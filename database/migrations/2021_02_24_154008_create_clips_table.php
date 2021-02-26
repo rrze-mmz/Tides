@@ -16,6 +16,8 @@ class CreateClipsTable extends Migration
         Schema::create('clips', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->foreignId('owner_id')->references('id')->on('users');
+            $table->string('slug')->unique();
             $table->text('description');
             $table->timestamps();
         });

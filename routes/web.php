@@ -14,10 +14,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+//Route::get('/', function () {
+//    return view('welcome');
+//});
 
-Route::get('/clips/',[ClipsController::class,'index']);
-Route::post('/clips',[ClipsController::class,'store']);
+Route::get('/clips',[ClipsController::class,'index']);
+Route::get('/clips/{clip}',[ClipsController::class,'show']);
+Route::post('/clips',[ClipsController::class,'store'])->middleware('auth');
+
+Auth::routes();
+
+Route::get('/home', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Auth::routes();
+
+Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
