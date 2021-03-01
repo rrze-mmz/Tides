@@ -55,6 +55,7 @@ class ClipsTest extends TestCase
     /** @test */
     public function an_authenticated_user_can_create_a_clip()
     {
+        $this->withoutExceptionHandling();
         $this->actingAs(User::factory()->create());
 
         $attributes = [
