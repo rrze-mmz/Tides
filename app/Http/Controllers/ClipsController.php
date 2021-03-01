@@ -30,7 +30,7 @@ class ClipsController extends Controller {
 
         $attributes = request()->validate([
                 'title' => 'required',
-                'description' => 'required',
+                'description' => 'min:3|max:255'
         ]);
 
         $attributes['slug'] = $attributes['title'];
@@ -38,5 +38,23 @@ class ClipsController extends Controller {
         auth()->user()->clips()->create($attributes);
 
         return redirect('/clips');
+    }
+
+    /**
+     * @param Clip $clip
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function update(Clip $clip)
+    {
+        $attributes = request()->validate([
+            'title' => 'required',
+            'description' => 'min:3|max:255'
+        ]);
+
+        $clip->setSlugAttribute($attributes['title']);
+
+        $clip->update($attributes);
+
+        return redirect($clip->path());
     }
 }

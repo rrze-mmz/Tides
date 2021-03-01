@@ -27,4 +27,14 @@ class Clip extends Model
         $this->attributes['slug'] = Str::slug($value);
     }
 
+    public function assets()
+    {
+        return $this->hasMany(Asset::class);
+    }
+
+    public function addAsset($uploadedFile)
+    {
+        return $this->assets()->create(compact('uploadedFile'));
+    }
+
 }

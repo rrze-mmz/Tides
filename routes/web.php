@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\AssetsController;
 use App\Http\Controllers\ClipsController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,12 +23,15 @@ use Illuminate\Support\Facades\Route;
 Route::get('/clips',[ClipsController::class,'index']);
 Route::get('/clips/{clip}',[ClipsController::class,'show']);
 Route::post('/clips',[ClipsController::class,'store'])->middleware('auth');
+Route::patch('/clips/{clip}',[ClipsController::class,'update'])->middleware('auth');
+
+Route::post('/clips/{clip}/assets',[AssetsController::class,'store'])->middleware('auth');
 
 Auth::routes();
 
-Route::get('/home', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Auth::routes();
 
-Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 

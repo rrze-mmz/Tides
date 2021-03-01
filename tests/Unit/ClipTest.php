@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Models\Asset;
 use App\Models\Clip;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
@@ -33,5 +34,15 @@ class ClipTest extends TestCase
         $clip = Clip::factory()->create();
 
         $this->assertEquals($clip->slug, Str::slug($clip->title));
+    }
+
+    /** @test */
+    public function it_has_many_assets()
+    {
+        $clip = Clip::factory()->create();
+
+        $assets = Asset::factory(2)->create(['clip_id'=> $clip->id]);
+
+        $this->assertEquals(2, $clip->assets()->count());
     }
 }

@@ -22,22 +22,22 @@ class ClipsTest extends TestCase
     }
 
     /** @test */
-    public function an_authenticated_user_can_create_a_clip()
+    public function a_vistor_cannot_update_a_clip()
     {
-        $this->actingAs(User::factory()->create());
+        $clip = Clip::factory()->create();
 
-        $title = $this->faker->sentence;
+        $this->patch($clip->path(), ['title'=>'changed'])
+            ->assertRedirect('login');
+    }
 
-        $attributes = [
-            'title' => $title,
-            'description' => $this->faker->paragraph,
-        ];
+    /** @test */
+    public function a_visitor_can_view_a_clip()
+    {
+        $clip = Clip::factory()->create();
 
-        $this->post('/clips',$attributes)->assertRedirect('/clips');
-
-        $this->assertDatabaseHas('clips', $attributes);
-
-        $this->get('/clips')->assertSee($attributes['title']);
+        $this->get($clip->path())
+            ->assertSee($clip->title)
+            ->assertSee($clip->description);
     }
 
     /** @test */
@@ -53,15 +53,57 @@ class ClipsTest extends TestCase
     }
 
     /** @test */
-    public function a_visitor_can_view_a_clip()
+    public function an_authenticated_user_can_create_a_clip()
+    {
+        $this->actingAs(User::factory()->create());
+
+        $attributes = [
+            'title' => $this->faker->sentence,
+            'description' => $this->faker->paragraph,
+        ];
+
+        $this->post('/clips',$attributes)->assertRedirect('/clips');
+
+        $this->assertDatabaseHas('clips', $attributes);
+
+        $this->get('/clips')->assertSee($attributes['title']);
+    }
+
+    /** @test */
+    public function an_authenticated_user_can_update_a_clip()
     {
         $this->actingAs(User::factory()->create());
 
         $clip = Clip::factory()->create();
 
-        $this->get($clip->path())
-            ->assertSee($clip->title)
-            ->assertSee($clip->description);
+        $this->get($clip->path())->assertSee($clip->title);
+
+        $attributes = [
+            'title'=>'changed',
+            'description' => 'changed'
+        ];
+        $this->patch($clip->path(), $attributes);
+
+        $clip = $clip->refresh();
+
+        $this->assertDatabaseHas('clips', $attributes);
+
+        $this->get($clip->path())->assertSee('changed');
     }
 
+    /** @test */
+    public function updating_a_clip_will_update_clip_slug()
+    {
+        $this->actingAs(User::factory()->create());
+
+        $clip = Clip::factory()->create();
+
+        $this->patch($clip->path(), ['title'=>'Title changed']);
+
+        $clip = $clip->refresh();
+
+        $this->assertEquals('Title changed', $clip->title);
+
+        $this->assertEquals('title-changed', $clip->slug);
+    }
 }
