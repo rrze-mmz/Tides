@@ -17,8 +17,8 @@
 </head>
 <body class="bg-gray-100 h-screen antialiased leading-none font-sans">
     <div id="app">
-        <header class="bg-gray-700 py-6">
-            <div class="container mx-auto flex justify-between items-center px-6">
+        <header class="bg-gray-800 p-2 mt-0 fixed w-full z-10 top-0 py-4">
+            <nav class="container mx-auto flex justify-between items-center px-6">
                 <div>
                     <a href="{{ url('/') }}" class="text-lg font-semibold text-gray-100 no-underline">
                         {{ config('app.name', 'Laravel') }}
@@ -42,10 +42,9 @@
                         </form>
                     @endguest
                 </nav>
-            </div>
+            </nav>
         </header>
-
-        @yield('content')
+            @yield('content')
     </div>
 </body>
 </html>
