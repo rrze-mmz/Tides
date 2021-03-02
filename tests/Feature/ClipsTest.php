@@ -18,15 +18,22 @@ class ClipsTest extends TestCase
     {
         $attributes = Clip::factory()->raw();
 
-        $this->post('/clips', $attributes)->assertRedirect('login');
+        $this->post('/admin/clips', $attributes)->assertRedirect('login');
     }
+
+    /** @test */
+    public function a_visitor_cannot_view_create_clip_form()
+    {
+        $this->get('/admin/clips/create')->assertRedirect('login');
+    }
+
 
     /** @test */
     public function a_vistor_cannot_update_a_clip()
     {
         $clip = Clip::factory()->create();
 
-        $this->patch($clip->path(), ['title'=>'changed'])
+        $this->patch($clip->adminPath(), ['title'=>'changed'])
             ->assertRedirect('login');
     }
 
@@ -35,9 +42,19 @@ class ClipsTest extends TestCase
     {
         $clip = Clip::factory()->create();
 
-        $this->get($clip->path())
+        $this->get($clip->adminPath())
             ->assertSee($clip->title)
             ->assertSee($clip->description);
+    }
+
+    /** @test */
+    public function an_authenticated_user_can_see_the_create_clip_form()
+    {
+        $this->withoutExceptionHandling();
+
+        $this->actingAs(User::factory()->create());
+
+        $this->get('/admin/clips/create')->assertStatus(200);
     }
 
     /** @test */
@@ -47,15 +64,13 @@ class ClipsTest extends TestCase
 
         $attributes = Clip::factory()->raw(['title'=> '']);
 
-//        dd($attributes);
-        $this->post('/clips', $attributes)
+        $this->post('/admin/clips', $attributes)
             ->assertSessionHasErrors('title');
     }
 
     /** @test */
     public function an_authenticated_user_can_create_a_clip()
     {
-        $this->withoutExceptionHandling();
         $this->actingAs(User::factory()->create());
 
         $attributes = [
@@ -63,11 +78,11 @@ class ClipsTest extends TestCase
             'description' => $this->faker->paragraph,
         ];
 
-        $this->post('/clips',$attributes)->assertRedirect('/clips');
+        $this->post('/admin/clips',$attributes)->assertRedirect('/clips');
 
         $this->assertDatabaseHas('clips', $attributes);
 
-        $this->get('/clips')->assertSee($attributes['title']);
+        $this->get('/admin/clips')->assertSee($attributes['title']);
     }
 
     /** @test */
@@ -83,13 +98,13 @@ class ClipsTest extends TestCase
             'title'=>'changed',
             'description' => 'changed'
         ];
-        $this->patch($clip->path(), $attributes);
+        $this->patch($clip->adminPath(), $attributes);
 
         $clip = $clip->refresh();
 
         $this->assertDatabaseHas('clips', $attributes);
 
-        $this->get($clip->path())->assertSee('changed');
+        $this->get($clip->adminPath())->assertSee('changed');
     }
 
     /** @test */
@@ -99,7 +114,7 @@ class ClipsTest extends TestCase
 
         $clip = Clip::factory()->create();
 
-        $this->patch($clip->path(), ['title'=>'Title changed']);
+        $this->patch($clip->adminPath(), ['title'=>'Title changed']);
 
         $clip = $clip->refresh();
 

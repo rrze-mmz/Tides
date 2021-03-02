@@ -21,6 +21,14 @@ class ClipTest extends TestCase
     }
 
     /** @test */
+    public function it_has_an_admin_path()
+    {
+        $clip = Clip::factory()->create();
+
+        $this->assertEquals('/admin/clips/'.$clip->slug, $clip->adminPath());
+    }
+
+    /** @test */
     public function it_has_a_slug_route()
     {
         $clip = Clip::factory()->create();
@@ -35,7 +43,6 @@ class ClipTest extends TestCase
 
         $this->assertEquals($clip->slug, Str::slug($clip->title));
     }
-
     /** @test */
     public function it_has_many_assets()
     {
@@ -44,5 +51,13 @@ class ClipTest extends TestCase
         $assets = Asset::factory(2)->create(['clip_id'=> $clip->id]);
 
         $this->assertEquals(2, $clip->assets()->count());
+    }
+
+    /** @test */
+    public function it_can_return_upload_date_in_carbon_format()
+    {
+        $clip = Clip::factory()->create(['updated_at'=>'2021-03-02 08:57:38']);
+
+        $this->assertEquals('2021-03-02', $clip->updated_at);
     }
 }

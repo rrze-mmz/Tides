@@ -17,6 +17,11 @@ class ClipsController extends Controller {
         return view('clips.index', compact('clips'));
     }
 
+    public function create()
+    {
+        return view('clips.create');
+    }
+
     /**
      * @param Clip $clip
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application

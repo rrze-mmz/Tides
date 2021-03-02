@@ -16,7 +16,7 @@ class HomeController extends Controller
     public function index()
     {
         return view('home',[
-            'latestClips' => Clip::all(),
+            'latestClips' => Clip::latest()->limit(18)->get(),
         ]);
     }
 }

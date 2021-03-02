@@ -6,7 +6,7 @@
         <h2>Welcome to Tides Videoportal</h2>
     </div>
 </div>
-<main class="sm:container sm:mx-auto sm:mt-10">
+<main class="sm:container sm:mx-auto sm:mt-16">
             @include('homepage._searchbar')
 
            <div class="flex justify-content-between  w-full items-end border-b">
@@ -18,23 +18,7 @@
            </div>
             <div class="h48 grid grid-cols-3 gap-4 pt-8">
                 @forelse($latestClips as $clip)
-                    <div class=" w-full flex bg-white">
-                        <div class="h-24 w-48 pt-3 ml-2 place-content-center place-items-center justify-center justify-items-center">
-                            <img src="/images/preview.jpeg" alt="preview image">
-                        </div>
-
-                        <div class=" bg-white p-4 flex flex-col justify-between w-full ">
-                            <div class="mb-1">
-                                <div class="text-gray-900 font-bold text-sm"><a href="{{ $clip->path() }}" class="underline">{{ $clip->title }}</a></div>
-                                <p class="text-gray-700 text-base pt-3">{{ Str::limit($clip->description, 30) }}</p>
-                            </div>
-                            <div class="flex items-center">
-                                <div class="text-sm">
-                                    <p class="text-gray-900">John Smith</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    @include('clips._card',['clip'=> $clip])
                     @empty
                         No clips found
                     @endforelse

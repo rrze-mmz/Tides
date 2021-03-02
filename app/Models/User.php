@@ -41,7 +41,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function clips()
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function clips(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Clip::class,'owner_id');
     }
