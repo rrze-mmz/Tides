@@ -23,12 +23,12 @@ class AssetsTest extends TestCase {
         $clip = Clip::factory()->create();
 
         $uploadedFile = new \Symfony\Component\HttpFoundation\File\UploadedFile(
-            dirname(__DIR__, 2) . '/storage/tests/Big_Buck_Bunny.mp4',
+            dirname(__DIR__, 3) . '/storage/tests/Big_Buck_Bunny.mp4',
             'Big_Buck_Bunny.mp4', 'video/mp4', null, true);
 
         $uploadedFile = UploadedFile::createFromBase($uploadedFile);
 
-        $this->post($clip->path() . '/assets', ['uploadedFile' => $uploadedFile])
+        $this->post($clip->adminPath() . '/assets', ['uploadedFile' => $uploadedFile])
             ->assertRedirect($clip->path());
 
         Storage::disk('public')->assertExists('/videos/' . $uploadedFile->hashName());

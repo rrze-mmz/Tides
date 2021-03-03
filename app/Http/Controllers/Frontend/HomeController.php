@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Frontend;
 
 use App\Models\Clip;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
-class HomeController extends Controller
-{
+class HomeController extends Controller {
 
     /**
      * Show the application dashboard.
@@ -16,7 +16,7 @@ class HomeController extends Controller
     public function index()
     {
         return view('home',[
-            'latestClips' => Clip::latest()->limit(18)->get(),
+            'clips' => Clip::latest()->limit(18)->get(),
         ]);
     }
 }

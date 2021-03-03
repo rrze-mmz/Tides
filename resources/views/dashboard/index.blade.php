@@ -21,6 +21,13 @@
                 <div class="pt-10 font-2xl font-semibold border-b border-black pb-2 ">
                    Your Latest Clips
                 </div>
+                <div class="h48 grid grid-cols-3 gap-4 pt-8">
+                    @forelse($clips as $clip)
+                        @include('clips._card',['clip'=> $clip])
+                    @empty
+                        No clips found
+                    @endforelse
+                </div>
             </div>
         <div class="lg:flex-1 lg:mx-10 pt-10">
 

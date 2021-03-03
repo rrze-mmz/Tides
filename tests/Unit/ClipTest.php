@@ -4,8 +4,10 @@ namespace Tests\Unit;
 
 use App\Models\Asset;
 use App\Models\Clip;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
+use Facades\Tests\Setup\ClipFactory;
 use Tests\TestCase;
 
 class ClipTest extends TestCase
@@ -59,5 +61,13 @@ class ClipTest extends TestCase
         $clip = Clip::factory()->create(['updated_at'=>'2021-03-02 08:57:38']);
 
         $this->assertEquals('2021-03-02', $clip->updated_at);
+    }
+
+    /** @test */
+    public function a_clip_has_only_one_owner()
+    {
+        $clip = ClipFactory::create();
+
+        $this->assertInstanceOf(User::class, $clip->owner);
     }
 }

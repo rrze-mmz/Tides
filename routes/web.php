@@ -1,10 +1,10 @@
 <?php
 
-use App\Http\Controllers\AssetsController;
+use App\Http\Controllers\Backend\AssetsController;
 use App\Http\Controllers\Backend\AdminDashboardController;
-use App\Http\Controllers\ClipsController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\TweetsController;
+use App\Http\Controllers\Backend\ClipsController;
+use App\Http\Controllers\Frontend\HomeController;
+use App\Http\Controllers\Frontend\ShowClipsController;
 use Illuminate\Support\Facades\Route;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
@@ -19,26 +19,28 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 |
 */
 
-//Route::get('/', function () {
-//    return view('welcome');
-//});
-
-Route::get('/clips',[ClipsController::class,'index']);
-Route::get('/clips/{clip}',[ClipsController::class,'show']);
-
-Route::post('/clips/{clip}/assets',[AssetsController::class,'store'])->middleware('auth');
-
-Auth::routes();
-
-Route::middleware('auth')->group(function(){
-    Route::get('/admin/dashboard', [AdminDashboardController::class,'index'])->name('dashboard');
-    Route::get('/admin/clips/create',[ClipsController::class,'create'])->name('clips.create');
-    Route::post('/admin/clips',[ClipsController::class,'store'])->name('clips.store');
-    Route::patch('/admin/clips/{clip}',[ClipsController::class,'update'])->middleware('auth');
-});
-Route::get('/home', [HomeController::class, 'index'])->name('home');
-
-Auth::routes();
-
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::redirect('/admin','/admin/dashboard');
+
+//Frontend clip routes
+Route::get('/clips',[ShowClipsController::class,'index']);
+Route::get('/clips/{clip}',[ShowClipsController::class,'show']);
+
+//Backend routes
+Route::prefix('admin')->middleware('auth')->group(function(){
+   //Dashboard
+    Route::get('/dashboard', [AdminDashboardController::class,'index'])->name('dashboard');
+
+    //Clip
+    Route::get('/clips/create',[ClipsController::class,'create'])->name('clips.create');
+    Route::post('/clips',[ClipsController::class,'store'])->name('clips.store');
+    Route::get('/clips/{clip}/edit',[ClipsController::class,'edit'])->name('clips.edit');
+    Route::patch('/clips/{clip}',[ClipsController::class,'update'])->name('clips.update');
+
+    //Assets
+    Route::post('/clips/{clip}/assets',[AssetsController::class,'store']);
+});
+
+Auth::routes();
 

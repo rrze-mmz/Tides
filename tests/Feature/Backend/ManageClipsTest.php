@@ -6,55 +6,43 @@ use App\Models\Clip;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Facades\Tests\Setup\ClipFactory;
 use Tests\TestCase;
 
-class ClipsTest extends TestCase
+class ManageClipsTest extends TestCase
 {
     use WithFaker, RefreshDatabase;
 
 
     /** @test */
-    public function a_visitor_cannot_create_a_clip()
+    public function a_visitor_cannot_manage_clips()
     {
-        $attributes = Clip::factory()->raw();
+        $clip = Clip::factory()->create();
 
-        $this->post('/admin/clips', $attributes)->assertRedirect('login');
-    }
+        $this->post('/admin/clips', [])->assertRedirect('login');
 
-    /** @test */
-    public function a_visitor_cannot_view_create_clip_form()
-    {
         $this->get('/admin/clips/create')->assertRedirect('login');
-    }
 
-
-    /** @test */
-    public function a_vistor_cannot_update_a_clip()
-    {
-        $clip = Clip::factory()->create();
-
-        $this->patch($clip->adminPath(), ['title'=>'changed'])
+        $this->patch($clip->adminPath(), [])
             ->assertRedirect('login');
-    }
-
-    /** @test */
-    public function a_visitor_can_view_a_clip()
-    {
-        $clip = Clip::factory()->create();
-
-        $this->get($clip->adminPath())
-            ->assertSee($clip->title)
-            ->assertSee($clip->description);
     }
 
     /** @test */
     public function an_authenticated_user_can_see_the_create_clip_form()
     {
-        $this->withoutExceptionHandling();
-
         $this->actingAs(User::factory()->create());
 
         $this->get('/admin/clips/create')->assertStatus(200);
+    }
+
+    /** @test */
+    public function an_authenticated_user_can_see_the_edit_clip_form()
+    {
+        $this->signIn();
+
+        $clip = ClipFactory::create();
+
+        $this->get($clip->adminPath().'/edit')->assertStatus(200);
     }
 
     /** @test */
@@ -71,18 +59,13 @@ class ClipsTest extends TestCase
     /** @test */
     public function an_authenticated_user_can_create_a_clip()
     {
-        $this->actingAs(User::factory()->create());
+        $this->signIn();
 
-        $attributes = [
-            'title' => $this->faker->sentence,
-            'description' => $this->faker->paragraph,
-        ];
+        $this->get('/admin/clips/create')->assertStatus(200);
 
-        $this->post('/admin/clips',$attributes)->assertRedirect('/clips');
-
-        $this->assertDatabaseHas('clips', $attributes);
-
-        $this->get('/admin/clips')->assertSee($attributes['title']);
+        $this->followingRedirects()
+            ->post('/admin/clips',$attributes = Clip::factory()->raw())
+            ->assertSee($attributes['title']);
     }
 
     /** @test */

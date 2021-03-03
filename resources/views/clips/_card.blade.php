@@ -10,7 +10,7 @@
         </div>
         <div class="flex items-center">
             <div class="text-sm">
-                <p class="text-gray-900 italic">{{ $clip->updated_at }} Presenter</p>
+                <p class="text-gray-900 italic">{{ $clip->updated_at }} {{ $clip->owner->name }}</p>
             </div>
         </div>
     </div>

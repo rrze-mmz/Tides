@@ -1,37 +1,27 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Backend;
 
 use App\Http\Requests\StoreUpdateClipRequest;
+use App\Http\Controllers\Controller;
 use App\Models\Clip;
 
 class ClipsController extends Controller {
 
     /**
+     * Create form for a single clip
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
      */
-    public function index()
-    {
-        $clips = Clip::all();
-
-        return view('clips.index', compact('clips'));
-    }
-
-    public function create()
+    public function create(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
         return view('clips.create');
     }
 
-    /**
-     * @param Clip $clip
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
-     */
-    public function show(Clip $clip): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
-    {
-        return view('clips.show', compact('clip'));
-    }
 
     /**
+     * Store a clip in database
+     *
      * @param StoreUpdateClipRequest $request
      * @return Illuminate\Routing\Redirector\Illuminate\Contracts\Foundation\Application\Illuminate\Http\RedirectResponse
      */
@@ -41,12 +31,25 @@ class ClipsController extends Controller {
 
         $attributes['slug'] = $attributes['title'];
 
-        auth()->user()->clips()->create($attributes);
+        $project = auth()->user()->clips()->create($attributes);
 
-        return redirect('/clips');
+        return redirect($project->adminPath());
     }
 
     /**
+     * Edit form for a single clip
+     *
+     * @param Clip $clip
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+     */
+    public function edit(Clip $clip): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    {
+        return view('clips.edit', compact('clip'));
+    }
+
+    /**
+     * Update a clip in the databse
+     *
      * @param Clip $clip
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
@@ -58,6 +61,6 @@ class ClipsController extends Controller {
 
         $clip->update($attributes);
 
-        return redirect($clip->path());
+        return redirect($clip->adminPath());
     }
 }
