@@ -32,7 +32,11 @@
                             <a class="no-underline hover:underline" href="{{ route('register') }}">{{ __('Register') }}</a>
                         @endif
                     @else
-                        <a href="/admin/dashboard" class="no-underline hover:underline"> Dashboard </a>
+
+                        @if(!str_contains(url()->current(), 'admin'))
+                           <a href="/admin/dashboard" class="no-underline hover:underline"> Dashboard </a>
+                        @endif
+
                         <span>{{ Auth::user()->name }}</span>
 
                         <a href="{{ route('logout') }}"

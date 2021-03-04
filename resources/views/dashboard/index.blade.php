@@ -7,10 +7,10 @@
             </div>
             <div class="lg:flex-grow lg:mx-10 pt-10 w-full">
                 <div class="flex font-2xl font-semibold border-b border-black pb-2 ">
-                    Welcome to your personal Dashboard {{ auth()->user()->name }} !!
+                    Welcome{{ auth()->user()->name }} !!  This is your personal Dashboard
                 </div>
                 <div class="flex px-2 py-2">
-                    <p>
+                    <p class="pt-2 ">
                         Start by creating a new video clip
                         <a class="ml-2 focus:outline-none text-white text-sm py-1.5 px-5 rounded-md bg-blue-500 hover:bg-blue-600 hover:shadow-lg"
                            href="{{ route('clips.create') }}"

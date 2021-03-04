@@ -3,14 +3,14 @@
         <li>
             <a
                 href="/admin/dashboard"
-                class="font-bold text-lg mb-4 block hover:text-gray-200"
+                class="font-bold text-lg mb-4 block hover:text-gray-200 border-t-2 py-2 border-b-2  border-white"
             >
                 Dashboard
             </a>
         </li>
         <li>
             <a
-                href="/clips"
+                href="/admin/clips/"
                 class="font-bold text-lg mb-4 block hover:text-gray-200"
             >
                 Clips

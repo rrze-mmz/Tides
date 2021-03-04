@@ -29,7 +29,7 @@ class AssetsTest extends TestCase {
         $uploadedFile = UploadedFile::createFromBase($uploadedFile);
 
         $this->post($clip->adminPath() . '/assets', ['uploadedFile' => $uploadedFile])
-            ->assertRedirect($clip->path());
+            ->assertRedirect($clip->adminPath());
 
         Storage::disk('public')->assertExists('/videos/' . $uploadedFile->hashName());
 

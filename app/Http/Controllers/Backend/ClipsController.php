@@ -61,6 +61,8 @@ class ClipsController extends Controller {
 
         $clip->update($attributes);
 
-        return redirect($clip->adminPath());
+        $clip->refresh();
+
+        return redirect($clip->adminPath().'/edit');
     }
 }

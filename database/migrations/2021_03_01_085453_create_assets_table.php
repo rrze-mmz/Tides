@@ -17,7 +17,7 @@ class CreateAssetsTable extends Migration
             $table->id();
             $table->foreignId('clip_id')->references('id')->on('clips')->cascadeOnDelete();
             $table->text('uploadedFile');
-            $table->string('type','14')->nullable();
+            $table->string('type')->nullable();
             $table->timestamps();
         });
     }

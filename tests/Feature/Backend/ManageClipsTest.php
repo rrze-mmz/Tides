@@ -42,7 +42,8 @@ class ManageClipsTest extends TestCase
 
         $clip = ClipFactory::create();
 
-        $this->get($clip->adminPath().'/edit')->assertStatus(200);
+        $this->get($clip->adminPath().'/edit')
+            ->assertStatus(200);
     }
 
     /** @test */

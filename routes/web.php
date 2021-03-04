@@ -6,7 +6,6 @@ use App\Http\Controllers\Backend\ClipsController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\ShowClipsController;
 use Illuminate\Support\Facades\Route;
-use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,7 +19,7 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 */
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::redirect('/home', '/');
 Route::redirect('/admin','/admin/dashboard');
 
 //Frontend clip routes
@@ -36,10 +35,11 @@ Route::prefix('admin')->middleware('auth')->group(function(){
     Route::get('/clips/create',[ClipsController::class,'create'])->name('clips.create');
     Route::post('/clips',[ClipsController::class,'store'])->name('clips.store');
     Route::get('/clips/{clip}/edit',[ClipsController::class,'edit'])->name('clips.edit');
-    Route::patch('/clips/{clip}',[ClipsController::class,'update'])->name('clips.update');
+    Route::get('/clips/{clip}/',[ClipsController::class,'show'])->name('clips.show');
+    Route::patch('/clips/{clip}/',[ClipsController::class,'update'])->name('clips.update');
 
     //Assets
-    Route::post('/clips/{clip}/assets',[AssetsController::class,'store']);
+    Route::post('/clips/{clip}/assets',[AssetsController::class,'store'])->name('admin.assets.store');
 });
 
 Auth::routes();

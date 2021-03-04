@@ -23,7 +23,7 @@ class ClipTest extends TestCase
     }
 
     /** @test */
-    public function it_has_an_admin_path()
+    public function it_has_a_admin_path()
     {
         $clip = Clip::factory()->create();
 
@@ -36,6 +36,23 @@ class ClipTest extends TestCase
         $clip = Clip::factory()->create();
 
         $this->get($clip->path())->assertStatus(200);
+    }
+
+    /** @test */
+    public function a_slug_must_be_incremental()
+    {
+        $clipA = Clip::factory()->create(['title'=> 'A test title','slug'=> 'A test title']);
+        $clipB = Clip::factory()->create(['title'=> 'A test title','slug'=> 'A test title']);
+
+        $this->assertSame('a-test-title-2', $clipB->slug);
+    }
+    /** @test */
+    public function slug_must_be_unique()
+    {
+        $clipA = Clip::factory()->create(['title'=> 'A test title','slug'=> 'A test title']);
+        $clipB = Clip::factory()->create(['title'=> 'A test title','slug'=> 'A test title']);
+
+        $this->assertNotEquals($clipA->slug, $clipB->slug);
     }
 
     /** @test */
@@ -69,5 +86,17 @@ class ClipTest extends TestCase
         $clip = ClipFactory::create();
 
         $this->assertInstanceOf(User::class, $clip->owner);
+    }
+
+    /** @test */
+    public function it_can_add_an_asset()
+    {
+        $clip = Clip::factory()->create();
+
+        $asset = $clip->addAsset('mp4/uploadedfilepath');
+
+        $this->assertCount(1, $clip->assets);
+
+        $this->assertTrue($clip->assets->contains($asset));
     }
 }
