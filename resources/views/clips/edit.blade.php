@@ -58,7 +58,6 @@
                             class="ml-2 focus:outline-none text-white text-sm py-1.5 px-5 rounded-md bg-blue-500 hover:bg-blue-600 hover:shadow-lg"
                     >Update</button>
                 </form>
-
                 <div class="w-1/5 px-4 border rounded mx-4 h-full  py-4 bg-white ">
                     <header class="font-semibold pb-2 items-center text-center border-b mb-2 "> Upload a file </header>
                     <form action="{{ $clip->adminPath().'/assets' }}"
@@ -77,7 +76,15 @@
                 </div>
             </div>
 
-            <div class="flex font-2xl font-semibold border-b border-black pb-2 pt-8 ">
+            <div class="flex">
+                <div class="">
+                    <a href="{{ $clip->path() }}" type="button">
+                        Go to view page
+                    </a>
+                </div>
+            </div>
+
+            <div class="flex font-2xl font-semibold border-b border-black pb-2 pt-8">
                 Assets
             </div>
             <div class="flex">

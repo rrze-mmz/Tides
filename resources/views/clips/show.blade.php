@@ -9,6 +9,12 @@
                 {{ $clip->description }}
             </p>
         </div>
+        <div class="flex content-center justify-center">
+            <video src="/videos/GUs2ovCy9TosQy3b5y0rxpaS2TvAtFcRAu4pK12k.mp4"
+                   class="mejs__player w-full" width="100%" height="70%"
+                   data-mejsoptions='{"alwaysShowControls": "true"}'>
 
+            </video>
+        </div>
         </main>
 @endsection

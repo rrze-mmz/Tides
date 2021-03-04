@@ -33,7 +33,7 @@ class Clip extends Model
     public function adminPath(): string
     {
 
-        return "/admin/clips/{$this->slug}";
+        return "/admin/clips/{$this->slug}/edit";
     }
 
     /**

@@ -20,7 +20,7 @@ class AssetsController extends Controller
             'uploadedFile' => 'file|required'
         ]);
 
-        $uploadedFile = $request->file('uploadedFile')->store('public/videos/');
+        $uploadedFile = $request->file('uploadedFile')->store('videos');
 
         $clip->addAsset($uploadedFile);
 
