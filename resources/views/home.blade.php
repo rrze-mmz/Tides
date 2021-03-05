@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.frontend')
 
 @section('content')
 <div class="w-full bg-gray-900 h-72 flex justify-center justify-items-center place-content-center place-items-center">

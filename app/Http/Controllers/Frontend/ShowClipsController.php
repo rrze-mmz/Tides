@@ -24,6 +24,6 @@ class ShowClipsController extends Controller
      */
     public function show(Clip $clip): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        return view('clips.show', compact('clip'));
+        return view('clips.frontend.show', compact('clip'));
     }
 }

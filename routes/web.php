@@ -33,9 +33,9 @@ Route::prefix('admin')->middleware('auth')->group(function(){
 
     //Clip
     Route::get('/clips/create',[ClipsController::class,'create'])->name('clips.create');
+    Route::get('/clips',[ClipsController::class,'index'])->name('clips.index');
     Route::post('/clips',[ClipsController::class,'store'])->name('clips.store');
-    Route::get('/clips/{clip}/edit',[ClipsController::class,'edit'])->name('clips.edit');
-    Route::get('/clips/{clip}/',[ClipsController::class,'show'])->name('clips.show');
+    Route::get('/clips/{clip}/',[ClipsController::class,'edit'])->name('clips.edit');
     Route::patch('/clips/{clip}/',[ClipsController::class,'update'])->name('clips.update');
 
     //Assets

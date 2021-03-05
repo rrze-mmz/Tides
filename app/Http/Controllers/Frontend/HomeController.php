@@ -16,7 +16,7 @@ class HomeController extends Controller {
     public function index()
     {
         return view('home',[
-            'clips' => Clip::latest()->limit(18)->get(),
+            'clips' => Clip::orderByDesc('updated_at')->limit(18)->get(),
         ]);
     }
 }

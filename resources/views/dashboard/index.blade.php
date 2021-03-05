@@ -1,13 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.backend')
 
 @section('content')
-    <main class="mx-auto lg:flex pt-12">
-            <div class="flex-none justify-center bg-gray-800 content-center h-screen w-1/7 ">
-                    @include('dashboard._sidebar-navigation')
-            </div>
             <div class="lg:flex-grow lg:mx-10 pt-10 w-full">
                 <div class="flex font-2xl font-semibold border-b border-black pb-2 ">
-                    Welcome{{ auth()->user()->name }} !!  This is your personal Dashboard
+                    Welcome {{ auth()->user()->name }} !!  This is your personal Dashboard
                 </div>
                 <div class="flex px-2 py-2">
                     <p class="pt-2 ">
@@ -29,8 +25,4 @@
                     @endforelse
                 </div>
             </div>
-        <div class="lg:flex-1 lg:mx-10 pt-10">
-
-        </div>
-    </main>
 @endsection

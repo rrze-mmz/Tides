@@ -5,36 +5,36 @@ namespace Tests\Feature;
 use App\Models\Clip;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class AssetsTest extends TestCase {
 
-    use WithFaker, RefreshDatabase;
+    use  RefreshDatabase;
 
 
     /** @test */
     public function an_authenticated_user_can_upload_a_video_file()
     {
+
         $this->actingAs(User::factory()->create());
 
         $clip = Clip::factory()->create();
 
-        $uploadedFile = new \Symfony\Component\HttpFoundation\File\UploadedFile(
-            dirname(__DIR__, 3) . '/storage/tests/Big_Buck_Bunny.mp4',
-            'Big_Buck_Bunny.mp4', 'video/mp4', null, true);
+//        Storage::fake('videos');
 
-        $uploadedFile = UploadedFile::createFromBase($uploadedFile);
+        $file = UploadedFile::fake()->create('video.mp4', '10000','video/mp4');
 
-        $this->post($clip->adminPath() . '/assets', ['uploadedFile' => $uploadedFile])
+        $this->post($clip->adminPath() . '/assets', ['uploadedFile' => $file])
             ->assertRedirect($clip->adminPath());
 
-        Storage::disk('public')->assertExists('/videos/' . $uploadedFile->hashName());
+        $this->assertDatabaseHas('assets', ['uploadedFile' => $clip->assets()->first()->uploadedFile]);
 
-        Storage::disk('public')->delete('/videos/' . $uploadedFile->hashName());
+        Storage::disk('videos')->assertExists($file->hashName());
 
-        Storage::disk('public')->assertMissing('/videos/' . $uploadedFile->hashName());
+        Storage::disk('videos')->delete($file->hashName());
+//
+        Storage::disk('videos')->assertMissing($file->hashName());
     }
 }

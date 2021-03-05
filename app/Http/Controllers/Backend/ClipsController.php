@@ -8,6 +8,12 @@ use App\Models\Clip;
 
 class ClipsController extends Controller {
 
+    public function index()
+    {
+        return view('clips.index',[
+            'clips' => Clip::orderByDesc('updated_at')->limit(18)->get(),
+        ]);
+    }
     /**
      * Create form for a single clip
      *
@@ -63,6 +69,6 @@ class ClipsController extends Controller {
 
         $clip->refresh();
 
-        return redirect($clip->adminPath().'/edit');
+        return redirect($clip->adminPath());
     }
 }

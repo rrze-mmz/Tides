@@ -6,7 +6,7 @@
     <div class=" bg-white p-4 flex flex-col justify-between w-full ">
         <div class="mb-1">
             <div class="text-gray-900 font-bold text-sm">
-                <a href="@if (str_contains(url()->current(), 'admin')) {{$clip->adminPath().'/edit'}} @else {{ $clip->path() }} @endif" class="underline">
+                <a href="@if (str_contains(url()->current(), 'admin')) {{$clip->adminPath()}} @else {{ $clip->path() }} @endif" class="underline">
                     {{ $clip->title }}
                 </a></div>
             <p class="text-gray-700 text-base py-3">{{ Str::limit($clip->description, 30) }}</p>

@@ -1,13 +1,7 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
+@extends('layouts.backend')
+
+@section('content')
+    <main class="mx-auto lg:flex pt-12">
         <h2>Clips index</h2>
         <ul>
             @foreach($clips as $clip)
@@ -16,7 +10,6 @@
                 </li>
             @endforeach
         </ul>
-
-</body>
-</html>
+    </main>
+@endsection
 

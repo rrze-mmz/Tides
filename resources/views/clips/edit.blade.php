@@ -1,10 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.backend')
 
 @section('content')
-    <main class="mx-auto lg:flex pt-12">
-        <div class="flex-none justify-center bg-gray-800 content-center h-screen w-1/7 ">
-            @include('dashboard._sidebar-navigation')
-        </div>
         <div class="lg:flex-grow lg:mx-10 pt-10 w-full">
             <div class="flex font-2xl font-semibold border-b border-black pb-2 ">
                 Edit {{ $clip->title }} test
@@ -99,6 +95,4 @@
                 </ul>
             </div>
         </div>
-
-    </main>
 @endsection
