@@ -15,7 +15,7 @@ class ShowClipsController extends Controller
     {
         $clips = Clip::all();
 
-        return view('clips.index', compact('clips'));
+        return view('clips.frontend.index', compact('clips'));
     }
 
     /**

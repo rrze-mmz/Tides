@@ -30,7 +30,7 @@ class ManageClipsTest extends TestCase
     /** @test */
     public function an_authenticated_user_can_see_the_create_clip_form()
     {
-        $this->actingAs(User::factory()->create());
+        $this->signIn();
 
         $this->get('/admin/clips/create')->assertStatus(200);
     }
@@ -49,7 +49,7 @@ class ManageClipsTest extends TestCase
     /** @test */
     public function a_clip_requires_a_title()
     {
-        $this->actingAs(User::factory()->create());
+        $this->signIn();
 
         $attributes = Clip::factory()->raw(['title'=> '']);
 
@@ -72,7 +72,7 @@ class ManageClipsTest extends TestCase
     /** @test */
     public function an_authenticated_user_can_update_a_clip()
     {
-        $this->actingAs(User::factory()->create());
+        $this->signIn();
 
         $clip = Clip::factory()->create();
 
@@ -94,7 +94,7 @@ class ManageClipsTest extends TestCase
     /** @test */
     public function updating_a_clip_will_update_clip_slug()
     {
-        $this->actingAs(User::factory()->create());
+        $this->signIn();
 
         $clip = Clip::factory()->create();
 

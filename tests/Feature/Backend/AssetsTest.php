@@ -17,12 +17,9 @@ class AssetsTest extends TestCase {
     /** @test */
     public function an_authenticated_user_can_upload_a_video_file()
     {
-
-        $this->actingAs(User::factory()->create());
+        $this->signIn();
 
         $clip = Clip::factory()->create();
-
-//        Storage::fake('videos');
 
         $file = UploadedFile::fake()->create('video.mp4', '10000','video/mp4');
 
@@ -34,7 +31,7 @@ class AssetsTest extends TestCase {
         Storage::disk('videos')->assertExists($file->hashName());
 
         Storage::disk('videos')->delete($file->hashName());
-//
+
         Storage::disk('videos')->assertMissing($file->hashName());
     }
 }
