@@ -20,7 +20,7 @@ class AdminDashboardTest extends TestCase
     /** @test */
     public function an_authenticated_user_can_access_dashboard_()
     {
-        $this->actingAs(User::factory()->create());
+        $this->signIn();
 
         $this->get('admin/dashboard')->assertStatus(200);
     }

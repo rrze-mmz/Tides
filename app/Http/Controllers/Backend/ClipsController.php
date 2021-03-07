@@ -8,12 +8,17 @@ use App\Models\Clip;
 
 class ClipsController extends Controller {
 
-    public function index()
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+     */
+    public function index(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
         return view('clips.index',[
             'clips' => Clip::orderByDesc('updated_at')->limit(18)->get(),
         ]);
     }
+
     /**
      * Create form for a single clip
      *
@@ -23,7 +28,6 @@ class ClipsController extends Controller {
     {
         return view('clips.create');
     }
-
 
     /**
      * Store a clip in database

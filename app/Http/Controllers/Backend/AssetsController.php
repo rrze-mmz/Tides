@@ -10,6 +10,8 @@ class AssetsController extends Controller
 {
 
     /**
+     * Saves a file and persist the asset to the database
+     *
      * @param Clip $clip
      * @param Request $request
      * @return \Illuminate\Routing\Redirector|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse

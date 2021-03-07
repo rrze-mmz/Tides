@@ -8,12 +8,13 @@ use App\Http\Controllers\Controller;
 
 class HomeController extends Controller {
 
+
     /**
      * Show the application dashboard.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): \Illuminate\View\View
     {
         return view('home',[
             'clips' => Clip::orderByDesc('updated_at')->limit(18)->get(),

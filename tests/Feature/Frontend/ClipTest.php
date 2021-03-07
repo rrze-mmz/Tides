@@ -16,7 +16,6 @@ class ClipTest extends TestCase
     {
         $clip = Clip::factory()->create();
 
-        $this->get($clip->path())
-            ->assertSee($clip->title);
+        $this->get($clip->path())->assertSee($clip->title);
     }
 }

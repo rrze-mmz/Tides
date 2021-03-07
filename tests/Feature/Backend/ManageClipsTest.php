@@ -42,8 +42,7 @@ class ManageClipsTest extends TestCase
 
         $clip = ClipFactory::create();
 
-        $this->get($clip->adminPath())
-            ->assertStatus(200);
+        $this->get($clip->adminPath())->assertStatus(200);
     }
 
     /** @test */
@@ -53,8 +52,7 @@ class ManageClipsTest extends TestCase
 
         $attributes = Clip::factory()->raw(['title'=> '']);
 
-        $this->post('/admin/clips', $attributes)
-            ->assertSessionHasErrors('title');
+        $this->post('/admin/clips', $attributes)->assertSessionHasErrors('title');
     }
 
     /** @test */
@@ -82,6 +80,7 @@ class ManageClipsTest extends TestCase
             'title'=>'changed',
             'description' => 'changed'
         ];
+
         $this->patch($clip->adminPath(), $attributes);
 
         $clip = $clip->refresh();

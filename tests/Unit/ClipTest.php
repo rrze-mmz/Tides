@@ -41,15 +41,17 @@ class ClipTest extends TestCase
     /** @test */
     public function a_slug_must_be_incremental()
     {
-        $clipA = Clip::factory()->create(['title'=> 'A test title','slug'=> 'A test title']);
-        $clipB = Clip::factory()->create(['title'=> 'A test title','slug'=> 'A test title']);
+        Clip::factory()->create(['title'=> 'A test title','slug'=> 'A test title']);
 
-        $this->assertSame('a-test-title-2', $clipB->slug);
+        $clip = Clip::factory()->create(['title'=> 'A test title','slug'=> 'A test title']);
+
+        $this->assertSame('a-test-title-2', $clip->slug);
     }
     /** @test */
     public function slug_must_be_unique()
     {
         $clipA = Clip::factory()->create(['title'=> 'A test title','slug'=> 'A test title']);
+
         $clipB = Clip::factory()->create(['title'=> 'A test title','slug'=> 'A test title']);
 
         $this->assertNotEquals($clipA->slug, $clipB->slug);
@@ -67,7 +69,7 @@ class ClipTest extends TestCase
     {
         $clip = Clip::factory()->create();
 
-        $assets = Asset::factory(2)->create(['clip_id'=> $clip->id]);
+        Asset::factory(2)->create(['clip_id'=> $clip->id]);
 
         $this->assertEquals(2, $clip->assets()->count());
     }
