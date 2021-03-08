@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Models\Asset;
 use App\Models\Clip;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -27,5 +28,19 @@ class AssetsController extends Controller
         $clip->addAsset($uploadedFile);
 
         return redirect($clip->adminPath());
+    }
+
+    /**
+     * @param Asset $asset
+     * @return \Illuminate\Routing\Redirector|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function destroy(Asset $asset): \Illuminate\Routing\Redirector|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse
+    {
+        $this->authorize('edit', $asset);
+
+        $asset->delete();
+
+        return redirect($asset->clip->adminPath());
     }
 }

@@ -41,6 +41,7 @@ Route::prefix('admin')->middleware('auth')->group(function(){
 
     //Assets
     Route::post('/clips/{clip}/assets',[AssetsController::class,'store'])->name('admin.assets.store');
+    Route::delete('assets/{asset}',[AssetsController::class, 'destroy'])->name('assets.destroy');
 });
 
 Auth::routes();

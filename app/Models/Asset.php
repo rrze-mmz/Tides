@@ -20,4 +20,12 @@ class Asset extends Model
     {
         return $this->belongsTo(Clip::class);
     }
+
+    /**
+     * @return string
+     */
+    public function path(): string
+    {
+        return "/admin/assets/{$this->id}";
+    }
 }

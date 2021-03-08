@@ -72,7 +72,12 @@ class ClipsController extends Controller {
         return redirect($clip->adminPath());
     }
 
-    public function destroy(Clip $clip)
+    /**
+     * @param Clip $clip
+     * @return \Illuminate\Routing\Redirector|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function destroy(Clip $clip): \Illuminate\Routing\Redirector|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse
     {
         $this->authorize('edit', $clip);
 

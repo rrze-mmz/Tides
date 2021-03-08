@@ -2,8 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Models\Clip;
-use App\Models\User;
+use App\Models\Asset;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -32,5 +31,31 @@ class AssetsTest extends TestCase {
         Storage::disk('videos')->delete($file->hashName());
 
         Storage::disk('videos')->assertMissing($file->hashName());
+    }
+
+    /** @test */
+    public function an_authenticated_user_cannot_delete_a_not_owned_clip_asset()
+    {
+        $asset = Asset::factory()->create();
+
+        $this->signIn();
+
+        $this->delete($asset->path())->assertStatus(403);
+    }
+
+    /** @test */
+    public function an_authenticated_user_can_delete_an_owned_clip_asset()
+    {
+        $clip = ClipFactory::withAssets(1)
+            ->ownedBy($this->signIn())
+            ->create();
+
+        $this->assertEquals(1, $clip->assets()->count());
+
+        $this->delete($clip->assets->first()->path())
+            ->assertRedirect($clip->adminPath());
+
+        $this->assertEquals(0, $clip->assets()->count());
+        ;
     }
 }

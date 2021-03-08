@@ -103,8 +103,19 @@
             <div class="flex ">
                 <ul class="pt-3 ">
                     @forelse($clip->assets as $asset)
-                        <li>
-                            {{ $asset->uploadedFile }}
+                        <li class="flex space-x-6 items-center pt-3">
+                            <div>
+                                {{ $asset->uploadedFile }} [AssetID: {{ $asset->id }}]
+                            </div>
+
+                            <form method="POST"
+                                action="{{$asset->path() }}"
+                            >
+                                @csrf
+                                @method('DELETE')
+                             <button type="submit"
+                                     class="focus:outline-none text-white text-sm py-1.5 px-5 rounded-md bg-red-700 hover:bg-red-500 hover:shadow-lg"> Delete </button>
+                            </form>
                         </li>
                     @empty
                         No assets
