@@ -3,7 +3,7 @@
 @section('content')
         <div class="lg:flex-grow lg:mx-10 pt-10 w-full">
             <div class="flex font-2xl font-semibold border-b border-black pb-2 ">
-                Edit {{ $clip->title }} test
+                Edit {{ $clip->title }}
             </div>
             <div class="flex content-between  px-2 py-2 content-center justify-center">
                 <form action="{{ $clip->adminPath() }}"
@@ -52,7 +52,7 @@
 
                     <button type=""
                             class="ml-2 focus:outline-none text-white text-sm py-1.5 px-5 rounded-md bg-blue-500 hover:bg-blue-600 hover:shadow-lg"
-                    >Update</button>
+                    >Save</button>
                 </form>
                 <div class="w-1/5 px-4 border rounded mx-4 h-full  py-4 bg-white ">
                     <header class="font-semibold pb-2 items-center text-center border-b mb-2 "> Upload a file </header>
@@ -63,8 +63,9 @@
                     >
                         @csrf
                         <input type="file" id="uploadedFile" name="uploadedFile">
-                        <input type="submit"
-                                class=" mt-3 ml-2 focus:outline-none text-white text-sm py-1.5 px-5 rounded-md bg-green-500 hover:bg-blue-600 hover:shadow-lg">
+                        <button type="submit"
+                                class=" mt-3 ml-2 focus:outline-none text-white text-sm py-1.5 px-5 rounded-md bg-green-500 hover:bg-blue-600 hover:shadow-lg"
+                        >Upload</button>
                         @error('uploadedFile')
                         <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
                         @enderror
@@ -72,9 +73,14 @@
                 </div>
             </div>
 
+            <div class="flex font-2xl font-semibold border-b border-black pb-2 pt-8">
+                More actions
+            </div>
             <div class="flex">
-                <div class="">
-                    <a href="{{ $clip->path() }}" type="button">
+                <div class="pt-3 ">
+                    <a href="{{ $clip->path() }}"
+                       type="button"
+                        class="mt-8 focus:outline-none text-white text-sm py-1.5 px-5 rounded-md bg-blue-500 hover:bg-blue-600 hover:shadow-lg">
                         Go to view page
                     </a>
                 </div>

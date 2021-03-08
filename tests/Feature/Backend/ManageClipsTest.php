@@ -17,7 +17,7 @@ class ManageClipsTest extends TestCase
     /** @test */
     public function a_visitor_cannot_manage_clips()
     {
-        $clip = Clip::factory()->create();
+        $clip = ClipFactory::create();
 
         $this->post('/admin/clips', [])->assertRedirect('login');
 
@@ -36,13 +36,21 @@ class ManageClipsTest extends TestCase
     }
 
     /** @test */
-    public function an_authenticated_user_can_see_the_edit_clip_form()
+    public function an_authenticated_user_can_view_the_edit_clip_form()
     {
-        $this->signIn();
-
-        $clip = ClipFactory::create();
+        $clip = ClipFactory::ownedBy($this->signIn())->create();
 
         $this->get($clip->adminPath())->assertStatus(200);
+    }
+
+    /** @test */
+    public function an_authenticated_user_cannot_view_clip_edit_form_from_not_owned_clips()
+    {
+        $clip = ClipFactory::create();
+
+        $this->signIn();
+
+        $this->get($clip->adminPath())->assertStatus(403);
     }
 
     /** @test */
@@ -58,6 +66,7 @@ class ManageClipsTest extends TestCase
     /** @test */
     public function an_authenticated_user_can_create_a_clip()
     {
+        $this->withoutExceptionHandling();
         $this->signIn();
 
         $this->get('/admin/clips/create')->assertStatus(200);
@@ -70,9 +79,7 @@ class ManageClipsTest extends TestCase
     /** @test */
     public function an_authenticated_user_can_update_a_clip()
     {
-        $this->signIn();
-
-        $clip = Clip::factory()->create();
+        $clip = ClipFactory::ownedBy($this->signIn())->create();
 
         $this->get($clip->path())->assertSee($clip->title);
 
@@ -91,15 +98,32 @@ class ManageClipsTest extends TestCase
     }
 
     /** @test */
-    public function updating_a_clip_will_update_clip_slug()
+    public function an_authenticated_user_cannot_update_a_not_owned_clip()
     {
+        $clip = ClipFactory::create();
+
         $this->signIn();
 
-        $clip = Clip::factory()->create();
+        $attributes = [
+            'title'=>'changed',
+            'description' => 'changed'
+        ];
+
+        $this->patch($clip->adminPath(), $attributes)->assertStatus(403);
+
+        $this->assertDatabaseMissing('clips', $attributes);
+
+
+    }
+
+    /** @test */
+    public function updating_a_clip_will_update_clip_slug()
+    {
+        $clip = ClipFactory::ownedBy($this->signIn())->create();
 
         $this->patch($clip->adminPath(), ['title'=>'Title changed']);
 
-        $clip = $clip->refresh();
+        $clip->refresh();
 
         $this->assertEquals('Title changed', $clip->title);
 

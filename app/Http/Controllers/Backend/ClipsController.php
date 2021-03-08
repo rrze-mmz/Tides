@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Http\Requests\StoreUpdateClipRequest;
+use App\Http\Requests\StoreClipRequest;
+use App\Http\Requests\UpdateClipRequest;
 use App\Http\Controllers\Controller;
 use App\Models\Clip;
 
@@ -32,16 +33,12 @@ class ClipsController extends Controller {
     /**
      * Store a clip in database
      *
-     * @param StoreUpdateClipRequest $request
+     * @param UpdateClipRequest $request
      * @return Illuminate\Routing\Redirector\Illuminate\Contracts\Foundation\Application\Illuminate\Http\RedirectResponse
      */
-    public function store(StoreUpdateClipRequest $request)
+    public function store(StoreClipRequest $request)
     {
-        $attributes = $request->validated();
-
-        $attributes['slug'] = $attributes['title'];
-
-        $project = auth()->user()->clips()->create($attributes);
+        $project = auth()->user()->clips()->create($request->validated());
 
         return redirect($project->adminPath());
     }
@@ -50,10 +47,12 @@ class ClipsController extends Controller {
      * Edit form for a single clip
      *
      * @param Clip $clip
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+     * @return \Illuminate\Contracts\View\actory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
      */
     public function edit(Clip $clip): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
+       $this->authorize('edit', $clip);
+
         return view('clips.edit', compact('clip'));
     }
 
@@ -63,13 +62,10 @@ class ClipsController extends Controller {
      * @param Clip $clip
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function update(Clip $clip, StoreUpdateClipRequest $request): \Illuminate\Routing\Redirector|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse
+    public function update(Clip $clip, UpdateClipRequest $request): \Illuminate\Routing\Redirector|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse
     {
-        $attributes = $request->validated();
 
-        $clip->setSlugAttribute($attributes['title']);
-
-        $clip->update($attributes);
+        $clip->update($request->validated());
 
         $clip->refresh();
 

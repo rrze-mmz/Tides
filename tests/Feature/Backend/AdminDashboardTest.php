@@ -18,7 +18,7 @@ class AdminDashboardTest extends TestCase
         $this->get('/admin/dashboard')->assertRedirect('login');
     }
     /** @test */
-    public function an_authenticated_user_can_access_dashboard_()
+    public function an_authenticated_user_can_access_dashboard()
     {
         $this->signIn();
 
@@ -39,5 +39,19 @@ class AdminDashboardTest extends TestCase
         $this->signIn();
 
         $this->get('/admin/dashboard')->assertSee('No clips found');
+    }
+
+    /** @test */
+    public function should_display_only_clips_created_by_the_logged_in_user()
+    {
+        $bob = $this->signIn();
+
+        ClipFactory::create();
+
+        $this->get('/admin/dashboard')->assertSee('No clips found');
+
+        $newClip = ClipFactory::ownedBy($bob)->create();
+
+        $this->get('/admin/dashboard')->assertSee($newClip->title);
     }
 }

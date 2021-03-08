@@ -105,5 +105,4 @@ class Clip extends Model
 
         return $slug;
     }
-
 }

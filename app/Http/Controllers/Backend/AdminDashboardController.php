@@ -16,7 +16,7 @@ class AdminDashboardController extends Controller
     public function index(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
         return view('dashboard.index', [
-            'clips' => Clip::orderByDesc('updated_at')->limit(10)->get(),
+            'clips' => auth()->user()->clips()->orderByDesc('updated_at')->limit(10)->get(),
         ]);
     }
 }

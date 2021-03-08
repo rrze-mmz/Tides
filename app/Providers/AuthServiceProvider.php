@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Clip;
+use App\Policies\ClipPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -13,7 +15,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        // 'App\Models\Model' => 'App\Policies\ModelPolicy',
+        Clip::class => ClipPolicy::class
     ];
 
     /**
@@ -25,6 +27,7 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Gate::define('edit-clips', [ClipPolicy::class, 'edit']);
+        Gate::define('create-clips', [ClipPolicy::class, 'create']);
     }
 }
