@@ -2,8 +2,11 @@
 
 @section('content')
     <main class="container  mx-auto  mt-32 md:mt-32 h-screen">
-        <div class="flex flex-col content-center justify-center place-content-center items-center">
+        <div class="flex  justify-between border-b-2  border-black pb-2">
             <h2 class="font-bold text-2xl">{{ $clip->title }} [ID: {{ $clip->id }}]</h2>
+            <a  class="focus:outline-none text-white text-sm py-1.5 px-5 rounded-md bg-green-700 hover:bg-green-600 hover:shadow-lg"
+                href="{{ $clip->adminPath() }}"
+            > Back to edit page </a>
         </div>
 
         @if (!is_null($clip->assets()->first()))
@@ -18,7 +21,7 @@
 
         @auth()
         <div class="flex">
-            <a href="{{ $clip->adminPath() }}"> Back to edit page </a>
+
         </div>
         @endauth
 

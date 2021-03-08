@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Facades\Tests\Setup\ClipFactory;
 use Tests\TestCase;
 
 class AssetsTest extends TestCase {
@@ -17,9 +18,7 @@ class AssetsTest extends TestCase {
     /** @test */
     public function an_authenticated_user_can_upload_a_video_file()
     {
-        $this->signIn();
-
-        $clip = Clip::factory()->create();
+        $clip = ClipFactory::ownedBy($this->signIn())->create();
 
         $file = UploadedFile::fake()->create('video.mp4', '10000','video/mp4');
 

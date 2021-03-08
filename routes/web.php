@@ -32,11 +32,12 @@ Route::prefix('admin')->middleware('auth')->group(function(){
     Route::get('/dashboard', [AdminDashboardController::class,'index'])->name('dashboard');
 
     //Clip
-    Route::get('/clips/create',[ClipsController::class,'create'])->name('clips.create');
     Route::get('/clips',[ClipsController::class,'index'])->name('clips.index');
+    Route::get('/clips/create',[ClipsController::class,'create'])->name('clips.create');
     Route::post('/clips',[ClipsController::class,'store'])->name('clips.store');
     Route::get('/clips/{clip}/',[ClipsController::class,'edit'])->name('clips.edit');
     Route::patch('/clips/{clip}/',[ClipsController::class,'update'])->name('clips.update');
+    Route::delete('/clips/{clip}/',[ClipsController::class,'destroy'])->name('clips.destroy');
 
     //Assets
     Route::post('/clips/{clip}/assets',[AssetsController::class,'store'])->name('admin.assets.store');

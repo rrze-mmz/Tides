@@ -76,20 +76,31 @@
             <div class="flex font-2xl font-semibold border-b border-black pb-2 pt-8">
                 More actions
             </div>
-            <div class="flex">
-                <div class="pt-3 ">
+            <div class="flex space-x-6 items-center pt-3">
                     <a href="{{ $clip->path() }}"
                        type="button"
-                        class="mt-8 focus:outline-none text-white text-sm py-1.5 px-5 rounded-md bg-blue-500 hover:bg-blue-600 hover:shadow-lg">
+                        class="focus:outline-none text-white text-sm py-1.5 px-5 rounded-md bg-blue-500 hover:bg-blue-600 hover:shadow-lg">
                         Go to view page
                     </a>
-                </div>
+
+                    <form action="{{ $clip->adminPath() }}"
+                          method="POST"
+                            class="" >
+                        @csrf
+                        @method('DELETE')
+                    <button
+                       type="submit"
+                       class="focus:outline-none text-white text-sm py-1.5 px-5 rounded-md bg-red-700 hover:bg-red-500 hover:shadow-lg">
+                        Delete
+                    </button>
+
+                    </form>
             </div>
 
             <div class="flex font-2xl font-semibold border-b border-black pb-2 pt-8">
                 Assets
             </div>
-            <div class="flex">
+            <div class="flex ">
                 <ul class="pt-3 ">
                     @forelse($clip->assets as $asset)
                         <li>

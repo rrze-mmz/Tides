@@ -23,8 +23,9 @@ class ManageClipsTest extends TestCase
 
         $this->get('/admin/clips/create')->assertRedirect('login');
 
-        $this->patch($clip->adminPath(), [])
-            ->assertRedirect('login');
+        $this->patch($clip->adminPath(), [])->assertRedirect('login');
+
+        $this->delete($clip->adminPath())->assertRedirect('login');
     }
 
     /** @test */
@@ -66,7 +67,6 @@ class ManageClipsTest extends TestCase
     /** @test */
     public function an_authenticated_user_can_create_a_clip()
     {
-        $this->withoutExceptionHandling();
         $this->signIn();
 
         $this->get('/admin/clips/create')->assertStatus(200);
@@ -77,7 +77,7 @@ class ManageClipsTest extends TestCase
     }
 
     /** @test */
-    public function an_authenticated_user_can_update_a_clip()
+    public function an_authenticated_user_can_update_an_owned_clip()
     {
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 
@@ -112,8 +112,6 @@ class ManageClipsTest extends TestCase
         $this->patch($clip->adminPath(), $attributes)->assertStatus(403);
 
         $this->assertDatabaseMissing('clips', $attributes);
-
-
     }
 
     /** @test */
@@ -128,5 +126,27 @@ class ManageClipsTest extends TestCase
         $this->assertEquals('Title changed', $clip->title);
 
         $this->assertEquals('title-changed', $clip->slug);
+    }
+
+    /** @test */
+    public function an_authenticated_user_cannot_delete_a_not_owned_clip()
+    {
+        $clip = ClipFactory::create();
+
+        $this->signIn();
+
+        $this->delete($clip->adminPath())->assertStatus(403);
+
+        $this->assertDatabaseHas('clips', $clip->only('id'));
+    }
+
+    /** @test */
+    public function an_authenticated_user_can_delete_owned_clip()
+    {
+        $clip = ClipFactory::ownedBy($this->signIn())->create();
+
+        $this->delete($clip->adminPath())->assertRedirect(route('clips.index'));
+
+        $this->assertDatabaseMissing('clips', $clip->only('id'));
     }
 }

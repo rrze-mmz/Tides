@@ -71,4 +71,13 @@ class ClipsController extends Controller {
 
         return redirect($clip->adminPath());
     }
+
+    public function destroy(Clip $clip)
+    {
+        $this->authorize('edit', $clip);
+
+        $clip->delete();
+
+        return redirect(route('clips.index'));
+    }
 }
