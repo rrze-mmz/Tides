@@ -42,8 +42,6 @@ class AssetsController extends Controller
 
         $asset->delete();
 
-        Storage::delete($asset->uploadedFile);
-
         return redirect($asset->clip->adminPath());
     }
 }
