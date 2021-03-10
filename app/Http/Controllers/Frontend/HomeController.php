@@ -16,7 +16,7 @@ class HomeController extends Controller {
      */
     public function index(): \Illuminate\View\View
     {
-        return view('home',[
+        return view('frontend.homepage.index',[
             'clips' => Clip::orderByDesc('updated_at')->limit(18)->get(),
         ]);
     }

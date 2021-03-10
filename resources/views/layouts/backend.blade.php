@@ -53,7 +53,7 @@
     </header>
     <main class="mx-auto lg:flex pt-12">
         <div class="flex-none justify-center bg-gray-800 content-center h-screen w-1/7 ">
-            @include('dashboard._sidebar-navigation')
+            @include('backend.dashboard._sidebar-navigation')
         </div>
         @yield('content')
     </main>

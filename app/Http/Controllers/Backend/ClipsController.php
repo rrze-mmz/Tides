@@ -15,7 +15,7 @@ class ClipsController extends Controller {
      */
     public function index(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        return view('clips.index',[
+        return view('backend.clips.index',[
             'clips' => Clip::orderByDesc('updated_at')->limit(18)->get(),
         ]);
     }
@@ -27,7 +27,7 @@ class ClipsController extends Controller {
      */
     public function create(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        return view('clips.create');
+        return view('backend.clips.create');
     }
 
     /**
@@ -53,7 +53,7 @@ class ClipsController extends Controller {
     {
        $this->authorize('edit', $clip);
 
-        return view('clips.edit', compact('clip'));
+        return view('backend.clips.edit', compact('clip'));
     }
 
     /**

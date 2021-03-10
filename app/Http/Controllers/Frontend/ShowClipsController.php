@@ -16,7 +16,7 @@ class ShowClipsController extends Controller
     {
         $clips = Clip::all();
 
-        return view('clips.frontend.index', compact('clips'));
+        return view('frontend.clips.index', compact('clips'));
     }
 
     /**
@@ -25,6 +25,6 @@ class ShowClipsController extends Controller
      */
     public function show(Clip $clip): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        return view('clips.frontend.show', compact('clip'));
+        return view('frontend.clips.show', compact('clip'));
     }
 }

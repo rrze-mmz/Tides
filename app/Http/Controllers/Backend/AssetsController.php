@@ -6,6 +6,7 @@ use App\Models\Asset;
 use App\Models\Clip;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 
 class AssetsController extends Controller
 {
@@ -40,6 +41,8 @@ class AssetsController extends Controller
         $this->authorize('edit', $asset);
 
         $asset->delete();
+
+        Storage::delete($asset->uploadedFile);
 
         return redirect($asset->clip->adminPath());
     }

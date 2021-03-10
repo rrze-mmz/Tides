@@ -56,6 +56,23 @@ class AssetsTest extends TestCase {
             ->assertRedirect($clip->adminPath());
 
         $this->assertEquals(0, $clip->assets()->count());
-        ;
+    }
+
+    /** @test */
+    public function deleting_an_asset_should_also_delete_the_file_from_storage()
+    {
+        $clip = ClipFactory::ownedBy($this->signIn())->create();
+
+        $file = UploadedFile::fake()->create('video.mp4', '10000','video/mp4');
+
+        $this->post($clip->adminPath() . '/assets', ['uploadedFile' => $file]);
+
+        $this->assertDatabaseHas('assets', ['uploadedFile' => $clip->assets()->first()->uploadedFile]);
+
+        $this->delete($clip->assets->first()->path());
+
+        $this->assertDeleted('assets', ['uploadedFile' => $file]);
+
+        Storage::disk('videos')->assertMissing($file->hashName());
     }
 }

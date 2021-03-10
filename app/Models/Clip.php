@@ -47,7 +47,7 @@ class Clip extends Model
      */
     public function setSlugAttribute($value):void
     {
-        if(static::whereSlug($slug = Str::slug($value))->exists())
+        if(static::whereSlug($slug = Str::of($value)->slug('-'))->exists())
         {
             $slug = $this->incrementSlug($slug);
         }

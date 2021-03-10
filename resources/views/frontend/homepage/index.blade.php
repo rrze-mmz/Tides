@@ -7,7 +7,7 @@
     </div>
 </div>
 <main class="sm:container sm:mx-auto sm:mt-16">
-            @include('homepage._searchbar')
+            @include('frontend.homepage._searchbar')
 
            <div class="flex justify-content-between  w-full items-end border-b">
                <div class="flex justify-between items-end w-full pb-2">
@@ -18,7 +18,7 @@
            </div>
             <div class="h48 grid grid-cols-3 gap-4 pt-8">
                 @forelse($clips as $clip)
-                    @include('clips._card',[
+                    @include('backend.clips._card',[
                             'clip'=> $clip,
                             'route' => 'admin'
                             ])

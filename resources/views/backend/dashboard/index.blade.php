@@ -19,7 +19,7 @@
                 </div>
                 <div class="h48 grid grid-cols-3 gap-4 pt-8">
                     @forelse($clips as $clip)
-                        @include('clips._card',['clip'=> $clip])
+                        @include('backend.clips._card',['clip'=> $clip])
                     @empty
                         No clips found
                     @endforelse

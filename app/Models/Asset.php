@@ -28,4 +28,5 @@ class Asset extends Model
     {
         return "/admin/assets/{$this->id}";
     }
+
 }
