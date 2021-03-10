@@ -7,13 +7,13 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Facades\Tests\Setup\ClipFactory;
+use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
 use Tests\TestCase;
 
 class AssetsTest extends TestCase {
 
     use  RefreshDatabase;
-
-
+    
     /** @test */
     public function an_authenticated_user_can_upload_a_video_file()
     {
@@ -74,5 +74,19 @@ class AssetsTest extends TestCase {
         $this->assertDeleted('assets', ['uploadedFile' => $file]);
 
         Storage::disk('videos')->assertMissing($file->hashName());
+    }
+
+    /** @test */
+    public function uploading_an_asset_should_save_asset_duration()
+    {
+        $clip = ClipFactory::ownedBy($this->signIn())->create();
+
+        $file = new UploadedFile(storage_path().'/tests/Big_Buck_Bunny.mp4','Big_Buck_Bunny.mp4','video/mp4',null, true);
+
+        $this->post($clip->adminPath() . '/assets', ['uploadedFile' => $file]);
+
+        $this->assertEquals(10, FFMpeg::open($clip->assets()->first()->uploadedFile)->getDurationInSeconds());
+
+        $clip->assets()->first()->delete();
     }
 }
