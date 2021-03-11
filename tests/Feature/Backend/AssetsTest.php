@@ -62,15 +62,17 @@ class AssetsTest extends TestCase {
     {
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 
-        $this->post($clip->adminPath() . '/assets', ['asset' => $file  = FileFactory::videoFile()]);
+        $this->post($clip->adminPath() . '/assets', ['asset' => FileFactory::videoFile()]);
 
-        $this->assertDatabaseHas('assets', ['path' => $clip->assets()->first()->path]);
+        $asset = $clip->assets()->first();
 
-        Storage::disk('videos')->delete($file->hashName());
+        $this->assertDatabaseHas('assets', ['path' => $asset->path]);
 
-        $this->assertDeleted('assets', ['asset' => $file]);
+       $asset->delete();
 
-        Storage::disk('videos')->assertMissing($file->hashName());
+        $this->assertDeleted($asset);
+
+        Storage::disk('videos')->assertMissing($asset->path);
     }
 
     /** @test */

@@ -25,6 +25,6 @@ class DeleteAssetFile
      */
     public function handle(AssetDeleted $event)
     {
-       Storage::delete($event->asset->uploadedFile);
+       Storage::delete($event->asset->path);
     }
 }

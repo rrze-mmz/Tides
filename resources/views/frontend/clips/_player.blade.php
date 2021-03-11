@@ -1,9 +1,9 @@
 <div class="flex justify-center content-center pt-6 w-auto" >
     <video src="{{'/'.$clip->assets->first()->path }}"
-           class="mejs__player w-auto flex"
-           width="{{ $clip->assets()->first()->width }}"
-           height="{{ $clip->assets()->first()->height }}"
-           data-mejsoptions='{"alwaysShowControls": "true"}'>
+           width="100%"
+           height="100%"
+           class="w-full h-screen"
+    >
     </video>
 </div>
 

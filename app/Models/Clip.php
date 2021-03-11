@@ -58,7 +58,7 @@ class Clip extends Model
      * @param $value
      * @return string
      */
-    public function getUpdatedAtAttribute($value): string
+    public function getCreatedAtAttribute($value): string
     {
         return Carbon::createFromFormat('Y-m-d H:i:s', $value)->format('Y-m-d');
     }

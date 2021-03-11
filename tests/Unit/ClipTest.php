@@ -9,6 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
 use Facades\Tests\Setup\ClipFactory;
+use Facades\Tests\Setup\FileFactory;
 use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
 use Tests\TestCase;
 
@@ -77,11 +78,11 @@ class ClipTest extends TestCase
     }
 
     /** @test */
-    public function it_can_return_upload_date_in_carbon_format()
+    public function it_can_return_created_date_in_carbon_format()
     {
-        $clip = Clip::factory()->create(['updated_at'=>'2021-03-02 08:57:38']);
+        $clip = Clip::factory()->create(['created_at'=>'2021-03-02 08:57:38']);
 
-        $this->assertEquals('2021-03-02', $clip->updated_at);
+        $this->assertEquals('2021-03-02', $clip->created_at);
     }
 
     /** @test */
@@ -97,12 +98,12 @@ class ClipTest extends TestCase
     {
         $clip = Clip::factory()->create();
 
-        $asset = new UploadedFile(storage_path().'/tests/Big_Buck_Bunny.mp4','Big_Buck_Bunny.mp4','video/mp4',null, true);
+        $videoFile = FileFactory::videoFile();
 
         $asset = $clip->addAsset([
             'disk' => 'videos',
-            'original_file_name' => $asset->getClientOriginalName(),
-            'path'  => $path = $asset->store('videos'),
+            'original_file_name' => $videoFile->getClientOriginalName(),
+            'path'  => $path = $videoFile->store('videos'),
             'duration' => FFMpeg::open($path)->getDurationInSeconds(),
             'width' => FFMpeg::open($path)->getVideoStream()->getDimensions()->getWidth(),
             'height' => FFMpeg::open($path)->getVideoStream()->getDimensions()->getHeight()
@@ -111,5 +112,7 @@ class ClipTest extends TestCase
         $this->assertCount(1, $clip->assets);
 
         $this->assertTrue($clip->assets->contains($asset));
+
+        $asset->delete();
     }
 }
