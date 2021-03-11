@@ -1,30 +1,29 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Backend;
 
 use App\Models\Asset;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\UploadedFile;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Storage;
 use Facades\Tests\Setup\ClipFactory;
+use Facades\Tests\Setup\FileFactory;
 use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
 use Tests\TestCase;
 
 class AssetsTest extends TestCase {
 
-    use  RefreshDatabase;
-    
+    use  RefreshDatabase, WithFaker;
+
     /** @test */
     public function an_authenticated_user_can_upload_a_video_file()
     {
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 
-        $file = UploadedFile::fake()->create('video.mp4', '10000','video/mp4');
-
-        $this->post($clip->adminPath() . '/assets', ['uploadedFile' => $file])
+        $this->post($clip->adminPath() . '/assets', ['asset' => $file  = FileFactory::videoFile()])
             ->assertRedirect($clip->adminPath());
 
-        $this->assertDatabaseHas('assets', ['uploadedFile' => $clip->assets()->first()->uploadedFile]);
+        $this->assertDatabaseHas('assets', ['path' => $clip->assets()->first()->path]);
 
         Storage::disk('videos')->assertExists($file->hashName());
 
@@ -63,15 +62,13 @@ class AssetsTest extends TestCase {
     {
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 
-        $file = UploadedFile::fake()->create('video.mp4', '10000','video/mp4');
+        $this->post($clip->adminPath() . '/assets', ['asset' => $file  = FileFactory::videoFile()]);
 
-        $this->post($clip->adminPath() . '/assets', ['uploadedFile' => $file]);
+        $this->assertDatabaseHas('assets', ['path' => $clip->assets()->first()->path]);
 
-        $this->assertDatabaseHas('assets', ['uploadedFile' => $clip->assets()->first()->uploadedFile]);
+        Storage::disk('videos')->delete($file->hashName());
 
-        $this->delete($clip->assets->first()->path());
-
-        $this->assertDeleted('assets', ['uploadedFile' => $file]);
+        $this->assertDeleted('assets', ['asset' => $file]);
 
         Storage::disk('videos')->assertMissing($file->hashName());
     }
@@ -81,11 +78,9 @@ class AssetsTest extends TestCase {
     {
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 
-        $file = new UploadedFile(storage_path().'/tests/Big_Buck_Bunny.mp4','Big_Buck_Bunny.mp4','video/mp4',null, true);
+        $this->post($clip->adminPath() . '/assets', ['asset' => $file  = FileFactory::videoFile()]);
 
-        $this->post($clip->adminPath() . '/assets', ['uploadedFile' => $file]);
-
-        $this->assertEquals(10, FFMpeg::open($clip->assets()->first()->uploadedFile)->getDurationInSeconds());
+        $this->assertEquals(10, FFMpeg::open($clip->assets()->first()->path)->getDurationInSeconds());
 
         $clip->assets()->first()->delete();
     }

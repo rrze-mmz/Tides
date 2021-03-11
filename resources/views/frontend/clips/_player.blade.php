@@ -1,6 +1,8 @@
 <div class="flex justify-center content-center pt-6 w-auto" >
-    <video src="{{'/'.$clip->assets->first()->uploadedFile }}"
-           class="mejs__player w-auto flex" width="1280" height="720"
+    <video src="{{'/'.$clip->assets->first()->path }}"
+           class="mejs__player w-auto flex"
+           width="{{ $clip->assets()->first()->width }}"
+           height="{{ $clip->assets()->first()->height }}"
            data-mejsoptions='{"alwaysShowControls": "true"}'>
     </video>
 </div>
@@ -12,7 +14,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z">
             </path>
         </svg>
-        <span class="pl-3"></span> 11 Min
+        <span class="pl-3"></span> {{ gmdate("H:i:s", $clip->assets()->first()->duration) }} Min
     </div>
 
     <div class="flex items-center">

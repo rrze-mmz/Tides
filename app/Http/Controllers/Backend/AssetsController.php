@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Http\Requests\UploadAssetRequest;
 use App\Models\Asset;
 use App\Models\Clip;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
 
 class AssetsController extends Controller
 {
@@ -18,15 +20,26 @@ class AssetsController extends Controller
      * @param Request $request
      * @return \Illuminate\Routing\Redirector|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse
      */
-    public function store(Clip $clip, Request $request): \Illuminate\Routing\Redirector|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse
+    public function store(Clip $clip, UploadAssetRequest $request): \Illuminate\Routing\Redirector|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse
     {
-        $request->validate([
-            'uploadedFile' => 'file|required'
-        ]);
+        $asset = $request->file('asset');
 
-        $uploadedFile = $request->file('uploadedFile')->store('videos');
+        try{
+            $attributes = [
+                'disk' => 'videos',
+                'original_file_name' => $asset->getClientOriginalName(),
+                'path'  => $path = $asset->store('videos'),
+                'duration' => FFMpeg::open($path)->getDurationInSeconds(),
+                'width' => FFMpeg::open($path)->getVideoStream()->getDimensions()->getWidth(),
+                'height' => FFMpeg::open($path)->getVideoStream()->getDimensions()->getHeight()
+            ];
 
-        $clip->addAsset($uploadedFile);
+            $clip->addAsset($attributes);
+        }catch (Exception $e)
+        {
+            Log::error($e);
+        }
+
 
         return redirect($clip->adminPath());
     }

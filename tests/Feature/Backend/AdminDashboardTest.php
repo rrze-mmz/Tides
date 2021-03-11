@@ -1,9 +1,7 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Backend;
 
-use App\Models\Clip;
-use App\Models\User;
 use Facades\Tests\Setup\ClipFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;

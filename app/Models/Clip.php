@@ -80,12 +80,12 @@ class Clip extends Model
     }
 
     /**
-     * @param $uploadedFile
+     * @param array $attributes
      * @return Model
      */
-    public function addAsset($uploadedFile): Model
+    public function addAsset($attributes = []): Model
     {
-        return $this->assets()->create(compact('uploadedFile'));
+        return $this->assets()->create($attributes);
     }
 
     /**

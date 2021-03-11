@@ -15,8 +15,13 @@ class CreateAssetsTable extends Migration
     {
         Schema::create('assets', function (Blueprint $table) {
             $table->id();
+            $table->string('original_file_name');
+            $table->string('disk');
+            $table->string('path');
+            $table->integer('width');
+            $table->integer('height');
+            $table->integer('duration');
             $table->foreignId('clip_id')->references('id')->on('clips')->cascadeOnDelete();
-            $table->text('uploadedFile');
             $table->string('type')->nullable();
             $table->timestamps();
         });

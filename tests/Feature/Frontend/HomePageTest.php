@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Frontend;
 
 use App\Models\Clip;
 use Illuminate\Foundation\Testing\RefreshDatabase;

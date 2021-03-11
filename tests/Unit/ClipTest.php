@@ -6,8 +6,10 @@ use App\Models\Asset;
 use App\Models\Clip;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
 use Facades\Tests\Setup\ClipFactory;
+use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
 use Tests\TestCase;
 
 class ClipTest extends TestCase
@@ -95,7 +97,16 @@ class ClipTest extends TestCase
     {
         $clip = Clip::factory()->create();
 
-        $asset = $clip->addAsset('mp4/uploadedfilepath');
+        $asset = new UploadedFile(storage_path().'/tests/Big_Buck_Bunny.mp4','Big_Buck_Bunny.mp4','video/mp4',null, true);
+
+        $asset = $clip->addAsset([
+            'disk' => 'videos',
+            'original_file_name' => $asset->getClientOriginalName(),
+            'path'  => $path = $asset->store('videos'),
+            'duration' => FFMpeg::open($path)->getDurationInSeconds(),
+            'width' => FFMpeg::open($path)->getVideoStream()->getDimensions()->getWidth(),
+            'height' => FFMpeg::open($path)->getVideoStream()->getDimensions()->getHeight()
+        ]);
 
         $this->assertCount(1, $clip->assets);
 

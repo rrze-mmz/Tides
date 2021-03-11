@@ -55,18 +55,18 @@
                     >Save</button>
                 </form>
                 <div class="w-1/5 px-4 border rounded mx-4 h-full  py-4 bg-white ">
-                    <header class="font-semibold pb-2 items-center text-center border-b mb-2 "> Upload a file </header>
+                    <header class="font-semibold pb-2 items-center text-center border-b mb-2 "> Upload a Video </header>
                     <form action="{{ $clip->adminPath().'/assets' }}"
                           enctype="multipart/form-data"
                           method="POST"
                           class="flex flex-col"
                     >
                         @csrf
-                        <input type="file" id="uploadedFile" name="uploadedFile">
+                        <input type="file" id="asset" name="asset">
                         <button type="submit"
                                 class=" mt-3 ml-2 focus:outline-none text-white text-sm py-1.5 px-5 rounded-md bg-green-500 hover:bg-blue-600 hover:shadow-lg"
                         >Upload</button>
-                        @error('uploadedFile')
+                        @error('asset')
                         <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
                         @enderror
                     </form>
@@ -101,11 +101,19 @@
                 Assets
             </div>
             <div class="flex ">
-                <ul class="pt-3 ">
+                <ul class="pt-3 list-inside ">
                     @forelse($clip->assets as $asset)
                         <li class="flex space-x-6 items-center pt-3">
                             <div>
-                                {{ $asset->uploadedFile }} [AssetID: {{ $asset->id }}]
+                                <p>
+                                    Path : {{ $asset->path }}
+                                </p>
+                                <p>
+                                    [AssetID: {{ $asset->id }}]
+                                </p>
+                                <p>
+                                    Resolution: {{ $asset->width }} x {{ $asset->height }}
+                                </p>
                             </div>
 
                             <form method="POST"

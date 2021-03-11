@@ -6,6 +6,7 @@ use App\Models\Asset;
 use App\Models\Clip;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 class AssetFactory extends Factory
 {
@@ -23,12 +24,18 @@ class AssetFactory extends Factory
      */
     public function definition()
     {
-        $path = $this->faker->file(dirname(__DIR__, 2).'/storage/tests/');
+//        $path = $this->faker->file(dirname(__DIR__, 2).'/storage/tests/');
+//
+//        $uploadedFile = UploadedFile::fake()->create($path);
 
-        $uploadedFile = UploadedFile::fake()->create($path);
-
+        $uploadedFile = UploadedFile::fake()->create('video.mp4', '10000','video/mp4');
         return [
-            'uploadedFile' => $uploadedFile,
+            'original_file_name' => $uploadedFile->getClientOriginalName(),
+            'disk'  => 'videos',
+            'path' => '/videos/',
+            'width' => $this->faker->randomNumber(),
+            'height' => '1280',
+            'duration' => '720',
             'clip_id' => Clip::factory(),
             'type' => 'video/mp4'
         ];
