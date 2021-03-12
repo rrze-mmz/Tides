@@ -16,16 +16,16 @@
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
     <!--  <link href="/css/mediaelementplayer.css" rel="stylesheet"> -->
 </head>
-<body class="bg-gray-100 h-screen antialiased leading-none font-sans">
+<body class="h-screen font-sans antialiased leading-none bg-gray-100">
 <div id="app">
-    <header class="bg-gray-800 p-2 mt-0 fixed w-full z-10 top-0 py-4">
-        <nav class="container mx-auto flex justify-between items-center px-6">
+    <header class="fixed top-0 z-10 p-2 py-4 mt-0 w-full bg-gray-800">
+        <nav class="container flex justify-between items-center px-6 mx-auto">
             <div>
                 <a href="{{ url('/') }}" class="text-lg font-semibold text-gray-100 no-underline">
                     {{ config('app.name', 'Laravel') }}
                 </a>
             </div>
-            <nav class="space-x-4 text-gray-300 text-sm sm:text-base">
+            <nav class="space-x-4 text-sm text-gray-300 sm:text-base">
 
                 @guest
                     <a class="no-underline hover:underline" href="{{ route('login') }}">{{ __('Login') }}</a>
@@ -51,8 +51,8 @@
             </nav>
         </nav>
     </header>
-    <main class="mx-auto lg:flex pt-12">
-        <div class="flex-none justify-center bg-gray-800 content-center h-screen w-1/7 ">
+    <main class="pt-12 mx-auto lg:flex">
+        <div class="flex-none justify-center content-center h-screen bg-gray-800 w-1/7">
             @include('backend.dashboard._sidebar-navigation')
         </div>
         @yield('content')

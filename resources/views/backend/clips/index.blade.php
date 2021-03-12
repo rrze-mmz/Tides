@@ -1,7 +1,7 @@
 @extends('layouts.backend')
 
 @section('content')
-    <main class="mx-auto lg:flex pt-12">
+    <main class="pt-12 mx-auto lg:flex">
         <h2>Clips index</h2>
         <ul>
             @foreach($clips as $clip)

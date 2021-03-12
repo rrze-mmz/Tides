@@ -1,11 +1,11 @@
 @extends('layouts.backend')
 
 @section('content')
-        <div class="lg:flex-grow lg:mx-10 pt-10 w-full">
-            <div class="flex font-2xl font-semibold border-b border-black pb-2 ">
+        <div class="pt-10 w-full lg:flex-grow lg:mx-10">
+            <div class="flex pb-2 font-semibold border-b border-black font-2xl">
                 Edit {{ $clip->title }}
             </div>
-            <div class="flex content-between  px-2 py-2 content-center justify-center">
+            <div class="flex justify-center content-center content-between py-2 px-2">
                 <form action="{{ $clip->adminPath() }}"
                       method="POST"
                       class="w-4/5"
@@ -13,13 +13,13 @@
                     @csrf
                     @method('PATCH')
                     <div class="mb-6">
-                        <label class="block mb-2 uppercase font-bold text-xs text-gray-700"
+                        <label class="block mb-2 text-xs font-bold text-gray-700 uppercase"
                                for="title"
                         >
                             Title
                         </label>
 
-                        <input class="border border-gray-400 p-2 w-full"
+                        <input class="p-2 w-full border border-gray-400"
                                type="text"
                                name="title"
                                id="title"
@@ -28,25 +28,25 @@
                         >
 
                         @error('title')
-                        <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
+                        <p class="mt-2 text-xs text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <div class="mb-6">
-                        <label class="block mb-2 uppercase font-bold text-xs text-gray-700"
+                        <label class="block mb-2 text-xs font-bold text-gray-700 uppercase"
                                for="description"
                         >
                             Description
                         </label>
 
-                        <textarea class="border border-gray-400 p-2 w-full"
+                        <textarea class="p-2 w-full border border-gray-400"
                                   type="text"
                                   name="description"
                                   id="description"
                         > {{ $clip->description }}</textarea>
 
                         @error('description')
-                        <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
+                        <p class="mt-2 text-xs text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
 
@@ -54,8 +54,8 @@
                             class="ml-2 focus:outline-none text-white text-sm py-1.5 px-5 rounded-md bg-blue-500 hover:bg-blue-600 hover:shadow-lg"
                     >Save</button>
                 </form>
-                <div class="w-1/5 px-4 border rounded mx-4 h-full  py-4 bg-white ">
-                    <header class="font-semibold pb-2 items-center text-center border-b mb-2 "> Upload a Video </header>
+                <div class="py-4 px-4 mx-4 w-1/5 h-full bg-white rounded border">
+                    <header class="items-center pb-2 mb-2 font-semibold text-center border-b"> Upload a Video </header>
                     <form action="{{ $clip->adminPath().'/assets' }}"
                           enctype="multipart/form-data"
                           method="POST"
@@ -67,16 +67,16 @@
                                 class=" mt-3 ml-2 focus:outline-none text-white text-sm py-1.5 px-5 rounded-md bg-green-500 hover:bg-blue-600 hover:shadow-lg"
                         >Upload</button>
                         @error('asset')
-                        <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
+                        <p class="mt-2 text-xs text-red-500">{{ $message }}</p>
                         @enderror
                     </form>
                 </div>
             </div>
 
-            <div class="flex font-2xl font-semibold border-b border-black pb-2 pt-8">
+            <div class="flex pt-8 pb-2 font-semibold border-b border-black font-2xl">
                 More actions
             </div>
-            <div class="flex space-x-6 items-center pt-3">
+            <div class="flex items-center pt-3 space-x-6">
                     <a href="{{ $clip->path() }}"
                        type="button"
                         class="focus:outline-none text-white text-sm py-1.5 px-5 rounded-md bg-blue-500 hover:bg-blue-600 hover:shadow-lg">
@@ -97,13 +97,13 @@
                     </form>
             </div>
 
-            <div class="flex font-2xl font-semibold border-b border-black pb-2 pt-8">
+            <div class="flex pt-8 pb-2 font-semibold border-b border-black font-2xl">
                 Assets
             </div>
-            <div class="flex ">
-                <ul class="pt-3 list-inside ">
+            <div class="flex">
+                <ul class="pt-3 list-inside">
                     @forelse($clip->assets as $asset)
-                        <li class="flex space-x-6 items-center pt-3">
+                        <li class="flex items-center pt-3 space-x-6">
                             <div>
                                 <p>
                                     Path : {{ $asset->path }}

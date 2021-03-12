@@ -1,23 +1,23 @@
 @extends('layouts.backend')
 
 @section('content')
-        <div class="lg:flex-grow lg:mx-10 pt-10 w-full">
-            <div class="flex font-2xl font-semibold border-b border-black pb-2 ">
+        <div class="pt-10 w-full lg:flex-grow lg:mx-10">
+            <div class="flex pb-2 font-semibold border-b border-black font-2xl">
                Creates new clip
             </div>
-            <div class="flex px-2 py-2 content-center justify-center">
+            <div class="flex justify-center content-center py-2 px-2">
                 <form action="/admin/clips/"
                       method="POST"
                         class="w-4/5">
                     @csrf
                     <div class="mb-6">
-                        <label class="block mb-2 uppercase font-bold text-xs text-gray-700"
+                        <label class="block mb-2 text-xs font-bold text-gray-700 uppercase"
                                for="title"
                         >
                             Title
                         </label>
 
-                        <input class="border border-gray-400 p-2 w-full"
+                        <input class="p-2 w-full border border-gray-400"
                                type="text"
                                name="title"
                                id="title"
@@ -25,18 +25,18 @@
                         >
 
                         @error('Title')
-                        <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
+                        <p class="mt-2 text-xs text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <div class="mb-6">
-                        <label class="block mb-2 uppercase font-bold text-xs text-gray-700"
+                        <label class="block mb-2 text-xs font-bold text-gray-700 uppercase"
                                for="description"
                         >
                         Description
                         </label>
 
-                        <textarea class="border border-gray-400 p-2 w-full"
+                        <textarea class="p-2 w-full border border-gray-400"
                                type="text"
                                name="description"
                                id="description"
@@ -44,7 +44,7 @@
                         > </textarea>
 
                         @error('')
-                        <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
+                        <p class="mt-2 text-xs text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
 
@@ -54,7 +54,7 @@
                 </form>
             </div>
         </div>
-        <div class="lg:flex-1 lg:mx-10 pt-10">
+        <div class="pt-10 lg:flex-1 lg:mx-10">
 
         </div>
     </main>

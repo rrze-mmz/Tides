@@ -1,9 +1,9 @@
 @extends('layouts.frontend')
 
 @section('content')
-    <main class="container  mx-auto  mt-32 md:mt-32 h-screen">
-        <div class="flex flex-col content-center justify-center place-content-center items-center">
-            <h2 class="font-bold text-2xl">Clips index</h2>
+    <main class="container mx-auto mt-32 h-screen md:mt-32">
+        <div class="flex flex-col justify-center content-center items-center place-content-center">
+            <h2 class="text-2xl font-bold">Clips index</h2>
         </div>
 
         <ul>

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use Facades\Tests\Setup\ClipFactory;
 use Facades\Tests\Setup\FileFactory;
 use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
+use Illuminate\Http\UploadedFile;
 use Tests\TestCase;
 
 class AssetsTest extends TestCase {
@@ -73,6 +74,16 @@ class AssetsTest extends TestCase {
         $this->assertDeleted($asset);
 
         Storage::disk('videos')->assertMissing($asset->path);
+    }
+
+    /** @test */
+    public function an_asset_should_be_a_video_file()
+    {
+        $clip = ClipFactory::ownedBy($this->signIn())->create();
+
+        $this->post($clip->adminPath() . '/assets', [
+            'asset' => $file = UploadedFile::fake()->image('avatar.jpg')
+            ])->assertSessionHasErrors('asset');
     }
 
     /** @test */
