@@ -1,8 +1,9 @@
-<div class="flex justify-center content-center pt-6 w-auto" >
+<div class="flex justify-center content-center pt-6 w-auto h-2/3" >
     <video src="{{'/'.$clip->assets->first()->path }}"
            width="100%"
            height="100%"
-           class="w-full h-screen"
+           poster="{{ $clip->posterImage }}"
+           class="w-full h-full"
     >
     </video>
 </div>

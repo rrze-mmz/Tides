@@ -8,6 +8,7 @@ use App\Models\Clip;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
 
 class AssetsController extends Controller
@@ -35,6 +36,15 @@ class AssetsController extends Controller
             ];
 
             $clip->addAsset($attributes);
+
+            $file = FFMpeg::open($path)
+                ->getFrameFromSeconds(5)
+                ->export()
+                ->toDisk('thumbnails')
+                ->save($clip->id.'_poster.png');
+
+            $clip->updatePosterImage();
+
         }catch (Exception $e)
         {
             Log::error($e);

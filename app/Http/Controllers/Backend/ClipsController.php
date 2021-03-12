@@ -38,6 +38,7 @@ class ClipsController extends Controller {
      */
     public function store(StoreClipRequest $request)
     {
+
         $project = auth()->user()->clips()->create($request->validated());
 
         return redirect($project->adminPath());

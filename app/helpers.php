@@ -6,6 +6,6 @@ function clipPoster($clipPoster = null)
     {
         return $clipPoster;
     }
-    return 'https://via.placeholder.com/1280x720.png?text=No+Media+in+clip';
+    return asset('/images/generic_clip_poster_image.png');
 
 }

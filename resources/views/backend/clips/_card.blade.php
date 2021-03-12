@@ -1,6 +1,6 @@
 <div class="flex w-full bg-white">
     <div class="justify-center justify-items-center place-content-center place-items-center pt-3 mb-5 ml-2 w-48 h-24">
-        <img src="{{ clipPoster() }}" alt="preview image">
+        <img src="{{ $clip->posterImage }}" alt="preview image">
     </div>
 
     <div class="flex flex-col justify-between p-4 w-full bg-white">

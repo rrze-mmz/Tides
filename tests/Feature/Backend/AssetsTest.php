@@ -77,13 +77,14 @@ class AssetsTest extends TestCase {
     }
 
     /** @test */
-    public function an_asset_should_be_a_video_file()
+    public function an_asset_must_be_a_video_file()
     {
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 
         $this->post($clip->adminPath() . '/assets', [
             'asset' => $file = UploadedFile::fake()->image('avatar.jpg')
-            ])->assertSessionHasErrors('asset');
+            ])
+            ->assertSessionHasErrors('asset');
     }
 
     /** @test */
@@ -94,6 +95,22 @@ class AssetsTest extends TestCase {
         $this->post($clip->adminPath() . '/assets', ['asset' => $file  = FileFactory::videoFile()]);
 
         $this->assertEquals(10, FFMpeg::open($clip->assets()->first()->path)->getDurationInSeconds());
+
+        $clip->assets()->first()->delete();
+    }
+
+    /** @test */
+    public function uploading_an_asset_should_create_a_clip_poster()
+    {
+        $this->withoutExceptionHandling();
+
+        $clip = ClipFactory::ownedBy($this->signIn())->create();
+
+        $this->post($clip->adminPath() . '/assets', ['asset' => $file  = FileFactory::videoFile()]);
+
+        $clip->refresh();
+
+        Storage::disk('thumbnails')->assertExists($clip->posterImage);
 
         $clip->assets()->first()->delete();
     }

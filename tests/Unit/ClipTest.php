@@ -115,4 +115,16 @@ class ClipTest extends TestCase
 
         $asset->delete();
     }
+
+    /** @test */
+    public function it_can_updates_its_poster_image()
+    {
+        $clip = Clip::factory()->create();
+
+        $this->assertEquals('/images/generic_clip_poster_image.png', $clip->posterImage);
+
+        $clip->updatePosterImage();
+
+        $this->assertEquals('/thumbnails/1_poster.png', $clip->posterImage);
+    }
 }

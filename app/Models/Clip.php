@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use http\Env\Request;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class Clip extends Model
@@ -13,6 +14,10 @@ class Clip extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    protected $attributes = [
+        'posterImage'  => '/images/generic_clip_poster_image.png'
+    ];
 
     /**
      * Clip frontend link
@@ -104,5 +109,12 @@ class Clip extends Model
         }
 
         return $slug;
+    }
+
+    public function updatePosterImage()
+    {
+        $this->posterImage = '/thumbnails/'.$this->id.'_poster.png';
+
+        $this->save();
     }
 }
