@@ -15,9 +15,6 @@ class Clip extends Model
 
     protected $guarded = [];
 
-    protected $attributes = [
-        'posterImage'  => '/images/generic_clip_poster_image.png'
-    ];
 
     /**
      * Clip frontend link
@@ -113,7 +110,7 @@ class Clip extends Model
 
     public function updatePosterImage()
     {
-        $this->posterImage = '/thumbnails/'.$this->id.'_poster.png';
+        $this->posterImage = $this->id.'_poster.png';
 
         $this->save();
     }

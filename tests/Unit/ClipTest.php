@@ -125,6 +125,6 @@ class ClipTest extends TestCase
 
         $clip->updatePosterImage();
 
-        $this->assertEquals('/thumbnails/1_poster.png', $clip->posterImage);
+        $this->assertEquals('1_poster.png', $clip->posterImage);
     }
 }

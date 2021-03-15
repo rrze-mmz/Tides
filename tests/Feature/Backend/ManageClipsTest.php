@@ -75,7 +75,25 @@ class ManageClipsTest extends TestCase
             ->assertSee($attributes['title']);
     }
 
+
     /** @test */
+    public function create_clip_form_should_remember_old_values_on_validation_error()
+    {
+        $this->signIn();
+
+        $attributes = [
+            'title' => 'Long description',
+            'description' => $this->faker->sentence(500),
+        ];
+        $this->post('admin/clips',$attributes);
+
+        $this->followingRedirects();
+
+        $this->get('/admin/clips/create')->assertSee($attributes);
+
+    }
+
+        /** @test */
     public function an_authenticated_user_can_update_an_owned_clip()
     {
         $clip = ClipFactory::ownedBy($this->signIn())->create();

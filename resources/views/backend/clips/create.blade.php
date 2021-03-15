@@ -21,6 +21,7 @@
                                type="text"
                                name="title"
                                id="title"
+                               value="{{ old('title') }}"
                                required
                         >
 
@@ -41,9 +42,9 @@
                                name="description"
                                id="description"
                                required
-                        > </textarea>
+                        > {{ old('description') }}</textarea>
 
-                        @error('')
+                        @error('description')
                         <p class="mt-2 text-xs text-red-500">{{ $message }}</p>
                         @enderror
                     </div>

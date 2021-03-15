@@ -1,6 +1,6 @@
 <div class="flex w-full bg-white">
     <div class="justify-center justify-items-center place-content-center place-items-center pt-3 mb-5 ml-2 w-48 h-24">
-        <img src="{{ $clip->posterImage }}" alt="preview image">
+        <img src="{{ fetchClipPoster($clip->posterImage) }}" alt="preview image">
     </div>
 
     <div class="flex flex-col justify-between p-4 w-full bg-white">
@@ -8,7 +8,7 @@
             <div class="text-sm font-bold text-gray-900">
                 <a href="@if (str_contains(url()->current(), 'admin')) {{$clip->adminPath()}} @else {{ $clip->path() }} @endif" class="underline">
                     {{ $clip->title }}
-                </a></div>
+                </a></div
             <p class="py-3 text-base text-gray-700">{{ Str::limit($clip->description, 30) }}</p>
         </div>
         <div class="flex items-center">

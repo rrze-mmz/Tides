@@ -1,11 +1,6 @@
 <?php
 
-function clipPoster($clipPoster = null)
+function fetchClipPoster($file = null)
 {
-    if($clipPoster !== null)
-    {
-        return $clipPoster;
-    }
-    return asset('/images/generic_clip_poster_image.png');
-
+    return (is_null($file)) ? '/images/generic_clip_poster_image.png' : '/thumbnails/'.$file;
 }

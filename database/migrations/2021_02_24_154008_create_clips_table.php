@@ -19,7 +19,7 @@ class CreateClipsTable extends Migration
             $table->foreignId('owner_id')->references('id')->on('users');
             $table->string('slug')->unique();
             $table->text('description');
-            $table->string('posterImage');
+            $table->string('posterImage')->nullable();
             $table->timestamps();
         });
     }

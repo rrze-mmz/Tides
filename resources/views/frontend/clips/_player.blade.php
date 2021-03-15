@@ -2,7 +2,7 @@
     <video src="{{'/'.$clip->assets->first()->path }}"
            width="100%"
            height="100%"
-           poster="{{ $clip->posterImage }}"
+           poster="{{ fetchClipPoster($clip->posterImage) }}"
            class="w-full h-full"
     >
     </video>

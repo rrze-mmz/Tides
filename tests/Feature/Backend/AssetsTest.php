@@ -114,4 +114,5 @@ class AssetsTest extends TestCase {
 
         $clip->assets()->first()->delete();
     }
+
 }

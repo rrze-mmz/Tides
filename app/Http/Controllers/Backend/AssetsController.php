@@ -37,7 +37,7 @@ class AssetsController extends Controller
 
             $clip->addAsset($attributes);
 
-            $file = FFMpeg::open($path)
+            FFMpeg::open($path)
                 ->getFrameFromSeconds(5)
                 ->export()
                 ->toDisk('thumbnails')
