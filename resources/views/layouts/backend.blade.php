@@ -58,5 +58,10 @@
         @yield('content')
     </main>
 </div>
+    <footer class=" flex bg-gray-800 h-10 justify-center items-center">
+        <div class="space-x-4 text-sm text-gray-300 sm:text-base">
+            Copyright @ {{ Illuminate\Support\Carbon::now()->year }} MIT Licence
+        </div>
+    </footer>
 </body>
 </html>

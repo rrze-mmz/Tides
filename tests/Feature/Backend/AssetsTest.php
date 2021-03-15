@@ -102,8 +102,6 @@ class AssetsTest extends TestCase {
     /** @test */
     public function uploading_an_asset_should_create_a_clip_poster()
     {
-        $this->withoutExceptionHandling();
-
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 
         $this->post($clip->adminPath() . '/assets', ['asset' => $file  = FileFactory::videoFile()]);
@@ -115,4 +113,33 @@ class AssetsTest extends TestCase {
         $clip->assets()->first()->delete();
     }
 
+    /** @test */
+    public function deleting_an_asset_should_delete_a_clip_poster()
+    {
+        $clip = ClipFactory::ownedBy($this->signIn())->create();
+
+        $this->post($clip->adminPath() . '/assets', ['asset' => $file  = FileFactory::videoFile()]);
+
+        $clip->refresh();
+
+        $this->delete($clip->assets()->first()->path());
+
+        Storage::disk('thumbnails')->assertMissing($clip->posterImage);
+    }
+
+    /** @test */
+    public function deleting_an_asset_should_update_clip_poster_image_column()
+    {
+        $clip = ClipFactory::ownedBy($this->signIn())->create();
+
+        $this->post($clip->adminPath() . '/assets', ['asset' => $file  = FileFactory::videoFile()]);
+
+        $this->delete($clip->assets()->first()->path());
+
+        $clip->refresh();
+
+        $this->assertNull($clip->posterImage);
+
+        $clip->delete();
+    }
 }

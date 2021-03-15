@@ -8,7 +8,7 @@
             <div class="text-sm font-bold text-gray-900">
                 <a href="@if (str_contains(url()->current(), 'admin')) {{$clip->adminPath()}} @else {{ $clip->path() }} @endif" class="underline">
                     {{ $clip->title }}
-                </a></div
+                </a></div>
             <p class="py-3 text-base text-gray-700">{{ Str::limit($clip->description, 30) }}</p>
         </div>
         <div class="flex items-center">

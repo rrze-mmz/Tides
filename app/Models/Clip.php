@@ -110,7 +110,7 @@ class Clip extends Model
 
     public function updatePosterImage()
     {
-        $this->posterImage = $this->id.'_poster.png';
+        $this->posterImage = (Storage::disk('thumbnails')->exists($this->id.'_poster.png'))? $this->id.'_poster.png':null;
 
         $this->save();
     }

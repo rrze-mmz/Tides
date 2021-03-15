@@ -11,13 +11,13 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" ></script>
-    <script src="{{ asset('js/mediaelement-and-player.js') }}"></script>
+    <script src="{{ asset('js/plyr.js') }}" ></script>
 
     <!-- Styles -->
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
-  <!--  <link href="/css/mediaelementplayer.css" rel="stylesheet"> -->
+    <link href="{{ asset('css/plyr.css') }}" rel="stylesheet">
 </head>
-<body class="h-screen font-sans antialiased leading-none bg-gray-100">
+<body class=" font-sans antialiased leading-none bg-gray-100">
     <div id="app">
         <header class="fixed top-0 z-10 p-2 py-4 mt-0 w-full bg-gray-800">
             <nav class="container flex justify-between items-center px-6 mx-auto">
@@ -52,22 +52,21 @@
                 </nav>
             </nav>
         </header>
+        <div class="h-screen">
             @yield('content')
+        </div>
     </div>
 
-
+    <footer class=" flex bg-gray-800 h-10 justify-center items-center">
+        <div class="space-x-4 text-sm text-gray-300 sm:text-base">
+            Copyright @ {{ Illuminate\Support\Carbon::now()->year }} MIT Licence
+        </div>
+    </footer>
     <script type="text/javascript">
-        $(document).ready(function(){
-            mejs.i18n.language('de'); // Setting German language
-
-            $('video').mediaelementplayer({
-                alwaysShowControls: false,
-                features: ['playpause','progress','volume','fullscreen'],
-                videoVolume: 'vertical',
-                success: function(mediaElement, originalNode, instance) {
-                }
+            const player = new Plyr('#player',{
+                iconUrl: '/css/plyr.svg',
+                loadSprite: false,
             });
-        });
     </script>
 </body>
 </html>

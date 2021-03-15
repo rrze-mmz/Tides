@@ -65,6 +65,8 @@ class AssetsController extends Controller
 
         $asset->delete();
 
+        $asset->clip->updatePosterImage();
+
         return redirect($asset->clip->adminPath());
     }
 }

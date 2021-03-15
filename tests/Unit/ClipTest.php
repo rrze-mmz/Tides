@@ -6,7 +6,7 @@ use App\Models\Asset;
 use App\Models\Clip;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Facades\Tests\Setup\ClipFactory;
 use Facades\Tests\Setup\FileFactory;
@@ -123,8 +123,14 @@ class ClipTest extends TestCase
 
         $this->assertEquals('/images/generic_clip_poster_image.png', $clip->posterImage);
 
+        $file  = FileFactory::videoFile();
+
+        $file->storeAs('thumbnails',$clip->id.'_poster.png');
+
         $clip->updatePosterImage();
 
         $this->assertEquals('1_poster.png', $clip->posterImage);
+
+        Storage::disk('thumbnails')->delete($clip->id.'_poster.png');
     }
 }

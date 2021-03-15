@@ -25,6 +25,10 @@ class DeleteAssetFile
      */
     public function handle(AssetDeleted $event)
     {
+        //delete poster image file
+        Storage::delete('thumbnails/'.$event->asset->clip->posterImage);
+
+        //delete the video file
        Storage::delete($event->asset->path);
     }
 }
