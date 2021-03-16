@@ -10,14 +10,14 @@ class HomeController extends Controller {
 
 
     /**
-     * Show the application dashboard.
+     * Fetch clips for the home page
      *
      * @return \Illuminate\Http\Response
      */
     public function index(): \Illuminate\View\View
     {
         return view('frontend.homepage.index',[
-            'clips' => Clip::orderByDesc('updated_at')->limit(18)->get(),
+            'clips' => Clip::whereHas('assets')->orderByDesc('updated_at')->limit(18)->get(),
         ]);
     }
 }

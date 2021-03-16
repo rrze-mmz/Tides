@@ -12,8 +12,6 @@ class ClipFactory {
 
     protected $assetsCount = 0;
 
-    protected $clipsCount = 0;
-
     protected $user;
 
     public function withAssets($count)

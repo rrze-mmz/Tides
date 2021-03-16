@@ -79,7 +79,7 @@
             <div class="flex items-center pt-3 space-x-6">
                     <a href="{{ $clip->path() }}"
                        type="button"
-                        class="focus:outline-none text-white text-sm py-1.5 px-5 rounded-md bg-blue-500 hover:bg-blue-600 hover:shadow-lg">
+                        class="focus:outline-none text-white text-sm  p-3 rounded-md bg-blue-500 hover:bg-blue-600 hover:shadow-lg">
                         Go to view page
                     </a>
 
@@ -90,7 +90,7 @@
                         @method('DELETE')
                     <button
                        type="submit"
-                       class="focus:outline-none text-white text-sm py-1.5 px-5 rounded-md bg-red-700 hover:bg-red-500 hover:shadow-lg">
+                       class="focus:outline-none text-white text-sm p-3 rounded-md bg-red-700 hover:bg-red-500 hover:shadow-lg">
                         Delete
                     </button>
 
@@ -101,29 +101,29 @@
                 Assets
             </div>
             <div class="flex">
-                <ul class="pt-3 list-inside">
-                    @forelse($clip->assets as $asset)
-                        <li class="flex items-center pt-3 space-x-6">
-                            <div>
-                                <p>
-                                    Path : {{ $asset->path }}
-                                </p>
-                                <p>
-                                    [AssetID: {{ $asset->id }}]
-                                </p>
-                                <p>
-                                    Resolution: {{ $asset->width }} x {{ $asset->height }}
-                                </p>
-                            </div>
+                <ul class="pt-3 w-full">
+                    <li class="flex content-center items-center p-5 mb-4 text-xl bg-green-500 rounded">
+                        <div class="pb-2 w-1/5 border-b border-black">ID</div>
+                        <div class="pb-2 w-3/5 border-b border-black">Saved path</div>
+                        <div class="pb-2 w-1/5 border-b border-black">Resolution</div>
+                        <div class="pb-2 w-1/5 border-b border-black">Actions</div>
+                    </li>
 
-                            <form method="POST"
-                                action="{{$asset->path() }}"
-                            >
-                                @csrf
-                                @method('DELETE')
-                             <button type="submit"
-                                     class="focus:outline-none text-white text-sm py-1.5 px-5 rounded-md bg-red-700 hover:bg-red-500 hover:shadow-lg"> Delete </button>
-                            </form>
+                    @forelse($clip->assets as $asset)
+                        <li class="flex content-center items-center p-5 mb-4 text-xl bg-gray-200 rounded">
+                            <div class="w-1/5"> {{ $asset->id }}</div>
+                            <div class="w-3/5"> {{ $asset->path }}</div>
+                            <div class="w-1/5"> {{ $asset->width }} x {{ $asset->height }}</div>
+                            <div class="w-1/5">
+                                <form method="POST"
+                                    action="{{$asset->path() }}"
+                                >
+                                    @csrf
+                                    @method('DELETE')
+                                 <button type="submit"
+                                         class="focus:outline-none text-white text-sm py-1.5 px-5 rounded-md bg-red-700 hover:bg-red-500 hover:shadow-lg"> Delete </button>
+                                </form>
+                            </div>
                         </li>
                     @empty
                         No assets

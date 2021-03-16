@@ -2,28 +2,34 @@
 
 namespace Tests\Feature\Frontend;
 
-use App\Models\Clip;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Facades\Tests\Setup\ClipFactory;
 use Tests\TestCase;
 
 class HomePageTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, WithFaker;
 
     /** @test */
-    public function home_page_should_show_project_name()
+    public function should_show_project_name()
     {
         $this->get('/')->assertStatus(200)->assertSee('Tides');
     }
 
     /** @test */
-    public function home_page_should_display_clip_if_any()
+    public function should_not_display_clips_without_assets()
     {
-        $this->get('/')->assertSee('No clips found');
+        $clip = ClipFactory::create();
 
-        $clip = Clip::factory()->create();
+        $this->get('/')->assertDontSee($clip->title);
+    }
 
-       $this->get('/')->assertSee($clip->title);
+    /** @test */
+    public function should_display_clips_with_video_assets()
+    {
+        $clip = ClipFactory::withAssets(1)->create();
+
+        $this->get('/')->assertSee($clip->title);
     }
 }
