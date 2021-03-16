@@ -1,7 +1,7 @@
 <div class="flex flex-col">
 
     <div class="flex justify-center content-center pt-6 " >
-            <video id="player" controls data-poster="{{'/'.$clip->assets->first()->path }}" controls data-plyr-config='{ "title": "Example Title" }'s>
+            <video id="player" controls data-poster="{{ fetchClipPoster($clip->posterImage)  }}" controls data-plyr-config='{ "title": "Example Title" }'s>
                 <source src="{{ '/'.$clip->assets->first()->path  }}" type="video/mp4" />
                 <!-- Captions are optional -->
                 <track kind="captions" label="English captions" src="/path/to/captions.vtt" srclang="en" default />

@@ -1,14 +1,14 @@
-{{--        Search form--}}
 <div class="flex justify-center content-center">
     <form method="POST"
-          action="/"
+          action="/search"
           class="w-3/5">
         @csrf
         <div class="p-2">
             <div class="flex items-center bg-white rounded-full shadow-xl">
                 <input class="ml-2 py-2 px-4 w-full leading-tight text-gray-700 rounded-l-full focus:outline-none"
-                       id="search"
+                       id="searchTerm"
                        type="text"
+                       name="searchTerm"
                        placeholder="Search">
 
                 <div class="p-4">

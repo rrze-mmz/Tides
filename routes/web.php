@@ -4,6 +4,7 @@ use App\Http\Controllers\Backend\AssetsController;
 use App\Http\Controllers\Backend\AdminDashboardController;
 use App\Http\Controllers\Backend\ClipsController;
 use App\Http\Controllers\Frontend\HomeController;
+use App\Http\Controllers\Frontend\SearchController;
 use App\Http\Controllers\Frontend\ShowClipsController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +22,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::redirect('/home', '/');
 Route::redirect('/admin','/admin/dashboard');
+
+Route::post('/search', [SearchController::class, 'search']);
 
 //Frontend clip routes
 Route::get('/clips',[ShowClipsController::class,'index']);

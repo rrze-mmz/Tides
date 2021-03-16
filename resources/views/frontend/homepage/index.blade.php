@@ -7,7 +7,7 @@
     </div>
 </div>
 <main class="sm:container sm:mx-auto sm:mt-16">
-            @include('frontend.homepage._searchbar')
+            @include('frontend.search._searchbar')
 
            <div class="flex items-end w-full border-b justify-content-between">
                <div class="flex justify-between items-end pb-2 w-full">

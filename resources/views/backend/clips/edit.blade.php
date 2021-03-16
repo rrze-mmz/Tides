@@ -102,7 +102,7 @@
             </div>
             <div class="flex">
                 <ul class="pt-3 w-full">
-                    <li class="flex content-center items-center p-5 mb-4 text-xl bg-green-500 rounded">
+                    <li class="flex content-center items-center p-5 mb-4 text-xl bg-gray-400 rounded">
                         <div class="pb-2 w-1/5 border-b border-black">ID</div>
                         <div class="pb-2 w-3/5 border-b border-black">Saved path</div>
                         <div class="pb-2 w-1/5 border-b border-black">Resolution</div>
