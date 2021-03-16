@@ -4,7 +4,7 @@ dist: precise
 language: php
 
 php:
-  - 8.0
+  - 8.0.2
 
 addons:
   postgresql: 12
