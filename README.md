@@ -1,4 +1,6 @@
 ## About Tides
+[![Laravel](https://github.com/stefanosgeo/tides/actions/workflows/build.yml/badge.svg?branch=develop)](https://github.com/stefanosgeo/tides/actions/workflows/build.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Tides is an open source video platform based on <a  href="https://laravel.com" target="_blank"> laravel framework </a>. 
 
