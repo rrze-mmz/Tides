@@ -18,11 +18,17 @@ class SearchController extends Controller
      */
     public function search(SearchRequest $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        $clips = Clip::whereHas('assets')
-                        ->whereRaw('lower(title)  like (?)',["%{$request->searchTerm}%"])
-                        ->orWhereRaw('lower(description)  like (?)',["%{$request->searchTerm}%"])
+        $clips = Clip::has('assets')
+                        ->where(function($q) use($request) {
+                            $q->whereRaw('lower(title)  like (?)',["%{$request->searchTerm}%"])
+                            ->orWhereRaw('lower(description)  like (?)',["%{$request->searchTerm}%"])
+                            ->orWhere('owner_id', function($q) use ($request){
+                                $q->select('id')
+                                    ->from('users')
+                                    ->whereRaw('lower(name)  like (?)',["%{$request->searchTerm}%"]);
+                            });
+                        })
                         ->get();
-
 
         return view('frontend.search.results', ['clips'=> $clips]);
     }

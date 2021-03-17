@@ -4,6 +4,7 @@ namespace Tests\Feature\Frontend;
 
 use App\Models\Asset;
 use App\Models\Clip;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -24,14 +25,15 @@ class SearchTest extends TestCase
 
        $this->clip =  Clip::factory()->create([
             'title' => 'Lorem ipsum for testing  the search function',
-            'description' => 'Dolor sit amet for testing the search function'
+            'description' => 'Dolor sit amet for testing the search function',
+            'owner_id' => User::factory()->create(['name' => 'John Doe'])
         ]);
 
        Asset::factory()->create(['clip_id' => $this->clip]);
     }
 
     /** @test */
-    public function search_term_should_not_be_emtpy()
+    public function search_term_should_not_be_empty()
     {
         $this->post('/search', ['searchTerm' => ''])
             ->assertSessionHasErrors('searchTerm');
@@ -65,7 +67,7 @@ class SearchTest extends TestCase
     public function a_user_can_search_for_clip_description()
     {
         $this->followingRedirects()
-            ->post('/search', ['searchTerm' => 'dolor'])
-            ->assertSee($this->clip->description);
+            ->post('/search', ['searchTerm' => 'Doe'])
+            ->assertSee($this->clip->owner->name);
     }
 }

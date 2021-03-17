@@ -28,7 +28,7 @@ class ClipFactory extends Factory
             'description' => $this->faker->paragraph,
             'slug'  => $title,
             'owner_id' => User::factory()->create()->id,
-            'posterImage' => '/images/generic_clip_poster_image.png'
+            'posterImage' => null
         ];
     }
 }

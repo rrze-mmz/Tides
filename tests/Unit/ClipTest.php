@@ -121,7 +121,7 @@ class ClipTest extends TestCase
     {
         $clip = Clip::factory()->create();
 
-        $this->assertEquals('/images/generic_clip_poster_image.png', $clip->posterImage);
+        $this->assertNull($clip->posterImage);
 
         $file  = FileFactory::videoFile();
 

@@ -1,4 +1,4 @@
-<div class="flex w-full bg-white">
+<div class="flex w-full bg-white my-2 ">
     <div class="justify-center justify-items-center place-content-center place-items-center pt-3 mb-5 ml-2 w-48 h-24">
         <img src="{{ fetchClipPoster($clip->posterImage) }}" alt="preview image">
     </div>

@@ -5,7 +5,7 @@
         <div class="flex justify-between pb-2 border-b-2 border-black">
             <h2 class="text-2xl font-bold">Search results: found {{ count($clips).' Clips'}}</h2>
         </div>
-        <div class="flex pt-2">
+        <div class="flex flex-col pt-2 mx-2">
             @forelse($clips as $clip)
                 @include('backend.clips._card',['clip'  => $clip,])
             @empty
