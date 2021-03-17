@@ -22,7 +22,7 @@ class UploadAssetRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'asset' => 'required|file|mimetypes:video/mp4,video/mpeg,video/x-matroska',

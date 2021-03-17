@@ -9,8 +9,7 @@ use Illuminate\Support\Str;
 class StoreClipRequest extends FormRequest
 {
 
-
-    protected function prepareForValidation()
+    protected function prepareForValidation():void
     {
         $this->merge([
             'slug' => Str::slug($this->title)
@@ -32,7 +31,7 @@ class StoreClipRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'title' => 'required',

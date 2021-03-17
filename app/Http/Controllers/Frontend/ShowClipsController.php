@@ -4,15 +4,15 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Clip;
-use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class ShowClipsController extends Controller
 {
 
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+     * @return View
      */
-    public function index(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    public function index(): View
     {
         $clips = Clip::all();
 
@@ -21,9 +21,9 @@ class ShowClipsController extends Controller
 
     /**
      * @param Clip $clip
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+     * @return View
      */
-    public function show(Clip $clip): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    public function show(Clip $clip): View
     {
         return view('frontend.clips.show', compact('clip'));
     }

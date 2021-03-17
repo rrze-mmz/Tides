@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Events\AssetDeleted;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Asset extends Model
 {
@@ -15,7 +16,7 @@ class Asset extends Model
     //this will update clips timestamp
     protected $touches = ['clip'];
 
-    //fire an event on delete
+    //fire an  event on delete
     protected $dispatchesEvents = [
         'deleted' => AssetDeleted::class
     ];
@@ -23,9 +24,9 @@ class Asset extends Model
     /**
      * Clip Eloquent relationship
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    public function clip(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function clip(): BelongsTo
     {
         return $this->belongsTo(Clip::class);
     }

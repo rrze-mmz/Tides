@@ -3,9 +3,10 @@
 namespace App\Models;
 
 use Carbon\Carbon;
-use http\Env\Request;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -14,7 +15,6 @@ class Clip extends Model
     use HasFactory;
 
     protected $guarded = [];
-
 
     /**
      * Clip frontend link
@@ -66,17 +66,17 @@ class Clip extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    public function owner(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function owner(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
-    public function assets(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function assets(): HasMany
     {
         return $this->hasMany(Asset::class);
     }
@@ -92,9 +92,9 @@ class Clip extends Model
 
     /**
      * @param $slug
-     * @return mixed|string
+     * @return mixed
      */
-    public function incrementSlug($slug)
+    public function incrementSlug($slug): mixed
     {
         $original = $slug;
 
@@ -108,7 +108,10 @@ class Clip extends Model
         return $slug;
     }
 
-    public function updatePosterImage()
+    /**
+     * Updates Clip poster Image on asset upload
+     */
+    public function updatePosterImage(): void
     {
         $this->posterImage = (Storage::disk('thumbnails')->exists($this->id.'_poster.png'))? $this->id.'_poster.png':null;
 

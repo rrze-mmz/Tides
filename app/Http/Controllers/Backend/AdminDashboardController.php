@@ -4,16 +4,16 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Clip;
+use Illuminate\View\View;
 
 class AdminDashboardController extends Controller
 {
-
     /**
      * Dashboard for the logged in user
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+     * @return View
      */
-    public function index(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    public function __invoke(): View
     {
         return view('backend.dashboard.index', [
             'clips' => auth()->user()->clips()->orderByDesc('updated_at')->limit(10)->get(),

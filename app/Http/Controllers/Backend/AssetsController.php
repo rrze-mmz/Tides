@@ -5,10 +5,10 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Requests\UploadAssetRequest;
 use App\Models\Asset;
 use App\Models\Clip;
-use Illuminate\Http\Request;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\RedirectResponse;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
 
 class AssetsController extends Controller
@@ -18,10 +18,10 @@ class AssetsController extends Controller
      * Saves a file and persist the asset to the database
      *
      * @param Clip $clip
-     * @param Request $request
-     * @return \Illuminate\Routing\Redirector|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse
+     * @param UploadAssetRequest $request
+     * @return RedirectResponse
      */
-    public function store(Clip $clip, UploadAssetRequest $request): \Illuminate\Routing\Redirector|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse
+    public function store(Clip $clip, UploadAssetRequest $request): RedirectResponse
     {
         $asset = $request->file('asset');
 
@@ -50,16 +50,16 @@ class AssetsController extends Controller
             Log::error($e);
         }
 
-
         return redirect($clip->adminPath());
     }
 
     /**
      * @param Asset $asset
-     * @return \Illuminate\Routing\Redirector|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @return RedirectResponse
+     * @throws AuthorizationException
+     * @throws Exception
      */
-    public function destroy(Asset $asset): \Illuminate\Routing\Redirector|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse
+    public function destroy(Asset $asset): RedirectResponse
     {
         $this->authorize('edit', $asset);
 

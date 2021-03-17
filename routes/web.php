@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/', HomeController::class)->name('home');
 Route::redirect('/home', '/');
 Route::redirect('/admin','/admin/dashboard');
 
@@ -32,7 +32,7 @@ Route::get('/clips/{clip}',[ShowClipsController::class,'show']);
 //Backend routes
 Route::prefix('admin')->middleware('auth')->group(function(){
    //Dashboard
-    Route::get('/dashboard', [AdminDashboardController::class,'index'])->name('dashboard');
+    Route::get('/dashboard', AdminDashboardController::class)->name('dashboard');
 
     //Clip
     Route::get('/clips',[ClipsController::class,'index'])->name('clips.index');

@@ -24,10 +24,6 @@ class AssetFactory extends Factory
      */
     public function definition()
     {
-//        $path = $this->faker->file(dirname(__DIR__, 2).'/storage/tests/');
-//
-//        $uploadedFile = UploadedFile::fake()->create($path);
-
         $uploadedFile = UploadedFile::fake()->create('video.mp4', '10000','video/mp4');
         return [
             'original_file_name' => $uploadedFile->getClientOriginalName(),

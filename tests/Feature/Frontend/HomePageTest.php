@@ -14,6 +14,7 @@ class HomePageTest extends TestCase
     /** @test */
     public function should_show_project_name()
     {
+        $this->withoutExceptionHandling();
         $this->get('/')->assertStatus(200)->assertSee('Tides');
     }
 
