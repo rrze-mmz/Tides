@@ -20,7 +20,9 @@ class AdminDashboardTest extends TestCase
     {
         $this->signIn();
 
-        $this->get('admin/dashboard')->assertStatus(200);
+        $this->get('admin/dashboard')
+            ->assertStatus(200)
+            ->assertViewIs('backend.dashboard.index');
     }
 
     /** @test */

@@ -32,42 +32,61 @@ class SearchTest extends TestCase
        Asset::factory()->create(['clip_id' => $this->clip]);
     }
 
+    protected function searchFor($term)
+    {
+        return $this::get('search?term='.$term);
+    }
+
     /** @test */
     public function search_term_should_not_be_empty()
     {
-        $this->post('/search', ['searchTerm' => ''])
-            ->assertSessionHasErrors('searchTerm');
+        $this->searchFor('')->assertSessionHasErrors('term');
     }
 
     /** @test */
     public function search_term_should_not_be_less_than_3_chars()
     {
-        $this->post('/search', ['searchTerm' => 'ab'])
-            ->assertSessionHasErrors('searchTerm');
+        $this->searchFor('ab')->assertSessionHasErrors('term');
     }
 
     /** @test */
-    public function search_should_return_only_clips_with_assets()
+    public function it_must_return_only_clips_with_assets()
     {
-        $clipWithoutAssets = Clip::factory()->create(['title' => 'Clip without video']);
+        Clip::factory()->create(['title' => 'Clip without video']);
 
-        $this->followingRedirects()
-            ->post('/search', ['searchTerm' => 'video'])
-            ->assertDontSee($clipWithoutAssets->title);
+        $this->searchFor('video')->assertSee('No results found');
     }
     /** @test */
-    public function a_user_can_search_for_clip_title()
+    public function it_can_search_for_clip_title()
     {
-        $this->followingRedirects()
-            ->post('/search', ['searchTerm' => 'lorem'])
-            ->assertSee($this->clip->title);
+        $this->searchFor('lorem')->assertSee($this->clip->title);
     }
 
     /** @test */
-    public function a_user_can_search_for_clip_description()
+    public function it_can_search_for_clip_description()
     {
-        $this->followingRedirects()
-            ->post('/search', ['searchTerm' => 'Doe'])
-            ->assertSee($this->clip->owner->name);
+        $this->searchFor('dolor')->assertSee($this->clip->title);
+    }
+
+    /** @test */
+    public function it_can_search_for_clip_owner()
+    {
+        $this->searchFor('Doe')->assertSee($this->clip->owner->name);
+    }
+
+    /** @test */
+    public function it_can_search_for_multiple_owners()
+    {
+        $secondClip =  Clip::factory()->create([
+                            'title' => 'Lorem ipsum for testing  the search function',
+                            'description' => 'Dolor sit amet for testing the search function',
+                            'owner_id' => User::factory()->create(['name' => 'Bob Doe'])
+                        ]);
+
+        Asset::factory()->create(['clip_id' => $secondClip]);
+
+        $this->searchFor('doe')
+                ->assertSee($this->clip->title)
+                ->assertSee($secondClip->title);
     }
 }

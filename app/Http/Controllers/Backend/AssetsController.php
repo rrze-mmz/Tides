@@ -37,6 +37,7 @@ class AssetsController extends Controller
 
             $clip->addAsset($attributes);
 
+            //generate a poster image for the clip
             FFMpeg::open($path)
                 ->getFrameFromSeconds(5)
                 ->export()

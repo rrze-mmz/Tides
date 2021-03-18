@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
-use App\Models\Clip;
 use Illuminate\View\View;
 
 class AdminDashboardController extends Controller

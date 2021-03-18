@@ -17,7 +17,7 @@ class ClipFactory extends Factory
     protected $model = Clip::class;
 
     /**
-     * Define the model's default state.
+     * Define the model's default state
      *
      * @return array
      */

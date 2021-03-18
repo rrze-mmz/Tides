@@ -5,31 +5,30 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SearchRequest;
 use App\Models\Clip;
-use Illuminate\Http\Request;
+use App\Models\User;
 use Illuminate\View\View;
+use Illuminate\Support\Str;
 
 class SearchController extends Controller
 {
-
     /**
-     * Main and basic seach function
+     * Main and basic search function
      *
      * @param SearchRequest $request
      * @return View
      */
     public function search(SearchRequest $request): View
     {
-        $clips = Clip::has('assets')
+
+        $clips = Clip::has('assets') // fetch only clips with assets
                         ->where(function($q) use($request) {
-                            $q->whereRaw('lower(title)  like (?)',["%{$request->searchTerm}%"])
-                                ->orWhereRaw('lower(description)  like (?)',["%{$request->searchTerm}%"])
-                                ->orWhere('owner_id', function($q) use ($request){
-                                    $q->select('id')
-                                        ->from('users')
-                                        ->whereRaw('lower(name)  like (?)',["%{$request->searchTerm}%"]);
-                            });
-                        })
-                        ->get();
+                            $q->whereRaw('lower(title)  like (?)',["%{$request->term}%"])
+                                ->orWhereRaw('lower(description)  like (?)',["%{$request->term}%"]);
+                        }) //search for clip title and description
+                        ->orWhereHas('owner', function($q) use($request){
+                                $q->whereRaw('lower(name)  like (?)',["%{$request->term}%"]);
+                        }) //search for clip presenter
+                        ->paginate(10)->withQueryString();
 
         return view('frontend.search.results', ['clips'=> $clips]);
     }

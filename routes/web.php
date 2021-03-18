@@ -23,9 +23,10 @@ Route::get('/', HomeController::class)->name('home');
 Route::redirect('/home', '/');
 Route::redirect('/admin','/admin/dashboard');
 
-Route::post('/search', [SearchController::class, 'search']);
+//Quick search
+Route::get('search', [SearchController::class, 'search']);
 
-//Frontend clip routes
+//Frontend clip route
 Route::get('/clips',[ShowClipsController::class,'index']);
 Route::get('/clips/{clip}',[ShowClipsController::class,'show']);
 

@@ -17,7 +17,7 @@
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/plyr.css') }}" rel="stylesheet">
 </head>
-<body class=" font-sans antialiased leading-none bg-gray-100  max-h-full min-h-screen">
+<body class=" font-sans antialiased leading-none bg-gray-100">
     <div id="app">
         <header class="fixed top-0 z-10 p-2 py-4 mt-0 w-full bg-gray-800 ">
             <nav class="container flex justify-between items-center px-6 mx-auto">
@@ -52,9 +52,9 @@
                 </nav>
             </nav>
         </header>
-{{--        <div class="h-full min-h-screen">--}}
+        <div class="h-full min-h-screen">
             @yield('content')
-{{--        </div>--}}
+        </div>
     </div>
 
     <footer class="flex bg-gray-800 h-10 mt-6 justify-center items-center">

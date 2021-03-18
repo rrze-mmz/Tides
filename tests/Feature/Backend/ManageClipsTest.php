@@ -32,7 +32,7 @@ class ManageClipsTest extends TestCase
     {
         $this->signIn();
 
-        $this->get('/admin/clips/create')->assertStatus(200);
+        $this->get('/admin/clips/create')->assertStatus(200)->assertViewIs('backend.clips.create');
     }
 
     /** @test */
