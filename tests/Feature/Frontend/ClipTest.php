@@ -5,7 +5,6 @@ namespace Tests\Feature\Frontend;
 use App\Models\Clip;
 use Facades\Tests\Setup\ClipFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class ClipTest extends TestCase

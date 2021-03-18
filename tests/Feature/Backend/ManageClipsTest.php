@@ -3,15 +3,14 @@
 namespace Tests\Feature\Backend;
 
 use App\Models\Clip;
+use Facades\Tests\Setup\ClipFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Facades\Tests\Setup\ClipFactory;
 use Tests\TestCase;
 
 class ManageClipsTest extends TestCase
 {
     use WithFaker, RefreshDatabase;
-
 
     /** @test */
     public function a_visitor_cannot_manage_clips()
@@ -75,7 +74,6 @@ class ManageClipsTest extends TestCase
             ->assertSee($attributes['title']);
     }
 
-
     /** @test */
     public function create_clip_form_should_remember_old_values_on_validation_error()
     {
@@ -93,7 +91,7 @@ class ManageClipsTest extends TestCase
 
     }
 
-        /** @test */
+    /** @test */
     public function an_authenticated_user_can_update_an_owned_clip()
     {
         $clip = ClipFactory::ownedBy($this->signIn())->create();

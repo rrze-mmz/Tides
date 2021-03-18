@@ -5,11 +5,11 @@ namespace Tests\Unit;
 use App\Models\Asset;
 use App\Models\Clip;
 use App\Models\User;
+use Facades\Tests\Setup\ClipFactory;
+use Facades\Tests\Setup\FileFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Facades\Tests\Setup\ClipFactory;
-use Facades\Tests\Setup\FileFactory;
 use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
 use Tests\TestCase;
 
@@ -50,6 +50,7 @@ class ClipTest extends TestCase
 
         $this->assertSame('a-test-title-2', $clip->slug);
     }
+
     /** @test */
     public function slug_must_be_unique()
     {
@@ -67,6 +68,7 @@ class ClipTest extends TestCase
 
         $this->assertEquals($clip->slug, Str::slug($clip->title));
     }
+
     /** @test */
     public function it_has_many_assets()
     {

@@ -4,10 +4,8 @@ namespace Tests\Unit;
 
 use App\Events\AssetDeleted;
 use App\Models\Asset;
-use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
-use Facades\Tests\Setup\ClipFactory;
 use Tests\TestCase;
 
 class AssetTest extends TestCase

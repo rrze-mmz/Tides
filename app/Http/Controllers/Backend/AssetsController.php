@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Requests\UploadAssetRequest;
+use App\Mail\VideoUploaded;
 use App\Models\Asset;
 use App\Models\Clip;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
 
 class AssetsController extends Controller
@@ -50,6 +52,9 @@ class AssetsController extends Controller
         {
             Log::error($e);
         }
+
+        Mail::to(auth()->user()->email)
+                ->send(new VideoUploaded($clip));
 
         return redirect($clip->adminPath());
     }

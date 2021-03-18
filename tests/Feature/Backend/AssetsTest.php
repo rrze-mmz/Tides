@@ -2,14 +2,16 @@
 
 namespace Tests\Feature\Backend;
 
+use App\Mail\VideoUploaded;
 use App\Models\Asset;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Storage;
 use Facades\Tests\Setup\ClipFactory;
 use Facades\Tests\Setup\FileFactory;
-use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
+use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
 use Tests\TestCase;
 
 class AssetsTest extends TestCase {
@@ -69,7 +71,7 @@ class AssetsTest extends TestCase {
 
         $this->assertDatabaseHas('assets', ['path' => $asset->path]);
 
-       $asset->delete();
+        $asset->delete();
 
         $this->assertDeleted($asset);
 
@@ -111,6 +113,21 @@ class AssetsTest extends TestCase {
         Storage::disk('thumbnails')->assertExists($clip->posterImage);
 
         $clip->assets()->first()->delete();
+    }
+
+    /** @test */
+    public function uploading_an_asset_should_notify_user_via_email()
+    {
+        Mail::fake();
+
+        $clip = ClipFactory::ownedBy($this->signIn())->create();
+
+        $this->post($clip->adminPath() . '/assets', ['asset' => $file  = FileFactory::videoFile()]);
+
+        Mail::assertSent(VideoUploaded::class);
+
+        $clip->assets()->first()->delete();
+
     }
 
     /** @test */

@@ -2,9 +2,9 @@
 
 namespace Tests\Feature\Frontend;
 
+use Facades\Tests\Setup\ClipFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Facades\Tests\Setup\ClipFactory;
 use Tests\TestCase;
 
 class HomePageTest extends TestCase

@@ -56,6 +56,7 @@ class SearchTest extends TestCase
 
         $this->searchFor('video')->assertSee('No results found');
     }
+
     /** @test */
     public function it_can_search_for_clip_title()
     {
