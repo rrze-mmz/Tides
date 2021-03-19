@@ -2,6 +2,7 @@
 /public/hot
 /public/storage
 /public/videos
+/public/streamable_videos
 /public/thumbnails
 /storage/*.key
 /vendor

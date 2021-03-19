@@ -9,13 +9,9 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" ></script>
-    <script src="{{ asset('js/plyr.js') }}" ></script>
 
     <!-- Styles -->
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/plyr.css') }}" rel="stylesheet">
 </head>
 <body class=" font-sans antialiased leading-none bg-gray-100">
     <div id="app">
@@ -62,11 +58,6 @@
             Copyright @ {{ Illuminate\Support\Carbon::now()->year }} MIT Licence
         </div>
     </footer>
-    <script type="text/javascript">
-            const player = new Plyr('#player',{
-                iconUrl: '/css/plyr.svg',
-                loadSprite: false,
-            });
-    </script>
+    <script src="{{ mix('js/app.js') }}" ></script>
 </body>
 </html>

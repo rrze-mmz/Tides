@@ -22,7 +22,8 @@
         "vue-template-compiler": "^2.6.11"
     },
     "dependencies": {
-        "jquery": "^3.6.0",
-        "mediaelement": "^4.2.16"
+        "hls.js": "^0.14.17",
+        "plyr": "^3.6.4",
+        "vue": "^2.6.12"
     }
 }

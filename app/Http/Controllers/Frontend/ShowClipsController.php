@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Clip;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ShowClipsController extends Controller
@@ -25,6 +26,7 @@ class ShowClipsController extends Controller
      */
     public function show(Clip $clip): View
     {
+//        dd($clip->assets()->first());
         return view('frontend.clips.show', compact('clip'));
     }
 }

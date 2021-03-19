@@ -3,14 +3,13 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Requests\UploadAssetRequest;
-use App\Mail\VideoUploaded;
+use App\Jobs\ConvertVideoForStreaming;
 use App\Models\Asset;
 use App\Models\Clip;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
 
 class AssetsController extends Controller
@@ -25,19 +24,19 @@ class AssetsController extends Controller
      */
     public function store(Clip $clip, UploadAssetRequest $request): RedirectResponse
     {
-        $asset = $request->file('asset');
+        $file = $request->file('asset');
 
         try{
             $attributes = [
                 'disk' => 'videos',
-                'original_file_name' => $asset->getClientOriginalName(),
-                'path'  => $path = $asset->store('videos'),
+                'original_file_name' => $file->getClientOriginalName(),
+                'path'  => $path = $file->store('videos'),
                 'duration' => FFMpeg::open($path)->getDurationInSeconds(),
                 'width' => FFMpeg::open($path)->getVideoStream()->getDimensions()->getWidth(),
                 'height' => FFMpeg::open($path)->getVideoStream()->getDimensions()->getHeight()
             ];
 
-            $clip->addAsset($attributes);
+           $asset = $clip->addAsset($attributes);
 
             //generate a poster image for the clip
             FFMpeg::open($path)
@@ -53,8 +52,7 @@ class AssetsController extends Controller
             Log::error($e);
         }
 
-        Mail::to(auth()->user()->email)
-                ->send(new VideoUploaded($clip));
+        $this->dispatch(new ConvertVideoForStreaming($asset));
 
         return redirect($clip->adminPath());
     }

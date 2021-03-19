@@ -23,6 +23,8 @@ class CreateAssetsTable extends Migration
             $table->integer('duration');
             $table->foreignId('clip_id')->references('id')->on('clips')->cascadeOnDelete();
             $table->string('type')->nullable();
+            $table->datetime('converted_for_downloading_at')->nullable();
+            $table->datetime('converted_for_streaming_at')->nullable();
             $table->timestamps();
         });
     }
