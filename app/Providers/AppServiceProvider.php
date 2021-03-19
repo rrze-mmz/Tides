@@ -27,9 +27,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Queue::after(function (JobProcessed $event){
-            Mail::to(auth()->user()->email)
-                ->send(new VideoUploaded($event));
-        });
+        //
     }
 }
