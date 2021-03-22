@@ -14,15 +14,41 @@
                     </p>
 
                 </div>
-                <div class="pt-10 pb-2 font-semibold border-b border-black font-2xl">
-                   Your Latest Clips
-                </div>
-                <div class="grid grid-cols-3 gap-4 pt-8 h48">
-                    @forelse($clips as $clip)
-                        @include('backend.clips._card',['clip'=> $clip])
-                    @empty
-                        No clips found
-                    @endforelse
+                <div class="flex ">
+
+                    <div class="w-2/3">
+                        <div class="pt-10 pb-2 font-semibold border-b border-black font-2xl">
+                            Your Latest Clips
+                        </div>
+                        <div class="grid grid-cols-3 gap-4 pt-8 h48">
+                            @forelse($clips as $clip)
+                                @include('backend.clips._card',['clip'=> $clip])
+                            @empty
+                                No clips found
+                            @endforelse
+                        </div>
+                    </div>
+
+                    <div class="pl-2 w-1/3">
+                        <div class="pt-10 pb-2 font-semibold border-b border-black font-2xl">
+                            Files in drop zone
+                        </div>
+                        <div class="w-full mt-3 pt-3 bg-white">
+                            <ul>
+                                @forelse($files as $file)
+                                    <li class="w-full mt-2 mb-2 p-2">
+                                        {{ $file['name'] }}
+                                        <span class="font-italic text-sm text-gray-800"> last modified at
+                                            {{ $file['date_modified'] }}
+                                        </span>
+                                    </li>
+                                @empty
+                                    No clips found
+                                @endforelse
+                            </ul>
+                        </div>
+
+                    </div>
                 </div>
             </div>
 @endsection

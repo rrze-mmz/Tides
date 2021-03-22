@@ -26,6 +26,7 @@ class UploadAssetRequest extends FormRequest
     {
         return [
             'asset' => 'required|file|mimetypes:video/mp4,video/mpeg,video/x-matroska',
+            'should_convert_to_hls' => 'boolean'
         ];
     }
 }

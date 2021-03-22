@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use App\Models\Asset;
 use App\Models\Clip;
 use App\Models\User;
+use Carbon\Carbon;
 use Facades\Tests\Setup\ClipFactory;
 use Facades\Tests\Setup\FileFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -98,17 +99,23 @@ class ClipTest extends TestCase
     /** @test */
     public function it_can_add_an_asset()
     {
+        Storage::fake('videos');
+
         $clip = Clip::factory()->create();
+
+        $clipStoragePath = getClipStoragePath($clip);
+        $fileNameDate = Carbon::createFromFormat('Y-m-d', $clip->created_at)->format('Ymd');
 
         $videoFile = FileFactory::videoFile();
 
         $asset = $clip->addAsset([
             'disk' => 'videos',
             'original_file_name' => $videoFile->getClientOriginalName(),
-            'path'  => $path = $videoFile->store('videos'),
-            'duration' => FFMpeg::open($path)->getDurationInSeconds(),
-            'width' => FFMpeg::open($path)->getVideoStream()->getDimensions()->getWidth(),
-            'height' => FFMpeg::open($path)->getVideoStream()->getDimensions()->getHeight()
+            'path'  =>
+                $path = $videoFile->storeAs($clipStoragePath, $fileNameDate.'-'.$clip->slug.'.'.Str::of($videoFile->getClientOriginalName())->after('.'), 'videos'),
+            'duration' => FFMpeg::fromDisk('videos')->open($path)->getDurationInSeconds(),
+            'width' => FFMpeg::fromDisk('videos')->open($path)->getVideoStream()->getDimensions()->getWidth(),
+            'height' => FFMpeg::fromDisk('videos')->open($path)->getVideoStream()->getDimensions()->getHeight()
         ]);
 
         $this->assertCount(1, $clip->assets);

@@ -2,10 +2,6 @@
 
 namespace App\Providers;
 
-use App\Mail\VideoUploaded;
-use Illuminate\Support\Facades\Queue;
-use Illuminate\Queue\Events\JobProcessed;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider

@@ -56,6 +56,11 @@ return [
             'visibility' => 'public',
         ],
 
+        'video_dropzone' => [
+            'driver' => 'local',
+            'root' => storage_path('app/video_drop_zone'),
+        ],
+
         'thumbnails' => [
             'driver' => 'local',
             'root' => storage_path('app/thumbnails'),

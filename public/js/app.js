@@ -19,21 +19,21 @@ var player = new (plyr__WEBPACK_IMPORTED_MODULE_0___default())('#player', {
   language: 'de',
   iconUrl: '/css/plyr.svg',
   loadSprite: false
-});
-var video = document.querySelector('video');
-var source = document.getElementById("player").children[0].getAttribute("src");
-console.log(source);
-
-if (!hls_js__WEBPACK_IMPORTED_MODULE_1___default().isSupported()) {
-  video.src = document.getElementById("player");
-} else {
-  // For more Hls.js options, see https://github.com/dailymotion/hls.js
-  var hls = new (hls_js__WEBPACK_IMPORTED_MODULE_1___default())();
-  hls.loadSource(source);
-  hls.attachMedia(video);
-  window.hls = hls;
-} // Expose player so it can be used from the console
-
+}); // const video = document.querySelector('video');
+// const source = document.getElementById("player").children[0].getAttribute("src");
+//
+// console.log(source);
+//
+// if (!Hls.isSupported()) {
+//     video.src = document.getElementById("player");
+// } else {
+//     // For more Hls.js options, see https://github.com/dailymotion/hls.js
+//     const hls = new Hls();
+//     hls.loadSource(source);
+//     hls.attachMedia(video);
+//     window.hls = hls;
+// }
+// Expose player so it can be used from the console
 
 window.player = player;
 

@@ -54,8 +54,5 @@ class ConvertVideoForStreaming implements ShouldQueue
         $this->asset->update([
             'converted_for_streaming_at' => Carbon::now(),
         ]);
-
-        Mail::to(auth()->user()->email)
-                ->send(new VideoUploaded($this->asset->clip));
     }
 }

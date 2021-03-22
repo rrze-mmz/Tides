@@ -63,6 +63,15 @@
                     >
                         @csrf
                         <input type="file" id="asset" name="asset">
+                        <div class="flex pt-4 align-content-between items-center justify-content-center">
+                            <legend>Convert to HLS?</legend>
+                            <input class="mx-auto"
+                                   type="checkbox"
+                                   name="should_convert_to_hls"
+                                   value="0"
+                            >
+                        </div>
+
                         <button type="submit"
                                 class=" mt-3 ml-2 focus:outline-none text-white text-sm py-1.5 px-5 rounded-md bg-green-500 hover:bg-blue-600 hover:shadow-lg"
                         >Upload</button>
@@ -79,7 +88,7 @@
             <div class="flex items-center pt-3 space-x-6">
                     <a href="{{ $clip->path() }}"
                        type="button"
-                        class="focus:outline-none text-white text-sm  p-3 rounded-md bg-blue-500 hover:bg-blue-600 hover:shadow-lg">
+                        class="p-3 text-sm text-white bg-blue-500 rounded-md focus:outline-none hover:bg-blue-600 hover:shadow-lg">
                         Go to view page
                     </a>
 
@@ -90,7 +99,7 @@
                         @method('DELETE')
                     <button
                        type="submit"
-                       class="focus:outline-none text-white text-sm p-3 rounded-md bg-red-700 hover:bg-red-500 hover:shadow-lg">
+                       class="p-3 text-sm text-white bg-red-700 rounded-md focus:outline-none hover:bg-red-500 hover:shadow-lg">
                         Delete
                     </button>
 
