@@ -14,14 +14,14 @@ class ClipFactory {
 
     protected $user;
 
-    public function withAssets($count)
+    public function withAssets($count): static
     {
         $this->assetsCount = $count;
 
         return $this;
     }
 
-    public function ownedBy($user)
+    public function ownedBy($user): static
     {
         $this->user = $user;
 

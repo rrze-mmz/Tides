@@ -1,11 +1,20 @@
 import Plyr from 'plyr';
-import Hls from 'hls.js';
+
+import $ from 'jquery';
+import 'select2';
+
+window.$ = window.jQuery = $;
 
 const player = new Plyr('#player',{
     language:'de',
     iconUrl: '/css/plyr.svg',
     loadSprite: false,
 });
+
+$(() => {
+    $('.js-example-basic-single').select2();
+});
+
 // const video = document.querySelector('video');
 // const source = document.getElementById("player").children[0].getAttribute("src");
 //

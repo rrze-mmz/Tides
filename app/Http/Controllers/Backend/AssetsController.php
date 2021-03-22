@@ -14,7 +14,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
-use Illuminate\Support\Str;
 
 class AssetsController extends Controller
 {
@@ -29,33 +28,33 @@ class AssetsController extends Controller
     {
         $file = $request->file('asset');
 
-        $clipStoragePath = getClipStoragePath($clip);
-
         //file name should be a pattern like
         // 20200101-clip-slug.extension
         $savedName  = $file->getClientOriginalName();
+
+        $storedFile  =  $file->storeAs(getClipStoragePath($clip), $savedName, 'videos');
+
+        $ffmpeg = FFMpeg::fromDisk('videos')->open($storedFile);
 
         try{
             $attributes = [
                 'disk' => 'videos',
                 'original_file_name' => $savedName,
-                'path'  => $path = $file->storeAs($clipStoragePath, $savedName, 'videos') ,
-                'duration' => FFMpeg::fromDisk('videos')->open($path)->getDurationInSeconds(),
-                'width' => FFMpeg::fromDisk('videos')->open($path)->getVideoStream()->getDimensions()->getWidth(),
-                'height' => FFMpeg::fromDisk('videos')->open($path)->getVideoStream()->getDimensions()->getHeight(),
+                'path'  => $storedFile ,
+                'duration' => $ffmpeg->getDurationInSeconds(),
+                'width' => $ffmpeg->getVideoStream()->getDimensions()->getWidth(),
+                'height' => $ffmpeg->getVideoStream()->getDimensions()->getHeight(),
             ];
 
            $asset = $clip->addAsset($attributes);
 
             //generate a poster image for the clip
-            FFMpeg::fromDisk('videos')->open($path)
-                ->getFrameFromSeconds(5)
+            $ffmpeg->getFrameFromSeconds(5)
                 ->export()
                 ->toDisk('thumbnails')
                 ->save($clip->id.'_poster.png');
 
             $clip->updatePosterImage();
-
         }catch (Exception $e)
         {
             Log::error($e);
@@ -66,8 +65,7 @@ class AssetsController extends Controller
             $this->dispatch(new ConvertVideoForStreaming($asset));
         }
 
-        Mail::to(auth()->user()->email)
-            ->send(new VideoUploaded($clip));
+        Mail::to(auth()->user()->email)->send(new VideoUploaded($clip));
 
         return redirect($clip->adminPath());
     }

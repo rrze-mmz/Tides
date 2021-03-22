@@ -7,6 +7,7 @@ use App\Models\Clip;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Testing\TestResponse;
 use Tests\TestCase;
 
 class SearchTest extends TestCase
@@ -21,7 +22,7 @@ class SearchTest extends TestCase
     */
     protected function setUp(): void
     {
-        parent::setUp();
+       parent::setUp();
 
        $this->clip =  Clip::factory()->create([
             'title' => 'Lorem ipsum for testing  the search function',
@@ -32,7 +33,7 @@ class SearchTest extends TestCase
        Asset::factory()->create(['clip_id' => $this->clip]);
     }
 
-    protected function searchFor($term)
+    protected function searchFor($term): TestResponse
     {
         return $this::get('search?term='.$term);
     }

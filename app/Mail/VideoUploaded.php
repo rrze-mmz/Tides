@@ -12,11 +12,12 @@ class VideoUploaded extends Mailable
 {
     use Queueable, SerializesModels;
 
-    protected $clip;
+    protected Clip $clip;
+
     /**
      * Create a new message instance.
      *
-     * @return void
+     * @param Clip $clip
      */
     public function __construct(Clip $clip)
     {
