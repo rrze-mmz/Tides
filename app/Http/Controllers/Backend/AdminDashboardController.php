@@ -17,9 +17,10 @@ class AdminDashboardController extends Controller
      */
     public function __invoke(): View
     {
+        //fetch the Drop zone file and list them
         $files = collect(Storage::disk('video_dropzone')->files())->map(function ($file){
             return [
-                'date_modified' =>Carbon::createFromTimestamp(Storage::disk('video_dropzone')->lastModified($file))->format('Y-m-d h:i:s'),
+                'date_modified' =>Carbon::createFromTimestamp(Storage::disk('video_dropzone')->lastModified($file))->format('Y-m-d H:i:s'),
                 'name'  => $file
             ];
         });

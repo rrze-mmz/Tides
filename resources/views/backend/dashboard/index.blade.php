@@ -43,7 +43,9 @@
                                         </span>
                                     </li>
                                 @empty
-                                    No clips found
+                                    <li class="w-full mt-2 mb-2 p-2">
+                                    No files found
+                                    </li>
                                 @endforelse
                             </ul>
                         </div>

@@ -5,18 +5,20 @@ namespace Tests\Feature\Backend;
 use Facades\Tests\Setup\ClipFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class AdminDashboardTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
 
-    public function a_visitor_visiting_dashboard_should_redirect_to_login_page()
+    public function it_should_not_be_accessed_by_a_user()
     {
         $this->get('/admin/dashboard')->assertRedirect('login');
     }
     /** @test */
-    public function an_authenticated_user_can_access_dashboard()
+    public function it_should_be_accessed_by_authenticated_user()
     {
         $this->signIn();
 
@@ -26,7 +28,7 @@ class AdminDashboardTest extends TestCase
     }
 
     /** @test */
-    public function should_display_clips_if_existing()
+    public function it_should_display_clips_if_existing()
     {
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 
@@ -34,7 +36,7 @@ class AdminDashboardTest extends TestCase
     }
 
     /** @test */
-    public function should_display_string__if_no_clip_exist()
+    public function it_should_display_string__if_no_clip_exist()
     {
         $this->signIn();
 
@@ -42,7 +44,7 @@ class AdminDashboardTest extends TestCase
     }
 
     /** @test */
-    public function should_display_only_clips_created_by_the_logged_in_user()
+    public function it_display_only_clips_created_by_the_logged_in_user()
     {
         $bob = $this->signIn();
 
@@ -53,5 +55,17 @@ class AdminDashboardTest extends TestCase
         $newClip = ClipFactory::ownedBy($bob)->create();
 
         $this->get('/admin/dashboard')->assertSee($newClip->title);
+    }
+
+    /** @test */
+    public function it_should_list_all_files_in_drop_zone()
+    {
+        $this->signIn();
+
+        Storage::fake('video_dropzone');
+
+        Storage::disk('video_dropzone')->put('test.pdf','some non-pdf content');
+
+        $this->get('/admin/dashboard')->assertSee('test.pdf');
     }
 }
