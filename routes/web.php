@@ -3,6 +3,7 @@
 use App\Http\Controllers\Backend\AssetsController;
 use App\Http\Controllers\Backend\AdminDashboardController;
 use App\Http\Controllers\Backend\ClipsController;
+use App\Http\Controllers\Frontend\ApiTagsController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\SearchController;
 use App\Http\Controllers\Frontend\ShowClipsController;
@@ -29,6 +30,8 @@ Route::get('search', [SearchController::class, 'search']);
 //Frontend clip route
 Route::get('/clips',[ShowClipsController::class,'index']);
 Route::get('/clips/{clip}',[ShowClipsController::class,'show']);
+
+Route::get('/api/tags', ApiTagsController::class)->name('api.tags');
 
 //Backend routes
 Route::prefix('admin')->middleware('auth')->group(function(){

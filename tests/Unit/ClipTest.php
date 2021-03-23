@@ -43,7 +43,7 @@ class ClipTest extends TestCase
     }
 
     /** @test */
-    public function a_slug_must_be_incremental()
+    public function it_has_an_incremental_slug()
     {
         Clip::factory()->create(['title'=> 'A test title','slug'=> 'A test title']);
 
@@ -53,7 +53,7 @@ class ClipTest extends TestCase
     }
 
     /** @test */
-    public function slug_must_be_unique()
+    public function it_has_a_unique_slug()
     {
         $clipA = Clip::factory()->create(['title'=> 'A test title','slug'=> 'A test title']);
 
@@ -63,7 +63,7 @@ class ClipTest extends TestCase
     }
 
     /** @test */
-    public function it_has_a_set_slug_fuction()
+    public function it_has_a_set_slug_function()
     {
         $clip = Clip::factory()->create();
 
@@ -89,7 +89,7 @@ class ClipTest extends TestCase
     }
 
     /** @test */
-    public function a_clip_has_only_one_owner()
+    public function it_has_only_one_owner()
     {
         $clip = ClipFactory::create();
 

@@ -34,25 +34,6 @@
 
                     <div class="mb-6">
                         <label class="block mb-2 text-xs font-bold text-gray-700 uppercase"
-                               for="tags"
-                        >
-                            Tags
-                        </label>
-                        <select class="js-example-basic-single p-2 w-full"
-                                name="tags[]"
-                                style="width: 100%"
-                        >
-                            <option value="1">Mathematik</option>
-                            <option value="2">science</option>
-                            <option value="3">physic</option>
-                            <option value="4">chemistry</option>
-                            <option value="5">linear</option>
-                            <option value="6">algebra</option>
-                        </select>
-                    </div>
-
-                    <div class="mb-6">
-                        <label class="block mb-2 text-xs font-bold text-gray-700 uppercase"
                                for="description"
                         >
                             Description
@@ -67,6 +48,25 @@
                         @error('description')
                         <p class="mt-2 text-xs text-red-500">{{ $message }}</p>
                         @enderror
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="block mb-2 text-xs font-bold text-gray-700 uppercase"
+                               for="tags"
+                        >
+                            Tags
+                        </label>
+                        <select class="js-example-basic-single p-2 w-full"
+                                name="tags[]"
+                                multiple="multiple"
+                                style="width: 100%"
+                        >
+                            @forelse($clip->tags as $tag)
+                                <option value="{{ $tag->id }}" selected="selected">{{ $tag->name }}</option>
+                            @empty
+                                <option value="1"></option>
+                            @endforelse
+                        </select>
                     </div>
 
                     <button type=""

@@ -6,10 +6,9 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 
-class StoreClipRequest extends FormRequest
-{
+class StoreClipRequest extends FormRequest {
 
-    protected function prepareForValidation():void
+    protected function prepareForValidation(): void
     {
         $this->merge([
             'slug' => Str::slug($this->title)
@@ -34,9 +33,10 @@ class StoreClipRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required',
+            'title'       => 'required',
             'description' => 'min:3|max:255',
-            'slug' => 'required'
+            'slug'        => 'required',
+            'tags'        => 'array|min:2'
         ];
     }
 }

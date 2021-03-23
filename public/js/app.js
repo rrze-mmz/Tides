@@ -25,7 +25,38 @@ var player = new (plyr__WEBPACK_IMPORTED_MODULE_0___default())('#player', {
   loadSprite: false
 });
 jquery__WEBPACK_IMPORTED_MODULE_1___default()(function () {
-  jquery__WEBPACK_IMPORTED_MODULE_1___default()('.js-example-basic-single').select2();
+  jquery__WEBPACK_IMPORTED_MODULE_1___default()('.js-example-basic-single').select2({
+    allowClear: true,
+    placeholder: 'Add a tag',
+    tags: true,
+    minimumInputLength: 2,
+    ajax: {
+      url: "/api/tags/",
+      delay: 250,
+      data: function data(params) {
+        return {
+          query: params.term,
+          // search term
+          page: params.page
+        };
+      },
+      processResults: function processResults(data, params) {
+        params.page = params.page || 1;
+        return {
+          results: jquery__WEBPACK_IMPORTED_MODULE_1___default().map(data, function (obj) {
+            return {
+              id: obj.id,
+              text: obj.text
+            };
+          }),
+          pagination: {
+            more: params.page * 30 < data.total_count
+          }
+        };
+      },
+      cache: true
+    }
+  });
 }); // const video = document.querySelector('video');
 // const source = document.getElementById("player").children[0].getAttribute("src");
 //

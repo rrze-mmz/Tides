@@ -119,7 +119,6 @@ class AssetsTest extends TestCase {
         $clip->refresh();
 
         Storage::disk('thumbnails')->assertExists($clip->posterImage);
-
     }
 
     /** @test */

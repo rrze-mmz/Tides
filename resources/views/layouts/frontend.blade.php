@@ -11,6 +11,7 @@
 
 
     <!-- Styles -->
+    <link rel="icon" href="{{ URL::asset('/css/favicon.ico') }}" type="image/x-icon"/>
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
 </head>
 <body class=" font-sans antialiased leading-none bg-gray-100">

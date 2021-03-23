@@ -6,8 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 
-class UpdateClipRequest extends FormRequest
-{
+class UpdateClipRequest extends FormRequest {
 
     protected function prepareForValidation()
     {
@@ -34,9 +33,10 @@ class UpdateClipRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required',
+            'title'       => 'required',
             'description' => 'min:3|max:255',
-            'slug' => 'required'
+            'slug'        => 'required',
+            'tags'        => 'array|min:2'
         ];
     }
 }

@@ -1,18 +1,45 @@
 import Plyr from 'plyr';
-
 import $ from 'jquery';
 import 'select2';
 
 window.$ = window.jQuery = $;
 
-const player = new Plyr('#player',{
-    language:'de',
+const player = new Plyr('#player', {
+    language: 'de',
     iconUrl: '/css/plyr.svg',
     loadSprite: false,
 });
 
 $(() => {
-    $('.js-example-basic-single').select2();
+        $('.js-example-basic-single').select2({
+            allowClear: true,
+            placeholder: 'Add a tag',
+            tags: true,
+            minimumInputLength: 2,
+            ajax:{
+                url: "/api/tags/",
+                delay: 250,
+                data: function (params) {
+                    return {
+                        query: params.term, // search term
+                        page: params.page
+                    };
+                },
+                processResults: function (data, params) {
+                    params.page = params.page || 1;
+                    return  {
+                        results: $.map(data, function (obj) {
+                            return {id: obj.id, text: obj.text};
+                        }),
+                        pagination: {
+                            more: (params.page * 30) < data.total_count
+                        }
+                    };
+                },
+                cache:true,
+            }
+
+        });
 });
 
 // const video = document.querySelector('video');

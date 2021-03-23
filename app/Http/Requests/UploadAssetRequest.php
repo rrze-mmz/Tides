@@ -5,8 +5,8 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 
-class UploadAssetRequest extends FormRequest
-{
+class UploadAssetRequest extends FormRequest {
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -25,7 +25,7 @@ class UploadAssetRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'asset' => 'required|file|mimetypes:video/mp4,video/mpeg,video/x-matroska',
+            'asset'                 => 'required|file|mimetypes:video/mp4,video/mpeg,video/x-matroska',
             'should_convert_to_hls' => 'boolean'
         ];
     }

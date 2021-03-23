@@ -5,8 +5,8 @@ namespace App\Listeners;
 use App\Events\AssetDeleted;
 use Illuminate\Support\Facades\Storage;
 
-class DeleteAssetFile
-{
+class DeleteAssetFile {
+
     /**
      * Create the event listener.
      *
@@ -20,7 +20,7 @@ class DeleteAssetFile
     /**
      * Handle the event.
      *
-     * @param  AssetDeleted  $event
+     * @param AssetDeleted $event
      * @return void
      */
     public function handle(AssetDeleted $event): void

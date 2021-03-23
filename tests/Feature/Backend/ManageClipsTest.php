@@ -27,19 +27,27 @@ class ManageClipsTest extends TestCase
     }
 
     /** @test */
-    public function an_authenticated_user_can_see_the_create_clip_form()
+    public function an_authenticated_user_can_see_the_create_clip_form_and_all_form_fields()
     {
         $this->signIn();
+
+        $this->get('/admin/clips/create')->assertSee('title')
+            ->assertSee('description')
+            ->assertSee('tags');
 
         $this->get('/admin/clips/create')->assertStatus(200)->assertViewIs('backend.clips.create');
     }
 
     /** @test */
-    public function an_authenticated_user_can_view_the_edit_clip_form()
+    public function an_authenticated_user_can_view_the_edit_clip_form_add_all_form_fields()
     {
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 
         $this->get($clip->adminPath())->assertStatus(200);
+
+        $this->get($clip->adminPath())->assertSee('title')
+            ->assertSee('description')
+            ->assertSee('tags');
     }
 
     /** @test */
@@ -73,6 +81,30 @@ class ManageClipsTest extends TestCase
             ->post('/admin/clips',$attributes = Clip::factory()->raw())
             ->assertSee($attributes['title']);
     }
+
+    /** @test */
+    public function an_authenticated_user_can_create_a_clip_with_tags()
+    {
+        $this->signIn();
+
+        $attributes = Clip::factory()->raw([
+            'tags' => ['php','example','oop']
+        ]);
+
+        $this->followingRedirects()->post('admin/clips',$attributes)->assertSee($attributes['tags']);
+
+        $clip = Clip::first();
+
+        $this->assertDatabaseCount('tags', 3);
+
+        $this->assertEquals(3, $clip->tags()->count());
+    }
+
+    public function an_authenticated_user_can_update_clip_tags()
+    {
+
+    }
+
 
     /** @test */
     public function create_clip_form_should_remember_old_values_on_validation_error()

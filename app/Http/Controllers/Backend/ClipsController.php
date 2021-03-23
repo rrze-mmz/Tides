@@ -2,22 +2,24 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreClipRequest;
 use App\Http\Requests\UpdateClipRequest;
-use App\Http\Controllers\Controller;
 use App\Models\Clip;
+use App\Models\Tag;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Arr;
 use Illuminate\View\View;
 
-class ClipsController extends Controller
-{
+class ClipsController extends Controller {
+
     /**
      * @return View
      */
     public function index(): View
     {
-        return view('backend.clips.index',[
+        return view('backend.clips.index', [
             'clips' => Clip::orderByDesc('updated_at')->limit(18)->get(),
         ]);
     }
@@ -38,11 +40,27 @@ class ClipsController extends Controller
      * @param StoreClipRequest $request
      * @return RedirectResponse
      */
-    public function store(StoreClipRequest $request) : RedirectResponse
+    public function store(StoreClipRequest $request): RedirectResponse
     {
-        $project = auth()->user()->clips()->create($request->validated());
+        $validated = $request->validated();
 
-        return redirect($project->adminPath());
+        $clip = auth()->user()->clips()->create(Arr::except($request->validated(),'tags'));
+
+        if(!empty($validated['tags']))
+        {
+            $tagsCollection = collect(new Tag);
+
+            foreach ($validated['tags'] as $tag)
+            {
+                $tagsCollection->push(tap(Tag::firstOrCreate(['name'=> $tag]))->save());
+            }
+
+            $tagsCollection->each(function ($tag, $key) use ($clip)
+            {
+                $clip->tags()->save($tag);
+            });
+        }
+        return redirect($clip->adminPath());
     }
 
     /**
@@ -52,9 +70,9 @@ class ClipsController extends Controller
      * @return View
      * @throws AuthorizationException
      */
-    public function edit(Clip $clip):View
+    public function edit(Clip $clip): View
     {
-       $this->authorize('edit', $clip);
+        $this->authorize('edit', $clip);
 
         return view('backend.clips.edit', compact('clip'));
     }
@@ -66,11 +84,29 @@ class ClipsController extends Controller
      * @param UpdateClipRequest $request
      * @return RedirectResponse
      */
-    public function update(Clip $clip, UpdateClipRequest $request):RedirectResponse
+    public function update(Clip $clip, UpdateClipRequest $request): RedirectResponse
     {
-        $clip->update($request->validated());
+        $validated = $request->validated();
+
+        $clip->update(Arr::except($request->validated(),'tags'));
 
         $clip->refresh();
+
+        if(!empty($validated['tags']))
+        {
+            $tagsCollection = collect(new Tag);
+
+            foreach ($validated['tags'] as $tag)
+            {
+                dd($tag);
+                $tagsCollection->push(tap(Tag::firstOrCreate(['name'=> $tag]))->save());
+            }
+
+            $tagsCollection->each(function ($tag, $key) use ($clip)
+            {
+                $clip->tags()->save($tag);
+            });
+        }
 
         return redirect($clip->adminPath());
     }

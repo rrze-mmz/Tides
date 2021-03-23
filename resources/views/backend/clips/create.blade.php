@@ -49,6 +49,24 @@
                         @enderror
                     </div>
 
+                    <div class="mb-6">
+                        <label class="block mb-2 text-xs font-bold text-gray-700 uppercase"
+                               for="tags"
+                        >
+                            Tags
+                        </label>
+                        <select class="js-example-basic-single p-2 w-full"
+                                name="tags[]"
+                                style="width: 100%"
+                                multiple="multiple"
+                        >
+                        </select>
+
+                        @error('tags')
+                        <p class="mt-2 text-xs text-red-500">{{ $message }}</p>
+                        @enderror
+                    </div>
+
                     <button type="submit"
                             class="ml-2 focus:outline-none text-white text-sm py-1.5 px-5 rounded-md bg-blue-500 hover:bg-blue-600 hover:shadow-lg"
                     >Create a Clip!</button>
