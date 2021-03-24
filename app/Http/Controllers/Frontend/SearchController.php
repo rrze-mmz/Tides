@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
@@ -7,12 +8,13 @@ use App\Http\Requests\SearchRequest;
 use App\Models\Clip;
 use Illuminate\View\View;
 
-class SearchController extends Controller {
+class SearchController extends Controller
+{
 
     /**
      * Main and basic search function
      *
-     * @param SearchRequest $request
+     * @param  SearchRequest  $request
      * @return View
      */
     public function search(SearchRequest $request): View

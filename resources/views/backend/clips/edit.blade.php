@@ -62,7 +62,7 @@
                                 style="width: 100%"
                         >
                             @forelse($clip->tags as $tag)
-                                <option value="{{ $tag->id }}" selected="selected">{{ $tag->name }}</option>
+                                <option value="{{ $tag->name }}" selected="selected">{{ $tag->name }}</option>
                             @empty
                                 <option value="1"></option>
                             @endforelse

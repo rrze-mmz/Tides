@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
@@ -14,13 +15,14 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
 
-class AssetsController extends Controller {
+class AssetsController extends Controller
+{
 
     /**
      * Saves a file and persist the asset to the database
      *
-     * @param Clip $clip
-     * @param UploadAssetRequest $request
+     * @param  Clip  $clip
+     * @param  UploadAssetRequest  $request
      * @return RedirectResponse
      */
     public function store(Clip $clip, UploadAssetRequest $request): RedirectResponse
@@ -35,8 +37,7 @@ class AssetsController extends Controller {
 
         $ffmpeg = FFMpeg::fromDisk('videos')->open($storedFile);
 
-        try
-        {
+        try {
             $attributes = [
                 'disk'               => 'videos',
                 'original_file_name' => $savedName,
@@ -52,16 +53,14 @@ class AssetsController extends Controller {
             $ffmpeg->getFrameFromSeconds(5)
                 ->export()
                 ->toDisk('thumbnails')
-                ->save($clip->id . '_poster.png');
+                ->save($clip->id.'_poster.png');
 
             $clip->updatePosterImage();
-        } catch (Exception $e)
-        {
+        } catch (Exception $e) {
             Log::error($e);
         }
 
-        if ($request->exists('should_convert_to_hls') && $request->should_convert_to_hls)
-        {
+        if ($request->exists('should_convert_to_hls') && $request->should_convert_to_hls) {
             $this->dispatch(new ConvertVideoForStreaming($asset));
         }
 
@@ -71,7 +70,7 @@ class AssetsController extends Controller {
     }
 
     /**
-     * @param Asset $asset
+     * @param  Asset  $asset
      * @return RedirectResponse
      * @throws AuthorizationException
      * @throws Exception

@@ -12,6 +12,20 @@ class ClipTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
+    public function a_visitor_cannot_manage_clips()
+    {
+        $clip = ClipFactory::create();
+
+        $this->post('/admin/clips', [])->assertRedirect('login');
+
+        $this->get('/admin/clips/create')->assertRedirect('login');
+
+        $this->patch($clip->adminPath(), [])->assertRedirect('login');
+
+        $this->delete($clip->adminPath())->assertRedirect('login');
+    }
+
+    /** @test */
     public function a_visitor_can_view_a_clip()
     {
         $clip = Clip::factory()->create();

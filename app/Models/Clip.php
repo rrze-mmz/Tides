@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Models;
 
 use Carbon\Carbon;
@@ -12,6 +13,7 @@ use Illuminate\Support\Str;
 
 class Clip extends Model
 {
+
     use HasFactory;
 
     protected $guarded = [];
@@ -47,10 +49,9 @@ class Clip extends Model
     /**
      * @param $value
      */
-    public function setSlugAttribute($value):void
+    public function setSlugAttribute($value): void
     {
-        if(static::whereSlug($slug = Str::of($value)->slug('-'))->exists())
-        {
+        if (static::whereSlug($slug = Str::of($value)->slug('-'))->exists()) {
             $slug = $this->incrementSlug($slug);
         }
         $this->attributes['slug'] = $slug;
@@ -75,7 +76,7 @@ class Clip extends Model
 
     public function tags()
     {
-        return $this->belongsToMany(Tag::class,'clip_tag')->withTimestamps();
+        return $this->belongsToMany(Tag::class, 'clip_tag')->withTimestamps();
     }
 
     /**
@@ -87,7 +88,7 @@ class Clip extends Model
     }
 
     /**
-     * @param array $attributes
+     * @param  array  $attributes
      * @return Model
      */
     public function addAsset($attributes = []): Model
@@ -106,8 +107,7 @@ class Clip extends Model
         $count = 2;
 
         while (static::whereSlug($slug)->exists()) {
-
-            $slug = "{$original}-" . $count++;
+            $slug = "{$original}-".$count++;
         }
 
         return $slug;
@@ -118,8 +118,29 @@ class Clip extends Model
      */
     public function updatePosterImage(): void
     {
-        $this->posterImage = (Storage::disk('thumbnails')->exists($this->id.'_poster.png'))? $this->id.'_poster.png':null;
+        $this->posterImage = (Storage::disk('thumbnails')->exists($this->id.'_poster.png')) ? $this->id.'_poster.png' : null;
 
         $this->save();
+    }
+
+    /**
+     * @param validated array  $tagsArray
+     */
+    public function addTags($tagsArray = []):void
+    {
+        if (!empty($tagsArray)) {
+            $tagsCollection = collect(new Tag);
+
+            //loop through tag names
+            foreach ($tagsArray as $tagName) {
+                //create or select a tag based on name and push it to local collection
+                $tagsCollection->push(tap(Tag::firstOrCreate(['name' => $tagName]))->save());
+            }
+            //sync tag collection with the clip
+            $this->tags()->sync($tagsCollection->pluck('id'));
+        }
+        else{
+            $this->tags()->detach();
+        }
     }
 }

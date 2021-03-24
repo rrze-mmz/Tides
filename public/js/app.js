@@ -45,16 +45,15 @@ jquery__WEBPACK_IMPORTED_MODULE_1___default()(function () {
         return {
           results: jquery__WEBPACK_IMPORTED_MODULE_1___default().map(data, function (obj) {
             return {
-              id: obj.id,
-              text: obj.text
+              id: obj.name,
+              text: obj.name
             };
           }),
           pagination: {
             more: params.page * 30 < data.total_count
           }
         };
-      },
-      cache: true
+      }
     }
   });
 }); // const video = document.querySelector('video');

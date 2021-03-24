@@ -1,12 +1,14 @@
 <?php
 
+
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Clip;
 use Illuminate\View\View;
 
-class ShowClipsController extends Controller {
+class ShowClipsController extends Controller
+{
 
     /**
      * @return View
@@ -19,7 +21,7 @@ class ShowClipsController extends Controller {
     }
 
     /**
-     * @param Clip $clip
+     * @param  Clip  $clip
      * @return View
      */
     public function show(Clip $clip): View

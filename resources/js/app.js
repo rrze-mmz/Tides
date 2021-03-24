@@ -29,16 +29,14 @@ $(() => {
                     params.page = params.page || 1;
                     return  {
                         results: $.map(data, function (obj) {
-                            return {id: obj.id, text: obj.text};
+                            return {id: obj.name, text: obj.name};
                         }),
                         pagination: {
                             more: (params.page * 30) < data.total_count
                         }
                     };
                 },
-                cache:true,
             }
-
         });
 });
 

@@ -3,6 +3,7 @@
 namespace Tests\Feature\Backend;
 
 use App\Models\Clip;
+use App\Models\Tag;
 use Facades\Tests\Setup\ClipFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -11,20 +12,6 @@ use Tests\TestCase;
 class ManageClipsTest extends TestCase
 {
     use WithFaker, RefreshDatabase;
-
-    /** @test */
-    public function a_visitor_cannot_manage_clips()
-    {
-        $clip = ClipFactory::create();
-
-        $this->post('/admin/clips', [])->assertRedirect('login');
-
-        $this->get('/admin/clips/create')->assertRedirect('login');
-
-        $this->patch($clip->adminPath(), [])->assertRedirect('login');
-
-        $this->delete($clip->adminPath())->assertRedirect('login');
-    }
 
     /** @test */
     public function an_authenticated_user_can_see_the_create_clip_form_and_all_form_fields()
@@ -61,7 +48,7 @@ class ManageClipsTest extends TestCase
     }
 
     /** @test */
-    public function a_clip_requires_a_title()
+    public function it_requires_a_title_when_creating_a_new_clip()
     {
         $this->signIn();
 
@@ -100,9 +87,42 @@ class ManageClipsTest extends TestCase
         $this->assertEquals(3, $clip->tags()->count());
     }
 
+    /** @test */
+    public function an_authenticated_user_can_remove_clip_tags()
+    {
+        $clip = ClipFactory::ownedBy($this->signIn())->create();
+
+        $clip->tags()->sync(Tag::factory()->create());
+
+        $attributes = [
+            'title'=>'changed',
+            'description' => 'changed',
+            'tags' => []
+        ];
+
+        $this->patch($clip->adminPath(), $attributes);
+
+        $this->assertEquals(0, $clip->tags()->count());
+    }
+
+    /** @test */
     public function an_authenticated_user_can_update_clip_tags()
     {
+        $clip = ClipFactory::ownedBy($this->signIn())->create();
 
+        $tag = Tag::factory()->create();
+
+        $clip->tags()->sync(Tag::factory()->create());
+
+        $attributes = [
+            'title'=>'changed',
+            'description' => 'changed',
+            'tags' => [$tag->name, 'another tag']
+        ];
+
+        $this->patch($clip->adminPath(), $attributes);
+
+        $this->assertEquals(2, $clip->tags()->count());
     }
 
 

@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -9,6 +10,7 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
+
     use HasFactory, Notifiable;
 
     /**
@@ -21,7 +23,6 @@ class User extends Authenticatable
         'email',
         'password',
     ];
-
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -31,7 +32,6 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
-
     /**
      * The attributes that should be cast to native types.
      *
@@ -46,6 +46,6 @@ class User extends Authenticatable
      */
     public function clips(): HasMany
     {
-        return $this->hasMany(Clip::class,'owner_id');
+        return $this->hasMany(Clip::class, 'owner_id');
     }
 }

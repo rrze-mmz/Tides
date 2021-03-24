@@ -142,4 +142,14 @@ class ClipTest extends TestCase
 
         Storage::disk('thumbnails')->delete($clip->id.'_poster.png');
     }
+
+    /** @test */
+    public function it_can_add_tags()
+    {
+        $clip = Clip::factory()->create();
+
+        $clip->addTags(['php','tides']);
+
+        $this->assertEquals(2, $clip->tags()->count());
+    }
 }

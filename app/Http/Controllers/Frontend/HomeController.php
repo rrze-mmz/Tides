@@ -1,12 +1,14 @@
 <?php
 
+
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Clip;
 use Illuminate\View\View;
 
-class HomeController extends Controller {
+class HomeController extends Controller
+{
 
     /**
      * Fetch clips for the home page

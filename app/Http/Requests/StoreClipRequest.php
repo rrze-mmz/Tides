@@ -1,17 +1,21 @@
 <?php
 
+
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 
-class StoreClipRequest extends FormRequest {
+class StoreClipRequest extends FormRequest
+{
 
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'slug' => Str::slug($this->title)
+            'slug' => Str::slug($this->title),
+            'tags' => $this->tags = $this->tags ?? [], //set empty array if select2 tags is empty
+
         ]);
     }
 
@@ -36,7 +40,7 @@ class StoreClipRequest extends FormRequest {
             'title'       => 'required',
             'description' => 'min:3|max:255',
             'slug'        => 'required',
-            'tags'        => 'array|min:2'
+            'tags'        => 'array'
         ];
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Policies;
 
 use App\Models\Clip;
@@ -8,11 +9,12 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 
 class ClipPolicy
 {
+
     use HandlesAuthorization;
 
     /**
-     * @param User $user
-     * @param Clip $clip
+     * @param  User  $user
+     * @param  Clip  $clip
      * @return bool
      */
     public function edit(User $user, Clip $clip): bool

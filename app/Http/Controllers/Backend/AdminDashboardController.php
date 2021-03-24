@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
@@ -8,7 +9,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 
-class AdminDashboardController extends Controller {
+class AdminDashboardController extends Controller
+{
 
     /**
      * Dashboard for the logged in user
@@ -17,7 +19,7 @@ class AdminDashboardController extends Controller {
      */
     public function __invoke(): View
     {
-        //fetch the Drop zone file and list them
+        //fetch drop zone files
         $files = collect(Storage::disk('video_dropzone')->files())->map(function ($file) {
             return [
                 'date_modified' => Carbon::createFromTimestamp(Storage::disk('video_dropzone')->lastModified($file))->format('Y-m-d H:i:s'),

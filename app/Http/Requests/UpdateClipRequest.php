@@ -1,17 +1,21 @@
 <?php
 
+
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 
-class UpdateClipRequest extends FormRequest {
+class UpdateClipRequest extends FormRequest
+{
+
 
     protected function prepareForValidation()
     {
         $this->merge([
-            'slug' => Str::slug($this->title)
+            'slug' => Str::slug($this->title),
+            'tags' => $this->tags = $this->tags ?? [], //set empty array if select2 tags is empty
         ]);
     }
 
@@ -36,7 +40,7 @@ class UpdateClipRequest extends FormRequest {
             'title'       => 'required',
             'description' => 'min:3|max:255',
             'slug'        => 'required',
-            'tags'        => 'array|min:2'
+            'tags'        => 'array'
         ];
     }
 }

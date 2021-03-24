@@ -18,9 +18,7 @@ class TagsApiTest extends TestCase
         $response = $this->get('/api/tags/?query=algebra');
 
         $response->assertJson([
-            "results" => [
                 ["id" => 1,"name" => 'algebra']
-            ]
-        ]);
+            ]);
     }
 }

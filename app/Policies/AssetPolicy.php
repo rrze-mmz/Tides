@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Policies;
 
 use App\Models\Asset;
@@ -8,6 +9,7 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 
 class AssetPolicy
 {
+
     use HandlesAuthorization;
 
     public function edit(User $user, Asset $asset): bool
