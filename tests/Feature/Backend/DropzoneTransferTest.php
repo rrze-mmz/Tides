@@ -5,9 +5,10 @@ namespace Tests\Feature\Backend;
 
 use Facades\Tests\Setup\ClipFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Queue;
+use Illuminate\Http\Testing\File;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
+
 
 class DropzoneTransferTest extends TestCase
 {
@@ -41,7 +42,7 @@ class DropzoneTransferTest extends TestCase
     /** @test */
     public function dropzone_transfer_view_should_list_all_files()
     {
-        Storage::fake('video_dropzone');
+        $disk = Storage::fake('video_dropzone');
 
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 
@@ -49,18 +50,9 @@ class DropzoneTransferTest extends TestCase
             ->assertStatus(200)
             ->assertSee('no videos');
 
-        Storage::disk('video_dropzone')->put('export_video.mp4',1000, 'video/mp4');
+        $disk->putFileAs('',File::create('export_video.mp4',1000),'export_video.mp4');
 
         $this->get(route('admin.clips.dropzone.listFiles',['clip'=>$clip]))
             ->assertSee('export_video.mp4');
-
-    }
-
-    public function it_transfers_files_from_dropzone_to_clip()
-    {
-        Queue::fake();
-
-        Storage::fake('video_dropzone');
-
     }
 }
