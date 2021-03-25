@@ -1,5 +1,6 @@
 <?php
 
+
 namespace Tests\Feature\Frontend;
 
 use Facades\Tests\Setup\ClipFactory;
@@ -9,12 +10,13 @@ use Tests\TestCase;
 
 class HomePageTest extends TestCase
 {
+
     use RefreshDatabase, WithFaker;
 
     /** @test */
     public function should_show_project_name()
     {
-        $this->get('/')->assertStatus(200)->assertSee('Tides');
+        $this->get(route('home'))->assertStatus(200)->assertSee('Tides');
     }
 
     /** @test */
@@ -22,7 +24,7 @@ class HomePageTest extends TestCase
     {
         $clip = ClipFactory::create();
 
-        $this->get('/')->assertDontSee($clip->title);
+        $this->get(route('home'))->assertDontSee($clip->title);
     }
 
     /** @test */
@@ -30,6 +32,6 @@ class HomePageTest extends TestCase
     {
         $clip = ClipFactory::withAssets(1)->create();
 
-        $this->get('/')->assertSee($clip->title);
+        $this->get(route('home'))->assertSee($clip->title);
     }
 }

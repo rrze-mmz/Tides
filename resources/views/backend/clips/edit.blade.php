@@ -111,6 +111,12 @@
                         Go to view page
                     </a>
 
+                    <a href="{{ $clip->path() }}"
+                       type="button"
+                       class="p-3 text-sm text-white bg-blue-500 rounded-md focus:outline-none hover:bg-blue-600 hover:shadow-lg">
+                        Transfer files from drop zone
+                    </a>
+
                     <form action="{{ $clip->adminPath() }}"
                           method="POST"
                             class="" >

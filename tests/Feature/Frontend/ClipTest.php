@@ -1,5 +1,6 @@
 <?php
 
+
 namespace Tests\Feature\Frontend;
 
 use App\Models\Clip;
@@ -9,6 +10,7 @@ use Tests\TestCase;
 
 class ClipTest extends TestCase
 {
+
     use RefreshDatabase;
 
     /** @test */
@@ -16,9 +18,9 @@ class ClipTest extends TestCase
     {
         $clip = ClipFactory::create();
 
-        $this->post('/admin/clips', [])->assertRedirect('login');
+        $this->post(route('clips.store'), [])->assertRedirect('login');
 
-        $this->get('/admin/clips/create')->assertRedirect('login');
+        $this->get(route('clips.create'))->assertRedirect('login');
 
         $this->patch($clip->adminPath(), [])->assertRedirect('login');
 

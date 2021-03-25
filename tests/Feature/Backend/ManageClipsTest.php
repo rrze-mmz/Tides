@@ -7,6 +7,7 @@ use App\Models\Tag;
 use Facades\Tests\Setup\ClipFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class ManageClipsTest extends TestCase
@@ -18,11 +19,11 @@ class ManageClipsTest extends TestCase
     {
         $this->signIn();
 
-        $this->get('/admin/clips/create')->assertSee('title')
+        $this->get(route('clips.create'))->assertSee('title')
             ->assertSee('description')
             ->assertSee('tags');
 
-        $this->get('/admin/clips/create')->assertStatus(200)->assertViewIs('backend.clips.create');
+        $this->get(route('clips.create'))->assertStatus(200)->assertViewIs('backend.clips.create');
     }
 
     /** @test */
@@ -54,7 +55,7 @@ class ManageClipsTest extends TestCase
 
         $attributes = Clip::factory()->raw(['title'=> '']);
 
-        $this->post('/admin/clips', $attributes)->assertSessionHasErrors('title');
+        $this->post(route('clips.store'), $attributes)->assertSessionHasErrors('title');
     }
 
     /** @test */
@@ -65,7 +66,7 @@ class ManageClipsTest extends TestCase
         $this->get('/admin/clips/create')->assertStatus(200);
 
         $this->followingRedirects()
-            ->post('/admin/clips',$attributes = Clip::factory()->raw())
+            ->post(route('clips.store'),$attributes = Clip::factory()->raw())
             ->assertSee($attributes['title']);
     }
 
@@ -78,7 +79,7 @@ class ManageClipsTest extends TestCase
             'tags' => ['php','example','oop']
         ]);
 
-        $this->followingRedirects()->post('admin/clips',$attributes)->assertSee($attributes['tags']);
+        $this->followingRedirects()->post(route('clips.store'),$attributes)->assertSee($attributes['tags']);
 
         $clip = Clip::first();
 
@@ -94,13 +95,11 @@ class ManageClipsTest extends TestCase
 
         $clip->tags()->sync(Tag::factory()->create());
 
-        $attributes = [
+        $this->patch($clip->adminPath(), [
             'title'=>'changed',
             'description' => 'changed',
             'tags' => []
-        ];
-
-        $this->patch($clip->adminPath(), $attributes);
+        ]);
 
         $this->assertEquals(0, $clip->tags()->count());
     }
@@ -114,13 +113,11 @@ class ManageClipsTest extends TestCase
 
         $clip->tags()->sync(Tag::factory()->create());
 
-        $attributes = [
+        $this->patch($clip->adminPath(), [
             'title'=>'changed',
             'description' => 'changed',
             'tags' => [$tag->name, 'another tag']
-        ];
-
-        $this->patch($clip->adminPath(), $attributes);
+        ]);
 
         $this->assertEquals(2, $clip->tags()->count());
     }
@@ -135,11 +132,11 @@ class ManageClipsTest extends TestCase
             'title' => 'Long description',
             'description' => $this->faker->sentence(500),
         ];
-        $this->post('admin/clips',$attributes);
+        $this->post(route('clips.store'),$attributes);
 
         $this->followingRedirects();
 
-        $this->get('/admin/clips/create')->assertSee($attributes);
+        $this->get(route('clips.create'))->assertSee($attributes);
 
     }
 
@@ -150,16 +147,17 @@ class ManageClipsTest extends TestCase
 
         $this->get($clip->path())->assertSee($clip->title);
 
-        $attributes = [
+        $this->patch($clip->adminPath(), [
             'title'=>'changed',
             'description' => 'changed'
-        ];
-
-        $this->patch($clip->adminPath(), $attributes);
+        ]);
 
         $clip = $clip->refresh();
 
-        $this->assertDatabaseHas('clips', $attributes);
+        $this->assertDatabaseHas('clips', [
+            'title'=>'changed',
+            'description' => 'changed'
+        ]);
 
         $this->get($clip->adminPath())->assertSee('changed');
     }

@@ -35,7 +35,7 @@ class SearchTest extends TestCase
 
     protected function searchFor($term): TestResponse
     {
-        return $this::get('search?term='.$term);
+        return $this::get(route('search').'?term='.$term);
     }
 
     /** @test */

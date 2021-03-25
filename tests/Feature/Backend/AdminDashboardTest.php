@@ -15,7 +15,7 @@ class AdminDashboardTest extends TestCase
 
     public function it_should_not_be_accessed_by_a_user()
     {
-        $this->get('/admin/dashboard')->assertRedirect('login');
+        $this->get(route('dashboard'))->assertRedirect('login');
     }
     /** @test */
     public function it_should_be_accessed_by_authenticated_user()
@@ -32,7 +32,7 @@ class AdminDashboardTest extends TestCase
     {
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 
-        $this->get('/admin/dashboard')->assertSee($clip->title);
+        $this->get(route('dashboard'))->assertSee($clip->title);
     }
 
     /** @test */
@@ -40,7 +40,7 @@ class AdminDashboardTest extends TestCase
     {
         $this->signIn();
 
-        $this->get('/admin/dashboard')->assertSee('No clips found');
+        $this->get(route('dashboard'))->assertSee('No clips found');
     }
 
     /** @test */
@@ -50,11 +50,11 @@ class AdminDashboardTest extends TestCase
 
         ClipFactory::create();
 
-        $this->get('/admin/dashboard')->assertSee('No clips found');
+        $this->get(route('dashboard'))->assertSee('No clips found');
 
         $newClip = ClipFactory::ownedBy($bob)->create();
 
-        $this->get('/admin/dashboard')->assertSee($newClip->title);
+        $this->get(route('dashboard'))->assertSee($newClip->title);
     }
 
     /** @test */
@@ -66,6 +66,6 @@ class AdminDashboardTest extends TestCase
 
         Storage::disk('video_dropzone')->put('test.pdf','some non-pdf content');
 
-        $this->get('/admin/dashboard')->assertSee('test.pdf');
+        $this->get(route('dashboard'))->assertSee('test.pdf');
     }
 }

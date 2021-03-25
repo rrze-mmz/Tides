@@ -17,6 +17,7 @@
         "pbmedia/laravel-ffmpeg": "^7.5"
     },
     "require-dev": {
+        "brianium/paratest": "^6.2",
         "facade/ignition": "^2.5",
         "fakerphp/faker": "^1.9.1",
         "laravel-frontend-presets/tailwindcss": "^4.3",

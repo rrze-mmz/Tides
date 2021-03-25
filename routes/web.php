@@ -3,6 +3,7 @@
 use App\Http\Controllers\Backend\AssetsController;
 use App\Http\Controllers\Backend\AdminDashboardController;
 use App\Http\Controllers\Backend\ClipsController;
+use App\Http\Controllers\Backend\DropzoneTransferController;
 use App\Http\Controllers\Frontend\ApiTagsController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\SearchController;
@@ -25,7 +26,7 @@ Route::redirect('/home', '/');
 Route::redirect('/admin','/admin/dashboard');
 
 //Quick search
-Route::get('search', [SearchController::class, 'search']);
+Route::get('search', [SearchController::class, 'search'])->name('search');
 
 //Frontend clip route
 Route::get('/clips',[ShowClipsController::class,'index']);
@@ -45,6 +46,10 @@ Route::prefix('admin')->middleware('auth')->group(function(){
     Route::get('/clips/{clip}/',[ClipsController::class,'edit'])->name('clips.edit');
     Route::patch('/clips/{clip}/',[ClipsController::class,'update'])->name('clips.update');
     Route::delete('/clips/{clip}/',[ClipsController::class,'destroy'])->name('clips.destroy');
+
+    Route::get('/clips/{clip}/transfer',[DropzoneTransferController::class,'listFiles'])->name('admin.clips.dropzone.listFiles');
+    Route::post('/clips/{clip}/transfer',[DropzoneTransferController::class,'transfer'])->name('admin.clips.dropzone.transfer');
+
 
     //Assets
     Route::post('/clips/{clip}/assets',[AssetsController::class,'store'])->name('admin.assets.store');
