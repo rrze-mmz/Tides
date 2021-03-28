@@ -1,5 +1,6 @@
 <?php
 
+
 namespace Tests\Unit;
 
 use App\Models\Clip;
@@ -8,6 +9,7 @@ use Tests\TestCase;
 
 class HelpersTest extends TestCase
 {
+
     use RefreshDatabase;
 
     /** @test */
@@ -25,8 +27,11 @@ class HelpersTest extends TestCase
     /** @test */
     public function it_returns_a_date_path()
     {
-        $this->assertEquals('/2021/01/13/TIDES_Clip_ID_1',getClipStoragePath(Clip::factory()->create(['created_at' => '2021-01-13 15:38:51'])));
-        $this->assertEquals('/2021/01/01/TIDES_Clip_ID_2',getClipStoragePath(Clip::factory()->create(['created_at' => '2021-01-01 15:38:51'])));
-        $this->assertEquals('/2021/12/27/TIDES_Clip_ID_3',getClipStoragePath(Clip::factory()->create(['created_at' => '2021-12-27 15:38:51'])));
+        $this->assertEquals('/2021/01/13/TIDES_Clip_ID_1',
+            getClipStoragePath(Clip::factory()->create(['created_at' => '2021-01-13 15:38:51'])));
+        $this->assertEquals('/2021/01/01/TIDES_Clip_ID_2',
+            getClipStoragePath(Clip::factory()->create(['created_at' => '2021-01-01 15:38:51'])));
+        $this->assertEquals('/2021/12/27/TIDES_Clip_ID_3',
+            getClipStoragePath(Clip::factory()->create(['created_at' => '2021-12-27 15:38:51'])));
     }
 }

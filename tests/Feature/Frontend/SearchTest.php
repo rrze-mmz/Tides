@@ -1,5 +1,6 @@
 <?php
 
+
 namespace Tests\Feature\Frontend;
 
 use App\Models\Asset;
@@ -12,6 +13,7 @@ use Tests\TestCase;
 
 class SearchTest extends TestCase
 {
+
     use RefreshDatabase, WithFaker;
 
     protected $clip;
@@ -22,15 +24,15 @@ class SearchTest extends TestCase
     */
     protected function setUp(): void
     {
-       parent::setUp();
+        parent::setUp();
 
-       $this->clip =  Clip::factory()->create([
-            'title' => 'Lorem ipsum for testing  the search function',
+        $this->clip = Clip::factory()->create([
+            'title'       => 'Lorem ipsum for testing  the search function',
             'description' => 'Dolor sit amet for testing the search function',
-            'owner_id' => User::factory()->create(['name' => 'John Doe'])
+            'owner_id'    => User::factory()->create(['name' => 'John Doe'])
         ]);
 
-       Asset::factory()->create(['clip_id' => $this->clip]);
+        Asset::factory()->create(['clip_id' => $this->clip]);
     }
 
     protected function searchFor($term): TestResponse
@@ -79,16 +81,16 @@ class SearchTest extends TestCase
     /** @test */
     public function it_can_search_for_multiple_owners()
     {
-        $secondClip =  Clip::factory()->create([
-                            'title' => 'Lorem ipsum for testing  the search function',
-                            'description' => 'Dolor sit amet for testing the search function',
-                            'owner_id' => User::factory()->create(['name' => 'Bob Doe'])
-                        ]);
+        $secondClip = Clip::factory()->create([
+            'title'       => 'Lorem ipsum for testing  the search function',
+            'description' => 'Dolor sit amet for testing the search function',
+            'owner_id'    => User::factory()->create(['name' => 'Bob Doe'])
+        ]);
 
         Asset::factory()->create(['clip_id' => $secondClip]);
 
         $this->searchFor('doe')
-                ->assertSee($this->clip->title)
-                ->assertSee($secondClip->title);
+            ->assertSee($this->clip->title)
+            ->assertSee($secondClip->title);
     }
 }

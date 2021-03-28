@@ -8,7 +8,8 @@ use App\Models\Asset;
 use App\Models\Clip;
 use App\Models\User;
 
-class ClipFactory {
+class ClipFactory
+{
 
     protected $assetsCount = 0;
     protected $user;

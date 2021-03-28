@@ -111,7 +111,7 @@
                         Go to view page
                     </a>
 
-                    <a href="{{ $clip->path() }}"
+                    <a href="{{ route('admin.clips.dropzone.listFiles', $clip) }}"
                        type="button"
                        class="p-3 text-sm text-white bg-blue-500 rounded-md focus:outline-none hover:bg-blue-600 hover:shadow-lg">
                         Transfer files from drop zone

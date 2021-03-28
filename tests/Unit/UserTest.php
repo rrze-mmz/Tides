@@ -1,5 +1,6 @@
 <?php
 
+
 namespace Tests\Unit;
 
 use App\Models\User;
@@ -9,6 +10,7 @@ use Tests\TestCase;
 
 class UserTest extends TestCase
 {
+
     use RefreshDatabase;
 
     /** @test */

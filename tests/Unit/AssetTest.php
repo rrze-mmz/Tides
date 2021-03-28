@@ -1,5 +1,6 @@
 <?php
 
+
 namespace Tests\Unit;
 
 use App\Events\AssetDeleted;
@@ -8,7 +9,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
-class AssetTest extends TestCase {
+class AssetTest extends TestCase
+{
 
     use RefreshDatabase;
 
@@ -17,7 +19,7 @@ class AssetTest extends TestCase {
     {
         $asset = Asset::factory()->create();
 
-        $this->assertEquals('/admin/assets/' . $asset->id, $asset->path());
+        $this->assertEquals('/admin/assets/'.$asset->id, $asset->path());
     }
 
     /** @test */

@@ -1,5 +1,6 @@
 <?php
 
+
 namespace Tests\Unit;
 
 use App\Models\Asset;
@@ -16,6 +17,7 @@ use Tests\TestCase;
 
 class ClipTest extends TestCase
 {
+
     use RefreshDatabase;
 
     /** @test */
@@ -45,9 +47,9 @@ class ClipTest extends TestCase
     /** @test */
     public function it_has_an_incremental_slug()
     {
-        Clip::factory()->create(['title'=> 'A test title','slug'=> 'A test title']);
+        Clip::factory()->create(['title' => 'A test title', 'slug' => 'A test title']);
 
-        $clip = Clip::factory()->create(['title'=> 'A test title','slug'=> 'A test title']);
+        $clip = Clip::factory()->create(['title' => 'A test title', 'slug' => 'A test title']);
 
         $this->assertSame('a-test-title-2', $clip->slug);
     }
@@ -55,9 +57,9 @@ class ClipTest extends TestCase
     /** @test */
     public function it_has_a_unique_slug()
     {
-        $clipA = Clip::factory()->create(['title'=> 'A test title','slug'=> 'A test title']);
+        $clipA = Clip::factory()->create(['title' => 'A test title', 'slug' => 'A test title']);
 
-        $clipB = Clip::factory()->create(['title'=> 'A test title','slug'=> 'A test title']);
+        $clipB = Clip::factory()->create(['title' => 'A test title', 'slug' => 'A test title']);
 
         $this->assertNotEquals($clipA->slug, $clipB->slug);
     }
@@ -75,7 +77,7 @@ class ClipTest extends TestCase
     {
         $clip = Clip::factory()->create();
 
-        Asset::factory(2)->create(['clip_id'=> $clip->id]);
+        Asset::factory(2)->create(['clip_id' => $clip->id]);
 
         $this->assertEquals(2, $clip->assets()->count());
     }
@@ -83,7 +85,7 @@ class ClipTest extends TestCase
     /** @test */
     public function it_can_return_created_date_in_carbon_format()
     {
-        $clip = Clip::factory()->create(['created_at'=>'2021-03-02 08:57:38']);
+        $clip = Clip::factory()->create(['created_at' => '2021-03-02 08:57:38']);
 
         $this->assertEquals('2021-03-02', $clip->created_at);
     }
@@ -109,13 +111,15 @@ class ClipTest extends TestCase
         $videoFile = FileFactory::videoFile();
 
         $asset = $clip->addAsset([
-            'disk' => 'videos',
+            'disk'               => 'videos',
             'original_file_name' => $videoFile->getClientOriginalName(),
-            'path'  =>
-                $path = $videoFile->storeAs($clipStoragePath, $fileNameDate.'-'.$clip->slug.'.'.Str::of($videoFile->getClientOriginalName())->after('.'), 'videos'),
-            'duration' => FFMpeg::fromDisk('videos')->open($path)->getDurationInSeconds(),
-            'width' => FFMpeg::fromDisk('videos')->open($path)->getVideoStream()->getDimensions()->getWidth(),
-            'height' => FFMpeg::fromDisk('videos')->open($path)->getVideoStream()->getDimensions()->getHeight()
+            'path'               =>
+                $path = $videoFile->storeAs($clipStoragePath,
+                    $fileNameDate.'-'.$clip->slug.'.'.Str::of($videoFile->getClientOriginalName())->after('.'),
+                    'videos'),
+            'duration'           => FFMpeg::fromDisk('videos')->open($path)->getDurationInSeconds(),
+            'width'              => FFMpeg::fromDisk('videos')->open($path)->getVideoStream()->getDimensions()->getWidth(),
+            'height'             => FFMpeg::fromDisk('videos')->open($path)->getVideoStream()->getDimensions()->getHeight()
         ]);
 
         $this->assertCount(1, $clip->assets);
@@ -132,9 +136,9 @@ class ClipTest extends TestCase
 
         $this->assertNull($clip->posterImage);
 
-        $file  = FileFactory::videoFile();
+        $file = FileFactory::videoFile();
 
-        $file->storeAs('thumbnails',$clip->id.'_poster.png');
+        $file->storeAs('thumbnails', $clip->id.'_poster.png');
 
         $clip->updatePosterImage();
 
@@ -148,7 +152,7 @@ class ClipTest extends TestCase
     {
         $clip = Clip::factory()->create();
 
-        $clip->addTags(['php','tides']);
+        $clip->addTags(['php', 'tides']);
 
         $this->assertEquals(2, $clip->tags()->count());
     }

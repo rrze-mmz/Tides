@@ -1,36 +1,40 @@
 <?php
 
+
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Clip;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class DropzoneTransferController extends Controller
 {
 
     /**
-     * Handle the incoming request.
+     * List all available files inside the dropzone folder
      *
      * @param  Clip  $clip
      * @return View
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws AuthorizationException
      */
     public function listFiles(Clip $clip): View
     {
         $this->authorize('edit', $clip);
 
-        //fetch drop zone files
-        $files = collect(Storage::disk('video_dropzone')->files())->map(function ($file) {
-            return [
-                'date_modified' => Carbon::createFromTimestamp(Storage::disk('video_dropzone')->lastModified($file))->format('Y-m-d H:i:s'),
-                'name'          => $file
-            ];
-        });
+        return view('backend.clips.dropzone.listFiles', [
+            'clip'  => $clip,
+            'files' => fetchDropZoneFiles()
+        ]);
+    }
 
+    public function transfer(Clip $clip, Request $request)
+    {
+        $files = $request->validate([
+            'files[]' => 'required|array'
+        ]);
 
-        return view('backend.clips.transfer',compact('files'));
+        return 'transfer';
     }
 }

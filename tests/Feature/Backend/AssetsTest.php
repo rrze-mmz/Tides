@@ -1,5 +1,6 @@
 <?php
 
+
 namespace Tests\Feature\Backend;
 
 use App\Jobs\ConvertVideoForStreaming;
@@ -10,13 +11,14 @@ use Facades\Tests\Setup\FileFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
 use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
 use Tests\TestCase;
 
-class AssetsTest extends TestCase {
+class AssetsTest extends TestCase
+{
 
     use  RefreshDatabase, WithFaker;
 
@@ -30,10 +32,10 @@ class AssetsTest extends TestCase {
     /** @test */
     public function an_authenticated_user_can_upload_a_video_file()
     {
-        $clip =  ClipFactory::ownedBy($this->signIn())->create();
+        $clip = ClipFactory::ownedBy($this->signIn())->create();
 
-        $this->post(route('admin.assets.store', $clip),['asset' => $file  = FileFactory::videoFile()])
-                ->assertRedirect($clip->adminPath());
+        $this->post(route('admin.assets.store', $clip), ['asset' => $file = FileFactory::videoFile()])
+            ->assertRedirect($clip->adminPath());
 
         $asset = $clip->assets()->first();
 
@@ -72,7 +74,7 @@ class AssetsTest extends TestCase {
     {
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 
-        $this->post(route('admin.assets.store',$clip), ['asset' => FileFactory::videoFile()]);
+        $this->post(route('admin.assets.store', $clip), ['asset' => FileFactory::videoFile()]);
 
         $asset = $clip->assets()->first();
 
@@ -90,7 +92,7 @@ class AssetsTest extends TestCase {
     {
         $this->post(route('admin.assets.store', ClipFactory::ownedBy($this->signIn())->create()), [
             'asset' => $file = UploadedFile::fake()->image('avatar.jpg')
-            ])
+        ])
             ->assertSessionHasErrors('asset');
     }
 
@@ -99,9 +101,10 @@ class AssetsTest extends TestCase {
     {
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 
-        $this->post(route('admin.assets.store', $clip), ['asset' => $file  = FileFactory::videoFile()]);
+        $this->post(route('admin.assets.store', $clip), ['asset' => $file = FileFactory::videoFile()]);
 
-        $this->assertEquals(10, FFMpeg::fromDisk('videos')->open($clip->assets()->first()->path)->getDurationInSeconds());
+        $this->assertEquals(10,
+            FFMpeg::fromDisk('videos')->open($clip->assets()->first()->path)->getDurationInSeconds());
 
     }
 
@@ -112,7 +115,7 @@ class AssetsTest extends TestCase {
 
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 
-        $this->post(route('admin.assets.store', $clip), ['asset' => $file  = FileFactory::videoFile()]);
+        $this->post(route('admin.assets.store', $clip), ['asset' => $file = FileFactory::videoFile()]);
 
         $clip->refresh();
 
@@ -126,7 +129,7 @@ class AssetsTest extends TestCase {
 
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 
-        $this->post(route('admin.assets.store', $clip), ['asset' => $file  = FileFactory::videoFile()]);
+        $this->post(route('admin.assets.store', $clip), ['asset' => $file = FileFactory::videoFile()]);
 
         Mail::assertSent(VideoUploaded::class);
     }
@@ -138,7 +141,7 @@ class AssetsTest extends TestCase {
 
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 
-        $this->post(route('admin.assets.store', $clip), ['asset' => $file  = FileFactory::videoFile()]);
+        $this->post(route('admin.assets.store', $clip), ['asset' => $file = FileFactory::videoFile()]);
 
         $clip->refresh();
 
@@ -152,7 +155,7 @@ class AssetsTest extends TestCase {
     {
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 
-        $this->post(route('admin.assets.store', $clip), ['asset' => $file  = FileFactory::videoFile()]);
+        $this->post(route('admin.assets.store', $clip), ['asset' => $file = FileFactory::videoFile()]);
 
         $this->delete($clip->assets()->first()->path());
 
@@ -169,7 +172,7 @@ class AssetsTest extends TestCase {
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 
         $this->post(route('admin.assets.store', $clip), [
-            'asset' => $file  = FileFactory::videoFile(),
+            'asset'                 => $file = FileFactory::videoFile(),
             'should_convert_to_hls' => true,
         ]);
 

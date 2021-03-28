@@ -1,22 +1,25 @@
 <?php
 
+
 namespace Tests\Feature\Backend;
 
 use Facades\Tests\Setup\ClipFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class AdminDashboardTest extends TestCase
 {
+
     use RefreshDatabase, WithFaker;
 
+    /** @test */
     public function it_should_not_be_accessed_by_a_user()
     {
         $this->get(route('dashboard'))->assertRedirect('login');
     }
+
     /** @test */
     public function it_should_be_accessed_by_authenticated_user()
     {
@@ -64,7 +67,7 @@ class AdminDashboardTest extends TestCase
 
         Storage::fake('video_dropzone');
 
-        Storage::disk('video_dropzone')->put('test.pdf','some non-pdf content');
+        Storage::disk('video_dropzone')->put('test.pdf', 'some non-pdf content');
 
         $this->get(route('dashboard'))->assertSee('test.pdf');
     }

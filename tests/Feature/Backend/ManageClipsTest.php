@@ -1,5 +1,6 @@
 <?php
 
+
 namespace Tests\Feature\Backend;
 
 use App\Models\Clip;
@@ -7,11 +8,11 @@ use App\Models\Tag;
 use Facades\Tests\Setup\ClipFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class ManageClipsTest extends TestCase
 {
+
     use WithFaker, RefreshDatabase;
 
     /** @test */
@@ -53,7 +54,7 @@ class ManageClipsTest extends TestCase
     {
         $this->signIn();
 
-        $attributes = Clip::factory()->raw(['title'=> '']);
+        $attributes = Clip::factory()->raw(['title' => '']);
 
         $this->post(route('clips.store'), $attributes)->assertSessionHasErrors('title');
     }
@@ -66,7 +67,7 @@ class ManageClipsTest extends TestCase
         $this->get('/admin/clips/create')->assertStatus(200);
 
         $this->followingRedirects()
-            ->post(route('clips.store'),$attributes = Clip::factory()->raw())
+            ->post(route('clips.store'), $attributes = Clip::factory()->raw())
             ->assertSee($attributes['title']);
     }
 
@@ -76,10 +77,10 @@ class ManageClipsTest extends TestCase
         $this->signIn();
 
         $attributes = Clip::factory()->raw([
-            'tags' => ['php','example','oop']
+            'tags' => ['php', 'example', 'oop']
         ]);
 
-        $this->followingRedirects()->post(route('clips.store'),$attributes)->assertSee($attributes['tags']);
+        $this->followingRedirects()->post(route('clips.store'), $attributes)->assertSee($attributes['tags']);
 
         $clip = Clip::first();
 
@@ -96,9 +97,9 @@ class ManageClipsTest extends TestCase
         $clip->tags()->sync(Tag::factory()->create());
 
         $this->patch($clip->adminPath(), [
-            'title'=>'changed',
+            'title'       => 'changed',
             'description' => 'changed',
-            'tags' => []
+            'tags'        => []
         ]);
 
         $this->assertEquals(0, $clip->tags()->count());
@@ -114,14 +115,13 @@ class ManageClipsTest extends TestCase
         $clip->tags()->sync(Tag::factory()->create());
 
         $this->patch($clip->adminPath(), [
-            'title'=>'changed',
+            'title'       => 'changed',
             'description' => 'changed',
-            'tags' => [$tag->name, 'another tag']
+            'tags'        => [$tag->name, 'another tag']
         ]);
 
         $this->assertEquals(2, $clip->tags()->count());
     }
-
 
     /** @test */
     public function create_clip_form_should_remember_old_values_on_validation_error()
@@ -129,10 +129,10 @@ class ManageClipsTest extends TestCase
         $this->signIn();
 
         $attributes = [
-            'title' => 'Long description',
+            'title'       => 'Long description',
             'description' => $this->faker->sentence(500),
         ];
-        $this->post(route('clips.store'),$attributes);
+        $this->post(route('clips.store'), $attributes);
 
         $this->followingRedirects();
 
@@ -148,14 +148,14 @@ class ManageClipsTest extends TestCase
         $this->get($clip->path())->assertSee($clip->title);
 
         $this->patch($clip->adminPath(), [
-            'title'=>'changed',
+            'title'       => 'changed',
             'description' => 'changed'
         ]);
 
         $clip = $clip->refresh();
 
         $this->assertDatabaseHas('clips', [
-            'title'=>'changed',
+            'title'       => 'changed',
             'description' => 'changed'
         ]);
 
@@ -170,7 +170,7 @@ class ManageClipsTest extends TestCase
         $this->signIn();
 
         $attributes = [
-            'title'=>'changed',
+            'title'       => 'changed',
             'description' => 'changed'
         ];
 
@@ -184,7 +184,7 @@ class ManageClipsTest extends TestCase
     {
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 
-        $this->patch($clip->adminPath(), ['title'=>'Title changed']);
+        $this->patch($clip->adminPath(), ['title' => 'Title changed']);
 
         $clip->refresh();
 
