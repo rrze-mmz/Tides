@@ -4,9 +4,13 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendEmail;
+use App\Jobs\TransferDropzoneFiles;
+use App\Mail\VideoUploaded;
 use App\Models\Clip;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 
 class DropzoneTransferController extends Controller
@@ -31,10 +35,15 @@ class DropzoneTransferController extends Controller
 
     public function transfer(Clip $clip, Request $request)
     {
-        $files = $request->validate([
-            'files[]' => 'required|array'
+        $this->authorize('edit', $clip);
+
+        $validated = $request->validate([
+            'files' => 'required|array'
         ]);
 
-        return 'transfer';
+        TransferDropzoneFiles::dispatch($clip,fetchDropZoneFiles()->whereIn('hash',$validated['files']));
+        Mail::to($clip->owner->email)->queue(new VideoUploaded($clip));
+
+        return redirect($clip->adminPath());
     }
 }

@@ -18,7 +18,6 @@
                         >
                             Title
                         </label>
-
                         <input class="p-2 w-full border border-gray-400"
                                type="text"
                                name="title"

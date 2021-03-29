@@ -5,6 +5,8 @@ namespace Tests\Unit;
 
 use App\Models\Clip;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Testing\File;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class HelpersTest extends TestCase
@@ -33,5 +35,19 @@ class HelpersTest extends TestCase
             getClipStoragePath(Clip::factory()->create(['created_at' => '2021-01-01 15:38:51'])));
         $this->assertEquals('/2021/12/27/TIDES_Clip_ID_3',
             getClipStoragePath(Clip::factory()->create(['created_at' => '2021-12-27 15:38:51'])));
+    }
+
+    /** @test */
+    public function it_returns_a_collection_with_all_dropzone_files()
+    {
+        $disk = Storage::fake('video_dropzone');
+
+        $disk->putFileAs('', File::create('export_video.mp4', 1000), 'export_video.mp4');
+
+        $collection = fetchDropZoneFiles();
+
+        $this->assertInstanceOf('Illuminate\Support\Collection', $collection);
+
+        $this->assertTrue($collection->contains('name','export_video.mp4'));
     }
 }

@@ -40,7 +40,6 @@ class ConvertVideoForStreaming implements ShouldQueue
         $lowBitrateFormat = (new X264 ('aac'))->setKiloBitrate(100);
         $midBitrateFormat = (new X264 ('aac'))->setKiloBitrate(200);
         $highBitrateFormat = (new X264 ('aac'))->setKiloBitrate(300);
-
         FFMpeg::open($this->asset->path)
             ->exportForHLS()
             ->toDisk('streamable_videos')

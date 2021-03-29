@@ -7,7 +7,8 @@
         </div>
 
         <form action = "{{ route('admin.clips.dropzone.transfer', $clip) }}"
-               method="POST">
+               method="POST"
+                class="w-3/5">
             @csrf
 
             <div class="mb-6">
@@ -33,6 +34,11 @@
                 <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
                 @enderror
             </div>
+
+            <input type="submit"
+                   value="submit"
+                    class="mt-2 focus:outline-none text-white text-sm py-1.5 px-5 rounded-md bg-blue-500 hover:bg-blue-600 hover:shadow-lg"
+            >
         </form>
     </div>
 @endsection

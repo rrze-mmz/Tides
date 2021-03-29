@@ -5,11 +5,23 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * Returns poster image relative file path of a clip or default
+ *
+ * @param  null  $file
+ * @return string
+ */
 function fetchClipPoster($file = null): string
 {
     return (is_null($file)) ? '/images/generic_clip_poster_image.png' : '/thumbnails/'.$file;
 }
 
+/**
+ * Return file dir for a clip based on created date
+ *
+ * @param  Clip  $clip
+ * @return string
+ */
 function getClipStoragePath(Clip $clip): string
 {
     return '/'.Carbon::createFromFormat('Y-m-d', $clip->created_at)->year.
@@ -18,6 +30,12 @@ function getClipStoragePath(Clip $clip): string
         .'TIDES_Clip_ID_'.$clip->id;
 }
 
+
+/**
+ * Fetch all files in the dropzone with sha1 hash
+ *
+ * @return Collection
+ */
 function fetchDropZoneFiles(): Collection
 {
     return collect(Storage::disk('video_dropzone')->files())
@@ -29,3 +47,8 @@ function fetchDropZoneFiles(): Collection
             'hash'          => sha1($file),
         ])->sortBy('date_modified');
 }
+
+//function fetchDropZoneFile($files ='')
+//{
+//    $files  = colllect(Storage::disk('video_dropzone')->files())->map(fn($file))
+//}

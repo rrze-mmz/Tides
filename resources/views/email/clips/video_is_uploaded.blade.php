@@ -1,7 +1,7 @@
 @component('mail::message')
 # Video upload completed
 
-Hi {{ auth()->user()->name }},
+Hi {{ $clip->owner->name }},
 
 Your Video "{{ $clip->title }}" is online
 
