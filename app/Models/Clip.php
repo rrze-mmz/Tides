@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -124,22 +125,17 @@ class Clip extends Model
     }
 
     /**
-     * @param validated array  $tagsArray
+     * @param  Collection  $tagsCollection
      */
-    public function addTags($tagsArray = []):void
+    public function addTags(Collection $tagsCollection): void
     {
-        if (!empty($tagsArray)) {
-            $tagsCollection = collect(new Tag);
-
-            //loop through tag names
-            foreach ($tagsArray as $tagName) {
-                //create or select a tag based on name and push it to local collection
-                $tagsCollection->push(tap(Tag::firstOrCreate(['name' => $tagName]))->save());
-            }
-            //sync tag collection with the clip
-            $this->tags()->sync($tagsCollection->pluck('id'));
+        if ($tagsCollection->isNotEmpty()) {
+            $this->tags()->sync($tagsCollection->map(function ($tagName){
+                return tap(Tag::firstOrCreate(['name' => $tagName]))->save();
+                })->pluck('id')
+            );
         }
-        else{
+        else {
             $this->tags()->detach();
         }
     }

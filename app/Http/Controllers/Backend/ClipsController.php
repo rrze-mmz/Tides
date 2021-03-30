@@ -47,7 +47,7 @@ class ClipsController extends Controller
 
         $clip = auth()->user()->clips()->create(Arr::except($request->validated(), 'tags'));
 
-        $clip->addTags($validated['tags']);
+        $clip->addTags(collect($validated['tags']));
 
         return redirect($clip->adminPath());
     }
@@ -79,7 +79,7 @@ class ClipsController extends Controller
 
         $clip->update(Arr::except($request->validated(), 'tags'));
 
-        $clip->addTags($validated['tags']);
+        $clip->addTags(collect($validated['tags']));
 
         return redirect($clip->adminPath());
     }

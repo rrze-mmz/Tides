@@ -3,7 +3,6 @@
 
 namespace Tests\Feature\Backend;
 
-use App\Jobs\ConvertVideoForStreaming;
 use App\Jobs\SendEmail;
 use App\Jobs\TransferDropzoneFiles;
 use App\Mail\VideoUploaded;

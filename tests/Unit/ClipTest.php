@@ -152,7 +152,7 @@ class ClipTest extends TestCase
     {
         $clip = Clip::factory()->create();
 
-        $clip->addTags(['php', 'tides']);
+        $clip->addTags(collect(['php', 'tides']));
 
         $this->assertEquals(2, $clip->tags()->count());
     }
