@@ -55,6 +55,18 @@ class AssetsTest extends TestCase
     }
 
     /** @test */
+    public function an_admin_can_delete_a_not_owned_clip_asset()
+    {
+        $asset = Asset::factory()->create();
+
+        $this->signInAdmin();
+
+        $this->delete($asset->path());
+
+        $this->assertDeleted($asset);
+    }
+
+    /** @test */
     public function an_authenticated_user_can_delete_an_owned_clip_asset()
     {
         $clip = ClipFactory::withAssets(1)
