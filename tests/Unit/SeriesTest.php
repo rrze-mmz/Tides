@@ -28,4 +28,21 @@ class SeriesTest extends TestCase
 
         $this->assertEquals('/series/'.$series->slug, $series->path());
     }
+
+    /** @test */
+    public function it_has_an_admin_path()
+    {
+        $series = Series::factory()->create();
+
+        $this->assertEquals('/admin/series/'.$series->slug, $series->adminPath());
+    }
+
+    /** @test */
+    public function it_has_a_slug_route()
+    {
+        $series = Series::factory()->create();
+
+        $this->get($series->path())->assertStatus(200);
+
+    }
 }
