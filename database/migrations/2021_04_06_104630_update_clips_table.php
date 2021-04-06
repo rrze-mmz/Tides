@@ -14,8 +14,8 @@ class UpdateClipsTable extends Migration
     public function up()
     {
         Schema::table('clips', function (Blueprint $table) {
-            $table->unsignedBigInteger('series_id')->nullable();
-            $table->integer('episode');
+            $table->unsignedBigInteger('series_id')->nullable()->default(null);
+            $table->integer('episode')->default('1');
 
         });
     }
