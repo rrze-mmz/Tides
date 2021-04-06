@@ -51,7 +51,6 @@ class ClipsController extends Controller
 
         return redirect($clip->adminPath());
     }
-
     /**
      * Edit form for a single clip
      *

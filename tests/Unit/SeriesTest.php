@@ -20,4 +20,12 @@ class SeriesTest extends TestCase
 
         $this->assertEquals(2, $series->clips()->count());
     }
+
+    /** @test */
+    public function it_has_a_path()
+    {
+        $series = Series::factory()->create();
+
+        $this->assertEquals('/series/'.$series->slug, $series->path());
+    }
 }

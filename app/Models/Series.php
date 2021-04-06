@@ -15,4 +15,9 @@ class Series extends Model
     {
         return $this->hasMany(Clip::class);
     }
+
+    public function path()
+    {
+        return "/series/{$this->slug}";
+    }
 }

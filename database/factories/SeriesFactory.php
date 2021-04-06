@@ -24,10 +24,9 @@ class SeriesFactory extends Factory
     {
         return [
             'title' => $title = $this->faker->sentence,
-            'description'   => $this->faker->paragraph,
+            'description'   => $this->faker->paragraph(50),
             'slug'  => $title,
             'owner_id'  => User::factory()->create()->id,
-            'description' => $this->faker->paragraph(100),
         ];
     }
 }
