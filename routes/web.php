@@ -4,6 +4,7 @@ use App\Http\Controllers\Backend\AssetsController;
 use App\Http\Controllers\Backend\AdminDashboardController;
 use App\Http\Controllers\Backend\ClipsController;
 use App\Http\Controllers\Backend\DropzoneTransferController;
+use App\Http\Controllers\Backend\SeriesController;
 use App\Http\Controllers\Frontend\ApiTagsController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\SearchController;
@@ -39,6 +40,9 @@ Route::prefix('admin')->middleware('auth')->group(function(){
    //Dashboard
     Route::get('/dashboard', AdminDashboardController::class)->name('dashboard');
 
+    //Series
+    Route::get('/series/create',[SeriesController::class,'create'])->name('series.create');
+    Route::post('/series', [SeriesController::class,'store'])->name('series.store');
     //Clip
     Route::get('/clips',[ClipsController::class,'index'])->name('clips.index');
     Route::get('/clips/create',[ClipsController::class,'create'])->name('clips.create');

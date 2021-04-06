@@ -177,7 +177,7 @@ class AssetsTest extends TestCase
     }
 
     /** @test */
-    public function it_should_queue_if_users_select_to_convert_to_hls()
+    public function it_should_queue_if_user_select_to_convert_to_hls()
     {
         Queue::fake();
 

@@ -57,4 +57,12 @@ class UserTest extends TestCase
 
         $this->assertEquals(2, $user->roles()->count());
     }
+
+    /** @test */
+    public function it_check_for_admin_role()
+    {
+        $this->signInAdmin();
+
+        $this->assertTrue(auth()->user()->isAdmin());
+    }
 }

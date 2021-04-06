@@ -2,21 +2,21 @@
 
 namespace Database\Factories;
 
-use App\Models\Clip;
 use App\Models\Series;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class ClipFactory extends Factory
+class SeriesFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Clip::class;
+    protected $model = Series::class;
+
     /**
-     * Define the model's default state
+     * Define the model's default state.
      *
      * @return array
      */
@@ -24,12 +24,10 @@ class ClipFactory extends Factory
     {
         return [
             'title' => $title = $this->faker->sentence,
-            'description' => $this->faker->paragraph,
+            'description'   => $this->faker->paragraph,
             'slug'  => $title,
-            'owner_id' => User::factory()->create()->id,
-            'posterImage' => null,
-            'series_id' => null,
-            'episode' => '1',
+            'owner_id'  => User::factory()->create()->id,
+            'description' => $this->faker->paragraph(100),
         ];
     }
 }

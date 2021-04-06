@@ -19,6 +19,10 @@ class Clip extends Model
 
     protected $guarded = [];
 
+    protected $attributes = [
+        'episode' => '1'
+    ];
+
     /**
      * Clip frontend link
      *
@@ -86,6 +90,11 @@ class Clip extends Model
     public function assets(): HasMany
     {
         return $this->hasMany(Asset::class);
+    }
+
+    public function series(): BelongsTo
+    {
+        return $this->hasOne(Series::class);
     }
 
     /**
