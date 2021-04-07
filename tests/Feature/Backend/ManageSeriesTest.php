@@ -14,8 +14,6 @@ class ManageSeriesTest extends TestCase
     /** @test */
     public function an_authenticated_user_can_see_the_create_series_form_and_all_form_fields()
     {
-        $this->withoutExceptionHandling();
-
         $this->signIn();
 
         $this->get(route('series.create'))->assertSee('title')

@@ -15,7 +15,7 @@ use Illuminate\Support\Str;
 class Clip extends Model
 {
 
-    use HasFactory;
+    use HasFactory, Slugable;
 
     protected $guarded = [];
 
@@ -49,17 +49,6 @@ class Clip extends Model
     public function getRouteKeyName(): string
     {
         return 'slug';
-    }
-
-    /**
-     * @param $value
-     */
-    public function setSlugAttribute($value): void
-    {
-        if (static::whereSlug($slug = Str::of($value)->slug('-'))->exists()) {
-            $slug = $this->incrementSlug($slug);
-        }
-        $this->attributes['slug'] = $slug;
     }
 
     /**
@@ -104,23 +93,6 @@ class Clip extends Model
     public function addAsset($attributes = []): Model
     {
         return $this->assets()->create($attributes);
-    }
-
-    /**
-     * @param $slug
-     * @return mixed
-     */
-    public function incrementSlug($slug): mixed
-    {
-        $original = $slug;
-
-        $count = 2;
-
-        while (static::whereSlug($slug)->exists()) {
-            $slug = "{$original}-".$count++;
-        }
-
-        return $slug;
     }
 
     /**
