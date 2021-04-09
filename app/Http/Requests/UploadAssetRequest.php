@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Gate;
 
 class UploadAssetRequest extends FormRequest
 {
-    
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -28,7 +28,7 @@ class UploadAssetRequest extends FormRequest
     {
         return [
             'asset'                 => 'required|file|mimetypes:video/mp4,video/mpeg,video/x-matroska',
-            'should_convert_to_hls' => 'boolean'
+            'should_convert_to_hls' => 'string|max:2'
         ];
     }
 }

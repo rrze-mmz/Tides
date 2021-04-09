@@ -71,4 +71,20 @@ class AdminDashboardTest extends TestCase
 
         $this->get(route('dashboard'))->assertSee('test.pdf');
     }
+
+    /** @test */
+    public function it_should_display_an_add_clip_button()
+    {
+        $this->signIn();
+
+        $this->get(route('dashboard'))->assertSee('New clip');
+    }
+
+    /** @test */
+    public function it_should_display_an_add_series_button()
+    {
+        $this->signIn();
+
+        $this->get(route('dashboard'))->assertSee('New series');
+    }
 }

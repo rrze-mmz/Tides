@@ -185,7 +185,7 @@ class AssetsTest extends TestCase
 
         $this->post(route('admin.assets.store', $clip), [
             'asset'                 => $file = FileFactory::videoFile(),
-            'should_convert_to_hls' => true,
+            'should_convert_to_hls' => 'on',
         ]);
 
         Queue::assertPushed(ConvertVideoForStreaming::class);

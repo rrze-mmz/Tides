@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreSeriesRequest;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 
 class SeriesController extends Controller
 {
@@ -18,15 +18,9 @@ class SeriesController extends Controller
         return view('backend.series.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(StoreSeriesRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'title' => 'required',
-            'description' => 'min:3|max:255',
-            'slug'        => 'required',
-        ]);
-
-        $series = auth()->user()->series()->create($validated);
+        $series = auth()->user()->series()->create( $request->validated());
 
         return redirect($series->adminPath());
     }

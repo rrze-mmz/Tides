@@ -3,7 +3,7 @@
 @section('content')
     <div class="pt-10 w-full lg:flex-grow lg:mx-10">
         <div class="flex pb-2 font-semibold border-b border-black font-2xl">
-            Creates new clip
+            Create new series
         </div>
         <div class="flex justify-center content-center py-2 px-2">
             <form action="/admin/series/"

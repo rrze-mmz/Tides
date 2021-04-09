@@ -45,6 +45,14 @@ class User extends Authenticatable
     /**
      * @return HasMany
      */
+    public function series(): HasMany
+    {
+        return $this->hasMany(Series::class, 'owner_id');
+    }
+
+    /**
+     * @return HasMany
+     */
     public function clips(): HasMany
     {
         return $this->hasMany(Clip::class, 'owner_id');

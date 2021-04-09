@@ -5,14 +5,23 @@
                 <div class="flex pb-2 font-semibold border-b border-black font-2xl">
                     Welcome {{ auth()->user()->name }} !!  This is your personal Dashboard
                 </div>
-                <div class="flex py-2 px-2">
-                    <p class="pt-2">
-                        Start by creating a new video clip
-                        <a class="ml-2 focus:outline-none text-white text-sm py-1.5 px-5 rounded-md bg-blue-500 hover:bg-blue-600 hover:shadow-lg"
-                           href="{{ route('clips.create') }}"
-                        >New clip</a>
-                    </p>
-
+                <div class="flex flex-col py-2 px-2">
+                    <div>
+                        <p class="pt-2">
+                            Start by creating a new series (series are a collection of clips)
+                            <a class="ml-2 focus:outline-none text-white text-sm py-1.5 px-5 rounded-md bg-blue-500 hover:bg-blue-600 hover:shadow-lg"
+                               href="{{ route('series.create') }}"
+                            >New series</a>
+                        </p>
+                    </div>
+                    <div>
+                        <p class="pt-2 mt-4">
+                            Start by creating a new video clip
+                            <a class="ml-2 focus:outline-none text-white text-sm py-1.5 px-5 rounded-md bg-blue-500 hover:bg-blue-600 hover:shadow-lg"
+                               href="{{ route('clips.create') }}"
+                            >New clip</a>
+                        </p>
+                    </div>
                 </div>
                 <div class="flex ">
 

@@ -12,16 +12,6 @@ class SeriesTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function it_has_many_clips()
-    {
-        $series = Series::factory()->create();
-
-        Clip::factory(2)->create(['series_id'=> $series->id]);
-
-        $this->assertEquals(2, $series->clips()->count());
-    }
-
-    /** @test */
     public function it_has_a_path()
     {
         $series = Series::factory()->create();
@@ -45,4 +35,25 @@ class SeriesTest extends TestCase
         $this->get($series->path())->assertStatus(200);
 
     }
+
+    /** @test */
+    public function it_has_a_unique_slug()
+    {
+        $seriesA = Series::factory()->create(['title'=>'A test title','slug'=>'A test title']);
+
+        $seriesB = Series::factory()->create(['title'=>'A test title','slug'=>'A test title']);
+
+        $this->assertNotEquals($seriesA->slug, $seriesB->slug);
+    }
+
+    /** @test */
+    public function it_has_many_clips()
+    {
+        $series = Series::factory()->create();
+
+        Clip::factory(2)->create(['series_id'=> $series->id]);
+
+        $this->assertEquals(2, $series->clips()->count());
+    }
+
 }

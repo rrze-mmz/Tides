@@ -86,7 +86,6 @@
                             <input class="mx-auto"
                                    type="checkbox"
                                    name="should_convert_to_hls"
-                                   value="0"
                             >
                         </div>
 

@@ -15,6 +15,13 @@ class UserTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
+    public function a_user_has_series()
+    {
+        $user = User::factory()->create();
+
+        $this->assertInstanceOf(Collection::class, $user->series);
+    }
+    /** @test */
     public function a_user_has_clips()
     {
         $user = User::factory()->create();
