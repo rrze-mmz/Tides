@@ -41,7 +41,7 @@ class ManageClipsTest extends TestCase
     }
 
     /** @test */
-    public function an_authenticated_user_cannot_view_clip_edit_form_from_not_owned_clips()
+    public function an_authenticated_user_cannot_view_clip_edit_form_for_not_owned_clips()
     {
         $clip = ClipFactory::create();
 
@@ -62,7 +62,7 @@ class ManageClipsTest extends TestCase
 
 
     /** @test */
-    public function it_requires_a_title_when_creating_a_new_clip()
+    public function it_requires_a_title_creating_a_new_clip()
     {
         $this->signIn();
 
@@ -141,9 +141,10 @@ class ManageClipsTest extends TestCase
         $this->signIn();
 
         $attributes = [
-            'title'       => 'Long description',
+            'title'       => 'Clip title',
             'description' => $this->faker->sentence(500),
         ];
+
         $this->post(route('clips.store'), $attributes);
 
         $this->followingRedirects();
@@ -153,7 +154,7 @@ class ManageClipsTest extends TestCase
     }
 
     /** @test */
-    public function an_authenticated_user_can_update_an_owned_clip()
+    public function an_authenticated_user_can_update_his_clip()
     {
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 

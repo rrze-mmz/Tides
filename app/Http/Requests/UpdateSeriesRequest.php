@@ -1,20 +1,18 @@
 <?php
 
-
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 
-class UpdateClipRequest extends FormRequest
+class UpdateSeriesRequest extends FormRequest
 {
 
     protected function prepareForValidation()
     {
         $this->merge([
-            'slug' => Str::slug($this->title),
-            'tags' => $this->tags = $this->tags ?? [], //set empty array if select2 tags is empty
+            'slug'  => Str::slug($this->title),
         ]);
     }
 
@@ -25,7 +23,7 @@ class UpdateClipRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Gate::allows('edit-clips', $this->route('clip'));
+        return Gate::allows('edit-series', $this->route('series'));
     }
 
     /**
@@ -33,13 +31,12 @@ class UpdateClipRequest extends FormRequest
      *
      * @return array
      */
-    public function rules(): array
+    public function rules()
     {
         return [
             'title'       => 'required',
             'description' => 'min:3|max:255',
             'slug'        => 'required',
-            'tags'        => 'array'
         ];
     }
 }

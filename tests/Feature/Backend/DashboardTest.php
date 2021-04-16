@@ -4,18 +4,19 @@
 namespace Tests\Feature\Backend;
 
 use Facades\Tests\Setup\ClipFactory;
+use Facades\Tests\Setup\SeriesFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
-class AdminDashboardTest extends TestCase
+class DashboardTest extends TestCase
 {
 
     use RefreshDatabase, WithFaker;
 
     /** @test */
-    public function it_should_not_be_accessed_by_a_user()
+    public function it_should_not_be_accessed_by_a_visitor()
     {
         $this->get(route('dashboard'))->assertRedirect('login');
     }
@@ -31,15 +32,29 @@ class AdminDashboardTest extends TestCase
     }
 
     /** @test */
-    public function it_should_display_clips_if_existing()
+    public function it_should_display_info_if_no_series_exist()
     {
-        $clip = ClipFactory::ownedBy($this->signIn())->create();
+        $this->signIn();
 
-        $this->get(route('dashboard'))->assertSee($clip->title);
+        $this->get(route('dashboard'))->assertSee('No series found');
     }
 
     /** @test */
-    public function it_should_display_string__if_no_clip_exist()
+    public function it_display_user_series()
+    {
+        $user = $this->signIn();
+
+        SeriesFactory::create();
+
+        $this->get(route('dashboard'))->assertSee('No series found');
+
+        $userSeries = SeriesFactory::ownedBy($user)->create();
+
+        $this->get(route('dashboard'))->assertSee($userSeries->title);
+    }
+
+    /** @test */
+    public function it_should_display_info_if_no_clip_exist()
     {
         $this->signIn();
 
@@ -47,17 +62,17 @@ class AdminDashboardTest extends TestCase
     }
 
     /** @test */
-    public function it_display_only_clips_created_by_the_logged_in_user()
+    public function it_display_user_clips()
     {
-        $bob = $this->signIn();
+        $user = $this->signIn();
 
         ClipFactory::create();
 
         $this->get(route('dashboard'))->assertSee('No clips found');
 
-        $newClip = ClipFactory::ownedBy($bob)->create();
+        $userClip = ClipFactory::ownedBy($user)->create();
 
-        $this->get(route('dashboard'))->assertSee($newClip->title);
+        $this->get(route('dashboard'))->assertSee($userClip->title);
     }
 
     /** @test */

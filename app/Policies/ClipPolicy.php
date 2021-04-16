@@ -13,6 +13,14 @@ class ClipPolicy
     use HandlesAuthorization;
 
     /**
+     * @return bool
+     */
+    public function create(): bool
+    {
+        return auth()->check();
+    }
+
+    /**
      * @param  User  $user
      * @param  Clip  $clip
      * @return bool
@@ -20,13 +28,5 @@ class ClipPolicy
     public function edit(User $user, Clip $clip): bool
     {
         return ($user->is($clip->owner) || $user->hasRole('admin')) ;
-    }
-
-    /**
-     * @return bool
-     */
-    public function create(): bool
-    {
-        return auth()->check();
     }
 }

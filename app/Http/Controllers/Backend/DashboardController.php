@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\View\View;
 
 
-class AdminDashboardController extends Controller
+class DashboardController extends Controller
 {
 
     /**
@@ -18,11 +18,15 @@ class AdminDashboardController extends Controller
     public function __invoke(): View
     {
         return view('backend.dashboard.index', [
-            'clips' => auth()->user()->clips()
+            'series' => auth()->user()->series()
                 ->orderByDesc('updated_at')
                 ->limit(10)
                 ->get(),
-            'files' => fetchDropZoneFiles()
+            'clips'  => auth()->user()->clips()
+                ->orderByDesc('updated_at')
+                ->limit(10)
+                ->get(),
+            'files'  => fetchDropZoneFiles()
         ]);
     }
 }

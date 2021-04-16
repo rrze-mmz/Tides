@@ -11,9 +11,9 @@ use App\Models\Asset;
 use App\Models\Clip;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
+use FFMpeg;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
 
 class AssetsController extends Controller
 {
@@ -59,8 +59,9 @@ class AssetsController extends Controller
         } catch (Exception $e) {
             Log::error($e);
         }
-        
-        if ($request->exists('should_convert_to_hls') && $request->should_convert_to_hls ==='on') {
+
+        if ($request->exists('should_convert_to_hls') && $request->should_convert_to_hls ==='on')
+        {
             $this->dispatch(new ConvertVideoForStreaming($asset));
         }
 

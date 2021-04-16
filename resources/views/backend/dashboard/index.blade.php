@@ -23,9 +23,19 @@
                         </p>
                     </div>
                 </div>
-                <div class="flex ">
-
+                <div class="flex">
                     <div class="w-2/3">
+                        <div class="pt-10 pb-2 font-semibold border-b border-black font-2xl">
+                            Your Latest Series
+                        </div>
+                        <div class="grid grid-cols-3 gap-4 pt-8 h48">
+                            @forelse($series as $singleSeries)
+                                <a href="{{ $singleSeries->adminPath() }}"> {{ $singleSeries->title}} </a>
+                            @empty
+                                No series found
+                            @endforelse
+                        </div>
+
                         <div class="pt-10 pb-2 font-semibold border-b border-black font-2xl">
                             Your Latest Clips
                         </div>

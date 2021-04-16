@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Backend\AssetsController;
-use App\Http\Controllers\Backend\AdminDashboardController;
+use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\ClipsController;
 use App\Http\Controllers\Backend\DropzoneTransferController;
 use App\Http\Controllers\Backend\SeriesController;
@@ -41,11 +41,14 @@ Route::get('/api/tags', ApiTagsController::class)->name('api.tags');
 //Backend routes
 Route::prefix('admin')->middleware('auth')->group(function(){
    //Dashboard
-    Route::get('/dashboard', AdminDashboardController::class)->name('dashboard');
+    Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
     //Series
     Route::get('/series/create',[SeriesController::class,'create'])->name('series.create');
     Route::post('/series', [SeriesController::class,'store'])->name('series.store');
+    Route::get('/series/{series}',[SeriesController::class,'edit'])->name('series.edit');
+    Route::patch('/series/{series}',[SeriesController::class,'update'])->name('series.update');
+
     //Clip
     Route::get('/clips',[ClipsController::class,'index'])->name('clips.index');
     Route::get('/clips/create',[ClipsController::class,'create'])->name('clips.create');
