@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Clip;
+use Illuminate\Support\Facades\App;
 use Illuminate\View\View;
 
 class HomeController extends Controller
@@ -17,6 +18,8 @@ class HomeController extends Controller
      */
     public function __invoke(): View
     {
+        \Debugbar::info(App::currentLocale());
+
         return view('frontend.homepage.index', [
             'clips' => Clip::whereHas('assets')->orderByDesc('updated_at')->limit(18)->get(),
         ]);

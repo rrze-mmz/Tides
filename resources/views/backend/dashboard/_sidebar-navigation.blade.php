@@ -10,6 +10,14 @@
         </li>
         <li>
             <a
+                href="/admin/series/"
+                class="block mb-4 text-lg font-bold hover:text-gray-200"
+            >
+                Series
+            </a>
+        </li>
+        <li>
+            <a
                 href="/admin/clips/"
                 class="block mb-4 text-lg font-bold hover:text-gray-200"
             >

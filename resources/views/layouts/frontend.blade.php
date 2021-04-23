@@ -25,17 +25,19 @@
                 </div>
                 <nav class="space-x-4 text-sm text-gray-300 sm:text-base">
 
+                    <span class="no-underline ">
+                        <a href="/set_lang/de" class="no-underline hover:underline">EN</a> | <a href="/set_lang/en" class="no-underline hover:underline">DE</a>
+                    </span>
                     @guest
-                        <a class="no-underline hover:underline" href="{{ route('login') }}">{{ __('Login') }}</a>
+                        <a class="no-underline hover:underline" href="{{ route('login') }}">{{ __('auth.Login') }}</a>
                         @if (Route::has('register'))
-                            <a class="no-underline hover:underline" href="{{ route('register') }}">{{ __('Register') }}</a>
+                            <a class="no-underline hover:underline" href="{{ route('register') }}">{{ __('auth.Register') }}</a>
                         @endif
                     @else
 
                         @if(!str_contains(url()->current(), 'admin'))
                            <a href="/admin/dashboard" class="no-underline hover:underline"> Dashboard </a>
                         @endif
-
                         <span>{{ Auth::user()->name }}</span>
 
                         <a href="{{ route('logout') }}"

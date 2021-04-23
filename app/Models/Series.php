@@ -6,8 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Series extends Model
-{
+class Series extends Model {
     use HasFactory, Slugable;
 
     protected $guarded = [];
@@ -38,5 +37,10 @@ class Series extends Model
     public function owner(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function addClip($attributes = [])
+    {
+        return $this->clips()->create($attributes);
     }
 }

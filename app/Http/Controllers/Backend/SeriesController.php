@@ -7,12 +7,19 @@ use App\Http\Requests\StoreSeriesRequest;
 use App\Http\Requests\UpdateSeriesRequest;
 use App\Models\Series;
 use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 
-class SeriesController extends Controller
-{
+class SeriesController extends Controller {
+    /**
+     * @return View
+     */
+    public function index(): View
+    {
+        return view('backend.series.index', [
+            'series' => auth()->user()->series()->orderByDesc('updated_at')->limit(20)->get()
+        ]);
+    }
 
     /**
      * @return View
@@ -23,18 +30,18 @@ class SeriesController extends Controller
     }
 
     /**
-     * @param  StoreSeriesRequest  $request
+     * @param StoreSeriesRequest $request
      * @return RedirectResponse
      */
     public function store(StoreSeriesRequest $request): RedirectResponse
     {
-        $series = auth()->user()->series()->create( $request->validated());
+        $series = auth()->user()->series()->create($request->validated());
 
         return redirect($series->adminPath());
     }
 
     /**
-     * @param  Series  $series
+     * @param Series $series
      * @return View
      * @throws AuthorizationException
      */
@@ -46,15 +53,30 @@ class SeriesController extends Controller
     }
 
     /**
-     * @param  Series  $series
-     * @param  UpdateSeriesRequest  $request
+     * @param Series $series
+     * @param UpdateSeriesRequest $request
      * @return RedirectResponse
      */
     public function update(Series $series, UpdateSeriesRequest $request): RedirectResponse
     {
+        \Debugbar::info('inside');
         $series->update($request->validated());
 
         return redirect($series->adminPath());
 
+    }
+
+    /**
+     * @param Series $series
+     * @return RedirectResponse
+     * @throws AuthorizationException
+     */
+    public function destroy(Series $series): RedirectResponse
+    {
+        $this->authorize('edit', $series);
+
+        $series->delete();
+
+        return redirect(route('series.index'));
     }
 }

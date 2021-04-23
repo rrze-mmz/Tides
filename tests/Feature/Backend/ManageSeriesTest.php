@@ -78,14 +78,19 @@ class ManageSeriesTest extends TestCase
     }
 
     /** @test */
+    public function edit_page_a_button_to_add_clips()
+    {
+        $this->get(route('series.edit', SeriesFactory::ownedBy($this->signIn())->create()))->assertSee('Add new clip');
+    }
+
+    /** @test */
     public function it_requires_a_title_creating_a_series()
     {
         $this->signIn();
 
         $attributes = Series::factory()->raw(['title'=> '']);
 
-        $this->post(route('series.store'),$attributes)->assertSessionHasErrors('title');
-    }
+        $this->post(route('series.store'),$attributes)->assertSessionHasErrors('title');}
 
     /** @test */
     public function create_series_form_should_remember_old_values_on_validation_error()
@@ -154,5 +159,29 @@ class ManageSeriesTest extends TestCase
         ])->assertStatus(200);
 
         $this->assertDatabaseHas('series', ['title'=>'changed']);
+    }
+
+    /** @test */
+    public function an_authenticated_user_cannot_delete_a_not_owned_series()
+    {
+        $series = SeriesFactory::create();
+
+        $this->signIn();
+
+        $this->delete($series->adminPath())->assertStatus(403);
+
+        $this->assertDatabaseHas('series', $series->only('id'));
+    }
+
+    /** @test */
+    public function an_admin_user_can_delete_a_not_owned_series()
+    {
+        $series = SeriesFactory::create();
+
+        $this->signInAdmin();
+
+        $this->followingRedirects()->delete($series->adminPath())->assertStatus(200);
+
+        $this->assertDatabaseMissing('series', $series->only('id'));
     }
 }

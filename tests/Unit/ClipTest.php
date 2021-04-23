@@ -122,11 +122,7 @@ class ClipTest extends TestCase
             'height'             => FFMpeg::fromDisk('videos')->open($path)->getVideoStream()->getDimensions()->getHeight()
         ]);
 
-        $this->assertCount(1, $clip->assets);
-
-        $this->assertTrue($clip->assets->contains($asset));
-
-        $asset->delete();
+        $this->assertInstanceOf(Asset::class, $asset);
     }
 
     /** @test */

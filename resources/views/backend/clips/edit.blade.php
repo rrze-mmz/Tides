@@ -117,7 +117,7 @@
 
                     <form action="{{ $clip->adminPath() }}"
                           method="POST"
-                            class="" >
+                        >
                         @csrf
                         @method('DELETE')
                     <button

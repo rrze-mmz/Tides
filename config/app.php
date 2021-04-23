@@ -80,7 +80,7 @@ return [
     |
     */
 
-    'locale' => 'de-DE',
+    'locale' => 'de',
 
     /*
     |--------------------------------------------------------------------------
@@ -106,7 +106,7 @@ return [
     |
     */
 
-    'faker_locale' => 'de_DE',
+    'faker_locale' => 'de',
 
     /*
     |--------------------------------------------------------------------------
@@ -226,7 +226,6 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-
     ],
 
 ];

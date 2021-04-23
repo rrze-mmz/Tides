@@ -21,7 +21,7 @@ class ClipsController extends Controller
     public function index(): View
     {
         return view('backend.clips.index', [
-            'clips' => Clip::orderByDesc('updated_at')->limit(18)->get(),
+            'clips' => auth()->user()->clips()->orderBy('title')->limit(10)->get(),
         ]);
     }
 
