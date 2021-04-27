@@ -9,6 +9,7 @@ use App\Jobs\TransferDropzoneFiles;
 use App\Mail\VideoUploaded;
 use App\Models\Clip;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
@@ -33,7 +34,15 @@ class DropzoneTransferController extends Controller
         ]);
     }
 
-    public function transfer(Clip $clip, Request $request)
+    /**
+     * Transfer files from dropzone to file path
+     *
+     * @param Clip $clip
+     * @param Request $request
+     * @return RedirectResponse
+     * @throws AuthorizationException
+     */
+    public function transfer(Clip $clip, Request $request): RedirectResponse
     {
         $this->authorize('edit', $clip);
 

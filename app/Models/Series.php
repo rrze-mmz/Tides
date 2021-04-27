@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Arr;
 
 class Series extends Model {
+
     use HasFactory, Slugable;
 
     protected $guarded = [];

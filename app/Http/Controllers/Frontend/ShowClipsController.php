@@ -26,7 +26,6 @@ class ShowClipsController extends Controller
      */
     public function show(Clip $clip): View
     {
-//        dd($clip->assets()->first());
         return view('frontend.clips.show', compact('clip'));
     }
 }

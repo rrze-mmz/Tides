@@ -117,7 +117,6 @@ class AssetsTest extends TestCase
 
         $this->assertEquals(10,
             FFMpeg::fromDisk('videos')->open($clip->assets()->first()->path)->getDurationInSeconds());
-
     }
 
     /** @test */

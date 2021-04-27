@@ -33,10 +33,7 @@ class SeriesClipsController extends Controller {
      */
     public function store(Series $series, StoreClipRequest $request): View
     {
-//        $request = Arr::add($request->validated(), 'owner_id', auth()->id());
-        $validated = $request->validated();
-
-        $series->addClip($validated);
+        $series->addClip($request->validated());
 
         return view('backend.series.edit', compact('series'));
     }

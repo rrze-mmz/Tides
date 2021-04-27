@@ -59,11 +59,9 @@ class SeriesController extends Controller {
      */
     public function update(Series $series, UpdateSeriesRequest $request): RedirectResponse
     {
-        \Debugbar::info('inside');
         $series->update($request->validated());
 
         return redirect($series->adminPath());
-
     }
 
     /**
