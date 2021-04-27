@@ -20,28 +20,31 @@ class ClipTest extends TestCase
 
     use RefreshDatabase;
 
+    protected Clip $clip;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->clip = Clip::factory()->create();
+    }
+
     /** @test */
     public function it_has_a_path()
     {
-        $clip = Clip::factory()->create();
-
-        $this->assertEquals('/clips/'.$clip->slug, $clip->path());
+        $this->assertEquals('/clips/'.$this->clip->slug, $this->clip->path());
     }
 
     /** @test */
     public function it_has_a_admin_path()
     {
-        $clip = Clip::factory()->create();
-
-        $this->assertEquals('/admin/clips/'.$clip->slug, $clip->adminPath());
+        $this->assertEquals('/admin/clips/'.$this->clip->slug, $this->clip->adminPath());
     }
 
     /** @test */
     public function it_has_a_slug_route()
     {
-        $clip = Clip::factory()->create();
-
-        $this->get($clip->path())->assertStatus(200);
+        $this->get($this->clip->path())->assertStatus(200);
     }
 
     /** @test */
@@ -67,19 +70,15 @@ class ClipTest extends TestCase
     /** @test */
     public function it_has_a_set_slug_function()
     {
-        $clip = Clip::factory()->create();
-
-        $this->assertEquals($clip->slug, Str::slug($clip->title));
+        $this->assertEquals($this->clip->slug, Str::slug($this->clip->title));
     }
 
     /** @test */
     public function it_has_many_assets()
     {
-        $clip = Clip::factory()->create();
+        Asset::factory(2)->create(['clip_id' => $this->clip->id]);
 
-        Asset::factory(2)->create(['clip_id' => $clip->id]);
-
-        $this->assertEquals(2, $clip->assets()->count());
+        $this->assertEquals(2, $this->clip->assets()->count());
     }
 
     /** @test */
@@ -93,9 +92,7 @@ class ClipTest extends TestCase
     /** @test */
     public function it_has_only_one_owner()
     {
-        $clip = ClipFactory::create();
-
-        $this->assertInstanceOf(User::class, $clip->owner);
+        $this->assertInstanceOf(User::class, $this->clip->owner);
     }
 
     /** @test */
@@ -103,19 +100,18 @@ class ClipTest extends TestCase
     {
         Storage::fake('videos');
 
-        $clip = Clip::factory()->create();
 
-        $clipStoragePath = getClipStoragePath($clip);
-        $fileNameDate = Carbon::createFromFormat('Y-m-d', $clip->created_at)->format('Ymd');
+        $clipStoragePath = getClipStoragePath($this->clip);
+        $fileNameDate = Carbon::createFromFormat('Y-m-d', $this->clip->created_at)->format('Ymd');
 
         $videoFile = FileFactory::videoFile();
 
-        $asset = $clip->addAsset([
+        $asset = $this->clip->addAsset([
             'disk'               => 'videos',
             'original_file_name' => $videoFile->getClientOriginalName(),
             'path'               =>
                 $path = $videoFile->storeAs($clipStoragePath,
-                    $fileNameDate.'-'.$clip->slug.'.'.Str::of($videoFile->getClientOriginalName())->after('.'),
+                    $fileNameDate.'-'.$this->clip->slug.'.'.Str::of($videoFile->getClientOriginalName())->after('.'),
                     'videos'),
             'duration'           => FFMpeg::fromDisk('videos')->open($path)->getDurationInSeconds(),
             'width'              => FFMpeg::fromDisk('videos')->open($path)->getVideoStream()->getDimensions()->getWidth(),
@@ -128,28 +124,25 @@ class ClipTest extends TestCase
     /** @test */
     public function it_can_updates_its_poster_image()
     {
-        $clip = Clip::factory()->create();
 
-        $this->assertNull($clip->posterImage);
+        $this->assertNull($this->clip->posterImage);
 
         $file = FileFactory::videoFile();
 
-        $file->storeAs('thumbnails', $clip->id.'_poster.png');
+        $file->storeAs('thumbnails', $this->clip->id.'_poster.png');
 
-        $clip->updatePosterImage();
+        $this->clip->updatePosterImage();
 
-        $this->assertEquals('1_poster.png', $clip->posterImage);
+        $this->assertEquals('1_poster.png', $this->clip->posterImage);
 
-        Storage::disk('thumbnails')->delete($clip->id.'_poster.png');
+        Storage::disk('thumbnails')->delete($this->clip->id.'_poster.png');
     }
 
     /** @test */
     public function it_can_add_tags()
     {
-        $clip = Clip::factory()->create();
+        $this->clip->addTags(collect(['php', 'tides']));
 
-        $clip->addTags(collect(['php', 'tides']));
-
-        $this->assertEquals(2, $clip->tags()->count());
+        $this->assertEquals(2, $this->clip->tags()->count());
     }
 }

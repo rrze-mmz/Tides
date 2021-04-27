@@ -47,7 +47,7 @@ class ManageSeriesTest extends TestCase
     }
 
     /** @test */
-    public function an_authenticated_user_can_view_the_edit_series_form_add_all_form_fields()
+    public function a_series_owner_can_view_edit_form_fields()
     {
         $series = SeriesFactory::ownedBy($this->signIn())->create();
 
@@ -78,9 +78,17 @@ class ManageSeriesTest extends TestCase
     }
 
     /** @test */
-    public function edit_page_a_button_to_add_clips()
+    public function edit_series_page_should_have_a_add_clips_button()
     {
         $this->get(route('series.edit', SeriesFactory::ownedBy($this->signIn())->create()))->assertSee('Add new clip');
+    }
+
+    /** @test */
+    public function edit_series_page_should_display_belonging_clips()
+    {
+        $series =  SeriesFactory::ownedBy($this->signIn())->withClips(2)->create();
+
+        $this->get(route('series.edit',$series))->assertSee($series->clips()->first()->title);
     }
 
     /** @test */
@@ -99,7 +107,7 @@ class ManageSeriesTest extends TestCase
 
         $attributes = [
             'title' => 'Series title',
-            'description' => $this->faker->sentence(50)
+            'description' => 'te'
         ];
 
         $this->post(route('series.store'), $attributes);
@@ -110,7 +118,7 @@ class ManageSeriesTest extends TestCase
     }
 
     /** @test */
-    public function an_authenticated_user_can_update_his_series()
+    public function a_series_owner_can_update_series()
     {
         $series = SeriesFactory::ownedBy($this->signIn())->create();
 
@@ -179,6 +187,16 @@ class ManageSeriesTest extends TestCase
         $series = SeriesFactory::create();
 
         $this->signInAdmin();
+
+        $this->followingRedirects()->delete($series->adminPath())->assertStatus(200);
+
+        $this->assertDatabaseMissing('series', $series->only('id'));
+    }
+
+    /** @test */
+    public function a_series_owner_can_delete_series()
+    {
+        $series = SeriesFactory::ownedBy($this->signIn())->create();
 
         $this->followingRedirects()->delete($series->adminPath())->assertStatus(200);
 

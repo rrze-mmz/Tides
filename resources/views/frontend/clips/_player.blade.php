@@ -19,7 +19,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z">
                 </path>
             </svg>
-            <span class="pl-3"></span> {{ gmdate("H:i:s", $clip->assets()->first()->duration) }} Min
+            <span class="pl-3"></span> {{ $clip->assets()->first()->durationToHours() }} Min
         </div>
 
         <div class="flex items-center">

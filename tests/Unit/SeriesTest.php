@@ -4,36 +4,37 @@ namespace Tests\Unit;
 
 use App\Models\Clip;
 use App\Models\Series;
-use Facades\Tests\Setup\SeriesFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class SeriesTest extends TestCase {
     use RefreshDatabase;
 
+    protected Series $series;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->series = Series::factory()->create();
+    }
+
     /** @test */
     public function it_has_a_path()
     {
-        $series = Series::factory()->create();
-
-        $this->assertEquals('/series/' . $series->slug, $series->path());
+        $this->assertEquals('/series/' . $this->series->slug, $this->series->path());
     }
 
     /** @test */
     public function it_has_an_admin_path()
     {
-        $series = Series::factory()->create();
-
-        $this->assertEquals('/admin/series/' . $series->slug, $series->adminPath());
+        $this->assertEquals('/admin/series/' . $this->series->slug, $this->series->adminPath());
     }
 
     /** @test */
     public function it_has_a_slug_route()
     {
-        $series = Series::factory()->create();
-
-        $this->get($series->path())->assertStatus(200);
-
+        $this->get($this->series->path())->assertStatus(200);
     }
 
     /** @test */
@@ -49,23 +50,21 @@ class SeriesTest extends TestCase {
     /** @test */
     public function it_has_many_clips()
     {
-        $series = Series::factory()->create();
+        Clip::factory(2)->create(['series_id' => $this->series->id]);
 
-        Clip::factory(2)->create(['series_id' => $series->id]);
-
-        $this->assertEquals(2, $series->clips()->count());
+        $this->assertEquals(2, $this->series->clips()->count());
     }
 
     /** @test */
     public function it_can_add_a_clip()
     {
-        $series = SeriesFactory::create();
+        $this->signIn();
 
-        $this->assertInstanceOf(Clip::class, $series->addClip([
+        $this->assertInstanceOf(Clip::class, $this->series->addClip([
             'title'       => 'a clip',
             'slug'        => 'a-clip',
+            'tags'        => [],
             'description' => 'clip description',
-            'owner_id'    => 1
         ]));
     }
 }

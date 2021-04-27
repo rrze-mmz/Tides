@@ -15,7 +15,6 @@ class StoreClipRequest extends FormRequest
         $this->merge([
             'slug' => Str::slug($this->title),
             'tags' => $this->tags = $this->tags ?? [], //set empty array if select2 tags is empty
-
         ]);
     }
 

@@ -18,8 +18,6 @@ class HomeController extends Controller
      */
     public function __invoke(): View
     {
-        \Debugbar::info(App::currentLocale());
-
         return view('frontend.homepage.index', [
             'clips' => Clip::whereHas('assets')->orderByDesc('updated_at')->limit(18)->get(),
         ]);

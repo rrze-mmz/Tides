@@ -29,6 +29,16 @@ class Asset extends Model
     ];
 
     /**
+     * Reture asset duration in hh:mm:ss format
+     *
+     * @return string
+     */
+    public function durationToHours(): string
+    {
+        return gmdate("H:i:s", $this->duration);
+    }
+
+    /**
      * Clip Eloquent relationship
      *
      * @return BelongsTo

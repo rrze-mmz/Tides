@@ -26,7 +26,8 @@
                 <nav class="space-x-4 text-sm text-gray-300 sm:text-base">
 
                     <span class="no-underline ">
-                        <a href="/set_lang/de" class="no-underline hover:underline">EN</a> | <a href="/set_lang/en" class="no-underline hover:underline">DE</a>
+                        <a href="/set_lang/en" class="{{ (session('locale') === 'en')?'underline':'' }}">EN</a> |
+                        <a href="/set_lang/de" class="{{ (session('locale') === 'de')?'underline':'' }}">DE</a>
                     </span>
                     @guest
                         <a class="no-underline hover:underline" href="{{ route('login') }}">{{ __('auth.Login') }}</a>

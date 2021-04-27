@@ -53,8 +53,6 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::patch('/series/{series}', [SeriesController::class, 'update'])->name('series.update');
     Route::delete('series/{series}', [SeriesController::class, 'destroy'])->name('series.destroy');
 
-    Route::get('/series/{series}/addClip',[SeriesClipsController::class, 'create'])->name('seriesClips.create');
-
     //Clip
     Route::get('/clips', [ClipsController::class, 'index'])->name('clips.index');
     Route::get('/clips/create', [ClipsController::class, 'create'])->name('clips.create');
@@ -68,6 +66,8 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::post('/clips/{clip}/transfer', [DropzoneTransferController::class, 'transfer'])
         ->name('admin.clips.dropzone.transfer');
 
+    Route::get('/series/{series}/addClip',[SeriesClipsController::class, 'create'])->name('series.clip.create');
+    Route::post('series/{series}/addClip',[SeriesClipsController::class, 'store'])->name('series.clip.store');
 
     //Assets
     Route::post('/clips/{clip}/assets', [AssetsController::class, 'store'])->name('admin.assets.store');

@@ -14,55 +14,54 @@ class UserTest extends TestCase
 
     use RefreshDatabase;
 
+    private User $user;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->user = User::factory()->create();
+    }
+
     /** @test */
     public function a_user_has_series()
     {
-        $user = User::factory()->create();
-
-        $this->assertInstanceOf(Collection::class, $user->series);
+        $this->assertInstanceOf(Collection::class, $this->user->series);
     }
     /** @test */
     public function a_user_has_clips()
     {
-        $user = User::factory()->create();
-
-        $this->assertInstanceOf(Collection::class, $user->clips);
+        $this->assertInstanceOf(Collection::class, $this->user->clips);
     }
 
     /** @test */
     public function it_has_many_roles()
     {
-        $user = User::factory()->create();
-
-        $this->assertInstanceOf(BelongsToMany::class, $user->roles());
+        $this->assertInstanceOf(BelongsToMany::class, $this->user->roles());
     }
 
     /** @test */
     public function it_can_assign_a_role()
     {
-        $user = User::factory()->create();
+        $this->assertInstanceOf(User::class, $this->user->assignRole('admin'));
 
-        $this->assertInstanceOf(User::class, $user->assignRole('admin'));
-
-        $this->assertEquals('admin', $user->roles()->first()->name);
+        $this->assertEquals('admin', $this->user->roles()->first()->name);
 
     }
 
     /** @test */
     public function it_can_check_for_a_role()
     {
-        $user = User::factory()->create();
-
-        $user->assignRole('admin')
+        $this->user->assignRole('admin')
             ->assignRole('tester');
 
-        $this->assertTrue($user->hasRole('admin'));
+        $this->assertTrue($this->user->hasRole('admin'));
 
-        $this->assertTrue($user->hasRole('tester'));
+        $this->assertTrue($this->user->hasRole('tester'));
 
-        $this->assertFalse($user->hasRole('superadmin'));
+        $this->assertFalse($this->user->hasRole('superadmin'));
 
-        $this->assertEquals(2, $user->roles()->count());
+        $this->assertEquals(2, $this->user->roles()->count());
     }
 
     /** @test */

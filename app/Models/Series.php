@@ -5,13 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Arr;
 
 class Series extends Model {
     use HasFactory, Slugable;
 
     protected $guarded = [];
 
-    public function clips()
+    public function clips(): HasMany
     {
         return $this->hasMany(Clip::class);
     }
@@ -39,8 +41,20 @@ class Series extends Model {
         return $this->belongsTo(User::class);
     }
 
-    public function addClip($attributes = [])
+    /**
+     * Add a clip on a series
+     *
+     * @param array $attributes
+     * @return Model
+     */
+    public function addClip($validated = []): Model
     {
-        return $this->clips()->create($attributes);
+        $validated = Arr::add($validated, 'owner_id', auth()->user()->id);
+
+        $clip  = $this->clips()->create(Arr::except($validated, 'tags'));
+
+        $clip->addTags(collect($validated['tags']));
+
+        return $clip;
     }
 }

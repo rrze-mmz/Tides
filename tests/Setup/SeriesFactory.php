@@ -30,12 +30,15 @@ class SeriesFactory
     public function create()
     {
         $series = Series::factory()->create([
-            'owner_id' => $this->user ?? User::factory()
+            'owner_id' => $user = $this->user ?? User::factory()
         ]);
 
-        Clip::factory($this->clipsCount)->create([
-            'series_id' => $series->id
-        ]);
+        if($this->clipsCount > 0){
+            Clip::factory($this->clipsCount)->create([
+                'series_id' => $series->id,
+                'owner_id'  => $user
+            ]);
+        }
 
         return $series;
     }
