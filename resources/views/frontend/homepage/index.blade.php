@@ -9,19 +9,37 @@
 <main class="sm:container sm:mx-auto sm:mt-16">
             @include('frontend.search._searchbar')
 
-           <div class="flex items-end w-full border-b justify-content-between">
-               <div class="flex justify-between items-end pb-2 w-full">
-                   <div class="text-2xl"> {{  __('homepage.Recently added!') }}</div>
-                   <a href="/clips" class="text-sm underline">{{__('homepage.more clips')}}</a>
+               <div class="flex items-end w-full border-b justify-content-between">
+                   <div class="flex justify-between items-end pb-2 w-full">
+                       <div class="text-2xl"> Last series</div>
+                       <a href="/clips" class="text-sm underline">view more...</a>
+                   </div>
+
+               </div>
+               <div class="grid grid-cols-3 gap-4 py-8 h48 ">
+                    @forelse($series as $single)
+                        @include('backend.series._card',[
+                                'series'=> $single,
+                                'route' => 'admin'
+                                ])
+                        @empty
+                           No series found
+                        @endforelse
                </div>
 
-           </div>
-            <div class="grid grid-cols-3 gap-4 pt-8 h48">
-                @forelse($clips as $clip)
-                    @include('backend.clips._card',[
-                            'clip'=> $clip,
-                            'route' => 'admin'
-                            ])
+                <div class="flex items-end w-full border-b justify-content-between">
+                    <div class="flex justify-between items-end pb-2 w-full">
+                        <div class="text-2xl"> {{  __('homepage.Recently added!') }}</div>
+                        <a href="/clips" class="text-sm underline">{{__('homepage.more clips')}}</a>
+                    </div>
+
+                </div>
+                <div class="grid grid-cols-3 gap-4 py-8 h48">
+                    @forelse($clips as $clip)
+                        @include('backend.clips._card',[
+                                'clip'=> $clip,
+                                'route' => 'admin'
+                                ])
                     @empty
                         {{ __('homepage.no clips found' )}}
                     @endforelse

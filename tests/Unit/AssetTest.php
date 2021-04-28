@@ -41,9 +41,8 @@ class AssetTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_duration_in_hour_format()
+    public function it_has_a_duration_in_hour_format()
     {
         $this->assertEquals(gmdate("H:i:s", $this->asset->duration), $this->asset->durationToHours());
-
     }
 }

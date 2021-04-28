@@ -23,6 +23,7 @@ class DashboardController extends Controller
                 ->limit(10)
                 ->get(),
             'clips'  => auth()->user()->clips()
+                ->whereNull('series_id')
                 ->orderByDesc('updated_at')
                 ->limit(10)
                 ->get(),

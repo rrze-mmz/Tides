@@ -32,11 +32,35 @@ class DashboardTest extends TestCase
     }
 
     /** @test */
+    public function it_should_display_an_add_series_button()
+    {
+        $this->signIn();
+
+        $this->get(route('dashboard'))->assertSee('New series');
+    }
+
+    /** @test */
+    public function it_should_display_an_add_clip_button()
+    {
+        $this->signIn();
+
+        $this->get(route('dashboard'))->assertSee('New clip');
+    }
+
+    /** @test */
     public function it_should_display_info_if_no_series_exist()
     {
         $this->signIn();
 
         $this->get(route('dashboard'))->assertSee('No series found');
+    }
+
+    /** @test */
+    public function it_should_display_info_if_no_clip_exist()
+    {
+        $this->signIn();
+
+        $this->get(route('dashboard'))->assertSee('No clips found');
     }
 
     /** @test */
@@ -54,15 +78,7 @@ class DashboardTest extends TestCase
     }
 
     /** @test */
-    public function it_should_display_info_if_no_clip_exist()
-    {
-        $this->signIn();
-
-        $this->get(route('dashboard'))->assertSee('No clips found');
-    }
-
-    /** @test */
-    public function it_display_user_clips()
+    public function it_display_user_clips_()
     {
         $user = $this->signIn();
 
@@ -85,21 +101,5 @@ class DashboardTest extends TestCase
         Storage::disk('video_dropzone')->put('test.pdf', 'some non-pdf content');
 
         $this->get(route('dashboard'))->assertSee('test.pdf');
-    }
-
-    /** @test */
-    public function it_should_display_an_add_clip_button()
-    {
-        $this->signIn();
-
-        $this->get(route('dashboard'))->assertSee('New clip');
-    }
-
-    /** @test */
-    public function it_should_display_an_add_series_button()
-    {
-        $this->signIn();
-
-        $this->get(route('dashboard'))->assertSee('New series');
     }
 }

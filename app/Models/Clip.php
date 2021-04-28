@@ -7,10 +7,10 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class Clip extends Model
 {
@@ -68,7 +68,10 @@ class Clip extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function tags()
+    /**
+     * @return BelongsToMany
+     */
+    public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class, 'clip_tag')->withTimestamps();
     }
@@ -81,6 +84,9 @@ class Clip extends Model
         return $this->hasMany(Asset::class);
     }
 
+    /**
+     * @return BelongsTo
+     */
     public function series(): BelongsTo
     {
         return $this->hasOne(Series::class);

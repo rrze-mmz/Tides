@@ -29,8 +29,8 @@
                             Your Latest Series
                         </div>
                         <div class="grid grid-cols-3 gap-4 pt-8 h48">
-                            @forelse($series as $singleSeries)
-                                <a href="{{ $singleSeries->adminPath() }}"> {{ $singleSeries->title}} </a>
+                            @forelse($series as $single)
+                                @include('backend.series._card',['series'=> $single])
                             @empty
                                 No series found
                             @endforelse
