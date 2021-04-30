@@ -11,7 +11,6 @@ use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\SearchController;
 use App\Http\Controllers\Frontend\ShowClipsController;
 use App\Http\Controllers\Frontend\ShowSeriesController;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -40,26 +39,30 @@ Route::get('/series/{series}', [ShowSeriesController::class, 'show']);
 
 Route::get('/api/tags', ApiTagsController::class)->name('api.tags');
 
+//change portal language
+Route::get('/set_lang/{locale}', function($locale){
+
+    if(! in_array($locale, ['en','de'])){
+        abort(400);
+    }
+
+    session()->put('locale', $locale);
+
+    return back();
+});
+
 //Backend routes
 Route::prefix('admin')->middleware('auth')->group(function () {
     //Dashboard
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
     //Series
-    Route::get('/series', [SeriesController::class, 'index'])->name('series.index');
-    Route::get('/series/create', [SeriesController::class, 'create'])->name('series.create');
-    Route::post('/series', [SeriesController::class, 'store'])->name('series.store');
+    Route::resource('series', SeriesController::class)->except(['show','edit']);
     Route::get('/series/{series}', [SeriesController::class, 'edit'])->name('series.edit');
-    Route::patch('/series/{series}', [SeriesController::class, 'update'])->name('series.update');
-    Route::delete('series/{series}', [SeriesController::class, 'destroy'])->name('series.destroy');
 
     //Clip
-    Route::get('/clips', [ClipsController::class, 'index'])->name('clips.index');
-    Route::get('/clips/create', [ClipsController::class, 'create'])->name('clips.create');
-    Route::post('/clips', [ClipsController::class, 'store'])->name('clips.store');
+    Route::resource('clips', ClipsController::class)->except(['show','edit']);
     Route::get('/clips/{clip}/', [ClipsController::class, 'edit'])->name('clips.edit');
-    Route::patch('/clips/{clip}/', [ClipsController::class, 'update'])->name('clips.update');
-    Route::delete('/clips/{clip}/', [ClipsController::class, 'destroy'])->name('clips.destroy');
 
     Route::get('/clips/{clip}/transfer', [DropzoneTransferController::class, 'listFiles'])
         ->name('admin.clips.dropzone.listFiles');
@@ -74,17 +77,5 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::delete('assets/{asset}', [AssetsController::class, 'destroy'])->name('assets.destroy');
 });
 
-//change portal language
-Route::get('/set_lang/{locale}', function($locale){
-
-    if(! in_array($locale, ['en','de'])){
-        abort(400);
-    }
-
-    session()->put('locale', $locale);
-
-    return back();
-
-});
 Auth::routes();
 

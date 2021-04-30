@@ -41,19 +41,19 @@ class SearchTest extends TestCase
     }
 
     /** @test */
-    public function search_term_should_not_be_empty()
+    public function it_shows_an_error_when_search_is_empty()
     {
         $this->searchFor('')->assertSessionHasErrors('term');
     }
 
     /** @test */
-    public function search_term_should_not_be_less_than_3_chars()
+    public function it_shows_an_error_when_search_term_is_less_than_3_chars()
     {
         $this->searchFor('ab')->assertSessionHasErrors('term');
     }
 
     /** @test */
-    public function it_must_return_only_clips_with_assets()
+    public function it_returns_only_clips_with_assets()
     {
         Clip::factory()->create(['title' => 'Clip without video']);
 
@@ -61,25 +61,25 @@ class SearchTest extends TestCase
     }
 
     /** @test */
-    public function it_can_search_for_clip_title()
+    public function it_searches_for_clip_title()
     {
         $this->searchFor('lorem')->assertSee($this->clip->title);
     }
 
     /** @test */
-    public function it_can_search_for_clip_description()
+    public function it_searches_for_clip_description()
     {
         $this->searchFor('dolor')->assertSee($this->clip->title);
     }
 
     /** @test */
-    public function it_can_search_for_clip_owner()
+    public function it_searches_for_clip_owner()
     {
         $this->searchFor('Doe')->assertSee($this->clip->owner->name);
     }
 
     /** @test */
-    public function it_can_search_for_multiple_owners()
+    public function it_searches_for_multiple_owners()
     {
         $secondClip = Clip::factory()->create([
             'title'       => 'Lorem ipsum for testing  the search function',

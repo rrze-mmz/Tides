@@ -19,14 +19,14 @@ class HomePageTest extends TestCase {
     }
 
     /** @test */
-    public function should_not_display_series_with_clips_without_assets()
+    public function it_does_not_display_series_with_clips_without_assets()
     {
         $series = SeriesFactory::withClips(1)->create();
 
         $this->get(route('home'))->assertDontSee($series->title);
     }
     /** @test */
-    public function should_display_latest_series_with_clips_that_have_assets()
+    public function it_displays_latest_series_with_clips_that_have_assets()
     {
         $series = SeriesFactory::create();
 
@@ -38,7 +38,7 @@ class HomePageTest extends TestCase {
     }
 
     /** @test */
-    public function should_not_display_clips_without_assets()
+    public function it_does_not_display_clips_without_assets()
     {
         $clip = ClipFactory::create();
 
@@ -46,7 +46,7 @@ class HomePageTest extends TestCase {
     }
 
     /** @test */
-    public function should_not_display_clips_that_belong_to_a_series()
+    public function it_does_not_display_clips_that_belong_to_a_series()
     {
         $series = SeriesFactory::withClips(1)->create();
 
@@ -55,7 +55,7 @@ class HomePageTest extends TestCase {
 
 
     /** @test */
-    public function should_display_clips_with_video_assets()
+    public function it_displays_clips_with_video_assets()
     {
         $clip = ClipFactory::withAssets(1)->create();
 
