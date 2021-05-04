@@ -13,14 +13,14 @@ class SeriesClipsTest extends TestCase
     use RefreshDatabase, WithFaker;
 
     /** @test */
-    public function a_non_authorize_user_cannot_view_add_clip_to_series_form()
+    public function a_non_authorize_user_cannot_view_add_clip_to_series_form(): void
     {
 
         $this->get(route('series.clip.create', SeriesFactory::create()))->assertRedirect('login');
     }
 
     /** @test */
-    public function an_authenticated_user_cannot_view_add_clip_to_series_form_for_not_owned_series()
+    public function an_authenticated_user_cannot_view_add_clip_to_series_form_for_not_owned_series(): void
     {
         $series = SeriesFactory::create();
 
@@ -30,7 +30,7 @@ class SeriesClipsTest extends TestCase
     }
 
     /** @test */
-    public function a_series_owner_can_add_a_clip_to_series()
+    public function a_series_owner_can_add_a_clip_to_series(): void
     {
         $series = SeriesFactory::ownedBy($this->signIn())->create();
 
@@ -38,7 +38,7 @@ class SeriesClipsTest extends TestCase
     }
 
     /** @test */
-    public function an_admin_can_view_add_clip_to_series_form_for_not_owned_series()
+    public function an_admin_can_view_add_clip_to_series_form_for_not_owned_series(): void
     {
         $series = SeriesFactory::create();
 
@@ -48,7 +48,7 @@ class SeriesClipsTest extends TestCase
     }
 
     /** @test */
-    public function a_series_owner_can_view_add_clip_to_course_form()
+    public function a_series_owner_can_view_add_clip_to_course_form(): void
     {
         $series = SeriesFactory::ownedBy($this->signIn())->create();
 
@@ -59,7 +59,7 @@ class SeriesClipsTest extends TestCase
     }
 
     /** @test */
-    public function a_series_owner_can_add_clip_to_series()
+    public function a_series_owner_can_add_clip_to_series(): void
     {
         $this->withoutExceptionHandling();
 

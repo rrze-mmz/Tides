@@ -12,7 +12,7 @@ class TagTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function it_has_many_clips()
+    public function it_has_many_clips(): void
     {
         $tag = Tag::factory()->create();
 

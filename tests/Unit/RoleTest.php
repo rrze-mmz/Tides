@@ -14,7 +14,7 @@ class RoleTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function it_has_many_users()
+    public function it_has_many_users(): void
     {
         $role = Role::factory()->create(['name' => 'admin']);
 

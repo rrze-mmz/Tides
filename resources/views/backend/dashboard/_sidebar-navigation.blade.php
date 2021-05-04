@@ -34,7 +34,7 @@
         </li>
         <li>
             <a
-                href="/"
+                href="/admin/opencast"
                 class="block mb-4 text-lg font-bold hover:text-gray-200"
             >
                 Opencast

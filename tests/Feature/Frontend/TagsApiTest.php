@@ -13,7 +13,7 @@ class TagsApiTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function it_search_tags()
+    public function it_search_tags(): void
     {
         Tag::factory()->create(['name' => 'algebra']);
 

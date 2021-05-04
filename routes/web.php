@@ -4,6 +4,7 @@ use App\Http\Controllers\Backend\AssetsController;
 use App\Http\Controllers\Backend\ClipsController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\DropzoneTransferController;
+use App\Http\Controllers\Backend\OpencastController;
 use App\Http\Controllers\Backend\SeriesClipsController;
 use App\Http\Controllers\Backend\SeriesController;
 use App\Http\Controllers\Frontend\ApiTagsController;
@@ -75,6 +76,8 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     //Assets
     Route::post('/clips/{clip}/assets', [AssetsController::class, 'store'])->name('admin.assets.store');
     Route::delete('assets/{asset}', [AssetsController::class, 'destroy'])->name('assets.destroy');
+
+    Route::get('/opencast', OpencastController::class)->name('opencast');
 });
 
 Auth::routes();

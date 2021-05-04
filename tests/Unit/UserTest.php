@@ -24,24 +24,24 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function a_user_has_series()
+    public function a_user_has_series(): void
     {
         $this->assertInstanceOf(Collection::class, $this->user->series);
     }
     /** @test */
-    public function a_user_has_clips()
+    public function a_user_has_clips(): void
     {
         $this->assertInstanceOf(Collection::class, $this->user->clips);
     }
 
     /** @test */
-    public function it_has_many_roles()
+    public function it_has_many_roles(): void
     {
         $this->assertInstanceOf(BelongsToMany::class, $this->user->roles());
     }
 
     /** @test */
-    public function it_can_assign_a_role()
+    public function it_can_assign_a_role(): void
     {
         $this->assertInstanceOf(User::class, $this->user->assignRole('admin'));
 
@@ -50,7 +50,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function it_can_check_for_a_role()
+    public function it_can_check_for_a_role(): void
     {
         $this->user->assignRole('admin')
             ->assignRole('tester');
@@ -65,7 +65,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function it_check_for_admin_role()
+    public function it_check_for_admin_role(): void
     {
         $this->signInAdmin();
 

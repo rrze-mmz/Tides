@@ -17,7 +17,7 @@ class ManageClipsTest extends TestCase
     use WithFaker, RefreshDatabase;
 
     /** @test */
-    public function an_authenticated_user_can_see_the_create_clip_form_and_all_form_fields()
+    public function an_authenticated_user_can_see_the_create_clip_form_and_all_form_fields(): void
     {
         $this->signIn();
 
@@ -30,7 +30,7 @@ class ManageClipsTest extends TestCase
     }
 
     /** @test */
-    public function an_authenticated_user_can_view_the_edit_clip_form_add_all_form_fields()
+    public function an_authenticated_user_can_view_the_edit_clip_form_add_all_form_fields(): void
     {
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 
@@ -42,7 +42,7 @@ class ManageClipsTest extends TestCase
     }
 
     /** @test */
-    public function it_lists_whether_a_clip_belongs_to_a_series()
+    public function it_lists_whether_a_clip_belongs_to_a_series(): void
     {
         $series = SeriesFactory::ownedBy($this->signIn())->withClips(2)->create();
 
@@ -50,7 +50,7 @@ class ManageClipsTest extends TestCase
     }
 
     /** @test */
-    public function an_authenticated_user_cannot_view_clip_edit_form_for_not_owned_clips()
+    public function an_authenticated_user_cannot_view_clip_edit_form_for_not_owned_clips(): void
     {
         $clip = ClipFactory::create();
 
@@ -60,7 +60,7 @@ class ManageClipsTest extends TestCase
     }
 
     /** @test */
-    public function an_admin_can_edit_a_not_owned_clip()
+    public function an_admin_can_edit_a_not_owned_clip(): void
     {
         $clip = ClipFactory::create();
 
@@ -71,7 +71,7 @@ class ManageClipsTest extends TestCase
 
 
     /** @test */
-    public function it_requires_a_title_creating_a_new_clip()
+    public function it_requires_a_title_creating_a_new_clip(): void
     {
         $this->signIn();
 
@@ -81,7 +81,7 @@ class ManageClipsTest extends TestCase
     }
 
     /** @test */
-    public function an_authenticated_user_can_create_a_clip()
+    public function an_authenticated_user_can_create_a_clip(): void
     {
         $this->signIn();
 
@@ -93,7 +93,7 @@ class ManageClipsTest extends TestCase
     }
 
     /** @test */
-    public function an_authenticated_user_can_create_a_clip_with_tags()
+    public function an_authenticated_user_can_create_a_clip_with_tags(): void
     {
         $this->signIn();
 
@@ -111,7 +111,7 @@ class ManageClipsTest extends TestCase
     }
 
     /** @test */
-    public function an_authenticated_user_can_remove_clip_tags()
+    public function an_authenticated_user_can_remove_clip_tags(): void
     {
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 
@@ -127,7 +127,7 @@ class ManageClipsTest extends TestCase
     }
 
     /** @test */
-    public function an_authenticated_user_can_update_clip_tags()
+    public function an_authenticated_user_can_update_clip_tags(): void
     {
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 
@@ -145,7 +145,7 @@ class ManageClipsTest extends TestCase
     }
 
     /** @test */
-    public function create_clip_form_should_remember_old_values_on_validation_error()
+    public function create_clip_form_should_remember_old_values_on_validation_error(): void
     {
         $this->signIn();
 
@@ -163,7 +163,7 @@ class ManageClipsTest extends TestCase
     }
 
     /** @test */
-    public function an_authenticated_user_can_update_his_clip()
+    public function an_authenticated_user_can_update_his_clip(): void
     {
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 
@@ -185,7 +185,7 @@ class ManageClipsTest extends TestCase
     }
 
     /** @test */
-    public function an_authenticated_user_cannot_update_a_not_owned_clip()
+    public function an_authenticated_user_cannot_update_a_not_owned_clip(): void
     {
         $clip = ClipFactory::create();
 
@@ -202,7 +202,7 @@ class ManageClipsTest extends TestCase
     }
 
     /** @test */
-    public function an_admin_user_can_update_a_not_owned_clip()
+    public function an_admin_user_can_update_a_not_owned_clip(): void
     {
         $clip = ClipFactory::create();
 
@@ -219,7 +219,7 @@ class ManageClipsTest extends TestCase
     }
 
     /** @test */
-    public function updating_a_clip_will_update_clip_slug()
+    public function updating_a_clip_will_update_clip_slug(): void
     {
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 
@@ -233,7 +233,7 @@ class ManageClipsTest extends TestCase
     }
 
     /** @test */
-    public function an_authenticated_user_cannot_delete_a_not_owned_clip()
+    public function an_authenticated_user_cannot_delete_a_not_owned_clip(): void
     {
         $clip = ClipFactory::create();
 
@@ -245,7 +245,7 @@ class ManageClipsTest extends TestCase
     }
 
     /** @test */
-    public function an_admin_user_can_delete_a_not_owned_clip()
+    public function an_admin_user_can_delete_a_not_owned_clip(): void
     {
         $clip = ClipFactory::create();
 
@@ -258,7 +258,7 @@ class ManageClipsTest extends TestCase
 
 
     /** @test */
-    public function an_authenticated_user_can_delete_owned_clip()
+    public function an_authenticated_user_can_delete_owned_clip(): void
     {
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 

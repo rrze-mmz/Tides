@@ -13,21 +13,21 @@ class SeriesFactory
     protected $clipsCount = 0;
     protected $user;
 
-    public function withClips($count)
+    public function withClips($count): static
     {
         $this->clipsCount = $count;
 
         return $this;
     }
 
-    public function ownedBy($user)
+    public function ownedBy($user): static
     {
         $this->user = $user;
 
         return $this;
     }
 
-    public function create()
+    public function create(): Series
     {
         $series = Series::factory()->create([
             'owner_id' => $user = $this->user ?? User::factory()

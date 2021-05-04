@@ -16,13 +16,13 @@ class DashboardTest extends TestCase
     use RefreshDatabase, WithFaker;
 
     /** @test */
-    public function it_should_not_be_accessed_by_a_visitor()
+    public function it_should_not_be_accessed_by_a_visitor(): void
     {
         $this->get(route('dashboard'))->assertRedirect('login');
     }
 
     /** @test */
-    public function it_should_be_accessed_by_authenticated_user()
+    public function it_should_be_accessed_by_authenticated_user(): void
     {
         $this->signIn();
 
@@ -32,7 +32,7 @@ class DashboardTest extends TestCase
     }
 
     /** @test */
-    public function it_should_display_an_add_series_button()
+    public function it_should_display_an_add_series_button(): void
     {
         $this->signIn();
 
@@ -40,7 +40,7 @@ class DashboardTest extends TestCase
     }
 
     /** @test */
-    public function it_should_display_an_add_clip_button()
+    public function it_should_display_an_add_clip_button(): void
     {
         $this->signIn();
 
@@ -48,7 +48,7 @@ class DashboardTest extends TestCase
     }
 
     /** @test */
-    public function it_should_display_info_if_no_series_exist()
+    public function it_should_display_info_if_no_series_exist(): void
     {
         $this->signIn();
 
@@ -56,7 +56,7 @@ class DashboardTest extends TestCase
     }
 
     /** @test */
-    public function it_should_display_info_if_no_clip_exist()
+    public function it_should_display_info_if_no_clip_exist(): void
     {
         $this->signIn();
 
@@ -64,7 +64,7 @@ class DashboardTest extends TestCase
     }
 
     /** @test */
-    public function it_display_user_series()
+    public function it_display_user_series(): void
     {
         $user = $this->signIn();
 
@@ -78,7 +78,7 @@ class DashboardTest extends TestCase
     }
 
     /** @test */
-    public function it_display_user_clips_()
+    public function it_display_user_clips_(): void
     {
         $user = $this->signIn();
 
@@ -92,7 +92,7 @@ class DashboardTest extends TestCase
     }
 
     /** @test */
-    public function it_should_list_all_files_in_drop_zone()
+    public function it_should_list_all_files_in_drop_zone(): void
     {
         $this->signIn();
 

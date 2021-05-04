@@ -30,7 +30,7 @@ class AssetsTest extends TestCase
     }
 
     /** @test */
-    public function an_authenticated_user_can_upload_a_video_file()
+    public function an_authenticated_user_can_upload_a_video_file(): void
     {
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 
@@ -45,7 +45,7 @@ class AssetsTest extends TestCase
     }
 
     /** @test */
-    public function an_authenticated_user_cannot_delete_a_not_owned_clip_asset()
+    public function an_authenticated_user_cannot_delete_a_not_owned_clip_asset(): void
     {
         $asset = Asset::factory()->create();
 
@@ -55,7 +55,7 @@ class AssetsTest extends TestCase
     }
 
     /** @test */
-    public function an_admin_can_delete_a_not_owned_clip_asset()
+    public function an_admin_can_delete_a_not_owned_clip_asset(): void
     {
         $asset = Asset::factory()->create();
 
@@ -67,7 +67,7 @@ class AssetsTest extends TestCase
     }
 
     /** @test */
-    public function an_authenticated_user_can_delete_an_owned_clip_asset()
+    public function an_authenticated_user_can_delete_an_owned_clip_asset(): void
     {
         $clip = ClipFactory::withAssets(1)
             ->ownedBy($this->signIn())
@@ -82,7 +82,7 @@ class AssetsTest extends TestCase
     }
 
     /** @test */
-    public function deleting_an_asset_should_also_delete_the_file_from_storage()
+    public function deleting_an_asset_should_also_delete_the_file_from_storage(): void
     {
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 
@@ -100,7 +100,7 @@ class AssetsTest extends TestCase
     }
 
     /** @test */
-    public function an_asset_must_be_a_video_file()
+    public function an_asset_must_be_a_video_file(): void
     {
         $this->post(route('admin.assets.store', ClipFactory::ownedBy($this->signIn())->create()), [
             'asset' => $file = UploadedFile::fake()->image('avatar.jpg')
@@ -109,7 +109,7 @@ class AssetsTest extends TestCase
     }
 
     /** @test */
-    public function uploading_an_asset_should_save_asset_duration()
+    public function uploading_an_asset_should_save_asset_duration(): void
     {
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 
@@ -120,7 +120,7 @@ class AssetsTest extends TestCase
     }
 
     /** @test */
-    public function uploading_an_asset_should_create_a_clip_poster()
+    public function uploading_an_asset_should_create_a_clip_poster(): void
     {
         Storage::fake('thumbnails');
 
@@ -134,7 +134,7 @@ class AssetsTest extends TestCase
     }
 
     /** @test */
-    public function uploading_an_asset_should_notify_user_via_email()
+    public function uploading_an_asset_should_notify_user_via_email(): void
     {
         Mail::fake();
 
@@ -146,7 +146,7 @@ class AssetsTest extends TestCase
     }
 
     /** @test */
-    public function deleting_an_asset_should_delete_a_clip_poster()
+    public function deleting_an_asset_should_delete_a_clip_poster(): void
     {
         Storage::fake('thumbnails');
 
@@ -162,7 +162,7 @@ class AssetsTest extends TestCase
     }
 
     /** @test */
-    public function deleting_an_asset_should_update_clip_poster_image_column()
+    public function deleting_an_asset_should_update_clip_poster_image_column(): void
     {
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 
@@ -176,7 +176,7 @@ class AssetsTest extends TestCase
     }
 
     /** @test */
-    public function it_converts_upload_file_to_hls()
+    public function it_converts_upload_file_to_hls(): void
     {
         Storage::fake('streamable_videos');
 
@@ -192,7 +192,7 @@ class AssetsTest extends TestCase
     }
 
     /** @test */
-    public function it_should_queue_if_user_select_to_convert_to_hls()
+    public function it_should_queue_if_user_select_to_convert_to_hls(): void
     {
         Queue::fake();
 

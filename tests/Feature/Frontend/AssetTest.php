@@ -14,7 +14,7 @@ class AssetTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function a_visitor_cannot_upload_a_video_file()
+    public function a_visitor_cannot_upload_a_video_file(): void
     {
         $clip = ClipFactory::create();
 
@@ -23,7 +23,7 @@ class AssetTest extends TestCase
     }
 
     /** @test */
-    public function a_visitor_cannot_view_dropzone_files_for_a_clip()
+    public function a_visitor_cannot_view_dropzone_files_for_a_clip(): void
     {
         $clip = ClipFactory::create();
 

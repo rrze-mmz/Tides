@@ -20,25 +20,25 @@ class SeriesTest extends TestCase {
     }
 
     /** @test */
-    public function it_has_a_path()
+    public function it_has_a_path(): void
     {
         $this->assertEquals('/series/' . $this->series->slug, $this->series->path());
     }
 
     /** @test */
-    public function it_has_an_admin_path()
+    public function it_has_an_admin_path(): void
     {
         $this->assertEquals('/admin/series/' . $this->series->slug, $this->series->adminPath());
     }
 
     /** @test */
-    public function it_has_a_slug_route()
+    public function it_has_a_slug_route(): void
     {
         $this->get($this->series->path())->assertStatus(200);
     }
 
     /** @test */
-    public function it_has_a_unique_slug()
+    public function it_has_a_unique_slug(): void
     {
         $seriesA = Series::factory()->create(['title' => 'A test title', 'slug' => 'A test title']);
 
@@ -48,7 +48,7 @@ class SeriesTest extends TestCase {
     }
 
     /** @test */
-    public function it_has_many_clips()
+    public function it_has_many_clips(): void
     {
         Clip::factory(2)->create(['series_id' => $this->series->id]);
 
@@ -56,7 +56,7 @@ class SeriesTest extends TestCase {
     }
 
     /** @test */
-    public function it_can_add_a_clip()
+    public function it_can_add_a_clip(): void
     {
         $this->signIn();
 

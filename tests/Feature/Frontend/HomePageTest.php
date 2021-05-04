@@ -14,19 +14,19 @@ class HomePageTest extends TestCase {
     use RefreshDatabase, WithFaker;
 
     /** @test */
-    public function should_show_project_name()
+    public function should_show_project_name(): void
     {
         $this->get(route('home'))->assertSee('Tides');
     }
 
     /** @test */
-    public function it_has_a_language_switcher()
+    public function it_has_a_language_switcher(): void
     {
         $this->get(route('home'))->assertSee('EN')->assertSee('DE');
     }
 
     /** @test */
-    public function it_changes_portal_language()
+    public function it_changes_portal_language(): void
     {
         $this->followingRedirects()->get('/set_lang/de');
 
@@ -34,7 +34,7 @@ class HomePageTest extends TestCase {
     }
 
     /** @test */
-    public function it_does_not_display_series_with_clips_without_assets()
+    public function it_does_not_display_series_with_clips_without_assets(): void
     {
         $series = SeriesFactory::withClips(1)->create();
 
@@ -42,7 +42,7 @@ class HomePageTest extends TestCase {
     }
 
     /** @test */
-    public function it_displays_latest_series_with_clips_that_have_assets()
+    public function it_displays_latest_series_with_clips_that_have_assets(): void
     {
         $series = SeriesFactory::create();
 
@@ -54,7 +54,7 @@ class HomePageTest extends TestCase {
     }
 
     /** @test */
-    public function it_does_not_display_clips_without_assets()
+    public function it_does_not_display_clips_without_assets(): void
     {
         $clip = ClipFactory::create();
 
@@ -62,7 +62,7 @@ class HomePageTest extends TestCase {
     }
 
     /** @test */
-    public function it_does_not_display_clips_that_belong_to_a_series()
+    public function it_does_not_display_clips_that_belong_to_a_series(): void
     {
         $series = SeriesFactory::withClips(1)->create();
 
@@ -70,7 +70,7 @@ class HomePageTest extends TestCase {
     }
 
     /** @test */
-    public function it_displays_clips_with_video_assets()
+    public function it_displays_clips_with_video_assets(): void
     {
         $clip = ClipFactory::withAssets(1)->create();
 

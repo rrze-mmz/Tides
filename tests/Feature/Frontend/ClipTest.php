@@ -23,7 +23,7 @@ class ClipTest extends TestCase
     }
 
     /** @test */
-    public function a_visitor_cannot_manage_clips()
+    public function a_visitor_cannot_manage_clips(): void
     {
         $this->post(route('clips.store'), [])->assertRedirect('login');
 
@@ -35,13 +35,13 @@ class ClipTest extends TestCase
     }
 
     /** @test */
-    public function a_visitor_can_view_a_clip()
+    public function a_visitor_can_view_a_clip(): void
     {
         $this->get($this->clip->path())->assertSee($this->clip->title);
     }
 
     /** @test */
-    public function an_authorized_user_cannot_view_edit_button_for_not_owned_clip()
+    public function an_authorized_user_cannot_view_edit_button_for_not_owned_clip(): void
     {
         $this->signIn();
 

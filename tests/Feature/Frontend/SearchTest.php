@@ -41,19 +41,19 @@ class SearchTest extends TestCase
     }
 
     /** @test */
-    public function it_shows_an_error_when_search_is_empty()
+    public function it_shows_an_error_when_search_is_empty(): void
     {
         $this->searchFor('')->assertSessionHasErrors('term');
     }
 
     /** @test */
-    public function it_shows_an_error_when_search_term_is_less_than_3_chars()
+    public function it_shows_an_error_when_search_term_is_less_than_3_chars(): void
     {
         $this->searchFor('ab')->assertSessionHasErrors('term');
     }
 
     /** @test */
-    public function it_returns_only_clips_with_assets()
+    public function it_returns_only_clips_with_assets(): void
     {
         Clip::factory()->create(['title' => 'Clip without video']);
 
@@ -61,25 +61,25 @@ class SearchTest extends TestCase
     }
 
     /** @test */
-    public function it_searches_for_clip_title()
+    public function it_searches_for_clip_title(): void
     {
         $this->searchFor('lorem')->assertSee($this->clip->title);
     }
 
     /** @test */
-    public function it_searches_for_clip_description()
+    public function it_searches_for_clip_description(): void
     {
         $this->searchFor('dolor')->assertSee($this->clip->title);
     }
 
     /** @test */
-    public function it_searches_for_clip_owner()
+    public function it_searches_for_clip_owner(): void
     {
         $this->searchFor('Doe')->assertSee($this->clip->owner->name);
     }
 
     /** @test */
-    public function it_searches_for_multiple_owners()
+    public function it_searches_for_multiple_owners(): void
     {
         $secondClip = Clip::factory()->create([
             'title'       => 'Lorem ipsum for testing  the search function',

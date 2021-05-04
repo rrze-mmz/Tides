@@ -13,7 +13,7 @@ class ManageSeriesTest extends TestCase
     use RefreshDatabase, WithFaker;
 
     /** @test */
-    public function an_authenticated_user_can_see_the_create_series_form_and_all_form_fields()
+    public function an_authenticated_user_can_see_the_create_series_form_and_all_form_fields(): void
     {
         $this->signIn();
 
@@ -25,7 +25,7 @@ class ManageSeriesTest extends TestCase
     }
 
     /** @test */
-    public function it_requires_a_title_when_creating_a_new_series()
+    public function it_requires_a_title_when_creating_a_new_series(): void
     {
         $this->signIn();
 
@@ -35,7 +35,7 @@ class ManageSeriesTest extends TestCase
     }
 
     /** @test */
-    public function an_authenticated_user_can_create_a_series()
+    public function an_authenticated_user_can_create_a_series(): void
     {
         $this->signIn();
 
@@ -47,7 +47,7 @@ class ManageSeriesTest extends TestCase
     }
 
     /** @test */
-    public function a_series_owner_can_view_edit_form_fields()
+    public function a_series_owner_can_view_edit_form_fields(): void
     {
         $series = SeriesFactory::ownedBy($this->signIn())->create();
 
@@ -58,7 +58,7 @@ class ManageSeriesTest extends TestCase
     }
 
     /** @test */
-    public function an_authenticated_user_cannot_view_edit_clip_form_for_not_owned_series()
+    public function an_authenticated_user_cannot_view_edit_clip_form_for_not_owned_series(): void
     {
         $series = SeriesFactory::create();
 
@@ -68,7 +68,7 @@ class ManageSeriesTest extends TestCase
     }
 
     /** @test */
-    public function an_admin_can_edit_an_not_owned_series()
+    public function an_admin_can_edit_an_not_owned_series(): void
     {
         $series = SeriesFactory::create();
 
@@ -78,19 +78,19 @@ class ManageSeriesTest extends TestCase
     }
 
     /** @test */
-    public function it_has_an_add_clips_button()
+    public function it_has_an_add_clips_button(): void
     {
         $this->get(route('series.edit', SeriesFactory::ownedBy($this->signIn())->create()))->assertSee('Add new clip');
     }
 
     /** @test */
-    public function it_has_go_to_public_page_button()
+    public function it_has_go_to_public_page_button(): void
     {
         $this->get(route('series.edit', SeriesFactory::ownedBy($this->signIn())->create()))->assertSee('Go to public page');
     }
 
     /** @test */
-    public function edit_series_page_should_display_belonging_clips()
+    public function edit_series_page_should_display_belonging_clips(): void
     {
         $series =  SeriesFactory::ownedBy($this->signIn())->withClips(2)->create();
 
@@ -98,7 +98,7 @@ class ManageSeriesTest extends TestCase
     }
 
     /** @test */
-    public function it_requires_a_title_creating_a_series()
+    public function it_requires_a_title_creating_a_series(): void
     {
         $this->signIn();
 
@@ -107,7 +107,7 @@ class ManageSeriesTest extends TestCase
         $this->post(route('series.store'),$attributes)->assertSessionHasErrors('title');}
 
     /** @test */
-    public function create_series_form_should_remember_old_values_on_validation_error()
+    public function create_series_form_should_remember_old_values_on_validation_error(): void
     {
         $this->signIn();
 
@@ -124,7 +124,7 @@ class ManageSeriesTest extends TestCase
     }
 
     /** @test */
-    public function a_series_owner_can_update_series()
+    public function a_series_owner_can_update_series(): void
     {
         $series = SeriesFactory::ownedBy($this->signIn())->create();
 
@@ -146,7 +146,7 @@ class ManageSeriesTest extends TestCase
     }
 
     /** @test */
-    public function an_authenticated_user_cannot_update_a_not_owned_series()
+    public function an_authenticated_user_cannot_update_a_not_owned_series(): void
     {
         $series = SeriesFactory::create();
 
@@ -161,7 +161,7 @@ class ManageSeriesTest extends TestCase
     }
 
     /** @test */
-    public function an_admin_user_can_update_a_not_owned_series()
+    public function an_admin_user_can_update_a_not_owned_series(): void
     {
         $series = SeriesFactory::create();
 
@@ -176,7 +176,7 @@ class ManageSeriesTest extends TestCase
     }
 
     /** @test */
-    public function an_authenticated_user_cannot_delete_a_not_owned_series()
+    public function an_authenticated_user_cannot_delete_a_not_owned_series(): void
     {
         $series = SeriesFactory::create();
 
@@ -188,7 +188,7 @@ class ManageSeriesTest extends TestCase
     }
 
     /** @test */
-    public function an_admin_user_can_delete_a_not_owned_series()
+    public function an_admin_user_can_delete_a_not_owned_series(): void
     {
         $series = SeriesFactory::create();
 
@@ -200,7 +200,7 @@ class ManageSeriesTest extends TestCase
     }
 
     /** @test */
-    public function a_series_owner_can_delete_series()
+    public function a_series_owner_can_delete_series(): void
     {
         $series = SeriesFactory::ownedBy($this->signIn())->create();
 
