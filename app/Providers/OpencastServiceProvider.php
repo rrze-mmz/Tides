@@ -18,6 +18,7 @@ class OpencastServiceProvider extends ServiceProvider
             $config = $this->app->get('config')['opencast'];
             return new OpencastClient([
                 'base_uri'  => $config['base_uri'],
+                'verify'    => config('app.env')==='production',
                 'auth'     => [
                     $config['digest_user'],
                     $config['digest_pass']
