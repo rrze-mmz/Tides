@@ -78,9 +78,15 @@ class ManageSeriesTest extends TestCase
     }
 
     /** @test */
-    public function edit_series_page_should_have_a_add_clips_button()
+    public function it_has_an_add_clips_button()
     {
         $this->get(route('series.edit', SeriesFactory::ownedBy($this->signIn())->create()))->assertSee('Add new clip');
+    }
+
+    /** @test */
+    public function it_has_go_to_public_page_button()
+    {
+        $this->get(route('series.edit', SeriesFactory::ownedBy($this->signIn())->create()))->assertSee('Go to public page');
     }
 
     /** @test */

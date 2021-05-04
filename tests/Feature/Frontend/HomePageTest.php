@@ -10,6 +10,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class HomePageTest extends TestCase {
+
     use RefreshDatabase, WithFaker;
 
     /** @test */
@@ -19,12 +20,27 @@ class HomePageTest extends TestCase {
     }
 
     /** @test */
+    public function it_has_a_language_switcher()
+    {
+        $this->get(route('home'))->assertSee('EN')->assertSee('DE');
+    }
+
+    /** @test */
+    public function it_changes_portal_language()
+    {
+        $this->followingRedirects()->get('/set_lang/de');
+
+        $this->get(route('home'))->assertSee('Letzte Videoaufnahmen');
+    }
+
+    /** @test */
     public function it_does_not_display_series_with_clips_without_assets()
     {
         $series = SeriesFactory::withClips(1)->create();
 
         $this->get(route('home'))->assertDontSee($series->title);
     }
+
     /** @test */
     public function it_displays_latest_series_with_clips_that_have_assets()
     {
@@ -52,7 +68,6 @@ class HomePageTest extends TestCase {
 
         $this->get(route('home'))->assertDontSee($series->clips()->first()->title);
     }
-
 
     /** @test */
     public function it_displays_clips_with_video_assets()

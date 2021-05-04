@@ -12,13 +12,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 
-class Clip extends Model
-{
+class Clip extends Model {
 
     use HasFactory, Slugable;
 
     protected $guarded = [];
-
     protected $attributes = [
         'episode' => '1'
     ];
@@ -89,11 +87,11 @@ class Clip extends Model
      */
     public function series(): BelongsTo
     {
-        return $this->hasOne(Series::class);
+        return $this->belongsTo(Series::class)->withDefault();
     }
 
     /**
-     * @param  array  $attributes
+     * @param array $attributes
      * @return Model
      */
     public function addAsset($attributes = []): Model
@@ -106,23 +104,24 @@ class Clip extends Model
      */
     public function updatePosterImage(): void
     {
-        $this->posterImage = (Storage::disk('thumbnails')->exists($this->id.'_poster.png')) ? $this->id.'_poster.png' : null;
+        $this->posterImage = (Storage::disk('thumbnails')->exists($this->id . '_poster.png')) ? $this->id . '_poster.png' : null;
 
         $this->save();
     }
 
     /**
-     * @param  Collection  $tagsCollection
+     * @param Collection $tagsCollection
      */
     public function addTags(Collection $tagsCollection): void
     {
-        if ($tagsCollection->isNotEmpty()) {
-            $this->tags()->sync($tagsCollection->map(function ($tagName){
+        if ($tagsCollection->isNotEmpty())
+        {
+            $this->tags()->sync($tagsCollection->map(function ($tagName) {
                 return tap(Tag::firstOrCreate(['name' => $tagName]))->save();
-                })->pluck('id')
+            })->pluck('id')
             );
-        }
-        else {
+        } else
+        {
             $this->tags()->detach();
         }
     }

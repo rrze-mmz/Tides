@@ -176,6 +176,22 @@ class AssetsTest extends TestCase
     }
 
     /** @test */
+    public function it_converts_upload_file_to_hls()
+    {
+        Storage::fake('streamable_videos');
+
+        $clip = ClipFactory::ownedBy($this->signIn())->create();
+
+        $this->post(route('admin.assets.store', $clip), [
+            'asset'                 => $file = FileFactory::videoFile(),
+            'should_convert_to_hls' => 'on',
+        ]);
+
+        Storage::disk('streamable_videos')->assertExists($clip->assets()->first()->id.'.m3u8');
+
+    }
+
+    /** @test */
     public function it_should_queue_if_user_select_to_convert_to_hls()
     {
         Queue::fake();

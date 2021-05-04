@@ -11,8 +11,8 @@
 
                <div class="flex items-end w-full border-b justify-content-between">
                    <div class="flex justify-between items-end pb-2 w-full">
-                       <div class="text-2xl"> Last series</div>
-                       <a href="/clips" class="text-sm underline">view more...</a>
+                       <div class="text-2xl">  {{  __('homepage.series.Recently added!') }} </div>
+                       <a href="/clips" class="text-sm underline">{{__('homepage.series.more series') }}</a>
                    </div>
 
                </div>
@@ -23,14 +23,14 @@
                                 'route' => 'admin'
                                 ])
                         @empty
-                           No series found
+                       {{ __('homepage.series.no series found' )}}
                         @endforelse
                </div>
 
                 <div class="flex items-end w-full border-b justify-content-between">
                     <div class="flex justify-between items-end pb-2 w-full">
-                        <div class="text-2xl"> {{  __('homepage.Recently added!') }}</div>
-                        <a href="/clips" class="text-sm underline">{{__('homepage.more clips')}}</a>
+                        <div class="text-2xl"> {{  __('homepage.clips.Recently added!') }}</div>
+                        <a href="/clips" class="text-sm underline">{{__('homepage.clips.more clips')}}</a>
                     </div>
 
                 </div>
@@ -41,7 +41,7 @@
                                 'route' => 'admin'
                                 ])
                     @empty
-                        {{ __('homepage.no clips found' )}}
+                        {{ __('homepage.clips.no clips found' )}}
                     @endforelse
                 </div>
 </main>

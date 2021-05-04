@@ -46,7 +46,6 @@ class TransferDropzoneFiles implements ShouldQueue
             $storedFile = $clipStoragePath.'/'.$file['name'];
             $ffmpeg = FFMpeg::fromDisk('videos')->open($storedFile);
 
-            try {
                 $attributes = [
                     'disk'               => 'videos',
                     'original_file_name' => $file['name'],
@@ -65,9 +64,7 @@ class TransferDropzoneFiles implements ShouldQueue
                     ->save($this->clip->id.'_poster.png');
 
                 $this->clip->updatePosterImage();
-            } catch (Exception $e) {
-                Log::error($e);
-            }
+
         });
 //        Mail::to($this->user->email)->send(new VideoUploaded($this->clip));
     }

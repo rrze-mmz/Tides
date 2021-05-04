@@ -22,6 +22,7 @@ class UpdateClipsTable extends Migration
 
     /**
      * Reverse the migrations.
+     *Hal
      *
      * @return void
      */

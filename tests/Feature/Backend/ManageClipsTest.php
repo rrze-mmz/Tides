@@ -8,6 +8,7 @@ use App\Models\Tag;
 use Facades\Tests\Setup\ClipFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Facades\Tests\Setup\SeriesFactory;
 use Tests\TestCase;
 
 class ManageClipsTest extends TestCase
@@ -38,6 +39,14 @@ class ManageClipsTest extends TestCase
         $this->get($clip->adminPath())->assertSee('title')
             ->assertSee('description')
             ->assertSee('tags');
+    }
+
+    /** @test */
+    public function it_lists_whether_a_clip_belongs_to_a_series()
+    {
+        $series = SeriesFactory::ownedBy($this->signIn())->withClips(2)->create();
+
+        $this->get(route('clips.edit', $series->clips()->first()))->assertSee($series->title);
     }
 
     /** @test */

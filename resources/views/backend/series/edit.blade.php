@@ -63,6 +63,13 @@
             More actions
         </div>
         <div class="flex items-center pt-3 space-x-6">
+            <form action="{{ route('frontend.series.show',$series) }}"
+                  method="GET">
+                <button
+                    class="ml-2 focus:outline-none text-white text-sm py-1.5 px-5 rounded-md bg-blue-900 hover:bg-blue-600 hover:shadow-lg">
+                    Go to public page
+                </button>
+            </form>
             <form action="{{ route('series.clip.create',$series) }}"
                   method="GET">
                 <button
@@ -81,47 +88,7 @@
             </form>
         </div>
 
-        <div class="flex pt-8 pb-2 font-semibold border-b border-black font-2xl">
-            Clips
-        </div>
-        <div class="flex">
-            <ul class="pt-3 w-full">
-                <li class="flex content-center items-center p-5 mb-4 text-xl bg-gray-400 rounded">
-                    <div class="pb-2 w-1/5 border-b border-black">Poster</div>
-                    <div class="pb-2 w-1/5 border-b border-black">Episode</div>
-                    <div class="pb-2 w-3/5 border-b border-black">Title</div>
-                    <div class="pb-2 w-1/5 border-b border-black">Duration</div>
-                    <div class="pb-2 w-1/5 border-b border-black">Actions</div>
-                </li>
-
-                @forelse($series->clips as $clip)
-                    <li class="flex content-center items-center p-5 mb-4 text-xl bg-gray-200 rounded">
-                        <div class="w-1/5">
-                            <div class="flex justify-center justify-items-center  place-items-center mx-2 w-48 h-full">
-                                <a href="{{$clip->adminPath()}}"><img
-                                    src="{{ fetchClipPoster($clip->posterImage) }}" alt="preview image">
-                                </a>
-                            </div>
-                        </div>
-                        <div class="w-1/5"> {{ $clip->episode }}</div>
-                        <div class="w-3/5"> {{ $clip->title }}</div>
-                        <div class="w-1/5"> {{ $clip->assets()->first()?->durationToHours()  }}</div>
-                        <div class="w-1/5">
-                            <form method="GET"
-                                  action="{{$clip->adminPath() }}"
-                            >
-                                <button type="submit"
-                                        class="focus:outline-none text-white text-sm py-1.5 px-5 rounded-md bg-blue-700 hover:bg-blue-500 hover:shadow-lg">
-                                    Edit
-                                </button>
-                            </form>
-                        </div>
-                    </li>
-                @empty
-                    No clips
-                @endforelse
-            </ul>
-        </div>
+        @include('backend.clips.list')
 
     </div>
 @endsection
