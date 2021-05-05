@@ -15,6 +15,9 @@ class OpencastTest extends TestCase
 
     private OpencastService $opencastService;
 
+    /*
+     * Mock api results
+     */
     private MockHandler $mockHandler;
 
     protected function setUp(): void
@@ -35,6 +38,4 @@ class OpencastTest extends TestCase
 
         $this->get(route('opencast'))->assertStatus(200);
     }
-
-
 }

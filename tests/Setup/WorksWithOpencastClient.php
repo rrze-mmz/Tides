@@ -8,9 +8,9 @@ use App\Http\Clients\OpencastClient;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
+use Illuminate\Support\Str;
 
 trait WorksWithOpencastClient {
-
     public function swapOpencastClient(): MockHandler
     {
         $mockHandler = new MockHandler();
@@ -33,5 +33,14 @@ trait WorksWithOpencastClient {
             "version"     => "1",
             "status"      => "pass",
         ]));
+    }
+
+    public function mockCreateSeriesResponse(): Response
+    {
+        return new Response(201, [
+                'Location' => [
+                    '0' => 'http://localhost:8080/api/series/' . Str::uuid()
+                ]
+        ]);
     }
 }

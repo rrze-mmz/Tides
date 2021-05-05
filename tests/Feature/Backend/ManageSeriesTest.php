@@ -3,14 +3,18 @@
 namespace Tests\Feature\Backend;
 
 use App\Models\Series;
+use App\Services\OpencastService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Facades\Tests\Setup\SeriesFactory;
+use Tests\Setup\WorksWithOpencastClient;
 use Tests\TestCase;
 
 class ManageSeriesTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase, WithFaker, WorksWithOpencastClient;
+
+    private OpencastService $opencastService;
 
     /** @test */
     public function an_authenticated_user_can_see_the_create_series_form_and_all_form_fields(): void
@@ -44,6 +48,27 @@ class ManageSeriesTest extends TestCase
         $this->followingRedirects()
             ->post(route('series.store'), $attributes = Series::factory()->raw())
             ->assertSee($attributes['title']);
+    }
+
+    /** @test */
+    public function it_creates_an_opencast_series_when_new_series_is_created()
+    {
+        $this->signIn();
+
+        $mockHandler = $this->swapOpencastClient();
+
+        $this->opencastService  = app(OpencastService::class);
+
+        $mockHandler->append($this->mockCreateSeriesResponse());
+
+        $this->post(route('series.store'), [
+            'title' => 'Series title',
+            'description' => 'test'
+        ]);
+
+        $series = Series::all()->first();
+
+        $this->assertNotNull($series->opencast_series_id);
     }
 
     /** @test */

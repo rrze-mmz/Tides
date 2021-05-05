@@ -6,9 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreSeriesRequest;
 use App\Http\Requests\UpdateSeriesRequest;
 use App\Models\Series;
+use App\Services\OpencastService;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class SeriesController extends Controller {
     /**
@@ -32,10 +36,23 @@ class SeriesController extends Controller {
     /**
      * @param StoreSeriesRequest $request
      * @return RedirectResponse
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function store(StoreSeriesRequest $request): RedirectResponse
+    public function store(StoreSeriesRequest $request, OpencastService $opencastService): RedirectResponse
     {
         $series = auth()->user()->series()->create($request->validated());
+
+        try{
+            $response = $opencastService->createSeries($series);
+
+            $series->opencast_series_id = Str::afterLast($response->getHeaders()['Location'][0], 'api/series/');
+
+            $series->update();
+        } catch (GuzzleException $exception)
+        {
+            Log::error($exception);
+        }
+
 
         return redirect($series->adminPath());
     }

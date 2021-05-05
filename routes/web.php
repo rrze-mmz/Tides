@@ -12,6 +12,8 @@ use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\SearchController;
 use App\Http\Controllers\Frontend\ShowClipsController;
 use App\Http\Controllers\Frontend\ShowSeriesController;
+use App\Models\Series;
+use App\Services\OpencastService;
 use Illuminate\Support\Facades\Route;
 
 /*
