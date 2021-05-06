@@ -7,6 +7,7 @@ use App\Jobs\IngestVideoFileToOpencast;
 use App\Models\Clip;
 use App\Services\OpencastService;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class OpencastController extends Controller
@@ -22,12 +23,24 @@ class OpencastController extends Controller
         return view('backend.opencast.status', compact('status'));
     }
 
-    public function ingestMediaPackage(Clip $clip, Request $request, OpencastService $opencastService)
+    /**
+     * Indest a video file to Opencast
+     * @param Clip $clip
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function ingestMediaPackage(Clip $clip, Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'videoFile'  => 'required|file|mimetypes:video/mp4,video/mpeg,video/x-matroska'
         ]);
 
-        $this->dispatch(new IngestVideoFileToOpencast($clip, $validated['videoFile']));
+        $videoFile = $validated['videoFile'];
+
+        $storedFile = $videoFile->storeAs(getClipStoragePath($clip), $videoFile->getClientOriginalName(), 'videos');
+
+        $this->dispatch(new IngestVideoFileToOpencast($clip, $storedFile));
+
+        return redirect(route('clips.edit', $clip));
     }
 }

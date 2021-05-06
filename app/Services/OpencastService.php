@@ -10,6 +10,7 @@ use GuzzleHttp\Psr7\Response;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Psr\Http\Message\ResponseInterface;
 
 class OpencastService
@@ -58,7 +59,7 @@ class OpencastService
         return $response;
     }
 
-    public function ingestMediaPackage(Clip $clip, UploadedFile $videoFile)
+    public function ingestMediaPackage(Clip $clip, string $videoFile)
     {
         try
         {
@@ -108,7 +109,7 @@ class OpencastService
         ];
     }
 
-    public function ingestMediaPackageFormData(Clip $clip, UploadedFile $file)
+    public function ingestMediaPackageFormData(Clip $clip, string $file): array
     {
         return [
             'headers'  => [
@@ -116,9 +117,17 @@ class OpencastService
             ],
             'multipart' => [
                 [
+                    'name'=> 'flavor',
+                    'contents' => 'presenter/source'
+                ],
+                [
+                    'name'  => 'title',
+                    'contents'  => $clip->title
+                ],
+                [
                     'name'  =>  'file',
-                    'contents'  =>  fopen($file,'r'),
-                    'filename'  => $file->getClientOriginalName()
+                    'contents'  =>  Storage::disk('videos')->get($file),
+                    'filename'  => 'Big_Buck_Bunny.mp4'
                 ],
             ]
         ];
