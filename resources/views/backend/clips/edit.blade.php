@@ -3,82 +3,128 @@
 @section('content')
         <div class="pt-10 w-full lg:flex-grow lg:mx-10">
             <div class="flex pb-2 font-semibold border-b border-black font-2xl">
-                Edit {{ $clip->title }} [ ID: {{ $clip->id }} ] <span class="font-sm italic pl-2"> created at {{$clip->created_at}}</span>
+                Edit {{ $clip->title }} [ ID: {{ $clip->id }} ] <span class="pl-2 italic font-sm"> created at {{$clip->created_at}}</span>
             </div>
-            <div class="flex justify-center content-center content-between py-2 px-2">
+            <div class="flex py-2 px-2">
                 <form action="{{ $clip->adminPath() }}"
                       method="POST"
-                      class="w-4/5"
+                      class="w-4/5 w-full"
                 >
                     @csrf
                     @method('PATCH')
-                    <div class="mb-6">
-                        <label class="block mb-2 text-xs font-bold text-gray-700 uppercase"
-                               for="title"
-                        >
-                            Title
-                        </label>
-                        <input class="p-2 w-full border border-gray-400"
-                               type="text"
-                               name="title"
-                               id="title"
-                               value="{{ $clip->title }}"
-                               required
-                        >
 
-                        @error('title')
-                        <p class="mt-2 text-xs text-red-500">{{ $message }}</p>
+                    <div class="grid grid-cols-8 gap-2 pt-2">
+
+                        <div class="flex content-center items-center">
+                            <label class="block py-2 mr-6 font-bold text-gray-700 text-md"
+                                   for="episode"
+                            >
+                                Episode
+                            </label>
+                        </div>
+                        <div class="col-span-7 w-20">
+                            <input class="py-2 px-4 w-full leading-tight text-gray-700 bg-white rounded border-2 border-gray-200 appearance-none focus:outline-none focus:bg-white focus:border-blue-500"
+                                   type="number"
+                                   name="episode"
+                                   id="episode"
+                                   value="{{ $clip->episode }}"
+                                   required
+                            >
+                        </div>
+                        @error('episode')
+                                <div class="col-span-8">
+                                    <p class="mt-2 w-full text-xs text-red-500">{{ $message }}</p>
+                                </div>
                         @enderror
-                    </div>
 
-                    <div class="mb-6">
-                        <label class="block mb-2 text-xs font-bold text-gray-700 uppercase"
-                               for="description"
-                        >
-                            Description
-                        </label>
+                        <div class="flex content-center items-center">
+                            <label class="block py-2 mr-6 font-bold text-gray-700 text-md"
+                                   for="title"
+                            >
+                                Title
+                            </label>
+                        </div>
+                        <div class="col-span-7 w-4/5">
+                            <input class="py-2 px-4 w-full leading-tight text-gray-700 bg-white rounded border-2 border-gray-200 appearance-none focus:outline-none focus:bg-white focus:border-blue-500"
+                                   type="text"
+                                   name="title"
+                                   id="title"
+                                   value="{{ $clip->title }}"
+                                   required
+                            >
+                        </div>
+                        @error('title')
+                        <div class="col-span-8">
+                            <p class="mt-2 w-full text-xs text-red-500">{{ $message }}</p>
+                        </div>
+                        @enderror
 
-                        <textarea class="p-2 w-full border border-gray-400"
+                        <div class="flex content-center items-center mb-6">
+                            <label class="block py-2 mr-6 font-bold text-gray-700 text-md"
+                                   for="title"
+                            >
+                                Description
+                            </label>
+                        </div>
+                        <div class="col-span-7 w-4/5">
+                        <textarea class="py-2 px-4 w-full leading-tight text-gray-700 bg-white rounded border-2 border-gray-200 appearance-none focus:outline-none focus:bg-white focus:border-blue-500"
                                   type="text"
                                   name="description"
                                   id="description"
                         > {{ $clip->description }}</textarea>
-
+                        </div>
                         @error('description')
-                        <p class="mt-2 text-xs text-red-500">{{ $message }}</p>
+                        <div class="col-span-8">
+                            <p class="mt-2 w-full text-xs text-red-500">{{ $message }}</p>
+                        </div>
                         @enderror
+
+                        <div class="flex content-center items-center mb-6">
+                            <label class="block py-2 mr-6 font-bold text-gray-700 text-md"
+                                   for="title"
+                            >
+                                Tags
+                            </label>
+                        </div>
+                        <div class="col-span-7 w-4/5">
+                            <select class="p-2 w-full js-example-basic-single"
+                                    name="tags[]"
+                                    multiple="multiple"
+                                    style="width: 100%"
+                            >
+                                @forelse($clip->tags as $tag)
+                                    <option value="{{ $tag->name }}" selected="selected">{{ $tag->name }}</option>
+                                @empty
+                                    <option value="1"></option>
+                                @endforelse
+                            </select>
+                        </div>
+                        @error('tags')
+                        <div class="col-span-8">
+                            <p class="mt-2 w-full text-xs text-red-500">{{ $message }}</p>
+                        </div>
+                        @enderror
+
                     </div>
 
-                    <div class="mb-6">
-                        <label class="block mb-2 text-xs font-bold text-gray-700 uppercase"
-                               for="tags"
-                        >
-                            Tags
-                        </label>
-                        <select class="js-example-basic-single p-2 w-full"
-                                name="tags[]"
-                                multiple="multiple"
-                                style="width: 100%"
-                        >
-                            @forelse($clip->tags as $tag)
-                                <option value="{{ $tag->name }}" selected="selected">{{ $tag->name }}</option>
-                            @empty
-                                <option value="1"></option>
-                            @endforelse
-                        </select>
-                    </div>
-
-                    <button type=""
-                            class="ml-2 focus:outline-none text-white text-sm py-1.5 px-5 rounded-md bg-blue-500 hover:bg-blue-600 hover:shadow-lg"
-                    >Save</button>
+                    <button class="py-2 px-8 font-bold text-white bg-blue-500 rounded shadow hover:bg-blue-600 focus:shadow-outline focus:outline-none"
+                            type="submit"
+                            value="submit"
+                    >
+                        Save
+                    </button>
                 </form>
-                <div class=" w-1/5 h-full space-y-5">
+                <div class="space-y-5 w-1/5 h-full">
                     @if(! is_null($clip->series_id) )
                         @include('backend.clips.sidebar._series-options')
                     @endif
 
-                        @include('backend.clips.sidebar._upload-video')
-                    </div>
+                    @include('backend.clips.sidebar._upload-video')
+
+                    @if ($opencastConnectionCollection->isNotEmpty())
+                        @include('backend.clips.sidebar._ingest-video')
+                    @endif
+                </div>
             </div>
 
             <div class="flex pt-8 pb-2 font-semibold border-b border-black font-2xl">

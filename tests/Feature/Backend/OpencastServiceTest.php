@@ -15,6 +15,7 @@ class OpencastServiceTest extends TestCase {
     use RefreshDatabase, WithFaker, WorksWithOpencastClient;
 
     private OpencastService $opencastService;
+
     private MockHandler $mockHandler;
 
     protected function setUp(): void

@@ -5,10 +5,12 @@ namespace Tests\Unit;
 use App\Models\Clip;
 use App\Models\Series;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Facades\Tests\Setup\SeriesFactory;
+use Tests\Setup\WorksWithOpencastClient;
 use Tests\TestCase;
 
 class SeriesTest extends TestCase {
-    use RefreshDatabase;
+    use RefreshDatabase, WorksWithOpencastClient;
 
     protected Series $series;
 
@@ -66,5 +68,15 @@ class SeriesTest extends TestCase {
             'tags'        => [],
             'description' => 'clip description',
         ]));
+    }
+
+    /** @test */
+    public function it_updates_opencast_series_id(): void
+    {
+        $series = SeriesFactory::create();
+
+        $series->updateOpencastSeriesId($this->mockCreateSeriesResponse());
+
+        $this->assertNotNull($series->opencast_series_id);
     }
 }

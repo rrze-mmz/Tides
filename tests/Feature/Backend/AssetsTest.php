@@ -199,7 +199,7 @@ class AssetsTest extends TestCase
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 
         $this->post(route('admin.assets.store', $clip), [
-            'asset'                 => $file = FileFactory::videoFile(),
+            'asset'                 => FileFactory::videoFile(),
             'should_convert_to_hls' => 'on',
         ]);
 

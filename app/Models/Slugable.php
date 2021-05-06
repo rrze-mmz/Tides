@@ -10,7 +10,9 @@ trait Slugable
 {
     public function setSlugAttribute($value)
     {
-        if (self::whereSlug($slug = Str::of($value)->slug('-'))->exists()) {
+        if (self::whereSlug($slug = Str::of($value)->slug('-'))
+            ->Where('id','!=',self::getKey())->exists())
+        {
             $slug = $this->incrementSlug($slug);
         }
         $this->attributes['slug'] = $slug;

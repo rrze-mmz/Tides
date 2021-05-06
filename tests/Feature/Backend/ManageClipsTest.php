@@ -5,16 +5,21 @@ namespace Tests\Feature\Backend;
 
 use App\Models\Clip;
 use App\Models\Tag;
+use App\Services\OpencastService;
 use Facades\Tests\Setup\ClipFactory;
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Facades\Tests\Setup\SeriesFactory;
+use Tests\Setup\WorksWithOpencastClient;
 use Tests\TestCase;
 
 class ManageClipsTest extends TestCase
 {
 
-    use WithFaker, RefreshDatabase;
+    use WithFaker, RefreshDatabase, WorksWithOpencastClient;
+
+    private OpencastService $opencastService;
 
     /** @test */
     public function an_authenticated_user_can_see_the_create_clip_form_and_all_form_fields(): void
@@ -118,6 +123,7 @@ class ManageClipsTest extends TestCase
         $clip->tags()->sync(Tag::factory()->create());
 
         $this->patch($clip->adminPath(), [
+            'episode'    => '1',
             'title'       => 'changed',
             'description' => 'changed',
             'tags'        => []
@@ -136,6 +142,7 @@ class ManageClipsTest extends TestCase
         $clip->tags()->sync(Tag::factory()->create());
 
         $this->patch($clip->adminPath(), [
+            'episode'    => '1',
             'title'       => 'changed',
             'description' => 'changed',
             'tags'        => [$tag->name, 'another tag']
@@ -170,6 +177,7 @@ class ManageClipsTest extends TestCase
         $this->get($clip->path())->assertSee($clip->title);
 
         $this->patch($clip->adminPath(), [
+            'episode'    => '1',
             'title'       => 'changed',
             'description' => 'changed'
         ]);
@@ -177,6 +185,7 @@ class ManageClipsTest extends TestCase
         $clip = $clip->refresh();
 
         $this->assertDatabaseHas('clips', [
+            'episode'    => '1',
             'title'       => 'changed',
             'description' => 'changed'
         ]);
@@ -192,6 +201,7 @@ class ManageClipsTest extends TestCase
         $this->signIn();
 
         $attributes = [
+            'episode'    => '1',
             'title'       => 'changed',
             'description' => 'changed'
         ];
@@ -209,6 +219,7 @@ class ManageClipsTest extends TestCase
         $this->signInAdmin();
 
         $attributes = [
+            'episode'    => '1',
             'title'       => 'changed',
             'description' => 'changed'
         ];
@@ -219,17 +230,75 @@ class ManageClipsTest extends TestCase
     }
 
     /** @test */
-    public function updating_a_clip_will_update_clip_slug(): void
+    public function it_updates_clip_slug_if_title_is_changed(): void
     {
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 
-        $this->patch($clip->adminPath(), ['title' => 'Title changed']);
+        $this->patch($clip->adminPath(), ['episode'    => '1','title' => 'Title changed']);
 
         $clip->refresh();
 
-        $this->assertEquals('Title changed', $clip->title);
-
         $this->assertEquals('title-changed', $clip->slug);
+    }
+
+    /** @test */
+    public function it_does_not_update_clip_slug_if_title_is_not_changed()
+    {
+        $this->withoutExceptionHandling();
+
+        $this->signIn();
+
+        $this->post(route('clips.store'), ['episode'    => '1','title' => 'Test clip', 'description'=>'test']);
+
+        $clip = Clip::find(1);
+
+        $this->patch($clip->adminPath(), ['episode' => '2','title' => 'Test clip', 'description' => 'test']);
+
+        $clip->refresh();
+
+        $this->assertEquals('test-clip', $clip->slug);
+    }
+
+    /** @test */
+    public function it_has_an_upload_button_in_edit_form(): void
+    {
+        $clip = ClipFactory::ownedBy($this->signIn())->create();
+
+        $this->get(route('clips.edit', $clip))->assertSee('Upload');
+    }
+
+    /** @test */
+    public function it_has_a_convert_to_hls_option_in_edit_form(): void
+    {
+        $clip = ClipFactory::ownedBy($this->signIn())->create();
+
+        $this->get(route('clips.edit', $clip))->assertSee('Convert to HLS?');
+    }
+
+    /** @test */
+    public function it_has_an_ingest_to_opencast_button_if_opencast_server_exists(): void
+    {
+        $mockHandler = $this->swapOpencastClient();
+
+        $this->opencastService  = app(OpencastService::class);
+
+        $mockHandler->append($this->mockHealthResponse());
+
+        $this->get(route('clips.edit',  ClipFactory::ownedBy($this->signIn())->create()))
+            ->assertSee('Ingest to Opencast');
+    }
+
+    /** @test */
+    public function it_hides_opencast_button_if_opencast_server_does_not_exists(): void
+    {
+        $mockHandler = $this->swapOpencastClient();
+
+        $this->opencastService  = app(OpencastService::class);
+
+        $mockHandler->append(new Response());
+
+        $this->get(route('clips.edit', ClipFactory::ownedBy($this->signIn())->create()))
+            ->assertDontSee('Ingest to Opencast');
     }
 
     /** @test */
@@ -255,7 +324,6 @@ class ManageClipsTest extends TestCase
 
         $this->assertDatabaseMissing('clips', $clip->only('id'));
     }
-
 
     /** @test */
     public function an_authenticated_user_can_delete_owned_clip(): void

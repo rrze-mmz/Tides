@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateSeriesRequest;
 use App\Models\Series;
 use App\Services\OpencastService;
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -15,6 +16,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class SeriesController extends Controller {
+
+
     /**
      * @return View
      */
@@ -35,24 +38,16 @@ class SeriesController extends Controller {
 
     /**
      * @param StoreSeriesRequest $request
+     * @param OpencastService $opencastService
      * @return RedirectResponse
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function store(StoreSeriesRequest $request, OpencastService $opencastService): RedirectResponse
     {
         $series = auth()->user()->series()->create($request->validated());
 
-        try{
-            $response = $opencastService->createSeries($series);
+        $opencastSeriesId = $opencastService->createSeries($series);
 
-            $series->opencast_series_id = Str::afterLast($response->getHeaders()['Location'][0], 'api/series/');
-
-            $series->update();
-        } catch (GuzzleException $exception)
-        {
-            Log::error($exception);
-        }
-
+        $series->updateOpencastSeriesId($opencastSeriesId);
 
         return redirect($series->adminPath());
     }
@@ -72,10 +67,18 @@ class SeriesController extends Controller {
     /**
      * @param Series $series
      * @param UpdateSeriesRequest $request
+     * @param OpencastService $opencastService
      * @return RedirectResponse
      */
-    public function update(Series $series, UpdateSeriesRequest $request): RedirectResponse
+    public function update(Series $series, UpdateSeriesRequest $request, OpencastService $opencastService): RedirectResponse
     {
+        if(is_null($series->opencast_series_id))
+        {
+            $opencastSeriesId = $opencastService->createSeries($series);
+
+            $series->updateOpencastSeriesId($opencastSeriesId);
+        }
+
         $series->update($request->validated());
 
         return redirect($series->adminPath());

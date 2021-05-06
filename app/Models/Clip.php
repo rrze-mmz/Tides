@@ -17,6 +17,7 @@ class Clip extends Model {
     use HasFactory, Slugable;
 
     protected $guarded = [];
+
     protected $attributes = [
         'episode' => '1'
     ];

@@ -12,8 +12,6 @@ use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\SearchController;
 use App\Http\Controllers\Frontend\ShowClipsController;
 use App\Http\Controllers\Frontend\ShowSeriesController;
-use App\Models\Series;
-use App\Services\OpencastService;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -79,7 +77,9 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::post('/clips/{clip}/assets', [AssetsController::class, 'store'])->name('admin.assets.store');
     Route::delete('assets/{asset}', [AssetsController::class, 'destroy'])->name('assets.destroy');
 
-    Route::get('/opencast', OpencastController::class)->name('opencast');
+    Route::get('/opencast', [OpencastController::class, 'status'])->name('opencast.status');
+    Route::post('clips/{clip}/ingestMediaPackage', [OpencastController::class, 'ingestMediaPackage'])
+        ->name('opencast.ingestMediaPackage');
 });
 
 Auth::routes();

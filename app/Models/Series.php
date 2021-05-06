@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 class Series extends Model {
 
@@ -45,10 +47,10 @@ class Series extends Model {
     /**
      * Add a clip on a series
      *
-     * @param array $attributes
+     * @param array $validated
      * @return Model
      */
-    public function addClip($validated = []): Model
+    public function addClip(array $validated = []): Model
     {
         $validated = Arr::add($validated, 'owner_id', auth()->user()->id);
 
@@ -57,5 +59,19 @@ class Series extends Model {
         $clip->addTags(collect($validated['tags']));
 
         return $clip;
+    }
+
+    /**
+     * Updates opencast series id
+     * @param Response $response
+     */
+    public function updateOpencastSeriesId(Response $response): void
+    {
+        if(!empty($response->getHeaders()))
+        {
+            $this->opencast_series_id = Str::afterLast($response->getHeaders()['Location'][0], 'api/series/');
+
+            $this->update();
+        }
     }
 }

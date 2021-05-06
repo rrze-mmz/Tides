@@ -4,6 +4,8 @@ namespace Tests\Feature\Backend;
 
 use App\Models\Series;
 use App\Services\OpencastService;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Facades\Tests\Setup\SeriesFactory;
@@ -15,6 +17,17 @@ class ManageSeriesTest extends TestCase
     use RefreshDatabase, WithFaker, WorksWithOpencastClient;
 
     private OpencastService $opencastService;
+
+    private MockHandler $mockHandler;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->mockHandler = $this->swapOpencastClient();
+
+        $this->opencastService = app(OpencastService::class);
+    }
 
     /** @test */
     public function an_authenticated_user_can_see_the_create_series_form_and_all_form_fields(): void
@@ -43,23 +56,22 @@ class ManageSeriesTest extends TestCase
     {
         $this->signIn();
 
-        $this->get('/admin/series/create')->assertStatus(200);
+        $this->post(route('series.store'),
+                [
+                'title' => 'Test title',
+                'description' => 'Test description'
+                ]
+        );
 
-        $this->followingRedirects()
-            ->post(route('series.store'), $attributes = Series::factory()->raw())
-            ->assertSee($attributes['title']);
+        $this->assertDatabaseHas('series', ['title'=>'Test title']);
     }
 
     /** @test */
-    public function it_creates_an_opencast_series_when_new_series_is_created()
+    public function it_creates_an_opencast_series_when_new_series_is_created(): void
     {
         $this->signIn();
 
-        $mockHandler = $this->swapOpencastClient();
-
-        $this->opencastService  = app(OpencastService::class);
-
-        $mockHandler->append($this->mockCreateSeriesResponse());
+        $this->mockHandler->append($this->mockCreateSeriesResponse());
 
         $this->post(route('series.store'), [
             'title' => 'Series title',
@@ -151,9 +163,31 @@ class ManageSeriesTest extends TestCase
     /** @test */
     public function a_series_owner_can_update_series(): void
     {
+        $this->mockHandler->append(new Response());
         $series = SeriesFactory::ownedBy($this->signIn())->create();
 
-        $this->get($series->path())->assertSee($series->title);
+        $this->patch($series->adminPath(),[
+            'title' => 'changed',
+            'description'   => 'changed'
+        ]);
+
+        $series->refresh();
+
+        $this->assertDatabaseHas('series', [
+            'title' => 'changed',
+            'description' => 'changed',
+        ]);
+
+        $this->get($series->adminPath())->assertSee('changed');
+    }
+
+    /** @test */
+    public function it_updates_opencast_series_id_if_is_null()
+    {
+        $series = SeriesFactory::ownedBy($this->signIn())->create();
+
+        //pass an empty opencast response
+        $this->mockHandler->append($this->mockCreateSeriesResponse());
 
         $this->patch($series->adminPath(),[
             'title' => 'changed',
@@ -162,12 +196,7 @@ class ManageSeriesTest extends TestCase
 
         $series = $series->refresh();
 
-        $this->assertDatabaseHas('series', [
-            'title' => 'changed',
-            'description' => 'changed',
-        ]);
-
-        $this->get($series->adminPath())->assertSee('changed');
+        $this->assertNotNull($series->opencast_series_id);
     }
 
     /** @test */
@@ -189,6 +218,9 @@ class ManageSeriesTest extends TestCase
     public function an_admin_user_can_update_a_not_owned_series(): void
     {
         $series = SeriesFactory::create();
+
+        //pass an empty opencast response
+        $this->mockHandler->append($this->mockCreateSeriesResponse());
 
         $this->signInAdmin();
 

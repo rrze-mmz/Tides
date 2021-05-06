@@ -39,7 +39,8 @@ class UpdateClipRequest extends FormRequest
             'title'       => 'required',
             'description' => 'min:3|max:255',
             'slug'        => 'required',
-            'tags'        => 'array'
+            'tags'        => 'array',
+            'episode'     => 'required|integer'
         ];
     }
 }

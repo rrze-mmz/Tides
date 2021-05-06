@@ -37,6 +37,7 @@ class UpdateSeriesRequest extends FormRequest
             'title'       => 'required',
             'description' => 'min:3|max:255',
             'slug'        => 'required',
+            'opencast_series_id' => 'null|uuid'
         ];
     }
 }

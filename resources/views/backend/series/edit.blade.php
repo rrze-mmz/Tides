@@ -52,6 +52,26 @@
                     @enderror
                 </div>
 
+                <div class="mb-6">
+                    <label class="block mb-2 text-xs font-bold text-gray-700 uppercase"
+                           for="title"
+                    >
+                        Opencast Series ID
+                    </label>
+
+                    <input class="p-1 w-full border border-gray-400"
+                           type="text"
+                           name="title"
+                           id="title"
+                           value="{{ $series->opencast_series_id }}"
+                           disabled
+                    >
+
+                    @error('Title')
+                    <p class="mt-2 text-xs text-red-500">{{ $message }}</p>
+                    @enderror
+                </div>
+
                 <button type="submit"
                         class="ml-2 focus:outline-none text-white text-sm py-1.5 px-5 rounded-md bg-blue-500 hover:bg-blue-600 hover:shadow-lg"
                 >Update a Series

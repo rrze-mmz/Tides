@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreClipRequest;
 use App\Http\Requests\UpdateClipRequest;
 use App\Models\Clip;
+use App\Services\OpencastService;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Arr;
@@ -58,11 +59,16 @@ class ClipsController extends Controller
      * @return View
      * @throws AuthorizationException
      */
-    public function edit(Clip $clip): View
+    public function edit(Clip $clip, OpencastService $opencastService): View
     {
         $this->authorize('edit', $clip);
 
-        return view('backend.clips.edit', compact('clip'));
+        \Debugbar::info($opencastConnectionCollection = $opencastService->getHealth());
+
+        return view('backend.clips.edit', [
+            'clip'  => $clip,
+            'opencastConnectionCollection'  => $opencastConnectionCollection,
+        ]);
     }
 
     /**
