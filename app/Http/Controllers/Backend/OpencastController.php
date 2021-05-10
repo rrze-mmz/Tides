@@ -36,7 +36,7 @@ class OpencastController extends Controller
         ]);
 
         //if clip has no series or series is null return without pushing to opencast
-        if(is_null($clip->series()->first()?->opencast_series_id))
+        if(is_null($clip->series->opencast_series_id))
         {
             return redirect(route('clips.edit', $clip));
         }

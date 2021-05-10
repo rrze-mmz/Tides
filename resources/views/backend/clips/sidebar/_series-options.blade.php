@@ -1,6 +1,6 @@
 <div class="w-full py-4 px-4 mx-4 h-full bg-white rounded border">
-    <header class="items-center pb-2 mb-2 font-semibold text-center border-b"> Belongs to:  {{ $clip->series()->first()->title  }} </header>
-    <form action="{{ $clip->series()->first()->adminPath() }}"
+    <header class="items-center pb-2 mb-2 font-semibold text-center border-b"> Belongs to:  {{ $clip->series->title  }} </header>
+    <form action="{{ $clip->series->adminPath() }}"
           enctype="multipart/form-data"
           method="GET"
           class="flex flex-col"

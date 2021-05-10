@@ -147,7 +147,7 @@ class OpencastService
                 ],
                 [
                     'name'  => 'isPartOf',
-                    'contents'  => $clip->series()->first()->opencast_series_id
+                    'contents'  => $clip->series->opencast_series_id
                 ],
                 [
                     'name'  =>  'file',

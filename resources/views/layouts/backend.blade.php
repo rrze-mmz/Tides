@@ -52,7 +52,7 @@
         </nav>
     </header>
     <main class="pt-12 mx-auto lg:flex">
-        <div class="justify-center content-center h-screen  bg-gray-800 w-1/7">
+        <div class="justify-center content-center min-h-screen max-h-full  bg-gray-800 w-1/7">
             @include('backend.dashboard._sidebar-navigation')
         </div>
         @yield('content')

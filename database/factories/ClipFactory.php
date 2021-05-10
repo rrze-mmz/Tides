@@ -23,8 +23,8 @@ class ClipFactory extends Factory
     public function definition()
     {
         return [
-            'title' => $title = $this->faker->sentence,
-            'description' => $this->faker->paragraph,
+            'title' => $title = $this->faker->sentence(),
+            'description' => $this->faker->paragraph(),
             'slug'  => $title,
             'owner_id' => User::factory()->create()->id,
             'posterImage' => null,

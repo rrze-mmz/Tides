@@ -16,7 +16,6 @@ use Illuminate\View\View;
 class ClipsController extends Controller
 {
 
-
     /**
      * @return View
      */
@@ -25,7 +24,9 @@ class ClipsController extends Controller
         return view(
             'backend.clips.index',
             [
-                'clips' => auth()->user()->clips()->orderBy('title')->limit(10)->get(),
+                'clips' => (auth()->user()->isAdmin())
+                    ? Clip::orderBy('title')->paginate(20)
+                    : auth()->user()->series()->orderBy('updated_at')->limit(20)->get(),
             ]
         );
 
@@ -72,8 +73,6 @@ class ClipsController extends Controller
     public function edit(Clip $clip, OpencastService $opencastService): View
     {
         $this->authorize('edit', $clip);
-
-        \Debugbar::info($clip->series()->first()?->opencast_series_id);
 
         return view(
             'backend.clips.edit',

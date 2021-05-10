@@ -7,13 +7,10 @@ use App\Http\Requests\StoreSeriesRequest;
 use App\Http\Requests\UpdateSeriesRequest;
 use App\Models\Series;
 use App\Services\OpencastService;
-use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\Psr7\Response;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
+
 
 class SeriesController extends Controller
 {
@@ -25,7 +22,10 @@ class SeriesController extends Controller
     public function index(): View
     {
         return view('backend.series.index', [
-            'series' => auth()->user()->series()->orderByDesc('updated_at')->limit(20)->get()
+            'series' =>
+                (auth()->user()->isAdmin())
+                    ? Series::orderByDesc('updated_at')->paginate(20)
+                    : auth()->user()->series()->orderBy('updated_at')->limit(20)->get(),
         ]);
     }
 

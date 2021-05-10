@@ -23,7 +23,7 @@ class SeriesFactory extends Factory
     public function definition()
     {
         return [
-            'title' => $title = $this->faker->sentence,
+            'title' => $title = $this->faker->sentence(),
             'description'   => $this->faker->paragraph(50),
             'slug'  => $title,
             'owner_id'  => User::factory()->create()->id,
