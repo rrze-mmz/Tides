@@ -55,29 +55,52 @@ trait WorksWithOpencastClient {
                 'startPage'  => 0,
                 'count'      => 20,
                 'searchTime' => 2,
-                'totalCount' => 1,
-                'workflow'  =>
+                'totalCount' => 2,
+                'workflow'   =>
                     [
-                    'id'           => 2006754,
-                    'state'        => 'RUNNING',
-                    'title'        => 'Transcode after upload',
-                    'mediapackage' => [
-                        'id'     => Str::uuid(),
-                        'title'  => $this->faker->sentence,
-                        'series' => $seriesId = Str::uuid(),
-                    ],
-                    'operations'   => [
-                        'operation' =>
-                            [
-                                'id'    => 'ingest-download',
-                                'state' => 'SUCCEEDED'
-                            ],
                         [
-                            'id'    => 'encode',
-                            'state' => 'RUNNING'
-                        ]
+                            'id'           => 2006754,
+                            'state'        => 'RUNNING',
+                            'title'        => 'Transcode after upload',
+                            'mediapackage' => [
+                                'id'     => Str::uuid(),
+                                'title'  => $this->faker->sentence,
+                                'series' => $seriesId = Str::uuid(),
+                            ],
+                            'operations'   => [
+                                'operation' =>
+                                    [
+                                        'id'    => 'ingest-download',
+                                        'state' => 'SUCCEEDED'
+                                    ],
+                                [
+                                    'id'    => 'encode',
+                                    'state' => 'RUNNING'
+                                ]
+                            ]
+                        ],
+                        [
+                            'id'           => 2006752,
+                            'state'        => 'RUNNING',
+                            'title'        => 'Transcode after upload',
+                            'mediapackage' => [
+                                'id'     => Str::uuid(),
+                                'title'  => $this->faker->sentence,
+                                'series' => $seriesId ,
+                            ],
+                            'operations'   => [
+                                'operation' =>
+                                    [
+                                        'id'    => 'ingest-download',
+                                        'state' => 'SUCCEEDED'
+                                    ],
+                                [
+                                    'id'    => 'encode',
+                                    'state' => 'RUNNING'
+                                ]
+                            ]
+                        ],
                     ]
-                    ],
             ]
         ]));
     }

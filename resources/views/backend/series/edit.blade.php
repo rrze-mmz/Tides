@@ -121,9 +121,9 @@
             Opencast running events
         </div>
             <ul>
-                @foreach($opencastSeriesRunningWorkflows as $workflow)
+                @foreach($opencastSeriesRunningWorkflows['workflows']['workflow'] as $workflow)
                     <li>
-                        {{ $workflow['workflow']['mediapackage']['title'] }}
+                        {{ $workflow['mediapackage']['title'] }}
                     </li>
                 @endforeach
             </ul>

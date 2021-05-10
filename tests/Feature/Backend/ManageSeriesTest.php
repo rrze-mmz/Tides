@@ -139,7 +139,7 @@ class ManageSeriesTest extends TestCase
     }
 
     /** @test */
-    public function edit_series_should_display_opencast_running_events_if_any()
+    public function edit_series_should_display_opencast_running_events_if_any():void
     {
         $series = SeriesFactory::ownedBy($this->signIn())->create();
 
@@ -151,7 +151,7 @@ class ManageSeriesTest extends TestCase
         $opencastViewData = collect(json_decode($mockData->getBody(), true));
 
         $this->get(route('series.edit',$series))->assertViewHas(['opencastSeriesRunningWorkflows'])
-            ->assertSee($opencastViewData['workflows']['workflow']['mediapackage']['title']);
+            ->assertSee($opencastViewData['workflows']['workflow'][0]['mediapackage']['title']);
     }
 
     /** @test */
