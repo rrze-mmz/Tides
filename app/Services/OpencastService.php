@@ -40,6 +40,31 @@ class OpencastService
     }
 
     /**
+     *  Return opencast running workflows for a series
+     * @param Series $series
+     * @return Collection
+     */
+    public function getSeriesRunningWorkflows(Series $series): Collection
+    {
+//        workflow/instances.json?state=running&seriesId=" . $seriesId . "&count=20&sort=DATE_CREATED_DESC
+        try {
+            $response = $this->client->get('workflow/instances.json', [
+                'query' => [
+                    'state' => "running",
+                    'seriesId'  => $series->opencast_series_id,
+                    'count' =>  20,
+                    'sort'  => 'DATE_CREATED_DESC'
+                ]
+            ]);
+        } catch (GuzzleException $exception) {
+            Log::error($exception);
+            $response = new Response();
+        }
+
+        return collect(json_decode((string) $response->getBody(), true));
+    }
+
+    /**
      * @param Series $series
      * @return ResponseInterface
      */

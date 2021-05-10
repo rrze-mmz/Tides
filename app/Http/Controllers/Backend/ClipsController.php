@@ -65,8 +65,7 @@ class ClipsController extends Controller
     /**
      * Edit form for a single clip
      *
-     * @param Clip $clip
-     * @param OpencastService $opencastService
+     * @param  Clip $clip
      * @return View
      * @throws AuthorizationException
      */
@@ -74,7 +73,7 @@ class ClipsController extends Controller
     {
         $this->authorize('edit', $clip);
 
-        \Debugbar::info($clip->series()->first()->opencast_series_id);
+        \Debugbar::info($clip->series()->first()?->opencast_series_id);
 
         return view(
             'backend.clips.edit',

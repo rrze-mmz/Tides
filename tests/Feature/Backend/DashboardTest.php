@@ -102,4 +102,22 @@ class DashboardTest extends TestCase
 
         $this->get(route('dashboard'))->assertSee('test.pdf');
     }
+
+    /** @test */
+    public function it_show_sidebar_menu_items_for_admins()
+    {
+        $this->signInAdmin();
+
+        $this->get(route('dashboard'))->assertSee('Opencast')
+        ->assertSee('Users');
+    }
+
+    /** @test */
+    public function it_hides_sidebar_menu_items_for_logged_in_users()
+    {
+        $this->signIn();
+
+        $this->get(route('dashboard'))->assertDontSee('Opencast')
+        ->assertDontSee('Users');
+    }
 }

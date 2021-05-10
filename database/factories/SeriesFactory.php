@@ -27,6 +27,7 @@ class SeriesFactory extends Factory
             'description'   => $this->faker->paragraph(50),
             'slug'  => $title,
             'owner_id'  => User::factory()->create()->id,
+            'opencast_series_id' => null,
         ];
     }
 }

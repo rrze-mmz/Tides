@@ -17,7 +17,7 @@
 
                     <div class="flex content-center items-center">
                         <label class="block py-2 mr-6 font-bold text-gray-700 text-md"
-                               for="episode"
+                               for="title"
                         >
                             Title
                         </label>
@@ -25,8 +25,8 @@
                     <div class="col-span-7 w-4/5">
                         <input class="py-2 px-4 w-full leading-tight text-gray-700 bg-white rounded border-2 border-gray-200 appearance-none focus:outline-none focus:bg-white focus:border-blue-500"
                                type="text"
-                               name="episode"
-                               id="episode"
+                               name="title"
+                               id="title"
                                value="{{ $series->title }}"
                                required
                         >
@@ -39,7 +39,7 @@
 
                     <div class="flex content-center items-center mb-6">
                         <label class="block py-2 mr-6 font-bold text-gray-700 text-md"
-                               for="title"
+                               for="description"
                         >
                             Description
                         </label>
@@ -59,7 +59,7 @@
 
                     <div class="flex content-center items-center">
                         <label class="block py-2 mr-6 font-bold text-gray-700 text-md"
-                               for="title"
+                               for="opencast_series_id"
                         >
                             Opencast Series ID
                         </label>
@@ -67,8 +67,8 @@
                     <div class="col-span-7 w-4/5">
                         <input class="py-2 px-4 w-full leading-tight text-gray-700 bg-white rounded border-2 border-gray-200 appearance-none focus:outline-none focus:bg-white focus:border-blue-500"
                                type="text"
-                               name="title"
-                               id="title"
+                               name="opencast_series_id"
+                               id="opencast_series_id""
                                disabled
                                value="{{ $series->opencast_series_id }}"
                                required
@@ -116,8 +116,21 @@
                 </button>
             </form>
         </div>
-
+        @if(isset($opencastSeriesRunningWorkflows['workflows']) && $opencastSeriesRunningWorkflows['workflows']['totalCount'] > 0)
+        <div class="flex pt-8 pb-2 font-semibold border-b border-black font-2xl">
+            Opencast running events
+        </div>
+            <ul>
+                @foreach($opencastSeriesRunningWorkflows as $workflow)
+                    <li>
+                        {{ $workflow['workflow']['mediapackage']['title'] }}
+                    </li>
+                @endforeach
+            </ul>
+        @endif
         @include('backend.clips.list')
+
+
 
     </div>
 @endsection

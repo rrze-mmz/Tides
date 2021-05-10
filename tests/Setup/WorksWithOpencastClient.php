@@ -8,9 +8,13 @@ use App\Http\Clients\OpencastClient;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Str;
 
+
 trait WorksWithOpencastClient {
+    use WithFaker;
+
     public function swapOpencastClient(): MockHandler
     {
         $mockHandler = new MockHandler();
@@ -38,9 +42,44 @@ trait WorksWithOpencastClient {
     public function mockCreateSeriesResponse(): Response
     {
         return new Response(201, [
-                'Location' => [
-                    '0' => 'http://localhost:8080/api/series/' . Str::uuid()
-                ]
+            'Location' => [
+                '0' => 'http://localhost:8080/api/series/' . Str::uuid()
+            ]
         ]);
     }
+
+    public function mockSeriesRunningWorkflowsResponse(): Response
+    {
+        return new Response(201, [], json_encode([
+            'workflows' => [
+                'startPage'  => 0,
+                'count'      => 20,
+                'searchTime' => 2,
+                'totalCount' => 1,
+                'workflow'  =>
+                    [
+                    'id'           => 2006754,
+                    'state'        => 'RUNNING',
+                    'title'        => 'Transcode after upload',
+                    'mediapackage' => [
+                        'id'     => Str::uuid(),
+                        'title'  => $this->faker->sentence,
+                        'series' => $seriesId = Str::uuid(),
+                    ],
+                    'operations'   => [
+                        'operation' =>
+                            [
+                                'id'    => 'ingest-download',
+                                'state' => 'SUCCEEDED'
+                            ],
+                        [
+                            'id'    => 'encode',
+                            'state' => 'RUNNING'
+                        ]
+                    ]
+                    ],
+            ]
+        ]));
+    }
 }
+

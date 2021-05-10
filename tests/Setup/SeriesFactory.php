@@ -36,7 +36,7 @@ class SeriesFactory
         if($this->clipsCount > 0){
             Clip::factory($this->clipsCount)->create([
                 'series_id' => $series->id,
-                'owner_id'  => $user
+                'owner_id'  => $user,
             ]);
         }
 

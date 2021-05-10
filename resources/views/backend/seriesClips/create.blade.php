@@ -12,6 +12,25 @@
                 @csrf
                 <div class="mb-6">
                     <label class="block mb-2 text-xs font-bold text-gray-700 uppercase"
+                           for="episode"
+                    >
+                        Episode
+                    </label>
+
+                    <input class="p-2 w-full border border-gray-400"
+                           type="number"
+                           name="episode"
+                           id="episode"
+                           value="{{ $series->clips()->count()+1 }}"
+                           required
+                    >
+
+                    @error('epidisode')
+                    <p class="mt-2 text-xs text-red-500">{{ $message }}</p>
+                    @enderror
+                </div>
+                <div class="mb-6">
+                    <label class="block mb-2 text-xs font-bold text-gray-700 uppercase"
                            for="title"
                     >
                         Title
@@ -25,7 +44,7 @@
                            required
                     >
 
-                    @error('Title')
+                    @error('title')
                     <p class="mt-2 text-xs text-red-500">{{ $message }}</p>
                     @enderror
                 </div>

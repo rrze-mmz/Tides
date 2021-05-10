@@ -58,11 +58,16 @@ class SeriesController extends Controller
      * @return View
      * @throws AuthorizationException
      */
-    public function edit(Series $series): View
+    public function edit(Series $series, OpencastService $opencastService): View
     {
         $this->authorize('edit', $series);
 
-        return view('backend.series.edit', compact('series'));
+        \Debugbar::info($workflows =$opencastService->getSeriesRunningWorkflows($series) );
+
+        return view('backend.series.edit',[
+            'series'    =>  $series,
+            'opencastSeriesRunningWorkflows'    =>  $workflows
+        ]);
     }
 
     /**
@@ -75,7 +80,7 @@ class SeriesController extends Controller
         Series $series,
         UpdateSeriesRequest $request,
         OpencastService $opencastService
-    ): RedirectResponse {
+    ): RedirectResponse{
         if (is_null($series->opencast_series_id)) {
             $opencastSeriesId = $opencastService->createSeries($series);
 

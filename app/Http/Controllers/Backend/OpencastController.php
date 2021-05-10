@@ -35,6 +35,12 @@ class OpencastController extends Controller
             'videoFile'  => 'required|file|mimetypes:video/mp4,video/mpeg,video/x-matroska'
         ]);
 
+        //if clip has no series or series is null return without pushing to opencast
+        if(is_null($clip->series()->first()?->opencast_series_id))
+        {
+            return redirect(route('clips.edit', $clip));
+        }
+
         $videoFile = $validated['videoFile'];
 
         $storedFile = $videoFile->storeAs(getClipStoragePath($clip), $videoFile->getClientOriginalName(), 'videos');

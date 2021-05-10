@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreClipRequest;
 use App\Models\Series;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Arr;
+use Illuminate\Http\RedirectResponse;
 
 class SeriesClipsController extends Controller
 {
@@ -30,12 +30,12 @@ class SeriesClipsController extends Controller
      *
      * @param Series $series
      * @param StoreClipRequest $request
-     * @return View
+     * @return RedirectResponse
      */
-    public function store(Series $series, StoreClipRequest $request): View
+    public function store(Series $series, StoreClipRequest $request): RedirectResponse
     {
         $series->addClip($request->validated());
 
-        return view('backend.series.edit', compact('series'));
+        return redirect(route('series.edit', $series));
     }
 }
