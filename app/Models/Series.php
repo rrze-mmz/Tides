@@ -10,7 +10,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
-class Series extends Model {
+class Series extends Model
+{
 
     use HasFactory, Slugable;
 
@@ -67,8 +68,7 @@ class Series extends Model {
      */
     public function updateOpencastSeriesId(Response $response): void
     {
-        if(!empty($response->getHeaders()))
-        {
+        if (!empty($response->getHeaders())) {
             $this->opencast_series_id = Str::afterLast($response->getHeaders()['Location'][0], 'api/series/');
 
             $this->update();

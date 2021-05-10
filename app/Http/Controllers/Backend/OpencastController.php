@@ -17,14 +17,14 @@ class OpencastController extends Controller
      * @param OpencastService $opencastService
      * @return View
      */
-    public function status(OpencastService $opencastService ): View
+    public function status(OpencastService $opencastService): View
     {
         $status = $opencastService->getHealth();
         return view('backend.opencast.status', compact('status'));
     }
 
     /**
-     * Indest a video file to Opencast
+     * Ingest a video file to Opencast
      * @param Clip $clip
      * @param Request $request
      * @return RedirectResponse

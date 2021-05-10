@@ -1,29 +1,30 @@
-<aside class="my-3 mx-5 text-white">
+<aside class="my-4 mx-6 text-white">
     <ul>
-        <li>
+        <li class="w-full">
             <a
-                href="/admin/dashboard"
-                class="block py-2 mb-4 text-lg font-bold border-t-2 border-b-2 border-white hover:text-gray-200"
+                href="{{route('dashboard')}}"
+                class="block  py-2 mb-4 text-lg font-bold {{ setActiveLink(route('dashboard')) }}  border-white hover:text-gray-200"
             >
                 Dashboard
             </a>
         </li>
         <li>
             <a
-                href="/admin/series/"
-                class="block mb-4 text-lg font-bold hover:text-gray-200"
+                href="{{route('series.index')}}"
+                class="block mb-4 text-lg font-bold  {{ setActiveLink(route('series.index')) }} hover:text-gray-200"
             >
                 Series
             </a>
         </li>
         <li>
             <a
-                href="/admin/clips/"
-                class="block mb-4 text-lg font-bold hover:text-gray-200"
+                href="{{route('clips.index')}}"
+                class="block mb-4 text-lg {{ setActiveLink(route('clips.index')) }}  font-bold hover:text-gray-200"
             >
                 Clips
             </a>
         </li>
+        @if(auth()->user()->isAdmin())
         <li>
             <a
                 href="/"
@@ -34,8 +35,8 @@
         </li>
         <li>
             <a
-                href="/admin/opencast"
-                class="block mb-4 text-lg font-bold hover:text-gray-200"
+                href="{{route('opencast.status')}}"
+                class="block mb-4 text-lg {{ setActiveLink(route('opencast.status')) }} font-bold hover:text-gray-200"
             >
                 Opencast
             </a>
@@ -48,6 +49,6 @@
                 Server
             </a>
         </li>
-
+        @endif
     </ul>
 </aside>

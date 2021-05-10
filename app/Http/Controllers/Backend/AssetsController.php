@@ -60,8 +60,7 @@ class AssetsController extends Controller
             Log::error($e);
         }
 
-        if ($request->exists('should_convert_to_hls') && $request->should_convert_to_hls ==='on')
-        {
+        if ($request->exists('should_convert_to_hls') && $request->should_convert_to_hls ==='on') {
             $this->dispatch(new ConvertVideoForStreaming($asset));
         }
 

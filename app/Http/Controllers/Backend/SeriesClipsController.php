@@ -8,7 +8,8 @@ use App\Models\Series;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Arr;
 
-class SeriesClipsController extends Controller {
+class SeriesClipsController extends Controller
+{
 
     /**
      *  Show clip form for a series

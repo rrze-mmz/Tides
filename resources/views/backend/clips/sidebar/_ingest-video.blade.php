@@ -8,10 +8,10 @@
         @csrf
         <input type="file" id="videoFile" name="videoFile">
         <p class="pt-2 text-sm italic">
-            * will start an Opencast workflow and you Video will be transcoded directly in Opencast server
+            * will start an Opencast workflow and your video will be transcoded directly to Opencast server
         </p>
         <button type="submit"
-                class=" mt-3 ml-2 focus:outline-none text-white text-sm py-1.5 px-5 rounded-md bg-green-500 hover:bg-green-600 hover:shadow-lg"
+                class="mt-2 py-2 px-8 text-white bg-green-500 rounded shadow hover:bg-green-600 focus:shadow-outline focus:outline-none"
         >Upload
         </button>
         @error('videoFile')

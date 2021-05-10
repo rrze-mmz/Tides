@@ -14,7 +14,7 @@ class OpencastServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(OpencastClient::class, function(){
+        $this->app->singleton(OpencastClient::class, function () {
             $config = $this->app->get('config')['opencast'];
             return new OpencastClient([
                 'base_uri'  => $config['base_uri'],

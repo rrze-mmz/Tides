@@ -15,7 +15,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
-class SeriesController extends Controller {
+class SeriesController extends Controller
+{
 
 
     /**
@@ -70,10 +71,12 @@ class SeriesController extends Controller {
      * @param OpencastService $opencastService
      * @return RedirectResponse
      */
-    public function update(Series $series, UpdateSeriesRequest $request, OpencastService $opencastService): RedirectResponse
-    {
-        if(is_null($series->opencast_series_id))
-        {
+    public function update(
+        Series $series,
+        UpdateSeriesRequest $request,
+        OpencastService $opencastService
+    ): RedirectResponse {
+        if (is_null($series->opencast_series_id)) {
             $opencastSeriesId = $opencastService->createSeries($series);
 
             $series->updateOpencastSeriesId($opencastSeriesId);

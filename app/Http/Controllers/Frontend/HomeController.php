@@ -8,7 +8,8 @@ use App\Models\Clip;
 use App\Models\Series;
 use Illuminate\View\View;
 
-class HomeController extends Controller {
+class HomeController extends Controller
+{
     /**
      * Fetch clips for the home page
      *

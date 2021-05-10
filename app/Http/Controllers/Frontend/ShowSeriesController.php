@@ -18,6 +18,6 @@ class ShowSeriesController extends Controller
      */
     public function show(Series $series): View
     {
-        return view('frontend.series.show',compact('series'));
+        return view('frontend.series.show', compact('series'));
     }
 }

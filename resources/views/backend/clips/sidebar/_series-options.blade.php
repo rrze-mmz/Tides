@@ -6,7 +6,7 @@
           class="flex flex-col"
     >
         <button type="submit"
-                class=" mt-3 ml-2 focus:outline-none text-white text-sm py-1.5 px-5 rounded-md bg-green-500 hover:bg-green-600 hover:shadow-lg"
-        >Go back to series</button>
+                class="mt-2 py-2 px-8 text-white bg-green-500 rounded shadow hover:bg-green-600 focus:shadow-outline focus:outline-none"
+        >View series</button>
     </form>
 </div>

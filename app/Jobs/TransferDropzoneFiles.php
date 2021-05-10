@@ -27,7 +27,6 @@ class TransferDropzoneFiles implements ShouldQueue
      */
     public function __construct(protected Clip $clip, protected Collection $files)
     {
-
     }
 
     /**
@@ -40,8 +39,10 @@ class TransferDropzoneFiles implements ShouldQueue
         $clipStoragePath = getClipStoragePath($this->clip);
 
         $this->files->each(function ($file, $key) use ($clipStoragePath) {
-            Storage::disk('videos')->writeStream($clipStoragePath.'/'.$file['name'],
-                Storage::disk('video_dropzone')->readStream($file['name']));
+            Storage::disk('videos')->writeStream(
+                $clipStoragePath.'/'.$file['name'],
+                Storage::disk('video_dropzone')->readStream($file['name'])
+            );
 
             $storedFile = $clipStoragePath.'/'.$file['name'];
             $ffmpeg = FFMpeg::fromDisk('videos')->open($storedFile);
@@ -64,7 +65,6 @@ class TransferDropzoneFiles implements ShouldQueue
                     ->save($this->clip->id.'_poster.png');
 
                 $this->clip->updatePosterImage();
-
         });
 //        Mail::to($this->user->email)->send(new VideoUploaded($this->clip));
     }

@@ -12,7 +12,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 
-class Clip extends Model {
+class Clip extends Model
+{
 
     use HasFactory, Slugable;
 
@@ -105,7 +106,8 @@ class Clip extends Model {
      */
     public function updatePosterImage(): void
     {
-        $this->posterImage = (Storage::disk('thumbnails')->exists($this->id . '_poster.png')) ? $this->id . '_poster.png' : null;
+        $this->posterImage =
+            (Storage::disk('thumbnails')->exists($this->id . '_poster.png')) ? $this->id . '_poster.png' : null;
 
         $this->save();
     }
@@ -115,14 +117,11 @@ class Clip extends Model {
      */
     public function addTags(Collection $tagsCollection): void
     {
-        if ($tagsCollection->isNotEmpty())
-        {
+        if ($tagsCollection->isNotEmpty()) {
             $this->tags()->sync($tagsCollection->map(function ($tagName) {
                 return tap(Tag::firstOrCreate(['name' => $tagName]))->save();
-            })->pluck('id')
-            );
-        } else
-        {
+            })->pluck('id'));
+        } else {
             $this->tags()->detach();
         }
     }

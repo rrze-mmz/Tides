@@ -19,13 +19,13 @@
 <body class="h-screen font-sans antialiased leading-none bg-gray-100">
 <div id="app">
     <header class="fixed top-0 z-10 p-2 py-4 mt-0 w-full bg-gray-800">
-        <nav class="container flex justify-between items-center px-6 mx-auto">
-            <div>
+        <nav class="flex justify-between items-center">
+            <div class="px-6 ">
                 <a href="{{ url('/') }}" class="text-lg font-semibold text-gray-100 no-underline">
                     {{ config('app.name', 'Laravel') }}
                 </a>
             </div>
-            <nav class="space-x-4 text-sm text-gray-300 sm:text-base">
+            <nav class="space-x-4 text-sm text-gray-300 sm:text-base px-8">
 
                 @guest
                     <a class="no-underline hover:underline" href="{{ route('login') }}">{{ __('Login') }}</a>
@@ -52,7 +52,7 @@
         </nav>
     </header>
     <main class="pt-12 mx-auto lg:flex">
-        <div class="flex-none justify-center content-center h-screen bg-gray-800 w-1/7">
+        <div class="justify-center content-center h-screen  bg-gray-800 w-1/7">
             @include('backend.dashboard._sidebar-navigation')
         </div>
         @yield('content')

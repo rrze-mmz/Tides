@@ -50,4 +50,12 @@ class HelpersTest extends TestCase
 
         $this->assertTrue($collection->contains('name','export_video.mp4'));
     }
+
+    /** @test */
+    public function it_returns_active_class_if_current_url_matches_href()
+    {
+        $this->get(route('dashboard'));
+
+        $this->assertEquals('border-b-2',setActiveLink(route('dashboard')));
+    }
 }

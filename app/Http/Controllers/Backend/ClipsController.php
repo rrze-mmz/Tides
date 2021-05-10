@@ -16,15 +16,21 @@ use Illuminate\View\View;
 class ClipsController extends Controller
 {
 
+
     /**
      * @return View
      */
     public function index(): View
     {
-        return view('backend.clips.index', [
-            'clips' => auth()->user()->clips()->orderBy('title')->limit(10)->get(),
-        ]);
-    }
+        return view(
+            'backend.clips.index',
+            [
+                'clips' => auth()->user()->clips()->orderBy('title')->limit(10)->get(),
+            ]
+        );
+
+    }//end index()
+
 
     /**
      * Create form for a single clip
@@ -34,12 +40,14 @@ class ClipsController extends Controller
     public function create(): View
     {
         return view('backend.clips.create');
-    }
+
+    }//end create()
+
 
     /**
      * Store a clip in database
      *
-     * @param  StoreClipRequest  $request
+     * @param  StoreClipRequest $request
      * @return RedirectResponse
      */
     public function store(StoreClipRequest $request): RedirectResponse
@@ -51,11 +59,14 @@ class ClipsController extends Controller
         $clip->addTags(collect($validated['tags']));
 
         return redirect($clip->adminPath());
-    }
+
+    }//end store()
+
     /**
      * Edit form for a single clip
      *
-     * @param  Clip  $clip
+     * @param Clip $clip
+     * @param OpencastService $opencastService
      * @return View
      * @throws AuthorizationException
      */
@@ -63,19 +74,24 @@ class ClipsController extends Controller
     {
         $this->authorize('edit', $clip);
 
-        \Debugbar::info($opencastConnectionCollection = $opencastService->getHealth());
+        \Debugbar::info($clip->series()->first()->opencast_series_id);
 
-        return view('backend.clips.edit', [
-            'clip'  => $clip,
-            'opencastConnectionCollection'  => $opencastConnectionCollection,
-        ]);
-    }
+        return view(
+            'backend.clips.edit',
+            [
+                'clip'                         => $clip,
+                'opencastConnectionCollection' => $opencastService->getHealth(),
+            ]
+        );
+
+    }//end edit()
+
 
     /**
      * Update a clip in the database
      *
-     * @param  Clip  $clip
-     * @param  UpdateClipRequest  $request
+     * @param  Clip              $clip
+     * @param  UpdateClipRequest $request
      * @return RedirectResponse
      */
     public function update(Clip $clip, UpdateClipRequest $request): RedirectResponse
@@ -87,10 +103,12 @@ class ClipsController extends Controller
         $clip->addTags(collect($validated['tags']));
 
         return redirect($clip->adminPath());
-    }
+
+    }//end update()
+
 
     /**
-     * @param  Clip  $clip
+     * @param  Clip $clip
      * @return RedirectResponse
      * @throws AuthorizationException
      */
@@ -101,5 +119,8 @@ class ClipsController extends Controller
         $clip->delete();
 
         return redirect(route('clips.index'));
-    }
-}
+
+    }//end destroy()
+
+
+}//end class

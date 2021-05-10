@@ -13,7 +13,7 @@
                     @csrf
                     @method('PATCH')
 
-                    <div class="grid grid-cols-8 gap-2 pt-2">
+                    <div class="grid grid-cols-8 gap-2 py-3">
 
                         <div class="flex content-center items-center">
                             <label class="block py-2 mr-6 font-bold text-gray-700 text-md"
@@ -107,7 +107,7 @@
 
                     </div>
 
-                    <button class="py-2 px-8 font-bold text-white bg-blue-500 rounded shadow hover:bg-blue-600 focus:shadow-outline focus:outline-none"
+                    <button class="py-2 px-8 text-white bg-blue-500 rounded shadow hover:bg-blue-600 focus:shadow-outline focus:outline-none"
                             type="submit"
                             value="submit"
                     >
@@ -133,13 +133,13 @@
             <div class="flex items-center pt-3 space-x-6">
                     <a href="{{ $clip->path() }}"
                        type="button"
-                        class="p-3 text-sm text-white bg-blue-500 rounded-md focus:outline-none hover:bg-blue-600 hover:shadow-lg">
+                        class="py-2 px-8 text-white bg-blue-500 rounded shadow hover:bg-blue-600 focus:shadow-outline focus:outline-none">
                         Go to view page
                     </a>
 
                     <a href="{{ route('admin.clips.dropzone.listFiles', $clip) }}"
                        type="button"
-                       class="p-3 text-sm text-white bg-blue-500 rounded-md focus:outline-none hover:bg-blue-600 hover:shadow-lg">
+                       class="py-2 px-8 text-white bg-blue-500 rounded shadow hover:bg-blue-600 focus:shadow-outline focus:outline-none">
                         Transfer files from drop zone
                     </a>
 
@@ -150,7 +150,7 @@
                         @method('DELETE')
                     <button
                        type="submit"
-                       class="p-3 text-sm text-white bg-red-700 rounded-md focus:outline-none hover:bg-red-500 hover:shadow-lg">
+                       class="py-2 px-8 text-white bg-red-500 rounded shadow hover:bg-red-600 focus:shadow-outline focus:outline-none">
                         Delete
                     </button>
 

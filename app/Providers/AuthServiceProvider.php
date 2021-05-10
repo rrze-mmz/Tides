@@ -31,8 +31,8 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Gate::define('create-series',[SeriesPolicy::class,'create']);
-        Gate::define('edit-series',[SeriesPolicy::class,'edit']);
+        Gate::define('create-series', [SeriesPolicy::class,'create']);
+        Gate::define('edit-series', [SeriesPolicy::class,'edit']);
         Gate::define('create-clips', [ClipPolicy::class, 'create']);
         Gate::define('edit-clips', [ClipPolicy::class, 'edit']);
         Gate::define('edit-assets', [AssetPolicy::class, 'edit']);

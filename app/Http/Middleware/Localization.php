@@ -17,7 +17,7 @@ class Localization
      */
     public function handle(Request $request, Closure $next)
     {
-        if (! session()->has('locale')){
+        if (! session()->has('locale')) {
             session()->put('locale', config('app.locale'));
         }
 

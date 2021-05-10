@@ -21,7 +21,9 @@ class IngestVideoFileToOpencast implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(private Clip $clip, private string $videoFile) {}
+    public function __construct(private Clip $clip, private string $videoFile)
+    {
+    }
 
     /**
      * Execute the job.

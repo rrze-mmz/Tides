@@ -29,11 +29,9 @@ class OpencastService
      */
     public function getHealth() : Collection
     {
-        try
-        {
+        try {
             $response = $this->client->get('info/health');
-        } catch (GuzzleException $exception)
-        {
+        } catch (GuzzleException $exception) {
             Log::error($exception);
             $response = new Response();
         }
@@ -47,11 +45,9 @@ class OpencastService
      */
     public function createSeries(Series $series): ResponseInterface
     {
-        try
-        {
+        try {
             $response =  $this->client->post('api/series', $this->createOpencastSeriesFormData($series));
-        } catch (GuzzleException $exception)
-        {
+        } catch (GuzzleException $exception) {
             Log::error($exception);
             $response = new Response();
         }
@@ -61,12 +57,12 @@ class OpencastService
 
     public function ingestMediaPackage(Clip $clip, string $videoFile)
     {
-        try
-        {
-            $response =  $this->client->post('ingest/addMediaPackage',
-                $this->ingestMediaPackageFormData($clip, $videoFile));
-        } catch (GuzzleException $exception)
-        {
+        try {
+            $response =  $this->client->post(
+                'ingest/addMediaPackage/compose-distribute-videoportal-upload',
+                $this->ingestMediaPackageFormData($clip, $videoFile)
+            );
+        } catch (GuzzleException $exception) {
             Log::error($exception);
             $response = new Response();
         }
@@ -123,6 +119,10 @@ class OpencastService
                 [
                     'name'  => 'title',
                     'contents'  => $clip->title
+                ],
+                [
+                    'name'  => 'isPartOf',
+                    'contents'  => $clip->series()->first()->opencast_series_id
                 ],
                 [
                     'name'  =>  'file',

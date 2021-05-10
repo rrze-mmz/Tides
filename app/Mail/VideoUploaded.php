@@ -22,7 +22,6 @@ class VideoUploaded extends Mailable
      */
     public function __construct(protected Clip $clip)
     {
-
     }
 
     /**

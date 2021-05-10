@@ -14,4 +14,3 @@ return [
         'no clips found'  => 'No videos found',
     ]
 ];
-

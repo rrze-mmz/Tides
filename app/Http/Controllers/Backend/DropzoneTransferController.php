@@ -50,7 +50,7 @@ class DropzoneTransferController extends Controller
             'files' => 'required|array'
         ]);
 
-        TransferDropzoneFiles::dispatch($clip,fetchDropZoneFiles()->whereIn('hash',$validated['files']));
+        TransferDropzoneFiles::dispatch($clip, fetchDropZoneFiles()->whereIn('hash', $validated['files']));
         Mail::to($clip->owner->email)->queue(new VideoUploaded($clip));
 
         return redirect($clip->adminPath());

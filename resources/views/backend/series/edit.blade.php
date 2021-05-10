@@ -9,71 +9,80 @@
         <div class="flex justify-center content-center content-between py-2 px-2">
             <form action="{{ $series->adminPath() }}"
                   method="POST"
-                  class="w-4/5">
+                  class="w-4/5 w-full"
+            >
                 @csrf
                 @method('PATCH')
+                <div class="grid grid-cols-8 gap-2 py-3">
 
-                <div class="mb-6">
-                    <label class="block mb-2 text-xs font-bold text-gray-700 uppercase"
-                           for="title"
-                    >
-                        Title
-                    </label>
-
-                    <input class="p-2 w-full border border-gray-400"
-                           type="text"
-                           name="title"
-                           id="title"
-                           value="{{ $series->title }}"
-                           required
-                    >
-
-                    @error('Title')
-                    <p class="mt-2 text-xs text-red-500">{{ $message }}</p>
+                    <div class="flex content-center items-center">
+                        <label class="block py-2 mr-6 font-bold text-gray-700 text-md"
+                               for="episode"
+                        >
+                            Title
+                        </label>
+                    </div>
+                    <div class="col-span-7 w-4/5">
+                        <input class="py-2 px-4 w-full leading-tight text-gray-700 bg-white rounded border-2 border-gray-200 appearance-none focus:outline-none focus:bg-white focus:border-blue-500"
+                               type="text"
+                               name="episode"
+                               id="episode"
+                               value="{{ $series->title }}"
+                               required
+                        >
+                    </div>
+                    @error('title')
+                    <div class="col-span-8">
+                        <p class="mt-2 w-full text-xs text-red-500">{{ $message }}</p>
+                    </div>
                     @enderror
-                </div>
 
-                <div class="mb-6">
-                    <label class="block mb-2 text-xs font-bold text-gray-700 uppercase"
-                           for="description"
-                    >
-                        Description
-                    </label>
-
-                    <textarea class="p-2 w-full border border-gray-400"
-                              type="text"
-                              name="description"
-                              id="description"
-                              required
-                    > {{ $series->description  }}</textarea>
-
+                    <div class="flex content-center items-center mb-6">
+                        <label class="block py-2 mr-6 font-bold text-gray-700 text-md"
+                               for="title"
+                        >
+                            Description
+                        </label>
+                    </div>
+                    <div class="col-span-7 w-4/5">
+                        <textarea class="py-2 px-4 w-full leading-tight text-gray-700 bg-white rounded border-2 border-gray-200 appearance-none focus:outline-none focus:bg-white focus:border-blue-500"
+                                  type="text"
+                                  name="description"
+                                  id="description"
+                        > {{ $series->description }}</textarea>
+                    </div>
                     @error('description')
-                    <p class="mt-2 text-xs text-red-500">{{ $message }}</p>
+                    <div class="col-span-8">
+                        <p class="mt-2 w-full text-xs text-red-500">{{ $message }}</p>
+                    </div>
                     @enderror
-                </div>
 
-                <div class="mb-6">
-                    <label class="block mb-2 text-xs font-bold text-gray-700 uppercase"
-                           for="title"
-                    >
-                        Opencast Series ID
-                    </label>
-
-                    <input class="p-1 w-full border border-gray-400"
-                           type="text"
-                           name="title"
-                           id="title"
-                           value="{{ $series->opencast_series_id }}"
-                           disabled
-                    >
-
-                    @error('Title')
-                    <p class="mt-2 text-xs text-red-500">{{ $message }}</p>
+                    <div class="flex content-center items-center">
+                        <label class="block py-2 mr-6 font-bold text-gray-700 text-md"
+                               for="title"
+                        >
+                            Opencast Series ID
+                        </label>
+                    </div>
+                    <div class="col-span-7 w-4/5">
+                        <input class="py-2 px-4 w-full leading-tight text-gray-700 bg-white rounded border-2 border-gray-200 appearance-none focus:outline-none focus:bg-white focus:border-blue-500"
+                               type="text"
+                               name="title"
+                               id="title"
+                               disabled
+                               value="{{ $series->opencast_series_id }}"
+                               required
+                        >
+                    </div>
+                    @error('opencast_series_id')
+                    <div class="col-span-8">
+                        <p class="mt-2 w-full text-xs text-red-500">{{ $message }}</p>
+                    </div>
                     @enderror
-                </div>
 
+                </div>
                 <button type="submit"
-                        class="ml-2 focus:outline-none text-white text-sm py-1.5 px-5 rounded-md bg-blue-500 hover:bg-blue-600 hover:shadow-lg"
+                        class="py-2 px-8 text-white bg-blue-500 rounded shadow hover:bg-blue-600 focus:shadow-outline focus:outline-none"
                 >Update a Series
                 </button>
             </form>
@@ -86,14 +95,14 @@
             <form action="{{ route('frontend.series.show',$series) }}"
                   method="GET">
                 <button
-                    class="ml-2 focus:outline-none text-white text-sm py-1.5 px-5 rounded-md bg-blue-900 hover:bg-blue-600 hover:shadow-lg">
+                    class="py-2 px-8  text-white bg-blue-500 rounded shadow hover:bg-blue-600 focus:shadow-outline focus:outline-none">
                     Go to public page
                 </button>
             </form>
             <form action="{{ route('series.clip.create',$series) }}"
                   method="GET">
                 <button
-                    class="ml-2 focus:outline-none text-white text-sm py-1.5 px-5 rounded-md bg-blue-900 hover:bg-blue-600 hover:shadow-lg">
+                    class="py-2 px-8  text-white bg-blue-500 rounded shadow hover:bg-blue-600 focus:shadow-outline focus:outline-none">
                     Add new clip
                 </button>
             </form>
@@ -102,7 +111,7 @@
                 @csrf
                 @method('DELETE')
                 <button
-                    class="ml-2 focus:outline-none text-white text-sm py-1.5 px-5 rounded-md bg-red-900 hover:bg-red-600 hover:shadow-lg">
+                    class="py-2 px-8  text-white bg-red-700 rounded shadow hover:bg-red-600 focus:shadow-outline focus:outline-none">
                     Delete Series
                 </button>
             </form>

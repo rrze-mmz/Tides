@@ -3,7 +3,9 @@
 use App\Models\Clip;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 /**
  * Returns poster image relative file path of a clip or default
@@ -48,7 +50,7 @@ function fetchDropZoneFiles(): Collection
         ])->sortBy('date_modified');
 }
 
-//function fetchDropZoneFile($files ='')
-//{
-//    $files  = colllect(Storage::disk('video_dropzone')->files())->map(fn($file))
-//}
+function setActiveLink(string $route): string
+{
+    return (Str::contains(url()->current(), $route))?'border-b-2':'';
+}

@@ -41,9 +41,9 @@ Route::get('/clips/{clip}', [ShowClipsController::class, 'show'])->name('fronten
 Route::get('/api/tags', ApiTagsController::class)->name('api.tags');
 
 //change portal language
-Route::get('/set_lang/{locale}', function($locale){
+Route::get('/set_lang/{locale}', function ($locale) {
 
-    if(! in_array($locale, ['en','de'])){
+    if (! in_array($locale, ['en','de'])) {
         abort(400);
     }
 
@@ -70,8 +70,8 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::post('/clips/{clip}/transfer', [DropzoneTransferController::class, 'transfer'])
         ->name('admin.clips.dropzone.transfer');
 
-    Route::get('/series/{series}/addClip',[SeriesClipsController::class, 'create'])->name('series.clip.create');
-    Route::post('series/{series}/addClip',[SeriesClipsController::class, 'store'])->name('series.clip.store');
+    Route::get('/series/{series}/addClip', [SeriesClipsController::class, 'create'])->name('series.clip.create');
+    Route::post('series/{series}/addClip', [SeriesClipsController::class, 'store'])->name('series.clip.store');
 
     //Assets
     Route::post('/clips/{clip}/assets', [AssetsController::class, 'store'])->name('admin.assets.store');
@@ -83,4 +83,3 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 });
 
 Auth::routes();
-
