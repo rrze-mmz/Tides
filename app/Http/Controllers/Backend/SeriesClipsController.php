@@ -34,8 +34,8 @@ class SeriesClipsController extends Controller
      */
     public function store(Series $series, StoreClipRequest $request): RedirectResponse
     {
-        $series->addClip($request->validated());
+        $clip = $series->addClip($request->validated());
 
-        return redirect(route('series.edit', $series));
+        return redirect(route('clips.edit', $clip));
     }
 }

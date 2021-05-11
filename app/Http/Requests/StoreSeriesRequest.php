@@ -34,7 +34,7 @@ class StoreSeriesRequest extends FormRequest
     {
         return [
             'title' => 'required',
-            'description' => 'min:3|max:255',
+            'description' => 'max:255',
             'slug'        => 'required',
         ];
     }

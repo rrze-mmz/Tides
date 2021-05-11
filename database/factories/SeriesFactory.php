@@ -24,7 +24,7 @@ class SeriesFactory extends Factory
     {
         return [
             'title' => $title = $this->faker->sentence(),
-            'description'   => $this->faker->paragraph(50),
+            'description'   => $this->faker->paragraph(2),
             'slug'  => $title,
             'owner_id'  => User::factory()->create()->id,
             'opencast_series_id' => null,

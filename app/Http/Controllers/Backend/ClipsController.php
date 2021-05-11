@@ -29,7 +29,6 @@ class ClipsController extends Controller
                     : auth()->user()->series()->orderBy('updated_at')->limit(20)->get(),
             ]
         );
-
     }//end index()
 
 
@@ -41,7 +40,6 @@ class ClipsController extends Controller
     public function create(): View
     {
         return view('backend.clips.create');
-
     }//end create()
 
 
@@ -60,7 +58,6 @@ class ClipsController extends Controller
         $clip->addTags(collect($validated['tags']));
 
         return redirect($clip->adminPath());
-
     }//end store()
 
     /**
@@ -81,7 +78,6 @@ class ClipsController extends Controller
                 'opencastConnectionCollection' => $opencastService->getHealth(),
             ]
         );
-
     }//end edit()
 
 
@@ -101,7 +97,6 @@ class ClipsController extends Controller
         $clip->addTags(collect($validated['tags']));
 
         return redirect($clip->adminPath());
-
     }//end update()
 
 
@@ -116,9 +111,10 @@ class ClipsController extends Controller
 
         $clip->delete();
 
+        if ($clip->series_id) {
+            return redirect(route('series.edit', $clip->series));
+        }
+
         return redirect(route('clips.index'));
-
     }//end destroy()
-
-
 }//end class

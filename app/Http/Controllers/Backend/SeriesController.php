@@ -11,7 +11,6 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 
-
 class SeriesController extends Controller
 {
 
@@ -62,11 +61,9 @@ class SeriesController extends Controller
     {
         $this->authorize('edit', $series);
 
-        \Debugbar::info($workflows =$opencastService->getSeriesRunningWorkflows($series) );
-
-        return view('backend.series.edit',[
+        return view('backend.series.edit', [
             'series'    =>  $series,
-            'opencastSeriesRunningWorkflows'    =>  $workflows
+            'opencastSeriesRunningWorkflows'    =>  $opencastService->getSeriesRunningWorkflows($series)
         ]);
     }
 
@@ -80,7 +77,7 @@ class SeriesController extends Controller
         Series $series,
         UpdateSeriesRequest $request,
         OpencastService $opencastService
-    ): RedirectResponse{
+    ): RedirectResponse {
         if (is_null($series->opencast_series_id)) {
             $opencastSeriesId = $opencastService->createSeries($series);
 

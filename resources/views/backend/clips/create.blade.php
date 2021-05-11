@@ -12,6 +12,7 @@
                     @csrf
 
                     <div class="grid grid-cols-8 gap-2 py-3">
+
                         <div class="flex content-center items-center">
                             <label class="block py-2 mr-6 font-bold text-gray-700 text-md"
                                    for="episode"

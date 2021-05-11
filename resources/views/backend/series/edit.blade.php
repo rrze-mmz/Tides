@@ -13,6 +13,7 @@
             >
                 @csrf
                 @method('PATCH')
+
                 <div class="grid grid-cols-8 gap-2 py-3">
 
                     <div class="flex content-center items-center">
@@ -112,7 +113,7 @@
                 @method('DELETE')
                 <button
                     class="py-2 px-8  text-white bg-red-700 rounded shadow hover:bg-red-600 focus:shadow-outline focus:outline-none">
-                    Delete Series
+                    Delete Serie
                 </button>
             </form>
         </div>

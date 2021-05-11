@@ -86,9 +86,9 @@ class ManageSeriesTest extends TestCase
     /** @test */
     public function a_series_owner_can_view_edit_form_fields(): void
     {
-        $this->mockHandler->append($this->mockSeriesRunningWorkflowsResponse());
-
         $series = SeriesFactory::ownedBy($this->signIn())->create();
+
+        $this->mockHandler->append($this->mockSeriesRunningWorkflowsResponse($series, false));
 
         $this->get($series->adminPath())->assertStatus(200);
 
@@ -109,9 +109,9 @@ class ManageSeriesTest extends TestCase
     /** @test */
     public function an_admin_can_edit_an_not_owned_series(): void
     {
-        $this->mockHandler->append($this->mockSeriesRunningWorkflowsResponse());
-
         $series = SeriesFactory::create();
+
+        $this->mockHandler->append($this->mockSeriesRunningWorkflowsResponse($series, false));
 
         $this->signInAdmin();
 
@@ -144,14 +144,14 @@ class ManageSeriesTest extends TestCase
         $series = SeriesFactory::ownedBy($this->signIn())->create();
 
         //pass an empty opencast response
-        $mockData = $this->mockSeriesRunningWorkflowsResponse();
+        $mockData = $this->mockSeriesRunningWorkflowsResponse($series, true);
 
         $this->mockHandler->append($mockData);
 
         $opencastViewData = collect(json_decode($mockData->getBody(), true));
 
         $this->get(route('series.edit',$series))->assertViewHas(['opencastSeriesRunningWorkflows'])
-            ->assertSee($opencastViewData['workflows']['workflow'][0]['mediapackage']['title']);
+            ->assertSee($opencastViewData['workflows']['workflow']['0']['mediapackage']['title']);
     }
 
     /** @test */
@@ -169,8 +169,8 @@ class ManageSeriesTest extends TestCase
         $this->signIn();
 
         $attributes = [
-            'title' => 'Series title',
-            'description' => 'te'
+            'title' => '',
+            'description' => 'test'
         ];
 
         $this->post(route('series.store'), $attributes);
@@ -238,20 +238,17 @@ class ManageSeriesTest extends TestCase
     /** @test */
     public function an_admin_user_can_update_a_not_owned_series(): void
     {
-        //pass an empty opencast response
-        $this->mockHandler->append($this->mockCreateSeriesResponse());
-
         $series = SeriesFactory::create();
-
-        //pass an empty opencast response
-        $this->mockHandler->append($this->mockCreateSeriesResponse());
 
         $this->signInAdmin();
 
-        $this->followingRedirects()->patch($series->adminPath(),[
+        //pass an empty opencast respons
+        $this->mockHandler->append($this->mockSeriesRunningWorkflowsResponse($series, false));
+
+        $this->patch($series->adminPath(),[
             'title'       => 'changed',
             'description' => 'changed'
-        ])->assertStatus(200);
+        ]);
 
         $this->assertDatabaseHas('series', ['title'=>'changed']);
     }

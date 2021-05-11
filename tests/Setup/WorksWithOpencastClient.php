@@ -5,11 +5,13 @@ namespace Tests\Setup;
 
 
 use App\Http\Clients\OpencastClient;
+use App\Models\Series;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Str;
+use PHPUnit\Util\Xml;
 
 
 trait WorksWithOpencastClient {
@@ -48,59 +50,88 @@ trait WorksWithOpencastClient {
         ]);
     }
 
-    public function mockSeriesRunningWorkflowsResponse(): Response
+    public function mockIngestMediaPackageResponse(): Response
     {
+        return new Response(200, [], json_encode([
+            new Xml()
+        ]));
+    }
+
+    public function mockSeriesRunningWorkflowsResponse(Series $series, bool $multiple): Response
+    {
+        $workflows = ($multiple) ? [
+            [
+                'id'           => 2006754,
+                'state'        => 'RUNNING',
+                'title'        => 'Transcode after upload',
+                'mediapackage' => [
+                    'id'     => Str::uuid(),
+                    'title'  => $this->faker->sentence,
+                    'series' => $series->opencast_series_id,
+                ],
+                'operations'   => [
+                    'operation' =>
+                        [
+                            'id'    => 'ingest-download',
+                            'state' => 'SUCCEEDED'
+                        ],
+                        [
+                            'id'    => 'encode',
+                            'state' => 'RUNNING'
+                        ]
+                ]
+            ],
+            [
+                'id'           => 2006752,
+                'state'        => 'RUNNING',
+                'title'        => 'Transcode after upload',
+                'mediapackage' => [
+                    'id'     => Str::uuid(),
+                    'title'  => $this->faker->sentence,
+                    'series' => $series->opencast_series_id ,
+                ],
+                'operations'   => [
+                    'operation' =>
+                        [
+                            'id'    => 'ingest-download',
+                            'state' => 'SUCCEEDED'
+                        ],
+                    [
+                        'id'    => 'encode',
+                        'state' => 'RUNNING'
+                    ]
+                ]
+            ],
+        ] :
+            [
+                'id'           => 2006754,
+                'state'        => 'RUNNING',
+                'title'        => 'Transcode after upload',
+                'mediapackage' => [
+                    'id'     => Str::uuid(),
+                    'title'  => $this->faker->sentence,
+                    'series' => $series->opencast_series_id,
+                ],
+                'operations'   => [
+                    'operation' =>
+                        [
+                            'id'    => 'ingest-download',
+                            'state' => 'SUCCEEDED'
+                        ],
+                    [
+                        'id'    => 'encode',
+                        'state' => 'RUNNING'
+                    ]
+                ]
+        ];
+
         return new Response(201, [], json_encode([
             'workflows' => [
                 'startPage'  => 0,
                 'count'      => 20,
                 'searchTime' => 2,
-                'totalCount' => 2,
-                'workflow'   =>
-                    [
-                        [
-                            'id'           => 2006754,
-                            'state'        => 'RUNNING',
-                            'title'        => 'Transcode after upload',
-                            'mediapackage' => [
-                                'id'     => Str::uuid(),
-                                'title'  => $this->faker->sentence,
-                                'series' => $seriesId = Str::uuid(),
-                            ],
-                            'operations'   => [
-                                'operation' =>
-                                    [
-                                        'id'    => 'ingest-download',
-                                        'state' => 'SUCCEEDED'
-                                    ],
-                                [
-                                    'id'    => 'encode',
-                                    'state' => 'RUNNING'
-                                ]
-                            ]
-                        ],
-                        [
-                            'id'           => 2006752,
-                            'state'        => 'RUNNING',
-                            'title'        => 'Transcode after upload',
-                            'mediapackage' => [
-                                'id'     => Str::uuid(),
-                                'title'  => $this->faker->sentence,
-                                'series' => $seriesId ,
-                            ],
-                            'operations'   => [
-                                'operation' =>
-                                    [
-                                        'id'    => 'ingest-download',
-                                        'state' => 'SUCCEEDED'
-                                    ],
-                                [
-                                    'id'    => 'encode',
-                                    'state' => 'RUNNING'
-                                ]
-                            ]
-                        ],
-                    ]
+                'totalCount' => $multiple ? 2:1,
+                'workflow'   => $workflows
             ]
         ]));
     }

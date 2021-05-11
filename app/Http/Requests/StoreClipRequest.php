@@ -37,7 +37,7 @@ class StoreClipRequest extends FormRequest
     {
         return [
             'title'       => 'required',
-            'description' => 'min:3|max:255',
+            'description' => 'max:500',
             'slug'        => 'required',
             'tags'        => 'array',
              'episode'     => 'required|integer'

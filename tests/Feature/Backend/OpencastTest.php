@@ -12,6 +12,7 @@ use GuzzleHttp\Handler\MockHandler;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Queue;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Tests\Setup\WorksWithOpencastClient;
 use Tests\TestCase;
@@ -46,6 +47,8 @@ class OpencastTest extends TestCase {
     {
         Queue::fake();
 
+        Storage::fake('videos');
+
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 
         $this->post(route('opencast.ingestMediaPackage', $clip), ['videoFile' => FileFactory::videoFile()]);
@@ -57,6 +60,8 @@ class OpencastTest extends TestCase {
     public function it_should_dispatch_an_ingest_to_opencast_job_after_video_upload(): void
     {
         Queue::fake();
+
+        Storage::fake('videos');
 
         $this->signIn();
 

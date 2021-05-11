@@ -35,7 +35,7 @@ class UpdateSeriesRequest extends FormRequest
     {
         return [
             'title'       => 'required',
-            'description' => 'min:3|max:255',
+            'description' => 'max:500',
             'slug'        => 'required',
             'opencast_series_id' => 'null|uuid'
         ];
