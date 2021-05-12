@@ -20,6 +20,8 @@ class ManageSeriesTest extends TestCase
 
     private MockHandler $mockHandler;
 
+    private string $flashMessageName;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -27,6 +29,8 @@ class ManageSeriesTest extends TestCase
         $this->mockHandler = $this->swapOpencastClient();
 
         $this->opencastService = app(OpencastService::class);
+
+        $this->flashMessageName = 'flashMessage';
     }
 
     /** @test */
@@ -67,6 +71,19 @@ class ManageSeriesTest extends TestCase
     }
 
     /** @test */
+    public function it_shows_a_flash_message_when_a_series_is_created(): void
+    {
+        $this->signIn();
+
+        $this->post(route('series.store'),
+            [
+                'title' => 'Test title',
+                'description' => 'Test description'
+            ]
+        )->assertSessionHas($this->flashMessageName);
+    }
+
+    /** @test */
     public function it_creates_an_opencast_series_when_new_series_is_created(): void
     {
         $this->signIn();
@@ -81,6 +98,33 @@ class ManageSeriesTest extends TestCase
         $series = Series::all()->first();
 
         $this->assertNotNull($series->opencast_series_id);
+    }
+
+    /** @test */
+    public function it_requires_a_title_creating_a_series(): void
+    {
+        $this->signIn();
+
+        $attributes = Series::factory()->raw(['title'=> '']);
+
+        $this->post(route('series.store'),$attributes)->assertSessionHasErrors('title');
+    }
+
+    /** @test */
+    public function create_series_form_should_remember_old_values_on_validation_error(): void
+    {
+        $this->signIn();
+
+        $attributes = [
+            'title' => '',
+            'description' => 'test'
+        ];
+
+        $this->post(route('series.store'), $attributes);
+
+        $this->followingRedirects();
+
+        $this->get(route('series.create'))->assertSee($attributes);
     }
 
     /** @test */
@@ -152,32 +196,6 @@ class ManageSeriesTest extends TestCase
 
         $this->get(route('series.edit',$series))->assertViewHas(['opencastSeriesRunningWorkflows'])
             ->assertSee($opencastViewData['workflows']['workflow']['0']['mediapackage']['title']);
-    }
-
-    /** @test */
-    public function it_requires_a_title_creating_a_series(): void
-    {
-        $this->signIn();
-
-        $attributes = Series::factory()->raw(['title'=> '']);
-
-        $this->post(route('series.store'),$attributes)->assertSessionHasErrors('title');}
-
-    /** @test */
-    public function create_series_form_should_remember_old_values_on_validation_error(): void
-    {
-        $this->signIn();
-
-        $attributes = [
-            'title' => '',
-            'description' => 'test'
-        ];
-
-        $this->post(route('series.store'), $attributes);
-
-        $this->followingRedirects();
-
-        $this->get(route('series.create'))->assertSee($attributes);
     }
 
     /** @test */
@@ -254,6 +272,17 @@ class ManageSeriesTest extends TestCase
     }
 
     /** @test */
+    public function it_shows_a_flash_message_when_a_series_is_updated()
+    {
+        $series = SeriesFactory::ownedBy($this->signIn())->create();
+
+        $this->patch($series->adminPath(),[
+            'title'       => 'changed',
+            'description' => 'changed'
+        ])->assertSessionHas($this->flashMessageName);
+    }
+
+    /** @test */
     public function an_authenticated_user_cannot_delete_a_not_owned_series(): void
     {
         $series = SeriesFactory::create();
@@ -285,5 +314,13 @@ class ManageSeriesTest extends TestCase
         $this->followingRedirects()->delete($series->adminPath())->assertStatus(200);
 
         $this->assertDatabaseMissing('series', $series->only('id'));
+    }
+
+    /** @test */
+    public function it_shows_a_flash_message_when_a_series_is_deleted()
+    {
+        $series = SeriesFactory::ownedBy($this->signIn())->create();
+
+        $this->delete($series->adminPath())->assertSessionHas($this->flashMessageName);
     }
 }

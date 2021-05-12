@@ -88,7 +88,7 @@ class User extends Authenticatable
         return ($this->roles->contains('name', $role)) ? true : false;
     }
 
-    public function isAdmin()
+    public function isAdmin(): bool
     {
         return $this->hasRole('admin');
     }

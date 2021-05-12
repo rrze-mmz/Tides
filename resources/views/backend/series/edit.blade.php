@@ -1,7 +1,6 @@
 @extends('layouts.backend')
 
 @section('content')
-    <div class="pt-10 w-full lg:flex-grow lg:mx-10">
         <div class="flex pb-2 font-semibold border-b border-black font-2xl">
             Edit {{ $series->title }} [ ID : {{ $series->id }}]<span
                 class="text-xs italic pl-2 pt-1"> created at {{$series->created_at }} </span>
@@ -69,7 +68,7 @@
                         <input class="py-2 px-4 w-full leading-tight text-gray-700 bg-white rounded border-2 border-gray-200 appearance-none focus:outline-none focus:bg-white focus:border-blue-500"
                                type="text"
                                name="opencast_series_id"
-                               id="opencast_series_id""
+                               id="opencast_series_id"
                                disabled
                                value="{{ $series->opencast_series_id }}"
                                required
@@ -113,7 +112,7 @@
                 @method('DELETE')
                 <button
                     class="py-2 px-8  text-white bg-red-700 rounded shadow hover:bg-red-600 focus:shadow-outline focus:outline-none">
-                    Delete Serie
+                    Delete Series
                 </button>
             </form>
         </div>

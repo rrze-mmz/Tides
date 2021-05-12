@@ -21,6 +21,35 @@ class ManageClipsTest extends TestCase
 
     private OpencastService $opencastService;
 
+    private string $flashMessageName;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->flashMessageName = 'flashMessage';
+    }
+
+    /** @test */
+    public function it_requires_a_title_creating_a_new_clip(): void
+    {
+        $this->signIn();
+
+        $attributes = Clip::factory()->raw(['title' => '']);
+
+        $this->post(route('clips.store'), $attributes)->assertSessionHasErrors('title');
+    }
+
+    /** @test */
+    public function an_authenticated_user_can_create_a_clip(): void
+    {
+        $this->signIn();
+
+        $this->followingRedirects()
+            ->post(route('clips.store'), $attributes = Clip::factory()->raw())
+            ->assertSee($attributes['title']);
+    }
+
     /** @test */
     public function an_authenticated_user_can_see_the_create_clip_form_and_all_form_fields(): void
     {
@@ -32,6 +61,14 @@ class ManageClipsTest extends TestCase
 
         $this->get(route('clips.create'))->assertStatus(200)
             ->assertViewIs('backend.clips.create');
+    }
+
+    /** @test */
+    public function it_shows_a_flash_message_when_a_clip_is_created(): void
+    {
+        $this->signIn();
+
+        $this->post(route('clips.store'), Clip::factory()->raw())->assertSessionHas($this->flashMessageName);
     }
 
     /** @test */
@@ -72,29 +109,6 @@ class ManageClipsTest extends TestCase
         $this->signInAdmin();
 
         $this->get($clip->adminPath())->assertStatus(200);
-    }
-
-
-    /** @test */
-    public function it_requires_a_title_creating_a_new_clip(): void
-    {
-        $this->signIn();
-
-        $attributes = Clip::factory()->raw(['title' => '']);
-
-        $this->post(route('clips.store'), $attributes)->assertSessionHasErrors('title');
-    }
-
-    /** @test */
-    public function an_authenticated_user_can_create_a_clip(): void
-    {
-        $this->signIn();
-
-        $this->get('/admin/clips/create')->assertStatus(200);
-
-        $this->followingRedirects()
-            ->post(route('clips.store'), $attributes = Clip::factory()->raw())
-            ->assertSee($attributes['title']);
     }
 
     /** @test */
@@ -244,8 +258,6 @@ class ManageClipsTest extends TestCase
     /** @test */
     public function it_does_not_update_clip_slug_if_title_is_not_changed()
     {
-        $this->withoutExceptionHandling();
-
         $this->signIn();
 
         $this->post(route('clips.store'), ['episode'    => '1','title' => 'Test clip', 'description'=>'test']);
@@ -302,6 +314,18 @@ class ManageClipsTest extends TestCase
     }
 
     /** @test */
+    public function it_shows_a_flash_message_when_a_clip_is_updated()
+    {
+        $clip = ClipFactory::ownedBy($this->signIn())->create();
+
+        $this->patch($clip->adminPath(),[
+            'title'       => 'changed',
+            'description' => 'changed'
+        ])->assertSessionHas($this->flashMessageName);
+    }
+
+
+    /** @test */
     public function an_authenticated_user_cannot_delete_a_not_owned_clip(): void
     {
         $clip = ClipFactory::create();
@@ -333,5 +357,13 @@ class ManageClipsTest extends TestCase
         $this->delete($clip->adminPath())->assertRedirect(route('clips.index'));
 
         $this->assertDatabaseMissing('clips', $clip->only('id'));
+    }
+
+    /** @test */
+    public function it_shows_a_flash_message_when_a_clip_is_deleted(): void
+    {
+        $clip = ClipFactory::ownedBy($this->signIn())->create();
+
+        $this->delete($clip->adminPath())->assertSessionHas($this->flashMessageName);
     }
 }

@@ -58,3 +58,39 @@ $(() => {
 // Expose player so it can be used from the console
 window.player = player;
 
+// window.Vue = require('vue');
+import Vue from 'vue'
+
+Vue.component('tides-flash-message', {
+    props:['body'],
+
+    data() {
+        return {
+            isVisible : true
+        };
+    },
+
+    created() {
+        setTimeout(() => this.isVisible = false, 2000)
+    },
+
+    template: `
+        <div v-show="isVisible" class="transition-all duration-500 ease-in-out text-white px-6 py-4 border-0 rounded relative mb-4 bg-blue-500">
+            <span class="text-xl inline-block mr-5 align-middle">
+                                <i class="fas fa-bell" />
+                              </span>
+            <span class="inline-block align-middle mr-8">
+                                <b >{{body}}</b>
+                              </span>
+            <button class="absolute bg-transparent text-2xl font-semibold leading-none right-0 top-0 mt-4 mr-6 outline-none focus:outline-none">
+                <button @click="isVisible = false">×</button>
+            </button>
+        </div>
+`,
+
+})
+
+new Vue({
+    el : '#app'
+})
+

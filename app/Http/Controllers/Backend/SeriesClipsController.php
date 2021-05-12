@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreClipRequest;
 use App\Models\Series;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 
@@ -16,7 +17,7 @@ class SeriesClipsController extends Controller
      *
      * @param Series $series
      * @return View
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws AuthorizationException
      */
     public function create(Series $series): View
     {
@@ -35,6 +36,8 @@ class SeriesClipsController extends Controller
     public function store(Series $series, StoreClipRequest $request): RedirectResponse
     {
         $clip = $series->addClip($request->validated());
+
+        $request->session()->flash('clip_created_successfully', 'Clip created successfully');
 
         return redirect(route('clips.edit', $clip));
     }

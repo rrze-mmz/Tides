@@ -1,7 +1,6 @@
 @extends('layouts.backend')
 
 @section('content')
-    <div class="pt-10 w-full lg:flex-grow lg:mx-10">
         <div class="flex pb-2 font-semibold border-b border-black font-2xl">
             Video file in drop zone
         </div>
@@ -40,5 +39,4 @@
                     class="mt-2 focus:outline-none text-white text-sm py-1.5 px-5 rounded-md bg-blue-500 hover:bg-blue-600 hover:shadow-lg"
             >
         </form>
-    </div>
 @endsection

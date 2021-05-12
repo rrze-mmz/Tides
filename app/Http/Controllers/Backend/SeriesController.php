@@ -14,7 +14,6 @@ use Illuminate\Http\RedirectResponse;
 class SeriesController extends Controller
 {
 
-
     /**
      * @return View
      */
@@ -48,6 +47,8 @@ class SeriesController extends Controller
         $opencastSeriesId = $opencastService->createSeries($series);
 
         $series->updateOpencastSeriesId($opencastSeriesId);
+
+        session()->flash('flashMessage', 'Clip created successfully');
 
         return redirect($series->adminPath());
     }

@@ -4,24 +4,26 @@ namespace App\Providers;
 
 use App\Events\AssetDeleted;
 use App\Listeners\DeleteAssetFile;
+use App\Models\Clip;
+use App\Models\Series;
+use App\Observers\ClipObserver;
+use App\Observers\SeriesObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
 
-class EventServiceProvider extends ServiceProvider
-{
+class EventServiceProvider extends ServiceProvider {
     /**
      * The event listener mappings for the application.
      *
      * @var array
      */
     protected $listen = [
-        Registered::class => [
+        Registered::class   => [
             SendEmailVerificationNotification::class,
         ],
         AssetDeleted::class => [
-                DeleteAssetFile::class
+            DeleteAssetFile::class
         ],
     ];
 
@@ -32,5 +34,7 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Series::observe(SeriesObserver::class);
+        Clip::observe(ClipObserver::class);
     }
 }

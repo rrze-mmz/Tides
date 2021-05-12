@@ -1,7 +1,6 @@
 @extends('layouts.backend')
 
 @section('content')
-        <div class="pt-10 w-full lg:flex-grow lg:mx-10">
             <div class="flex pb-2 font-semibold border-b border-black font-2xl">
                 Edit {{ $clip->title }} [ ID: {{ $clip->id }} ] <span class="pl-2 italic font-sm"> created at {{$clip->created_at}}</span>
             </div>
@@ -158,5 +157,4 @@
             </div>
 
             @include('backend.assets.list', ['assets'=>$clip->assets])
-        </div>
 @endsection
