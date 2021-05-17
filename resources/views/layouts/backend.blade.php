@@ -14,6 +14,9 @@
 
     <!-- Styles -->
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
+
+    <livewire:styles />
+
     <!--  <link href="/css/mediaelementplayer.css" rel="stylesheet"> -->
 </head>
 <body class="h-screen font-sans antialiased leading-none bg-gray-100">

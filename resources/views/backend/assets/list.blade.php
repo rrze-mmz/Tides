@@ -4,18 +4,20 @@
 <div class="flex">
     <ul class="pt-3 w-full">
         <li class="flex content-center items-center p-5 mb-4 bg-gray-400 rounded">
-            <div class="pb-2 w-1/5 border-b border-black">ID</div>
-            <div class="pb-2 w-3/5 border-b border-black">Saved path</div>
-            <div class="pb-2 w-1/5 border-b border-black">Resolution</div>
-            <div class="pb-2 w-1/5 border-b border-black">Actions</div>
+            <div class="pb-2 w-1/6 border-b border-black">ID</div>
+            <div class="pb-2 w-3/6 border-b border-black">Saved path</div>
+            <div class="pb-2 w-1/6 border-b border-black">Duration</div>
+            <div class="pb-2 w-1/6 border-b border-black">Resolution</div>
+            <div class="pb-2 w-1/6 border-b border-black">Actions</div>
         </li>
 
         @forelse($assets as $asset)
             <li class="flex content-center items-center p-5 mb-4 bg-gray-200 rounded">
-                <div class="w-1/5"> {{ $asset->id }}</div>
-                <div class="w-3/5"> {{ $asset->path }}</div>
-                <div class="w-1/5"> {{ $asset->width }} x {{ $asset->height }}</div>
-                <div class="w-1/5">
+                <div class="w-1/6"> {{ $asset->id }}</div>
+                <div class="w-3/6"> {{ $asset->path }}</div>
+                <div class="w-1/6"> {{ $asset->durationToHours() }}</div>
+                <div class="w-1/6"> {{ $asset->width }} x {{ $asset->height }}</div>
+                <div class="w-1/6">
                     <form method="POST"
                           action="{{$asset->path() }}"
                     >

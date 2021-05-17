@@ -7,20 +7,17 @@ use App\Models\Clip;
 use App\Models\Tag;
 use App\Services\OpencastService;
 use Facades\Tests\Setup\ClipFactory;
+use Facades\Tests\Setup\SeriesFactory;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Facades\Tests\Setup\SeriesFactory;
 use Tests\Setup\WorksWithOpencastClient;
 use Tests\TestCase;
 
-class ManageClipsTest extends TestCase
-{
-
+class ManageClipsTest extends TestCase {
     use WithFaker, RefreshDatabase, WorksWithOpencastClient;
 
     private OpencastService $opencastService;
-
     private string $flashMessageName;
 
     protected function setUp(): void
@@ -137,7 +134,7 @@ class ManageClipsTest extends TestCase
         $clip->tags()->sync(Tag::factory()->create());
 
         $this->patch($clip->adminPath(), [
-            'episode'    => '1',
+            'episode'     => '1',
             'title'       => 'changed',
             'description' => 'changed',
             'tags'        => []
@@ -156,7 +153,7 @@ class ManageClipsTest extends TestCase
         $clip->tags()->sync(Tag::factory()->create());
 
         $this->patch($clip->adminPath(), [
-            'episode'    => '1',
+            'episode'     => '1',
             'title'       => 'changed',
             'description' => 'changed',
             'tags'        => [$tag->name, 'another tag']
@@ -191,7 +188,7 @@ class ManageClipsTest extends TestCase
         $this->get($clip->path())->assertSee($clip->title);
 
         $this->patch($clip->adminPath(), [
-            'episode'    => '1',
+            'episode'     => '1',
             'title'       => 'changed',
             'description' => 'changed'
         ]);
@@ -199,7 +196,7 @@ class ManageClipsTest extends TestCase
         $clip = $clip->refresh();
 
         $this->assertDatabaseHas('clips', [
-            'episode'    => '1',
+            'episode'     => '1',
             'title'       => 'changed',
             'description' => 'changed'
         ]);
@@ -215,7 +212,7 @@ class ManageClipsTest extends TestCase
         $this->signIn();
 
         $attributes = [
-            'episode'    => '1',
+            'episode'     => '1',
             'title'       => 'changed',
             'description' => 'changed'
         ];
@@ -233,7 +230,7 @@ class ManageClipsTest extends TestCase
         $this->signInAdmin();
 
         $attributes = [
-            'episode'    => '1',
+            'episode'     => '1',
             'title'       => 'changed',
             'description' => 'changed'
         ];
@@ -248,7 +245,7 @@ class ManageClipsTest extends TestCase
     {
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 
-        $this->patch($clip->adminPath(), ['episode'    => '1','title' => 'Title changed']);
+        $this->patch($clip->adminPath(), ['episode' => '1', 'title' => 'Title changed']);
 
         $clip->refresh();
 
@@ -260,11 +257,11 @@ class ManageClipsTest extends TestCase
     {
         $this->signIn();
 
-        $this->post(route('clips.store'), ['episode'    => '1','title' => 'Test clip', 'description'=>'test']);
+        $this->post(route('clips.store'), ['episode' => '1', 'title' => 'Test clip', 'description' => 'test']);
 
         $clip = Clip::find(1);
 
-        $this->patch($clip->adminPath(), ['episode' => '2','title' => 'Test clip', 'description' => 'test']);
+        $this->patch($clip->adminPath(), ['episode' => '2', 'title' => 'Test clip', 'description' => 'test']);
 
         $clip->refresh();
 
@@ -292,11 +289,11 @@ class ManageClipsTest extends TestCase
     {
         $mockHandler = $this->swapOpencastClient();
 
-        $this->opencastService  = app(OpencastService::class);
+        $this->opencastService = app(OpencastService::class);
 
         $mockHandler->append($this->mockHealthResponse());
 
-        $this->get(route('clips.edit',  ClipFactory::ownedBy($this->signIn())->create()))
+        $this->get(route('clips.edit', ClipFactory::ownedBy($this->signIn())->create()))
             ->assertSee('Ingest to Opencast');
     }
 
@@ -305,7 +302,7 @@ class ManageClipsTest extends TestCase
     {
         $mockHandler = $this->swapOpencastClient();
 
-        $this->opencastService  = app(OpencastService::class);
+        $this->opencastService = app(OpencastService::class);
 
         $mockHandler->append(new Response());
 
@@ -318,12 +315,11 @@ class ManageClipsTest extends TestCase
     {
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 
-        $this->patch($clip->adminPath(),[
+        $this->patch($clip->adminPath(), [
             'title'       => 'changed',
             'description' => 'changed'
         ])->assertSessionHas($this->flashMessageName);
     }
-
 
     /** @test */
     public function an_authenticated_user_cannot_delete_a_not_owned_clip(): void
@@ -366,4 +362,5 @@ class ManageClipsTest extends TestCase
 
         $this->delete($clip->adminPath())->assertSessionHas($this->flashMessageName);
     }
+
 }

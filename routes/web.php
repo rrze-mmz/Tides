@@ -7,11 +7,13 @@ use App\Http\Controllers\Backend\DropzoneTransferController;
 use App\Http\Controllers\Backend\OpencastController;
 use App\Http\Controllers\Backend\SeriesClipsController;
 use App\Http\Controllers\Backend\SeriesController;
+use App\Http\Controllers\Backend\UsersController;
 use App\Http\Controllers\Frontend\ApiTagsController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\SearchController;
 use App\Http\Controllers\Frontend\ShowClipsController;
 use App\Http\Controllers\Frontend\ShowSeriesController;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -80,6 +82,8 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/opencast', [OpencastController::class, 'status'])->name('opencast.status');
     Route::post('clips/{clip}/ingestMediaPackage', [OpencastController::class, 'ingestMediaPackage'])
         ->name('opencast.ingestMediaPackage');
+
+    Route::get('/users', [UsersController::class,'index'])->name('users.index');
 });
 
 Auth::routes();

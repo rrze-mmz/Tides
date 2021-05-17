@@ -27,8 +27,8 @@
         @if(auth()->user()->isAdmin())
         <li>
             <a
-                href="/"
-                class="block mb-4 text-lg font-bold hover:text-gray-200"
+                href="{{ route('users.index') }}"
+                class="block mb-4 text-lg  {{ setActiveLink(route('users.index')) }} font-bold hover:text-gray-200"
             >
                 Users
             </a>

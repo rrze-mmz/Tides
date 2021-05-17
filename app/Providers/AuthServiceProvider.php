@@ -7,6 +7,7 @@ use App\Models\Clip;
 use App\Policies\AssetPolicy;
 use App\Policies\ClipPolicy;
 use App\Policies\SeriesPolicy;
+use App\Policies\UserPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -36,5 +37,6 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('create-clips', [ClipPolicy::class, 'create']);
         Gate::define('edit-clips', [ClipPolicy::class, 'edit']);
         Gate::define('edit-assets', [AssetPolicy::class, 'edit']);
+        Gate::define('show-users', [UserPolicy::class, 'show']);
     }
 }
