@@ -15,7 +15,7 @@
     <!-- Styles -->
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
 
-    <livewire:styles />
+    @livewireStyles
 
     <!--  <link href="/css/mediaelementplayer.css" rel="stylesheet"> -->
 </head>

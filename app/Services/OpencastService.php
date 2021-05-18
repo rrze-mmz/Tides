@@ -185,8 +185,7 @@ class OpencastService
 
     private function transformRunningWorkflowsResponse(array $response)
     {
-        if((int)$response['workflows']['totalCount'] != 1)
-        {
+        if ((int)$response['workflows']['totalCount'] != 1) {
             return $response;
         }
 

@@ -62,6 +62,4 @@ class SeriesObserver
     {
         session()->flash('flashMessage', $series->title.' '.__FUNCTION__. ' successfully');
     }
-
-
 }

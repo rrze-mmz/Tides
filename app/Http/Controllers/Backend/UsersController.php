@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 
-class UsersController extends Controller {
+class UsersController extends Controller
+{
 
     public function index(User $user)
     {
@@ -13,7 +14,6 @@ class UsersController extends Controller {
 
         return view('backend.users.datatables', [
             'users' => User::paginate(10)
-            ]
-        );
+            ]);
     }
 }
