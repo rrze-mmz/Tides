@@ -93,6 +93,14 @@ class Clip extends Model
     }
 
     /**
+     * @return HasMany
+     */
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    /**
      * @param array $attributes
      * @return Model
      */

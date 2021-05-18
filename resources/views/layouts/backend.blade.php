@@ -58,7 +58,7 @@
         <div class="justify-center content-center min-h-screen max-h-full  bg-gray-800 w-1/7">
             @include('backend.dashboard._sidebar-navigation')
         </div>
-        <div class="pt-10 w-full lg:flex-grow lg:mx-10">
+        <div class="pt-8 w-full lg:flex-grow lg:mx-10">
             @if(Session::has('flashMessage'))
                     <tides-flash-message body="{{ Session::get('flashMessage', 'default') }}"></tides-flash-message>
             @endif

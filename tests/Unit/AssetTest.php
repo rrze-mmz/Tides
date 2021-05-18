@@ -5,6 +5,7 @@ namespace Tests\Unit;
 
 use App\Events\AssetDeleted;
 use App\Models\Asset;
+use App\Models\Clip;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
@@ -28,6 +29,12 @@ class AssetTest extends TestCase
     public function it_has_a_path(): void
     {
         $this->assertEquals('/admin/assets/'.$this->asset->id, $this->asset->path());
+    }
+
+    /** @test */
+    public function it_belongs_to_a_clip(): void
+    {
+        $this->assertInstanceOf(Clip::class, $this->asset->clip);
     }
 
     /** @test */

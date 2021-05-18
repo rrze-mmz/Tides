@@ -59,6 +59,14 @@ class User extends Authenticatable
     }
 
     /**
+     * @return HasMany
+     */
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class, 'owner_id');
+    }
+
+    /**
      * @return BelongsToMany
      */
     public function roles(): BelongsToMany

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Backend\AssetsController;
+use App\Http\Controllers\Backend\ClipCommentsController;
 use App\Http\Controllers\Backend\ClipsController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\DropzoneTransferController;
@@ -13,7 +14,6 @@ use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\SearchController;
 use App\Http\Controllers\Frontend\ShowClipsController;
 use App\Http\Controllers\Frontend\ShowSeriesController;
-use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -54,16 +54,21 @@ Route::get('/set_lang/{locale}', function ($locale) {
     return back();
 });
 
+//Comment routes
+Route::middleware(['auth'])
+    ->post('/clip/{clip}/comments', [ClipCommentsController::class , 'create'])
+    ->name('clip.comments.store');
+
 //Backend routes
 Route::prefix('admin')->middleware('auth')->group(function () {
     //Dashboard
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
-    //Series
+    //Series routes
     Route::resource('series', SeriesController::class)->except(['show','edit']);
     Route::get('/series/{series}', [SeriesController::class, 'edit'])->name('series.edit');
 
-    //Clip
+    //Clip routes
     Route::resource('clips', ClipsController::class)->except(['show','edit']);
     Route::get('/clips/{clip}/', [ClipsController::class, 'edit'])->name('clips.edit');
 
@@ -75,10 +80,11 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/series/{series}/addClip', [SeriesClipsController::class, 'create'])->name('series.clip.create');
     Route::post('series/{series}/addClip', [SeriesClipsController::class, 'store'])->name('series.clip.store');
 
-    //Assets
+    //Assets routes
     Route::post('/clips/{clip}/assets', [AssetsController::class, 'store'])->name('admin.assets.store');
     Route::delete('assets/{asset}', [AssetsController::class, 'destroy'])->name('assets.destroy');
 
+    //Opencast routes
     Route::get('/opencast', [OpencastController::class, 'status'])->name('opencast.status');
     Route::post('clips/{clip}/ingestMediaPackage', [OpencastController::class, 'ingestMediaPackage'])
         ->name('opencast.ingestMediaPackage');

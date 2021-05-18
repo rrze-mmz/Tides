@@ -5,9 +5,9 @@ namespace Tests\Unit;
 
 use App\Models\Asset;
 use App\Models\Clip;
+use App\Models\Comment;
 use App\Models\User;
 use Carbon\Carbon;
-use Facades\Tests\Setup\ClipFactory;
 use Facades\Tests\Setup\FileFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Storage;
@@ -82,6 +82,14 @@ class ClipTest extends TestCase
     }
 
     /** @test */
+    public function it_has_many_comments(): void
+    {
+        Comment::factory(2)->create(['clip_id' => $this->clip->id]);
+
+        $this->assertEquals(2, $this->clip->comments()->count());
+    }
+
+    /** @test */
     public function it_can_return_created_date_in_carbon_format(): void
     {
         $clip = Clip::factory()->create(['created_at' => '2021-03-02 08:57:38']);
@@ -90,7 +98,7 @@ class ClipTest extends TestCase
     }
 
     /** @test */
-    public function it_has_only_one_owner(): void
+    public function it_belongs_to_an_owner(): void
     {
         $this->assertInstanceOf(User::class, $this->clip->owner);
     }

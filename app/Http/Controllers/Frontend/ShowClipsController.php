@@ -26,6 +26,6 @@ class ShowClipsController extends Controller
      */
     public function show(Clip $clip): View
     {
-        return view('frontend.clips.show', compact('clip'));
+        return view('frontend.clips.show', compact('clip'))->with('successMessage', '');
     }
 }

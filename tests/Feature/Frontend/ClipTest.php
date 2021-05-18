@@ -47,4 +47,10 @@ class ClipTest extends TestCase
 
         $this->get($this->clip->path())->assertDontSee('Back to edit page');
     }
+
+    /** @test */
+    public function a_visitor_cannot_see_clip_comments(): void
+    {
+        $this->get(route('frontend.clips.show',$this->clip))->assertDontSee('Comments');
+    }
 }

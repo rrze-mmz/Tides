@@ -18,7 +18,7 @@ class UserDataTable extends Component
     public $sortAsc = true;
     protected $queryString = ['search','admin', 'sortAsc'];
 
-    public function sortBy($field)
+    public function sortBy($field): void
     {
         $this->sortAsc = !($this->sortField === $field) || !$this->sortAsc;
 
