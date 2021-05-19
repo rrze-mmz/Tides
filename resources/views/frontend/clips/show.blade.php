@@ -27,7 +27,10 @@
         @auth
             <div class="flex flex-col pt-20">
                 <h2 class="text-2xl font-semibold">Comments</h2>
-                @include('frontend.clips._comments')
+
+                <livewire:comments-section :clip="$clip"/>
+                @livewireScripts
+
             </div>
         @endauth
 

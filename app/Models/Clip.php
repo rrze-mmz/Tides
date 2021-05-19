@@ -3,7 +3,6 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -49,15 +48,6 @@ class Clip extends Model
     public function getRouteKeyName(): string
     {
         return 'slug';
-    }
-
-    /**
-     * @param $value
-     * @return string
-     */
-    public function getCreatedAtAttribute($value): string
-    {
-        return Carbon::createFromFormat('Y-m-d H:i:s', $value)->format('Y-m-d');
     }
 
     /**

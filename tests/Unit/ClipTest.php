@@ -90,14 +90,6 @@ class ClipTest extends TestCase
     }
 
     /** @test */
-    public function it_can_return_created_date_in_carbon_format(): void
-    {
-        $clip = Clip::factory()->create(['created_at' => '2021-03-02 08:57:38']);
-
-        $this->assertEquals('2021-03-02', $clip->created_at);
-    }
-
-    /** @test */
     public function it_belongs_to_an_owner(): void
     {
         $this->assertInstanceOf(User::class, $this->clip->owner);
@@ -109,7 +101,8 @@ class ClipTest extends TestCase
         Storage::fake('videos');
 
         $clipStoragePath = getClipStoragePath($this->clip);
-        $fileNameDate = Carbon::createFromFormat('Y-m-d', $this->clip->created_at)->format('Ymd');
+
+        $fileNameDate = $this->clip->created_at->format('Y-m-d');
 
         $videoFile = FileFactory::videoFile();
 

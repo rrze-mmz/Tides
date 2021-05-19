@@ -18,9 +18,14 @@ class OpencastService
 
     private OpencastClient $client;
 
+    private Response $response;
+
     public function __construct(OpencastClient $client)
     {
         $this->client = $client;
+
+        //initialize an empty responce
+        $this->response = new Response(200, [], json_encode([]));
     }
 
     /**
@@ -31,13 +36,12 @@ class OpencastService
     public function getHealth(): Collection
     {
         try {
-            $response = $this->client->get('info/health');
+            $this->response = $this->client->get('info/health');
         } catch (GuzzleException $exception) {
             Log::error($exception);
-            $response = new Response();
         }
 
-        return collect(json_decode((string)$response->getBody(), true));
+        return collect(json_decode((string)$this->response->getBody(), true));
     }
 
     /**
@@ -49,7 +53,7 @@ class OpencastService
     {
 //        workflow/instances.json?state=running&seriesId=" . $seriesId . "&count=20&sort=DATE_CREATED_DESC
         try {
-            $response = $this->client->get('workflow/instances.json', [
+            $this->response = $this->client->get('workflow/instances.json', [
                 'query' => [
                     'state'    => "running",
                     'seriesId' => $series->opencast_series_id,
@@ -59,12 +63,9 @@ class OpencastService
             ]);
         } catch (GuzzleException $exception) {
             Log::error($exception);
-            $response = new Response();
         }
 
-        $response = $this->transformRunningWorkflowsResponse(json_decode((string)$response->getBody(), true));
-
-        return collect($response);
+        return collect($this->transformRunningWorkflowsResponse(json_decode((string)$this->response->getBody(), true)));
     }
 
     /**
@@ -76,13 +77,12 @@ class OpencastService
     public function createSeries(Series $series): Response|ResponseInterface
     {
         try {
-            $response = $this->client->post('api/series', $this->createOpencastSeriesFormData($series));
+            $this->response = $this->client->post('api/series', $this->createOpencastSeriesFormData($series));
         } catch (GuzzleException $exception) {
             Log::error($exception);
-            $response = new Response();
         }
 
-        return $response;
+        return $this->response;
     }
 
     /**
@@ -95,20 +95,19 @@ class OpencastService
     public function ingestMediaPackage(Clip $clip, string $videoFile): Response|ResponseInterface
     {
         try {
-            $response = $this->client->post(
+            $this->response = $this->client->post(
                 'ingest/addMediaPackage/compose-distribute-videoportal-upload',
                 $this->ingestMediaPackageFormData($clip, $videoFile)
             );
         } catch (GuzzleException $exception) {
             Log::error($exception);
-            $response = new Response();
         }
 
         //TODO
         // Create upload file table, store upload information and re-ingest if failed before deleting
         Storage::disk('videos')->delete($videoFile);
 
-        return $response;
+        return $this->response;
     }
 
     /**
@@ -183,8 +182,18 @@ class OpencastService
         ];
     }
 
-    private function transformRunningWorkflowsResponse(array $response)
+    /**
+     * Opencast API returns a single json object if one or an array of objects.
+     * This method add a single object to an array so that the iteration still works
+     *
+     * @param array $response
+     * @return array
+     */
+    private function transformRunningWorkflowsResponse(array $response): array
     {
+        if (empty($response)) {
+            return [];
+        }
         if ((int)$response['workflows']['totalCount'] != 1) {
             return $response;
         }

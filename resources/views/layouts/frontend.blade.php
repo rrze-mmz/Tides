@@ -13,6 +13,7 @@
     <!-- Styles -->
     <link rel="icon" href="{{ URL::asset('/css/favicon.ico') }}" type="image/x-icon"/>
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
+    @livewireStyles
 </head>
 <body class=" font-sans antialiased leading-none bg-gray-100">
     <div id="app">

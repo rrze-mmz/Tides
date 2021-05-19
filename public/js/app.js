@@ -18,7 +18,44 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 
 
+ // const video = document.querySelector('video');
+// const source = document.getElementById("player").children[0].getAttribute("src");
+//
+// console.log(source);
+//
+// if (!Hls.isSupported()) {
+//     video.src = document.getElementById("player");
+// } else {
+//     // For more Hls.js options, see https://github.com/dailymotion/hls.js
+//     const hls = new Hls();
+//     hls.loadSource(source);
+//     hls.attachMedia(video);
+//     window.hls = hls;
+// }
+// Expose player so it can be used from the console
 
+window.player = player; // window.Vue = require('vue');
+
+
+vue__WEBPACK_IMPORTED_MODULE_3__.default.component('tides-flash-message', {
+  props: ['body'],
+  data: function data() {
+    return {
+      isVisible: true
+    };
+  },
+  created: function created() {
+    var _this = this;
+
+    setTimeout(function () {
+      return _this.isVisible = false;
+    }, 2000);
+  },
+  template: "\n        <div v-show=\"isVisible\" class=\"rounded-md bg-green-200 p-2 mb-2\">\n            <div class=\"flex\">\n                <div class=\"flex-shrink-0\">\n                    <svg class=\"h-5 w-5 text-green-400\" viewBox=\"0 0 20 20\" fill=\"currentColor\">\n                        <path fill-rule=\"evenodd\"\n                              d=\"M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z\"\n                              clip-rule=\"evenodd\" />\n                    </svg>\n                </div>\n                <div class=\"ml-3\">\n                    <p class=\"text-sm leading-5 font-medium text-green-800\">\n                       {{ body }}\n                    </p>\n                </div>\n                <div class=\"ml-auto pl-3\">\n                    <div class=\"-mx-1.5 -my-1.5\">\n                        <button  @click=\"isVisible = false\" type=\"button\"\n                                class=\"inline-flex rounded-md p-1.5 text-green-500 hover:bg-green-100 focus:outline-none focus:bg-green-100 transition ease-in-out duration-150\"\n                                aria-label=\"Dismiss\">\n                            <svg class=\"h-5 w-5\" viewBox=\"0 0 20 20\" fill=\"currentColor\">\n                                <path fill-rule=\"evenodd\"\n                                      d=\"M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z\"\n                                      clip-rule=\"evenodd\" />\n                            </svg>\n                        </button>\n                    </div>\n                </div>\n            </div>\n        </div>\n"
+});
+new vue__WEBPACK_IMPORTED_MODULE_3__.default({
+  el: '#app'
+});
 window.$ = window.jQuery = (jquery__WEBPACK_IMPORTED_MODULE_1___default());
 var player = new (plyr__WEBPACK_IMPORTED_MODULE_0___default())('#player', {
   language: 'de',
@@ -57,43 +94,6 @@ jquery__WEBPACK_IMPORTED_MODULE_1___default()(function () {
       }
     }
   });
-}); // const video = document.querySelector('video');
-// const source = document.getElementById("player").children[0].getAttribute("src");
-//
-// console.log(source);
-//
-// if (!Hls.isSupported()) {
-//     video.src = document.getElementById("player");
-// } else {
-//     // For more Hls.js options, see https://github.com/dailymotion/hls.js
-//     const hls = new Hls();
-//     hls.loadSource(source);
-//     hls.attachMedia(video);
-//     window.hls = hls;
-// }
-// Expose player so it can be used from the console
-
-window.player = player; // window.Vue = require('vue');
-
-
-vue__WEBPACK_IMPORTED_MODULE_3__.default.component('tides-flash-message', {
-  props: ['body'],
-  data: function data() {
-    return {
-      isVisible: true
-    };
-  },
-  created: function created() {
-    var _this = this;
-
-    setTimeout(function () {
-      return _this.isVisible = false;
-    }, 2000);
-  },
-  template: "\n        <div v-show=\"isVisible\" class=\"rounded-md bg-green-200 p-2 mb-2\">\n            <div class=\"flex\">\n                <div class=\"flex-shrink-0\">\n                    <svg class=\"h-5 w-5 text-green-400\" viewBox=\"0 0 20 20\" fill=\"currentColor\">\n                        <path fill-rule=\"evenodd\"\n                              d=\"M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z\"\n                              clip-rule=\"evenodd\" />\n                    </svg>\n                </div>\n                <div class=\"ml-3\">\n                    <p class=\"text-sm leading-5 font-medium text-green-800\">\n                       {{ body }}\n                    </p>\n                </div>\n                <div class=\"ml-auto pl-3\">\n                    <div class=\"-mx-1.5 -my-1.5\">\n                        <button  @click=\"isVisible = false\" type=\"button\"\n                                class=\"inline-flex rounded-md p-1.5 text-green-500 hover:bg-green-100 focus:outline-none focus:bg-green-100 transition ease-in-out duration-150\"\n                                aria-label=\"Dismiss\">\n                            <svg class=\"h-5 w-5\" viewBox=\"0 0 20 20\" fill=\"currentColor\">\n                                <path fill-rule=\"evenodd\"\n                                      d=\"M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z\"\n                                      clip-rule=\"evenodd\" />\n                            </svg>\n                        </button>\n                    </div>\n                </div>\n            </div>\n        </div>\n"
-});
-new vue__WEBPACK_IMPORTED_MODULE_3__.default({
-  el: '#app'
 });
 
 /***/ }),

@@ -9,6 +9,7 @@ use App\Services\OpencastService;
 use Facades\Tests\Setup\ClipFactory;
 use Facades\Tests\Setup\FileFactory;
 use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Queue;
@@ -30,6 +31,18 @@ class OpencastTest extends TestCase {
         $this->mockHandler = $this->swapOpencastClient();
 
         $this->opencastService = app(OpencastService::class);
+    }
+
+    /** @test */
+    public function it_shows_an_info_message_if_opencast_server_is_not_available(): void
+    {
+        $this->signInAdmin();
+
+        $this->mockHandler->append(new Response(200, [], json_encode([])));
+
+        $this->get(route('opencast.status'))
+            ->assertStatus(200)
+            ->assertSee('Opencast connection is not available');
     }
 
     /** @test */

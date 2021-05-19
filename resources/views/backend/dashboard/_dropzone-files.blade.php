@@ -1,7 +1,7 @@
 <div class="pt-10 pb-2 font-semibold border-b border-black font-2xl">
     Files in drop zone
 </div>
-<div class="w-full mt-3 py-3 bg-white">
+<div class="w-full mt-3 py-3 bg-white rounded-md">
     <ul>
         @forelse($files as $file)
             <li class="w-full mt-2 mb-2 p-2">

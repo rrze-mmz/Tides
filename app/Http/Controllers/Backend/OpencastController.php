@@ -22,6 +22,7 @@ class OpencastController extends Controller
     public function status(OpencastService $opencastService): View
     {
         $status = $opencastService->getHealth();
+
         return view('backend.opencast.status', compact('status'));
     }
 

@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Backend\AssetsController;
-use App\Http\Controllers\Backend\ClipCommentsController;
 use App\Http\Controllers\Backend\ClipsController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\DropzoneTransferController;
@@ -53,11 +52,6 @@ Route::get('/set_lang/{locale}', function ($locale) {
 
     return back();
 });
-
-//Comment routes
-Route::middleware(['auth'])
-    ->post('/clip/{clip}/comments', [ClipCommentsController::class , 'create'])
-    ->name('clip.comments.store');
 
 //Backend routes
 Route::prefix('admin')->middleware('auth')->group(function () {
