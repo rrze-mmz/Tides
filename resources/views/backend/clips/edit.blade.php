@@ -69,6 +69,7 @@
                         <textarea class="py-2 px-4 w-full leading-tight text-gray-700 bg-white rounded border-2 border-gray-200 appearance-none focus:outline-none focus:bg-white focus:border-blue-500"
                                   type="text"
                                   name="description"
+                                  rows="10"
                                   id="description"
                         > {{ $clip->description }}</textarea>
                         </div>
@@ -86,7 +87,7 @@
                             </label>
                         </div>
                         <div class="col-span-7 w-4/5">
-                            <select class="p-2 w-full js-example-basic-single"
+                            <select class="p-2 w-full js-example-basic-single focus:outline-none focus:bg-white focus:border-blue-500"
                                     name="tags[]"
                                     multiple="multiple"
                                     style="width: 100%"
@@ -106,12 +107,7 @@
 
                     </div>
 
-                    <button class="py-2 px-8 text-white bg-blue-500 rounded shadow hover:bg-blue-600 focus:shadow-outline focus:outline-none"
-                            type="submit"
-                            value="submit"
-                    >
-                        Save
-                    </button>
+                    <x-form.button :link="$link=false" type="submit" text="Save"/>
                 </form>
                 <div class="space-y-5 w-1/5 h-full">
                     @if(! is_null($clip->series_id) )
@@ -130,28 +126,18 @@
                 More actions
             </div>
             <div class="flex items-center pt-3 space-x-6">
-                    <a href="{{ $clip->path() }}"
-                       type="button"
-                        class="py-2 px-8 text-white bg-blue-500 rounded shadow hover:bg-blue-600 focus:shadow-outline focus:outline-none">
-                        Go to view page
-                    </a>
+                <x-form.button :link="$clip->path()" type="submit" text="Go to public page"/>
 
-                    <a href="{{ route('admin.clips.dropzone.listFiles', $clip) }}"
-                       type="button"
-                       class="py-2 px-8 text-white bg-blue-500 rounded shadow hover:bg-blue-600 focus:shadow-outline focus:outline-none">
-                        Transfer files from drop zone
-                    </a>
+                <x-form.button :link="route('admin.clips.dropzone.listFiles', $clip)" type="submit" text=" Transfer files from drop zone"/>
+
 
                     <form action="{{ $clip->adminPath() }}"
                           method="POST"
                         >
                         @csrf
                         @method('DELETE')
-                    <button
-                       type="submit"
-                       class="py-2 px-8 text-white bg-red-500 rounded shadow hover:bg-red-600 focus:shadow-outline focus:outline-none">
-                        Delete
-                    </button>
+
+                        <x-form.button :link="$link=false" type="delete" text="Delete"/>
 
                     </form>
             </div>

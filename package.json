@@ -25,6 +25,7 @@
         "vue-template-compiler": "^2.6.11"
     },
     "dependencies": {
+        "alpinejs": "^2.8.2",
         "hls.js": "^0.14.17",
         "plyr": "^3.6.4",
         "select2": "^4.1.0-rc.0",

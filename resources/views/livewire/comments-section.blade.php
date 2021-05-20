@@ -1,9 +1,7 @@
 <div class="mb-2 space-y-10" id="comments-section">
-    @if ($messageText)
         <x-message
             :messageText="$messageText"
             :messageType="$messageType"/>
-    @endif
 
     <form wire:submit.prevent="postComment" action="#" method="POST" class="w-1/2 my-12">
         @csrf

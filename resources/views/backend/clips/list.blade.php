@@ -26,14 +26,7 @@
                 <div class="w-1/5"> {{ $clip->assets()->first()?->durationToHours()  }}</div>
                 <div class="w-1/5">
                     @if(str_contains(url()->current(), 'admin'))
-                    <form method="GET"
-                          action="{{$clip->adminPath() }}"
-                    >
-                        <button type="submit"
-                                class="py-2 px-8 text-white bg-blue-500 rounded shadow hover:bg-blue-600 focus:shadow-outline focus:outline-none">
-                            Edit
-                        </button>
-                    </form>
+                        <x-form.button :link="$clip->adminPath()" type="submit" text="Edit"/>
                     @else
                         <form method="GET"
                               action="{{$clip->Path() }}"

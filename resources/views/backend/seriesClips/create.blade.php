@@ -98,10 +98,7 @@
                     @enderror
 
                 </div>
-
-                <button type="submit"
-                        class="ml-2 focus:outline-none text-white text-sm py-1.5 px-5 rounded-md bg-blue-500 hover:bg-blue-600 hover:shadow-lg"
-                >Add a Clip to Series</button>
+                <x-form.button :link="$link=false" type="submit" text="Add a Clip to Series"/>
 
             </form>
         </div>

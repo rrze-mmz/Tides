@@ -79,9 +79,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::delete('assets/{asset}', [AssetsController::class, 'destroy'])->name('assets.destroy');
 
     //Opencast routes
-    Route::get('/opencast', [OpencastController::class, 'status'])->name('opencast.status');
-    Route::post('clips/{clip}/ingestMediaPackage', [OpencastController::class, 'ingestMediaPackage'])
-        ->name('opencast.ingestMediaPackage');
+    Route::get('/opencast', OpencastController::class)->name('opencast.status');
 
     Route::get('/users', [UsersController::class,'index'])->name('users.index');
 });

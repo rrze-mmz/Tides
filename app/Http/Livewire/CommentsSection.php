@@ -29,6 +29,8 @@ class CommentsSection extends Component
     public function mount(Clip $clip)
     {
         $this->clip = $clip;
+        $this->messageType ='';
+        $this->messageText = '';
     }
 
     public function postComment()
@@ -51,6 +53,7 @@ class CommentsSection extends Component
 
         $this->messageText = 'Comment posted successfully';
         $this->messageType = 'success';
+        $this->emit('updated');
     }
 
     public function deleteComment(Comment $comment)
@@ -63,6 +66,7 @@ class CommentsSection extends Component
 
         $this->messageText = 'Comment deleted successfully';
         $this->messageType = 'error';
+        $this->emit('updated');
     }
 
     public function render()

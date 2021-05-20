@@ -66,6 +66,7 @@
                         <div class="col-span-7 w-4/5">
                         <textarea class="py-2 px-4 w-full leading-tight text-gray-700 bg-white rounded border-2 border-gray-200 appearance-none focus:outline-none focus:bg-white focus:border-blue-500"
                                   type="text"
+                                  rows="10"
                                   name="description"
                                   id="description"
                         >{{ old('description') }} </textarea>
@@ -96,15 +97,14 @@
                             <p class="mt-2 w-full text-xs text-red-500">{{ $message }}</p>
                         </div>
                         @enderror
-                    </div>
 
-                    <button type="submit"
-                            class="ml-2 focus:outline-none text-white text-sm py-1.5 px-5 rounded-md bg-blue-500 hover:bg-blue-600 hover:shadow-lg"
-                    >Create a Clip!</button>
+                        <div class="flex content-center items-center mb-6">
+                        </div>
+                        <div class="col-span-7 w-4/5">
+                            <x-form.button :link="$link=false" type="submit" text="Create clip"/>
+                        </div>
+                    </div>
                 </form>
             </div>
-        <div class="pt-10 lg:flex-1 lg:mx-10">
-
-        </div>
     </main>
 @endsection

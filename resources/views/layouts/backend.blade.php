@@ -17,7 +17,6 @@
 
     @livewireStyles
 
-    <!--  <link href="/css/mediaelementplayer.css" rel="stylesheet"> -->
 </head>
 <body class="h-screen font-sans antialiased leading-none bg-gray-100">
 <div id="app">
@@ -60,7 +59,7 @@
         </div>
         <div class="pt-8 w-full lg:flex-grow lg:mx-10">
             @if(Session::has('flashMessage'))
-                    <tides-flash-message body="{{ Session::get('flashMessage', 'default') }}"></tides-flash-message>
+                    <x-alerts.flash-alert :message="Session::get('flashMessage', 'default')"/>
             @endif
 
             @yield('content')

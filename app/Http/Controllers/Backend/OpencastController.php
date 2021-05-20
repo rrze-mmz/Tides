@@ -19,36 +19,10 @@ class OpencastController extends Controller
      * @param OpencastService $opencastService
      * @return View
      */
-    public function status(OpencastService $opencastService): View
+    public function __invoke(OpencastService $opencastService): View
     {
         $status = $opencastService->getHealth();
 
         return view('backend.opencast.status', compact('status'));
-    }
-
-    /**
-     * Ingest a video file to Opencast
-     * @param Clip $clip
-     * @param Request $request
-     * @return RedirectResponse
-     */
-    public function ingestMediaPackage(Clip $clip, Request $request): RedirectResponse
-    {
-        $validated = $request->validate([
-            'videoFile'  => 'required|file|mimetypes:video/mp4,video/mpeg,video/x-matroska'
-        ]);
-
-        //if clip has no series or series is null return without pushing to opencast
-        if (is_null($clip->series->opencast_series_id)) {
-            return redirect(route('clips.edit', $clip));
-        }
-
-        $videoFile = $validated['videoFile'];
-
-        $storedFile = $videoFile->storeAs(getClipStoragePath($clip), $videoFile->getClientOriginalName(), 'videos');
-
-        $this->dispatch(new IngestVideoFileToOpencast($clip, $storedFile));
-
-        return redirect(route('clips.edit', $clip));
     }
 }

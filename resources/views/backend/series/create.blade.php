@@ -45,6 +45,7 @@
                         <textarea class="py-2 px-4 w-full leading-tight text-gray-700 bg-white rounded border-2 border-gray-200 appearance-none focus:outline-none focus:bg-white focus:border-blue-500"
                                   type="text"
                                   name="description"
+                                  rows="10"
                                   id="description"
                         > {{ old('description') }}</textarea>
                     </div>
@@ -53,10 +54,14 @@
                         <p class="mt-2 w-full text-xs text-red-500">{{ $message }}</p>
                     </div>
                     @enderror
+
+                    <div class="flex content-center items-center mb-6">
+                    </div>
+                    <div class="col-span-7 w-4/5">
+                        <x-form.button :link="$link=false" type="submit" text="Create series"/>
+                    </div>
                 </div>
-                <button type="submit"
-                        class="ml-2 focus:outline-none text-white text-sm py-1.5 px-5 rounded-md bg-blue-500 hover:bg-blue-600 hover:shadow-lg"
-                >Create a Series</button>
+
             </form>
         </div>
     </main>

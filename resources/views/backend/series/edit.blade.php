@@ -47,6 +47,7 @@
                     <div class="col-span-7 w-4/5">
                         <textarea class="py-2 px-4 w-full leading-tight text-gray-700 bg-white rounded border-2 border-gray-200 appearance-none focus:outline-none focus:bg-white focus:border-blue-500"
                                   type="text"
+                                  rows="10"
                                   name="description"
                                   id="description"
                         > {{ $series->description }}</textarea>
@@ -81,10 +82,9 @@
                     @enderror
 
                 </div>
-                <button type="submit"
-                        class="py-2 px-8 text-white bg-blue-500 rounded shadow hover:bg-blue-600 focus:shadow-outline focus:outline-none"
-                >Update a Series
-                </button>
+
+                <x-form.button :link="$link=false" type="submit" text="Update Series"/>
+
             </form>
         </div>
 
@@ -92,28 +92,15 @@
             More actions
         </div>
         <div class="flex items-center pt-3 space-x-6">
-            <form action="{{ route('frontend.series.show',$series) }}"
-                  method="GET">
-                <button
-                    class="py-2 px-8  text-white bg-blue-500 rounded shadow hover:bg-blue-600 focus:shadow-outline focus:outline-none">
-                    Go to public page
-                </button>
-            </form>
-            <form action="{{ route('series.clip.create',$series) }}"
-                  method="GET">
-                <button
-                    class="py-2 px-8  text-white bg-blue-500 rounded shadow hover:bg-blue-600 focus:shadow-outline focus:outline-none">
-                    Add new clip
-                </button>
-            </form>
+            <x-form.button :link="route('frontend.series.show',$series)" type="submit" text="Go to public page"/>
+
+            <x-form.button :link="route('series.clip.create',$series)" type="submit" text="Add new clip"/>
+
             <form action="{{$series->adminPath()}}"
                   method="POST">
                 @csrf
                 @method('DELETE')
-                <button
-                    class="py-2 px-8  text-white bg-red-700 rounded shadow hover:bg-red-600 focus:shadow-outline focus:outline-none">
-                    Delete Series
-                </button>
+                <x-form.button :link="$link=false" type="delete" text="Delete Series"/>
             </form>
         </div>
         @if(isset($opencastSeriesRunningWorkflows['workflows']) && $opencastSeriesRunningWorkflows['workflows']['totalCount'] > 0)

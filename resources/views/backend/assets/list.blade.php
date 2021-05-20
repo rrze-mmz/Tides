@@ -23,8 +23,7 @@
                     >
                         @csrf
                         @method('DELETE')
-                        <button type="submit"
-                                class="py-2 px-8 text-white bg-red-500 rounded shadow hover:bg-red-600 focus:shadow-outline focus:outline-none"> Delete </button>
+                        <x-form.button :link="$link=false" type="delete" text="Delete"/>
                     </form>
                 </div>
             </li>

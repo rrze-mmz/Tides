@@ -105,7 +105,6 @@ class OpencastService
 
         //TODO
         // Create upload file table, store upload information and re-ingest if failed before deleting
-        Storage::disk('videos')->delete($videoFile);
 
         return $this->response;
     }
@@ -175,7 +174,7 @@ class OpencastService
                 ],
                 [
                     'name'     => 'file',
-                    'contents' => Storage::disk('videos')->get($file),
+                    'contents' => file_get_contents($file),
                     'filename' => basename($file)
                 ],
             ]

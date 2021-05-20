@@ -4,12 +4,11 @@ namespace Tests\Unit;
 
 use App\Models\Series;
 use App\Services\OpencastService;
-use Facades\Tests\Setup\FileFactory;
 use Facades\Tests\Setup\SeriesFactory;
 use GuzzleHttp\Handler\MockHandler;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Arr;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Tests\Setup\WorksWithOpencastClient;
@@ -61,13 +60,11 @@ class OpencastServiceTest extends TestCase
 
         $this->mockHandler->append($this->mockIngestMediaPackageResponse());
 
-        $file =   FileFactory::videoFile();
-
         $series = SeriesFactory::withClips(1)->create();
 
-        $storedFile = $file->storeAs(getClipStoragePath($series->clips()->first()), $file->getClientOriginalName(), 'videos');
+        $file = UploadedFile::fake()->create('video.mp4', 1000);
 
-        $response = $this->opencastService->ingestMediaPackage($series->clips()->first(),  $storedFile);
+        $response = $this->opencastService->ingestMediaPackage($series->clips()->first(),  $file);
 
         $this->assertEquals(200, $response->getStatusCode());
     }
@@ -128,9 +125,8 @@ class OpencastServiceTest extends TestCase
 
         $series = SeriesFactory::withClips(2)->create(['opencast_series_id'=> Str::uuid()]);
 
-        $file =   FileFactory::videoFile();
 
-        $storedFile = $file->storeAs(getClipStoragePath($series->clips()->first()), $file->getClientOriginalName(), 'videos');
+        $file = UploadedFile::fake()->create('video.mp4', 1000);
 
         $data = [
             'headers'   => [
@@ -151,12 +147,12 @@ class OpencastServiceTest extends TestCase
                 ],
                 [
                     'name'     => 'file',
-                    'contents' => Storage::disk('videos')->get($storedFile),
-                    'filename' => basename($storedFile)
+                    'contents' => file_get_contents($file),
+                    'filename' => basename($file)
                 ],
             ]
         ];
 
-        $this->assertEquals($data, $this->opencastService->ingestMediaPackageFormData($series->clips()->first(), $storedFile));
+        $this->assertEquals($data, $this->opencastService->ingestMediaPackageFormData($series->clips()->first(), $file));
     }
 }
