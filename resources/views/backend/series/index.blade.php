@@ -14,6 +14,9 @@
                         You have no series yet
                     </li>
                 @endforelse
+                <div class="py-10">
+                    {{ $series->links() }}
+                </div>
             </ul>
 @endsection
 

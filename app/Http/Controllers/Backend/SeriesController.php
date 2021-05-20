@@ -22,7 +22,7 @@ class SeriesController extends Controller
         return view('backend.series.index', [
             'series' =>
                 (auth()->user()->isAdmin())
-                    ? Series::orderByDesc('updated_at')->paginate(20)
+                    ? Series::orderByDesc('updated_at')->paginate(10)
                     : auth()->user()->series()->orderBy('updated_at')->limit(20)->get(),
         ]);
     }
