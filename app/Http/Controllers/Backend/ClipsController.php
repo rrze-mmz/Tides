@@ -99,7 +99,6 @@ class ClipsController extends Controller
         return redirect($clip->adminPath());
     }//end update()
 
-
     /**
      * @param  Clip $clip
      * @return RedirectResponse

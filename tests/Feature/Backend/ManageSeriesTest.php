@@ -34,6 +34,26 @@ class ManageSeriesTest extends TestCase
     }
 
     /** @test */
+    public function it_paginates_users_series_in_dashboard_index_page(): void
+    {
+        Series::factory(11)->create(['owner_id'=>$this->signIn()]);
+
+        $this->get(route('series.index').'?page=2')->assertDontSee('You have no series yet');
+
+    }
+
+    /** @test */
+    public function it_paginates_all_series_in_dashboard_index_page_for_admin_user(): void
+    {
+        Series::factory(11)->create();
+
+        $this->signInAdmin();
+
+        $this->get(route('series.index').'?page=2')->assertDontSee('You have no series yet');
+
+    }
+
+    /** @test */
     public function an_authenticated_user_can_see_the_create_series_form_and_all_form_fields(): void
     {
         $this->signIn();
@@ -306,12 +326,12 @@ class ManageSeriesTest extends TestCase
         $this->assertDatabaseMissing('series', $series->only('id'));
     }
 
-    /** @test */
+    /** @test *
     public function a_series_owner_can_delete_series(): void
     {
         $series = SeriesFactory::ownedBy($this->signIn())->create();
 
-        $this->followingRedirects()->delete($series->adminPath())->assertStatus(200);
+        $this->delete($series->adminPath());
 
         $this->assertDatabaseMissing('series', $series->only('id'));
     }

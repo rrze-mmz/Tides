@@ -22,7 +22,7 @@ class CommentsSectionTest extends TestCase
 
         $this->signIn();
 
-        $this->clip = ClipFactory::create();
+        $this->clip = ClipFactory::create(['allow_comments'=> true]);
 
     }
 

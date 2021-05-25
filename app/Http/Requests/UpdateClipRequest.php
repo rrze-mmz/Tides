@@ -15,6 +15,7 @@ class UpdateClipRequest extends FormRequest
         $this->merge([
             'slug' => Str::slug($this->title),
             'tags' => $this->tags = $this->tags ?? [], //set empty array if select2 tags is empty
+            'allow_comments'=> $this->allow_comments === 'on',
         ]);
     }
 
@@ -40,7 +41,8 @@ class UpdateClipRequest extends FormRequest
             'description' => 'max:255',
             'slug'        => 'required',
             'tags'        => 'array',
-            'episode'     => 'required|integer'
+            'episode'     => 'required|integer',
+            'allow_comments'=> 'boolean',
         ];
     }
 }

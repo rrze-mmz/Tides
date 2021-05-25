@@ -7,6 +7,7 @@ namespace Tests\Setup;
 use App\Models\Asset;
 use App\Models\Clip;
 use App\Models\User;
+use function PHPUnit\Framework\at;
 
 class ClipFactory
 {
@@ -28,10 +29,10 @@ class ClipFactory
         return $this;
     }
 
-    public function create()
+    public function create(array $attributes = [])
     {
-        $clip = Clip::factory()->create([
-            'owner_id' => $this->user ?? User::factory()
+        $clip = Clip::factory()->create(
+            !empty($attributes)? $attributes : ['owner_id' => $this->user ?? User::factory()
         ]);
 
         Asset::factory($this->assetsCount)->create([

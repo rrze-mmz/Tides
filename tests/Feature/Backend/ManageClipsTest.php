@@ -363,4 +363,19 @@ class ManageClipsTest extends TestCase {
         $this->delete($clip->adminPath())->assertSessionHas($this->flashMessageName);
     }
 
+    /** @test */
+    public function it_can_toggle_comments(): void
+    {
+        $clip = ClipFactory::ownedBy($this->signIn())->create();
+
+        $this->get($clip->path())->assertDontSee('Comments');
+
+        $this->patch(route('clips.update', $clip), [
+            'title'   => $clip->title,
+            'episode' => $clip->episode,
+            'allow_comments' => 'on'
+        ]);
+
+        $this->get($clip->path())->assertSee('Comments');
+    }
 }

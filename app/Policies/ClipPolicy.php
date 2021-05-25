@@ -29,4 +29,13 @@ class ClipPolicy
     {
         return ($user->is($clip->owner) || $user->hasRole('admin')) ;
     }
+
+    /**
+     * @param Clip $clip
+     * @return bool
+     */
+    public function viewComments(User $user, Clip $clip): bool
+    {
+        return (auth()->check() && $clip->allow_comments);
+    }
 }

@@ -24,7 +24,7 @@
                 </p>
             </div>
 
-        @auth
+        @can ('view-comments', $clip)
             <div class="flex flex-col pt-20">
                 <h2 class="text-2xl font-semibold">Comments</h2>
 
