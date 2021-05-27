@@ -66,6 +66,5 @@ class TransferDropzoneFiles implements ShouldQueue
 
                 $this->clip->updatePosterImage();
         });
-//        Mail::to($this->user->email)->send(new VideoUploaded($this->clip));
     }
 }

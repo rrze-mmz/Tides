@@ -153,6 +153,7 @@ class OpencastServiceTest extends TestCase
             ]
         ];
 
-        $this->assertEquals($data, $this->opencastService->ingestMediaPackageFormData($series->clips()->first(), $file));
+        $this->assertEquals($data, $this->opencastService
+            ->ingestMediaPackageFormData($series->clips()->first(), $file));
     }
 }

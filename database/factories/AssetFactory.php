@@ -28,7 +28,7 @@ class AssetFactory extends Factory
         return [
             'original_file_name' => $uploadedFile->getClientOriginalName(),
             'disk'  => 'videos',
-            'path' => '/videos/'.$uploadedFile->getClientOriginalName(),
+            'path' =>  $uploadedFile->getClientOriginalName(),
             'width' => $this->faker->randomNumber(),
             'height' => '1280',
             'duration' => '720',

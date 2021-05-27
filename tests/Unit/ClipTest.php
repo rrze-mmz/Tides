@@ -114,8 +114,14 @@ class ClipTest extends TestCase
                     $fileNameDate.'-'.$this->clip->slug.'.'.Str::of($videoFile->getClientOriginalName())->after('.'),
                     'videos'),
             'duration'           => FFMpeg::fromDisk('videos')->open($path)->getDurationInSeconds(),
-            'width'              => FFMpeg::fromDisk('videos')->open($path)->getVideoStream()->getDimensions()->getWidth(),
-            'height'             => FFMpeg::fromDisk('videos')->open($path)->getVideoStream()->getDimensions()->getHeight()
+            'width'              => FFMpeg::fromDisk('videos')->open($path)
+                                        ->getVideoStream()
+                                        ->getDimensions()
+                                        ->getWidth(),
+            'height'             => FFMpeg::fromDisk('videos')->open($path)
+                                        ->getVideoStream()
+                                        ->getDimensions()
+                                        ->getHeight()
         ]);
 
         $this->assertInstanceOf(Asset::class, $asset);

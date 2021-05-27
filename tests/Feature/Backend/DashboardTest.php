@@ -78,7 +78,7 @@ class DashboardTest extends TestCase
     }
 
     /** @test */
-    public function it_display_user_clips_(): void
+    public function it_display_user_clips(): void
     {
         $user = $this->signIn();
 

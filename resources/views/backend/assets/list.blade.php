@@ -17,7 +17,8 @@
                 <div class="w-3/6"> {{ $asset->path }}</div>
                 <div class="w-1/6"> {{ $asset->durationToHours() }}</div>
                 <div class="w-1/6"> {{ $asset->width }} x {{ $asset->height }}</div>
-                <div class="w-1/6">
+                <div class="w-1/6 flex items-center align-items-center space-x-1">
+                    <x-form.button :link="route('assets.download',$asset)" type="submit" text="Download"/>
                     <form method="POST"
                           action="{{$asset->path() }}"
                     >

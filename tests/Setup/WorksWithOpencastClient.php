@@ -15,6 +15,7 @@ use PHPUnit\Util\Xml;
 
 
 trait WorksWithOpencastClient {
+
     use WithFaker;
 
     public function swapOpencastClient(): MockHandler

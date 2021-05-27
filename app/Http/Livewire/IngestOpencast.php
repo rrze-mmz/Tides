@@ -40,5 +40,4 @@ class IngestOpencast extends Component
     {
         return view('livewire.ingest-opencast');
     }
-
 }

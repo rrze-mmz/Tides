@@ -31,22 +31,32 @@
                         <a href="/set_lang/de" class="{{ (session('locale') === 'de')?'underline':'' }}">DE</a>
                     </span>
                     @guest
-                        <a class="no-underline hover:underline" href="{{ route('login') }}">{{ __('auth.Login') }}</a>
+                        <a class="no-underline hover:underline"
+                           href="{{ route('login') }}"
+                        >{{ __('auth.Login') }}</a>
                         @if (Route::has('register'))
-                            <a class="no-underline hover:underline" href="{{ route('register') }}">{{ __('auth.Register') }}</a>
+                            <a class="no-underline hover:underline"
+                               href="{{ route('register') }}"
+                            >{{ __('auth.Register') }}</a>
                         @endif
                     @else
 
                         @if(!str_contains(url()->current(), 'admin'))
-                           <a href="/admin/dashboard" class="no-underline hover:underline"> Dashboard </a>
+                           <a href="/admin/dashboard"
+                              class="no-underline hover:underline"
+                           > Dashboard </a>
                         @endif
                         <span>{{ Auth::user()->name }}</span>
 
                         <a href="{{ route('logout') }}"
                            class="no-underline hover:underline"
                            onclick="event.preventDefault();
-                                document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                                document.getElementById('logout-form').submit();"
+                        >{{ __('Logout') }}</a>
+                        <form id="logout-form"
+                              action="{{ route('logout') }}"
+                              method="POST"
+                              class="hidden">
                             {{ csrf_field() }}
                         </form>
                     @endguest

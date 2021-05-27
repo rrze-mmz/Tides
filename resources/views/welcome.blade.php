@@ -29,13 +29,22 @@
                     <a class="inline-block py-2 px-4 text-white no-underline" href="#">Active</a>
                 </li>
                 <li class="mr-3">
-                    <a class="inline-block py-2 px-4 text-gray-600 no-underline hover:text-gray-200 hover:text-underline" href="#">link</a>
+                    <a class="inline-block py-2 px-4 text-gray-600 no-underline
+                                hover:text-gray-200 hover:text-underline"
+                       href="#"
+                    >link</a>
                 </li>
                 <li class="mr-3">
-                    <a class="inline-block py-2 px-4 text-gray-600 no-underline hover:text-gray-200 hover:text-underline" href="#">link</a>
+                    <a class="inline-block py-2 px-4 text-gray-600 no-underline hover:text-gray-200
+                                hover:text-underline"
+                       href="#"
+                    >link</a>
                 </li>
                 <li class="mr-3">
-                    <a class="inline-block py-2 px-4 text-gray-600 no-underline hover:text-gray-200 hover:text-underline" href="#">link</a>
+                    <a class="inline-block py-2 px-4 text-gray-600 no-underline hover:text-gray-200
+                                hover:text-underline"
+                       href="#"
+                    >link</a>
                 </li>
             </ul>
         </div>
@@ -52,13 +61,20 @@
                     {{ config('app.name', 'Laravel') }}
                 </h1>
                 @if(Route::has('login'))
-                    <div class="flex flex-col justify-center items-center space-y-2 sm:flex-row sm:flex-wrap sm:space-x-8 sm:space-y-0">
+                    <div class="flex flex-col justify-center items-center space-y-2
+                                sm:flex-row sm:flex-wrap sm:space-x-8 sm:space-y-0">
                         @auth
-                            <a href="{{ url('/home') }}" class="text-sm font-normal text-teal-800 no-underline uppercase hover:underline">{{ __('Home') }}</a>
+                            <a href="{{ url('/home') }}" class="text-sm font-normal text-teal-800 no-underline
+                                    uppercase hover:underline"
+                            >{{ __('Home') }}</a>
                         @else
-                            <a href="{{ route('login') }}" class="text-sm font-normal text-teal-800 no-underline uppercase hover:underline">{{ __('Login') }}</a>
+                            <a href="{{ route('login') }}" class="text-sm font-normal text-teal-800 no-underline
+                                    uppercase hover:underline"
+                            >{{ __('Login') }}</a>
                             @if (Route::has('register'))
-                                <a href="{{ route('register') }}" class="text-sm font-normal text-teal-800 no-underline uppercase hover:underline">{{ __('Register') }}</a>
+                                <a href="{{ route('register') }}" class="text-sm font-normal text-teal-800 no-underline
+                                        uppercase hover:underline"
+                                >{{ __('Register') }}</a>
                             @endif
                         @endauth
                     </div>

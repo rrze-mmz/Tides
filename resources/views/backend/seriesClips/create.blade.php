@@ -19,7 +19,9 @@
                         </label>
                     </div>
                     <div class="col-span-7 w-20">
-                        <input class="py-2 px-4 w-full leading-tight text-gray-700 bg-white rounded border-2 border-gray-200 appearance-none focus:outline-none focus:bg-white focus:border-blue-500"
+                        <input class="py-2 px-4 w-full leading-tight text-gray-700 bg-white rounded border-2
+                                        border-gray-200 appearance-none focus:outline-none focus:bg-white
+                                        focus:border-blue-500"
                                type="number"
                                name="episode"
                                id="episode"
@@ -41,7 +43,9 @@
                         </label>
                     </div>
                     <div class="col-span-7 w-4/5">
-                        <input class="py-2 px-4 w-full leading-tight text-gray-700 bg-white rounded border-2 border-gray-200 appearance-none focus:outline-none focus:bg-white focus:border-blue-500"
+                        <input class="py-2 px-4 w-full leading-tight text-gray-700 bg-white rounded border-2
+                                        border-gray-200 appearance-none focus:outline-none focus:bg-white
+                                        focus:border-blue-500"
                                type="text"
                                name="title"
                                id="title"
@@ -64,7 +68,9 @@
                         </label>
                     </div>
                     <div class="col-span-7 w-4/5">
-                        <textarea class="py-2 px-4 w-full leading-tight text-gray-700 bg-white rounded border-2 border-gray-200 appearance-none focus:outline-none focus:bg-white focus:border-blue-500"
+                        <textarea class="py-2 px-4 w-full leading-tight text-gray-700 bg-white rounded border-2
+                                            border-gray-200 appearance-none focus:outline-none focus:bg-white
+                                            focus:border-blue-500"
                                   type="text"
                                   name="description"
                                   id="description"

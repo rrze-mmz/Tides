@@ -2,7 +2,8 @@
 
 @section('content')
             <div class="flex pb-2 font-semibold border-b border-black font-2xl">
-                Edit {{ $clip->title }} [ ID: {{ $clip->id }} ] <span class="pl-2 italic font-sm"> created at {{$clip->created_at}}</span>
+                Edit {{ $clip->title }} [ ID: {{ $clip->id }} ]
+                <span class="pl-2 italic font-sm"> created at {{$clip->created_at}}</span>
             </div>
             <div class="flex py-2 px-2">
                 <form action="{{ $clip->adminPath() }}"

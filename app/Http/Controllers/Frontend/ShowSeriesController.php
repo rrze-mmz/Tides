@@ -18,6 +18,13 @@ class ShowSeriesController extends Controller
      */
     public function show(Series $series): View
     {
+        /*
+         * modify series clips and if user is not owner fetch only clips that has video assets
+         */
+        $series->clips = (auth()->user()?->id === $series->owner_id)
+            ? $series->clips
+            :  $series->clips->filter(fn($clip)=> $clip->assets()->count());
+
         return view('frontend.series.show', compact('series'));
     }
 }

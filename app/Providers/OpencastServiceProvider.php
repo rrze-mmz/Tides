@@ -16,6 +16,7 @@ class OpencastServiceProvider extends ServiceProvider
     {
         $this->app->singleton(OpencastClient::class, function () {
             $config = $this->app->get('config')['opencast'];
+
             return new OpencastClient([
                 'base_uri'  => $config['base_uri'],
                 'verify'    => config('app.env')==='production',

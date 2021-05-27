@@ -92,6 +92,8 @@ class AssetsTest extends TestCase
 
         $this->assertDatabaseHas('assets', ['path' => $asset->path]);
 
+        Storage::disk('videos')->assertExists($asset->path);
+
         $asset->delete();
 
         $this->assertDeleted($asset);

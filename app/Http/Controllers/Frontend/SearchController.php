@@ -17,7 +17,7 @@ class SearchController extends Controller
      * @param  SearchRequest  $request
      * @return View
      */
-    public function search(SearchRequest $request): View
+    public function search(SearchRequest $request): Vie
     {
         $clips = Clip::has('assets') // fetch only clips with assets
         ->where(function ($q) use ($request) {

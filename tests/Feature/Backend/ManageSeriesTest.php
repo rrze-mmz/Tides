@@ -191,7 +191,8 @@ class ManageSeriesTest extends TestCase
     /** @test */
     public function it_has_go_to_public_page_button(): void
     {
-        $this->get(route('series.edit', SeriesFactory::ownedBy($this->signIn())->create()))->assertSee('Go to public page');
+        $this->get(route('series.edit', SeriesFactory::ownedBy($this->signIn())->create()))
+                    ->assertSee('Go to public page');
     }
 
     /** @test */
@@ -326,7 +327,7 @@ class ManageSeriesTest extends TestCase
         $this->assertDatabaseMissing('series', $series->only('id'));
     }
 
-    /** @test *
+    /** @test */
     public function a_series_owner_can_delete_series(): void
     {
         $series = SeriesFactory::ownedBy($this->signIn())->create();

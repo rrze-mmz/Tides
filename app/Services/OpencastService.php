@@ -10,20 +10,15 @@ use GuzzleHttp\Psr7\Response;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 use Psr\Http\Message\ResponseInterface;
 
 class OpencastService
 {
 
-    private OpencastClient $client;
-
     private Response $response;
 
-    public function __construct(OpencastClient $client)
+    public function __construct(private OpencastClient $client)
     {
-        $this->client = $client;
-
         //initialize an empty responce
         $this->response = new Response(200, [], json_encode([]));
     }

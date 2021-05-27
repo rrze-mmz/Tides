@@ -62,10 +62,9 @@ class SeriesController extends Controller
     {
         $this->authorize('edit', $series);
 
-        return view('backend.series.edit', [
-            'series'    =>  $series,
-            'opencastSeriesRunningWorkflows'    =>  $opencastService->getSeriesRunningWorkflows($series)
-        ]);
+        $opencastSeriesRunningWorkflows = $opencastService->getSeriesRunningWorkflows($series);
+
+        return view('backend.series.edit', compact(['series','opencastSeriesRunningWorkflows']));
     }
 
     /**

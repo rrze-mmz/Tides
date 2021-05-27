@@ -17,15 +17,19 @@
                     {{ __('Verify Your Email Address') }}
                 </header>
 
-                <div class="w-full flex flex-wrap text-gray-700 leading-normal text-sm p-6 space-y-4 sm:text-base sm:space-y-6">
+                <div class="w-full flex flex-wrap text-gray-700 leading-normal text-sm p-6
+                            space-y-4 sm:text-base sm:space-y-6">
                     <p>
                         {{ __('Before proceeding, please check your email for a verification link.') }}
                     </p>
 
                     <p>
-                        {{ __('If you did not receive the email') }}, <a
+                        {{ __('If you did not receive the email') }},
+                        <a
                             class="text-blue-500 hover:text-blue-700 no-underline hover:underline cursor-pointer"
-                            onclick="event.preventDefault(); document.getElementById('resend-verification-form').submit();">{{ __('click here to request another') }}</a>.
+                            onclick="event.preventDefault();
+                                     document.getElementById('resend-verification-form').submit();"
+                        >{{ __('click here to request another') }}</a>.
                     </p>
 
                     <form id="resend-verification-form" method="POST" action="{{ route('verification.resend') }}"

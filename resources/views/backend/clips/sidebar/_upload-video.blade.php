@@ -16,7 +16,8 @@
         </div>
 
         <button type="submit"
-                class=" mt-3 ml-2 focus:outline-none text-white text-sm py-1.5 px-5 rounded-md bg-green-500 hover:bg-green-600 hover:shadow-lg"
+                class=" mt-3 ml-2 focus:outline-none text-white text-sm py-1.5 px-5 rounded-md bg-green-500
+                        hover:bg-green-600 hover:shadow-lg"
         >Upload</button>
         @error('asset')
         <p class="mt-2 text-xs text-red-500">{{ $message }}</p>
