@@ -9,7 +9,7 @@
             @endcan
         </div>
 
-        <div class="flex flex-col pt-20">
+        <div class="flex flex-col pt-10">
             <h2 class="text-2xl font-semibold">Description</h2>
             <p class="pt-4">
                 {{ $series->description }}

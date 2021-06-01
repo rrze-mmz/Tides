@@ -21,6 +21,8 @@ class ClipFactory extends Factory
      */
     public function definition()
     {
+        static $episode = 0;
+
         return [
             'title' => $title = $this->faker->sentence(),
             'description' => $this->faker->paragraph(),
@@ -28,7 +30,7 @@ class ClipFactory extends Factory
             'owner_id' => User::factory()->create()->id,
             'posterImage' => null,
             'series_id' => null,
-            'episode' => '1',
+            'episode' => $episode++,
         ];
     }
 }

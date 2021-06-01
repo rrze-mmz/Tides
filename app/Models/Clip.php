@@ -13,11 +13,9 @@ use Illuminate\Support\Facades\Storage;
 
 class Clip extends Model
 {
-
     use HasFactory, Slugable;
 
     protected $guarded = [];
-
     protected $attributes = [
         'episode' => '1'
     ];
@@ -100,7 +98,7 @@ class Clip extends Model
     }
 
     /**
-     * Updates Clip poster Image on asset upload
+     * Updates clip poster image on asset upload
      */
     public function updatePosterImage(): void
     {
@@ -115,6 +113,12 @@ class Clip extends Model
      */
     public function addTags(Collection $tagsCollection): void
     {
+        /*
+         * Check for tags collection from post request.
+         * The closure returns a tag model, where the model is either selected or created.
+         * The tag model is synchronized with the clip tags.
+         * In case the collection is empty assumed that clip has no tags and delete them
+         */
         if ($tagsCollection->isNotEmpty()) {
             $this->tags()->sync($tagsCollection->map(function ($tagName) {
                 return tap(Tag::firstOrCreate(['name' => $tagName]))->save();
@@ -122,5 +126,23 @@ class Clip extends Model
         } else {
             $this->tags()->detach();
         }
+    }
+
+    /*
+     * Return next and previoud Models based on current Model
+     */
+    public function previousNextClipCollection(): Collection
+    {
+
+        $clipsCollection = $this->series->clips()->orderBy('episode')->get();
+
+        return collect([
+            'previous' => $clipsCollection->filter(function ($value, $key) {
+                return (int)$value->episode == (int)$this->episode - 1;
+            })->first(),
+            'next'     => $clipsCollection->filter(function ($value, $key) {
+                return (int)$value->episode == (int) $this->episode + 1;
+            })->first()
+        ]);
     }
 }

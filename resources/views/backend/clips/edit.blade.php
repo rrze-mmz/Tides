@@ -1,10 +1,29 @@
 @extends('layouts.backend')
 
 @section('content')
-            <div class="flex pb-2 font-semibold border-b border-black font-2xl">
-                Edit {{ $clip->title }} [ ID: {{ $clip->id }} ]
-                <span class="pl-2 italic font-sm"> created at {{$clip->created_at}}</span>
-            </div>
+            <div class="flex items center  w-full pb-2 font-semibold border-b border-black font-2xl">
+                <div class="flex justify-between items-end w-full">
+                    <div class="">
+                        Edit {{ $clip->title }} [ ID: {{ $clip->id }} ]
+                        <span class="pl-2 italic font-sm"> created at {{$clip->created_at}}</span>
+                    </div>
+                    <div class="flex space-x-2">
+                        @if(!is_null($previousNextClipCollection->get('previous')))
+                            <x-form.button :link="$previousNextClipCollection->get('previous')->adminPath()"
+                                           type="submit"
+                                           text="Previous"
+                            />
+                        @endif
+
+                        @if(!is_null($previousNextClipCollection->get('next')))
+                            <x-form.button :link="$previousNextClipCollection->get('next')->adminPath()"
+                                           type="submit"
+                                           text="Next"
+                            />
+                        @endif
+                    </div>
+                </div>
+                </div>
             <div class="flex py-2 px-2">
                 <form action="{{ $clip->adminPath() }}"
                       method="POST"
@@ -16,7 +35,7 @@
                     <div class="grid grid-cols-8 gap-2 py-3">
 
                         <div class="flex content-center items-center">
-                            <label class="block py-2 mr-6 font-bold text-gray-700 text-md"
+                            <label class="blozck py-2 mr-6 font-bold text-gray-700 text-md"
                                    for="episode"
                             >
                                 Episode

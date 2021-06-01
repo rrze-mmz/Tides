@@ -11,5 +11,9 @@
                 No clips found
             @endforelse
         </div>
+
+        <div class="py-10">
+            {{ $clips->links() }}
+        </div>
 @endsection
 

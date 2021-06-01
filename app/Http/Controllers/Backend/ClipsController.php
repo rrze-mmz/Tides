@@ -15,7 +15,6 @@ use Illuminate\View\View;
 
 class ClipsController extends Controller
 {
-
     /**
      * @return View
      */
@@ -25,12 +24,11 @@ class ClipsController extends Controller
             'backend.clips.index',
             [
                 'clips' => (auth()->user()->isAdmin())
-                    ? Clip::orderBy('title')->paginate(20)
-                    : auth()->user()->series()->orderBy('updated_at')->limit(20)->get(),
+                    ? Clip::orderBy('title')->paginate(12)
+                    : auth()->user()->series()->orderBy('updated_at')->paginate(12),
             ]
         );
     }//end index()
-
 
     /**
      * Create form for a single clip
@@ -42,11 +40,10 @@ class ClipsController extends Controller
         return view('backend.clips.create');
     }//end create()
 
-
     /**
      * Store a clip in database
      *
-     * @param  StoreClipRequest $request
+     * @param StoreClipRequest $request
      * @return RedirectResponse
      */
     public function store(StoreClipRequest $request): RedirectResponse
@@ -63,7 +60,7 @@ class ClipsController extends Controller
     /**
      * Edit form for a single clip
      *
-     * @param  Clip $clip
+     * @param Clip $clip
      * @return View
      * @throws AuthorizationException
      */
@@ -75,17 +72,17 @@ class ClipsController extends Controller
             'backend.clips.edit',
             [
                 'clip'                         => $clip,
+                'previousNextClipCollection'   => $clip->previousNextClipCollection(),
                 'opencastConnectionCollection' => $opencastService->getHealth(),
             ]
         );
     }//end edit()
 
-
     /**
      * Update a clip in the database
      *
-     * @param  Clip              $clip
-     * @param  UpdateClipRequest $request
+     * @param Clip $clip
+     * @param UpdateClipRequest $request
      * @return RedirectResponse
      */
     public function update(Clip $clip, UpdateClipRequest $request): RedirectResponse
@@ -100,7 +97,7 @@ class ClipsController extends Controller
     }//end update()
 
     /**
-     * @param  Clip $clip
+     * @param Clip $clip
      * @return RedirectResponse
      * @throws AuthorizationException
      */

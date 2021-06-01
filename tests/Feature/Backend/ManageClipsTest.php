@@ -28,6 +28,23 @@ class ManageClipsTest extends TestCase {
     }
 
     /** @test */
+    public function it_paginates_users_clips_in_dashboard_index_page(): void
+    {
+        Clip::factory(20)->create(['owner_id'=>$this->signIn()]);
+
+        $this->get(route('clips.index').'?page=2')->assertDontSee('You have no series yet');
+    }
+
+    /** @test */
+    public function it_paginates_all_clips_in_dashboard_index_page_for_admin_user(): void
+    {
+        Clip::factory(20)->create();
+
+        $this->signInAdmin();
+
+        $this->get(route('clips.index').'?page=2')->assertDontSee('You have no series yet');
+    }
+    /** @test */
     public function it_requires_a_title_creating_a_new_clip(): void
     {
         $this->signIn();
@@ -378,4 +395,57 @@ class ManageClipsTest extends TestCase {
 
         $this->get($clip->path())->assertSee('Comments');
     }
+
+    /** @test */
+    public function it_displays_previous_next_clip_id_links(): void
+    {
+        $this->signInAdmin();
+
+        SeriesFactory::withClips(3)->create();
+
+        $clip = Clip::find(2);
+        $previousClip = Clip::find(1);
+        $nextClip = Clip::find(3);
+
+        $this->get($clip->adminPath())
+            ->assertSee('Previous')
+            ->assertSee('Next')
+            ->assertSee($previousClip->adminPath())
+            ->assertSee($nextClip->adminPath());
+    }
+
+    /** @test */
+    public function it_hides_previous_clip_id_links_if_clip_is_the_first_on_a_series(): void
+    {
+        $this->signInAdmin();
+
+        SeriesFactory::withClips(3)->create();
+
+        $clip = Clip::find(1);
+        $nextClip = Clip::find(2);
+
+        $this->get($clip->adminPath())
+            ->assertDontSee('Previous')
+            ->assertSee('Next')
+            ->assertSee($nextClip->adminPath());
+    }
+
+    /** @test */
+    public function it_hides_next_clip_id_links_if_clip_is_the_last_on_a_series(): void
+    {
+        $this->signInAdmin();
+
+        SeriesFactory::withClips(4)->create();
+
+        $clip = Clip::find(4);
+
+        $previousClip = Clip::find(3);
+
+
+        $this->get($clip->adminPath())
+            ->assertSee('Previous')
+            ->assertDontSee('Next')
+            ->assertSee($previousClip->adminPath());
+    }
+
 }

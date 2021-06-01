@@ -21,7 +21,7 @@
                 <div class="w-3/5"> {{ $clip->title }}</div>
                 <div class="w-1/5"> {{ $clip->assets->first()?->durationToHours()  }}</div>
                 <div class="w-1/5">
-                    @if($dashboardAction)
+                    @if($dashboardAction && Request::segment(1) === 'admin')
                         <x-form.button :link="$clip->adminPath()" type="submit" text="Edit"/>
                     @else
                         <form method="GET"

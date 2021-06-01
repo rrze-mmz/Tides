@@ -36,16 +36,15 @@ class ManageSeriesTest extends TestCase
     /** @test */
     public function it_paginates_users_series_in_dashboard_index_page(): void
     {
-        Series::factory(11)->create(['owner_id'=>$this->signIn()]);
+        Series::factory(20)->create(['owner_id'=>$this->signIn()]);
 
         $this->get(route('series.index').'?page=2')->assertDontSee('You have no series yet');
-
     }
 
     /** @test */
     public function it_paginates_all_series_in_dashboard_index_page_for_admin_user(): void
     {
-        Series::factory(11)->create();
+        Series::factory(20)->create();
 
         $this->signInAdmin();
 
@@ -343,5 +342,15 @@ class ManageSeriesTest extends TestCase
         $series = SeriesFactory::ownedBy($this->signIn())->create();
 
         $this->delete($series->adminPath())->assertSessionHas($this->flashMessageName);
+    }
+
+    /** @test */
+    public function it_shows_series_owner_if_user_is_admin(): void
+    {
+        $series = Series::factory()->create();
+
+        $this->signInAdmin();
+
+        $this->get(route('series.edit', $series))->assertSee($series->owner->name);
     }
 }

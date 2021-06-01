@@ -8,7 +8,7 @@
         <div class="flex justify-center content-center content-between py-2 px-2">
             <form action="{{ $series->adminPath() }}"
                   method="POST"
-                  class="w-4/5 w-full"
+                  class=" @if(auth()->user()->isAdmin()) w-4/5 @else w-full @endif"
             >
                 @csrf
                 @method('PATCH')
@@ -86,6 +86,13 @@
                 <x-form.button :link="$link=false" type="submit" text="Update Series"/>
 
             </form>
+
+            @if(auth()->user()->isAdmin())
+                <div class="w-1/5">
+                    Series owner is {{ $series->owner->name }}
+                </div>
+            @endif
+
         </div>
 
         <div class="flex pt-8 pb-2 font-semibold border-b border-black font-2xl">
@@ -116,8 +123,6 @@
             </ul>
         @endif
         @include('backend.clips.list')
-
-
 
     </div>
 @endsection

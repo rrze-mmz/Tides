@@ -7,11 +7,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Clip;
 use App\Services\WowzaService;
 use Illuminate\View\View;
-use Psy\Util\Str;
 
 class ShowClipsController extends Controller
 {
-
     /**
      * @return View
      */
@@ -23,13 +21,15 @@ class ShowClipsController extends Controller
     }
 
     /**
-     * @param  Clip  $clip
+     * @param Clip $clip
      * @return View
      */
     public function show(Clip $clip, WowzaService $wowzaServiceProvider): View
     {
-        $wowzaStatus = $wowzaServiceProvider->checkApiConnection();
-
-        return view('frontend.clips.show', compact(['clip','wowzaStatus']))->with('successMessage', '');
+        return view('frontend.clips.show', [
+            'clip'                       => $clip,
+            'wowzaStatus'                => $wowzaServiceProvider->checkApiConnection(),
+            'previousNextClipCollection' => $clip->previousNextClipCollection(),
+        ]);
     }
 }

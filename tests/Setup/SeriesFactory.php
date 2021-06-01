@@ -48,7 +48,7 @@ class SeriesFactory
                 'owner_id'  => $user,
             ]);
 
-            if($this->assetsCount > 0 && $this->clipsCount >0)
+            if($this->assetsCount > 0)
             {
                 foreach ($clips as $clip)
                 {

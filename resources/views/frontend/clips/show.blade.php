@@ -1,7 +1,7 @@
 @extends('layouts.frontend')
 
 @section('content')
-    <main class="container mx-auto mt-32 md:mt-32">
+    <main class="container mx-auto mt-36 md:mt-36">
         <div class="flex justify-between pb-2 border-b-2 border-black">
             <h2 class="text-2xl font-bold">{{ $clip->title }} [ID: {{ $clip->id }}]</h2>
             @can('edit-clips', $clip)
@@ -16,7 +16,39 @@
                 @include('frontend.clips._player',['asset'=> $clip->assets()])
         @endif
 
-            <div class="flex flex-col pt-20">
+        <div class="flex justify-between py-2">
+            @if(!is_null($previousNextClipCollection->get('previous')))
+                <x-form.button :link="$previousNextClipCollection->get('previous')->path()"
+                               type="submit"
+                               text="Previous"
+                />
+            @endif
+
+            @if(!is_null($previousNextClipCollection->get('next')))
+                <x-form.button :link="$previousNextClipCollection->get('next')->path()"
+                               type="submit"
+                               text="Next"
+                />
+            @endif
+        </div>
+
+        @if ($clip->tags->isNotEmpty())
+            <div class="flex flex-col pt-10 ">
+                <h2 class="text-2xl font-semibold pb-2 w-full border-b-2 border-black">Tags</h2>
+                <span class="pt-4 ">
+                    @foreach($clip->tags as $tag)
+                    <div
+                        class="text-sm mr-1 inline-flex items-center font-bold leading-sm px-3 py-1 bg-green-200
+                                text-green-700 rounded-full"
+                    >
+                        {{ $tag->name }}
+                    </div>
+                    @endforeach
+                </span>
+            </div>
+        @endif
+
+            <div class="flex flex-col pt-10">
                 <h2 class="text-2xl font-semibold">Description</h2>
                 <p class="pt-4">
                     {{ $clip->description }}
@@ -24,8 +56,8 @@
             </div>
 
         @can ('view-comments', $clip)
-            <div class="flex flex-col pt-20">
-                <h2 class="text-2xl font-semibold">Comments</h2>
+            <div class="flex flex-col pt-10">
+                <h2 class="text-2xl font-semibold pb-2 border-b-2 border-black">Comments</h2>
 
                 <livewire:comments-section :clip="$clip"/>
                 @livewireScripts

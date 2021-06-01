@@ -6,6 +6,7 @@ namespace Tests\Feature\Frontend;
 use App\Models\Clip;
 use App\Services\WowzaService;
 use Facades\Tests\Setup\ClipFactory;
+use Facades\Tests\Setup\SeriesFactory;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -13,9 +14,7 @@ use Illuminate\Support\Facades\Storage;
 use Tests\Setup\WorksWithWowzaClient;
 use Tests\TestCase;
 
-class ClipTest extends TestCase
-{
-
+class ClipTest extends TestCase {
     use RefreshDatabase, WorksWithWowzaClient;
 
     private Clip $clip;
@@ -56,7 +55,7 @@ class ClipTest extends TestCase
     {
         $this->mockHandler->append($this->mockCheckApiConnection());
 
-        $this->get($this->clip->path())->assertSee('http://172.17.0.2:1935');
+        $this->get($this->clip->path())->assertSee('http://172.17.0.3:1935');
 
         Storage::disk('videos')->delete($this->clip->assets()->first()->path);
     }
@@ -86,6 +85,39 @@ class ClipTest extends TestCase
     {
         $this->mockHandler->append(new Response());
 
-        $this->get(route('frontend.clips.show',$this->clip))->assertDontSee('Comments');
+        $this->get(route('frontend.clips.show', $this->clip))->assertDontSee('Comments');
+    }
+
+    /** @test */
+    public function it_shows_clip_tags_if_any(): void
+    {
+        $this->mockHandler->append(new Response());
+
+        $this->get(route('frontend.clips.show', $this->clip))->assertDontSee('Tags');
+
+        $this->clip->addTags(collect(['single tag', 'tides', 'testTags']));
+
+        $this->get(route('frontend.clips.show', $this->clip))
+            ->assertSee('Tags')
+            ->assertSee('testTags');
+    }
+
+    /** @test */
+    public function a_user_can_navigate_to_next_and_previous_clip_if_clip_belongs_to_a_series(): void
+    {
+        $this->mockHandler->append(new Response());
+
+        SeriesFactory::withClips(3)->create();
+
+        //the first clip in series will have id of 2. A clip with ID of 1 is already created by setUp method
+        $clip = Clip::find(3);
+        $previousClip = Clip::find(2);
+        $nextClip = Clip::find(4);
+
+        $this->get($clip->path())
+            ->assertSee('Previous')
+            ->assertSee('Next')
+            ->assertSee($previousClip->path())
+            ->assertSee($nextClip->path());
     }
 }

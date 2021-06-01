@@ -1,5 +1,4 @@
 <div class="flex flex-col">
-
     <div class="flex justify-center content-center pt-6 " >
             <video id="player" controls data-poster="{{ fetchClipPoster($clip->posterImage)  }}" >
                 @if(Illuminate\Support\Facades\Storage::disk('streamable_videos')
@@ -8,8 +7,8 @@
                             type="application/x-mpegURL" />
                 @elseif(Illuminate\Support\Str::contains($wowzaStatus['0'],'Wowza Streaming Engine'))
                     <source
-{{--                            src = "http://172.17.0.2:1935/vod/content//2021/05/19/TIDES_Clip_ID_23/camera.smil/playlist.m3u8"--}}
-                            src="{{ env('WOWZA_ENGINE_URL').$clip->assets->first()->path.'/playlist.m3u8'  }}"
+                            src = "http://172.17.0.3:1935/vod/content//2021/05/19/TIDES_Clip_ID_23/camera.smil/playlist.m3u8"
+{{--                            src="{{ env('WOWZA_ENGINE_URL').$clip->assets->first()->path.'/playlist.m3u8'  }}"--}}
                             type="application/x-mpegURL"  />
                 @else
                     <source  src="{{ '/videos/'.$clip->assets->first()->path  }}"

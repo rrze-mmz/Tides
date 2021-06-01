@@ -6,10 +6,12 @@ namespace Tests\Unit;
 use App\Models\Asset;
 use App\Models\Clip;
 use App\Models\Comment;
+use App\Models\Series;
 use App\Models\User;
 use Carbon\Carbon;
 use Facades\Tests\Setup\FileFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
@@ -149,5 +151,33 @@ class ClipTest extends TestCase
         $this->clip->addTags(collect(['php', 'tides']));
 
         $this->assertEquals(2, $this->clip->tags()->count());
+    }
+
+    /** @test */
+    public function it_can_fetch_a_collection_of_previous_and_next_clip_models_if_clip_belongs_to_a_series(): void
+    {
+        $series = Series::factory()->create();
+
+        Clip::factory()->create([
+            'title' => 'first clip',
+            'series_id' => $series->id,
+            'episode'   => 1,
+        ]);
+
+        $secondClip = Clip::factory()->create([
+            'title' => 'second clip',
+            'series_id' => $series->id,
+            'episode'   => 2,
+        ]);
+
+        Clip::factory()->create([
+            'title' => 'third clip',
+            'series_id' => $series->id,
+            'episode'   => 3,
+        ]);
+
+        $this->assertInstanceOf(Collection::class, $secondClip->previousNextClipCollection());
+        $this->assertInstanceOf(Clip::class, $secondClip->previousNextClipCollection()->get('previous'));
+        $this->assertInstanceOf(Clip::class, $secondClip->previousNextClipCollection()->get('next'));
     }
 }
