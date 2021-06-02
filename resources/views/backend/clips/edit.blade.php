@@ -183,6 +183,18 @@
                                text=" Transfer files from drop zone"
                 />
 
+                @if ($clip->assets()->count())
+                    <x-form.button :link="route('admin.clips.triggerSmilFiles', $clip)"
+                                   type="submit"
+                                   text="Trigger smil files"
+                    />
+                @endif
+
+                <x-form.button :link="route('admin.clips.dropzone.listFiles', $clip)"
+                               type="submit"
+                               text=" Transfer files from drop zone"
+                />
+
                     <form action="{{ $clip->adminPath() }}"
                           method="POST"
                         >

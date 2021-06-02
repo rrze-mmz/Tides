@@ -164,6 +164,14 @@ class OpencastService
                     'contents' => $clip->title
                 ],
                 [
+                    'name'     => 'description',
+                    'contents' => $clip->id
+                ],
+                [
+                    'name'     => 'publisher',
+                    'contents' => $clip->owner->email
+                ],
+                [
                     'name'     => 'isPartOf',
                     'contents' => $clip->series->opencast_series_id
                 ],

@@ -5,6 +5,8 @@ namespace App\Jobs;
 
 use App\Models\Clip;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Filesystem\FileExistsException;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -33,16 +35,23 @@ class TransferDropzoneFiles implements ShouldQueue
      * Execute the job.video_dropzone
      *
      * @return void
+     * @throws FileExistsException
      */
     public function handle()
     {
         $clipStoragePath = getClipStoragePath($this->clip);
 
         $this->files->each(function ($file, $key) use ($clipStoragePath) {
-            Storage::disk('videos')->writeStream(
-                $clipStoragePath.'/'.$file['name'],
-                Storage::disk('video_dropzone')->readStream($file['name'])
-            );
+            try
+            {
+                Storage::disk('videos')->writeStream(
+                    $clipStoragePath.'/'.$file['name'],
+                    Storage::disk('video_dropzone')->readStream($file['name'])
+                );
+            }catch (FileNotFoundException $e)
+            {
+                Log::info($e);
+            }
 
             $storedFile = $clipStoragePath.'/'.$file['name'];
             $ffmpeg = FFMpeg::fromDisk('videos')->open($storedFile);

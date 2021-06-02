@@ -36,7 +36,7 @@ class DropzoneTransferController extends Controller
 
     /**
      * Transfer files from dropzone to file path
-     *
+
      * @param Clip $clip
      * @param Request $request
      * @return RedirectResponse
@@ -51,6 +51,7 @@ class DropzoneTransferController extends Controller
         ]);
 
         TransferDropzoneFiles::dispatch($clip, fetchDropZoneFiles()->whereIn('hash', $validated['files']));
+
         Mail::to($clip->owner->email)->queue(new VideoUploaded($clip));
 
         return redirect($clip->adminPath());

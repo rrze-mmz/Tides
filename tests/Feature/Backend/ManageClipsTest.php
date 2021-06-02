@@ -448,4 +448,11 @@ class ManageClipsTest extends TestCase {
             ->assertSee($previousClip->adminPath());
     }
 
+    /** @test */
+    public function it_has_a_trigger_smil_file_button_if_clip_has_assets(): void
+    {
+        $clip = ClipFactory::withAssets(2)->ownedBy($this->signIn())->create();
+
+        $this->get(route('clips.edit', $clip))->assertSee('Trigger smil files');
+    }
 }

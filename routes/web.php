@@ -7,6 +7,7 @@ use App\Http\Controllers\Backend\DropzoneTransferController;
 use App\Http\Controllers\Backend\OpencastController;
 use App\Http\Controllers\Backend\SeriesClipsController;
 use App\Http\Controllers\Backend\SeriesController;
+use App\Http\Controllers\Backend\TriggerSmilFilesController;
 use App\Http\Controllers\Backend\UsersController;
 use App\Http\Controllers\Frontend\ApiTagsController;
 use App\Http\Controllers\Frontend\AssetsDownloadController;
@@ -62,6 +63,9 @@ Route::prefix('admin')->middleware('auth')->group(function () {
         ->name('admin.clips.dropzone.listFiles');
     Route::post('/clips/{clip}/transfer', [DropzoneTransferController::class, 'transfer'])
         ->name('admin.clips.dropzone.transfer');
+
+    Route::get('/clips/{clip}/triggerSmilFiles', TriggerSmilFilesController::class)
+        ->name('admin.clips.triggerSmilFiles');
 
     Route::get('/series/{series}/addClip', [SeriesClipsController::class, 'create'])->name('series.clip.create');
     Route::post('series/{series}/addClip', [SeriesClipsController::class, 'store'])->name('series.clip.store');

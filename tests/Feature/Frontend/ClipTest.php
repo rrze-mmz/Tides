@@ -55,7 +55,7 @@ class ClipTest extends TestCase {
     {
         $this->mockHandler->append($this->mockCheckApiConnection());
 
-        $this->get($this->clip->path())->assertSee('http://172.17.0.3:1935');
+        $this->get($this->clip->path())->assertSee(env('WOWZA_ENGINE_URL'));
 
         Storage::disk('videos')->delete($this->clip->assets()->first()->path);
     }

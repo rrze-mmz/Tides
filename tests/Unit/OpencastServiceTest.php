@@ -142,6 +142,14 @@ class OpencastServiceTest extends TestCase
                     'contents' => $series->clips()->first()->title
                 ],
                 [
+                    'name'     => 'description',
+                    'contents' => $series->clips()->first()->id
+                ],
+                [
+                    'name'     => 'publisher',
+                    'contents' => $series->clips()->first()->owner->email
+                ],
+                [
                     'name'     => 'isPartOf',
                     'contents' => $series->opencast_series_id
                 ],
@@ -149,7 +157,7 @@ class OpencastServiceTest extends TestCase
                     'name'     => 'file',
                     'contents' => file_get_contents($file),
                     'filename' => basename($file)
-                ],
+                ]
             ]
         ];
 
