@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\CreateWowzaSmilFile;
 use App\Jobs\SendEmail;
 use App\Jobs\TransferDropzoneFiles;
 use App\Mail\VideoUploaded;
@@ -11,6 +12,7 @@ use App\Models\Clip;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 
@@ -50,8 +52,12 @@ class DropzoneTransferController extends Controller
             'files' => 'required|array'
         ]);
 
-        TransferDropzoneFiles::dispatch($clip, fetchDropZoneFiles()->whereIn('hash', $validated['files']));
+        Bus::chain([
+            new TransferDropzoneFiles($clip, fetchDropZoneFiles()->whereIn('hash', $validated['files'])),
+            new CreateWowzaSmilFile($clip),
+        ])->dispatch();
 
+        //mail can be chained via anonymous function inside the bus but then the test  fails
         Mail::to($clip->owner->email)->queue(new VideoUploaded($clip));
 
         return redirect($clip->adminPath());

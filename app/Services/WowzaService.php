@@ -11,7 +11,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Spatie\ArrayToXml\ArrayToXml;
 
-class WowzaService {
+class WowzaService
+{
     private Response $response;
 
     public function __construct(private WowzaClient $client)
@@ -26,11 +27,9 @@ class WowzaService {
      */
     public function checkApiConnection(): Collection
     {
-        try
-        {
+        try {
             $this->response = $this->client->get('/');
-        } catch (GuzzleException $e)
-        {
+        } catch (GuzzleException $e) {
             Log::error($e);
         }
 
@@ -41,9 +40,8 @@ class WowzaService {
      * Generates smil files for wowza streaming
      * @throws \DOMException
      */
-    public function createSmilFiles(Clip $clip): void
+    public function createSmilFile(Clip $clip): void
     {
-        $xmlArray = [];
 
         $xmlArray = [
             'body' => [
@@ -51,12 +49,14 @@ class WowzaService {
             ]
         ];
 
+         // select all clip video assets, itterate them and create an array for array to xml package
         $xmlArray['body']['switch'] = $clip->assets
-                                        ->where('type','=','video')
-                                        ->sortByDesc('height')
-                                        ->map(function($asset) use ($xmlArray) {
-                                               return  $this->createSmilFileArray($asset);
-                                            })->toArray();
+                                            ->where('type', '=', 'video')
+                                            ->sortByDesc('height')
+                                            ->map(function ($asset) use ($xmlArray) {
+                                                    return $this->createSmilFileArray($asset);
+                                            })
+                                            ->toArray();
 
         $result = new ArrayToXml($xmlArray, [
             'rootElementName' => 'smil',
@@ -65,9 +65,21 @@ class WowzaService {
             ]
         ], true, 'UTF-8', '1.0', []);
 
-        $xmlFile = $result->prettify()->toXml();
 
-        Storage::disk('videos')->put(getClipStoragePath($clip).'/camera.smil',$xmlFile);
+        //store the generated file to clip path
+        Storage::disk('videos')
+            ->put($assetPath = getClipStoragePath($clip) . '/camera.smil', $xmlFile = $result->prettify()->toXml());
+
+        //save or update the smil file in db
+        $clip->addAsset([
+            'disk'               => 'videos',
+            'original_file_name' => 'camera.smil',
+            'type'               => 'smil',
+            'path'               => $assetPath,
+            'duration'           => '0',
+            'width'              => '0',
+            'height'             => '0',
+        ]);
 
         Log::info($xmlFile);
     }
@@ -78,36 +90,36 @@ class WowzaService {
      */
     public function createSmilFileArray($asset): array
     {
-        return  [
+        return [
             'video' => [
-                '_attributes' => [
+                '_attributes'       => [
                     'src'            => 'mp4:' . $asset->original_file_name,
-                    'system-bitrate' => $bitrate  = $this->findWowzaAssetBitrate((int)$asset->height),
+                    'system-bitrate' => $bitrate = $this->findWowzaAssetBitrate((int)$asset->height),
                     'width'          => $asset->width,
                     'height'         => $asset->height
                 ],
-                'param1'       => [
+                'paramVideoBR'      => [
                     '_attributes' => [
                         'name'      => 'videoBitrate',
                         'value'     => $bitrate,
                         'valuetype' => 'data',
                     ]
                 ],
-                'param2'       => [
+                'paramAudioBR'      => [
                     '_attributes' => [
                         'name'      => 'audioBitrate',
                         'value'     => '44100',
                         'valuetype' => 'data',
                     ]
                 ],
-                'param3'       => [
+                'paramVideoCodecID' => [
                     '_attributes' => [
                         'name'      => 'videoCodecId',
                         'value'     => 'avc1.4d401f',
                         'valuetype' => 'data',
                     ]
                 ],
-                'param4'       => [
+                'paramAudioCodecID' => [
                     '_attributes' => [
                         'name'      => 'audioCodecId',
                         'value'     => 'mp4a.40.2',
@@ -120,21 +132,14 @@ class WowzaService {
 
     public function findWowzaAssetBitrate($videoPixelHeight): int
     {
-        if($videoPixelHeight > 700 && $videoPixelHeight < 800 )
-        {
-            return  1100000;
-        }
-        else if($videoPixelHeight > 360 && $videoPixelHeight < 700)
-        {
-            return  750000;
-        }
-        else if($videoPixelHeight <= 360)
-        {
-            return  450000;
-        }
-        else
-        {
-            return  1500000;
+        if ($videoPixelHeight > 700 && $videoPixelHeight < 800) {
+            return 1100000;
+        } elseif ($videoPixelHeight > 360 && $videoPixelHeight < 700) {
+            return 750000;
+        } elseif ($videoPixelHeight <= 360) {
+            return 450000;
+        } else {
+            return 1500000;
         }
     }
 }

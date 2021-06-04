@@ -3,15 +3,14 @@
 namespace App\Jobs;
 
 use App\Models\Clip;
-use App\Services\OpencastService;
+use App\Services\WowzaService;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class IngestVideoFileToOpencast implements ShouldQueue
+class CreateWowzaSmilFile implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -20,18 +19,19 @@ class IngestVideoFileToOpencast implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(private Clip $clip, private string $videoFile)
+    public function __construct(private Clip $clip)
     {
+        //
     }
 
     /**
      * Execute the job.
      *
      * @return void
-     * @throws FileNotFoundException
+     * @throws \DOMException
      */
-    public function handle(OpencastService $opencastService)
+    public function handle(WowzaService $wowzaService)
     {
-        $opencastService->ingestMediaPackage($this->clip, $this->videoFile);
+        $wowzaService->createSmilFile($this->clip);
     }
 }

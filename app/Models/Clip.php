@@ -89,12 +89,20 @@ class Clip extends Model
     }
 
     /**
+     * @return Model|null
+     */
+    public function getCameraSmil(): Model|null
+    {
+        return $this->assets()->firstWhere('original_file_name', '=', 'camera.smil');
+    }
+
+    /**
      * @param array $attributes
      * @return Model
      */
-    public function addAsset($attributes = []): Model
+    public function addAsset(array $attributes = []): Model
     {
-        return $this->assets()->create($attributes);
+        return $this->assets()->firstOrCreate($attributes);
     }
 
     /**

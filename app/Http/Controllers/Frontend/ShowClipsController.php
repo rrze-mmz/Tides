@@ -24,11 +24,11 @@ class ShowClipsController extends Controller
      * @param Clip $clip
      * @return View
      */
-    public function show(Clip $clip, WowzaService $wowzaServiceProvider): View
+    public function show(Clip $clip, WowzaService $wowzaService): View
     {
         return view('frontend.clips.show', [
             'clip'                       => $clip,
-            'wowzaStatus'                => $wowzaServiceProvider->checkApiConnection(),
+            'wowzaStatus'                => $wowzaService->checkApiConnection(),
             'previousNextClipCollection' => $clip->previousNextClipCollection(),
         ]);
     }

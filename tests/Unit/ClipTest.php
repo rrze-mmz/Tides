@@ -8,18 +8,14 @@ use App\Models\Clip;
 use App\Models\Comment;
 use App\Models\Series;
 use App\Models\User;
-use Carbon\Carbon;
 use Facades\Tests\Setup\FileFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
 use Tests\TestCase;
 
-class ClipTest extends TestCase
-{
-
+class ClipTest extends TestCase {
     use RefreshDatabase;
 
     protected Clip $clip;
@@ -34,13 +30,13 @@ class ClipTest extends TestCase
     /** @test */
     public function it_has_a_path(): void
     {
-        $this->assertEquals('/clips/'.$this->clip->slug, $this->clip->path());
+        $this->assertEquals('/clips/' . $this->clip->slug, $this->clip->path());
     }
 
     /** @test */
     public function it_has_a_admin_path(): void
     {
-        $this->assertEquals('/admin/clips/'.$this->clip->slug, $this->clip->adminPath());
+        $this->assertEquals('/admin/clips/' . $this->clip->slug, $this->clip->adminPath());
     }
 
     /** @test */
@@ -100,30 +96,14 @@ class ClipTest extends TestCase
     /** @test */
     public function it_can_add_an_asset(): void
     {
-        Storage::fake('videos');
-
-        $clipStoragePath = getClipStoragePath($this->clip);
-
-        $fileNameDate = $this->clip->created_at->format('Y-m-d');
-
-        $videoFile = FileFactory::videoFile();
-
         $asset = $this->clip->addAsset([
             'disk'               => 'videos',
-            'original_file_name' => $videoFile->getClientOriginalName(),
-            'path'               =>
-                $path = $videoFile->storeAs($clipStoragePath,
-                    $fileNameDate.'-'.$this->clip->slug.'.'.Str::of($videoFile->getClientOriginalName())->after('.'),
-                    'videos'),
-            'duration'           => FFMpeg::fromDisk('videos')->open($path)->getDurationInSeconds(),
-            'width'              => FFMpeg::fromDisk('videos')->open($path)
-                                        ->getVideoStream()
-                                        ->getDimensions()
-                                        ->getWidth(),
-            'height'             => FFMpeg::fromDisk('videos')->open($path)
-                                        ->getVideoStream()
-                                        ->getDimensions()
-                                        ->getHeight()
+            'original_file_name' => 'video.mp4',
+            'path'               => '/videos/',
+            'duration'           => '100',
+            'width'              => '1920',
+            'height'             => '1080',
+            'type'               => 'video',
         ]);
 
         $this->assertInstanceOf(Asset::class, $asset);
@@ -136,13 +116,13 @@ class ClipTest extends TestCase
 
         $file = FileFactory::videoFile();
 
-        $file->storeAs('thumbnails', $this->clip->id.'_poster.png');
+        $file->storeAs('thumbnails', $this->clip->id . '_poster.png');
 
         $this->clip->updatePosterImage();
 
         $this->assertEquals('1_poster.png', $this->clip->posterImage);
 
-        Storage::disk('thumbnails')->delete($this->clip->id.'_poster.png');
+        Storage::disk('thumbnails')->delete($this->clip->id . '_poster.png');
     }
 
     /** @test */
@@ -159,19 +139,19 @@ class ClipTest extends TestCase
         $series = Series::factory()->create();
 
         Clip::factory()->create([
-            'title' => 'first clip',
+            'title'     => 'first clip',
             'series_id' => $series->id,
             'episode'   => 1,
         ]);
 
         $secondClip = Clip::factory()->create([
-            'title' => 'second clip',
+            'title'     => 'second clip',
             'series_id' => $series->id,
             'episode'   => 2,
         ]);
 
         Clip::factory()->create([
-            'title' => 'third clip',
+            'title'     => 'third clip',
             'series_id' => $series->id,
             'episode'   => 3,
         ]);
@@ -179,5 +159,23 @@ class ClipTest extends TestCase
         $this->assertInstanceOf(Collection::class, $secondClip->previousNextClipCollection());
         $this->assertInstanceOf(Clip::class, $secondClip->previousNextClipCollection()->get('previous'));
         $this->assertInstanceOf(Clip::class, $secondClip->previousNextClipCollection()->get('next'));
+    }
+
+    /** @test */
+    public function it_an_asset_instance_if_clip_has_smil_file(): void
+    {
+        $this->assertNull($this->clip->getCameraSmil());
+
+        $this->clip->addAsset([
+            'disk'               => 'videos',
+            'original_file_name' => 'camera.smil',
+            'type'               => 'smil',
+            'path'               => '/videos/camera.smil',
+            'duration'           => '0',
+            'width'              => '0',
+            'height'             => '0',
+        ]);
+
+        $this->assertInstanceOf(Asset::class, $this->clip->getCameraSmil());
     }
 }

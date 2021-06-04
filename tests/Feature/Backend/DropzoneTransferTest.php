@@ -3,6 +3,7 @@
 
 namespace Tests\Feature\Backend;
 
+use App\Jobs\CreateWowzaSmilFile;
 use App\Jobs\SendEmail;
 use App\Jobs\TransferDropzoneFiles;
 use App\Mail\VideoUploaded;
@@ -10,8 +11,8 @@ use Facades\Tests\Setup\ClipFactory;
 use Facades\Tests\Setup\FileFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Testing\File;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
@@ -101,13 +102,16 @@ class DropzoneTransferTest extends TestCase
     /** @test */
     public function it_should_queue_the_transfer_dropzone_to_clip_job(): void
     {
-        Queue::fake();
+        Bus::fake();
 
-        $this->post(route('admin.clips.dropzone.transfer',ClipFactory::ownedBy($this->signIn())->create()), [
+        $this->post(route('admin.clips.dropzone.transfer',  ClipFactory::ownedBy($this->signIn())->create()), [
             'files'=>[sha1('test_file_name')]]);
 
-        Queue::assertPushed(TransferDropzoneFiles::class);
+        Bus::assertChained([
+            TransferDropzoneFiles::class,
+            CreateWowzaSmilFile::class,
 
+        ]);
     }
 
     /** @test */

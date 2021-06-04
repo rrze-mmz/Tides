@@ -27,7 +27,8 @@ class SearchController extends Controller
         ->orWhereHas('owner', function ($q) use ($request) {
             $q->whereRaw('lower(name)  like (?)', ["%{$request->term}%"]);
         }) //search for clip presenter
-        ->paginate(10)->withQueryString();
+        ->paginate(10)
+        ->withQueryString();
 
         return view('frontend.search.results', ['clips' => $clips]);
     }

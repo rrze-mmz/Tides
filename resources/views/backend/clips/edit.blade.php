@@ -178,11 +178,6 @@
                                text="Go to public page"
                 />
 
-                <x-form.button :link="route('admin.clips.dropzone.listFiles', $clip)"
-                               type="submit"
-                               text=" Transfer files from drop zone"
-                />
-
                 @if ($clip->assets()->count())
                     <x-form.button :link="route('admin.clips.triggerSmilFiles', $clip)"
                                    type="submit"

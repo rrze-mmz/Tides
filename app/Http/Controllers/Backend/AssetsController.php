@@ -45,6 +45,7 @@ class AssetsController extends Controller
                 'duration'           => $ffmpeg->getDurationInSeconds(),
                 'width'              => $ffmpeg->getVideoStream()->getDimensions()->getWidth(),
                 'height'             => $ffmpeg->getVideoStream()->getDimensions()->getHeight(),
+                'type'              => 'video',
             ];
 
             $asset = $clip->addAsset($attributes);

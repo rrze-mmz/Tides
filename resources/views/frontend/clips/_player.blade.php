@@ -7,10 +7,7 @@
                             type="application/x-mpegURL" />
                 @elseif(Illuminate\Support\Str::contains($wowzaStatus['0'],'Wowza Streaming Engine'))
                     <source
-                            src = "http://172.17.0.2:1935/vod/content/2021/05/19/TIDES_Clip_ID_23/camera.smil/playlist.m3u8"
-{{--                            src = "http://172.17.0.3:1935/vod/content/2021/04/26/TIDES_Clip_ID_2/camera.smil/playlist.m3u8"--}}
-
-                            {{--                            src="{{ env('WOWZA_ENGINE_URL').$clip->assets->first()->path.'/playlist.m3u8'  }}"--}}
+                            src="{{ env('WOWZA_ENGINE_URL').$clip->getCameraSmil()?->path.'/playlist.m3u8' }}"
                             type="application/x-mpegURL"  />
                 @else
                     <source  src="{{ '/videos/'.$clip->assets->first()->path  }}"

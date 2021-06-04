@@ -3,12 +3,8 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
-use App\Jobs\IngestVideoFileToOpencast;
-use App\Models\Clip;
 use App\Services\OpencastService;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 
 class OpencastController extends Controller
 {

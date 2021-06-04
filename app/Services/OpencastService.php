@@ -7,7 +7,6 @@ use App\Models\Clip;
 use App\Models\Series;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Response;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Psr\Http\Message\ResponseInterface;
@@ -85,7 +84,6 @@ class OpencastService
      * @param Clip $clip
      * @param string $videoFile
      * @return Response|ResponseInterface
-     * @throws FileNotFoundException
      */
     public function ingestMediaPackage(Clip $clip, string $videoFile): Response|ResponseInterface
     {
@@ -146,7 +144,6 @@ class OpencastService
      * @param Clip $clip
      * @param string $file
      * @return array
-     * @throws FileNotFoundException
      */
     public function ingestMediaPackageFormData(Clip $clip, string $file): array
     {

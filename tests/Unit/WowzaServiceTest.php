@@ -51,9 +51,11 @@ class WowzaServiceTest extends TestCase
     {
         Storage::fake('videos');
 
-        $this->wowzaService->createSmilFiles($this->clip);
+        $this->wowzaService->createSmilFile($this->clip);
 
         Storage::disk('videos')->assertExists(getClipStoragePath($this->clip).'/camera.smil');
+
+        $this->assertDatabaseHas('assets', ['type'=>'smil']);
     }
 
     /** @test */
@@ -77,28 +79,28 @@ class WowzaServiceTest extends TestCase
                     'width'          => 1920,
                     'height'         => 1080
                 ],
-                'param1'       => [
+                'paramVideoBR'       => [
                     '_attributes' => [
                         'name'      => 'videoBitrate',
                         'value'     => 1500000,
                         'valuetype' => 'data',
                     ]
                 ],
-                'param2'       => [
+                'paramAudioBR'       => [
                     '_attributes' => [
                         'name'      => 'audioBitrate',
                         'value'     => '44100',
                         'valuetype' => 'data',
                     ]
                 ],
-                'param3'       => [
+                'paramVideoCodecID'       => [
                     '_attributes' => [
                         'name'      => 'videoCodecId',
                         'value'     => 'avc1.4d401f',
                         'valuetype' => 'data',
                     ]
                 ],
-                'param4'       => [
+                'paramAudioCodecID'       => [
                     '_attributes' => [
                         'name'      => 'audioCodecId',
                         'value'     => 'mp4a.40.2',

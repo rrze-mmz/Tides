@@ -32,6 +32,8 @@ class AssetsTest extends TestCase
     /** @test */
     public function an_authenticated_user_can_upload_a_video_file(): void
     {
+        $this->withoutExceptionHandling();
+
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 
         $this->post(route('admin.assets.store', $clip), ['asset' => $file = FileFactory::videoFile()])
