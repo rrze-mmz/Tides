@@ -157,8 +157,8 @@ class ClipTest extends TestCase {
         ]);
 
         $this->assertInstanceOf(Collection::class, $secondClip->previousNextClipCollection());
-        $this->assertInstanceOf(Clip::class, $secondClip->previousNextClipCollection()->get('previous'));
-        $this->assertInstanceOf(Clip::class, $secondClip->previousNextClipCollection()->get('next'));
+        $this->assertInstanceOf(Clip::class, $secondClip->previousNextClipCollection()->get('previousClip'));
+        $this->assertInstanceOf(Clip::class, $secondClip->previousNextClipCollection()->get('nextClip'));
     }
 
     /** @test */

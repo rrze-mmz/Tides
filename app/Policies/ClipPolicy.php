@@ -13,6 +13,8 @@ class ClipPolicy
     use HandlesAuthorization;
 
     /**
+     * Check whether the current user can create a clip
+     *
      * @return bool
      */
     public function create(): bool
@@ -21,6 +23,8 @@ class ClipPolicy
     }
 
     /**
+     * Check whether the given user can edit the given clip
+     *
      * @param  User  $user
      * @param  Clip  $clip
      * @return bool
@@ -31,6 +35,9 @@ class ClipPolicy
     }
 
     /**
+     * Check whether the current user can view the given clip comments
+     *
+     * @param User $user
      * @param Clip $clip
      * @return bool
      */

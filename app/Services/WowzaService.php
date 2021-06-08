@@ -22,8 +22,8 @@ class WowzaService
 
     /**
      * Check whether Wowza Server is online
+     *
      * @return Collection
-     * @throws GuzzleException
      */
     public function checkApiConnection(): Collection
     {
@@ -38,6 +38,7 @@ class WowzaService
 
     /**
      * Generates smil files for wowza streaming
+     *
      * @throws \DOMException
      */
     public function createSmilFile(Clip $clip): void
@@ -85,6 +86,8 @@ class WowzaService
     }
 
     /**
+     * Create a smil array to use for spatie component
+     *
      * @param $asset
      * @return array[]
      */
@@ -130,6 +133,12 @@ class WowzaService
         ];
     }
 
+    /**
+     * Get Wowza bitrate value based on asset height
+     *
+     * @param $videoPixelHeight
+     * @return int
+     */
     public function findWowzaAssetBitrate($videoPixelHeight): int
     {
         if ($videoPixelHeight > 700 && $videoPixelHeight < 800) {

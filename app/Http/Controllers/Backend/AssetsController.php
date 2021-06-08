@@ -71,6 +71,8 @@ class AssetsController extends Controller
     }
 
     /**
+     * Delete the given asset
+     *
      * @param  Asset  $asset
      * @return RedirectResponse
      * @throws AuthorizationException

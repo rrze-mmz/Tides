@@ -11,7 +11,7 @@ use Illuminate\Http\RedirectResponse;
 class TriggerSmilFilesController extends Controller
 {
     /**
-     * Handle the incoming request.
+     * Genarates a wowza smil file for a clip
      *
      * @param Clip $clip
      * @param WowzaService $wowzaService

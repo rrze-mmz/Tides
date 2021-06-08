@@ -11,7 +11,7 @@ class ShowSeriesController extends Controller
 {
 
     /**
-     * Series page
+     * Series main page
      *
      * @param Series $series
      * @return View

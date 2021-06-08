@@ -31,11 +31,11 @@ class ConvertVideoForStreaming implements ShouldQueue
     }
 
     /**
-     * Execute the job.
+     * Transcode given video file to different resolutions
      *
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         $lowBitrateFormat = (new X264('aac'))->setKiloBitrate(100);
         $midBitrateFormat = (new X264('aac'))->setKiloBitrate(200);

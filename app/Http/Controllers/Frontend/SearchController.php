@@ -12,7 +12,7 @@ class SearchController extends Controller
 {
 
     /**
-     * Main and basic search function
+     * Main and basic search using ORM
      *
      * @param  SearchRequest  $request
      * @return View

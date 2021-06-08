@@ -15,6 +15,8 @@ class SeriesController extends Controller
 {
 
     /**
+     * Index all series in admin portal. In case of simple user list only users series
+     *
      * @return View
      */
     public function index(): View
@@ -28,6 +30,8 @@ class SeriesController extends Controller
     }
 
     /**
+     * Create form for a series
+     *
      * @return View
      */
     public function create(): View
@@ -36,6 +40,8 @@ class SeriesController extends Controller
     }
 
     /**
+     * Store a series in database
+     *
      * @param StoreSeriesRequest $request
      * @param OpencastService $opencastService
      * @return RedirectResponse
@@ -54,7 +60,10 @@ class SeriesController extends Controller
     }
 
     /**
+     * Edit form for a series
+     *
      * @param Series $series
+     * @param OpencastService $opencastService
      * @return View
      * @throws AuthorizationException
      */
@@ -68,6 +77,8 @@ class SeriesController extends Controller
     }
 
     /**
+     * Update a single series in the database
+     *
      * @param Series $series
      * @param UpdateSeriesRequest $request
      * @param OpencastService $opencastService
@@ -90,6 +101,8 @@ class SeriesController extends Controller
     }
 
     /**
+     * Delete a single series
+     *
      * @param Series $series
      * @return RedirectResponse
      * @throws AuthorizationException

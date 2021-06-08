@@ -25,11 +25,11 @@ class VideoUploaded extends Mailable
     }
 
     /**
-     * Build the message.
+     * Sends an email message if a video is uploaded successfully.
      *
      * @return $this
      */
-    public function build()
+    public function build(): static
     {
         return $this->subject('Cool your video is now online')
             ->markdown('email.clips.video_is_uploaded', [

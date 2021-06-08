@@ -11,7 +11,7 @@ use Illuminate\View\View;
 class HomeController extends Controller
 {
     /**
-     * Fetch clips for the home page
+     * Show latest series and clips for the home page
      *
      * @return View
      */

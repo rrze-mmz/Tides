@@ -25,12 +25,12 @@ class IngestVideoFileToOpencast implements ShouldQueue
     }
 
     /**
-     * Execute the job.
+     * Ingest the given video file to Opencast server
      *
      * @return void
      * @throws FileNotFoundException
      */
-    public function handle(OpencastService $opencastService)
+    public function handle(OpencastService $opencastService): void
     {
         $opencastService->ingestMediaPackage($this->clip, $this->videoFile);
     }

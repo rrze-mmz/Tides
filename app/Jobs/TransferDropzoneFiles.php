@@ -4,7 +4,6 @@
 namespace App\Jobs;
 
 use App\Models\Clip;
-use App\Services\WowzaService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Filesystem\FileExistsException;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
@@ -32,12 +31,12 @@ class TransferDropzoneFiles implements ShouldQueue
     }
 
     /**
-     * Execute the job.video_dropzone
+     * Copy a collection of video files to clip path
      *
      * @return void
      * @throws FileExistsException
      */
-    public function handle(WowzaService $wowzaService)
+    public function handle(): void
     {
         $clipStoragePath = getClipStoragePath($this->clip);
 

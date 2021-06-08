@@ -9,7 +9,7 @@ class DashboardController
 {
 
     /**
-     * Dashboard for the logged in user
+     * Show max 10 of user's series/clips and list dropzone files
      *
      * @return View
      */

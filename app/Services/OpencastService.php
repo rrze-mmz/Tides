@@ -81,6 +81,7 @@ class OpencastService
 
     /**
      * A post request to ingest a video file and start a workflow in Opencast Admin node
+     *
      * @param Clip $clip
      * @param string $videoFile
      * @return Response|ResponseInterface

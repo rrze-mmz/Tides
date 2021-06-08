@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 class AssetsDownloadController extends Controller
 {
     /**
-     * Handle the incoming request.
+     * Download a given asset
      *
      * @param Asset $asset
      * @return BinaryFileResponse

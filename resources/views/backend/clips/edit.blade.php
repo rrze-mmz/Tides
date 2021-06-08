@@ -8,15 +8,15 @@
                         <span class="pl-2 italic font-sm"> created at {{$clip->created_at}}</span>
                     </div>
                     <div class="flex space-x-2">
-                        @if(!is_null($previousNextClipCollection->get('previous')))
-                            <x-form.button :link="$previousNextClipCollection->get('previous')->adminPath()"
+                        @if(!is_null($previousNextClipCollection->get('previousClip')))
+                            <x-form.button :link="$previousNextClipCollection->get('previousClip')->adminPath()"
                                            type="submit"
                                            text="Previous"
                             />
                         @endif
 
-                        @if(!is_null($previousNextClipCollection->get('next')))
-                            <x-form.button :link="$previousNextClipCollection->get('next')->adminPath()"
+                        @if(!is_null($previousNextClipCollection->get('nextClip')))
+                            <x-form.button :link="$previousNextClipCollection->get('nextClip')->adminPath()"
                                            type="submit"
                                            text="Next"
                             />

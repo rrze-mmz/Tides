@@ -11,6 +11,7 @@ use Illuminate\View\View;
 class ShowClipsController extends Controller
 {
     /**
+     * Indexes all portal clips
      * @return View
      */
     public function index(): View
@@ -21,6 +22,8 @@ class ShowClipsController extends Controller
     }
 
     /**
+     * Clip main page
+     *
      * @param Clip $clip
      * @return View
      */

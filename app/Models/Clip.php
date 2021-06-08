@@ -3,19 +3,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 
-class Clip extends Model
+class Clip extends BaseModel
 {
-    use HasFactory, Slugable;
+    use  Slugable;
 
-    protected $guarded = [];
     protected $attributes = [
         'episode' => '1'
     ];
@@ -41,6 +38,8 @@ class Clip extends Model
     }
 
     /**
+     * Route key should be slug instead of id
+     *
      * @return string
      */
     public function getRouteKeyName(): string
@@ -49,6 +48,8 @@ class Clip extends Model
     }
 
     /**
+     * User relationship
+     *
      * @return BelongsTo
      */
     public function owner(): BelongsTo
@@ -57,6 +58,8 @@ class Clip extends Model
     }
 
     /**
+     * Tags relationship
+     *
      * @return BelongsToMany
      */
     public function tags(): BelongsToMany
@@ -65,6 +68,8 @@ class Clip extends Model
     }
 
     /**
+     * Asset relationship
+     *
      * @return HasMany
      */
     public function assets(): HasMany
@@ -73,6 +78,8 @@ class Clip extends Model
     }
 
     /**
+     * Series relationship
+     *
      * @return BelongsTo
      */
     public function series(): BelongsTo
@@ -81,6 +88,8 @@ class Clip extends Model
     }
 
     /**
+     * Comments relationship
+     *
      * @return HasMany
      */
     public function comments(): HasMany
@@ -89,18 +98,22 @@ class Clip extends Model
     }
 
     /**
-     * @return Model|null
+     * Clip smil file
+     *
+     * @return Asset|null
      */
-    public function getCameraSmil(): Model|null
+    public function getCameraSmil(): Asset|null
     {
         return $this->assets()->firstWhere('original_file_name', '=', 'camera.smil');
     }
 
     /**
+     * Adds an asset to clip
+     *
      * @param array $attributes
-     * @return Model
+     * @return Asset
      */
-    public function addAsset(array $attributes = []): Model
+    public function addAsset(array $attributes = []): Asset
     {
         return $this->assets()->firstOrCreate($attributes);
     }
@@ -117,6 +130,8 @@ class Clip extends Model
     }
 
     /**
+     * Add tags to clip
+     *
      * @param Collection $tagsCollection
      */
     public function addTags(Collection $tagsCollection): void
@@ -137,7 +152,7 @@ class Clip extends Model
     }
 
     /*
-     * Return next and previoud Models based on current Model
+     * Return next and previous Models based on current Model episode attribute
      */
     public function previousNextClipCollection(): Collection
     {
@@ -145,10 +160,10 @@ class Clip extends Model
         $clipsCollection = $this->series->clips()->orderBy('episode')->get();
 
         return collect([
-            'previous' => $clipsCollection->filter(function ($value, $key) {
+            'previousClip' => $clipsCollection->filter(function ($value, $key) {
                 return (int)$value->episode == (int)$this->episode - 1;
             })->first(),
-            'next'     => $clipsCollection->filter(function ($value, $key) {
+            'nextClip'     => $clipsCollection->filter(function ($value, $key) {
                 return (int)$value->episode == (int) $this->episode + 1;
             })->first()
         ]);

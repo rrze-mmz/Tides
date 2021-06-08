@@ -20,7 +20,7 @@ class DeleteAssetFile
     }
 
     /**
-     * Handle the event.
+     * Update clip poster file and delete the given video file
      *
      * @param  AssetDeleted  $event
      * @return void

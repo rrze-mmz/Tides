@@ -4,6 +4,8 @@ namespace App\Http\Livewire;
 
 use App\Models\Clip;
 use App\Models\Comment;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 
@@ -17,29 +19,40 @@ class CommentsSection extends Component
     public $messageType;
     public $comments;
 
-    protected $rules =[
+    protected array $rules =[
         'content'   => 'required|min:3',
         'clip'  => 'required'
     ];
 
-    public function fetchComments()
+    /**
+     * Get all comments for a clip
+     */
+    public function fetchComments(): void
     {
         $this->comments = $this->clip->comments()->get();
     }
-    public function mount(Clip $clip)
+
+    /**
+     * Mount Livewire component
+     * @param Clip $clip
+     */
+    public function mount(Clip $clip): void
     {
         $this->clip = $clip;
         $this->messageType ='';
         $this->messageText = '';
     }
 
-    public function postComment()
+    /**
+     * Post a comment for a clip
+     *
+     * @throws AuthorizationException
+     */
+    public function postComment(): void
     {
         $this->authorize('create-comment');
 
         $this->validate();
-
-//        sleep(1);
 
         Comment::create([
             'clip_id' => $this->clip->id,
@@ -56,7 +69,13 @@ class CommentsSection extends Component
         $this->emit('updated');
     }
 
-    public function deleteComment(Comment $comment)
+    /**
+     * Delete a single comment
+     *
+     * @param Comment $comment
+     * @throws AuthorizationException
+     */
+    public function deleteComment(Comment $comment): void
     {
         $this->authorize('delete-comment', $comment);
 
@@ -69,7 +88,11 @@ class CommentsSection extends Component
         $this->emit('updated');
     }
 
-    public function render()
+    /**
+     * Render Livewire component
+     * @return View
+     */
+    public function render(): View
     {
         return view('livewire.comments-section');
     }

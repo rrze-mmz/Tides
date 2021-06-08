@@ -17,15 +17,15 @@
         @endif
 
         <div class="flex justify-between py-2">
-            @if(!is_null($previousNextClipCollection->get('previous')))
-                <x-form.button :link="$previousNextClipCollection->get('previous')->path()"
+            @if(!is_null($previousNextClipCollection->get('previousClip')))
+                <x-form.button :link="$previousNextClipCollection->get('previousClip')->path()"
                                type="submit"
                                text="Previous"
                 />
             @endif
 
-            @if(!is_null($previousNextClipCollection->get('next')))
-                <x-form.button :link="$previousNextClipCollection->get('next')->path()"
+            @if(!is_null($previousNextClipCollection->get('nextClip')))
+                <x-form.button :link="$previousNextClipCollection->get('nextClip')->path()"
                                type="submit"
                                text="Next"
                 />

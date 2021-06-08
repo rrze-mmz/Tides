@@ -3,6 +3,8 @@
 namespace App\View\Components;
 
 use App\Models\Series;
+use Closure;
+use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
 class ListClips extends Component
@@ -20,9 +22,9 @@ class ListClips extends Component
     /**
      * Get the view / contents that represent the component.
      *
-     * @return \Illuminate\Contracts\View\View|\Closure|string
+     * @return View
      */
-    public function render()
+    public function render(): View
     {
         return view('components.list-clips');
     }

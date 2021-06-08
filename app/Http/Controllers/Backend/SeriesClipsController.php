@@ -13,7 +13,7 @@ class SeriesClipsController extends Controller
 {
 
     /**
-     *  Show clip form for a series
+     *  Show create clip form to assign a clip to series
      *
      * @param Series $series
      * @return View
@@ -27,7 +27,7 @@ class SeriesClipsController extends Controller
     }
 
     /**
-     * Store a clip with a series id
+     * Store a clip in a series
      *
      * @param Series $series
      * @param StoreClipRequest $request

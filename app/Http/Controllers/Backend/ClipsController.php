@@ -16,6 +16,8 @@ use Illuminate\View\View;
 class ClipsController extends Controller
 {
     /**
+     * Index all clips in admin portal. In case of simple user list only users clips
+     *
      * @return View
      */
     public function index(): View
@@ -61,6 +63,7 @@ class ClipsController extends Controller
      * Edit form for a single clip
      *
      * @param Clip $clip
+     * @param OpencastService $opencastService
      * @return View
      * @throws AuthorizationException
      */
@@ -79,7 +82,7 @@ class ClipsController extends Controller
     }//end edit()
 
     /**
-     * Update a clip in the database
+     * Update a single clip in the database
      *
      * @param Clip $clip
      * @param UpdateClipRequest $request
@@ -97,6 +100,8 @@ class ClipsController extends Controller
     }//end update()
 
     /**
+     * Delete a single clip
+     *
      * @param Clip $clip
      * @return RedirectResponse
      * @throws AuthorizationException

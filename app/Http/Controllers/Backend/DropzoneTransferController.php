@@ -37,7 +37,7 @@ class DropzoneTransferController extends Controller
     }
 
     /**
-     * Transfer files from dropzone to file path
+     * Transfer files from dropzone to clip file path
 
      * @param Clip $clip
      * @param Request $request

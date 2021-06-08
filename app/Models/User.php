@@ -43,6 +43,8 @@ class User extends Authenticatable
     ];
 
     /**
+     * Series relationship
+     *
      * @return HasMany
      */
     public function series(): HasMany
@@ -51,6 +53,8 @@ class User extends Authenticatable
     }
 
     /**
+     * Clip relationship
+     *
      * @return HasMany
      */
     public function clips(): HasMany
@@ -59,6 +63,8 @@ class User extends Authenticatable
     }
 
     /**
+     * Comments relationship
+     *
      * @return HasMany
      */
     public function comments(): HasMany
@@ -67,6 +73,8 @@ class User extends Authenticatable
     }
 
     /**
+     * Roles relationship
+     *
      * @return BelongsToMany
      */
     public function roles(): BelongsToMany
@@ -75,19 +83,25 @@ class User extends Authenticatable
     }
 
     /**
+     * Assign a role to the current user
+     *
      * @param  string  $role
      * @return User
      */
     public function assignRole(string $role = ''): static
     {
+        //if role doesn't exist create one
         $role = tap(Role::firstOrCreate(['name' => $role]))->save();
 
+        //assign role to the current user
         $this->roles()->sync($role->pluck('id'));
 
         return $this;
     }
 
     /**
+     * Check whether the current user has given role
+     *
      * @param  string  $role
      * @return bool
      */
@@ -96,6 +110,11 @@ class User extends Authenticatable
         return ($this->roles->contains('name', $role)) ? true : false;
     }
 
+    /**
+     * Check whether the current user is an admin
+     *
+     * @return bool
+     */
     public function isAdmin(): bool
     {
         return $this->hasRole('admin');

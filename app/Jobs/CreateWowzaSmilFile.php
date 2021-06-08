@@ -25,12 +25,12 @@ class CreateWowzaSmilFile implements ShouldQueue
     }
 
     /**
-     * Execute the job.
+     * Create a wowza smil file based on clip assets
      *
      * @return void
      * @throws \DOMException
      */
-    public function handle(WowzaService $wowzaService)
+    public function handle(WowzaService $wowzaService): void
     {
         $wowzaService->createSmilFile($this->clip);
     }

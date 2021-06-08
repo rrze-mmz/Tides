@@ -11,7 +11,7 @@ class SeriesPolicy
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can create models.
+     * Check whether the current user can create a clip.
      *
      * @return bool
      */
@@ -21,6 +21,8 @@ class SeriesPolicy
     }
 
     /**
+     * Check whether the given user can edit the given series
+     *
      * @param  User  $user
      * @param  Series  $series
      * @return bool

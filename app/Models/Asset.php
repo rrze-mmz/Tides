@@ -5,10 +5,9 @@ namespace App\Models;
 
 use App\Events\AssetDeleted;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Asset extends Model
+class Asset extends BaseModel
 {
 
     use HasFactory;
@@ -29,7 +28,7 @@ class Asset extends Model
     ];
 
     /**
-     * Reture asset duration in hh:mm:ss format
+     * Return asset duration in hh:mm:ss format
      *
      * @return string
      */
@@ -39,7 +38,7 @@ class Asset extends Model
     }
 
     /**
-     * Clip Eloquent relationship
+     *  Clip relationship
      *
      * @return BelongsTo
      */
@@ -49,6 +48,8 @@ class Asset extends Model
     }
 
     /**
+     * Asset backend link
+     *
      * @return string
      */
     public function path(): string

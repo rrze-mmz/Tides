@@ -3,17 +3,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class Tag extends Model
+class Tag extends BaseModel
 {
 
-    use HasFactory;
-
-    protected $guarded = [];
-
+    /**
+     * Clip relationship
+     *
+     * @return BelongsToMany
+     */
     public function clips(): BelongsToMany
     {
         return $this->belongsToMany(Clip::class, 'clip_tag')->withTimestamps();

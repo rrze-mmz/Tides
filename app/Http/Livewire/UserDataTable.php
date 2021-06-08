@@ -18,6 +18,11 @@ class UserDataTable extends Component
     public $sortAsc = true;
     protected $queryString = ['search','admin', 'sortAsc'];
 
+    /**
+     * Sort users by method parameter
+     *
+     * @param $field
+     */
     public function sortBy($field): void
     {
         $this->sortAsc = !($this->sortField === $field) || !$this->sortAsc;
@@ -25,16 +30,26 @@ class UserDataTable extends Component
         $this->sortField = $field;
     }
 
+    /**
+     * Updates the status of the component if search input changed
+     */
     public function updatingSearch(): void
     {
         $this->resetPage();
     }
 
+    /**
+     * Updates the status of the component if  admin checkbox changed
+     */
     public function updatingAdmin(): void
     {
         $this->resetPage();
     }
 
+    /**
+     * Render Livewire component
+     * @return View
+     */
     public function render(): View
     {
         $search = trim(strtolower($this->search));
