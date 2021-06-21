@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
 class Series extends BaseModel
 {
 
-    use Slugable;
+    use Slugable, Accessable;
 
     /**
      * A series can have many clips
@@ -73,7 +73,7 @@ class Series extends BaseModel
     {
         $validated = Arr::add($validated, 'owner_id', auth()->user()->id);
 
-        $clip  = $this->clips()->create(Arr::except($validated, 'tags'));
+        $clip  = $this->clips()->create(Arr::except($validated, ['tags','acls']));
 
         $clip->addTags(collect($validated['tags']));
 

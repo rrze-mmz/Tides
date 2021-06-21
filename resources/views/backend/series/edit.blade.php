@@ -81,6 +81,8 @@
                     </div>
                     @enderror
 
+                    <x-form.acl :model="$series"/>
+
                 </div>
 
                 <x-form.button :link="$link=false" type="submit" text="Update Series"/>

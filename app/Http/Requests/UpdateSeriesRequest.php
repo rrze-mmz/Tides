@@ -6,13 +6,12 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 
-class UpdateSeriesRequest extends FormRequest
-{
-
+class UpdateSeriesRequest extends FormRequest {
     protected function prepareForValidation()
     {
         $this->merge([
-            'slug'  => Str::slug($this->title),
+            'slug' => Str::slug($this->title),
+            'acls' => $this->acls = $this->acls ?? [], //set empty array if select2 acls is empty
         ]);
     }
 
@@ -34,10 +33,11 @@ class UpdateSeriesRequest extends FormRequest
     public function rules()
     {
         return [
-            'title'       => 'required',
-            'description' => 'max:500',
-            'slug'        => 'required',
-            'opencast_series_id' => 'null|uuid'
+            'title'              => 'required',
+            'description'        => 'max:500',
+            'slug'               => 'required',
+            'opencast_series_id' => 'null|uuid',
+            'acls'               => 'array'
         ];
     }
 }

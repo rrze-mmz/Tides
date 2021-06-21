@@ -18,19 +18,9 @@ class CreateClipTagTable extends Migration {
                 'clip_id',
                 'tag_id'
             ]);
-            $table->foreignId('clip_id');
-            $table->foreignId('tag_id');
+            $table->foreignId('clip_id')->references('id')->on('clips')->onDelete('cascade');
+            $table->foreignId('tag_id')->references('id')->on('tags')->onDelete('cascade');
             $table->timestamps();
-
-            $table->foreign('clip_id')
-                ->references('id')
-                ->on('clips')
-                ->onDelete('cascade');
-
-            $table->foreign('tag_id')
-                ->references('id')
-                ->on('tags')
-                ->onDelete('cascade');
         });
     }
 

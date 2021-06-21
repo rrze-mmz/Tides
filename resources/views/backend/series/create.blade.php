@@ -55,6 +55,7 @@
                     </div>
                     @enderror
 
+                    <x-form.acl />
                     <div class="flex content-center items-center mb-6">
                     </div>
                     <div class="col-span-7 w-4/5">

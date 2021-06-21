@@ -45,4 +45,10 @@ class ClipPolicy
     {
         return (auth()->check() && $clip->allow_comments);
     }
+
+    public function viewVideo(User $user, Clip $clip):bool
+    {
+
+        return (auth()->check() && $clip->acls->pluck('id')->contains('1'));
+    }
 }

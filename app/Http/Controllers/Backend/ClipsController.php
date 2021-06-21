@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreClipRequest;
 use App\Http\Requests\UpdateClipRequest;
+use App\Models\Acl;
 use App\Models\Clip;
 use App\Services\OpencastService;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -13,8 +14,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Arr;
 use Illuminate\View\View;
 
-class ClipsController extends Controller
-{
+class ClipsController extends Controller {
     /**
      * Index all clips in admin portal. In case of simple user list only users clips
      *
@@ -52,9 +52,11 @@ class ClipsController extends Controller
     {
         $validated = $request->validated();
 
-        $clip = auth()->user()->clips()->create(Arr::except($request->validated(), 'tags'));
+        $clip = auth()->user()->clips()->create(Arr::except($request->validated(), ['tags', 'acls']));
 
         $clip->addTags(collect($validated['tags']));
+
+        $clip->addAcls(collect($validated['acls']));
 
         return redirect($clip->adminPath());
     }//end store()
@@ -75,6 +77,7 @@ class ClipsController extends Controller
             'backend.clips.edit',
             [
                 'clip'                         => $clip,
+                'acls'                         => Acl::all(),
                 'previousNextClipCollection'   => $clip->previousNextClipCollection(),
                 'opencastConnectionCollection' => $opencastService->getHealth(),
             ]
@@ -92,9 +95,11 @@ class ClipsController extends Controller
     {
         $validated = $request->validated();
 
-        $clip->update(Arr::except($request->validated(), 'tags'));
+        $clip->update(Arr::except($request->validated(), ['tags', 'acls']));
 
         $clip->addTags(collect($validated['tags']));
+
+        $clip->addAcls(collect($validated['acls']));
 
         return redirect($clip->adminPath());
     }//end update()
@@ -112,7 +117,8 @@ class ClipsController extends Controller
 
         $clip->delete();
 
-        if ($clip->series_id) {
+        if ($clip->series_id)
+        {
             return redirect(route('series.edit', $clip->series));
         }
 

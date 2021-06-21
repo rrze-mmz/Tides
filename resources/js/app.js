@@ -8,7 +8,10 @@ window.$ = window.jQuery = $;
 
 
 $(() => {
-    $('.js-example-basic-single').select2({
+
+    $('.js-select2-tides-multiple').select2();
+
+    $('.select2-tags-multiple').select2({
         allowClear: true,
         placeholder: 'Add a tag',
         tags: true,

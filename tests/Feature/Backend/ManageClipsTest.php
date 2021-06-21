@@ -69,9 +69,11 @@ class ManageClipsTest extends TestCase {
     {
         $this->signIn();
 
-        $this->get(route('clips.create'))->assertSee('title')
+        $this->get(route('clips.create'))
+            ->assertSee('title')
             ->assertSee('description')
-            ->assertSee('tags');
+            ->assertSee('tags')
+            ->assertSee('acls');
 
         $this->get(route('clips.create'))->assertStatus(200)
             ->assertViewIs('backend.clips.create');
@@ -94,7 +96,8 @@ class ManageClipsTest extends TestCase {
 
         $this->get($clip->adminPath())->assertSee('title')
             ->assertSee('description')
-            ->assertSee('tags');
+            ->assertSee('tags')
+            ->assertSee('acls');
     }
 
     /** @test */
@@ -141,6 +144,22 @@ class ManageClipsTest extends TestCase {
         $this->assertDatabaseCount('tags', 3);
 
         $this->assertEquals(3, $clip->tags()->count());
+    }
+
+    /** @test */
+    public function an_authenticated_user_can_create_a_clip_with_acls(): void
+    {
+        $this->signIn();
+
+        $attributes = Clip::factory()->raw([
+            'acls' => ['1', '2']
+        ]);
+
+        $this->post(route('clips.store'), $attributes);
+
+        $clip = Clip::first();
+
+        $this->assertEquals(2, $clip->acls()->count());
     }
 
     /** @test */
@@ -242,6 +261,7 @@ class ManageClipsTest extends TestCase {
     /** @test */
     public function an_admin_user_can_update_a_not_owned_clip(): void
     {
+        $this->withoutExceptionHandling();
         $clip = ClipFactory::create();
 
         $this->signInAdmin();
@@ -454,5 +474,23 @@ class ManageClipsTest extends TestCase {
         $clip = ClipFactory::withAssets(2)->ownedBy($this->signIn())->create();
 
         $this->get(route('clips.edit', $clip))->assertSee('Trigger smil files');
+    }
+
+    /** @test */
+    public function it_list_smil_files_if_any(): void
+    {
+        $clip = ClipFactory::withAssets(2)->ownedBy($this->signIn())->create();
+
+        $clip->addAsset([
+            'disk'               => 'videos',
+            'original_file_name' => 'camera.smil',
+            'type'               => 'smil',
+            'path'               => '/videos/camera.smil',
+            'duration'           => '0',
+            'width'              => '0',
+            'height'             => '0',
+        ]);
+
+        $this->get(route('clips.edit',$clip))->assertSee('camera.smil');
     }
 }

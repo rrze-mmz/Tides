@@ -85,13 +85,13 @@
 
                         <div class="flex content-center items-center mb-6">
                             <label class="block py-2 mr-6 font-bold text-gray-700 text-md"
-                                   for="title"
+                                   for="tags"
                             >
                                 Tags
                             </label>
                         </div>
                         <div class="col-span-7 w-4/5">
-                            <select class="js-example-basic-single p-2 w-full"
+                            <select class="select2-tags-multiple p-2 w-full"
                                     name="tags[]"
                                     style="width: 100%"
                                     multiple="multiple"
@@ -103,6 +103,8 @@
                             <p class="mt-2 w-full text-xs text-red-500">{{ $message }}</p>
                         </div>
                         @enderror
+
+                        <x-form.acl/>
 
                         <div class="flex content-center items-center mb-6">
                             <label for="allow_comments"

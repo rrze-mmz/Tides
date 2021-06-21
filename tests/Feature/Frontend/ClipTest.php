@@ -120,4 +120,14 @@ class ClipTest extends TestCase {
             ->assertSee($previousClip->path())
             ->assertSee($nextClip->path());
     }
+
+    /** @test */
+    public function an_intern_acl_clip_must_only_be_available_for_logged_in_users(): void
+    {
+        $this->mockHandler->append(new Response());
+
+        $this->clip->addAcls(collect(['1']));
+
+        $this->get($this->clip->path())->assertDontSee('plyr-player');
+    }
 }

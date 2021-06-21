@@ -15,6 +15,7 @@ class StoreClipRequest extends FormRequest
         $this->merge([
             'slug' => Str::slug($this->title),
             'tags' => $this->tags = $this->tags ?? [], //set empty array if select2 tags is empty
+            'acls' => $this->acls = $this->acls ?? [], //set empty array if select2 acls is empty
             'allow_comments'=> $this->allow_comments==='on',
         ]);
     }
@@ -41,6 +42,7 @@ class StoreClipRequest extends FormRequest
             'description' => 'max:500',
             'slug'        => 'required',
             'tags'        => 'array',
+            'acls'        => 'array',
             'episode'     => 'required|integer',
             'allow_comments'=> 'boolean',
 

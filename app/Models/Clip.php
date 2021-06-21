@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Storage;
 
 class Clip extends BaseModel
 {
-    use  Slugable;
+    use  Slugable, Accessable;
 
     protected $attributes = [
         'episode' => '1'
@@ -84,6 +84,7 @@ class Clip extends BaseModel
      */
     public function series(): BelongsTo
     {
+        //a clip may not belong to a series
         return $this->belongsTo(Series::class)->withDefault();
     }
 
@@ -156,7 +157,6 @@ class Clip extends BaseModel
      */
     public function previousNextClipCollection(): Collection
     {
-
         $clipsCollection = $this->series->clips()->orderBy('episode')->get();
 
         return collect([

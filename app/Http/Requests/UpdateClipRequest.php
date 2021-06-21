@@ -7,15 +7,14 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 
-class UpdateClipRequest extends FormRequest
-{
-
+class UpdateClipRequest extends FormRequest {
     protected function prepareForValidation()
     {
         $this->merge([
-            'slug' => Str::slug($this->title),
-            'tags' => $this->tags = $this->tags ?? [], //set empty array if select2 tags is empty
-            'allow_comments'=> $this->allow_comments === 'on',
+            'slug'           => Str::slug($this->title),
+            'tags'           => $this->tags = $this->tags ?? [], //set empty array if select2 tags is empty
+            'acls'           => $this->acls = $this->acls ?? [], //set empty array if select2 acls is empty
+            'allow_comments' => $this->allow_comments === 'on',
         ]);
     }
 
@@ -37,12 +36,13 @@ class UpdateClipRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title'       => 'required',
-            'description' => 'max:255',
-            'slug'        => 'required',
-            'tags'        => 'array',
-            'episode'     => 'required|integer',
-            'allow_comments'=> 'boolean',
+            'title'          => 'required',
+            'description'    => 'max:255',
+            'slug'           => 'required',
+            'tags'           => 'array',
+            'acls'           => 'array',
+            'episode'        => 'required|integer',
+            'allow_comments' => 'boolean',
         ];
     }
 }

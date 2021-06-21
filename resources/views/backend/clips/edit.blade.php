@@ -107,13 +107,13 @@
 
                         <div class="flex content-center items-center mb-6">
                             <label class="block py-2 mr-6 font-bold text-gray-700 text-md"
-                                   for="title"
+                                   for="tags"
                             >
                                 Tags
                             </label>
                         </div>
                         <div class="col-span-7 w-4/5">
-                            <select class="p-2 w-full js-example-basic-single
+                            <select class="p-2 w-full select2-tags-multiple
                                             focus:outline-none focus:bg-white focus:border-blue-500"
                                     name="tags[]"
                                     multiple="multiple"
@@ -131,6 +131,8 @@
                             <p class="mt-2 w-full text-xs text-red-500">{{ $message }}</p>
                         </div>
                         @enderror
+
+                        <x-form.acl :model="$clip"/>
 
                         <div class="flex content-center items-center mb-6">
                             <label for="allow_comments"

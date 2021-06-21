@@ -15,6 +15,9 @@ class IngestVideoFileToOpencast implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public int $tries = 3;
+    public array $backoff = [2, 10, 20];
+
     /**
      * Create a new job instance.
      *
@@ -27,8 +30,8 @@ class IngestVideoFileToOpencast implements ShouldQueue
     /**
      * Ingest the given video file to Opencast server
      *
+     * @param OpencastService $opencastService
      * @return void
-     * @throws FileNotFoundException
      */
     public function handle(OpencastService $opencastService): void
     {

@@ -90,7 +90,7 @@
                         </label>
                     </div>
                     <div class="col-span-7 w-4/5">
-                        <select class="js-example-basic-single p-2 w-full"
+                        <select class="select2-tags-multiple p-2 w-full"
                                 name="tags[]"
                                 style="width: 100%"
                                 multiple="multiple"
@@ -102,6 +102,8 @@
                         <p class="mt-2 w-full text-xs text-red-500">{{ $message }}</p>
                     </div>
                     @enderror
+
+                    <x-form.acl/>
 
                 </div>
                 <x-form.button :link="$link=false" type="submit" text="Add a Clip to Series"/>

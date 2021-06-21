@@ -61,8 +61,6 @@ class SeriesClipsTest extends TestCase
     /** @test */
     public function a_series_owner_can_add_clip_to_series(): void
     {
-        $this->withoutExceptionHandling();
-
         $series  = SeriesFactory::ownedBy($this->signIn())->create();
 
         $this->post(route('series.clip.store', $series), Clip::factory()->raw());

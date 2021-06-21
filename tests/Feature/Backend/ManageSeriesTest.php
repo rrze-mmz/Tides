@@ -4,22 +4,19 @@ namespace Tests\Feature\Backend;
 
 use App\Models\Series;
 use App\Services\OpencastService;
+use Facades\Tests\Setup\SeriesFactory;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Facades\Tests\Setup\SeriesFactory;
 use Tests\Setup\WorksWithOpencastClient;
 use Tests\TestCase;
 
-class ManageSeriesTest extends TestCase
-{
+class ManageSeriesTest extends TestCase {
     use RefreshDatabase, WithFaker, WorksWithOpencastClient;
 
     private OpencastService $opencastService;
-
     private MockHandler $mockHandler;
-
     private string $flashMessageName;
 
     protected function setUp(): void
@@ -36,9 +33,9 @@ class ManageSeriesTest extends TestCase
     /** @test */
     public function it_paginates_users_series_in_dashboard_index_page(): void
     {
-        Series::factory(20)->create(['owner_id'=>$this->signIn()]);
+        Series::factory(20)->create(['owner_id' => $this->signIn()]);
 
-        $this->get(route('series.index').'?page=2')->assertDontSee('You have no series yet');
+        $this->get(route('series.index') . '?page=2')->assertDontSee('You have no series yet');
     }
 
     /** @test */
@@ -48,7 +45,7 @@ class ManageSeriesTest extends TestCase
 
         $this->signInAdmin();
 
-        $this->get(route('series.index').'?page=2')->assertDontSee('You have no series yet');
+        $this->get(route('series.index') . '?page=2')->assertDontSee('You have no series yet');
 
     }
 
@@ -57,8 +54,10 @@ class ManageSeriesTest extends TestCase
     {
         $this->signIn();
 
-        $this->get(route('series.create'))->assertSee('title')
-            ->assertSee('description');
+        $this->get(route('series.create'))
+            ->assertSee('title')
+            ->assertSee('description')
+            ->assertSee('acls');
 
         $this->get(route('series.create'))->assertStatus(200)
             ->assertViewIs('backend.series.create');
@@ -69,7 +68,7 @@ class ManageSeriesTest extends TestCase
     {
         $this->signIn();
 
-        $attributes = Series::factory()->raw(['title'=> '']);
+        $attributes = Series::factory()->raw(['title' => '']);
 
         $this->post(route('series.store'), $attributes)->assertSessionHasErrors('title');
     }
@@ -80,13 +79,31 @@ class ManageSeriesTest extends TestCase
         $this->signIn();
 
         $this->post(route('series.store'),
-                [
-                'title' => 'Test title',
+            [
+                'title'       => 'Test title',
                 'description' => 'Test description'
-                ]
+            ]
         );
 
-        $this->assertDatabaseHas('series', ['title'=>'Test title']);
+        $this->assertDatabaseHas('series', ['title' => 'Test title']);
+    }
+
+    /** @test */
+    public function an_authenticated_user_can_create_a_series_with_acls(): void
+    {
+        $this->signIn();
+
+        $this->post(route('series.store'),
+            [
+                'title'       => 'Test title',
+                'description' => 'Test description',
+                'acls'        => ['1','2'],
+            ]
+        );
+
+        $series = Series::first();
+
+        $this->assertEquals(2, $series->acls()->count());
     }
 
     /** @test */
@@ -96,7 +113,7 @@ class ManageSeriesTest extends TestCase
 
         $this->post(route('series.store'),
             [
-                'title' => 'Test title',
+                'title'       => 'Test title',
                 'description' => 'Test description'
             ]
         )->assertSessionHas($this->flashMessageName);
@@ -110,7 +127,7 @@ class ManageSeriesTest extends TestCase
         $this->mockHandler->append($this->mockCreateSeriesResponse());
 
         $this->post(route('series.store'), [
-            'title' => 'Series title',
+            'title'       => 'Series title',
             'description' => 'test'
         ]);
 
@@ -124,9 +141,9 @@ class ManageSeriesTest extends TestCase
     {
         $this->signIn();
 
-        $attributes = Series::factory()->raw(['title'=> '']);
+        $attributes = Series::factory()->raw(['title' => '']);
 
-        $this->post(route('series.store'),$attributes)->assertSessionHasErrors('title');
+        $this->post(route('series.store'), $attributes)->assertSessionHasErrors('title');
     }
 
     /** @test */
@@ -135,7 +152,7 @@ class ManageSeriesTest extends TestCase
         $this->signIn();
 
         $attributes = [
-            'title' => '',
+            'title'       => '',
             'description' => 'test'
         ];
 
@@ -149,14 +166,16 @@ class ManageSeriesTest extends TestCase
     /** @test */
     public function a_series_owner_can_view_edit_form_fields(): void
     {
+        $this->withoutExceptionHandling();
         $series = SeriesFactory::ownedBy($this->signIn())->create();
 
         $this->mockHandler->append($this->mockSeriesRunningWorkflowsResponse($series, false));
 
-        $this->get($series->adminPath())->assertStatus(200);
-
-        $this->get($series->adminPath())->assertSee('title')
-            ->assertSee('description');
+        $this->get($series->adminPath())
+            ->assertStatus(200)
+            ->assertSee('title')
+            ->assertSee('description')
+            ->assertSee('acls');
     }
 
     /** @test */
@@ -191,19 +210,19 @@ class ManageSeriesTest extends TestCase
     public function it_has_go_to_public_page_button(): void
     {
         $this->get(route('series.edit', SeriesFactory::ownedBy($this->signIn())->create()))
-                    ->assertSee('Go to public page');
+            ->assertSee('Go to public page');
     }
 
     /** @test */
     public function edit_series_page_should_display_belonging_clips(): void
     {
-        $series =  SeriesFactory::ownedBy($this->signIn())->withClips(2)->create();
+        $series = SeriesFactory::ownedBy($this->signIn())->withClips(2)->create();
 
-        $this->get(route('series.edit',$series))->assertSee($series->clips()->first()->title);
+        $this->get(route('series.edit', $series))->assertSee($series->clips()->first()->title);
     }
 
     /** @test */
-    public function edit_series_should_display_opencast_running_events_if_any():void
+    public function edit_series_should_display_opencast_running_events_if_any(): void
     {
         $series = SeriesFactory::ownedBy($this->signIn())->create();
 
@@ -214,7 +233,8 @@ class ManageSeriesTest extends TestCase
 
         $opencastViewData = collect(json_decode($mockData->getBody(), true));
 
-        $this->get(route('series.edit',$series))->assertViewHas(['opencastSeriesRunningWorkflows'])
+        $this->get(route('series.edit', $series))
+            ->assertViewHas(['opencastSeriesRunningWorkflows'])
             ->assertSee($opencastViewData['workflows']['workflow']['0']['mediapackage']['title']);
     }
 
@@ -225,15 +245,15 @@ class ManageSeriesTest extends TestCase
 
         $series = SeriesFactory::ownedBy($this->signIn())->create();
 
-        $this->patch($series->adminPath(),[
-            'title' => 'changed',
-            'description'   => 'changed'
+        $this->patch($series->adminPath(), [
+            'title'       => 'changed',
+            'description' => 'changed'
         ]);
 
         $series->refresh();
 
         $this->assertDatabaseHas('series', [
-            'title' => 'changed',
+            'title'       => 'changed',
             'description' => 'changed',
         ]);
 
@@ -248,9 +268,9 @@ class ManageSeriesTest extends TestCase
         //pass an empty opencast response
         $this->mockHandler->append($this->mockCreateSeriesResponse());
 
-        $this->patch($series->adminPath(),[
-            'title' => 'changed',
-            'description'   => 'changed'
+        $this->patch($series->adminPath(), [
+            'title'       => 'changed',
+            'description' => 'changed'
         ]);
 
         $series = $series->refresh();
@@ -265,12 +285,12 @@ class ManageSeriesTest extends TestCase
 
         $this->signIn();
 
-        $this->patch($series->adminPath(),[
-            'title' => 'changed',
-            'description'   => 'changed'
+        $this->patch($series->adminPath(), [
+            'title'       => 'changed',
+            'description' => 'changed'
         ])->assertStatus(403);
 
-        $this->assertDatabaseMissing('series', ['title'=>'changed']);
+        $this->assertDatabaseMissing('series', ['title' => 'changed']);
     }
 
     /** @test */
@@ -283,12 +303,12 @@ class ManageSeriesTest extends TestCase
         //pass an empty opencast respons
         $this->mockHandler->append($this->mockSeriesRunningWorkflowsResponse($series, false));
 
-        $this->patch($series->adminPath(),[
+        $this->patch($series->adminPath(), [
             'title'       => 'changed',
             'description' => 'changed'
         ]);
 
-        $this->assertDatabaseHas('series', ['title'=>'changed']);
+        $this->assertDatabaseHas('series', ['title' => 'changed']);
     }
 
     /** @test */
@@ -296,7 +316,7 @@ class ManageSeriesTest extends TestCase
     {
         $series = SeriesFactory::ownedBy($this->signIn())->create();
 
-        $this->patch($series->adminPath(),[
+        $this->patch($series->adminPath(), [
             'title'       => 'changed',
             'description' => 'changed'
         ])->assertSessionHas($this->flashMessageName);

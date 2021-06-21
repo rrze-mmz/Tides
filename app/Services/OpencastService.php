@@ -45,7 +45,6 @@ class OpencastService
      */
     public function getSeriesRunningWorkflows(Series $series): Collection
     {
-//        workflow/instances.json?state=running&seriesId=" . $seriesId . "&count=20&sort=DATE_CREATED_DESC
         try {
             $this->response = $this->client->get('workflow/instances.json', [
                 'query' => [

@@ -10,6 +10,7 @@ use App\Services\OpencastService;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Arr;
 
 class SeriesController extends Controller
 {
@@ -48,7 +49,11 @@ class SeriesController extends Controller
      */
     public function store(StoreSeriesRequest $request, OpencastService $opencastService): RedirectResponse
     {
-        $series = auth()->user()->series()->create($request->validated());
+        $validated = $request->validated();
+
+        $series = auth()->user()->series()->create(Arr::except($request->validated(),'acls'));
+
+        $series->addAcls(collect($validated['acls']));
 
         $opencastSeriesId = $opencastService->createSeries($series);
 
@@ -94,8 +99,11 @@ class SeriesController extends Controller
 
             $series->updateOpencastSeriesId($opencastSeriesId);
         }
+        $validated = $request->validated();
 
-        $series->update($request->validated());
+        $series->update(Arr::except($request->validated(),'acls'));
+
+        $series->addAcls(collect($validated['acls']));
 
         return redirect($series->adminPath());
     }
