@@ -35,7 +35,13 @@ class SeriesClipsController extends Controller
      */
     public function store(Series $series, StoreClipRequest $request): RedirectResponse
     {
-        $clip = $series->addClip($request->validated());
+        $validated = $request->validated();
+
+        $clip = $series->addClip($validated);
+
+        $clip->addTags(collect($validated['tags']));
+
+        $clip->addAcls(collect($validated['acls']));
 
         $request->session()->flash('clip_created_successfully', 'Clip created successfully');
 

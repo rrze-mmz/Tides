@@ -28,6 +28,6 @@ class CreateAclsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('acls');
+        DB::statement('drop table acls cascade');
     }
 }

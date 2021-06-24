@@ -4,7 +4,7 @@ namespace App\View\Components\Form;
 
 use Illuminate\View\Component;
 
-class ToggleButton extends Component
+class Textarea extends Component
 {
     /**
      * Create a new component instance.
@@ -12,9 +12,11 @@ class ToggleButton extends Component
      * @return void
      */
     public function __construct(
-        public bool $value,
+        public $value,
+        public string $fieldName,
         public string $label,
-        public string $fieldName
+        public bool $required = false,
+        public int $numRows = 10
     ) {
         //
     }
@@ -26,6 +28,6 @@ class ToggleButton extends Component
      */
     public function render()
     {
-        return view('components.form.toggle-button');
+        return view('components.form.textarea');
     }
 }

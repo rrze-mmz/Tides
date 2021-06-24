@@ -49,11 +49,7 @@ class SeriesController extends Controller
      */
     public function store(StoreSeriesRequest $request, OpencastService $opencastService): RedirectResponse
     {
-        $validated = $request->validated();
-
-        $series = auth()->user()->series()->create(Arr::except($request->validated(),'acls'));
-
-        $series->addAcls(collect($validated['acls']));
+        $series = auth()->user()->series()->create($request->validated());
 
         $opencastSeriesId = $opencastService->createSeries($series);
 
@@ -99,11 +95,7 @@ class SeriesController extends Controller
 
             $series->updateOpencastSeriesId($opencastSeriesId);
         }
-        $validated = $request->validated();
-
-        $series->update(Arr::except($request->validated(),'acls'));
-
-        $series->addAcls(collect($validated['acls']));
+        $series->update($request->validated());
 
         return redirect($series->adminPath());
     }

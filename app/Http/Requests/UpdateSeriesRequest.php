@@ -5,13 +5,14 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rules\Password;
 
-class UpdateSeriesRequest extends FormRequest {
+class UpdateSeriesRequest extends FormRequest
+{
     protected function prepareForValidation()
     {
         $this->merge([
             'slug' => Str::slug($this->title),
-            'acls' => $this->acls = $this->acls ?? [], //set empty array if select2 acls is empty
         ]);
     }
 
@@ -37,7 +38,7 @@ class UpdateSeriesRequest extends FormRequest {
             'description'        => 'max:500',
             'slug'               => 'required',
             'opencast_series_id' => 'null|uuid',
-            'acls'               => 'array'
+            'password'           => ['nullable', Password::min(8)->mixedCase()]
         ];
     }
 }

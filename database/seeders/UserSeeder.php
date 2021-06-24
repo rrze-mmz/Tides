@@ -22,7 +22,7 @@ class UserSeeder extends Seeder
         ]);
 
         DB::table('users')->insert([
-            'name' => 'John Doe',
+            'name' => 'Bob the Admin',
             'email' => 'admin@test.com',
             'password' => Hash::make('12341234'),
         ]);

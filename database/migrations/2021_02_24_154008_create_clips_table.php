@@ -18,8 +18,12 @@ class CreateClipsTable extends Migration
             $table->string('title');
             $table->foreignId('owner_id')->references('id')->on('users');
             $table->string('slug')->unique();
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->string('posterImage')->nullable();
+            $table->string('password')->nullable();
+            $table->unsignedBigInteger('series_id')->nullable()->default(null);
+            $table->integer('episode')->default('1');
+            $table->boolean('allow_comments')->default(false);
             $table->timestamps();
         });
     }

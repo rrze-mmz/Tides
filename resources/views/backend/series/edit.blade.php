@@ -13,79 +13,40 @@
                 @csrf
                 @method('PATCH')
 
-                <div class="grid grid-cols-8 gap-2 py-3">
+                <div class="flex flex-col gap-3">
 
-                    <div class="flex content-center items-center">
-                        <label class="block py-2 mr-6 font-bold text-gray-700 text-md"
-                               for="title"
-                        >
-                            Title
-                        </label>
-                    </div>
-                    <div class="col-span-7 w-4/5">
-                        <input class="py-2 px-4 w-full leading-tight text-gray-700 bg-white rounded border-2 border-gray-200 appearance-none focus:outline-none focus:bg-white focus:border-blue-500"
-                               type="text"
-                               name="title"
-                               id="title"
-                               value="{{ $series->title }}"
-                               required
-                        >
-                    </div>
-                    @error('title')
-                    <div class="col-span-8">
-                        <p class="mt-2 w-full text-xs text-red-500">{{ $message }}</p>
-                    </div>
-                    @enderror
+                    <x-form.input field-name="title"
+                                  input-type="text"
+                                  :value="$series->title"
+                                  label="Title"
+                                  :full-col="true"
+                                  :required="true"
+                    />
 
-                    <div class="flex content-center items-center mb-6">
-                        <label class="block py-2 mr-6 font-bold text-gray-700 text-md"
-                               for="description"
-                        >
-                            Description
-                        </label>
-                    </div>
-                    <div class="col-span-7 w-4/5">
-                        <textarea class="py-2 px-4 w-full leading-tight text-gray-700 bg-white rounded border-2 border-gray-200 appearance-none focus:outline-none focus:bg-white focus:border-blue-500"
-                                  type="text"
-                                  rows="10"
-                                  name="description"
-                                  id="description"
-                        > {{ $series->description }}</textarea>
-                    </div>
-                    @error('description')
-                    <div class="col-span-8">
-                        <p class="mt-2 w-full text-xs text-red-500">{{ $message }}</p>
-                    </div>
-                    @enderror
+                    <x-form.textarea field-name="description"
+                                     :value="$series->description"
+                                     label="Description"
+                    />
 
-                    <div class="flex content-center items-center">
-                        <label class="block py-2 mr-6 font-bold text-gray-700 text-md"
-                               for="opencast_series_id"
-                        >
-                            Opencast Series ID
-                        </label>
-                    </div>
-                    <div class="col-span-7 w-4/5">
-                        <input class="py-2 px-4 w-full leading-tight text-gray-700 bg-white rounded border-2 border-gray-200 appearance-none focus:outline-none focus:bg-white focus:border-blue-500"
-                               type="text"
-                               name="opencast_series_id"
-                               id="opencast_series_id"
-                               disabled
-                               value="{{ $series->opencast_series_id }}"
-                               required
-                        >
-                    </div>
-                    @error('opencast_series_id')
-                    <div class="col-span-8">
-                        <p class="mt-2 w-full text-xs text-red-500">{{ $message }}</p>
-                    </div>
-                    @enderror
+                    <x-form.input field-name="opencast_series_id"
+                                  input-type="text"
+                                  :value="$series->opencast_series_id"
+                                  label="Opencast Series ID"
+                                  :full-col="true"
+                                  :disabled="true"
+                                  :required="true"
+                    />
 
-                    <x-form.acl :model="$series"/>
-
+                    <x-form.password field-name="password"
+                                     :value="$series->password"
+                                     label="Password"
+                                     :full-col="true"
+                    />
                 </div>
 
-                <x-form.button :link="$link=false" type="submit" text="Update Series"/>
+                <div class="pt-10">
+                    <x-form.button :link="$link=false" type="submit" text="Update Series" />
+                </div>
 
             </form>
 

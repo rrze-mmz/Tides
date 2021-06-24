@@ -25,6 +25,11 @@ abstract class TestCase extends BaseTestCase
             'name'       => 'lms',
             'description' => 'Material is accessed via LMS (moodle, Ilias, etc.) log in',
         ]);
+
+        Acl::create([
+            'name'       => 'password',
+            'description' => 'Material is accessed via a password (moodle, Ilias, etc.)',
+        ]);
     }
 
     /**

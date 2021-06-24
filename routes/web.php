@@ -15,6 +15,8 @@ use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\SearchController;
 use App\Http\Controllers\Frontend\ShowClipsController;
 use App\Http\Controllers\Frontend\ShowSeriesController;
+use App\Http\Middleware\EnsureLMSTokenIsValid;
+use App\Models\Clip;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
@@ -23,6 +25,10 @@ Route::redirect('/admin', '/admin/dashboard');
 
 //Quick search
 Route::get('search', [SearchController::class, 'search'])->name('search');
+
+Route::get('/protector/link/clip/{clip:id}/{token}/{duration}/{type}', function (Clip $clip) {
+    redirect()->route('frontend.clips.show', $clip);
+})->middleware(EnsureLMSTokenIsValid::class)->name('clip.lms.link');
 
 Route::get('/series/{series}', [ShowSeriesController::class, 'show'])->name('series.show');
 

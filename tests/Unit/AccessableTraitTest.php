@@ -33,4 +33,6 @@ class AccessableTraitTest extends TestCase
 
         $this->assertEquals(2, $this->clip->acls()->count());
     }
+
+
 }

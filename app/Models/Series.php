@@ -93,4 +93,19 @@ class Series extends BaseModel
             $this->update();
         }
     }
+
+    /**
+     * Returns a comma seperated alcs list for all clips
+     * @return mixed
+     */
+    public function fetchClipsAcls(): string
+    {
+        //iterate every clip and get a unique acl name
+        return  $this->clips->map(function ($clip) {
+                            return  $clip->acls()->pluck('name');
+        })->flatten()
+                                ->unique()
+                                ->values()
+                                ->implode(', ');
+    }
 }

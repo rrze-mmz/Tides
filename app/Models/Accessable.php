@@ -6,11 +6,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Collection;
 
-trait Accessable {
+trait Accessable
+{
 
     public function acls(): MorphToMany
     {
-        return $this->morphToMany(Acl::class,'accessable')->withTimestamps();
+        return $this->morphToMany(Acl::class, 'accessable')->withTimestamps();
     }
 
     public function addAcls(Collection $aclsCollection)
@@ -30,5 +31,4 @@ trait Accessable {
 
 //        $this->acls()->attach($acl);
     }
-
 }

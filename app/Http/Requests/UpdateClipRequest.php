@@ -6,8 +6,10 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rules\Password;
 
-class UpdateClipRequest extends FormRequest {
+class UpdateClipRequest extends FormRequest
+{
     protected function prepareForValidation()
     {
         $this->merge([
@@ -43,6 +45,8 @@ class UpdateClipRequest extends FormRequest {
             'acls'           => 'array',
             'episode'        => 'required|integer',
             'allow_comments' => 'boolean',
+            'password'       => ['nullable',Password::min(8)->mixedCase()]
+
         ];
     }
 }

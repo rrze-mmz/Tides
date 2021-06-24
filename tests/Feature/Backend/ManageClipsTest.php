@@ -44,6 +44,7 @@ class ManageClipsTest extends TestCase {
 
         $this->get(route('clips.index').'?page=2')->assertDontSee('You have no series yet');
     }
+
     /** @test */
     public function it_requires_a_title_creating_a_new_clip(): void
     {
@@ -52,6 +53,24 @@ class ManageClipsTest extends TestCase {
         $attributes = Clip::factory()->raw(['title' => '']);
 
         $this->post(route('clips.store'), $attributes)->assertSessionHasErrors('title');
+    }
+
+    /** @test */
+    public function it_must_have_a_strong_password_if_any(): void
+    {
+        $this->signIn();
+
+        $this->post(route('clips.store', Clip::factory()->raw([
+                            'title' => 'This is a test',
+                            'password'  => '1234',
+                            ])
+            ))->assertSessionHasErrors('password');
+
+        $this->followingRedirects()->post(route('clips.store', Clip::factory()->raw([
+                            'title' => 'This is a test',
+                            'password'  => '1234qwER',
+                        ])
+                ))->assertStatus(200);
     }
 
     /** @test */

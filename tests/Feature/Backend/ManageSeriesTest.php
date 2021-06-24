@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Backend;
 
+use App\Models\Clip;
 use App\Models\Series;
 use App\Services\OpencastService;
 use Facades\Tests\Setup\SeriesFactory;
@@ -31,6 +32,23 @@ class ManageSeriesTest extends TestCase {
     }
 
     /** @test */
+    public function it_shows_series_information_in_index_page(): void
+    {
+        $series = SeriesFactory::ownedBy($this->signIn())
+            ->withClips(3)
+            ->create();
+
+        Clip::find(1)->addAcls(collect([1])); //assign 'intern' acl
+        Clip::find(2)->addAcls(collect([2])); //assign 'lms' acl
+        Clip::find(3)->addAcls(collect([2])); //assign 'lms' acl
+
+
+        $this->get(route('series.index'))
+            ->assertSee($series->title)
+            ->assertSee('intern, lms');
+    }
+
+    /** @test */
     public function it_paginates_users_series_in_dashboard_index_page(): void
     {
         Series::factory(20)->create(['owner_id' => $this->signIn()]);
@@ -57,7 +75,8 @@ class ManageSeriesTest extends TestCase {
         $this->get(route('series.create'))
             ->assertSee('title')
             ->assertSee('description')
-            ->assertSee('acls');
+            ->assertSee('acls')
+            ->assertSee('password');
 
         $this->get(route('series.create'))->assertStatus(200)
             ->assertViewIs('backend.series.create');
@@ -74,6 +93,27 @@ class ManageSeriesTest extends TestCase {
     }
 
     /** @test */
+    public function it_must_have_a_strong_password_if_any(): void
+    {
+        $this->signIn();
+
+
+        $this->post(route('series.store', Series::factory()->raw([
+                        'title'    => 'This is a test',
+                        'password' => '1234',
+                        ])
+        ))->assertSessionHasErrors('password');
+
+        $this->post(route('series.store', Series::factory()->raw([
+                        'title'    => 'This is a test',
+                        'password' => '1234qwER',
+                        ])
+        ));
+
+        $this->assertDatabaseHas('series', ['password'=> '1234qwER']);
+    }
+
+    /** @test */
     public function an_authenticated_user_can_create_a_series(): void
     {
         $this->signIn();
@@ -86,24 +126,6 @@ class ManageSeriesTest extends TestCase {
         );
 
         $this->assertDatabaseHas('series', ['title' => 'Test title']);
-    }
-
-    /** @test */
-    public function an_authenticated_user_can_create_a_series_with_acls(): void
-    {
-        $this->signIn();
-
-        $this->post(route('series.store'),
-            [
-                'title'       => 'Test title',
-                'description' => 'Test description',
-                'acls'        => ['1','2'],
-            ]
-        );
-
-        $series = Series::first();
-
-        $this->assertEquals(2, $series->acls()->count());
     }
 
     /** @test */
@@ -174,8 +196,7 @@ class ManageSeriesTest extends TestCase {
         $this->get($series->adminPath())
             ->assertStatus(200)
             ->assertSee('title')
-            ->assertSee('description')
-            ->assertSee('acls');
+            ->assertSee('description');
     }
 
     /** @test */

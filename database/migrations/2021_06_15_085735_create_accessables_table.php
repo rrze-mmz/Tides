@@ -31,6 +31,6 @@ class CreateAccessablesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('accessable');
+        Schema::dropIfExists('accessables');
     }
 }

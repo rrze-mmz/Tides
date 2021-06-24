@@ -33,7 +33,7 @@ function getClipStoragePath(Clip $clip): string
 }
 
 
-/**
+/*
  * Fetch all files in the dropzone with sha1 hash
  *
  * @return Collection

@@ -14,7 +14,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Arr;
 use Illuminate\View\View;
 
-class ClipsController extends Controller {
+class ClipsController extends Controller
+{
     /**
      * Index all clips in admin portal. In case of simple user list only users clips
      *
@@ -117,8 +118,7 @@ class ClipsController extends Controller {
 
         $clip->delete();
 
-        if ($clip->series_id)
-        {
+        if ($clip->series_id) {
             return redirect(route('series.edit', $clip->series));
         }
 

@@ -1,4 +1,4 @@
-<aside class="my-4 mx-6 text-white">
+<aside class="my-4 mx-6 text-white text-center">
     <ul>
         <li class="w-full">
             <a
