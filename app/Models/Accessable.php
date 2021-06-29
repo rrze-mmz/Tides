@@ -28,7 +28,29 @@ trait Accessable
         } else {
             $this->acls()->detach();
         }
+    }
 
-//        $this->acls()->attach($acl);
+    public function checkAcls(): bool
+    {
+        $acls = $this->acls;
+
+        $tokenType = lcfirst(class_basename($this::class));
+        $tokenTime = session()->get($tokenType.'_'.$this->id.'_time');
+
+        $check = false;
+        if ($acls->isEmpty()) {
+            $check = true;
+        }
+        if ($acls->pluck('id')->contains('1')) {
+            $check = (auth()->check() && auth()->user()->can('view-video', $this));
+        }
+        if ($acls->pluck('id')->contains('2')) {
+            $check =  (
+                        session()->get($tokenType.'_'.$this->id.'_token')=== generateLMSToken($this, $tokenTime)
+                        || ((auth()->check() && auth()->user()->can('view-video', $this)))
+                        );
+        }
+
+        return $check;
     }
 }

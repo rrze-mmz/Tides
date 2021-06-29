@@ -45,7 +45,7 @@ class User extends Authenticatable
     /**
      * Series relationship
      *
-     * @return HasMany
+     * @return HasMan
      */
     public function series(): HasMany
     {

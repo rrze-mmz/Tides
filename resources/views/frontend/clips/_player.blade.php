@@ -1,6 +1,12 @@
 <div class="flex flex-col">
     <div class="flex justify-center content-center pt-6 " >
-        <x-player :clip="$clip" :wowzaStatus="$wowzaStatus"/>
+
+        @if($clip->checkAcls())
+            <x-player :clip="$clip" :wowzaStatus="$wowzaStatus"/>
+        @else
+            <p>You are not authorized to view this video!</p>
+        @endif
+
     </div>
     <div class="flex justify-around pt-8 pb-3 border-b-2 border-gray-500">
 

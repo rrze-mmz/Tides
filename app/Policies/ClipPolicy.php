@@ -48,7 +48,7 @@ class ClipPolicy
 
     public function viewVideo(User $user, Clip $clip):bool
     {
-
-        return (auth()->check() && $clip->acls->pluck('id')->contains('1'));
+        return ((auth()->check() && $clip->acls->pluck('id')->contains('1')) ||
+                $user->is($clip->owner));
     }
 }

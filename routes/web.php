@@ -15,6 +15,7 @@ use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\SearchController;
 use App\Http\Controllers\Frontend\ShowClipsController;
 use App\Http\Controllers\Frontend\ShowSeriesController;
+use App\Http\Middleware\CheckLMSToken;
 use App\Http\Middleware\EnsureLMSTokenIsValid;
 use App\Models\Clip;
 use Illuminate\Support\Facades\Route;
@@ -26,15 +27,26 @@ Route::redirect('/admin', '/admin/dashboard');
 //Quick search
 Route::get('search', [SearchController::class, 'search'])->name('search');
 
-Route::get('/protector/link/clip/{clip:id}/{token}/{duration}/{type}', function (Clip $clip) {
-    redirect()->route('frontend.clips.show', $clip);
-})->middleware(EnsureLMSTokenIsValid::class)->name('clip.lms.link');
-
 Route::get('/series/{series}', [ShowSeriesController::class, 'show'])->name('series.show');
 
 //Frontend clip route
 Route::get('/clips', [ShowClipsController::class, 'index'])->name('frontend.clip.index');
-Route::get('/clips/{clip}', [ShowClipsController::class, 'show'])->name('frontend.clips.show');
+
+Route::get('/clips/{clip}', [ShowClipsController::class, 'show'])
+    ->name('frontend.clips.show');
+
+Route::get('/protector/link/clip/{clip:id}/{token}/{time}/{client}', function (Clip $clip, $token, $time, $client) {
+    session()->put([
+        'clip_' . $clip->id . '_token'=> $token,
+        'clip_' . $clip->id . '_time'=> $time,
+        'clip_' . $clip->id . '_client'=> $client,
+    ]);
+
+    return redirect()->route('frontend.clips.show', $clip);
+})
+    ->middleware(EnsureLMSTokenIsValid::class)
+    ->name('clip.lms.link');
+
 
 Route::get('/api/tags', ApiTagsController::class)->name('api.tags');
 

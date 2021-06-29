@@ -3,7 +3,6 @@
 use App\Models\Clip;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -50,7 +49,31 @@ function fetchDropZoneFiles(): Collection
         ])->sortBy('date_modified');
 }
 
+/**
+ * Returns tailwind menu active link css rule
+ *
+ * @param string $route
+ * @return string
+ */
 function setActiveLink(string $route): string
 {
     return (Str::contains(url()->current(), $route))?'border-b-2':'';
+}
+
+/**
+ * Generates a LMS token based on the given object (series|clip)
+ *
+ * @param $obj
+ * @param $time
+ * @param false $withURL
+ * @return string
+ */
+function generateLMSToken($obj, $time, bool $withURL = false): string
+{
+    $type = lcfirst(class_basename($obj::class));
+
+    \Debugbar::info($type.$obj->id.$obj->password.request()->ip().$time.'studon');
+    $token = md5($type.$obj->id.$obj->password.request()->ip().$time.'studon');
+
+    return ($withURL)?'/protector/link/'.$type.'/'.$obj->id.'/'.$token.'/'.$time.'/studon':$token;
 }

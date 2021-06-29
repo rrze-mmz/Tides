@@ -14,19 +14,27 @@ class EnsureLMSTokenIsValid
      * @param \Closure $next
      * @return mixed
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): mixed
     {
-        $lmsRequest = collect([
-            'type'     => ((string)$request->segment('3')==='course')?'series':(string)$request->segment('3'),
-            'id'       => (int) $request->segment('4'),
-            'token'    => $request->segment('5'),
-            'duration' => $request->segment('6'),
-            'source'   => $request->segment('7')
-        ]);
+        //this should either be a series (course term is for backward compability with old LMS links) or a clip
+        $objType = ((string)$request->segment('3')==='course')?'series':(string)$request->segment('3');
+        $objID = (int) $request->segment('4');
+        $objToken = $request->segment('5');
+        $objTokenTime = $request->segment('6');
 
-        $model = "App\Models\\".ucfirst($lmsRequest['type']);
+        $model = "App\Models\\".ucfirst($objType);
 
-        $obj = $model::find($lmsRequest['id']);
+        $obj = $model::find($objID);
+
+        if (!$obj->acls()->pluck('id')->contains('2')) {
+            return $next($request);
+        }
+
+        $token = generateLMSToken($obj, $objTokenTime);
+
+        if ($objToken !== $token) {
+            abort(403);
+        }
 
         return $next($request);
     }

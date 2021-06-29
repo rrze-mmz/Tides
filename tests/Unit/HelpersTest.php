@@ -4,6 +4,7 @@
 namespace Tests\Unit;
 
 use App\Models\Clip;
+use Facades\Tests\Setup\ClipFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Testing\File;
 use Illuminate\Support\Facades\Storage;
@@ -57,5 +58,31 @@ class HelpersTest extends TestCase
         $this->get(route('dashboard'));
 
         $this->assertEquals('border-b-2',setActiveLink(route('dashboard')));
+    }
+
+    /** @test */
+    public function it_has_a_generate_token_function(): void
+    {
+        $time = dechex(time());
+
+        $token = md5('clip'.'1'.'1234qwER'.'127.0.0.1'.$time.'studon');
+
+        $this->assertEquals($token, generateLMSToken(ClipFactory::create(['password'=>'1234qwER']), $time));
+    }
+
+    /** @test */
+    public function it_has_a_token_function_with_url_option_as_parameter(): void
+    {
+        $time = dechex(time());
+
+        $token = md5('clip'.'1'.'1234qwER'.'127.0.0.1'.$time.'studon');
+
+        $clip  = ClipFactory::create(['password'=>'1234qwER']);
+
+        $url = '/protector/link/clip/1/'.$token.'/'.$time.'/studon';
+
+        $this->assertNotEquals($url, generateLMSToken($clip, $time));
+
+        $this->assertEquals($url, generateLMSToken($clip, $time, true));
     }
 }
