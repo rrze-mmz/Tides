@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use App\Models\Clip;
 use App\Models\Series;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Facades\Tests\Setup\SeriesFactory;
 use Tests\Setup\WorksWithOpencastClient;
@@ -78,5 +79,11 @@ class SeriesTest extends TestCase {
         $series->updateOpencastSeriesId($this->mockCreateSeriesResponse());
 
         $this->assertNotNull($series->opencast_series_id);
+    }
+
+    /** @test */
+    public function it_has_a_public_scope(): void
+    {
+        $this->assertInstanceOf(Builder::class, Series::public());
     }
 }

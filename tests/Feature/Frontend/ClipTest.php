@@ -51,13 +51,93 @@ class ClipTest extends TestCase {
     }
 
     /** @test */
+    public function a_visitor_cannot_view_a_not_public_clip(): void
+    {
+        $this->mockHandler->append($this->mockCheckApiConnection());
+
+        $this->clip->isPublic = false;
+
+        $this->clip->save();
+
+        $this->get($this->clip->path())->assertStatus(403);
+    }
+
+    /** @test */
+    public function a_clip_owner_can_view_a_not_public_clip(): void
+    {
+        $this->mockHandler->append($this->mockCheckApiConnection());
+
+        $user = $this->signIn();
+
+        $this->clip->owner_id = $user->id;
+        $this->clip->isPublic = false;
+
+        $this->clip->save();
+
+        $this->get($this->clip->path())->assertStatus(200);
+    }
+
+    /** @test */
+    public function an_admin_can_view_a_not_public_clip(): void
+    {
+        $this->mockHandler->append($this->mockCheckApiConnection());
+
+        $this->signInAdmin();
+
+        $this->clip->isPublic = false;
+
+        $this->clip->save();
+
+        $this->get($this->clip->path())->assertStatus(200);
+    }
+
+    /** @test */
+    public function a_visitor_cannot_view_a_clip_that_belongs_to_a_not_public_series(): void
+    {
+        $series = SeriesFactory::create();
+
+        $series->isPublic = false;
+
+        $series->save();
+
+        $this->clip->series_id  = $series->id;
+
+        $this->clip->save();
+
+
+        $this->get($this->clip->path())->assertStatus(403);
+    }
+
+    /** @test */
+    public function a_clip_owner_can_view_a_clip_that_belongs_to_a_not_public_series(): void
+    {
+        $this->mockHandler->append($this->mockCheckApiConnection());
+
+        $user = $this->signIn();
+
+        $series = SeriesFactory::create();
+
+        $series->isPublic = false;
+
+        $series->save();
+
+        $this->clip->series_id  = $series->id;
+        $this->clip->owner_id = $user->id;
+
+        $this->clip->save();
+
+
+        $this->get($this->clip->path())->assertStatus(200);
+    }
+
+    /** @test */
     public function it_is_using_a_wowza_source_link_if_wowza_server_is_available(): void
     {
         $this->mockHandler->append($this->mockCheckApiConnection());
 
         $this->get($this->clip->path())->assertSee(env('WOWZA_ENGINE_URL'));
 
-        Storage::disk('videos')->delete($this->clip->assets()->first()->path);
+        Storage::disk('videos')->delete($this->clip->assets()->first()->pth);
     }
 
     /** @test */

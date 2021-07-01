@@ -24,6 +24,7 @@ class CreateClipsTable extends Migration
             $table->unsignedBigInteger('series_id')->nullable()->default(null);
             $table->integer('episode')->default('1');
             $table->boolean('allow_comments')->default(false);
+            $table->boolean('isPublic')->default(true);
             $table->timestamps();
         });
     }

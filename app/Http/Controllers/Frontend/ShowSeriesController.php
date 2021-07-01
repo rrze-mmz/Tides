@@ -18,6 +18,8 @@ class ShowSeriesController extends Controller
      */
     public function show(Series $series): View
     {
+        $this->authorize('view-series', $series);
+
         /*
          * modify series clips and if user is not owner fetch only clips that has video assets
          */

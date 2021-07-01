@@ -21,11 +21,11 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        Clip::class => ClipPolicy::class,
-        Asset::class => AssetPolicy::class,
-        Series::class => SeriesPolicy::class,
-        Comment::class =>  CommentPolicy::class,
-        User::class => UserPolicy::class
+        Clip::class    => ClipPolicy::class,
+        Asset::class   => AssetPolicy::class,
+        Series::class  => SeriesPolicy::class,
+        Comment::class => CommentPolicy::class,
+        User::class    => UserPolicy::class
     ];
 
     /**
@@ -37,10 +37,12 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Gate::define('create-series', [SeriesPolicy::class,'create']);
-        Gate::define('edit-series', [SeriesPolicy::class,'edit']);
+        Gate::define('create-series', [SeriesPolicy::class, 'create']);
+        Gate::define('edit-series', [SeriesPolicy::class, 'edit']);
+        Gate::define('view-series', [SeriesPolicy::class, 'view']);
         Gate::define('create-clips', [ClipPolicy::class, 'create']);
         Gate::define('edit-clips', [ClipPolicy::class, 'edit']);
+        Gate::define('view-clips', [ClipPolicy::class, 'view']);
         Gate::define('view-comments', [ClipPolicy::class, 'viewComments']);
         Gate::define('view-video', [ClipPolicy::class, 'viewVideo']);
         Gate::define('edit-assets', [AssetPolicy::class, 'edit']);

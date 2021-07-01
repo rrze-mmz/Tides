@@ -55,6 +55,11 @@
                                               field-name="allow_comments"
                         />
 
+                        <x-form.toggle-button :value="true"
+                                              label="Public available"
+                                              field-name="isPublic"
+                        />
+
                         <div class="col-span-7 w-4/5">
                             <x-form.button :link="$link=false" type="submit" text="Create clip"/>
                         </div>

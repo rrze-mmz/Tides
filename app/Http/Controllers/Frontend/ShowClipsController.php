@@ -29,6 +29,8 @@ class ShowClipsController extends Controller
      */
     public function show(Clip $clip, WowzaService $wowzaService): View
     {
+        $this->authorize('view-clips', $clip);
+
         return view('frontend.clips.show', [
             'clip'                       => $clip,
             'wowzaStatus'                => $wowzaService->checkApiConnection(),

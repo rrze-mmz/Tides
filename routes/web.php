@@ -27,7 +27,7 @@ Route::redirect('/admin', '/admin/dashboard');
 //Quick search
 Route::get('search', [SearchController::class, 'search'])->name('search');
 
-Route::get('/series/{series}', [ShowSeriesController::class, 'show'])->name('series.show');
+Route::get('/series/{series}', [ShowSeriesController::class, 'show'])->name('frontend.series.show');
 
 //Frontend clip route
 Route::get('/clips', [ShowClipsController::class, 'index'])->name('frontend.clip.index');

@@ -21,6 +21,19 @@ class SeriesPolicy
     }
 
     /**
+     * @param User|null $user
+     * @param Series $series
+     * @return bool
+     */
+    public function view(?User $user, Series $series): bool
+    {
+        return(
+        (!auth()->check() && $series->isPublic)
+        || (optional($user)->is($series->owner) || optional($user)->isAdmin())
+        );
+    }
+
+    /**
      * Check whether the given user can edit the given series
      *
      * @param  User  $user

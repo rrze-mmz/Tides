@@ -9,6 +9,7 @@ use App\Models\Comment;
 use App\Models\Series;
 use App\Models\User;
 use Facades\Tests\Setup\FileFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Collection;
@@ -43,6 +44,7 @@ class ClipTest extends TestCase {
     /** @test */
     public function it_has_a_slug_route(): void
     {
+        $this->withoutExceptionHandling();
         $this->get($this->clip->path())->assertStatus(200);
     }
 
@@ -178,5 +180,11 @@ class ClipTest extends TestCase {
         ]);
 
         $this->assertInstanceOf(Asset::class, $this->clip->getCameraSmil());
+    }
+
+    /** @test */
+    public function it_has_a_public_scope(): void
+    {
+        $this->assertInstanceOf(Builder::class, Clip::public());
     }
 }

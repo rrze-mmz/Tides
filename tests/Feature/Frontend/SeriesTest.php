@@ -25,7 +25,59 @@ class SeriesTest extends TestCase
 
         $clipWithoutAsset = Clip::factory()->create(['series_id'=>$series->id]);
 
-        $this->get(route('series.show', $series))->assertDontSee($clipWithoutAsset->title);
+        $this->get(route('frontend.series.show', $series))->assertDontSee($clipWithoutAsset->title);
+    }
+
+    /** @test */
+    public function it_shows_not_authorized_page_for_non_public_series_for_visitors(): void
+    {
+        $series = SeriesFactory::withClips(2)->withAssets(1)->create();
+
+        $series->isPublic = false;
+
+        $series->save();
+
+        $this->get(route('frontend.series.show', $series))->assertStatus(403);
+    }
+
+    /** @test */
+    public function it_shows_not_authorized_page_for_non_public_series_for_now_series_owner(): void
+    {
+        $series = SeriesFactory::withClips(2)->withAssets(1)->create();
+
+        $series->isPublic = false;
+
+        $series->save();
+
+        $this->signIn();
+
+        $this->get(route('frontend.series.show', $series))->assertStatus(403);
+    }
+
+    /** @test */
+    public function a_series_owner_can_view_a_non_public_series(): void
+    {
+        $series = SeriesFactory::ownedBy($this->signIn())->withClips(2)->withAssets(1)->create();
+
+        $series->isPublic = false;
+
+        $series->save();
+
+        $this->get(route('frontend.series.show', $series))->assertStatus(200);
+    }
+
+    /** @test */
+    public function an_admin_can_view_a_non_public_series(): void
+    {
+        $series = SeriesFactory::withClips(2)->withAssets(1)->create();
+
+        $series->isPublic = false;
+
+        $series->save();
+
+        $this->signInAdmin();
+
+        $this->get(route('frontend.series.show', $series))->assertStatus(200);
     }
 
     /** @test */
@@ -39,6 +91,6 @@ class SeriesTest extends TestCase
         $firstClip->addAcls(collect(['1']));
         $secondClip->addAcls(collect(['1','2']));
 
-        $this->get(route('series.show',$series))->assertSee(Acl::find(1)->name)->assertSee(Acl::find(2)->name);
+        $this->get(route('frontend.series.show',$series))->assertSee(Acl::find(1)->name)->assertSee(Acl::find(2)->name);
     }
 }

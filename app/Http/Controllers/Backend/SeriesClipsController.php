@@ -21,7 +21,7 @@ class SeriesClipsController extends Controller
      */
     public function create(Series $series): View
     {
-        $this->authorize('edit', $series);
+        $this->authorize('edit-series', $series);
 
         return view('backend.seriesClips.create', compact('series'));
     }

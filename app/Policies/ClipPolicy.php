@@ -11,7 +11,6 @@ class ClipPolicy
 {
 
     use HandlesAuthorization;
-
     /**
      * Check whether the current user can create a clip
      *
@@ -32,6 +31,20 @@ class ClipPolicy
     public function edit(User $user, Clip $clip): bool
     {
         return ($user->is($clip->owner) || $user->hasRole('admin')) ;
+    }
+
+    /**
+     * @param User|null $user
+     * @param Clip $clip
+     * @return bool
+     */
+    public function view(?User $user, Clip $clip): bool
+    {
+        return(
+            (!auth()->check() && $clip->isPublic && (is_null($clip->series->isPublic) || $clip->series->isPublic))
+            || (auth()->check() && $clip->checkAcls())
+            || (optional($user)->is($clip->owner) || optional($user)->isAdmin() )
+        );
     }
 
     /**

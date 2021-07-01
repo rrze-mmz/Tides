@@ -51,6 +51,17 @@ class AccessableTraitTest extends TestCase
 
         $this->assertTrue($this->clip->checkAcls());
 
+        auth()->logout();
+
+        //clip is available for admin user
+        $this->assertFalse($this->clip->checkAcls());
+
+        $this->signInAdmin();
+
+        $this->assertTrue(($this->clip->checkAcls()));
+
+        auth()->logout();
+
         //clip is now only for LMS users available
         $this->clip->addAcls(collect(['2']));
 

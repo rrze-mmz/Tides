@@ -54,6 +54,24 @@ class HomePageTest extends TestCase {
     }
 
     /** @test */
+    public function it_should_not_display_series_that_is_not_public(): void
+    {
+        $series = SeriesFactory::create();
+
+        $clip = ClipFactory::withAssets(1)->create();
+
+        $series->clips()->save($clip);
+
+        $this->get(route('home'))->assertSee($series->title);
+
+        $series->isPublic = false;
+
+        $series->save();
+
+        $this->get(route('home'))->assertDontSee($series->title);
+    }
+
+    /** @test */
     public function it_does_not_display_clips_without_assets(): void
     {
         $clip = ClipFactory::create();
@@ -75,5 +93,19 @@ class HomePageTest extends TestCase {
         $clip = ClipFactory::withAssets(1)->create();
 
         $this->get(route('home'))->assertSee($clip->title);
+    }
+
+    /** @test */
+    public function it_should_not_display_clips_that_are_not_public(): void
+    {
+        $clip = ClipFactory::withAssets(1)->create();
+
+        $this->get(route('home'))->assertSee($clip->title);
+
+        $clip->isPublic = false;
+
+        $clip->save();
+
+        $this->get(route('home'))->assertDontSee($clip->title);
     }
 }

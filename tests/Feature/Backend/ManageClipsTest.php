@@ -92,7 +92,8 @@ class ManageClipsTest extends TestCase {
             ->assertSee('title')
             ->assertSee('description')
             ->assertSee('tags')
-            ->assertSee('acls');
+            ->assertSee('acls')
+            ->assertSee('isPublic');
 
         $this->get(route('clips.create'))->assertStatus(200)
             ->assertViewIs('backend.clips.create');

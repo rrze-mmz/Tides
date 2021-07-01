@@ -42,6 +42,11 @@
                                      label="Password"
                                      :full-col="true"
                     />
+
+                    <x-form.toggle-button :value="$series->isPublic"
+                                          label="Public available"
+                                          field-name="isPublic"
+                    />
                 </div>
 
                 <div class="pt-10">
@@ -62,7 +67,7 @@
             More actions
         </div>
         <div class="flex items-center pt-3 space-x-6">
-            <x-form.button :link="route('series.show',$series)" type="submit" text="Go to public page"/>
+            <x-form.button :link="route('frontend.series.show',$series)" type="submit" text="Go to public page"/>
 
             <x-form.button :link="route('series.clip.create',$series)" type="submit" text="Add new clip"/>
 

@@ -39,7 +39,7 @@ trait Accessable
 
         $check = false;
         if ($acls->isEmpty()) {
-            $check = true;
+            return true;
         }
         if ($acls->pluck('id')->contains('1')) {
             $check = (auth()->check() && auth()->user()->can('view-video', $this));
@@ -48,6 +48,7 @@ trait Accessable
             $check =  (
                         session()->get($tokenType.'_'.$this->id.'_token')=== generateLMSToken($this, $tokenTime)
                         || ((auth()->check() && auth()->user()->can('view-video', $this)))
+                        || (auth()->check() && auth()->user()->isAdmin())
                         );
         }
 

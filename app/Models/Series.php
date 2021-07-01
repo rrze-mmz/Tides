@@ -96,6 +96,7 @@ class Series extends BaseModel
 
     /**
      * Returns a comma seperated alcs list for all clips
+     *
      * @return mixed
      */
     public function fetchClipsAcls(): string
@@ -107,5 +108,16 @@ class Series extends BaseModel
                                 ->unique()
                                 ->values()
                                 ->implode(', ');
+    }
+
+    /**
+     *  Scope a query to only include public series
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function scopePublic($query): mixed
+    {
+        return $query->where('isPublic', 1);
     }
 }

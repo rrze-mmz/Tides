@@ -13,6 +13,7 @@ class UpdateSeriesRequest extends FormRequest
     {
         $this->merge([
             'slug' => Str::slug($this->title),
+            'isPublic' => $this->isPublic === 'on',
         ]);
     }
 
@@ -38,7 +39,8 @@ class UpdateSeriesRequest extends FormRequest
             'description'        => 'max:500',
             'slug'               => 'required',
             'opencast_series_id' => 'null|uuid',
-            'password'           => ['nullable', Password::min(8)->mixedCase()]
+            'password'           => ['nullable', Password::min(8)->mixedCase()],
+            'isPublic'           => 'boolean'
         ];
     }
 }

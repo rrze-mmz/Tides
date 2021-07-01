@@ -58,13 +58,25 @@ class AccessTest extends TestCase
     }
 
     /** @test */
-    public function an_lms_clip_is_accessable_for_clip_owner(): void
+    public function a_lms_clip_is_accessable_for_clip_owner(): void
     {
         $this->clip->addAcls(collect(['2']));
 
         $this->get($this->clip->path())->assertDontSee('plyr-player');
 
         $this->actingAs($this->clip->owner);
+
+        $this->get($this->clip->path())->assertSee('plyr-player');
+    }
+
+    /** @test */
+    public function a_lms_clip_is_accessable_for_admin(): void
+    {
+        $this->clip->addAcls(collect(['2']));
+
+        $this->get($this->clip->path())->assertDontSee('plyr-player');
+
+        $this->signInAdmin();
 
         $this->get($this->clip->path())->assertSee('plyr-player');
     }

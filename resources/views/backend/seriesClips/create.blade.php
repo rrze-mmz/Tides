@@ -55,6 +55,11 @@
                                           field-name="allow_comments"
                     />
 
+                    <x-form.toggle-button :value="$series->isPublic"
+                                          label="Public available"
+                                          field-name="isPublic"
+                    />
+
                 </div>
                 <div class="pt-10 ">
                     <x-form.button :link="$link=false" type="submit" text="Add a Clip to Series"/>

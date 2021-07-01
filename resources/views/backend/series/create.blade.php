@@ -37,6 +37,11 @@
                                      :full-col="true"
                     />
 
+                    <x-form.toggle-button :value="true"
+                                          label="Public available"
+                                          field-name="isPublic"
+                    />
+
                     <div class="flex content-center items-center mb-6">
                     </div>
                     <div class="col-span-7 w-4/5">

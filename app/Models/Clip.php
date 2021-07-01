@@ -168,4 +168,15 @@ class Clip extends BaseModel
             })->first()
         ]);
     }
+
+    /**
+     *  Scope a query to only include public clips
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function scopePublic($query)
+    {
+        return $query->where('isPublic', 1);
+    }
 }

@@ -14,6 +14,7 @@ class ClipFactory extends Factory
      * @var string
      */
     protected $model = Clip::class;
+
     /**
      * Define the model's default state
      *
@@ -24,13 +25,14 @@ class ClipFactory extends Factory
         static $episode = 0;
 
         return [
-            'title' => $title = $this->faker->sentence(),
+            'title'       => $title = $this->faker->sentence(),
             'description' => $this->faker->paragraph(),
-            'slug'  => $title,
-            'owner_id' => User::factory()->create()->id,
+            'slug'        => $title,
+            'owner_id'    => User::factory()->create()->id,
             'posterImage' => null,
-            'series_id' => null,
-            'episode' => $episode++,
+            'series_id'   => null,
+            'episode'     => $episode++,
+            'isPublic'    => true,
         ];
     }
 }

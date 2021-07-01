@@ -9,10 +9,12 @@ use Illuminate\Validation\Rules\Password;
 
 class StoreSeriesRequest extends FormRequest
 {
+
     protected function prepareForValidation()
     {
         $this->merge([
             'slug' => Str::slug($this->title),
+            'isPublic' => $this->isPublic === 'on',
         ]);
     }
 
@@ -21,7 +23,7 @@ class StoreSeriesRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return Gate::allows('create-series', $this->route('series'));
     }
@@ -37,7 +39,8 @@ class StoreSeriesRequest extends FormRequest
             'title'       => 'required',
             'description' => 'max:255',
             'slug'        => 'required',
-            'password'       => ['nullable',Password::min(8)->mixedCase()]
+            'password'    => ['nullable', Password::min(8)->mixedCase()],
+            'isPublic'   => 'boolean',
         ];
     }
 }
