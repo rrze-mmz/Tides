@@ -27,8 +27,7 @@ class SeriesPolicy
      */
     public function view(?User $user, Series $series): bool
     {
-        return(
-        (!auth()->check() && $series->isPublic)
+        return( $series->isPublic
         || (optional($user)->is($series->owner) || optional($user)->isAdmin())
         );
     }

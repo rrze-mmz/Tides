@@ -17,7 +17,7 @@ class StoreClipRequest extends FormRequest
             'tags'           => $this->tags = $this->tags ?? [], //set empty array if select2 tags is empty
             'acls'           => $this->acls = $this->acls ?? [], //set empty array if select2 acls is empty
             'allow_comments' => $this->allow_comments === 'on',
-            'isPublic' => $this->isPublic === 'on',
+            'isPublic'       => $this->isPublic === 'on',
         ]);
     }
 
@@ -42,6 +42,7 @@ class StoreClipRequest extends FormRequest
             'title'          => 'required',
             'description'    => 'max:500',
             'slug'           => 'required',
+            'semester_id'    => 'required|integer',
             'tags'           => 'array',
             'acls'           => 'array',
             'episode'        => 'required|integer',

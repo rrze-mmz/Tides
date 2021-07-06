@@ -59,7 +59,6 @@ class IngestOpencastTest extends TestCase
 
         Queue::assertPushed(IngestVideoFileToOpencast::class);
     }
-
     /** @test */
     public function it_dont_dispatches_an_ingest_job_when_file_is_not_a_video(): void
     {

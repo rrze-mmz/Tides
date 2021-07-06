@@ -9,9 +9,9 @@ window.$ = window.jQuery = $;
 
 $(() => {
 
-    $('.js-select2-tides-multiple').select2();
+    $('.select2-tides').select2();
 
-    $('.select2-tags-multiple').select2({
+    $('.select2-tides-tags').select2({
         allowClear: true,
         placeholder: 'Add a tag',
         tags: true,

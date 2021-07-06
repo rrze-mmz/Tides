@@ -52,16 +52,23 @@
                                  :value="$clip->description"
                                  label="Description"/>
 
+                <x-form.select2-single field-name="semester_id"
+                                       label="Semester"
+                                       select-class="select2-tides"
+                                       :items="App\Models\Semester::all()"
+                                       :selectedItem="$clip->semester_id"
+                />
+
                 <x-form.select2-multiple field-name="tags"
                                          :model="$clip"
                                          label="Tags"
-                                         select-class="select2-tags-multiple"
+                                         select-class="select2-tides-tags"
                                          :items="$clip->tags"/>
 
                 <x-form.select2-multiple field-name="acls"
                                          :model="$clip"
                                          label="Accessible via"
-                                         select-class="js-select2-tides-multiple"/>
+                                         select-class="select2-tides"/>
 
                 <x-form.password field-name="password"
                                  :value="$clip->password"

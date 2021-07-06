@@ -8,26 +8,17 @@
     </div>
     <div class="col-start-2 col-end-6">
         <select class="p-2 w-full {{ $selectClass}}
-                                            focus:outline-none focus:bg-white focus:border-blue-500"
-                name="{{ $fieldName }}[]"
-                multiple="multiple"
+            focus:outline-none focus:bg-white focus:border-blue-500"
+                name="{{ $fieldName }}"
                 style="width: 100%"
         >
-            @if($fieldName== 'acls')
                 @forelse($items as $item)
-                    <option value="{{ $item->id }}"
-                            @if($model?->acls->contains($item->id)) {{'selected'}} @endif
-                        >{{ $item->name }}</option>
-                    @empty
-                        <option value="1"></option>
-                    @endforelse
-            @else
-                @forelse($items as $item)
-                    <option value="{{$item->name }}" selected="selected">{{$item->name }}</option>
+                    <option value="{{$item->id }}" {{ ($item->id == $selectedItem)?'selected':'' }}>
+                        {{$item->name }}
+                    </option>
                 @empty
                     <option value="1" ></option>
                 @endforelse
-            @endif
         </select>
     </div>
 
@@ -37,5 +28,3 @@
     </div>
     @enderror
 </div>
-
-

@@ -3,6 +3,7 @@
 namespace Tests;
 
 use App\Models\Acl;
+use App\Models\Semester;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -28,7 +29,15 @@ abstract class TestCase extends BaseTestCase
 
         Acl::create([
             'name'       => 'password',
-            'description' => 'Material is accessed via a password (moodle, Ilias, etc.)',
+            'description' => 'Material is accessed via a password',
+        ]);
+
+        Semester::create([
+            'name'  => 'Wintersemester 2021/2022',
+            'acronym'=> 'W21',
+            'short_title'=> '2021/2022',
+            'start_date'    => '2021-10-01 00:00:00',
+            'stop_date'  => '2022-03-31 23:59:59',
         ]);
     }
 

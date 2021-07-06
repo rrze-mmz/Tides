@@ -1984,8 +1984,8 @@ __webpack_require__.r(__webpack_exports__);
 
 window.$ = window.jQuery = (jquery__WEBPACK_IMPORTED_MODULE_4___default());
 jquery__WEBPACK_IMPORTED_MODULE_4___default()(function () {
-  jquery__WEBPACK_IMPORTED_MODULE_4___default()('.js-select2-tides-multiple').select2();
-  jquery__WEBPACK_IMPORTED_MODULE_4___default()('.select2-tags-multiple').select2({
+  jquery__WEBPACK_IMPORTED_MODULE_4___default()('.select2-tides').select2();
+  jquery__WEBPACK_IMPORTED_MODULE_4___default()('.select2-tides-tags').select2({
     allowClear: true,
     placeholder: 'Add a tag',
     tags: true,

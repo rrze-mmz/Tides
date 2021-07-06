@@ -56,6 +56,16 @@ class ManageClipsTest extends TestCase {
     }
 
     /** @test */
+    public function it_requires_a_semester_creating_a_new_clip(): void
+    {
+        $this->signIn();
+
+        $attributes = Clip::factory()->raw(['semester_id' => '']);
+
+        $this->post(route('clips.store'), $attributes)->assertSessionHasErrors('semester_id');
+    }
+
+    /** @test */
     public function it_must_have_a_strong_password_if_any(): void
     {
         $this->signIn();
@@ -93,6 +103,7 @@ class ManageClipsTest extends TestCase {
             ->assertSee('description')
             ->assertSee('tags')
             ->assertSee('acls')
+            ->assertSee('semester')
             ->assertSee('isPublic');
 
         $this->get(route('clips.create'))->assertStatus(200)
@@ -151,6 +162,7 @@ class ManageClipsTest extends TestCase {
     /** @test */
     public function an_authenticated_user_can_create_a_clip_with_tags(): void
     {
+        $this->withoutExceptionHandling();
         $this->signIn();
 
         $attributes = Clip::factory()->raw([
@@ -193,7 +205,8 @@ class ManageClipsTest extends TestCase {
             'episode'     => '1',
             'title'       => 'changed',
             'description' => 'changed',
-            'tags'        => []
+            'tags'        => [],
+            'semester_id'   => '1',
         ]);
 
         $this->assertEquals(0, $clip->tags()->count());
@@ -212,7 +225,8 @@ class ManageClipsTest extends TestCase {
             'episode'     => '1',
             'title'       => 'changed',
             'description' => 'changed',
-            'tags'        => [$tag->name, 'another tag']
+            'tags'        => [$tag->name, 'another tag'],
+            'semester_id'   => '1',
         ]);
 
         $this->assertEquals(2, $clip->tags()->count());
@@ -226,6 +240,7 @@ class ManageClipsTest extends TestCase {
         $attributes = [
             'title'       => 'Clip title',
             'description' => $this->faker->sentence(500),
+            'semester_id'   => '1',
         ];
 
         $this->post(route('clips.store'), $attributes);
@@ -246,7 +261,8 @@ class ManageClipsTest extends TestCase {
         $this->patch($clip->adminPath(), [
             'episode'     => '1',
             'title'       => 'changed',
-            'description' => 'changed'
+            'description' => 'changed',
+            'semester_id'   => '1',
         ]);
 
         $clip = $clip->refresh();
@@ -254,7 +270,8 @@ class ManageClipsTest extends TestCase {
         $this->assertDatabaseHas('clips', [
             'episode'     => '1',
             'title'       => 'changed',
-            'description' => 'changed'
+            'description' => 'changed',
+            'semester_id'   => '1',
         ]);
 
         $this->get($clip->adminPath())->assertSee('changed');
@@ -270,7 +287,8 @@ class ManageClipsTest extends TestCase {
         $attributes = [
             'episode'     => '1',
             'title'       => 'changed',
-            'description' => 'changed'
+            'description' => 'changed',
+            'semester_id'   => '1',
         ];
 
         $this->patch($clip->adminPath(), $attributes)->assertStatus(403);
@@ -281,7 +299,6 @@ class ManageClipsTest extends TestCase {
     /** @test */
     public function an_admin_user_can_update_a_not_owned_clip(): void
     {
-        $this->withoutExceptionHandling();
         $clip = ClipFactory::create();
 
         $this->signInAdmin();
@@ -289,7 +306,8 @@ class ManageClipsTest extends TestCase {
         $attributes = [
             'episode'     => '1',
             'title'       => 'changed',
-            'description' => 'changed'
+            'description' => 'changed',
+            'semester_id'   => '1',
         ];
 
         $this->followingRedirects()->patch($clip->adminPath(), $attributes)->assertStatus(200);
@@ -302,7 +320,7 @@ class ManageClipsTest extends TestCase {
     {
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 
-        $this->patch($clip->adminPath(), ['episode' => '1', 'title' => 'Title changed']);
+        $this->patch($clip->adminPath(), ['episode' => '1', 'title' => 'Title changed', 'semester_id'=>'1']);
 
         $clip->refresh();
 
@@ -314,7 +332,12 @@ class ManageClipsTest extends TestCase {
     {
         $this->signIn();
 
-        $this->post(route('clips.store'), ['episode' => '1', 'title' => 'Test clip', 'description' => 'test']);
+        $this->post(route('clips.store'), [
+            'episode' => '1',
+            'title' => 'Test clip',
+            'description' => 'test',
+            'semester_id'=>'1'
+        ]);
 
         $clip = Clip::find(1);
 
@@ -430,6 +453,7 @@ class ManageClipsTest extends TestCase {
         $this->patch(route('clips.update', $clip), [
             'title'   => $clip->title,
             'episode' => $clip->episode,
+            'semester_id'=>'1',
             'allow_comments' => 'on'
         ]);
 

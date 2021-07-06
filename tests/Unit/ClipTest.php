@@ -6,11 +6,13 @@ namespace Tests\Unit;
 use App\Models\Asset;
 use App\Models\Clip;
 use App\Models\Comment;
+use App\Models\Semester;
 use App\Models\Series;
 use App\Models\User;
 use Facades\Tests\Setup\FileFactory;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
@@ -80,6 +82,12 @@ class ClipTest extends TestCase {
         Asset::factory(2)->create(['clip_id' => $this->clip->id]);
 
         $this->assertEquals(2, $this->clip->assets()->count());
+    }
+
+    /** @test */
+    public function it_has_only_one_semester(): void
+    {
+        $this->assertInstanceOf(BelongsTo::class, $this->clip->semester());
     }
 
     /** @test */

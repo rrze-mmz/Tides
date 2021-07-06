@@ -33,15 +33,22 @@
                                       label="Description"
                         />
 
+                        <x-form.select2-single field-name="semester_id"
+                                                 label="Semester"
+                                                 select-class="select2-tides"
+                                                 :items="App\Models\Semester::all()"
+                                                 :selectedItem="old('semester_id')"
+                        />
+
                         <x-form.select2-multiple field-name="tags"
                                                  label="Tags"
-                                                 select-class="select2-tags-multiple"
+                                                 select-class="select2-tides-tags"
                                                  :items="[]"
                         />
 
                         <x-form.select2-multiple field-name="acls"
                                                  label="Accessible via"
-                                                 select-class="js-select2-tides-multiple"
+                                                 select-class="select2-tides"
                         />
 
                         <x-form.password field-name="password"

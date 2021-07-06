@@ -4,9 +4,9 @@ namespace Tests\Unit;
 
 use App\Models\Clip;
 use App\Models\Series;
+use Facades\Tests\Setup\SeriesFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Facades\Tests\Setup\SeriesFactory;
 use Tests\Setup\WorksWithOpencastClient;
 use Tests\TestCase;
 
@@ -68,6 +68,7 @@ class SeriesTest extends TestCase {
             'slug'        => 'a-clip',
             'tags'        => [],
             'description' => 'clip description',
+            'semester_id' => '1',
         ]));
     }
 

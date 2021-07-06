@@ -40,21 +40,23 @@ class ClipPolicy
      */
     public function view(?User $user, Clip $clip): bool
     {
-        return(
-            (!auth()->check() && $clip->isPublic && (is_null($clip->series->isPublic) || $clip->series->isPublic))
-            || (auth()->check() && $clip->checkAcls())
-            || (optional($user)->is($clip->owner) || optional($user)->isAdmin() )
-        );
+        if (optional($user)->is($clip->owner) || optional($user)->isAdmin()) {
+            return true;
+        } elseif ($clip->isPublic && (is_null($clip->series->isPublic) || $clip->series->isPublic)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
      * Check whether the current user can view the given clip comments
      *
-     * @param User $user
+     * @param User|null $user
      * @param Clip $clip
      * @return bool
      */
-    public function viewComments(User $user, Clip $clip): bool
+    public function viewComments(?User $user, Clip $clip): bool
     {
         return (auth()->check() && $clip->allow_comments);
     }

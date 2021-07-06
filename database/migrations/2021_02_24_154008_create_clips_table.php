@@ -17,6 +17,7 @@ class CreateClipsTable extends Migration
             $table->id();
             $table->string('title');
             $table->foreignId('owner_id')->references('id')->on('users');
+            $table->foreignId(('semester_id'))->references('id')->on('semesters');
             $table->string('slug')->unique();
             $table->text('description')->nullable();
             $table->string('posterImage')->nullable();
