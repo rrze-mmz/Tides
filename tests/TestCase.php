@@ -33,6 +33,14 @@ abstract class TestCase extends BaseTestCase
         ]);
 
         Semester::create([
+            'name'  => 'Sommersemester 2021',
+            'acronym'=> 'S21',
+            'short_title'=> '2021',
+            'start_date'    => '2021-04-01 00:00:00',
+            'stop_date'  => '2022-09-30 23:59:59',
+        ]);
+
+        Semester::create([
             'name'  => 'Wintersemester 2021/2022',
             'acronym'=> 'W21',
             'short_title'=> '2021/2022',

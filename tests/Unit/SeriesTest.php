@@ -7,6 +7,7 @@ use App\Models\Series;
 use Facades\Tests\Setup\SeriesFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Str;
 use Tests\Setup\WorksWithOpencastClient;
 use Tests\TestCase;
 
@@ -37,7 +38,7 @@ class SeriesTest extends TestCase {
     /** @test */
     public function it_has_a_slug_route(): void
     {
-        $this->get($this->series->path())->assertStatus(200);
+        $this->assertEquals('/series/'.Str::slug($this->series->title),$this->series->path());
     }
 
     /** @test */

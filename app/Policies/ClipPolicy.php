@@ -42,7 +42,9 @@ class ClipPolicy
     {
         if (optional($user)->is($clip->owner) || optional($user)->isAdmin()) {
             return true;
-        } elseif ($clip->isPublic && (is_null($clip->series->isPublic) || $clip->series->isPublic)) {
+        } elseif ($clip->isPublic &&
+            (is_null($clip->series->isPublic) || $clip->series->isPublic)
+            && $clip->assets()->count() > 0) {
             return true;
         } else {
             return false;

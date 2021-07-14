@@ -30,7 +30,7 @@ class Select2Multiple extends Component
      */
     public function render()
     {
-        $this->items = ($this->items===null)? Acl::all(): $this->items;
+        $this->items = ($this->items === null)? Acl::all(): $this->items;
 
         return view('components.form.select2-multiple');
     }

@@ -28,7 +28,7 @@
 
                     <x-form.select2-multiple field-name="acls"
                                              label="Accessible via"
-                                             select-class="js-select2-tides-multiple"
+                                             select-class="select2-tides"
                     />
 
                     <x-form.password field-name="password"

@@ -6,13 +6,11 @@ namespace Tests\Unit;
 use App\Models\Asset;
 use App\Models\Clip;
 use App\Models\Comment;
-use App\Models\Semester;
 use App\Models\Series;
 use App\Models\User;
 use Facades\Tests\Setup\FileFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
@@ -46,8 +44,7 @@ class ClipTest extends TestCase {
     /** @test */
     public function it_has_a_slug_route(): void
     {
-        $this->withoutExceptionHandling();
-        $this->get($this->clip->path())->assertStatus(200);
+        $this->assertEquals('/clips/'.Str::slug($this->clip->title),$this->clip->path());
     }
 
     /** @test */

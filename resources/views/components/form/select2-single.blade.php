@@ -13,7 +13,7 @@
                 style="width: 100%"
         >
                 @forelse($items as $item)
-                    <option value="{{$item->id }}" {{ ($item->id == $selectedItem)?'selected':'' }}>
+                    <option value="{{$item->id }}" {{ $isSelected($item->id) ? 'selected="selected"' : '' }}>
                         {{$item->name }}
                     </option>
                 @empty

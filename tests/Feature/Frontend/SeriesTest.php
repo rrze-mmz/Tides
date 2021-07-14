@@ -93,4 +93,35 @@ class SeriesTest extends TestCase
 
         $this->get(route('frontend.series.show',$series))->assertSee(Acl::find(1)->name)->assertSee(Acl::find(2)->name);
     }
+
+    /** @test */
+    public function it_list_all_clips_with_semester_info(): void
+    {
+        $series = SeriesFactory::withClips(2)->withAssets(1)->create();
+
+        $this->get(route('frontend.series.show',$series))->assertSee($series->clips->first()->semester->name);
+    }
+
+    /** @test */
+    public function it_shows_series_semester_info(): void
+    {
+        $series = SeriesFactory::withClips(2)->withAssets(1)->create();
+
+        $this->get(route('frontend.series.show',$series))->assertSee($series->latestClip->semester->name);
+    }
+
+    /** @test */
+    public function it_shows_series_multiple_semester_info_if_has_clips_from_multiple_semester(): void
+    {
+        $series = SeriesFactory::withClips(2)->withAssets(1)->create();
+
+        $latestClip = $series->latestClip;
+
+        $latestClip->semester_id = 2;
+
+        $latestClip->save();
+
+        $this->get(route('frontend.series.show',$series))
+            ->assertSee($series->clips()->first()->semester->name.', '.$series->latestClip->semester->name);
+    }
 }

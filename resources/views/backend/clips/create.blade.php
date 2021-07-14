@@ -34,10 +34,10 @@
                         />
 
                         <x-form.select2-single field-name="semester_id"
-                                                 label="Semester"
-                                                 select-class="select2-tides"
-                                                 :items="App\Models\Semester::all()"
-                                                 :selectedItem="old('semester_id')"
+                                               label="Semester"
+                                               select-class="select2-tides"
+                                               model="semester"
+                                               :selectedItem="old('semester_id')"
                         />
 
                         <x-form.select2-multiple field-name="tags"

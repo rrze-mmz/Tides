@@ -2,7 +2,7 @@
 
 namespace App\View\Components\Form;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Semester;
 use Illuminate\View\Component;
 
 class Select2Single extends Component
@@ -13,11 +13,10 @@ class Select2Single extends Component
      * @return void
      */
     public function __construct(
-        public ?Model $model = null,
+        public ?string $model = null,
         public string $label,
         public string $fieldName,
         public $selectClass,
-        public $items,
         public $selectedItem
     ) {
         //
@@ -30,6 +29,22 @@ class Select2Single extends Component
      */
     public function render()
     {
-        return view('components.form.select2-single');
+        return view('components.form.select2-single', [
+                'items' =>  match ($this->model) {
+                    'semester' => Semester::where('id', '>', 1)->orderBy('id', 'desc')->get(),
+                    'default'  => []
+                }
+        ]);
+    }
+
+    /**
+     * Determine if the given option is the currently selected option.
+     *
+     * @param  string  $option
+     * @return bool
+     */
+    public function isSelected($option)
+    {
+        return $option === $this->selectedItem;
     }
 }

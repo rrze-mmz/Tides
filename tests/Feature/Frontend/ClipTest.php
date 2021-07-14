@@ -4,6 +4,7 @@
 namespace Tests\Feature\Frontend;
 
 use App\Models\Clip;
+use App\Models\User;
 use App\Services\WowzaService;
 use Facades\Tests\Setup\ClipFactory;
 use Facades\Tests\Setup\SeriesFactory;
@@ -60,6 +61,52 @@ class ClipTest extends TestCase {
         $this->clip->save();
 
         $this->get($this->clip->path())->assertStatus(403);
+    }
+
+    /** @test */
+    public function a_visitor_cannot_view_a_clip_page_without_assets(): void
+    {
+        $this->mockHandler->append($this->mockCheckApiConnection());
+
+        $emptyClip = ClipFactory::withAssets(0)->create();
+
+        $this->get(route('frontend.clips.show',$emptyClip))->assertStatus(403);
+    }
+
+    /** @test */
+    public function a_logged_in_user_cannot_view_a_clip_page_without_assets(): void
+    {
+        $this->mockHandler->append($this->mockCheckApiConnection());
+
+        $emptyClip = ClipFactory::withAssets(0)->create();
+
+        $this->signIn();
+
+        $this->get(route('frontend.clips.show',$emptyClip))->assertStatus(403);
+    }
+
+    /** @test */
+    public function a_clip_owner_can_view_a_clip_page_without_assets(): void
+    {
+        $this->mockHandler->append($this->mockCheckApiConnection());
+
+        $emptyClip = ClipFactory::withAssets(0)->create();
+
+        $this->actingAs($emptyClip->owner);
+
+        $this->get(route('frontend.clips.show',$emptyClip))->assertStatus(200);
+    }
+
+    /** @test */
+    public function an_admin_can_view_a_clip_page_without_assets(): void
+    {
+        $this->mockHandler->append($this->mockCheckApiConnection());
+
+        $emptyClip = ClipFactory::withAssets(0)->create();
+
+        $this->signInAdmin();
+
+        $this->get(route('frontend.clips.show',$emptyClip))->assertStatus(200);
     }
 
     /** @test */
@@ -187,7 +234,7 @@ class ClipTest extends TestCase {
     {
         $this->mockHandler->append(new Response());
 
-        SeriesFactory::withClips(3)->create();
+        SeriesFactory::withClips(3)->withAssets(2)->create();
 
         //the first clip in series will have id of 2. A clip with ID of 1 is already created by setUp method
         $clip = Clip::find(3);

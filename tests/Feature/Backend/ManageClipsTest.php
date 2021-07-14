@@ -96,6 +96,7 @@ class ManageClipsTest extends TestCase {
     /** @test */
     public function an_authenticated_user_can_see_the_create_clip_form_and_all_form_fields(): void
     {
+        $this->withoutExceptionHandling();
         $this->signIn();
 
         $this->get(route('clips.create'))
@@ -362,6 +363,23 @@ class ManageClipsTest extends TestCase {
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 
         $this->get(route('clips.edit', $clip))->assertSee('Convert to HLS?');
+    }
+
+    /** @test */
+    public function it_shows_an_lms_test_link_if_clip_has_an_lms_acl_and_user_is_admin(): void
+    {
+        $this->withoutExceptionHandling();
+        $userClip = ClipFactory::ownedBy($this->signIn())->create();
+
+        $this->get(route('clips.edit',$userClip))->assertDontSee('LMS Test Link');
+
+        $adminClip = ClipFactory::ownedBy($this->signInAdmin())->create();
+
+        $this->get(route('clips.edit',$adminClip))->assertDontSee('LMS Test Link');
+
+        $adminClip->addAcls(collect(['2']));
+
+        $this->get(route('clips.edit',$adminClip))->assertSee('LMS Test Link');
     }
 
     /** @test */

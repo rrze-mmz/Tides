@@ -55,7 +55,7 @@
                 <x-form.select2-single field-name="semester_id"
                                        label="Semester"
                                        select-class="select2-tides"
-                                       :items="App\Models\Semester::all()"
+                                       model="semester"
                                        :selectedItem="$clip->semester_id"
                 />
 
@@ -102,7 +102,7 @@
                 @include('backend.clips.sidebar._ingest-video')
             @endif
 
-                @if(auth()->user()->isAdmin())
+                @if(auth()->user()->isAdmin() && $clip->acls->pluck('id')->contains('2'))
                     <div class="w-full py-4 px-4 mx-4 h-full bg-white rounded border">
                         <header class="items-center pb-2 mb-2 font-semibold text-center border-b">
                           LMS Test Link </header>

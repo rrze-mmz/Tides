@@ -5,6 +5,7 @@ namespace App\Models;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
@@ -21,6 +22,14 @@ class Series extends BaseModel
     public function clips(): HasMany
     {
         return $this->hasMany(Clip::class);
+    }
+
+    /**
+     * @return HasOne
+     */
+    public function latestClip(): HasOne
+    {
+        return $this->hasOne(Clip::class)->latestOfMany();
     }
 
     /**

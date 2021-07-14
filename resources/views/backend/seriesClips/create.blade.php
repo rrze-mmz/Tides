@@ -33,6 +33,13 @@
                                      label="Description"
                     />
 
+                    <x-form.select2-single field-name="semester_id"
+                                           label="Semester"
+                                           select-class="select2-tides"
+                                           model="semester"
+                                           :selectedItem="$series->latestClip?->semeseter_id"
+                    />
+
                     <x-form.select2-multiple field-name="tags"
                                              label="Tags"
                                              select-class="select2-tides-tags"
