@@ -3,6 +3,7 @@
 namespace Tests;
 
 use App\Models\Acl;
+use App\Models\Organization;
 use App\Models\Semester;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
@@ -46,6 +47,20 @@ abstract class TestCase extends BaseTestCase
             'short_title'=> '2021/2022',
             'start_date'    => '2021-10-01 00:00:00',
             'stop_date'  => '2022-03-31 23:59:59',
+        ]);
+
+        Organization::create([
+            'org_id' => 1,
+            'name' => 'Tides organization unit',
+            'parent_org_id' => 1,
+            'orgno' => '0000000000',
+            'shortname'=> 'Main organization unit',
+            'staff' => null,
+            'startdate' => now(),
+            'operationstartdate' => now(),
+            'operationenddate' => '2999-12-31',
+            'created_at' => now(),
+            'updated_at' => null,
         ]);
     }
 

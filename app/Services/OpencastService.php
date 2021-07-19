@@ -112,7 +112,7 @@ class OpencastService
     {
         return [
             'headers'     => [
-                'Content-Type: application/x-www-form-urlencoded',
+                'Content-Type' => 'application/x-www-form-urlencoded',
             ],
             'form_params' => [
                 "metadata" => '[{"flavor": "dublincore/series","title": "EVENTS.EVENTS.DETAILS.CATALOG.EPISODE",
@@ -149,7 +149,7 @@ class OpencastService
     {
         return [
             'headers'   => [
-                'Content-Type: multipart/form-data',
+                'Content-Type' => 'multipart/form-data',
             ],
             'multipart' => [
                 [

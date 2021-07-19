@@ -100,13 +100,22 @@ class Clip extends BaseModel
     }
 
     /**
-     * Semester relationship
+     *  A clip hat one semester
      *
      * @return BelongsTo
      */
     public function semester(): BelongsTo
     {
         return $this->belongsTo(Semester::class);
+    }
+
+    /**
+     *  A clip has one organization
+     * @return HasOne
+     */
+    public function organisation(): HasOne
+    {
+        return $this->hasOne(Organization::class);
     }
 
     /**

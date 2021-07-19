@@ -38,6 +38,7 @@ class StoreSeriesRequest extends FormRequest
         return [
             'title'       => 'required',
             'description' => 'max:255',
+            'organization_id' => 'required | integer',
             'slug'        => 'required',
             'password'    => ['nullable', Password::min(8)->mixedCase()],
             'isPublic'   => 'boolean',

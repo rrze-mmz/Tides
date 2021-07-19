@@ -37,6 +37,13 @@
                                   :required="true"
                     />
 
+                    <x-form.select2-single field-name="organization_id"
+                                           label="Organization"
+                                           select-class="select2-tides-organization"
+                                           model="organization"
+                                           :selectedItem="$series->organization_id"
+                    />
+
                     <x-form.password field-name="password"
                                      :value="$series->password"
                                      label="Password"

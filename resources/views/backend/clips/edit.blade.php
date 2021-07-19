@@ -52,6 +52,13 @@
                                  :value="$clip->description"
                                  label="Description"/>
 
+                <x-form.select2-single field-name="organization_id"
+                                       label="Organization"
+                                       select-class="select2-tides-organization"
+                                       model="organization"
+                                       :selectedItem="$clip->organization_id"
+                />
+
                 <x-form.select2-single field-name="semester_id"
                                        label="Semester"
                                        select-class="select2-tides"

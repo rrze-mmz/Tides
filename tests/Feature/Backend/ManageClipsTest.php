@@ -96,12 +96,12 @@ class ManageClipsTest extends TestCase {
     /** @test */
     public function an_authenticated_user_can_see_the_create_clip_form_and_all_form_fields(): void
     {
-        $this->withoutExceptionHandling();
         $this->signIn();
 
         $this->get(route('clips.create'))
             ->assertSee('title')
             ->assertSee('description')
+            ->assertSee('organization')
             ->assertSee('tags')
             ->assertSee('acls')
             ->assertSee('semester')
@@ -129,6 +129,10 @@ class ManageClipsTest extends TestCase {
         $this->get($clip->adminPath())->assertSee('title')
             ->assertSee('description')
             ->assertSee('tags')
+            ->assertSee('organization')
+            ->assertSee('tags')
+            ->assertSee('semester')
+            ->assertSee('isPublic')
             ->assertSee('acls');
     }
 
@@ -206,6 +210,7 @@ class ManageClipsTest extends TestCase {
             'episode'     => '1',
             'title'       => 'changed',
             'description' => 'changed',
+            'organization_id' => '1',
             'tags'        => [],
             'semester_id'   => '1',
         ]);
@@ -226,6 +231,7 @@ class ManageClipsTest extends TestCase {
             'episode'     => '1',
             'title'       => 'changed',
             'description' => 'changed',
+            'organization_id' => '1',
             'tags'        => [$tag->name, 'another tag'],
             'semester_id'   => '1',
         ]);
@@ -241,6 +247,7 @@ class ManageClipsTest extends TestCase {
         $attributes = [
             'title'       => 'Clip title',
             'description' => $this->faker->sentence(500),
+            'organization_id' => '1',
             'semester_id'   => '1',
         ];
 
@@ -263,6 +270,7 @@ class ManageClipsTest extends TestCase {
             'episode'     => '1',
             'title'       => 'changed',
             'description' => 'changed',
+            'organization_id' => '1',
             'semester_id'   => '1',
         ]);
 
@@ -272,6 +280,7 @@ class ManageClipsTest extends TestCase {
             'episode'     => '1',
             'title'       => 'changed',
             'description' => 'changed',
+            'organization_id' => '1',
             'semester_id'   => '1',
         ]);
 
@@ -289,6 +298,7 @@ class ManageClipsTest extends TestCase {
             'episode'     => '1',
             'title'       => 'changed',
             'description' => 'changed',
+            'organization_id' => '1',
             'semester_id'   => '1',
         ];
 
@@ -308,6 +318,7 @@ class ManageClipsTest extends TestCase {
             'episode'     => '1',
             'title'       => 'changed',
             'description' => 'changed',
+            'organization_id' => '1',
             'semester_id'   => '1',
         ];
 
@@ -321,7 +332,11 @@ class ManageClipsTest extends TestCase {
     {
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 
-        $this->patch($clip->adminPath(), ['episode' => '1', 'title' => 'Title changed', 'semester_id'=>'1']);
+        $this->patch($clip->adminPath(), [
+            'episode' => '1',
+            'title' => 'Title changed',
+            'organization_id' => '1',
+            'semester_id'=>'1']);
 
         $clip->refresh();
 
@@ -337,6 +352,7 @@ class ManageClipsTest extends TestCase {
             'episode' => '1',
             'title' => 'Test clip',
             'description' => 'test',
+            'organization_id' => '1',
             'semester_id'=>'1'
         ]);
 
@@ -415,7 +431,8 @@ class ManageClipsTest extends TestCase {
 
         $this->patch($clip->adminPath(), [
             'title'       => 'changed',
-            'description' => 'changed'
+            'description' => 'changed',
+            'organization_id' => '1',
         ])->assertSessionHas($this->flashMessageName);
     }
 
@@ -471,6 +488,7 @@ class ManageClipsTest extends TestCase {
         $this->patch(route('clips.update', $clip), [
             'title'   => $clip->title,
             'episode' => $clip->episode,
+            'organization_id' => '1',
             'semester_id'=>'1',
             'allow_comments' => 'on'
         ]);

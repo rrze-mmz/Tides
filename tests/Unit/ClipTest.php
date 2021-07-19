@@ -11,6 +11,7 @@ use App\Models\User;
 use Facades\Tests\Setup\FileFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
@@ -85,6 +86,12 @@ class ClipTest extends TestCase {
     public function it_has_only_one_semester(): void
     {
         $this->assertInstanceOf(BelongsTo::class, $this->clip->semester());
+    }
+
+    /** @test */
+    public function it_has_one_organization_unit(): void
+    {
+        $this->assertInstanceOf(HasOne::class, $this->clip->organisation());
     }
 
     /** @test */

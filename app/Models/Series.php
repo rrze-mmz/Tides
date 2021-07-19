@@ -73,6 +73,15 @@ class Series extends BaseModel
     }
 
     /**
+     * A series has one organization unit
+     * @return HasOne
+     */
+    public function organization(): HasOne
+    {
+        return $this->hasOne(Organization::class);
+    }
+
+    /**
      * Add a clip on a series
      *
      * @param array $validated

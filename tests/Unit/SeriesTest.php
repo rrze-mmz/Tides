@@ -6,6 +6,7 @@ use App\Models\Clip;
 use App\Models\Series;
 use Facades\Tests\Setup\SeriesFactory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Tests\Setup\WorksWithOpencastClient;
@@ -57,6 +58,12 @@ class SeriesTest extends TestCase {
         Clip::factory(2)->create(['series_id' => $this->series->id]);
 
         $this->assertEquals(2, $this->series->clips()->count());
+    }
+
+    /** @test */
+    public function it_has_one_organization_unit(): void
+    {
+        $this->assertInstanceOf(HasOne::class, $this->series->organization());
     }
 
     /** @test */

@@ -9,7 +9,7 @@ use App\Http\Controllers\Backend\SeriesClipsController;
 use App\Http\Controllers\Backend\SeriesController;
 use App\Http\Controllers\Backend\TriggerSmilFilesController;
 use App\Http\Controllers\Backend\UsersController;
-use App\Http\Controllers\Frontend\ApiTagsController;
+use App\Http\Controllers\Frontend\ApiController;
 use App\Http\Controllers\Frontend\AssetsDownloadController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\SearchController;
@@ -48,7 +48,8 @@ Route::get('/protector/link/clip/{clip:id}/{token}/{time}/{client}', function (C
     ->name('clip.lms.link');
 
 
-Route::get('/api/tags', ApiTagsController::class)->name('api.tags');
+Route::get('/api/tags', [ApiController::class, 'tags'])->name('api.tags');
+Route::get('/api/organizations',[ApiController::class, 'organizations'])->name('api.organizations');
 
 //change portal language
 Route::get('/set_lang/{locale}', function ($locale) {

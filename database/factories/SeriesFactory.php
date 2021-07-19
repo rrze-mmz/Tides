@@ -6,8 +6,7 @@ use App\Models\Series;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class SeriesFactory extends Factory
-{
+class SeriesFactory extends Factory {
     /**
      * The name of the factory's corresponding model.
      *
@@ -25,6 +24,7 @@ class SeriesFactory extends Factory
         return [
             'title'              => $title = $this->faker->sentence(),
             'description'        => $this->faker->paragraph(2),
+            'organization_id'     => '1',
             'slug'               => $title,
             'owner_id'           => User::factory()->create()->id,
             'opencast_series_id' => null,

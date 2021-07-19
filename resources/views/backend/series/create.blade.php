@@ -25,6 +25,12 @@
                                      label="Description"
                     />
 
+                    <x-form.select2-single field-name="organization_id"
+                                           label="Organization"
+                                           select-class="select2-tides-organization"
+                                           model="organization"
+                                           :selectedItem="old('organization_id')"
+                    />
 
                     <x-form.select2-multiple field-name="acls"
                                              label="Accessible via"

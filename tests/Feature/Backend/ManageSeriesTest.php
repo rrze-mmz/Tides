@@ -77,7 +77,8 @@ class ManageSeriesTest extends TestCase {
             ->assertSee('description')
             ->assertSee('acls')
             ->assertSee('password')
-            ->assertSee('isPublic');
+            ->assertSee('isPublic')
+            ->assertSee('Organization');
 
         $this->get(route('series.create'))->assertStatus(200)
             ->assertViewIs('backend.series.create');
@@ -94,24 +95,35 @@ class ManageSeriesTest extends TestCase {
     }
 
     /** @test */
+    public function it_requires_an_organization_id_when_creating_a_new_series(): void
+    {
+        $this->signIn();
+
+        $attributes = Series::factory()->raw(['organization_id' => null]);
+
+        $this->post(route('series.store'), $attributes)->assertSessionHasErrors('organization_id');
+    }
+
+    /** @test */
     public function it_must_have_a_strong_password_if_any(): void
     {
         $this->signIn();
 
-
         $this->post(route('series.store', Series::factory()->raw([
-                        'title'    => 'This is a test',
-                        'password' => '1234',
-                        ])
+            'title'           => 'This is a test',
+            'password'        => '1234',
+            'organization_id' => '1',
+        ])
         ))->assertSessionHasErrors('password');
 
         $this->post(route('series.store', Series::factory()->raw([
-                        'title'    => 'This is a test',
-                        'password' => '1234qwER',
-                        ])
+            'title'           => 'This is a test',
+            'password'        => '1234qwER',
+            'organization_id' => '1',
+        ])
         ));
 
-        $this->assertDatabaseHas('series', ['password'=> '1234qwER']);
+        $this->assertDatabaseHas('series', ['password' => '1234qwER']);
     }
 
     /** @test */
@@ -121,8 +133,9 @@ class ManageSeriesTest extends TestCase {
 
         $this->post(route('series.store'),
             [
-                'title'       => 'Test title',
-                'description' => 'Test description'
+                'title'           => 'Test title',
+                'description'     => 'Test description',
+                'organization_id' => '1',
             ]
         );
 
@@ -136,8 +149,9 @@ class ManageSeriesTest extends TestCase {
 
         $this->post(route('series.store'),
             [
-                'title'       => 'Test title',
-                'description' => 'Test description'
+                'title'           => 'Test title',
+                'description'     => 'Test description',
+                'organization_id' => '1',
             ]
         )->assertSessionHas($this->flashMessageName);
     }
@@ -150,8 +164,9 @@ class ManageSeriesTest extends TestCase {
         $this->mockHandler->append($this->mockCreateSeriesResponse());
 
         $this->post(route('series.store'), [
-            'title'       => 'Series title',
-            'description' => 'test'
+            'title'           => 'Series title',
+            'description'     => 'test',
+            'organization_id' => '1',
         ]);
 
         $series = Series::all()->first();
@@ -269,7 +284,8 @@ class ManageSeriesTest extends TestCase {
 
         $this->patch($series->adminPath(), [
             'title'       => 'changed',
-            'description' => 'changed'
+            'description' => 'changed',
+            'organization_id' => '1',
         ]);
 
         $series->refresh();
@@ -277,6 +293,7 @@ class ManageSeriesTest extends TestCase {
         $this->assertDatabaseHas('series', [
             'title'       => 'changed',
             'description' => 'changed',
+            'organization_id' => '1',
         ]);
 
         $this->get($series->adminPath())->assertSee('changed');
@@ -292,7 +309,8 @@ class ManageSeriesTest extends TestCase {
 
         $this->patch($series->adminPath(), [
             'title'       => 'changed',
-            'description' => 'changed'
+            'description' => 'changed',
+            'organization_id' => '1',
         ]);
 
         $series = $series->refresh();
@@ -309,7 +327,8 @@ class ManageSeriesTest extends TestCase {
 
         $this->patch($series->adminPath(), [
             'title'       => 'changed',
-            'description' => 'changed'
+            'description' => 'changed',
+            'organization_id' => '1',
         ])->assertStatus(403);
 
         $this->assertDatabaseMissing('series', ['title' => 'changed']);
@@ -327,7 +346,8 @@ class ManageSeriesTest extends TestCase {
 
         $this->patch($series->adminPath(), [
             'title'       => 'changed',
-            'description' => 'changed'
+            'description' => 'changed',
+            'organization_id' => '1',
         ]);
 
         $this->assertDatabaseHas('series', ['title' => 'changed']);
@@ -340,7 +360,8 @@ class ManageSeriesTest extends TestCase {
 
         $this->patch($series->adminPath(), [
             'title'       => 'changed',
-            'description' => 'changed'
+            'description' => 'changed',
+            'organization_id' => '1',
         ])->assertSessionHas($this->flashMessageName);
     }
 

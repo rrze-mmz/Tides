@@ -12,6 +12,7 @@
                 name="{{ $fieldName }}"
                 style="width: 100%"
         >
+
                 @forelse($items as $item)
                     <option value="{{$item->id }}" {{ $isSelected($item->id) ? 'selected="selected"' : '' }}>
                         {{$item->name }}

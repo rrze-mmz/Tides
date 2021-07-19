@@ -7,8 +7,7 @@ use App\Models\Semester;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class ClipFactory extends Factory
-{
+class ClipFactory extends Factory {
     /**
      * The name of the factory's corresponding model.
      *
@@ -26,15 +25,16 @@ class ClipFactory extends Factory
         static $episode = 0;
 
         return [
-            'title'       => $title = $this->faker->sentence(),
-            'description' => $this->faker->paragraph(),
-            'slug'        => $title,
-            'owner_id'    => User::factory()->create()->id,
-            'semester_id' => Semester::factory()->create()->id,
-            'posterImage' => null,
-            'series_id'   => null,
-            'episode'     => $episode++,
-            'isPublic'    => true,
+            'title'           => $title = $this->faker->sentence(),
+            'description'     => $this->faker->paragraph(),
+            'slug'            => $title,
+            'organization_id' => '1',
+            'owner_id'        => User::factory()->create()->id,
+            'semester_id'     => Semester::factory()->create()->id,
+            'posterImage'     => null,
+            'series_id'       => null,
+            'episode'         => $episode++,
+            'isPublic'        => true,
         ];
     }
 }

@@ -7,12 +7,11 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
 
-class UpdateSeriesRequest extends FormRequest
-{
+class UpdateSeriesRequest extends FormRequest {
     protected function prepareForValidation()
     {
         $this->merge([
-            'slug' => Str::slug($this->title),
+            'slug'     => Str::slug($this->title),
             'isPublic' => $this->isPublic === 'on',
         ]);
     }
@@ -37,6 +36,7 @@ class UpdateSeriesRequest extends FormRequest
         return [
             'title'              => 'required',
             'description'        => 'max:500',
+            'organization_id'    => 'required | integer',
             'slug'               => 'required',
             'opencast_series_id' => 'null|uuid',
             'password'           => ['nullable', Password::min(8)->mixedCase()],
