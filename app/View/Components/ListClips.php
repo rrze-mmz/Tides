@@ -3,7 +3,6 @@
 namespace App\View\Components;
 
 use App\Models\Series;
-use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 

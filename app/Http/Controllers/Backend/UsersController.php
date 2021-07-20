@@ -21,6 +21,6 @@ class UsersController extends Controller
 
         return view('backend.users.datatables', [
             'users' => User::paginate(10)
-            ]);
+        ]);
     }
 }

@@ -16,7 +16,7 @@ class UserDataTable extends Component
     public $search;
     public $sortField;
     public $sortAsc = true;
-    protected $queryString = ['search','admin', 'sortAsc'];
+    protected $queryString = ['search', 'admin', 'sortAsc'];
 
     /**
      * Sort users by method parameter
@@ -56,20 +56,20 @@ class UserDataTable extends Component
 
         return view('livewire.user-data-table', [
             'users' => ($this->admin)
-                ?Role::where('name', 'admin')->first()
-                        ->users()
-                        ->where(function ($query) use ($search) {
-                            $query->whereRaw('lower(name) like (?)', ["%{$search}%"])
-                                ->orwhereRaw('lower(email) like (?)', ["%{$search}%"]);
-                        })
-                        ->when($this->sortField, function ($query) {
-                            $query->orderBy($this->sortField, $this->sortAsc ? 'asc' :  'desc');
-                        })
-                        ->paginate(10)
-                :User::whereRaw('lower(name) like (?)', ["%{$search}%"])
+                ? Role::where('name', 'admin')->first()
+                    ->users()
+                    ->where(function ($query) use ($search) {
+                        $query->whereRaw('lower(name) like (?)', ["%{$search}%"])
+                            ->orwhereRaw('lower(email) like (?)', ["%{$search}%"]);
+                    })
+                    ->when($this->sortField, function ($query) {
+                        $query->orderBy($this->sortField, $this->sortAsc ? 'asc' : 'desc');
+                    })
+                    ->paginate(10)
+                : User::whereRaw('lower(name) like (?)', ["%{$search}%"])
                     ->orwhereRaw('lower(email) like (?)', ["%{$search}%"])
                     ->when($this->sortField, function ($query) {
-                        $query->orderBy($this->sortField, $this->sortAsc ? 'asc' :  'desc');
+                        $query->orderBy($this->sortField, $this->sortAsc ? 'asc' : 'desc');
                     })
                     ->paginate(10),
         ]);

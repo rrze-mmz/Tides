@@ -10,14 +10,13 @@ use Illuminate\View\View;
 
 class SearchController extends Controller
 {
-
     /**
      * Main and basic search using ORM
      *
-     * @param  SearchRequest  $request
+     * @param SearchRequest $request
      * @return View
      */
-    public function search(SearchRequest $request): Vie
+    public function search(SearchRequest $request): View
     {
         $clips = Clip::has('assets') // fetch only clips with assets
         ->where(function ($q) use ($request) {
@@ -28,7 +27,7 @@ class SearchController extends Controller
             $q->whereRaw('lower(name)  like (?)', ["%{$request->term}%"]);
         }) //search for clip presenter
         ->paginate(10)
-        ->withQueryString();
+            ->withQueryString();
 
         return view('frontend.search.results', ['clips' => $clips]);
     }

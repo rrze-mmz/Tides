@@ -11,7 +11,6 @@ use Illuminate\Http\RedirectResponse;
 
 class SeriesClipsController extends Controller
 {
-
     /**
      *  Show create clip form to assign a clip to series
      *

@@ -9,7 +9,6 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 
 class AssetPolicy
 {
-
     use HandlesAuthorization;
 
     /**

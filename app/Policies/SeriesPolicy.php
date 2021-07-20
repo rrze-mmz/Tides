@@ -27,16 +27,16 @@ class SeriesPolicy
      */
     public function view(?User $user, Series $series): bool
     {
-        return( $series->isPublic
-        || (optional($user)->is($series->owner) || optional($user)->isAdmin())
+        return ($series->isPublic
+            || (optional($user)->is($series->owner) || optional($user)->isAdmin())
         );
     }
 
     /**
      * Check whether the given user can edit the given series
      *
-     * @param  User  $user
-     * @param  Series  $series
+     * @param User $user
+     * @param Series $series
      * @return bool
      */
     public function edit(User $user, Series $series): bool

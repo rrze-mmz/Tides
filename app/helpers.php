@@ -9,26 +9,26 @@ use Illuminate\Support\Str;
 /**
  * Returns poster image relative file path of a clip or default
  *
- * @param  null  $file
+ * @param null $file
  * @return string
  */
 function fetchClipPoster($file = null): string
 {
-    return (is_null($file)) ? '/images/generic_clip_poster_image.png' : '/thumbnails/'.$file;
+    return (is_null($file)) ? '/images/generic_clip_poster_image.png' : '/thumbnails/' . $file;
 }
 
 /**
  * Return file dir for a clip based on created date
  *
- * @param  Clip  $clip
+ * @param Clip $clip
  * @return string
  */
 function getClipStoragePath(Clip $clip): string
 {
-    return '/'.Carbon::createFromFormat('Y-m-d', $clip->created_at->format('Y-m-d'))->year.
-       '/'.str_pad(Carbon::createFromFormat('Y-m-d', $clip->created_at->format('Y-m-d'))->month, 2, "0", STR_PAD_LEFT).
-       '/'.str_pad(Carbon::createFromFormat('Y-m-d', $clip->created_at->format('Y-m-d'))->day, 2, "0", STR_PAD_LEFT).'/'
-        .'TIDES_Clip_ID_'.$clip->id;
+    return '/' . Carbon::createFromFormat('Y-m-d', $clip->created_at->format('Y-m-d'))->year .
+        '/' . str_pad(Carbon::createFromFormat('Y-m-d', $clip->created_at->format('Y-m-d'))->month, 2, "0", STR_PAD_LEFT) .
+        '/' . str_pad(Carbon::createFromFormat('Y-m-d', $clip->created_at->format('Y-m-d'))->day, 2, "0", STR_PAD_LEFT) . '/'
+        . 'TIDES_Clip_ID_' . $clip->id;
 }
 
 
@@ -57,7 +57,7 @@ function fetchDropZoneFiles(): Collection
  */
 function setActiveLink(string $route): string
 {
-    return (Str::contains(url()->current(), $route))?'border-b-2':'';
+    return (Str::contains(url()->current(), $route)) ? 'border-b-2' : '';
 }
 
 /**
@@ -72,8 +72,8 @@ function generateLMSToken($obj, $time, bool $withURL = false): string
 {
     $type = lcfirst(class_basename($obj::class));
 
-    \Debugbar::info($type.$obj->id.$obj->password.request()->ip().$time.'studon');
-    $token = md5($type.$obj->id.$obj->password.request()->ip().$time.'studon');
+    \Debugbar::info($type . $obj->id . $obj->password . request()->ip() . $time . 'studon');
+    $token = md5($type . $obj->id . $obj->password . request()->ip() . $time . 'studon');
 
-    return ($withURL)?'/protector/link/'.$type.'/'.$obj->id.'/'.$token.'/'.$time.'/studon':$token;
+    return ($withURL) ? '/protector/link/' . $type . '/' . $obj->id . '/' . $token . '/' . $time . '/studon' : $token;
 }

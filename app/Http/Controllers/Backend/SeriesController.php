@@ -10,11 +10,9 @@ use App\Services\OpencastService;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Arr;
 
 class SeriesController extends Controller
 {
-
     /**
      * Index all series in admin portal. In case of simple user list only users series
      *
@@ -74,7 +72,7 @@ class SeriesController extends Controller
 
         $opencastSeriesRunningWorkflows = $opencastService->getSeriesRunningWorkflows($series);
 
-        return view('backend.series.edit', compact(['series','opencastSeriesRunningWorkflows']));
+        return view('backend.series.edit', compact(['series', 'opencastSeriesRunningWorkflows']));
     }
 
     /**

@@ -5,6 +5,7 @@ namespace App\View\Components\Form;
 use App\Models\Acl;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\View\Component;
+use Illuminate\View\View;
 
 class Select2Multiple extends Component
 {
@@ -19,18 +20,19 @@ class Select2Multiple extends Component
         public string $fieldName,
         public $selectClass,
         public $items = null
-    ) {
+    )
+    {
         //
     }
 
     /**
      * Get the view / contents that represent the component.
      *
-     * @return \Illuminate\Contracts\View\View|\Closure|string
+     * @return View
      */
-    public function render()
+    public function render(): View
     {
-        $this->items = ($this->items === null)? Acl::all(): $this->items;
+        $this->items = ($this->items === null) ? Acl::all() : $this->items;
 
         return view('components.form.select2-multiple');
     }

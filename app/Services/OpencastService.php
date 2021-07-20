@@ -13,7 +13,6 @@ use Psr\Http\Message\ResponseInterface;
 
 class OpencastService
 {
-
     private Response $response;
 
     public function __construct(private OpencastClient $client)
@@ -133,7 +132,7 @@ class OpencastService
 				    {"allow": true,"role": "ROLE_USER_ADMIN","action": "read"},
 				    {"allow": true,"role": "ROLE_USER_ADMIN","action": "write"},
 			    ]',
-                "theme" => '601'
+                "theme"    => '601'
             ]
         ];
     }

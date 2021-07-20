@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class OrganizationSeeder extends Seeder
@@ -16,17 +15,17 @@ class OrganizationSeeder extends Seeder
     public function run()
     {
         DB::table('organizations')->insert([
-            'org_id' => 1,
-            'name' => 'Tides organization unit',
-            'parent_org_id' => 1,
-            'orgno' => '0000000000',
-            'shortname'=> 'Main organization unit',
-            'staff' => null,
-            'startdate' => now(),
+            'org_id'             => 1,
+            'name'               => 'Tides organization unit',
+            'parent_org_id'      => 1,
+            'orgno'              => '0000000000',
+            'shortname'          => 'Main organization unit',
+            'staff'              => null,
+            'startdate'          => now(),
             'operationstartdate' => now(),
-            'operationenddate' => '2999-12-31',
-            'created_at' => now(),
-            'updated_at' => null,
+            'operationenddate'   => '2999-12-31',
+            'created_at'         => now(),
+            'updated_at'         => null,
         ]);
     }
 }

@@ -11,8 +11,8 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-
-    use HasFactory, Notifiable;
+    use HasFactory;
+    use Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -85,7 +85,7 @@ class User extends Authenticatable
     /**
      * Assign a role to the current user
      *
-     * @param  string  $role
+     * @param string $role
      * @return User
      */
     public function assignRole(string $role = ''): static
@@ -102,7 +102,7 @@ class User extends Authenticatable
     /**
      * Check whether the current user has given role
      *
-     * @param  string  $role
+     * @param string $role
      * @return bool
      */
     public function hasRole($role = ''): bool

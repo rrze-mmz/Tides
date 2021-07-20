@@ -18,11 +18,10 @@ use Illuminate\View\View;
 
 class DropzoneTransferController extends Controller
 {
-
     /**
      * List all available files inside the dropzone folder
      *
-     * @param  Clip  $clip
+     * @param Clip $clip
      * @return View
      * @throws AuthorizationException
      */
@@ -38,7 +37,6 @@ class DropzoneTransferController extends Controller
 
     /**
      * Transfer files from dropzone to clip file path
-
      * @param Clip $clip
      * @param Request $request
      * @return RedirectResponse

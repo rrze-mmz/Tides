@@ -12,7 +12,7 @@ class Organization extends BaseModel
     protected $primaryKey = 'org_id';
 
     /**
-     * Get the clip clips for an organizatino unit
+     * Get the clip clips for an organization unit
      * @return HasMany
      */
     public function clips(): HasMany

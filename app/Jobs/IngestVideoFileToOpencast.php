@@ -5,7 +5,6 @@ namespace App\Jobs;
 use App\Models\Clip;
 use App\Services\OpencastService;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -13,7 +12,10 @@ use Illuminate\Queue\SerializesModels;
 
 class IngestVideoFileToOpencast implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     public int $tries = 3;
     public array $backoff = [2, 10, 20];

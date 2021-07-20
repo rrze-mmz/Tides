@@ -8,7 +8,6 @@ use Illuminate\Support\Collection;
 
 trait Accessable
 {
-
     public function acls(): MorphToMany
     {
         return $this->morphToMany(Acl::class, 'accessable')->withTimestamps();
@@ -35,7 +34,7 @@ trait Accessable
         $acls = $this->acls;
 
         $tokenType = lcfirst(class_basename($this::class));
-        $tokenTime = session()->get($tokenType.'_'.$this->id.'_time');
+        $tokenTime = session()->get($tokenType . '_' . $this->id . '_time');
 
         $check = false;
         if ($acls->isEmpty()) {
@@ -45,11 +44,11 @@ trait Accessable
             $check = (auth()->check() && auth()->user()->can('view-video', $this));
         }
         if ($acls->pluck('id')->contains('2')) {
-            $check =  (
-                        session()->get($tokenType.'_'.$this->id.'_token')=== generateLMSToken($this, $tokenTime)
-                        || ((auth()->check() && auth()->user()->can('view-video', $this)))
-                        || (auth()->check() && auth()->user()->isAdmin())
-                        );
+            $check = (
+                session()->get($tokenType . '_' . $this->id . '_token') === generateLMSToken($this, $tokenTime)
+                || ((auth()->check() && auth()->user()->can('view-video', $this)))
+                || (auth()->check() && auth()->user()->isAdmin())
+            );
         }
 
         return $check;

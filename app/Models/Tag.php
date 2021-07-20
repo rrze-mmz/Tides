@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Tag extends BaseModel
 {
-
     /**
      * Clip relationship
      *

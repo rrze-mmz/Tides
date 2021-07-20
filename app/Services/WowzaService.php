@@ -50,14 +50,14 @@ class WowzaService
             ]
         ];
 
-         // select all clip video assets, itterate them and create an array for array to xml package
+        // select all clip video assets, itterate them and create an array for array to xml package
         $xmlArray['body']['switch'] = $clip->assets
-                                            ->where('type', '=', 'video')
-                                            ->sortByDesc('height')
-                                            ->map(function ($asset) use ($xmlArray) {
-                                                    return $this->createSmilFileArray($asset);
-                                            })
-                                            ->toArray();
+            ->where('type', '=', 'video')
+            ->sortByDesc('height')
+            ->map(function ($asset) use ($xmlArray) {
+                return $this->createSmilFileArray($asset);
+            })
+            ->toArray();
 
         $result = new ArrayToXml($xmlArray, [
             'rootElementName' => 'smil',

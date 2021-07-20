@@ -9,11 +9,10 @@ use Illuminate\Validation\Rules\Password;
 
 class StoreSeriesRequest extends FormRequest
 {
-
     protected function prepareForValidation()
     {
         $this->merge([
-            'slug' => Str::slug($this->title),
+            'slug'     => Str::slug($this->title),
             'isPublic' => $this->isPublic === 'on',
         ]);
     }
@@ -36,12 +35,12 @@ class StoreSeriesRequest extends FormRequest
     public function rules()
     {
         return [
-            'title'       => 'required',
-            'description' => 'max:255',
+            'title'           => 'required',
+            'description'     => 'max:255',
             'organization_id' => 'required | integer',
-            'slug'        => 'required',
-            'password'    => ['nullable', Password::min(8)->mixedCase()],
-            'isPublic'   => 'boolean',
+            'slug'            => 'required',
+            'password'        => ['nullable', Password::min(8)->mixedCase()],
+            'isPublic'        => 'boolean',
         ];
     }
 }

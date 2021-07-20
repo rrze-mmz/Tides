@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Clip;
 use App\Services\WowzaService;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\View\View;
 
 class ShowClipsController extends Controller
@@ -25,7 +26,9 @@ class ShowClipsController extends Controller
      * Clip main page
      *
      * @param Clip $clip
+     * @param WowzaService $wowzaService
      * @return View
+     * @throws AuthorizationException
      */
     public function show(Clip $clip, WowzaService $wowzaService): View
     {

@@ -16,9 +16,8 @@ class IngestOpencast extends Component
     public $videoFile;
     public $messageText;
     public $messageType;
-
     protected array $rules = [
-        'videoFile'  => 'required|file|mimetypes:video/mp4,video/mpeg,video/x-matroska,video/x-m4v'
+        'videoFile' => 'required|file|mimetypes:video/mp4,video/mpeg,video/x-matroska,video/x-m4v'
     ];
 
     /**

@@ -7,7 +7,6 @@ use Illuminate\View\View;
 
 class DashboardController
 {
-
     /**
      * Show max 10 of user's series/clips and list dropzone files
      *

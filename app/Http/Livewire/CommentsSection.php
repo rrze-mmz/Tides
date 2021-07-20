@@ -18,10 +18,9 @@ class CommentsSection extends Component
     public $messageText;
     public $messageType;
     public $comments;
-
-    protected array $rules =[
-        'content'   => 'required|min:3',
-        'clip'  => 'required'
+    protected array $rules = [
+        'content' => 'required|min:3',
+        'clip'    => 'required'
     ];
 
     /**
@@ -39,7 +38,7 @@ class CommentsSection extends Component
     public function mount(Clip $clip): void
     {
         $this->clip = $clip;
-        $this->messageType ='';
+        $this->messageType = '';
         $this->messageText = '';
     }
 
@@ -55,9 +54,9 @@ class CommentsSection extends Component
         $this->validate();
 
         Comment::create([
-            'clip_id' => $this->clip->id,
-            'content'   => $this->content,
-            'owner_id'  => auth()->user()->id
+            'clip_id'  => $this->clip->id,
+            'content'  => $this->content,
+            'owner_id' => auth()->user()->id
         ]);
 
         $this->content = '';

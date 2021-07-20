@@ -62,6 +62,11 @@ class SeriesTest extends TestCase {
     }
 
     /** @test */
+    public function it_fetches_the_latest_clip(): void
+    {
+        $this->assertInstanceOf(HasOne::class,$this->series->latestClip());
+    }
+    /** @test */
     public function it_has_one_organization_unit(): void
     {
         $this->assertInstanceOf(HasOne::class, $this->series->organization());

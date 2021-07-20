@@ -16,26 +16,26 @@ class AclSeeder extends Seeder
     {
         DB::table('acls')->insert(
             [
-                'name'       => 'intern',
+                'name'        => 'intern',
                 'description' => 'Material is accessed via portal log in',
-                'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s'),
+                'created_at'  => date('Y-m-d H:i:s'),
+                'updated_at'  => date('Y-m-d H:i:s'),
             ],
         );
         DB::table('acls')->insert(
             [
-                'name'       => 'lms',
+                'name'        => 'lms',
                 'description' => 'Material is accessed via LMS (moodle, Ilias, etc.) log in',
-                'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s'),
+                'created_at'  => date('Y-m-d H:i:s'),
+                'updated_at'  => date('Y-m-d H:i:s'),
             ],
         );
         DB::table('acls')->insert(
             [
-                'name'       => 'password',
+                'name'        => 'password',
                 'description' => 'Material is accessed via a secret password (moodle, Ilias, etc.) log in ',
-                'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s'),
+                'created_at'  => date('Y-m-d H:i:s'),
+                'updated_at'  => date('Y-m-d H:i:s'),
             ],
         );
     }

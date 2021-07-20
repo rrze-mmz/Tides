@@ -11,7 +11,7 @@ use Illuminate\Http\RedirectResponse;
 class TriggerSmilFilesController extends Controller
 {
     /**
-     * Genarates a wowza smil file for a clip
+     * Generates a wowza smil file for a clip
      *
      * @param Clip $clip
      * @param WowzaService $wowzaService
@@ -25,7 +25,7 @@ class TriggerSmilFilesController extends Controller
 
         $wowzaService->createSmilFiles($clip);
 
-        session()->flash('flashMessage', $clip->title.' smil files created successfully ');
+        session()->flash('flashMessage', $clip->title . ' smil files created successfully ');
 
         return back();
     }

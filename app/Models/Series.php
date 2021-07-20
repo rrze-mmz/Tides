@@ -11,8 +11,8 @@ use Illuminate\Support\Str;
 
 class Series extends BaseModel
 {
-
-    use Slugable, Accessable;
+    use Accessable;
+    use Slugable;
 
     /**
      * A series can have many clips
@@ -25,11 +25,12 @@ class Series extends BaseModel
     }
 
     /**
+     * Fetch the latest clip from a series based on episode
      * @return HasOne
      */
     public function latestClip(): HasOne
     {
-        return $this->hasOne(Clip::class)->latestOfMany();
+        return $this->hasOne(Clip::class)->latestOfMany('episode');
     }
 
     /**
@@ -91,7 +92,7 @@ class Series extends BaseModel
     {
         $validated = Arr::add($validated, 'owner_id', auth()->user()->id);
 
-        $clip  = $this->clips()->create(Arr::except($validated, ['tags','acls']));
+        $clip = $this->clips()->create(Arr::except($validated, ['tags', 'acls']));
 
         $clip->addTags(collect($validated['tags']));
 
@@ -120,12 +121,9 @@ class Series extends BaseModel
     public function fetchClipsAcls(): string
     {
         //iterate every clip and get a unique acl name
-        return  $this->clips->map(function ($clip) {
-                            return  $clip->acls()->pluck('name');
-        })->flatten()
-                                ->unique()
-                                ->values()
-                                ->implode(', ');
+        return $this->clips->map(function ($clip) {
+            return $clip->acls()->pluck('name');
+        })->flatten()->unique()->values()->implode(', ');
     }
 
     /**

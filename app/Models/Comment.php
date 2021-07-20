@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Comment extends BaseModel
 {
-
     /**
      * Clip relationship
      *

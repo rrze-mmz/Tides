@@ -16,7 +16,7 @@ class AssetsDownloadController extends Controller
      */
     public function __invoke(Asset $asset): BinaryFileResponse
     {
-        $path = $asset->disk.'/'.$asset->path;
+        $path = $asset->disk . '/' . $asset->path;
 
         $headers = array('Content-Type' => $asset->type);
 

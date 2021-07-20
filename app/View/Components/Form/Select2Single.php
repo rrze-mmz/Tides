@@ -5,6 +5,7 @@ namespace App\View\Components\Form;
 use App\Models\Organization;
 use App\Models\Semester;
 use Illuminate\View\Component;
+use Illuminate\View\View;
 
 class Select2Single extends Component
 {
@@ -19,25 +20,26 @@ class Select2Single extends Component
         public string $fieldName,
         public $selectClass,
         public $selectedItem
-    ) {
+    )
+    {
         //
     }
 
     /**
      * Get the view / contents that represent the component.
      *
-     * @return \Illuminate\Contracts\View\View|\Closure|string
+     * @return View
      */
-    public function render()
+    public function render(): View
     {
         return view('components.form.select2-single', [
             'items' => match ($this->model) {
-                'semester'     => Semester::where('id', '>', 1)
-                                     ->orderBy('id', 'desc')
-                                     ->get(),
+                'semester' => Semester::where('id', '>', 1)
+                    ->orderBy('id', 'desc')
+                    ->get(),
                 'organization' => Organization::select(['org_id as id', 'name'])
-                                    ->where('org_id', '=', $this->selectedItem)
-                                    ->get(),//make an api call. Therefore display only the selected option
+                    ->where('org_id', '=', $this->selectedItem)
+                    ->get(),//make an api call. Therefore display only the selected option
                 'default' => []
             }
         ]);
@@ -49,7 +51,7 @@ class Select2Single extends Component
      * @param string $option
      * @return bool
      */
-    public function isSelected($option)
+    public function isSelected($option): bool
     {
         return $option === $this->selectedItem;
     }

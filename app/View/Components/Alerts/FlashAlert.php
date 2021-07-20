@@ -3,6 +3,7 @@
 namespace App\View\Components\Alerts;
 
 use Illuminate\View\Component;
+use Illuminate\View\View;
 
 class FlashAlert extends Component
 {
@@ -19,9 +20,9 @@ class FlashAlert extends Component
     /**
      * Get the view / contents that represent the component.
      *
-     * @return \Illuminate\Contracts\View\View|\Closure|string
+     * @return View
      */
-    public function render()
+    public function render(): View
     {
         return view('components.alerts.flash-alert');
     }

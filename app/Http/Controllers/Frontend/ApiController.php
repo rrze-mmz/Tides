@@ -26,6 +26,7 @@ class ApiController extends Controller
                 ->get(),
         );
     }
+
     public function organizations(Request $request)
     {
         $searchTerm = strtolower($request['query']);

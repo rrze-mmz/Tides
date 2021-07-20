@@ -189,7 +189,7 @@ class Clip extends BaseModel
                 return (int)$value->episode == (int)$this->episode - 1;
             })->first(),
             'nextClip'     => $clipsCollection->filter(function ($value, $key) {
-                return (int)$value->episode == (int) $this->episode + 1;
+                return (int)$value->episode == (int)$this->episode + 1;
             })->first()
         ]);
     }
@@ -200,7 +200,7 @@ class Clip extends BaseModel
      * @param $query
      * @return mixed
      */
-    public function scopePublic($query)
+    public function scopePublic($query): mixed
     {
         return $query->where('isPublic', 1);
     }
