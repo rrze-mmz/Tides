@@ -8,14 +8,13 @@ use Facades\Tests\Setup\SeriesFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class SeriesTest extends TestCase
-{
+class SeriesTest extends TestCase {
     use RefreshDatabase;
 
     /** @test */
     public function a_visitor_cannot_manage_series(): void
     {
-        $this->post(route('series.store'),[])->assertRedirect('login');
+        $this->post(route('series.store'), [])->assertRedirect('login');
     }
 
     /** @test */
@@ -23,7 +22,7 @@ class SeriesTest extends TestCase
     {
         $series = SeriesFactory::withClips(2)->withAssets(1)->create();
 
-        $clipWithoutAsset = Clip::factory()->create(['series_id'=>$series->id]);
+        $clipWithoutAsset = Clip::factory()->create(['series_id' => $series->id]);
 
         $this->get(route('frontend.series.show', $series))->assertDontSee($clipWithoutAsset->title);
     }
@@ -89,9 +88,9 @@ class SeriesTest extends TestCase
         $secondClip = Clip::find(2);
 
         $firstClip->addAcls(collect(['1']));
-        $secondClip->addAcls(collect(['1','2']));
+        $secondClip->addAcls(collect(['1', '2']));
 
-        $this->get(route('frontend.series.show',$series))->assertSee(Acl::find(1)->name)->assertSee(Acl::find(2)->name);
+        $this->get(route('frontend.series.show', $series))->assertSee(Acl::find(1)->name)->assertSee(Acl::find(2)->name);
     }
 
     /** @test */
@@ -99,7 +98,7 @@ class SeriesTest extends TestCase
     {
         $series = SeriesFactory::withClips(2)->withAssets(1)->create();
 
-        $this->get(route('frontend.series.show',$series))->assertSee($series->clips->first()->semester->name);
+        $this->get(route('frontend.series.show', $series))->assertSee($series->clips->first()->semester->name);
     }
 
     /** @test */
@@ -107,7 +106,7 @@ class SeriesTest extends TestCase
     {
         $series = SeriesFactory::withClips(2)->withAssets(1)->create();
 
-        $this->get(route('frontend.series.show',$series))->assertSee($series->latestClip->semester->name);
+        $this->get(route('frontend.series.show', $series))->assertSee($series->latestClip->semester->name);
     }
 
     /** @test */
@@ -121,7 +120,7 @@ class SeriesTest extends TestCase
 
         $latestClip->save();
 
-        $this->get(route('frontend.series.show',$series))
-            ->assertSee($series->clips()->first()->semester->name.', '.$series->latestClip->semester->name);
+        $this->get(route('frontend.series.show', $series))
+            ->assertSee($series->clips()->first()->semester->name . ', ' . $series->latestClip->semester->name);
     }
 }

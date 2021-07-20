@@ -15,7 +15,9 @@ use Tests\Setup\WorksWithOpencastClient;
 use Tests\TestCase;
 
 class ManageClipsTest extends TestCase {
-    use WithFaker, RefreshDatabase, WorksWithOpencastClient;
+    use RefreshDatabase;
+    use WithFaker;
+    use WorksWithOpencastClient;
 
     private OpencastService $opencastService;
     private string $flashMessageName;
@@ -30,9 +32,9 @@ class ManageClipsTest extends TestCase {
     /** @test */
     public function it_paginates_users_clips_in_dashboard_index_page(): void
     {
-        Clip::factory(20)->create(['owner_id'=>$this->signIn()]);
+        Clip::factory(20)->create(['owner_id' => $this->signIn()]);
 
-        $this->get(route('clips.index').'?page=2')->assertDontSee('You have no series yet');
+        $this->get(route('clips.index') . '?page=2')->assertDontSee('You have no series yet');
     }
 
     /** @test */
@@ -42,7 +44,7 @@ class ManageClipsTest extends TestCase {
 
         $this->signInAdmin();
 
-        $this->get(route('clips.index').'?page=2')->assertDontSee('You have no series yet');
+        $this->get(route('clips.index') . '?page=2')->assertDontSee('You have no series yet');
     }
 
     /** @test */
@@ -71,16 +73,16 @@ class ManageClipsTest extends TestCase {
         $this->signIn();
 
         $this->post(route('clips.store', Clip::factory()->raw([
-                            'title' => 'This is a test',
-                            'password'  => '1234',
-                            ])
-            ))->assertSessionHasErrors('password');
+            'title'    => 'This is a test',
+            'password' => '1234',
+        ])
+        ))->assertSessionHasErrors('password');
 
         $this->followingRedirects()->post(route('clips.store', Clip::factory()->raw([
-                            'title' => 'This is a test',
-                            'password'  => '1234qwER',
-                        ])
-                ))->assertStatus(200);
+            'title'    => 'This is a test',
+            'password' => '1234qwER',
+        ])
+        ))->assertStatus(200);
     }
 
     /** @test */
@@ -207,12 +209,12 @@ class ManageClipsTest extends TestCase {
         $clip->tags()->sync(Tag::factory()->create());
 
         $this->patch($clip->adminPath(), [
-            'episode'     => '1',
-            'title'       => 'changed',
-            'description' => 'changed',
+            'episode'         => '1',
+            'title'           => 'changed',
+            'description'     => 'changed',
             'organization_id' => '1',
-            'tags'        => [],
-            'semester_id'   => '1',
+            'tags'            => [],
+            'semester_id'     => '1',
         ]);
 
         $this->assertEquals(0, $clip->tags()->count());
@@ -228,12 +230,12 @@ class ManageClipsTest extends TestCase {
         $clip->tags()->sync(Tag::factory()->create());
 
         $this->patch($clip->adminPath(), [
-            'episode'     => '1',
-            'title'       => 'changed',
-            'description' => 'changed',
+            'episode'         => '1',
+            'title'           => 'changed',
+            'description'     => 'changed',
             'organization_id' => '1',
-            'tags'        => [$tag->name, 'another tag'],
-            'semester_id'   => '1',
+            'tags'            => [$tag->name, 'another tag'],
+            'semester_id'     => '1',
         ]);
 
         $this->assertEquals(2, $clip->tags()->count());
@@ -245,10 +247,10 @@ class ManageClipsTest extends TestCase {
         $this->signIn();
 
         $attributes = [
-            'title'       => 'Clip title',
-            'description' => $this->faker->sentence(500),
+            'title'           => 'Clip title',
+            'description'     => $this->faker->sentence(500),
             'organization_id' => '1',
-            'semester_id'   => '1',
+            'semester_id'     => '1',
         ];
 
         $this->post(route('clips.store'), $attributes);
@@ -267,21 +269,21 @@ class ManageClipsTest extends TestCase {
         $this->get($clip->path())->assertSee($clip->title);
 
         $this->patch($clip->adminPath(), [
-            'episode'     => '1',
-            'title'       => 'changed',
-            'description' => 'changed',
+            'episode'         => '1',
+            'title'           => 'changed',
+            'description'     => 'changed',
             'organization_id' => '1',
-            'semester_id'   => '1',
+            'semester_id'     => '1',
         ]);
 
         $clip = $clip->refresh();
 
         $this->assertDatabaseHas('clips', [
-            'episode'     => '1',
-            'title'       => 'changed',
-            'description' => 'changed',
+            'episode'         => '1',
+            'title'           => 'changed',
+            'description'     => 'changed',
             'organization_id' => '1',
-            'semester_id'   => '1',
+            'semester_id'     => '1',
         ]);
 
         $this->get($clip->adminPath())->assertSee('changed');
@@ -295,11 +297,11 @@ class ManageClipsTest extends TestCase {
         $this->signIn();
 
         $attributes = [
-            'episode'     => '1',
-            'title'       => 'changed',
-            'description' => 'changed',
+            'episode'         => '1',
+            'title'           => 'changed',
+            'description'     => 'changed',
             'organization_id' => '1',
-            'semester_id'   => '1',
+            'semester_id'     => '1',
         ];
 
         $this->patch($clip->adminPath(), $attributes)->assertStatus(403);
@@ -315,11 +317,11 @@ class ManageClipsTest extends TestCase {
         $this->signInAdmin();
 
         $attributes = [
-            'episode'     => '1',
-            'title'       => 'changed',
-            'description' => 'changed',
+            'episode'         => '1',
+            'title'           => 'changed',
+            'description'     => 'changed',
             'organization_id' => '1',
-            'semester_id'   => '1',
+            'semester_id'     => '1',
         ];
 
         $this->followingRedirects()->patch($clip->adminPath(), $attributes)->assertStatus(200);
@@ -333,10 +335,10 @@ class ManageClipsTest extends TestCase {
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 
         $this->patch($clip->adminPath(), [
-            'episode' => '1',
-            'title' => 'Title changed',
+            'episode'         => '1',
+            'title'           => 'Title changed',
             'organization_id' => '1',
-            'semester_id'=>'1']);
+            'semester_id'     => '1']);
 
         $clip->refresh();
 
@@ -349,11 +351,11 @@ class ManageClipsTest extends TestCase {
         $this->signIn();
 
         $this->post(route('clips.store'), [
-            'episode' => '1',
-            'title' => 'Test clip',
-            'description' => 'test',
+            'episode'         => '1',
+            'title'           => 'Test clip',
+            'description'     => 'test',
             'organization_id' => '1',
-            'semester_id'=>'1'
+            'semester_id'     => '1'
         ]);
 
         $clip = Clip::find(1);
@@ -387,15 +389,15 @@ class ManageClipsTest extends TestCase {
         $this->withoutExceptionHandling();
         $userClip = ClipFactory::ownedBy($this->signIn())->create();
 
-        $this->get(route('clips.edit',$userClip))->assertDontSee('LMS Test Link');
+        $this->get(route('clips.edit', $userClip))->assertDontSee('LMS Test Link');
 
         $adminClip = ClipFactory::ownedBy($this->signInAdmin())->create();
 
-        $this->get(route('clips.edit',$adminClip))->assertDontSee('LMS Test Link');
+        $this->get(route('clips.edit', $adminClip))->assertDontSee('LMS Test Link');
 
         $adminClip->addAcls(collect(['2']));
 
-        $this->get(route('clips.edit',$adminClip))->assertSee('LMS Test Link');
+        $this->get(route('clips.edit', $adminClip))->assertSee('LMS Test Link');
     }
 
     /** @test */
@@ -430,8 +432,8 @@ class ManageClipsTest extends TestCase {
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 
         $this->patch($clip->adminPath(), [
-            'title'       => 'changed',
-            'description' => 'changed',
+            'title'           => 'changed',
+            'description'     => 'changed',
             'organization_id' => '1',
         ])->assertSessionHas($this->flashMessageName);
     }
@@ -486,11 +488,11 @@ class ManageClipsTest extends TestCase {
         $this->get($clip->path())->assertDontSee('Comments');
 
         $this->patch(route('clips.update', $clip), [
-            'title'   => $clip->title,
-            'episode' => $clip->episode,
+            'title'           => $clip->title,
+            'episode'         => $clip->episode,
             'organization_id' => '1',
-            'semester_id'=>'1',
-            'allow_comments' => 'on'
+            'semester_id'     => '1',
+            'allow_comments'  => 'on'
         ]);
 
         $this->get($clip->path())->assertSee('Comments');
@@ -571,6 +573,6 @@ class ManageClipsTest extends TestCase {
             'height'             => '0',
         ]);
 
-        $this->get(route('clips.edit',$clip))->assertSee('camera.smil');
+        $this->get(route('clips.edit', $clip))->assertSee('camera.smil');
     }
 }

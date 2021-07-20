@@ -10,8 +10,8 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class HomePageTest extends TestCase {
-
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     /** @test */
     public function should_show_project_name(): void

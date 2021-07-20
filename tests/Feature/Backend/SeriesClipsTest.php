@@ -10,7 +10,8 @@ use Tests\TestCase;
 
 class SeriesClipsTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     /** @test */
     public function a_non_authorize_user_cannot_view_add_clip_to_series_form(): void

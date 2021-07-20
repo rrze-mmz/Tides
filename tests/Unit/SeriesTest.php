@@ -13,7 +13,8 @@ use Tests\Setup\WorksWithOpencastClient;
 use Tests\TestCase;
 
 class SeriesTest extends TestCase {
-    use RefreshDatabase, WorksWithOpencastClient;
+    use RefreshDatabase;
+    use WorksWithOpencastClient;
 
     protected Series $series;
 
@@ -39,7 +40,7 @@ class SeriesTest extends TestCase {
     /** @test */
     public function it_has_a_slug_route(): void
     {
-        $this->assertEquals('/series/'.Str::slug($this->series->title),$this->series->path());
+        $this->assertEquals('/series/' . Str::slug($this->series->title), $this->series->path());
     }
 
     /** @test */

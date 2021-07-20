@@ -31,18 +31,22 @@ class Select2Single extends Component
     public function render()
     {
         return view('components.form.select2-single', [
-                'items' =>  match ($this->model) {
-                    'semester' => Semester::where('id', '>', 1)->orderBy('id', 'desc')->get(),
-                    'organization' => Organization::select(['org_id as id','name'])->where('org_id','=', $this->selectedItem)->get(),
-                    'default'  => []
-                }
+            'items' => match ($this->model) {
+                'semester'     => Semester::where('id', '>', 1)
+                                     ->orderBy('id', 'desc')
+                                     ->get(),
+                'organization' => Organization::select(['org_id as id', 'name'])
+                                    ->where('org_id', '=', $this->selectedItem)
+                                    ->get(),//make an api call. Therefore display only the selected option
+                'default' => []
+            }
         ]);
     }
 
     /**
      * Determine if the given option is the currently selected option.
      *
-     * @param  string  $option
+     * @param string $option
      * @return bool
      */
     public function isSelected($option)

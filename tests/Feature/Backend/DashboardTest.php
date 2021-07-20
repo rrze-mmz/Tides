@@ -12,8 +12,8 @@ use Tests\TestCase;
 
 class DashboardTest extends TestCase
 {
-
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     /** @test */
     public function it_should_not_be_accessed_by_a_visitor(): void

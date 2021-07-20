@@ -18,17 +18,21 @@ class ApiController extends Controller
      */
     public function tags(Request $request): JsonResponse
     {
+        $searchTerm = strtolower($request['query']);
+
         return response()->json(
             Tag::select(['id', 'name'])
-                ->whereRaw('lower(name)  like (?)', ["%{$request['query']}%"])
+                ->whereRaw('lower(name)  like (?)', ["%{$searchTerm}%"])
                 ->get(),
         );
     }
     public function organizations(Request $request)
     {
+        $searchTerm = strtolower($request['query']);
+
         return response()->json(
             Organization::select(['org_id as id', 'name'])
-                ->whereRaw('lower(name)  like (?)', ["%{$request['query']}%"])
+                ->whereRaw('lower(name)  like (?)', ["%{$searchTerm}%"])
                 ->get(),
         );
     }

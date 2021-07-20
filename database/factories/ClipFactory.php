@@ -7,7 +7,8 @@ use App\Models\Semester;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class ClipFactory extends Factory {
+class ClipFactory extends Factory
+{
     /**
      * The name of the factory's corresponding model.
      *

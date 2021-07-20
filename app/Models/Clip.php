@@ -10,9 +10,14 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * @method static first()
+ * @method static find(int $int)
+ */
 class Clip extends BaseModel
 {
-    use  Slugable, Accessable;
+    use Accessable;
+    use Slugable;
 
     protected $attributes = [
         'episode' => '1'

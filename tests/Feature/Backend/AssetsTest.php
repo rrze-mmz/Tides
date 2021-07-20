@@ -17,10 +17,9 @@ use Illuminate\Support\Facades\Storage;
 use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
 use Tests\TestCase;
 
-class AssetsTest extends TestCase
-{
-
-    use  RefreshDatabase, WithFaker;
+class AssetsTest extends TestCase {
+    use RefreshDatabase;
+    use WithFaker;
 
     protected function setUp(): void
     {
@@ -36,7 +35,7 @@ class AssetsTest extends TestCase
 
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 
-        $this->post(route('admin.assets.store', $clip), ['asset' => $file = FileFactory::videoFile()])
+        $this->post(route('admin.assets.store', $clip), ['asset' => FileFactory::videoFile()])
             ->assertRedirect($clip->adminPath());
 
         $asset = $clip->assets()->first();
@@ -117,7 +116,7 @@ class AssetsTest extends TestCase
     {
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 
-        $this->post(route('admin.assets.store', $clip), ['asset' => $file = FileFactory::videoFile()]);
+        $this->post(route('admin.assets.store', $clip), ['asset' => FileFactory::videoFile()]);
 
         $this->assertEquals(10,
             FFMpeg::fromDisk('videos')->open($clip->assets()->first()->path)->getDurationInSeconds());
@@ -156,7 +155,7 @@ class AssetsTest extends TestCase
 
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 
-        $this->post(route('admin.assets.store', $clip), ['asset' => $file = FileFactory::videoFile()]);
+        $this->post(route('admin.assets.store', $clip), ['asset' => FileFactory::videoFile()]);
 
         $clip->refresh();
 
@@ -170,7 +169,7 @@ class AssetsTest extends TestCase
     {
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 
-        $this->post(route('admin.assets.store', $clip), ['asset' => $file = FileFactory::videoFile()]);
+        $this->post(route('admin.assets.store', $clip), ['asset' => FileFactory::videoFile()]);
 
         $this->delete($clip->assets()->first()->path());
 
@@ -187,11 +186,11 @@ class AssetsTest extends TestCase
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 
         $this->post(route('admin.assets.store', $clip), [
-            'asset'                 => $file = FileFactory::videoFile(),
+            'asset'                 => FileFactory::videoFile(),
             'should_convert_to_hls' => 'on',
         ]);
 
-        Storage::disk('streamable_videos')->assertExists($clip->assets()->first()->id.'.m3u8');
+        Storage::disk('streamable_videos')->assertExists($clip->assets()->first()->id . '.m3u8');
 
     }
 

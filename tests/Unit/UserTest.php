@@ -9,9 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class UserTest extends TestCase
-{
-
+class UserTest extends TestCase {
     use RefreshDatabase;
 
     private User $user;
@@ -28,6 +26,7 @@ class UserTest extends TestCase
     {
         $this->assertInstanceOf(Collection::class, $this->user->series);
     }
+
     /** @test */
     public function a_user_has_clips(): void
     {
@@ -46,7 +45,6 @@ class UserTest extends TestCase
         $this->assertInstanceOf(User::class, $this->user->assignRole('admin'));
 
         $this->assertEquals('admin', $this->user->roles()->first()->name);
-
     }
 
     /** @test */

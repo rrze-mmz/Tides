@@ -11,7 +11,9 @@ use Tests\Setup\WorksWithOpencastClient;
 use Tests\TestCase;
 
 class OpencastTest extends TestCase {
-    use RefreshDatabase, WithFaker, WorksWithOpencastClient;
+    use RefreshDatabase;
+    use WithFaker;
+    use WorksWithOpencastClient;
 
     private OpencastService $opencastService;
     private MockHandler $mockHandler;

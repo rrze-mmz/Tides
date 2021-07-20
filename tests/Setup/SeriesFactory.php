@@ -9,11 +9,10 @@ use App\Models\Clip;
 use App\Models\Series;
 use App\Models\User;
 
-class SeriesFactory
-{
-    protected $clipsCount = 0;
-    protected $assetsCount = 0;
-    protected $user;
+class SeriesFactory {
+    protected int $clipsCount = 0;
+    protected int $assetsCount = 0;
+    protected User $user;
 
     public function withClips($count): static
     {
@@ -42,14 +41,15 @@ class SeriesFactory
             'owner_id' => $user = $this->user ?? User::factory()
         ]);
 
-        if($this->clipsCount > 0){
+        if ($this->clipsCount > 0)
+        {
             $clips = Clip::factory($this->clipsCount)->create([
-                'series_id' => $series->id,
-                'owner_id'  => $user,
-                'semester_id'  => 1,
+                'series_id'   => $series->id,
+                'owner_id'    => $user,
+                'semester_id' => 1,
             ]);
 
-            if($this->assetsCount > 0)
+            if ($this->assetsCount > 0)
             {
                 foreach ($clips as $clip)
                 {

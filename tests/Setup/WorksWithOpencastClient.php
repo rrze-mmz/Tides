@@ -15,7 +15,6 @@ use PHPUnit\Util\Xml;
 
 
 trait WorksWithOpencastClient {
-
     use WithFaker;
 
     public function swapOpencastClient(): MockHandler
@@ -76,10 +75,10 @@ trait WorksWithOpencastClient {
                             'id'    => 'ingest-download',
                             'state' => 'SUCCEEDED'
                         ],
-                        [
-                            'id'    => 'encode',
-                            'state' => 'RUNNING'
-                        ]
+                    [
+                        'id'    => 'encode',
+                        'state' => 'RUNNING'
+                    ]
                 ]
             ],
             [
@@ -89,7 +88,7 @@ trait WorksWithOpencastClient {
                 'mediapackage' => [
                     'id'     => Str::uuid(),
                     'title'  => $this->faker->sentence,
-                    'series' => $series->opencast_series_id ,
+                    'series' => $series->opencast_series_id,
                 ],
                 'operations'   => [
                     'operation' =>
@@ -124,14 +123,14 @@ trait WorksWithOpencastClient {
                         'state' => 'RUNNING'
                     ]
                 ]
-        ];
+            ];
 
         return new Response(201, [], json_encode([
             'workflows' => [
                 'startPage'  => 0,
                 'count'      => 20,
                 'searchTime' => 2,
-                'totalCount' => $multiple ? 2:1,
+                'totalCount' => $multiple ? 2 : 1,
                 'workflow'   => $workflows
             ]
         ]));

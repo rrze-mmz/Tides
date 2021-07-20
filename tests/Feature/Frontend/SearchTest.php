@@ -6,17 +6,17 @@ namespace Tests\Feature\Frontend;
 use App\Models\Asset;
 use App\Models\Clip;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Testing\TestResponse;
 use Tests\TestCase;
 
-class SearchTest extends TestCase
-{
+class SearchTest extends TestCase {
+    use RefreshDatabase;
+    use WithFaker;
 
-    use RefreshDatabase, WithFaker;
-
-    protected $clip;
+    protected Model $clip;
 
     /*
     /   Set up the test
@@ -37,7 +37,7 @@ class SearchTest extends TestCase
 
     protected function searchFor($term): TestResponse
     {
-        return $this::get(route('search').'?term='.$term);
+        return $this::get(route('search') . '?term=' . $term);
     }
 
     /** @test */

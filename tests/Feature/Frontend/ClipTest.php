@@ -4,7 +4,6 @@
 namespace Tests\Feature\Frontend;
 
 use App\Models\Clip;
-use App\Models\User;
 use App\Services\WowzaService;
 use Facades\Tests\Setup\ClipFactory;
 use Facades\Tests\Setup\SeriesFactory;
@@ -16,7 +15,8 @@ use Tests\Setup\WorksWithWowzaClient;
 use Tests\TestCase;
 
 class ClipTest extends TestCase {
-    use RefreshDatabase, WorksWithWowzaClient;
+    use RefreshDatabase;
+    use WorksWithWowzaClient;
 
     private Clip $clip;
     private MockHandler $mockHandler;
@@ -70,7 +70,7 @@ class ClipTest extends TestCase {
 
         $emptyClip = ClipFactory::withAssets(0)->create();
 
-        $this->get(route('frontend.clips.show',$emptyClip))->assertStatus(403);
+        $this->get(route('frontend.clips.show', $emptyClip))->assertStatus(403);
     }
 
     /** @test */
@@ -82,7 +82,7 @@ class ClipTest extends TestCase {
 
         $this->signIn();
 
-        $this->get(route('frontend.clips.show',$emptyClip))->assertStatus(403);
+        $this->get(route('frontend.clips.show', $emptyClip))->assertStatus(403);
     }
 
     /** @test */
@@ -94,7 +94,7 @@ class ClipTest extends TestCase {
 
         $this->actingAs($emptyClip->owner);
 
-        $this->get(route('frontend.clips.show',$emptyClip))->assertStatus(200);
+        $this->get(route('frontend.clips.show', $emptyClip))->assertStatus(200);
     }
 
     /** @test */
@@ -106,7 +106,7 @@ class ClipTest extends TestCase {
 
         $this->signInAdmin();
 
-        $this->get(route('frontend.clips.show',$emptyClip))->assertStatus(200);
+        $this->get(route('frontend.clips.show', $emptyClip))->assertStatus(200);
     }
 
     /** @test */
@@ -147,7 +147,7 @@ class ClipTest extends TestCase {
 
         $series->save();
 
-        $this->clip->series_id  = $series->id;
+        $this->clip->series_id = $series->id;
 
         $this->clip->save();
 
@@ -168,7 +168,7 @@ class ClipTest extends TestCase {
 
         $series->save();
 
-        $this->clip->series_id  = $series->id;
+        $this->clip->series_id = $series->id;
         $this->clip->owner_id = $user->id;
 
         $this->clip->save();

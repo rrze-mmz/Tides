@@ -17,9 +17,7 @@ use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 
-class DropzoneTransferTest extends TestCase
-{
-
+class DropzoneTransferTest extends TestCase {
     use RefreshDatabase;
 
 
@@ -84,12 +82,12 @@ class DropzoneTransferTest extends TestCase
 
         $files = fetchDropZoneFiles()->sortBy('date_modified');
 
-        $videoHD =$files->first();
-        $videoSD =$files->last();
+        $videoHD = $files->first();
+        $videoSD = $files->last();
 
         $clip = ClipFactory::ownedBy($this->signIn())->create();
 
-        $this->followingRedirects()->post(route('admin.clips.dropzone.transfer',$clip),
+        $this->followingRedirects()->post(route('admin.clips.dropzone.transfer', $clip),
             ["files" => [$videoHD['hash'], $videoSD['hash']]]
         )->assertStatus(200);
 
@@ -104,8 +102,8 @@ class DropzoneTransferTest extends TestCase
     {
         Bus::fake();
 
-        $this->post(route('admin.clips.dropzone.transfer',  ClipFactory::ownedBy($this->signIn())->create()), [
-            'files'=>[sha1('test_file_name')]]);
+        $this->post(route('admin.clips.dropzone.transfer', ClipFactory::ownedBy($this->signIn())->create()), [
+            'files' => [sha1('test_file_name')]]);
 
         Bus::assertChained([
             TransferDropzoneFiles::class,
@@ -119,8 +117,8 @@ class DropzoneTransferTest extends TestCase
     {
         Mail::fake();
 
-        $this->post(route('admin.clips.dropzone.transfer',ClipFactory::ownedBy($this->signIn())->create()), [
-            'files'=>[sha1('test_file_name')]]);
+        $this->post(route('admin.clips.dropzone.transfer', ClipFactory::ownedBy($this->signIn())->create()), [
+            'files' => [sha1('test_file_name')]]);
 
         Mail::assertQueued(VideoUploaded::class);
     }

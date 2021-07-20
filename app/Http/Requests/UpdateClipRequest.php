@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
 
-class UpdateClipRequest extends FormRequest {
+class UpdateClipRequest extends FormRequest
+{
     protected function prepareForValidation()
     {
         $this->merge([

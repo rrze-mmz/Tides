@@ -7,7 +7,8 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
 
-class UpdateSeriesRequest extends FormRequest {
+class UpdateSeriesRequest extends FormRequest
+{
     protected function prepareForValidation()
     {
         $this->merge([

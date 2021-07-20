@@ -12,8 +12,8 @@ use function PHPUnit\Framework\at;
 class ClipFactory
 {
 
-    protected $assetsCount = 0;
-    protected $user;
+    protected int $assetsCount = 0;
+    protected User $user;
 
     public function withAssets($count): static
     {

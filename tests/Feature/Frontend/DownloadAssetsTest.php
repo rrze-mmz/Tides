@@ -11,7 +11,8 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Tests\TestCase;
 
 class DownloadAssetsTest extends TestCase {
-    use RefreshDatabase, withFaker;
+    use RefreshDatabase;
+    use withFaker;
 
     /*
      * this might be a Unit Test!!

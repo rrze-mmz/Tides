@@ -45,7 +45,7 @@ class ClipTest extends TestCase {
     /** @test */
     public function it_has_a_slug_route(): void
     {
-        $this->assertEquals('/clips/'.Str::slug($this->clip->title),$this->clip->path());
+        $this->assertEquals('/clips/' . Str::slug($this->clip->title), $this->clip->path());
     }
 
     /** @test */

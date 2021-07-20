@@ -14,12 +14,12 @@ use Illuminate\Support\Str;
 use Tests\Setup\WorksWithOpencastClient;
 use Tests\TestCase;
 
-class OpencastServiceTest extends TestCase
-{
-    use RefreshDatabase, WithFaker, WorksWithOpencastClient;
+class OpencastServiceTest extends TestCase {
+    use RefreshDatabase;
+    use WithFaker;
+    use WorksWithOpencastClient;
 
     private OpencastService $opencastService;
-
     private MockHandler $mockHandler;
 
     protected function setUp(): void
@@ -64,7 +64,7 @@ class OpencastServiceTest extends TestCase
 
         $file = UploadedFile::fake()->create('video.mp4', 1000);
 
-        $response = $this->opencastService->ingestMediaPackage($series->clips()->first(),  $file);
+        $response = $this->opencastService->ingestMediaPackage($series->clips()->first(), $file);
 
         $this->assertEquals(200, $response->getStatusCode());
     }
@@ -72,7 +72,7 @@ class OpencastServiceTest extends TestCase
     /** @test */
     public function it_fetch_running_workflows_for_a_series(): void
     {
-        $series = Series::factory()->create(['opencast_series_id'=> Str::uuid()]);
+        $series = Series::factory()->create(['opencast_series_id' => Str::uuid()]);
 
         $this->mockHandler->append($this->mockSeriesRunningWorkflowsResponse($series, true));
 
@@ -89,7 +89,7 @@ class OpencastServiceTest extends TestCase
         $series = SeriesFactory::create();
 
         $data = [
-            'headers'  => [
+            'headers'     => [
                 'Content-Type' => 'application/x-www-form-urlencoded',
             ],
             'form_params' => [
@@ -97,21 +97,21 @@ class OpencastServiceTest extends TestCase
                         "fields": [
                         {
                              "id": "title",
-                             "value": "'.$series->title.'",
+                             "value": "' . $series->title . '",
                          },
                          {
                              "id": "creator",
-                             "value": ["'. $series->owner->name.'"],
+                             "value": ["' . $series->owner->name . '"],
                          },
                          ]
                     }]',
-                "acl" => '[
+                "acl"      => '[
 					{"allow": true,"role": "ROLE_ADMIN","action": "read"},
 				    {"allow": true,"role": "ROLE_ADMIN","action": "write"},
 				    {"allow": true,"role": "ROLE_USER_ADMIN","action": "read"},
 				    {"allow": true,"role": "ROLE_USER_ADMIN","action": "write"},
 			    ]',
-                "theme" => '601'
+                "theme"    => '601'
             ]
         ];
 
@@ -123,7 +123,7 @@ class OpencastServiceTest extends TestCase
     {
         Storage::fake('videos');
 
-        $series = SeriesFactory::withClips(2)->create(['opencast_series_id'=> Str::uuid()]);
+        $series = SeriesFactory::withClips(2)->create(['opencast_series_id' => Str::uuid()]);
 
 
         $file = UploadedFile::fake()->create('video.mp4', 1000);

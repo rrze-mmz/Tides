@@ -10,8 +10,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use Tests\TestCase;
 
-class CommentsSectionTest extends TestCase
-{
+class CommentsSectionTest extends TestCase {
     use RefreshDatabase;
 
     protected Clip $clip;
@@ -22,7 +21,7 @@ class CommentsSectionTest extends TestCase
 
         $this->signIn();
 
-        $this->clip = ClipFactory::withAssets(2)->create(['allow_comments'=> true]);
+        $this->clip = ClipFactory::withAssets(2)->create(['allow_comments' => true]);
 
     }
 
@@ -36,7 +35,6 @@ class CommentsSectionTest extends TestCase
     /** @test */
     public function it_allows_posting_comments_only_to_logged_in_users(): void
     {
-
         Livewire::test(CommentsSection::class)
             ->set('clip', $this->clip)
             ->set('content', 'Test comment')
@@ -63,7 +61,7 @@ class CommentsSectionTest extends TestCase
             ->set('clip', $this->clip)
             ->set('content', '')
             ->call('postComment')
-            ->assertHasErrors(['content'=> 'required']);
+            ->assertHasErrors(['content' => 'required']);
     }
 
     /** @test */
@@ -73,13 +71,13 @@ class CommentsSectionTest extends TestCase
             ->set('clip', $this->clip)
             ->set('content', 'ab')
             ->call('postComment')
-            ->assertHasErrors(['content'=> 'min']);
+            ->assertHasErrors(['content' => 'min']);
     }
 
     /** @test */
     public function it_displays_a_delete_button_for_comment_owner(): void
     {
-        Comment::factory()->create(['clip_id'=> $this->clip->id,'owner_id'=>auth()->user()->id]);
+        Comment::factory()->create(['clip_id' => $this->clip->id, 'owner_id' => auth()->user()->id]);
 
         Livewire::test(CommentsSection::class)
             ->set('clip', $this->clip)
@@ -89,7 +87,7 @@ class CommentsSectionTest extends TestCase
     /** @test */
     public function it_displays_a_delete_button_for_admin_users(): void
     {
-        Comment::factory()->create(['clip_id'=> $this->clip->id]);
+        Comment::factory()->create(['clip_id' => $this->clip->id]);
 
         $this->signInAdmin();
 
@@ -102,9 +100,9 @@ class CommentsSectionTest extends TestCase
     public function a_comment_owner_can_delete_his_comment(): void
     {
         $comment = Comment::factory()->create([
-            'clip_id'=> $this->clip->id,
-            'owner_id'=>auth()->user()->id,
-            'content' => 'test comment'
+            'clip_id'  => $this->clip->id,
+            'owner_id' => auth()->user()->id,
+            'content'  => 'test comment'
         ]);
 
         Livewire::test(CommentsSection::class)
@@ -117,9 +115,9 @@ class CommentsSectionTest extends TestCase
     public function an_admin_can_delete_a_not_owned_comment(): void
     {
         $comment = Comment::factory()->create([
-            'clip_id'=> $this->clip->id,
-            'owner_id'=>auth()->user()->id,
-            'content' => 'test comment'
+            'clip_id'  => $this->clip->id,
+            'owner_id' => auth()->user()->id,
+            'content'  => 'test comment'
         ]);
 
         $this->signInAdmin();

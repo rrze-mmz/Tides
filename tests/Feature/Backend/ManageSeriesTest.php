@@ -14,7 +14,9 @@ use Tests\Setup\WorksWithOpencastClient;
 use Tests\TestCase;
 
 class ManageSeriesTest extends TestCase {
-    use RefreshDatabase, WithFaker, WorksWithOpencastClient;
+    use RefreshDatabase;
+    use WithFaker;
+    use WorksWithOpencastClient;
 
     private OpencastService $opencastService;
     private MockHandler $mockHandler;
@@ -283,16 +285,16 @@ class ManageSeriesTest extends TestCase {
         $series = SeriesFactory::ownedBy($this->signIn())->create();
 
         $this->patch($series->adminPath(), [
-            'title'       => 'changed',
-            'description' => 'changed',
+            'title'           => 'changed',
+            'description'     => 'changed',
             'organization_id' => '1',
         ]);
 
         $series->refresh();
 
         $this->assertDatabaseHas('series', [
-            'title'       => 'changed',
-            'description' => 'changed',
+            'title'           => 'changed',
+            'description'     => 'changed',
             'organization_id' => '1',
         ]);
 
@@ -308,8 +310,8 @@ class ManageSeriesTest extends TestCase {
         $this->mockHandler->append($this->mockCreateSeriesResponse());
 
         $this->patch($series->adminPath(), [
-            'title'       => 'changed',
-            'description' => 'changed',
+            'title'           => 'changed',
+            'description'     => 'changed',
             'organization_id' => '1',
         ]);
 
@@ -326,8 +328,8 @@ class ManageSeriesTest extends TestCase {
         $this->signIn();
 
         $this->patch($series->adminPath(), [
-            'title'       => 'changed',
-            'description' => 'changed',
+            'title'           => 'changed',
+            'description'     => 'changed',
             'organization_id' => '1',
         ])->assertStatus(403);
 
@@ -345,8 +347,8 @@ class ManageSeriesTest extends TestCase {
         $this->mockHandler->append($this->mockSeriesRunningWorkflowsResponse($series, false));
 
         $this->patch($series->adminPath(), [
-            'title'       => 'changed',
-            'description' => 'changed',
+            'title'           => 'changed',
+            'description'     => 'changed',
             'organization_id' => '1',
         ]);
 
@@ -359,8 +361,8 @@ class ManageSeriesTest extends TestCase {
         $series = SeriesFactory::ownedBy($this->signIn())->create();
 
         $this->patch($series->adminPath(), [
-            'title'       => 'changed',
-            'description' => 'changed',
+            'title'           => 'changed',
+            'description'     => 'changed',
             'organization_id' => '1',
         ])->assertSessionHas($this->flashMessageName);
     }

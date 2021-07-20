@@ -8,9 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class RoleTest extends TestCase
-{
-
+class RoleTest extends TestCase {
     use RefreshDatabase;
 
     /** @test */

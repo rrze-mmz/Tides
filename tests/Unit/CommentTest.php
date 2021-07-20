@@ -8,8 +8,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class CommentTest extends TestCase
-{
+class CommentTest extends TestCase {
     use RefreshDatabase;
 
     private Comment $comment;
@@ -20,10 +19,11 @@ class CommentTest extends TestCase
 
         $this->comment = Comment::factory()->create();
     }
+
     /** @test */
     public function it_belongs_to_a_clip(): void
     {
-        $this->assertInstanceOf(Clip::class,$this->comment->clip);
+        $this->assertInstanceOf(Clip::class, $this->comment->clip);
     }
 
     /** @test */

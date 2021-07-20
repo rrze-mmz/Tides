@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class TagTest extends TestCase
-{
+class TagTest extends TestCase {
     use RefreshDatabase;
 
     /** @test */
@@ -18,5 +17,4 @@ class TagTest extends TestCase
 
         $this->assertInstanceOf(BelongsToMany::class, $tag->clips());
     }
-
 }

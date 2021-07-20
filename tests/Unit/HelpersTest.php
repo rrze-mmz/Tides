@@ -10,9 +10,7 @@ use Illuminate\Http\Testing\File;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
-class HelpersTest extends TestCase
-{
-
+class HelpersTest extends TestCase {
     use RefreshDatabase;
 
     /** @test */
@@ -49,7 +47,7 @@ class HelpersTest extends TestCase
 
         $this->assertInstanceOf('Illuminate\Support\Collection', $collection);
 
-        $this->assertTrue($collection->contains('name','export_video.mp4'));
+        $this->assertTrue($collection->contains('name', 'export_video.mp4'));
     }
 
     /** @test */
@@ -57,7 +55,7 @@ class HelpersTest extends TestCase
     {
         $this->get(route('dashboard'));
 
-        $this->assertEquals('border-b-2',setActiveLink(route('dashboard')));
+        $this->assertEquals('border-b-2', setActiveLink(route('dashboard')));
     }
 
     /** @test */
@@ -65,9 +63,9 @@ class HelpersTest extends TestCase
     {
         $time = dechex(time());
 
-        $token = md5('clip'.'1'.'1234qwER'.'127.0.0.1'.$time.'studon');
+        $token = md5('clip' . '1' . '1234qwER' . '127.0.0.1' . $time . 'studon');
 
-        $this->assertEquals($token, generateLMSToken(ClipFactory::create(['password'=>'1234qwER']), $time));
+        $this->assertEquals($token, generateLMSToken(ClipFactory::create(['password' => '1234qwER']), $time));
     }
 
     /** @test */
@@ -75,11 +73,11 @@ class HelpersTest extends TestCase
     {
         $time = dechex(time());
 
-        $token = md5('clip'.'1'.'1234qwER'.'127.0.0.1'.$time.'studon');
+        $token = md5('clip' . '1' . '1234qwER' . '127.0.0.1' . $time . 'studon');
 
-        $clip  = ClipFactory::create(['password'=>'1234qwER']);
+        $clip = ClipFactory::create(['password' => '1234qwER']);
 
-        $url = '/protector/link/clip/1/'.$token.'/'.$time.'/studon';
+        $url = '/protector/link/clip/1/' . $token . '/' . $time . '/studon';
 
         $this->assertNotEquals($url, generateLMSToken($clip, $time));
 

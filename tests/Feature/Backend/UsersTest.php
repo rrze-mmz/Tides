@@ -8,8 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use Tests\TestCase;
 
-class UsersTest extends TestCase
-{
+class UsersTest extends TestCase {
     use RefreshDatabase;
 
     protected function setUp(): void
@@ -64,8 +63,8 @@ class UsersTest extends TestCase
     /** @test */
     public function it_can_search_for_user_name_in_index_users_data_table(): void
     {
-        $bob = User::factory()->create(['name'=> 'Bob Tester']);
-        $alice = User::factory()->create(['name'=> 'Alice Tester']);
+        $bob = User::factory()->create(['name' => 'Bob Tester']);
+        $alice = User::factory()->create(['name' => 'Alice Tester']);
 
         Livewire::test(UserDataTable::class)
             ->set('search', 'bob')
@@ -76,8 +75,8 @@ class UsersTest extends TestCase
     /** @test */
     public function it_can_search_for_user_email_in_index_users_data_table(): void
     {
-        $bob = User::factory()->create(['email'=> 'bob@example.org']);
-        $alice = User::factory()->create(['email'=> 'alice@example.org']);
+        $bob = User::factory()->create(['email' => 'bob@example.org']);
+        $alice = User::factory()->create(['email' => 'alice@example.org']);
 
         Livewire::test(UserDataTable::class)
             ->set('search', 'bob@example.org')
@@ -88,9 +87,9 @@ class UsersTest extends TestCase
     /** @test */
     public function it_can_sorts_by_user_name_ascending_in_index_users_data_table(): void
     {
-        $bob = User::factory()->create(['name'=> 'Bob Tester']);
-        $alice = User::factory()->create(['name'=> 'Alice Tester']);
-        $gregor =  User::factory()->create(['name'=> 'Gregor Tester']);
+        $bob = User::factory()->create(['name' => 'Bob Tester']);
+        $alice = User::factory()->create(['name' => 'Alice Tester']);
+        $gregor = User::factory()->create(['name' => 'Gregor Tester']);
 
         Livewire::test(UserDataTable::class)
             ->call('sortBy', 'name')
@@ -100,9 +99,9 @@ class UsersTest extends TestCase
     /** @test */
     public function it_can_sorts_by_user_name_descending_in_index_users_data_table(): void
     {
-        $bob = User::factory()->create(['name'=> 'Bob Tester']);
-        $alice = User::factory()->create(['name'=> 'Alice Tester']);
-        $gregor =  User::factory()->create(['name'=> 'Gregor Tester']);
+        $bob = User::factory()->create(['name' => 'Bob Tester']);
+        $alice = User::factory()->create(['name' => 'Alice Tester']);
+        $gregor = User::factory()->create(['name' => 'Gregor Tester']);
 
         Livewire::test(UserDataTable::class)
             ->call('sortBy', 'name')
@@ -113,9 +112,9 @@ class UsersTest extends TestCase
     /** @test */
     public function it_can_sorts_by_user_email_ascending_in_index_users_data_table(): void
     {
-        $bob = User::factory()->create(['email'=> 'bob@example.org']);
-        $alice = User::factory()->create(['email'=> 'alice@example.org']);
-        $gregor =  User::factory()->create(['email'=> 'gregor@example.org']);
+        $bob = User::factory()->create(['email' => 'bob@example.org']);
+        $alice = User::factory()->create(['email' => 'alice@example.org']);
+        $gregor = User::factory()->create(['email' => 'gregor@example.org']);
 
         Livewire::test(UserDataTable::class)
             ->call('sortBy', 'email')
@@ -125,9 +124,9 @@ class UsersTest extends TestCase
     /** @test */
     public function it_can_sorts_by_user_email_descending_in_index_users_data_table(): void
     {
-        $bob = User::factory()->create(['email'=> 'bob@example.org']);
-        $alice = User::factory()->create(['email'=> 'alice@example.org']);
-        $gregor =  User::factory()->create(['email'=> 'gregor@example.org']);
+        $bob = User::factory()->create(['email' => 'bob@example.org']);
+        $alice = User::factory()->create(['email' => 'alice@example.org']);
+        $gregor = User::factory()->create(['email' => 'gregor@example.org']);
 
         Livewire::test(UserDataTable::class)
             ->call('sortBy', 'email')

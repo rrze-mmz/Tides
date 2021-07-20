@@ -49,7 +49,7 @@ Route::get('/protector/link/clip/{clip:id}/{token}/{time}/{client}', function (C
 
 
 Route::get('/api/tags', [ApiController::class, 'tags'])->name('api.tags');
-Route::get('/api/organizations',[ApiController::class, 'organizations'])->name('api.organizations');
+Route::get('/api/organizations', [ApiController::class, 'organizations'])->name('api.organizations');
 
 //change portal language
 Route::get('/set_lang/{locale}', function ($locale) {
