@@ -69,4 +69,10 @@ class UserTest extends TestCase {
 
         $this->assertTrue(auth()->user()->isAdmin());
     }
+
+    /** @test */
+    public function it_can_return_user_full_name(): void
+    {
+        $this->assertEquals($this->user->getFullNameAttribute(), $this->user->first_name.' '.$this->user->last_name);
+    }
 }

@@ -16,7 +16,6 @@ use App\Http\Controllers\Frontend\SearchController;
 use App\Http\Controllers\Frontend\ShowClipsController;
 use App\Http\Controllers\Frontend\ShowSeriesController;
 use App\Http\Middleware\CheckLMSToken;
-use App\Http\Middleware\EnsureLMSTokenIsValid;
 use App\Models\Clip;
 use Illuminate\Support\Facades\Route;
 
@@ -37,14 +36,14 @@ Route::get('/clips/{clip}', [ShowClipsController::class, 'show'])
 
 Route::get('/protector/link/clip/{clip:id}/{token}/{time}/{client}', function (Clip $clip, $token, $time, $client) {
     session()->put([
-        'clip_' . $clip->id . '_token'=> $token,
-        'clip_' . $clip->id . '_time'=> $time,
-        'clip_' . $clip->id . '_client'=> $client,
+        'clip_' . $clip->id . '_token'  => $token,
+        'clip_' . $clip->id . '_time'   => $time,
+        'clip_' . $clip->id . '_client' => $client,
     ]);
 
     return redirect()->route('frontend.clips.show', $clip);
 })
-    ->middleware(EnsureLMSTokenIsValid::class)
+    ->middleware(['lms.token'])
     ->name('clip.lms.link');
 
 
@@ -54,7 +53,7 @@ Route::get('/api/organizations', [ApiController::class, 'organizations'])->name(
 //change portal language
 Route::get('/set_lang/{locale}', function ($locale) {
 
-    if (! in_array($locale, ['en','de'])) {
+    if (!in_array($locale, ['en', 'de'])) {
         abort(400);
     }
 
@@ -71,11 +70,11 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
     //Series routes
-    Route::resource('series', SeriesController::class)->except(['show','edit']);
+    Route::resource('series', SeriesController::class)->except(['show', 'edit']);
     Route::get('/series/{series}', [SeriesController::class, 'edit'])->name('series.edit');
 
     //Clip routes
-    Route::resource('clips', ClipsController::class)->except(['show','edit']);
+    Route::resource('clips', ClipsController::class)->except(['show', 'edit']);
     Route::get('/clips/{clip}/', [ClipsController::class, 'edit'])->name('clips.edit');
 
     Route::get('/clips/{clip}/transfer', [DropzoneTransferController::class, 'listFiles'])
@@ -96,7 +95,10 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     //Opencast routes
     Route::get('/opencast', OpencastController::class)->name('opencast.status');
 
-    Route::get('/users', [UsersController::class,'index'])->name('users.index');
+    Route::middleware(['user.admin'])->group(function () {
+        Route::get('/users', [UsersController::class, 'index'])->name('users.index');
+        Route::get('/users/create', [UsersController::class, 'create'])->name('users.create');
+    });
 });
 
 Auth::routes();

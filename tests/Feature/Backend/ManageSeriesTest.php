@@ -416,6 +416,6 @@ class ManageSeriesTest extends TestCase {
 
         $this->signInAdmin();
 
-        $this->get(route('series.edit', $series))->assertSee($series->owner->name);
+        $this->get(route('series.edit', $series))->assertSee($series->owner->first_name);
     }
 }

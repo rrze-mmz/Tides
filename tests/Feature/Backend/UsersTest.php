@@ -8,7 +8,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use Tests\TestCase;
 
-class UsersTest extends TestCase {
+class UsersTest extends TestCase
+{
     use RefreshDatabase;
 
     protected function setUp(): void
@@ -19,15 +20,17 @@ class UsersTest extends TestCase {
     }
 
     /** @test */
-    public function it_is_not_authorized_for_logged_in_users(): void
+    public function user_resources_are_not_authorized_for_logged_in_users(): void
     {
         auth()->logout();
 
         $this->get(route('users.index'))->assertRedirect('/login');
+        $this->get(route('users.create'))->assertRedirect('/login');
 
         $this->signIn();
 
         $this->get(route('users.index'))->assertStatus(403);
+        $this->get(route('users.create'))->assertStatus(403);
     }
 
     /** @test */
@@ -53,23 +56,23 @@ class UsersTest extends TestCase {
         $admin = $this->signInAdmin();
 
         Livewire::test(UserDataTable::class)
-            ->assertSee($admin->name)
-            ->assertSee($user->name)
+            ->assertSee($admin->username)
+            ->assertSee($user->username)
             ->set('admin', true)
-            ->assertSee($admin->name)
-            ->assertDontSee($user->name);
+            ->assertSee($admin->username)
+            ->assertDontSee($user->username);
     }
 
     /** @test */
     public function it_can_search_for_user_name_in_index_users_data_table(): void
     {
-        $bob = User::factory()->create(['name' => 'Bob Tester']);
-        $alice = User::factory()->create(['name' => 'Alice Tester']);
+        $bob = User::factory()->create(['first_name' => 'Bob', 'last_name' => 'Tester']);
+        $alice = User::factory()->create(['first_name' => 'Alice', 'last_name' => 'Tester']);
 
         Livewire::test(UserDataTable::class)
             ->set('search', 'bob')
-            ->assertSee($bob->name)
-            ->assertDontSee($alice->name);
+            ->assertSee($bob->username)
+            ->assertDontSee($alice->username);
     }
 
     /** @test */
@@ -80,33 +83,57 @@ class UsersTest extends TestCase {
 
         Livewire::test(UserDataTable::class)
             ->set('search', 'bob@example.org')
-            ->assertSee($bob->name)
-            ->assertDontSee($alice->name);
+            ->assertSee($bob->username)
+            ->assertDontSee($alice->username);
     }
 
     /** @test */
     public function it_can_sorts_by_user_name_ascending_in_index_users_data_table(): void
     {
-        $bob = User::factory()->create(['name' => 'Bob Tester']);
-        $alice = User::factory()->create(['name' => 'Alice Tester']);
-        $gregor = User::factory()->create(['name' => 'Gregor Tester']);
+        $bob = User::factory()->create([
+            'first_name' => 'Bob',
+            'last_name'  => 'Tester',
+            'username'   => 'bob01'
+        ]);
+        $alice = User::factory()->create([
+            'first_name' => 'Alice',
+            'last_name'  => 'Tester',
+            'username'   => 'alice01'
+        ]);
+        $gregor = User::factory()->create([
+            'first_name' => 'Gregor',
+            'last_name'  => 'Tester',
+            'username'   => 'gregor01'
+        ]);
 
         Livewire::test(UserDataTable::class)
-            ->call('sortBy', 'name')
-            ->assertSeeInOrder([$alice->name, $bob->name, $gregor->name]);
+            ->call('sortBy', 'username')
+            ->assertSeeInOrder([$alice->username, $bob->username, $gregor->username]);
     }
 
     /** @test */
     public function it_can_sorts_by_user_name_descending_in_index_users_data_table(): void
     {
-        $bob = User::factory()->create(['name' => 'Bob Tester']);
-        $alice = User::factory()->create(['name' => 'Alice Tester']);
-        $gregor = User::factory()->create(['name' => 'Gregor Tester']);
+        $bob = User::factory()->create([
+            'first_name' => 'Bob',
+            'last_name'  => 'Tester',
+            'username'   => 'bob01'
+        ]);
+        $alice = User::factory()->create([
+            'first_name' => 'Alice',
+            'last_name'  => 'Tester',
+            'username'   => 'alice01'
+        ]);
+        $gregor = User::factory()->create([
+            'first_name' => 'Gregor',
+            'last_name'  => 'Tester',
+            'username'   => 'gregor01'
+        ]);
 
         Livewire::test(UserDataTable::class)
-            ->call('sortBy', 'name')
-            ->call('sortBy', 'name')
-            ->assertSeeInOrder([$gregor->name, $bob->name, $alice->name]);
+            ->call('sortBy', 'username')
+            ->call('sortBy', 'username')
+            ->assertSeeInOrder([$gregor->username, $bob->username, $alice->username]);
     }
 
     /** @test */
@@ -118,7 +145,7 @@ class UsersTest extends TestCase {
 
         Livewire::test(UserDataTable::class)
             ->call('sortBy', 'email')
-            ->assertSeeInOrder([$alice->name, $bob->name, $gregor->name]);
+            ->assertSeeInOrder([$alice->username, $bob->username, $gregor->username]);
     }
 
     /** @test */
@@ -131,6 +158,12 @@ class UsersTest extends TestCase {
         Livewire::test(UserDataTable::class)
             ->call('sortBy', 'email')
             ->call('sortBy', 'email')
-            ->assertSeeInOrder([$gregor->name, $bob->name, $alice->name]);
+            ->assertSeeInOrder([$gregor->username, $bob->username, $alice->username]);
+    }
+
+    /** @test */
+    public function an_admin_user_can_create_a_new_local_user(): void
+    {
+        $this->get(route('users.create'))->assertSee('Name');
     }
 }

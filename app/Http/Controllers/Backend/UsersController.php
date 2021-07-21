@@ -11,16 +11,23 @@ class UsersController extends Controller
 {
     /**
      * Render datatables Livewire component
-     * @param User $user
+     *
      * @return View
-     * @throws AuthorizationException
      */
-    public function index(User $user): View
+    public function index(): View
     {
-        $this->authorize('view', $user);
-
-        return view('backend.users.datatables', [
+        return view('backend.users.index', [
             'users' => User::paginate(10)
         ]);
+    }
+
+    /**
+     * Create user form
+     *
+     * @return View
+     */
+    public function create(): View
+    {
+        return view('backend.users.create');
     }
 }

@@ -29,7 +29,7 @@ class SearchTest extends TestCase {
         $this->clip = Clip::factory()->create([
             'title'       => 'Lorem ipsum for testing  the search function',
             'description' => 'Dolor sit amet for testing the search function',
-            'owner_id'    => User::factory()->create(['name' => 'John Doe'])
+            'owner_id'    => User::factory()->create(['first_name' => 'John', 'last_name'=> 'Doe'])
         ]);
 
         Asset::factory()->create(['clip_id' => $this->clip]);
@@ -75,7 +75,7 @@ class SearchTest extends TestCase {
     /** @test */
     public function it_searches_for_clip_owner(): void
     {
-        $this->searchFor('Doe')->assertSee($this->clip->owner->name);
+        $this->searchFor('Doe')->assertSee($this->clip->owner->first_name);
     }
 
     /** @test */
@@ -84,7 +84,7 @@ class SearchTest extends TestCase {
         $secondClip = Clip::factory()->create([
             'title'       => 'Lorem ipsum for testing  the search function',
             'description' => 'Dolor sit amet for testing the search function',
-            'owner_id'    => User::factory()->create(['name' => 'Bob Doe'])
+            'owner_id'    => User::factory()->create(['first_name' => 'Bob', 'last_name'=> 'Doe'])
         ]);
 
         Asset::factory()->create(['clip_id' => $secondClip]);

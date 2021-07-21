@@ -42,13 +42,41 @@
                             <th
                                 class="px-6 py-3 text-left ">
                                 <div class="flex items-center">
-                                    <button wire:click="sortBy('name')" class="bg-gray-50 text-xs leading-4 font-medium
+                                    <button wire:click="sortBy('first_name')" class="bg-gray-50 text-xs leading-4 font-medium
                                                     text-gray-500 uppercase tracking-wider"
                                     >
-                                        Name
+                                        First Name
                                     </button>
                                     <x-sort-icon
-                                        field="name"
+                                        field="first_name"
+                                        :sortField="$sortField"
+                                        :sortAsc="$sortAsc"/>
+                                </div>
+                            </th>
+                            <th
+                                class="px-6 py-3 text-left ">
+                                <div class="flex items-center">
+                                    <button wire:click="sortBy('last_name')" class="bg-gray-50 text-xs leading-4 font-medium
+                                                    text-gray-500 uppercase tracking-wider"
+                                    >
+                                        Last Name
+                                    </button>
+                                    <x-sort-icon
+                                        field="last_name"
+                                        :sortField="$sortField"
+                                        :sortAsc="$sortAsc"/>
+                                </div>
+                            </th>
+                            <th
+                                class="px-6 py-3 text-left ">
+                                <div class="flex items-center">
+                                    <button wire:click="sortBy('username')" class="bg-gray-50 text-xs leading-4 font-medium
+                                                    text-gray-500 uppercase tracking-wider"
+                                    >
+                                        Username
+                                    </button>
+                                    <x-sort-icon
+                                        field="username"
                                         :sortField="$sortField"
                                         :sortAsc="$sortAsc"/>
                                 </div>
@@ -79,7 +107,7 @@
                         <tbody class="bg-white divide-y divide-gray-200">
                         @foreach ($users as $user)
                             <tr>
-                                <td class="w-4/12 px-6 py-4 whitespace-no-wrap">
+                                <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
                                     <div class="flex items-center">
                                         <div class="flex-shrink-0 h-10 w-10">
                                             <img class="h-10 w-10 rounded-full"
@@ -87,15 +115,33 @@
                                         </div>
                                         <div class="ml-4">
                                             <div class="text-sm leading-5 font-medium text-gray-900">
-                                                {{ $user->name }}
+                                                {{ $user->first_name }}
                                             </div>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="w-4/12  px-6 py-4 whitespace-no-wrap">
+                                <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
+                                    <div class="flex items-center">
+                                        <div class="ml-4">
+                                            <div class="text-sm leading-5 font-medium text-gray-900">
+                                                {{ $user->last_name }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
+                                    <div class="flex items-center">
+                                        <div class="ml-4">
+                                            <div class="text-sm leading-5 font-medium text-gray-900">
+                                                {{ $user->username }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="w-2/12  px-6 py-4 whitespace-no-wrap">
                                     <div class="text-sm leading-5 text-gray-900">{{ $user->email }}</div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-no-wrap">
+                                <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
                                     @if ($user->isAdmin())
                                         <span
                                             class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
@@ -110,7 +156,7 @@
                                 </span>
                                     @endif
                                 </td>
-                                <td class="px-6 py-4 whitespace-no-wrap text-right text-sm leading-5 font-medium">
+                                <td class="w-2/12 px-6 py-4 whitespace-no-wrap text-right text-sm leading-5 font-medium">
                                     <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a>
                                 </td>
                             </tr>
