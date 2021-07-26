@@ -20,8 +20,7 @@ class Select2Multiple extends Component
         public string $fieldName,
         public $selectClass,
         public $items = null
-    )
-    {
+    ) {
         //
     }
 

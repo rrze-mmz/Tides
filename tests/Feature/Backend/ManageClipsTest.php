@@ -169,7 +169,6 @@ class ManageClipsTest extends TestCase {
     /** @test */
     public function an_authenticated_user_can_create_a_clip_with_tags(): void
     {
-        $this->withoutExceptionHandling();
         $this->signIn();
 
         $attributes = Clip::factory()->raw([

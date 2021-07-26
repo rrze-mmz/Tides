@@ -2,20 +2,21 @@
 
 @section('content')
     <div class="flex pb-2 font-semibold border-b border-black font-2xl">
-        Create new user
+        Edit user
     </div>
 
     <div class="flex py-2 px-2">
-        <form action="{{ route('users.store') }}"
-                method="POST"
-                class="w-4/5">
+        <form action="{{ route('users.update',$user) }}"
+              method="POST"
+              class="w-4/5">
             @csrf
+            @method('PATCH')
 
             <div class="flex flex-col gap-6">
 
                 <x-form.input field-name="first_name"
                               input-type="text"
-                              :value="old('first_name')"
+                              :value="$user->first_name"
                               label="First Name"
                               :full-col="true"
                               :required="true"
@@ -23,30 +24,22 @@
 
                 <x-form.input field-name="last_name"
                               input-type="text"
-                              :value="old('last_name')"
+                              :value="$user->last_name"
                               label="Last Name"
                               :full-col="true"
                               :required="true"
                 />
 
-                <x-form.input field-name="username"
-                              input-type="username"
-                              :value="old('username')"
-                              label="Username"
-                              :full-col="false"
-                              :required="true"
-                />
-
                 <x-form.input field-name="email"
                               input-type="email"
-                              :value="old('email')"
+                              :value="$user->email"
                               label="Email"
                               :full-col="true"
                               :required="true"
                 />
 
                 <div class="col-span-7 w-4/5">
-                    <x-form.button :link="$link=false" type="submit" text="Create user"/>
+                    <x-form.button :link="$link=false" type="submit" text="Edit user"/>
                 </div>
             </div>
 

@@ -20,8 +20,7 @@ class Input extends Component
         public bool $required = false,
         public bool $disabled = false,
         public bool $fullCol = true
-    )
-    {
+    ) {
         //
     }
 

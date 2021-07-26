@@ -17,8 +17,7 @@ class Password extends Component
         public string $fieldName,
         public string $label,
         public bool $fullCol = true
-    )
-    {
+    ) {
         //
     }
 

@@ -20,8 +20,7 @@ class Select2Single extends Component
         public string $fieldName,
         public $selectClass,
         public $selectedItem
-    )
-    {
+    ) {
         //
     }
 

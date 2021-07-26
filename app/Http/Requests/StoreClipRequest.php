@@ -39,17 +39,17 @@ class StoreClipRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title'           => 'required',
-            'description'     => 'max:500',
-            'organization_id' => 'required | integer',
-            'slug'            => 'required',
-            'semester_id'     => 'required|integer',
-            'tags'            => 'array',
-            'acls'            => 'array',
-            'episode'         => 'required|integer',
-            'allow_comments'  => 'boolean',
+            'title'           => ['required'],
+            'description'     => ['max:500'],
+            'organization_id' => ['required', 'integer'],
+            'slug'            => ['required'],
+            'semester_id'     => ['required', 'integer'],
+            'tags'            => ['array'],
+            'acls'            => ['array'],
+            'episode'         => ['required', 'integer'],
+            'allow_comments'  => ['boolean'],
             'password'        => ['nullable', Password::min(8)->mixedCase()],
-            'is_public'       => 'boolean',
+            'is_public'       => ['boolean'],
 
         ];
     }

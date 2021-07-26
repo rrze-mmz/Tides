@@ -35,13 +35,13 @@ class UpdateSeriesRequest extends FormRequest
     public function rules()
     {
         return [
-            'title'              => 'required',
-            'description'        => 'max:500',
-            'organization_id'    => 'required | integer',
-            'slug'               => 'required',
-            'opencast_series_id' => 'null|uuid',
+            'title'              => ['required'],
+            'description'        => ['max:500'],
+            'organization_id'    => ['required ', 'integer'],
+            'slug'               => ['required'],
+            'opencast_series_id' => ['null', 'uuid'],
             'password'           => ['nullable', Password::min(8)->mixedCase()],
-            'isPublic'           => 'boolean'
+            'isPublic'           => ['boolean'],
         ];
     }
 }

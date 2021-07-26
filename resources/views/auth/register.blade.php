@@ -15,14 +15,44 @@
                     @csrf
 
                     <div class="flex flex-wrap">
-                        <label for="name" class="block text-gray-700 text-sm font-bold mb-2 sm:mb-4">
-                            {{ __('Name') }}:
+                        <label for="first_name" class="block text-gray-700 text-sm font-bold mb-2 sm:mb-4">
+                            First Name:
                         </label>
 
-                        <input id="name" type="text" class="form-input w-full @error('name')  border-red-500 @enderror"
-                            name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
+                        <input id="first_name" type="text" class="form-input w-full @error('first_name')  border-red-500 @enderror"
+                            name="first_name" value="{{ old('first_name') }}" required autocomplete="first_name" autofocus>
 
-                        @error('name')
+                        @error('first_name')
+                        <p class="text-red-500 text-xs italic mt-4">
+                            {{ $message }}
+                        </p>
+                        @enderror
+                    </div>
+
+                    <div class="flex flex-wrap">
+                        <label for="last_name" class="block text-gray-700 text-sm font-bold mb-2 sm:mb-4">
+                            Last Name:
+                        </label>
+
+                        <input id="last_name" type="text" class="form-input w-full @error('last_name')  border-red-500 @enderror"
+                               name="last_name" value="{{ old('last_name') }}" required autocomplete="last_name" autofocus>
+
+                        @error('last_name')
+                        <p class="text-red-500 text-xs italic mt-4">
+                            {{ $message }}
+                        </p>
+                        @enderror
+                    </div>
+
+                    <div class="flex flex-wrap">
+                        <label for="username" class="block text-gray-700 text-sm font-bold mb-2 sm:mb-4">
+                            Username:
+                        </label>
+
+                        <input id="username" type="text" class="form-input w-full @error('username')  border-red-500 @enderror"
+                               name="username" value="{{ old('username') }}" required autocomplete="username" autofocus>
+
+                        @error('username')
                         <p class="text-red-500 text-xs italic mt-4">
                             {{ $message }}
                         </p>

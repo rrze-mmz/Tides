@@ -3,14 +3,18 @@
 namespace Tests\Feature\Backend;
 
 use App\Http\Livewire\UserDataTable;
+use App\Mail\EmailUserPassword;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Notification;
 use Livewire\Livewire;
 use Tests\TestCase;
 
-class UsersTest extends TestCase
+class ManageUsersTest extends TestCase
 {
     use RefreshDatabase;
+    use WithFaker;
 
     protected function setUp(): void
     {
@@ -26,11 +30,16 @@ class UsersTest extends TestCase
 
         $this->get(route('users.index'))->assertRedirect('/login');
         $this->get(route('users.create'))->assertRedirect('/login');
+        $this->post(route('users.store',[]))->assertRedirect('/login');
+        $this->get(route('users.edit',User::factory()->create()))->assertRedirect('/login');
+        $this->delete(route('users.destroy',User::factory()->create()))->assertRedirect('/login');
 
         $this->signIn();
 
         $this->get(route('users.index'))->assertStatus(403);
         $this->get(route('users.create'))->assertStatus(403);
+        $this->post(route('users.store',[]))->assertStatus(403);
+        $this->delete(route('users.destroy', User::factory()->create()))->assertStatus(403);
     }
 
     /** @test */
@@ -162,8 +171,155 @@ class UsersTest extends TestCase
     }
 
     /** @test */
-    public function an_admin_user_can_create_a_new_local_user(): void
+    public function an_admin_user_see_create_a_new_local_user_form(): void
     {
-        $this->get(route('users.create'))->assertSee('Name');
+        $this->get(route('users.create'))
+            ->assertSee('first_name')
+            ->assertSee('last_name')
+            ->assertSee('email');
+    }
+
+    /** @test */
+    public function it_requires_a_first_name_for_creating_a_new_user(): void
+    {
+        $this->post(route('users.store'), ['first_name' => ''])
+            ->assertSessionHasErrors('first_name');
+
+        $this->post(route('users.store'), ['first_name' => '12'])
+            ->assertSessionHasErrors('first_name');
+
+        $this->post(route('users.store'), ['first_name' => $this->faker->firstName()])
+            ->assertSessionDoesntHaveErrors('first_name');
+    }
+
+    /** @test */
+    public function it_requires_a_last_name_for_creating_a_new_user(): void
+    {
+        $this->post(route('users.store'), ['last_name' => ''])
+            ->assertSessionHasErrors('last_name');
+
+        $this->post(route('users.store'), ['last_name' => '12'])
+            ->assertSessionHasErrors('last_name');
+
+        $this->post(route('users.store'), ['last_name' => $this->faker->lastName()])
+            ->assertSessionDoesntHaveErrors('last_name');
+    }
+
+    /** @test */
+    public function it_requires_a_unique_username_for_creating_new_user(): void
+    {
+        $this->post(route('users.store'), ['username' => ''])
+            ->assertSessionHasErrors('username');
+
+        $this->post(route('users.store'), ['username' => auth()->user()->username])
+            ->assertSessionHasErrors('username');
+
+        $this->post(route('users.store'), ['username' => 'johndoe21'])
+            ->assertSessionDoesntHaveErrors('username');
+    }
+
+    /** @test */
+    public function it_requires_a_unique_and_valid_email_for_creating_new_user(): void
+    {
+        $this->post(route('users.store'), ['email' => 'test'])
+            ->assertSessionHasErrors('email');
+
+        $this->post(route('users.store'), ['email' => auth()->user()->email])
+            ->assertSessionHasErrors('email');
+
+        $this->post(route('users.store'), ['email' => $this->faker->email()])
+            ->assertSessionDoesntHaveErrors('email');
+    }
+
+    /** @test */
+    public function create_user_form_should_remember_old_values_on_validation_error()
+    {
+        $attributes = [
+            'first_name' => $this->faker->firstName(),
+            'last_name'  => $this->faker->lastName(),
+            'username'   => $this->faker->userName(),
+            'email'      => auth()->user()->email
+        ];
+
+        $this->post(route('users.store'), $attributes);
+
+        $this->followingRedirects();
+
+        $this->get(route('users.create'))->assertSee($attributes);
+
+    }
+
+    /** @test */
+    public function an_admin_can_create_a_new_user(): void
+    {
+        $attributes = [
+            'first_name' => 'John',
+            'last_name'  => 'Doe',
+            'username'   => 'johndoe21',
+            'email'      => 'john@doe.com'
+        ];
+
+        $this->post(route('users.store'), $attributes);
+
+        $this->assertDatabaseHas('users', ['username' => $attributes['username']]);
+    }
+
+    /** @test */
+    public function after_creation_user_will_be_notified_via_email(): void
+    {
+        Notification::fake();
+
+        $attributes = [
+            'first_name' => 'John',
+            'last_name'  => 'Doe',
+            'username'   => 'johndoe21',
+            'email'      => 'john@doe.com'
+        ];
+
+        $this->post(route('users.store'), $attributes);
+
+        Notification::assertNotSentTo([User::find(2)], EmailUserPassword::class);
+    }
+
+    /** @test */
+    public function admin_user_can_view_edit_user_form(): void
+    {
+        $user = User::factory()->create();
+
+        $this->get(route('users.edit', $user))
+            ->assertStatus(200)
+            ->assertSee('first_name')
+            ->assertSee('last_name')
+            ->assertSee('email');
+    }
+
+    /** @test */
+    public function admin_user_can_update_user_information(): void
+    {
+        $user = User::factory()->create();
+
+        $this->patch((route('users.update',$user)), [
+            'first_name' => 'John',
+            'last_name'  => 'Doe',
+            'email'      => $user->email
+        ]);
+
+        $user->refresh();
+
+        $this->assertDatabaseHas('users', [
+            'first_name' => 'John',
+            'last_name'  => 'Doe',
+            'email'      => $user->email
+        ]);
+    }
+
+    /** @test */
+    public function an_admin_user_can_delete_a_user(): void
+    {
+        $user = User::factory()->create();
+
+        $this->delete(route('users.destroy',$user));
+
+        $this->assertDatabaseMissing('users',['id'=>$user->id]);
     }
 }

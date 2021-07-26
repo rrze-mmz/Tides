@@ -18,8 +18,7 @@ class Textarea extends Component
         public string $label,
         public bool $required = false,
         public int $numRows = 10
-    )
-    {
+    ) {
         //
     }
 

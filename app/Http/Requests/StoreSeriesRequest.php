@@ -35,12 +35,12 @@ class StoreSeriesRequest extends FormRequest
     public function rules()
     {
         return [
-            'title'           => 'required',
-            'description'     => 'max:255',
-            'organization_id' => 'required | integer',
-            'slug'            => 'required',
+            'title'           => ['required'],
+            'description'     => ['max:255'],
+            'organization_id' => ['required', 'integer'],
+            'slug'            => ['required'],
             'password'        => ['nullable', Password::min(8)->mixedCase()],
-            'isPublic'        => 'boolean',
+            'isPublic'        => ['boolean'],
         ];
     }
 }

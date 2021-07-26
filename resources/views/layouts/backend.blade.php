@@ -48,7 +48,7 @@
                             > Dashboard </a>
                         @endif
 
-                        <span>{{ Auth::user()->getFullNameAttribute() }}</span>
+                        <span>Hi, {{ Auth::user()->username }}</span>
 
                         <a href="{{ route('logout') }}"
                            class="no-underline hover:underline"
