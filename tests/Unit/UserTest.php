@@ -9,7 +9,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class UserTest extends TestCase {
+class UserTest extends TestCase
+{
     use RefreshDatabase;
 
     private User $user;
@@ -50,29 +51,32 @@ class UserTest extends TestCase {
     /** @test */
     public function it_can_check_for_a_role(): void
     {
-        $this->user->assignRole('admin')
-            ->assignRole('tester');
+        $this->user->assignRole('admin');
 
         $this->assertTrue($this->user->hasRole('admin'));
 
-        $this->assertTrue($this->user->hasRole('tester'));
-
-        $this->assertFalse($this->user->hasRole('superadmin'));
-
-        $this->assertEquals(2, $this->user->roles()->count());
+        $this->assertFalse($this->user->hasRole('user'));
     }
 
     /** @test */
     public function it_check_for_admin_role(): void
     {
-        $this->signInAdmin();
+        $this->signInRole('admin');
 
         $this->assertTrue(auth()->user()->isAdmin());
     }
 
     /** @test */
+    public function it_check_for_moderator_role(): void
+    {
+        $this->signInRole('moderator');
+
+        $this->assertTrue(auth()->user()->isModerator());
+    }
+
+    /** @test */
     public function it_can_return_user_full_name(): void
     {
-        $this->assertEquals($this->user->getFullNameAttribute(), $this->user->first_name.' '.$this->user->last_name);
+        $this->assertEquals($this->user->getFullNameAttribute(), $this->user->first_name . ' ' . $this->user->last_name);
     }
 }

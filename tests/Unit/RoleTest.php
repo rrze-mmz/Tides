@@ -8,13 +8,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class RoleTest extends TestCase {
+class RoleTest extends TestCase
+{
     use RefreshDatabase;
 
     /** @test */
     public function it_has_many_users(): void
     {
-        $role = Role::factory()->create(['name' => 'admin']);
+        $role = Role::where('name', 'admin')->first();
 
         $this->assertInstanceOf(BelongsToMany::class, $role->users());
     }

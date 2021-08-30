@@ -8,7 +8,8 @@ use Facades\Tests\Setup\SeriesFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class SeriesTest extends TestCase {
+class SeriesTest extends TestCase
+{
     use RefreshDatabase;
 
     /** @test */
@@ -25,6 +26,20 @@ class SeriesTest extends TestCase {
         $clipWithoutAsset = Clip::factory()->create(['series_id' => $series->id]);
 
         $this->get(route('frontend.series.show', $series))->assertDontSee($clipWithoutAsset->title);
+    }
+
+    /** @test */
+    public function it_shows_series_page_even_without_clips_for_series_owner(): void
+    {
+        $user = $this->signIn();
+
+        $series = SeriesFactory::ownedBy($user)->create();
+
+        auth()->logout();
+
+        $this->get(route('frontend.series.show', $series))->assertStatus(403);
+
+        $this->actingAs($user)->get(route('frontend.series.show', $series))->assertStatus(200);
     }
 
     /** @test */
@@ -74,7 +89,7 @@ class SeriesTest extends TestCase {
 
         $series->save();
 
-        $this->signInAdmin();
+        $this->signInRole('admin');
 
         $this->get(route('frontend.series.show', $series))->assertStatus(200);
     }
@@ -106,7 +121,8 @@ class SeriesTest extends TestCase {
     {
         $series = SeriesFactory::withClips(2)->withAssets(1)->create();
 
-        $this->get(route('frontend.series.show', $series))->assertSee($series->latestClip->semester->name);
+        $this->get(route('frontend.series.show', $series))
+            ->assertSee($series->latestClip->semester->name);
     }
 
     /** @test */

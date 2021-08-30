@@ -7,7 +7,8 @@ use Facades\Tests\Setup\ClipFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class AccessTest extends TestCase {
+class AccessTest extends TestCase
+{
     use RefreshDatabase;
 
     private Clip $clip;
@@ -74,7 +75,7 @@ class AccessTest extends TestCase {
 
         $this->get($this->clip->path())->assertDontSee('plyr-player');
 
-        $this->signInAdmin();
+        $this->signInRole('admin');
 
         $this->get($this->clip->path())->assertSee('plyr-player');
     }

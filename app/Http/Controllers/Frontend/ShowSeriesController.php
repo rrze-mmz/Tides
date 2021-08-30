@@ -21,9 +21,9 @@ class ShowSeriesController extends Controller
         $this->authorize('view-series', $series);
 
         /*
-         * modify series clips and if user is not owner fetch only clips that has video assets
+         * for visitors fetch only clips that containing a video asset
          */
-        $series->clips = (auth()->user()?->id === $series->owner_id)
+        $series->clips = (auth()->user()?->id === $series->owner_id || auth()->user()?->isAdmin())
             ? $series->clips
             : $series->clips->filter(fn($clip) => $clip->assets()->count());
 

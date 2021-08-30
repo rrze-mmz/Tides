@@ -15,9 +15,9 @@ class SeriesPolicy
      *
      * @return bool
      */
-    public function create(): bool
+    public function create(User $user): bool
     {
-        return auth()->check();
+        return auth()->check() && $user->isModerator();
     }
 
     /**
@@ -27,7 +27,13 @@ class SeriesPolicy
      */
     public function view(?User $user, Series $series): bool
     {
-        return ($series->isPublic
+        /*
+         * return true only if series is Public and contains clips with assets
+         * or user is series owner or user is  admin
+         */
+
+        return (
+            ($series->isPublic && $series->clips->filter(fn($clip) => $clip->assets()->count())->count() > 0)
             || (optional($user)->is($series->owner) || optional($user)->isAdmin())
         );
     }

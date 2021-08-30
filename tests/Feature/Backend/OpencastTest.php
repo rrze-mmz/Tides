@@ -10,7 +10,8 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\Setup\WorksWithOpencastClient;
 use Tests\TestCase;
 
-class OpencastTest extends TestCase {
+class OpencastTest extends TestCase
+{
     use RefreshDatabase;
     use WithFaker;
     use WorksWithOpencastClient;
@@ -30,7 +31,7 @@ class OpencastTest extends TestCase {
     /** @test */
     public function it_shows_an_info_message_if_opencast_server_is_not_available(): void
     {
-        $this->signInAdmin();
+        $this->signInRole('admin');
 
         $this->mockHandler->append(new Response(200, [], json_encode([])));
 
@@ -42,7 +43,7 @@ class OpencastTest extends TestCase {
     /** @test */
     public function it_should_check_for_opencast_status(): void
     {
-        $this->signIn();
+        $this->signInRole('moderator');
 
         $this->mockHandler->append($this->mockHealthResponse());
 

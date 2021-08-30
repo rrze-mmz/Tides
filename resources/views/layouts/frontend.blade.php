@@ -16,64 +16,63 @@
     @livewireStyles
 </head>
 <body class="font-sans antialiased leading-none bg-gray-100 ">
-    <div id="app" class="flex flex-col min-h-screen">
-        <header class="fixed top-0 z-10 p-2 py-4 mt-0 w-full bg-gray-800 ">
-            <nav class="container flex justify-between items-center px-6 mx-auto">
-                <div>
-                    <a href="{{ url('/') }}" class="text-lg font-semibold text-gray-100 no-underline">
-                        {{ config('app.name', 'Laravel') }}
-                    </a>
-                </div>
-                <nav class="space-x-4 text-sm font-semibold text-gray-300 sm:text-base">
+<div id="app" class="flex flex-col min-h-screen">
+    <header class="fixed top-0 z-10 p-2 py-4 mt-0 w-full bg-gray-800 ">
+        <nav class="container flex justify-between items-center px-6 mx-auto">
+            <div>
+                <a href="{{ url('/') }}" class="text-lg font-semibold text-gray-100 no-underline">
+                    {{ config('app.name', 'Laravel') }}
+                </a>
+            </div>
+            <nav class="space-x-4 text-sm font-semibold text-gray-300 sm:text-base">
 
-                    <span class="no-underline ">
+                    <span class="no-underline mr-10">
                         <a href="/set_lang/en" class="{{ (session('locale') === 'en')?'underline':'' }}">EN</a> |
                         <a href="/set_lang/de" class="{{ (session('locale') === 'de')?'underline':'' }}">DE</a>
                     </span>
-                    @guest
+                @guest
+                    <a class="no-underline hover:underline"
+                       href="{{ route('login') }}"
+                    >{{ __('auth.Login') }}</a>
+                    @if (Route::has('register'))
                         <a class="no-underline hover:underline"
-                           href="{{ route('login') }}"
-                        >{{ __('auth.Login') }}</a>
-                        @if (Route::has('register'))
-                            <a class="no-underline hover:underline"
-                               href="{{ route('register') }}"
-                            >{{ __('auth.Register') }}</a>
-                        @endif
-                    @else
-
-                        @if(!str_contains(url()->current(), 'admin'))
-                           <a href="/admin/dashboard"
-                              class="no-underline hover:underline"
-                           > Dashboard </a>
-                        @endif
-                        <span>{{ Auth::user()->name }}</span>
-
-                        <a href="{{ route('logout') }}"
+                           href="{{ route('register') }}"
+                        >{{ __('auth.Register') }}</a>
+                    @endif
+                @else
+                    <span>Hi, {{ Auth::user()->getFullNameAttribute() }}</span>
+                    @if(!str_contains(url()->current(), 'admin') && auth()->user()->can('access-dashboard'))
+                        <a href="/admin/dashboard"
                            class="no-underline hover:underline"
-                           onclick="event.preventDefault();
+                        > Dashboard </a>
+                    @endif
+
+                    <a href="{{ route('logout') }}"
+                       class="no-underline hover:underline"
+                       onclick="event.preventDefault();
                                 document.getElementById('logout-form').submit();"
-                        >{{ __('Logout') }}</a>
-                        <form id="logout-form"
-                              action="{{ route('logout') }}"
-                              method="POST"
-                              class="hidden">
-                            {{ csrf_field() }}
-                        </form>
-                    @endguest
-                </nav>
+                    >{{ __('Logout') }}</a>
+                    <form id="logout-form"
+                          action="{{ route('logout') }}"
+                          method="POST"
+                          class="hidden">
+                        {{ csrf_field() }}
+                    </form>
+                @endguest
             </nav>
-        </header>
+        </nav>
+    </header>
 
-        <main class="mb-auto flex-grow">
-            @yield('content')
-        </main>
+    <main class="mb-auto flex-grow">
+        @yield('content')
+    </main>
 
-        <footer class="flex bg-gray-800 h-10 mt-6 justify-center items-center">
-            <div class="space-x-4 text-sm text-gray-300 sm:text-base">
-                Copyright @ {{ Illuminate\Support\Carbon::now()->year }} MIT Licence
-            </div>
-        </footer>
-    </div>
-    <script src="{{ mix('js/app.js') }}" ></script>
+    <footer class="flex bg-gray-800 h-10 mt-6 justify-center items-center">
+        <div class="space-x-4 text-sm text-gray-300 sm:text-base">
+            Copyright @ {{ Illuminate\Support\Carbon::now()->year }} MIT Licence
+        </div>
+    </footer>
+</div>
+<script src="{{ mix('js/app.js') }}"></script>
 </body>
 </html>

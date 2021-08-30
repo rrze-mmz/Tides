@@ -14,7 +14,8 @@ use Illuminate\Support\Facades\Storage;
 use Tests\Setup\WorksWithWowzaClient;
 use Tests\TestCase;
 
-class ClipTest extends TestCase {
+class ClipTest extends TestCase
+{
     use RefreshDatabase;
     use WorksWithWowzaClient;
 
@@ -104,7 +105,7 @@ class ClipTest extends TestCase {
 
         $emptyClip = ClipFactory::withAssets(0)->create();
 
-        $this->signInAdmin();
+        $this->signInRole('admin');
 
         $this->get(route('frontend.clips.show', $emptyClip))->assertStatus(200);
     }
@@ -129,7 +130,7 @@ class ClipTest extends TestCase {
     {
         $this->mockHandler->append($this->mockCheckApiConnection());
 
-        $this->signInAdmin();
+        $this->signInRole('admin');
 
         $this->clip->isPublic = false;
 
@@ -151,7 +152,6 @@ class ClipTest extends TestCase {
 
         $this->clip->save();
 
-
         $this->get($this->clip->path())->assertStatus(403);
     }
 
@@ -172,7 +172,6 @@ class ClipTest extends TestCase {
         $this->clip->owner_id = $user->id;
 
         $this->clip->save();
-
 
         $this->get($this->clip->path())->assertStatus(200);
     }

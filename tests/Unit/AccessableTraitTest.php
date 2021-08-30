@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class AccessableTraitTest extends TestCase {
+class AccessableTraitTest extends TestCase
+{
     use RefreshDatabase;
 
     protected Clip $clip;
@@ -55,7 +56,7 @@ class AccessableTraitTest extends TestCase {
         //clip is available for admin user
         $this->assertFalse($this->clip->checkAcls());
 
-        $this->signInAdmin();
+        $this->signInRole('admin');
 
         $this->assertTrue(($this->clip->checkAcls()));
 

@@ -38,6 +38,13 @@
                               :required="true"
                 />
 
+                <x-form.select2-single field-name="role_id"
+                                       label="Role"
+                                       select-class="select2-tides"
+                                       model="role"
+                                       :selectedItem="$user->roles->first()?->id"
+                />
+
                 <div class="col-span-7 w-4/5">
                     <x-form.button :link="$link=false" type="submit" text="Edit user"/>
                 </div>

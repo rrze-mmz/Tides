@@ -4,13 +4,13 @@ namespace Tests;
 
 use App\Models\Acl;
 use App\Models\Organization;
+use App\Models\Role;
 use App\Models\Semester;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
-abstract class TestCase extends BaseTestCase {
+abstract class TestCase extends BaseTestCase
+{
     use CreatesApplication;
 
     protected function setUp(): void
@@ -61,13 +61,34 @@ abstract class TestCase extends BaseTestCase {
             'created_at'         => now(),
             'updated_at'         => null,
         ]);
+
+        Role::create([
+            'name' => 'superadmin',
+        ]);
+
+        Role::create([
+            'name' => 'admin',
+        ]);
+
+        Role::create([
+            'name' => 'moderator',
+        ]);
+
+        Role::create([
+            'name' => 'assistant',
+        ]);
+
+        Role::create([
+            'name' => 'user',
+        ]);
+
     }
 
     /**
-     * @param null $user
-     * @return mixed
+     * @param User|null $user
+     * @return User
      */
-    protected function signIn($user = null): mixed
+    protected function signIn(User $user = null): User
     {
         $user = $user ?: User::factory()->create();
 
@@ -77,14 +98,15 @@ abstract class TestCase extends BaseTestCase {
     }
 
     /**
-     * @param null $user
+     * @param User $user
+     * @param string $role
      * @return User
      */
-    protected function signInAdmin($user = null) : User
+    protected function signInRole(string $role = ''): User
     {
-        $user = $user ?: User::factory()->create();
+        $user = User::factory()->create();
 
-        $user->assignRole('admin');
+        $user->assignRole($role);
 
         $this->actingAs($user);
 

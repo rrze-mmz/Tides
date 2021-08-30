@@ -17,23 +17,26 @@ use Illuminate\Support\Facades\Storage;
 use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
 use Tests\TestCase;
 
-class AssetsTest extends TestCase {
+class AssetsTest extends TestCase
+{
     use RefreshDatabase;
     use WithFaker;
+
+    private string $role = '';
 
     protected function setUp(): void
     {
         parent::setUp();
 
         Storage::fake('videos');
+
+        $this->role = 'moderator';
     }
 
     /** @test */
-    public function an_authenticated_user_can_upload_a_video_file(): void
+    public function a_moderator_can_upload_a_video_file(): void
     {
-        $this->withoutExceptionHandling();
-
-        $clip = ClipFactory::ownedBy($this->signIn())->create();
+        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
 
         $this->post(route('admin.assets.store', $clip), ['asset' => FileFactory::videoFile()])
             ->assertRedirect($clip->adminPath());
@@ -46,11 +49,11 @@ class AssetsTest extends TestCase {
     }
 
     /** @test */
-    public function an_authenticated_user_cannot_delete_a_not_owned_clip_asset(): void
+    public function a_moderator_cannot_delete_a_not_owned_clip_asset(): void
     {
         $asset = Asset::factory()->create();
 
-        $this->signIn();
+        $this->signInRole($this->role);
 
         $this->delete($asset->path())->assertStatus(403);
     }
@@ -60,7 +63,7 @@ class AssetsTest extends TestCase {
     {
         $asset = Asset::factory()->create();
 
-        $this->signInAdmin();
+        $this->signInRole('admin');
 
         $this->delete($asset->path());
 
@@ -68,10 +71,10 @@ class AssetsTest extends TestCase {
     }
 
     /** @test */
-    public function an_authenticated_user_can_delete_an_owned_clip_asset(): void
+    public function a_moderator_can_delete_an_owned_clip_asset(): void
     {
         $clip = ClipFactory::withAssets(1)
-            ->ownedBy($this->signIn())
+            ->ownedBy($this->signInRole($this->role))
             ->create();
 
         $this->assertEquals(1, $clip->assets()->count());
@@ -85,7 +88,7 @@ class AssetsTest extends TestCase {
     /** @test */
     public function deleting_an_asset_should_also_delete_the_file_from_storage(): void
     {
-        $clip = ClipFactory::ownedBy($this->signIn())->create();
+        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
 
         $this->post(route('admin.assets.store', $clip), ['asset' => FileFactory::videoFile()]);
 
@@ -105,7 +108,7 @@ class AssetsTest extends TestCase {
     /** @test */
     public function an_asset_must_be_a_video_file(): void
     {
-        $this->post(route('admin.assets.store', ClipFactory::ownedBy($this->signIn())->create()), [
+        $this->post(route('admin.assets.store', ClipFactory::ownedBy($this->signInRole($this->role))->create()), [
             'asset' => $file = UploadedFile::fake()->image('avatar.jpg')
         ])
             ->assertSessionHasErrors('asset');
@@ -114,7 +117,7 @@ class AssetsTest extends TestCase {
     /** @test */
     public function uploading_an_asset_should_save_asset_duration(): void
     {
-        $clip = ClipFactory::ownedBy($this->signIn())->create();
+        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
 
         $this->post(route('admin.assets.store', $clip), ['asset' => FileFactory::videoFile()]);
 
@@ -127,7 +130,7 @@ class AssetsTest extends TestCase {
     {
         Storage::fake('thumbnails');
 
-        $clip = ClipFactory::ownedBy($this->signIn())->create();
+        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
 
         $this->post(route('admin.assets.store', $clip), ['asset' => $file = FileFactory::videoFile()]);
 
@@ -141,7 +144,7 @@ class AssetsTest extends TestCase {
     {
         Mail::fake();
 
-        $clip = ClipFactory::ownedBy($this->signIn())->create();
+        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
 
         $this->post(route('admin.assets.store', $clip), ['asset' => $file = FileFactory::videoFile()]);
 
@@ -153,7 +156,7 @@ class AssetsTest extends TestCase {
     {
         Storage::fake('thumbnails');
 
-        $clip = ClipFactory::ownedBy($this->signIn())->create();
+        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
 
         $this->post(route('admin.assets.store', $clip), ['asset' => FileFactory::videoFile()]);
 
@@ -167,7 +170,7 @@ class AssetsTest extends TestCase {
     /** @test */
     public function deleting_an_asset_should_update_clip_poster_image_column(): void
     {
-        $clip = ClipFactory::ownedBy($this->signIn())->create();
+        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
 
         $this->post(route('admin.assets.store', $clip), ['asset' => FileFactory::videoFile()]);
 
@@ -183,7 +186,7 @@ class AssetsTest extends TestCase {
     {
         Storage::fake('streamable_videos');
 
-        $clip = ClipFactory::ownedBy($this->signIn())->create();
+        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
 
         $this->post(route('admin.assets.store', $clip), [
             'asset'                 => FileFactory::videoFile(),
@@ -199,7 +202,7 @@ class AssetsTest extends TestCase {
     {
         Queue::fake();
 
-        $clip = ClipFactory::ownedBy($this->signIn())->create();
+        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
 
         $this->post(route('admin.assets.store', $clip), [
             'asset'                 => FileFactory::videoFile(),

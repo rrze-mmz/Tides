@@ -6,8 +6,10 @@ use App\Events\AssetDeleted;
 use App\Listeners\DeleteAssetFile;
 use App\Models\Clip;
 use App\Models\Series;
+use App\Models\User;
 use App\Observers\ClipObserver;
 use App\Observers\SeriesObserver;
+use App\Observers\UserObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -37,5 +39,6 @@ class EventServiceProvider extends ServiceProvider
     {
         Series::observe(SeriesObserver::class);
         Clip::observe(ClipObserver::class);
+        User::observe(UserObserver::class);
     }
 }

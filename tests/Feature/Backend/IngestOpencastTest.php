@@ -14,7 +14,8 @@ use Livewire\Livewire;
 use Tests\Setup\WorksWithOpencastClient;
 use Tests\TestCase;
 
-class IngestOpencastTest extends TestCase {
+class IngestOpencastTest extends TestCase
+{
     use RefreshDatabase;
     use WorksWithOpencastClient;
 
@@ -27,7 +28,7 @@ class IngestOpencastTest extends TestCase {
 
         app()->setLocale('en');
 
-        $this->clip = ClipFactory::ownedBy($this->signIn())->create();
+        $this->clip = ClipFactory::ownedBy($this->signInRole('moderator'))->create();
 
         $mockHandler = $this->swapOpencastClient();
 

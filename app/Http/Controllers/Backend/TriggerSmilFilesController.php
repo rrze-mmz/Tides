@@ -16,7 +16,6 @@ class TriggerSmilFilesController extends Controller
      * @param Clip $clip
      * @param WowzaService $wowzaService
      * @return RedirectResponse
-     * @throws \DOMException
      * @throws AuthorizationException
      */
     public function __invoke(Clip $clip, WowzaService $wowzaService): RedirectResponse

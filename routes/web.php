@@ -65,7 +65,7 @@ Route::get('/set_lang/{locale}', function ($locale) {
 Route::get('/assetDownload/{asset}', AssetsDownloadController::class)->name('assets.download');
 
 //Backend routes
-Route::prefix('admin')->middleware('auth')->group(function () {
+Route::prefix('admin')->middleware(['auth', 'can:access-dashboard'])->group(function () {
     //Dashboard
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
 

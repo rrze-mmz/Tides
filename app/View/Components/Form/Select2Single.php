@@ -3,6 +3,7 @@
 namespace App\View\Components\Form;
 
 use App\Models\Organization;
+use App\Models\Role;
 use App\Models\Semester;
 use Illuminate\View\Component;
 use Illuminate\View\View;
@@ -16,11 +17,12 @@ class Select2Single extends Component
      */
     public function __construct(
         public ?string $model = null,
-        public string $label,
-        public string $fieldName,
-        public $selectClass,
-        public $selectedItem
-    ) {
+        public string  $label,
+        public string  $fieldName,
+        public         $selectClass,
+        public         $selectedItem
+    )
+    {
         //
     }
 
@@ -34,6 +36,9 @@ class Select2Single extends Component
         return view('components.form.select2-single', [
             'items' => match ($this->model) {
                 'semester' => Semester::where('id', '>', 1)
+                    ->orderBy('id', 'desc')
+                    ->get(),
+                'role' => Role::where('id', '>', 0)
                     ->orderBy('id', 'desc')
                     ->get(),
                 'organization' => Organization::select(['org_id as id', 'name'])

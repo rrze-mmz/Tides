@@ -58,7 +58,7 @@ class User extends Authenticatable
     /**
      * Series relationship
      *
-     * @return HasMan
+     * @return HasMany
      */
     public function series(): HasMany
     {
@@ -86,6 +86,19 @@ class User extends Authenticatable
     }
 
     /**
+     * Assign a role to the current user
+     *
+     * @param string $role
+     * @return User
+     */
+    public function assignRole(string $role = ''): static
+    {
+        $this->roles()->sync([Role::where('name', $role)->first()->id]);
+
+        return $this;
+    }
+
+    /**
      * Roles relationship
      *
      * @return BelongsToMany
@@ -96,23 +109,6 @@ class User extends Authenticatable
     }
 
     /**
-     * Assign a role to the current user
-     *
-     * @param string $role
-     * @return User
-     */
-    public function assignRole(string $role = ''): static
-    {
-        //if role doesn't exist create one
-        $role = tap(Role::firstOrCreate(['name' => $role]))->save();
-
-        //assign role to the current user
-        $this->roles()->sync($role->pluck('id'));
-
-        return $this;
-    }
-
-    /**
      * Check whether the current user has given role
      *
      * @param string $role
@@ -120,7 +116,7 @@ class User extends Authenticatable
      */
     public function hasRole($role = ''): bool
     {
-        return ($this->roles->contains('name', $role)) ? true : false;
+        return (bool)$this->roles->contains('name', $role);
     }
 
     /**
@@ -131,6 +127,16 @@ class User extends Authenticatable
     public function isAdmin(): bool
     {
         return $this->hasRole('admin');
+    }
+
+    /**
+     * Check whether the current user is an editor
+     *
+     * @return bool
+     */
+    public function isModerator(): bool
+    {
+        return $this->hasRole('moderator');
     }
 
     /**

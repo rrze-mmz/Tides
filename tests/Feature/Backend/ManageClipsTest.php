@@ -14,25 +14,29 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\Setup\WorksWithOpencastClient;
 use Tests\TestCase;
 
-class ManageClipsTest extends TestCase {
+class ManageClipsTest extends TestCase
+{
     use RefreshDatabase;
     use WithFaker;
     use WorksWithOpencastClient;
 
     private OpencastService $opencastService;
     private string $flashMessageName;
+    private string $role = '';
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->flashMessageName = 'flashMessage';
+
+        $this->role = 'moderator';
     }
 
     /** @test */
     public function it_paginates_users_clips_in_dashboard_index_page(): void
     {
-        Clip::factory(20)->create(['owner_id' => $this->signIn()]);
+        Clip::factory(20)->create(['owner_id' => $this->signInRole($this->role)]);
 
         $this->get(route('clips.index') . '?page=2')->assertDontSee('You have no series yet');
     }
@@ -42,7 +46,7 @@ class ManageClipsTest extends TestCase {
     {
         Clip::factory(20)->create();
 
-        $this->signInAdmin();
+        $this->signInRole('admin');
 
         $this->get(route('clips.index') . '?page=2')->assertDontSee('You have no series yet');
     }
@@ -50,7 +54,7 @@ class ManageClipsTest extends TestCase {
     /** @test */
     public function it_requires_a_title_creating_a_new_clip(): void
     {
-        $this->signIn();
+        $this->signInRole($this->role);
 
         $attributes = Clip::factory()->raw(['title' => '']);
 
@@ -60,7 +64,7 @@ class ManageClipsTest extends TestCase {
     /** @test */
     public function it_requires_a_semester_creating_a_new_clip(): void
     {
-        $this->signIn();
+        $this->signInRole($this->role);
 
         $attributes = Clip::factory()->raw(['semester_id' => '']);
 
@@ -70,7 +74,7 @@ class ManageClipsTest extends TestCase {
     /** @test */
     public function it_must_have_a_strong_password_if_any(): void
     {
-        $this->signIn();
+        $this->signInRole($this->role);
 
         $this->post(route('clips.store', Clip::factory()->raw([
             'title'    => 'This is a test',
@@ -86,9 +90,18 @@ class ManageClipsTest extends TestCase {
     }
 
     /** @test */
-    public function an_authenticated_user_can_create_a_clip(): void
+    public function an_authenticated_user_is_not_allowed_to_create_new_clip(): void
     {
         $this->signIn();
+
+        $this->post(route('clips.store'), $attributes = Clip::factory()->raw()
+        )->assertStatus(403);
+    }
+
+    /** @test */
+    public function a_moderator_can_create_a_clip(): void
+    {
+        $this->signInRole($this->role);
 
         $this->followingRedirects()
             ->post(route('clips.store'), $attributes = Clip::factory()->raw())
@@ -96,9 +109,9 @@ class ManageClipsTest extends TestCase {
     }
 
     /** @test */
-    public function an_authenticated_user_can_see_the_create_clip_form_and_all_form_fields(): void
+    public function a_moderator_can_see_the_create_clip_form_and_all_form_fields(): void
     {
-        $this->signIn();
+        $this->signInRole($this->role);
 
         $this->get(route('clips.create'))
             ->assertSee('title')
@@ -116,15 +129,15 @@ class ManageClipsTest extends TestCase {
     /** @test */
     public function it_shows_a_flash_message_when_a_clip_is_created(): void
     {
-        $this->signIn();
+        $this->signInRole($this->role);
 
         $this->post(route('clips.store'), Clip::factory()->raw())->assertSessionHas($this->flashMessageName);
     }
 
     /** @test */
-    public function an_authenticated_user_can_view_the_edit_clip_form_add_all_form_fields(): void
+    public function a_moderator_can_view_the_edit_clip_form_add_all_form_fields(): void
     {
-        $clip = ClipFactory::ownedBy($this->signIn())->create();
+        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
 
         $this->get($clip->adminPath())->assertStatus(200);
 
@@ -141,17 +154,17 @@ class ManageClipsTest extends TestCase {
     /** @test */
     public function it_lists_whether_a_clip_belongs_to_a_series(): void
     {
-        $series = SeriesFactory::ownedBy($this->signIn())->withClips(2)->create();
+        $series = SeriesFactory::ownedBy($this->signInRole($this->role))->withClips(2)->create();
 
         $this->get(route('clips.edit', $series->clips()->first()))->assertSee($series->title);
     }
 
     /** @test */
-    public function an_authenticated_user_cannot_view_clip_edit_form_for_not_owned_clips(): void
+    public function a_moderator_cannot_view_clip_edit_form_for_not_owned_clips(): void
     {
         $clip = ClipFactory::create();
 
-        $this->signIn();
+        $this->signInRole($this->role);
 
         $this->get($clip->adminPath())->assertStatus(403);
     }
@@ -161,15 +174,15 @@ class ManageClipsTest extends TestCase {
     {
         $clip = ClipFactory::create();
 
-        $this->signInAdmin();
+        $this->signInRole('admin');
 
         $this->get($clip->adminPath())->assertStatus(200);
     }
 
     /** @test */
-    public function an_authenticated_user_can_create_a_clip_with_tags(): void
+    public function a_moderator_can_create_a_clip_with_tags(): void
     {
-        $this->signIn();
+        $this->signInRole($this->role);
 
         $attributes = Clip::factory()->raw([
             'tags' => ['php', 'example', 'oop']
@@ -185,9 +198,9 @@ class ManageClipsTest extends TestCase {
     }
 
     /** @test */
-    public function an_authenticated_user_can_create_a_clip_with_acls(): void
+    public function a_moderator_can_create_a_clip_with_acls(): void
     {
-        $this->signIn();
+        $this->signInRole($this->role);
 
         $attributes = Clip::factory()->raw([
             'acls' => ['1', '2']
@@ -201,9 +214,9 @@ class ManageClipsTest extends TestCase {
     }
 
     /** @test */
-    public function an_authenticated_user_can_remove_clip_tags(): void
+    public function a_moderator_can_remove_clip_tags(): void
     {
-        $clip = ClipFactory::ownedBy($this->signIn())->create();
+        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
 
         $clip->tags()->sync(Tag::factory()->create());
 
@@ -220,9 +233,9 @@ class ManageClipsTest extends TestCase {
     }
 
     /** @test */
-    public function an_authenticated_user_can_update_clip_tags(): void
+    public function a_moderator_can_update_clip_tags(): void
     {
-        $clip = ClipFactory::ownedBy($this->signIn())->create();
+        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
 
         $tag = Tag::factory()->create();
 
@@ -243,7 +256,7 @@ class ManageClipsTest extends TestCase {
     /** @test */
     public function create_clip_form_should_remember_old_values_on_validation_error(): void
     {
-        $this->signIn();
+        $this->signInRole($this->role);
 
         $attributes = [
             'title'           => 'Clip title',
@@ -261,9 +274,9 @@ class ManageClipsTest extends TestCase {
     }
 
     /** @test */
-    public function an_authenticated_user_can_update_his_clip(): void
+    public function a_moderator_can_update_his_clip(): void
     {
-        $clip = ClipFactory::ownedBy($this->signIn())->create();
+        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
 
         $this->get($clip->path())->assertSee($clip->title);
 
@@ -289,11 +302,11 @@ class ManageClipsTest extends TestCase {
     }
 
     /** @test */
-    public function an_authenticated_user_cannot_update_a_not_owned_clip(): void
+    public function a_moderator_cannot_update_a_not_owned_clip(): void
     {
         $clip = ClipFactory::create();
 
-        $this->signIn();
+        $this->signInRole($this->role);
 
         $attributes = [
             'episode'         => '1',
@@ -313,7 +326,7 @@ class ManageClipsTest extends TestCase {
     {
         $clip = ClipFactory::create();
 
-        $this->signInAdmin();
+        $this->signInRole('admin');
 
         $attributes = [
             'episode'         => '1',
@@ -331,7 +344,7 @@ class ManageClipsTest extends TestCase {
     /** @test */
     public function it_updates_clip_slug_if_title_is_changed(): void
     {
-        $clip = ClipFactory::ownedBy($this->signIn())->create();
+        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
 
         $this->patch($clip->adminPath(), [
             'episode'         => '1',
@@ -347,7 +360,7 @@ class ManageClipsTest extends TestCase {
     /** @test */
     public function it_does_not_update_clip_slug_if_title_is_not_changed()
     {
-        $this->signIn();
+        $this->signInRole($this->role);
 
         $this->post(route('clips.store'), [
             'episode'         => '1',
@@ -369,7 +382,7 @@ class ManageClipsTest extends TestCase {
     /** @test */
     public function it_has_an_upload_button_in_edit_form(): void
     {
-        $clip = ClipFactory::ownedBy($this->signIn())->create();
+        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
 
         $this->get(route('clips.edit', $clip))->assertSee('Upload');
     }
@@ -377,7 +390,7 @@ class ManageClipsTest extends TestCase {
     /** @test */
     public function it_has_a_convert_to_hls_option_in_edit_form(): void
     {
-        $clip = ClipFactory::ownedBy($this->signIn())->create();
+        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
 
         $this->get(route('clips.edit', $clip))->assertSee('Convert to HLS?');
     }
@@ -386,11 +399,11 @@ class ManageClipsTest extends TestCase {
     public function it_shows_an_lms_test_link_if_clip_has_an_lms_acl_and_user_is_admin(): void
     {
         $this->withoutExceptionHandling();
-        $userClip = ClipFactory::ownedBy($this->signIn())->create();
+        $userClip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
 
         $this->get(route('clips.edit', $userClip))->assertDontSee('LMS Test Link');
 
-        $adminClip = ClipFactory::ownedBy($this->signInAdmin())->create();
+        $adminClip = ClipFactory::ownedBy($this->signInRole('admin'))->create();
 
         $this->get(route('clips.edit', $adminClip))->assertDontSee('LMS Test Link');
 
@@ -408,7 +421,7 @@ class ManageClipsTest extends TestCase {
 
         $mockHandler->append($this->mockHealthResponse());
 
-        $this->get(route('clips.edit', ClipFactory::ownedBy($this->signIn())->create()))
+        $this->get(route('clips.edit', ClipFactory::ownedBy($this->signInRole($this->role))->create()))
             ->assertSee('Ingest to Opencast');
     }
 
@@ -421,14 +434,14 @@ class ManageClipsTest extends TestCase {
 
         $mockHandler->append(new Response());
 
-        $this->get(route('clips.edit', ClipFactory::ownedBy($this->signIn())->create()))
+        $this->get(route('clips.edit', ClipFactory::ownedBy($this->signInRole($this->role))->create()))
             ->assertDontSee('Ingest to Opencast');
     }
 
     /** @test */
     public function it_shows_a_flash_message_when_a_clip_is_updated()
     {
-        $clip = ClipFactory::ownedBy($this->signIn())->create();
+        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
 
         $this->patch($clip->adminPath(), [
             'title'           => 'changed',
@@ -438,11 +451,11 @@ class ManageClipsTest extends TestCase {
     }
 
     /** @test */
-    public function an_authenticated_user_cannot_delete_a_not_owned_clip(): void
+    public function a_moderator_cannot_delete_a_not_owned_clip(): void
     {
         $clip = ClipFactory::create();
 
-        $this->signIn();
+        $this->signInRole($this->role);
 
         $this->delete($clip->adminPath())->assertStatus(403);
 
@@ -454,7 +467,7 @@ class ManageClipsTest extends TestCase {
     {
         $clip = ClipFactory::create();
 
-        $this->signInAdmin();
+        $this->signInRole('admin');
 
         $this->followingRedirects()->delete($clip->adminPath())->assertStatus(200);
 
@@ -462,9 +475,9 @@ class ManageClipsTest extends TestCase {
     }
 
     /** @test */
-    public function an_authenticated_user_can_delete_owned_clip(): void
+    public function a_moderator_can_delete_owned_clip(): void
     {
-        $clip = ClipFactory::ownedBy($this->signIn())->create();
+        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
 
         $this->delete($clip->adminPath())->assertRedirect(route('clips.index'));
 
@@ -474,7 +487,7 @@ class ManageClipsTest extends TestCase {
     /** @test */
     public function it_shows_a_flash_message_when_a_clip_is_deleted(): void
     {
-        $clip = ClipFactory::ownedBy($this->signIn())->create();
+        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
 
         $this->delete($clip->adminPath())->assertSessionHas($this->flashMessageName);
     }
@@ -482,7 +495,7 @@ class ManageClipsTest extends TestCase {
     /** @test */
     public function it_can_toggle_comments(): void
     {
-        $clip = ClipFactory::ownedBy($this->signIn())->create();
+        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
 
         $this->get($clip->path())->assertDontSee('Comments');
 
@@ -500,7 +513,7 @@ class ManageClipsTest extends TestCase {
     /** @test */
     public function it_displays_previous_next_clip_id_links(): void
     {
-        $this->signInAdmin();
+        $this->signInRole('admin');
 
         SeriesFactory::withClips(3)->create();
 
@@ -518,7 +531,7 @@ class ManageClipsTest extends TestCase {
     /** @test */
     public function it_hides_previous_clip_id_links_if_clip_is_the_first_on_a_series(): void
     {
-        $this->signInAdmin();
+        $this->signInRole('admin');
 
         SeriesFactory::withClips(3)->create();
 
@@ -534,7 +547,7 @@ class ManageClipsTest extends TestCase {
     /** @test */
     public function it_hides_next_clip_id_links_if_clip_is_the_last_on_a_series(): void
     {
-        $this->signInAdmin();
+        $this->signInRole('admin');
 
         SeriesFactory::withClips(4)->create();
 
@@ -552,7 +565,7 @@ class ManageClipsTest extends TestCase {
     /** @test */
     public function it_has_a_trigger_smil_file_button_if_clip_has_assets(): void
     {
-        $clip = ClipFactory::withAssets(2)->ownedBy($this->signIn())->create();
+        $clip = ClipFactory::withAssets(2)->ownedBy($this->signInRole($this->role))->create();
 
         $this->get(route('clips.edit', $clip))->assertSee('Trigger smil files');
     }
@@ -560,7 +573,7 @@ class ManageClipsTest extends TestCase {
     /** @test */
     public function it_list_smil_files_if_any(): void
     {
-        $clip = ClipFactory::withAssets(2)->ownedBy($this->signIn())->create();
+        $clip = ClipFactory::withAssets(2)->ownedBy($this->signInRole($this->role))->create();
 
         $clip->addAsset([
             'disk'               => 'videos',

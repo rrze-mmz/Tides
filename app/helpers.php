@@ -25,9 +25,12 @@ function fetchClipPoster($file = null): string
  */
 function getClipStoragePath(Clip $clip): string
 {
-    return '/' . Carbon::createFromFormat('Y-m-d', $clip->created_at->format('Y-m-d'))->year .
-        '/' . str_pad(Carbon::createFromFormat('Y-m-d', $clip->created_at->format('Y-m-d'))->month, 2, "0", STR_PAD_LEFT) .
-        '/' . str_pad(Carbon::createFromFormat('Y-m-d', $clip->created_at->format('Y-m-d'))->day, 2, "0", STR_PAD_LEFT) . '/'
+    return '/' . Carbon::createFromFormat('Y-m-d', $clip->created_at->format('Y-m-d'))
+            ->year .
+      '/' . str_pad(Carbon::createFromFormat('Y-m-d', $clip->created_at->format('Y-m-d'))
+            ->month, 2, "0", STR_PAD_LEFT) .
+      '/' . str_pad(Carbon::createFromFormat('Y-m-d', $clip->created_at->format('Y-m-d'))
+            ->day, 2, "0", STR_PAD_LEFT) . '/'
         . 'TIDES_Clip_ID_' . $clip->id;
 }
 
@@ -72,7 +75,6 @@ function generateLMSToken($obj, $time, bool $withURL = false): string
 {
     $type = lcfirst(class_basename($obj::class));
 
-    \Debugbar::info($type . $obj->id . $obj->password . request()->ip() . $time . 'studon');
     $token = md5($type . $obj->id . $obj->password . request()->ip() . $time . 'studon');
 
     return ($withURL) ? '/protector/link/' . $type . '/' . $obj->id . '/' . $token . '/' . $time . '/studon' : $token;

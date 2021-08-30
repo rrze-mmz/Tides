@@ -12,7 +12,6 @@ use Tests\TestCase;
 
 class AssetTest extends TestCase
 {
-
     use RefreshDatabase;
 
     private Asset $asset;
@@ -28,7 +27,7 @@ class AssetTest extends TestCase
     /** @test */
     public function it_has_a_path(): void
     {
-        $this->assertEquals('/admin/assets/'.$this->asset->id, $this->asset->path());
+        $this->assertEquals('/admin/assets/' . $this->asset->id, $this->asset->path());
     }
 
     /** @test */

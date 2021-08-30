@@ -10,7 +10,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use Tests\TestCase;
 
-class CommentsSectionTest extends TestCase {
+class CommentsSectionTest extends TestCase
+{
     use RefreshDatabase;
 
     protected Clip $clip;
@@ -22,7 +23,6 @@ class CommentsSectionTest extends TestCase {
         $this->signIn();
 
         $this->clip = ClipFactory::withAssets(2)->create(['allow_comments' => true]);
-
     }
 
     /** @test */
@@ -89,7 +89,7 @@ class CommentsSectionTest extends TestCase {
     {
         Comment::factory()->create(['clip_id' => $this->clip->id]);
 
-        $this->signInAdmin();
+        $this->signInRole('admin');
 
         Livewire::test(CommentsSection::class)
             ->set('clip', $this->clip)
@@ -120,7 +120,7 @@ class CommentsSectionTest extends TestCase {
             'content'  => 'test comment'
         ]);
 
-        $this->signInAdmin();
+        $this->signInRole('admin');
 
         Livewire::test(CommentsSection::class)
             ->set('clip', $this->clip)

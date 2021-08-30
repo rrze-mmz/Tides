@@ -8,7 +8,8 @@ use Facades\Tests\Setup\FileFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class AssetTest extends TestCase {
+class AssetTest extends TestCase
+{
     use RefreshDatabase;
 
     /** @test */

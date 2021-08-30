@@ -16,9 +16,9 @@ class ClipPolicy
      *
      * @return bool
      */
-    public function create(): bool
+    public function create(User $user): bool
     {
-        return auth()->check();
+        return auth()->check() && $user->isModerator();
     }
 
     /**

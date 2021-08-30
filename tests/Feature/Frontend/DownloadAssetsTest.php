@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Tests\TestCase;
 
-class DownloadAssetsTest extends TestCase {
+class DownloadAssetsTest extends TestCase
+{
     use RefreshDatabase;
     use withFaker;
 
@@ -22,7 +23,7 @@ class DownloadAssetsTest extends TestCase {
     {
         Storage::fake('videos');
 
-        $clip = ClipFactory::ownedBy($this->signIn())->create();
+        $clip = ClipFactory::ownedBy($this->signInRole('moderator'))->create();
 
         $this->post(route('admin.assets.store', $clip), ['asset' => FileFactory::videoFile()]);
 
@@ -31,6 +32,5 @@ class DownloadAssetsTest extends TestCase {
         $this->assertInstanceOf(BinaryFileResponse::class, response()->download(Storage::disk('videos')->path($asset->path)));
 
         Storage::disk('videos')->delete($asset->path);
-
     }
 }

@@ -5,10 +5,10 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Models\Role;
 use App\Models\User;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Http\RedirectResponse;
@@ -33,7 +33,7 @@ class UsersController extends Controller
     }
 
     /**
-     * Create user form
+     * Create form for a user
      *
      * @return View
      */
@@ -43,6 +43,8 @@ class UsersController extends Controller
     }
 
     /**
+     * Store a user in database
+     *
      * @throws Exception
      */
     public function store(StoreUserRequest $request)
@@ -59,6 +61,8 @@ class UsersController extends Controller
     }
 
     /**
+     * Edit form for a user
+     *
      * @param User $user
      * @return View
      */
@@ -68,6 +72,8 @@ class UsersController extends Controller
     }
 
     /**
+     * Updates a single user in database
+     *
      * @param User $user
      * @param UpdateUserRequest $request
      * @return RedirectResponse
@@ -78,10 +84,14 @@ class UsersController extends Controller
 
         $user->update($validated);
 
+        $user->assignRole(Role::find($validated['role_id'])->name);
+
         return redirect(route('users.edit', $user));
     }
 
     /**
+     * Deletes a single user
+     *
      * @param User $user
      * @return Redirector|Application|RedirectResponse
      */

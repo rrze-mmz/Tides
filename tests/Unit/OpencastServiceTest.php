@@ -129,9 +129,6 @@ class OpencastServiceTest extends TestCase {
         $file = UploadedFile::fake()->create('video.mp4', 1000);
 
         $data = [
-            'headers'   => [
-                'Content-Type' => 'multipart/form-data',
-            ],
             'multipart' => [
                 [
                     'name'     => 'flavor',
