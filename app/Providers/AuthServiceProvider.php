@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Models\Asset;
 use App\Models\Clip;
+use App\Models\Comment;
+use App\Models\Series;
 use App\Models\User;
 use App\Policies\AssetPolicy;
 use App\Policies\ClipPolicy;

@@ -105,24 +105,25 @@
 
             @include('backend.clips.sidebar._upload-video')
 
-            @if ($opencastConnectionCollection->isNotEmpty())
+            @if ($opencastConnectionCollection = $opencastConnectionCollection->isNotEmpty())
                 @include('backend.clips.sidebar._ingest-video')
             @endif
 
-                @if(auth()->user()->isAdmin() && $clip->acls->pluck('id')->contains('2'))
-                    <div class="w-full py-4 px-4 mx-4 h-full bg-white rounded border">
-                        <header class="items-center pb-2 mb-2 font-semibold text-center border-b">
-                          LMS Test Link </header>
-                            <p>
-                                <a
-                                        href="{{generateLMSToken($clip, dechex(time()), true)}}"
-                                        type="button"
-                                        class="mt-2 py-2 px-8 text-white bg-green-500 rounded shadow hover:bg-green-600
+            @if(auth()->user()->isAdmin() && $clip->acls->pluck('id')->contains('2'))
+                <div class="w-full py-4 px-4 mx-4 h-full bg-white rounded border">
+                    <header class="items-center pb-2 mb-2 font-semibold text-center border-b">
+                        LMS Test Link
+                    </header>
+                    <p>
+                        <a
+                            href="{{generateLMSToken($clip, dechex(time()), true)}}"
+                            type="button"
+                            class="mt-2 py-2 px-8 text-white bg-green-500 rounded shadow hover:bg-green-600
                             focus:shadow-outline focus:outline-none"
-                                >LMS Test Link</a>
-                            </p>
-                    </div>
-                @endif
+                        >LMS Test Link</a>
+                    </p>
+                </div>
+            @endif
 
         </div>
     </div>
@@ -147,6 +148,13 @@
                        type="submit"
                        text=" Transfer files from drop zone"
         />
+
+        @if($opencastConnectionCollection)
+            <x-form.button :link="route('admin.clips.opencast.listEvents', $clip)"
+                           type="submit"
+                           text=" Transfer files from Opencast"
+            />
+        @endif
 
         <form action="{{ $clip->adminPath() }}"
               method="POST"

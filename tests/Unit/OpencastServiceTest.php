@@ -9,12 +9,14 @@ use GuzzleHttp\Handler\MockHandler;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Tests\Setup\WorksWithOpencastClient;
 use Tests\TestCase;
 
-class OpencastServiceTest extends TestCase {
+class OpencastServiceTest extends TestCase
+{
     use RefreshDatabase;
     use WithFaker;
     use WorksWithOpencastClient;
@@ -81,6 +83,24 @@ class OpencastServiceTest extends TestCase {
         $this->assertEquals('RUNNING', $response['workflows']['workflow']['0']['state']);
 
         $this->assertEquals($series->opencast_series_id, $response['workflows']['workflow']['0']['mediapackage']['series']);
+    }
+
+    /** @test */
+    public function if_fetches_all_finished_events_for_a_series(): void
+    {
+        $series = Series::factory()->create(['opencast_series_id' => Str::uuid()]);
+
+        $this->mockHandler->append($this->mockSeriesProcessedEvents($series));
+
+        $this->mockHandler->append($this->mockSeriesCanceledEvents($series));
+
+        $response = $this->opencastService->getEventsBySeriesID($series);
+
+        $this->assertInstanceOf(Collection::class, $response);
+
+        $this->assertTrue($response->pluck('processing_state')->contains('STOPPED'));
+
+        $this->assertTrue($response->pluck('processing_state')->contains('SUCCEEDED'));
     }
 
     /** @test */

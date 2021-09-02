@@ -7,20 +7,27 @@ use App\Jobs\CreateWowzaSmilFile;
 use App\Jobs\SendEmail;
 use App\Jobs\TransferDropzoneFiles;
 use App\Mail\VideoUploaded;
+use App\Services\OpencastService;
 use Facades\Tests\Setup\ClipFactory;
 use Facades\Tests\Setup\FileFactory;
+use Facades\Tests\Setup\SeriesFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Testing\File;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Tests\Setup\WorksWithOpencastClient;
 use Tests\TestCase;
 
 
-class DropzoneTransferTest extends TestCase
+class AssetsTransferTest extends TestCase
 {
     use RefreshDatabase;
+    use WorksWithOpencastClient;
 
+    private OpencastService $opencastService;
     private string $role = '';
 
     protected function setUp(): void
@@ -69,6 +76,48 @@ class DropzoneTransferTest extends TestCase
 
         $this->get(route('admin.clips.dropzone.listFiles', ['clip' => $clip]))
             ->assertSee(sha1('export_video.mp4'));
+    }
+
+    /** @test */
+    public function is_should_show_an_empty_list_if_no_opencast_events_found(): void
+    {
+        $series = SeriesFactory::withClips(2)
+            ->ownedBy($this->signInRole($this->role))
+            ->create();
+
+        $series->opencast_series_id = Str::uuid();
+
+        $series->save();
+
+        $this->get(route('admin.clips.opencast.listEvents', ['clip' => $series->clips()->first()]))
+            ->assertStatus(200)
+            ->assertSee('no events found for this series');
+    }
+
+    /** @test */
+    public function opencast_transfer_view_should_list_all_events_with_event_uid(): void
+    {
+        $series = SeriesFactory::withClips(2)
+            ->ownedBy($this->signInRole($this->role))
+            ->create();
+
+        $series->opencast_series_id = Str::uuid();
+
+        $series->save();
+
+        $mockHandler = $this->swapOpencastClient();
+
+        $this->opencastService = app(OpencastService::class);
+
+        $mockHandler->append($this->mockSeriesProcessedEvents($series));
+
+        $mockHandler->append($this->mockSeriesCanceledEvents($series));
+
+        $this->get(route('admin.clips.opencast.listEvents', ['clip' => $series->clips()->first()]))
+            ->assertStatus(200)
+            ->assertViewHas('events', function (Collection $collection) {
+                return $collection->count() == 2;
+            });
     }
 
     /** @test */

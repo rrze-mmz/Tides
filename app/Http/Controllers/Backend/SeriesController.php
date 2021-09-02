@@ -84,9 +84,9 @@ class SeriesController extends Controller
      * @return RedirectResponse
      */
     public function update(
-        Series $series,
+        Series              $series,
         UpdateSeriesRequest $request,
-        OpencastService $opencastService
+        OpencastService     $opencastService
     ): RedirectResponse {
         if (is_null($series->opencast_series_id)) {
             $opencastSeriesId = $opencastService->createSeries($series);

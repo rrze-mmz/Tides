@@ -17,7 +17,7 @@ class AssetTest extends TestCase
     {
         $clip = ClipFactory::create();
 
-        $this->post(route('admin.assets.store', $clip), ['asset' => $file = FileFactory::videoFile()])
+        $this->post(route('admin.assets.store', $clip), ['asset' => FileFactory::videoFile()])
             ->assertRedirect('login');
     }
 
@@ -26,6 +26,6 @@ class AssetTest extends TestCase
     {
         $clip = ClipFactory::create();
 
-        $this->get(route('admin.clips.dropzone.transfer', $clip))->assertRedirect('login');
+        $this->get(route('admin.clips.dropzone.listFiles', $clip))->assertRedirect('login');
     }
 }

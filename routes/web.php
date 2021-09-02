@@ -1,9 +1,9 @@
 <?php
 
 use App\Http\Controllers\Backend\AssetsController;
+use App\Http\Controllers\Backend\AssetsTransferController;
 use App\Http\Controllers\Backend\ClipsController;
 use App\Http\Controllers\Backend\DashboardController;
-use App\Http\Controllers\Backend\DropzoneTransferController;
 use App\Http\Controllers\Backend\OpencastController;
 use App\Http\Controllers\Backend\SeriesClipsController;
 use App\Http\Controllers\Backend\SeriesController;
@@ -77,14 +77,36 @@ Route::prefix('admin')->middleware(['auth', 'can:access-dashboard'])->group(func
     Route::resource('clips', ClipsController::class)->except(['show', 'edit']);
     Route::get('/clips/{clip}/', [ClipsController::class, 'edit'])->name('clips.edit');
 
-    Route::get('/clips/{clip}/transfer', [DropzoneTransferController::class, 'listFiles'])
-        ->name('admin.clips.dropzone.listFiles');
-    Route::post('/clips/{clip}/transfer', [DropzoneTransferController::class, 'transfer'])
-        ->name('admin.clips.dropzone.transfer');
+    /*
+     * A group of clip assets functions
+     */
+    Route::middleware('can:edit,clip')->group(function () {
+        /*
+         * Transfer assets from a certain path in the server
+         * called "dropzone". This path is usually the export path
+         * for an extern service ffmpeg video transcoding. In FAU case
+         * the encoding is performed by the HPC cluster
+         */
+        Route::get('/clips/{clip}/dropzone/list', [AssetsTransferController::class, 'listDropzoneFiles'])
+            ->name('admin.clips.dropzone.listFiles');
+        Route::post('/clips/{clip}/dropzone/transfer', [AssetsTransferController::class, 'transferDropzoneFiles'])
+            ->name('admin.clips.dropzone.transfer');
 
-    Route::get('/clips/{clip}/triggerSmilFiles', TriggerSmilFilesController::class)
-        ->name('admin.clips.triggerSmilFiles');
+        /*
+         * Transfer assets from Opencast Server
+         */
+        Route::get('/clips/{clip}/opencast/list', [AssetsTransferController::class, 'listOpencastEvents'])
+            ->name('admin.clips.opencast.listEvents');
+        Route::post('/clips/{clip}/opencast/transfer', [AssetsTransferController::class, 'transferOpencastFiles'])
+            ->name('admin.clips.opencast.transfer');
 
+        // Create SMIL files for WOWZA hls streaming
+        Route::get('/clips/{clip}/triggerSmilFiles', TriggerSmilFilesController::class)
+            ->name('admin.clips.triggerSmilFiles');
+    });
+
+
+    // Create a clip for a certain series.
     Route::get('/series/{series}/addClip', [SeriesClipsController::class, 'create'])->name('series.clip.create');
     Route::post('series/{series}/addClip', [SeriesClipsController::class, 'store'])->name('series.clip.store');
 
@@ -95,11 +117,14 @@ Route::prefix('admin')->middleware(['auth', 'can:access-dashboard'])->group(func
     //Opencast routes
     Route::get('/opencast', OpencastController::class)->name('opencast.status');
 
+    // Basic portal user administration
     Route::middleware(['user.admin'])->group(function () {
         Route::get('/users', [UsersController::class, 'index'])->name('users.index');
         Route::get('/users/create', [UsersController::class, 'create'])->name('users.create');
         Route::post('/users/create', [UsersController::class, 'store'])->name('users.store');
         Route::get('/users/{user}/edit', [UsersController::class, 'edit'])->name('users.edit');
+//        TODO
+//        Route::get('/users/{user}', [UsersController::class,'show'])->name('users.show')
         Route::patch('/users/{user}', [UsersController::class, 'update'])->name('users.update');
         Route::delete('/users/{user}', [UsersController::class, 'destroy'])->name('users.destroy');
     });

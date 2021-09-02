@@ -24,7 +24,8 @@ class SearchController extends Controller
                 ->orWhereRaw('lower(description)  like (?)', ["%{$request->term}%"]);
         }) //search for clip title and description
         ->orWhereHas('owner', function ($q) use ($request) {
-            $q->whereRaw('lower(name)  like (?)', ["%{$request->term}%"]);
+            $q->whereRaw('lower(first_name)  like (?)', ["%{$request->term}%"])
+                ->orWhereRaw('lower(last_name)  like (?)', ["%{$request->term}%"]);
         }) //search for clip presenter
         ->paginate(10)
             ->withQueryString();

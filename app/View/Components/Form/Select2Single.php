@@ -19,10 +19,9 @@ class Select2Single extends Component
         public ?string $model = null,
         public string  $label,
         public string  $fieldName,
-        public         $selectClass,
-        public         $selectedItem
-    )
-    {
+        public $selectClass,
+        public $selectedItem
+    ) {
         //
     }
 

@@ -51,7 +51,7 @@ class UsersController extends Controller
     {
         $validated = $request->validated();
         $secret = random_int(20, 30);
-        $validated['password'] = Hash::make($secret);
+        $validated['password'] = Hash::make((string)$secret);
 
         $user = User::create($validated);
 

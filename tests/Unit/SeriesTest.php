@@ -12,7 +12,8 @@ use Illuminate\Support\Str;
 use Tests\Setup\WorksWithOpencastClient;
 use Tests\TestCase;
 
-class SeriesTest extends TestCase {
+class SeriesTest extends TestCase
+{
     use RefreshDatabase;
     use WorksWithOpencastClient;
 
@@ -64,8 +65,9 @@ class SeriesTest extends TestCase {
     /** @test */
     public function it_fetches_the_latest_clip(): void
     {
-        $this->assertInstanceOf(HasOne::class,$this->series->latestClip());
+        $this->assertInstanceOf(HasOne::class, $this->series->latestClip());
     }
+
     /** @test */
     public function it_has_one_organization_unit(): void
     {
@@ -99,6 +101,6 @@ class SeriesTest extends TestCase {
     /** @test */
     public function it_has_a_public_scope(): void
     {
-        $this->assertInstanceOf(Builder::class, Series::public());
+        $this->assertInstanceOf(Builder::class, Series::isPublic());
     }
 }

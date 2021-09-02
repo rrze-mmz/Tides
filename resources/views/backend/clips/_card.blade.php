@@ -7,7 +7,7 @@
         <div class="mb-1">
             <div class="text-sm font-bold text-gray-900">
                 <a href="@if (str_contains(url()->current(), 'admin')) {{$clip->adminPath()}}
-                         @else {{ $clip->path() }} @endif"
+                @else {{ $clip->path() }} @endif"
                    class="underline"
                 >{{ $clip->title }}</a>
             </div>
@@ -56,7 +56,7 @@
             </div>
             <div class="text-sm">
                 <p class="italic text-gray-900">
-                    {{ $clip->owner->name }}
+                    {{ $clip->owner->getFullNameAttribute() }}
                 </p>
             </div>
         </div>

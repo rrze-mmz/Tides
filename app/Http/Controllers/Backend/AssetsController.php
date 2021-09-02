@@ -9,20 +9,21 @@ use App\Jobs\ConvertVideoForStreaming;
 use App\Mail\VideoUploaded;
 use App\Models\Asset;
 use App\Models\Clip;
+use FFMpeg\Exception\ExecutableNotFoundException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
-use FFMpeg;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class AssetsController extends Controller
 {
+    private Asset $asset;
 
     /**
      * Saves a file and persist the asset to the database
      *
-     * @param  Clip  $clip
-     * @param  UploadAssetRequest  $request
+     * @param Clip $clip
+     * @param UploadAssetRequest $request
      * @return RedirectResponse
      */
     public function store(Clip $clip, UploadAssetRequest $request): RedirectResponse
@@ -35,7 +36,7 @@ class AssetsController extends Controller
 
         $storedFile = $file->storeAs(getClipStoragePath($clip), $savedName, 'videos');
 
-        $ffmpeg = FFMpeg::fromDisk('videos')->open($storedFile);
+        $ffmpeg = \FFMpeg::fromDisk('videos')->open($storedFile);
 
         try {
             $attributes = [
@@ -45,24 +46,24 @@ class AssetsController extends Controller
                 'duration'           => $ffmpeg->getDurationInSeconds(),
                 'width'              => $ffmpeg->getVideoStream()->getDimensions()->getWidth(),
                 'height'             => $ffmpeg->getVideoStream()->getDimensions()->getHeight(),
-                'type'              => 'video',
+                'type'               => 'video',
             ];
 
-            $asset = $clip->addAsset($attributes);
+            $this->asset = $clip->addAsset($attributes);
 
             //generate a poster image for the clip
             $ffmpeg->getFrameFromSeconds(5)
                 ->export()
                 ->toDisk('thumbnails')
-                ->save($clip->id.'_poster.png');
+                ->save($clip->id . '_poster.png');
 
             $clip->updatePosterImage();
-        } catch (Exception $e) {
+        } catch (ExecutableNotFoundException $e) {
             Log::error($e);
         }
 
-        if ($request->exists('should_convert_to_hls') && $request->should_convert_to_hls ==='on') {
-            $this->dispatch(new ConvertVideoForStreaming($asset));
+        if ($request->exists('should_convert_to_hls') && $request->should_convert_to_hls === 'on') {
+            $this->dispatch(new ConvertVideoForStreaming($this->asset));
         }
 
         Mail::to(auth()->user()->email)->send(new VideoUploaded($clip));
@@ -73,10 +74,10 @@ class AssetsController extends Controller
     /**
      * Delete the given asset
      *
-     * @param  Asset  $asset
+     * @param Asset $asset
      * @return RedirectResponse
-     * @throws AuthorizationException
      * @throws Exception
+     * @throws AuthorizationException
      */
     public function destroy(Asset $asset): RedirectResponse
     {

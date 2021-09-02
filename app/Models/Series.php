@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-use GuzzleHttp\Psr7\Response;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Psr\Http\Message\ResponseInterface;
 
 class Series extends BaseModel
 {
@@ -102,9 +102,9 @@ class Series extends BaseModel
     /**
      * Updates opencast series id in series table
      *
-     * @param Response $response
+     * @param ResponseInterface $response
      */
-    public function updateOpencastSeriesId(Response $response): void
+    public function updateOpencastSeriesId(ResponseInterface $response): void
     {
         if (!empty($response->getHeaders())) {
             $this->opencast_series_id = Str::afterLast($response->getHeaders()['Location'][0], 'api/series/');
@@ -114,7 +114,7 @@ class Series extends BaseModel
     }
 
     /**
-     * Returns a comma seperated alcs list for all clips
+     * Returns a comma seperated acls list for all clips
      *
      * @return mixed
      */
@@ -132,7 +132,7 @@ class Series extends BaseModel
      * @param $query
      * @return mixed
      */
-    public function scopePublic($query): mixed
+    public function scopeIsPublic($query): mixed
     {
         return $query->where('isPublic', 1);
     }

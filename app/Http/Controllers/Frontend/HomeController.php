@@ -18,13 +18,15 @@ class HomeController extends Controller
     public function __invoke(): View
     {
         return view('frontend.homepage.index', [
-            'series' => Series::public()->whereHas('clips', function ($q) {
-                $q->whereHas('assets');
-            })
+            'series' => Series::isPublic()
+                ->whereHas('clips', function ($q) {
+                    $q->whereHas('assets');
+                })
                 ->orderByDesc('updated_at')
                 ->limit(18)
                 ->get(),
-            'clips'  => Clip::public()->whereHas('assets')
+            'clips'  => Clip::public()
+                ->whereHas('assets')
                 ->whereNull('series_id')
                 ->orderByDesc('updated_at')
                 ->limit(18)

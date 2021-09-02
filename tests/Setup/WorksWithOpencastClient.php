@@ -14,7 +14,8 @@ use Illuminate\Support\Str;
 use PHPUnit\Util\Xml;
 
 
-trait WorksWithOpencastClient {
+trait WorksWithOpencastClient
+{
     use WithFaker;
 
     public function swapOpencastClient(): MockHandler
@@ -55,6 +56,66 @@ trait WorksWithOpencastClient {
         return new Response(200, [], json_encode([
             new Xml()
         ]));
+    }
+
+    public function mockSeriesProcessedEvents(Series $series): Response
+    {
+        return new Response(201, [], json_encode([
+                [
+                    'identifier'         => Str::uuid(),
+                    'creator'            => 'Opencast Project Administrator',
+                    'presenter'          => [],
+                    'created'            => '2021-05-10T14:21:00Z',
+                    'is_part_of'         => $series->opencast_series_id,
+                    'subjects'           => [],
+                    'start'              => '2021-05-10T14:21:21Z',
+                    'description'        => '',
+                    'language'           => '',
+                    'source'             => '',
+                    'title'              => 'Processed event',
+                    'processing_state'   => 'SUCCEEDED',
+                    'license'            => '',
+                    'archive_version'    => 4,
+                    'contributor'        => [],
+                    'series'             => $series->title,
+                    'has_previews'       => false,
+                    'location'           => '',
+                    'rightsholder'       => '',
+                    'publication_status' => [],
+                    'status'             => 'EVENTS.EVENTS.STATUS.PROCESSED',
+                ],
+            ])
+        );
+    }
+
+    public function mockSeriesCanceledEvents(Series $series): Response
+    {
+        return new Response(201, [], json_encode([
+                [
+                    'identifier'         => Str::uuid(),
+                    'creator'            => 'Opencast Project Administrator',
+                    'presenter'          => [],
+                    'created'            => '2021-05-10T14:21:00Z',
+                    'is_part_of'         => $series->opencast_series_id,
+                    'subjects'           => [],
+                    'start'              => '2021-05-17T14:21:21Z',
+                    'description'        => '',
+                    'language'           => '',
+                    'source'             => '',
+                    'title'              => 'Canceled event',
+                    'processing_state'   => 'STOPPED',
+                    'license'            => '',
+                    'archive_version'    => 4,
+                    'contributor'        => [],
+                    'series'             => $series->title,
+                    'has_previews'       => false,
+                    'location'           => '',
+                    'rightsholder'       => '',
+                    'publication_status' => [],
+                    'status'             => 'EVENTS.EVENTS.STATUS.PROCESSING_CANCELED',
+                ],
+            ])
+        );
     }
 
     public function mockSeriesRunningWorkflowsResponse(Series $series, bool $multiple): Response

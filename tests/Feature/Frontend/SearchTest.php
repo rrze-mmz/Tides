@@ -12,7 +12,8 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Testing\TestResponse;
 use Tests\TestCase;
 
-class SearchTest extends TestCase {
+class SearchTest extends TestCase
+{
     use RefreshDatabase;
     use WithFaker;
 
@@ -29,7 +30,7 @@ class SearchTest extends TestCase {
         $this->clip = Clip::factory()->create([
             'title'       => 'Lorem ipsum for testing  the search function',
             'description' => 'Dolor sit amet for testing the search function',
-            'owner_id'    => User::factory()->create(['first_name' => 'John', 'last_name'=> 'Doe'])
+            'owner_id'    => User::factory()->create(['first_name' => 'John', 'last_name' => 'Doe'])
         ]);
 
         Asset::factory()->create(['clip_id' => $this->clip]);
@@ -50,6 +51,12 @@ class SearchTest extends TestCase {
     public function it_shows_an_error_when_search_term_is_less_than_3_chars(): void
     {
         $this->searchFor('ab')->assertSessionHasErrors('term');
+    }
+
+    /** @test */
+    public function it_renders_a_results_page(): void
+    {
+        $this->searchFor('test')->assertStatus(200);
     }
 
     /** @test */
@@ -84,7 +91,7 @@ class SearchTest extends TestCase {
         $secondClip = Clip::factory()->create([
             'title'       => 'Lorem ipsum for testing  the search function',
             'description' => 'Dolor sit amet for testing the search function',
-            'owner_id'    => User::factory()->create(['first_name' => 'Bob', 'last_name'=> 'Doe'])
+            'owner_id'    => User::factory()->create(['first_name' => 'Bob', 'last_name' => 'Doe'])
         ]);
 
         Asset::factory()->create(['clip_id' => $secondClip]);

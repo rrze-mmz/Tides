@@ -54,7 +54,7 @@ class WowzaService
         $xmlArray['body']['switch'] = $clip->assets
             ->where('type', '=', 'video')
             ->sortByDesc('height')
-            ->map(function ($asset) use ($xmlArray) {
+            ->map(function ($asset) {
                 return $this->createSmilFileArray($asset);
             })
             ->toArray();

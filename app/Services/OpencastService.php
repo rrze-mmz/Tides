@@ -102,6 +102,63 @@ class OpencastService
     }
 
     /**
+     * Returning opencast processed and canceled events for a series
+     *
+     * @param Series $series
+     * @return Collection
+     */
+    public function getEventsBySeriesID(Series $series): Collection
+    {
+        $merged = collect([]);
+
+        try {
+            $proccessed = $this->client->get('api/events', [
+                'query' => [
+                    'filter' => 'series:' . $series->opencast_series_id . ',status:EVENTS.EVENTS.STATUS.PROCESSED',
+                    'sort'   => 'start_date:ASC'
+                ]
+            ]);
+            $canceled = $this->client->get('api/events', [
+                'query' => [
+                    'filter' => 'series:' . $series->opencast_series_id . ',status:EVENTS.EVENTS.STATUS.PROCESSING_CANCELED',
+                    'sort'   => 'start_date:ASC'
+                ]
+            ]);
+            $collection = collect(json_decode((string)$proccessed->getBody(), true));
+
+            $merged = $collection->merge(collect(json_decode((string)$canceled->getBody(), true)));
+        } catch (GuzzleException $exception) {
+            Log::error($exception);
+        }
+
+        return $merged;
+    }
+
+    public function getAssetsByEventID($eventID): Collection
+    {
+        try {
+            $this->response = $this->client->get('assets/episode/' . $eventID);
+        } catch (GuzzleException $exception) {
+            Log::error($exception);
+        }
+
+        // change the xml response to xml object
+        $xmlResponse = simplexml_load_string((string)$this->response->getBody());
+
+        // isolate the media key from XML Object
+        $xmlResponse = (array)$xmlResponse->media;
+
+        // create a collection from the XML Object track value
+        $opencastAssets = collect($xmlResponse['track']);
+
+        // return a collection map with uid => delivery tags
+        return $opencastAssets->mapWithKeys(function ($element) {
+            return [
+                (string)$element->attributes()->id => (string)$element->attributes()->type];
+        });
+    }
+
+    /**
      * forms the data for Opencast post request to series api
      *
      * @param Series $series

@@ -398,7 +398,6 @@ class ManageClipsTest extends TestCase
     /** @test */
     public function it_shows_an_lms_test_link_if_clip_has_an_lms_acl_and_user_is_admin(): void
     {
-        $this->withoutExceptionHandling();
         $userClip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
 
         $this->get(route('clips.edit', $userClip))->assertDontSee('LMS Test Link');
@@ -413,7 +412,7 @@ class ManageClipsTest extends TestCase
     }
 
     /** @test */
-    public function it_has_an_ingest_to_opencast_button_if_opencast_server_exists(): void
+    public function it_has_opencast_action_buttons_if_opencast_server_exists(): void
     {
         $mockHandler = $this->swapOpencastClient();
 
@@ -422,11 +421,12 @@ class ManageClipsTest extends TestCase
         $mockHandler->append($this->mockHealthResponse());
 
         $this->get(route('clips.edit', ClipFactory::ownedBy($this->signInRole($this->role))->create()))
-            ->assertSee('Ingest to Opencast');
+            ->assertSee('Ingest to Opencast')
+            ->assertSee('Transfer files from Opencast');
     }
 
     /** @test */
-    public function it_hides_opencast_button_if_opencast_server_does_not_exists(): void
+    public function it_hides_opencast_action_buttons_if_opencast_server_does_not_exists(): void
     {
         $mockHandler = $this->swapOpencastClient();
 
@@ -435,7 +435,8 @@ class ManageClipsTest extends TestCase
         $mockHandler->append(new Response());
 
         $this->get(route('clips.edit', ClipFactory::ownedBy($this->signInRole($this->role))->create()))
-            ->assertDontSee('Ingest to Opencast');
+            ->assertDontSee('Ingest to Opencast')
+            ->assertDontSee('Transfer files from Opencast');
     }
 
     /** @test */
