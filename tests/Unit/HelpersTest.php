@@ -6,11 +6,12 @@ namespace Tests\Unit;
 use App\Models\Clip;
 use Facades\Tests\Setup\ClipFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\Testing\File;
 use Illuminate\Support\Facades\Storage;
+use Facades\Tests\Setup\FileFactory;
 use Tests\TestCase;
 
-class HelpersTest extends TestCase {
+class HelpersTest extends TestCase
+{
     use RefreshDatabase;
 
     /** @test */
@@ -41,13 +42,13 @@ class HelpersTest extends TestCase {
     {
         $disk = Storage::fake('video_dropzone');
 
-        $disk->putFileAs('', File::create('export_video.mp4', 1000), 'export_video.mp4');
+        $disk->putFileAs('', FileFactory::videoFile(), 'export_video_1080.mp4');
 
         $collection = fetchDropZoneFiles();
 
         $this->assertInstanceOf('Illuminate\Support\Collection', $collection);
 
-        $this->assertTrue($collection->contains('name', 'export_video.mp4'));
+        $this->assertTrue($collection->contains('name', 'export_video_1080.mp4'));
     }
 
     /** @test */

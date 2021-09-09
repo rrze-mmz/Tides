@@ -28,7 +28,7 @@ class StoreClipRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Gate::allows('create-clips', $this->route('clip'));
+        return Gate::allows('create-clips', $this->route('clip')) || $this->user()->isAdmin();
     }
 
     /**

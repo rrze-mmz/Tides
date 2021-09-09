@@ -7,6 +7,7 @@ use App\Models\Clip;
 use App\Models\Series;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Response;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Psr\Http\Message\ResponseInterface;
@@ -120,8 +121,10 @@ class OpencastService
             ]);
             $canceled = $this->client->get('api/events', [
                 'query' => [
-                    'filter' => 'series:' . $series->opencast_series_id . ',status:EVENTS.EVENTS.STATUS.PROCESSING_CANCELED',
-                    'sort'   => 'start_date:ASC'
+                    'filter'
+                           =>
+                        'series:' . $series->opencast_series_id . ',status:EVENTS.EVENTS.STATUS.PROCESSING_CANCELED',
+                    'sort' => 'start_date:ASC'
                 ]
             ]);
             $collection = collect(json_decode((string)$proccessed->getBody(), true));
@@ -134,8 +137,31 @@ class OpencastService
         return $merged;
     }
 
+    /**
+     * Fetch event metadata information as a collection
+     * @param $eventID
+     * @return Collection
+     */
+    public function getEventByEventID($eventID): Collection
+    {
+        try {
+            $this->response = $this->client->get('api/events/' . $eventID);
+        } catch (GuzzleException $exception) {
+            Log::error($exception);
+        }
+
+        return collect(json_decode((string)$this->response->getBody(), true));
+    }
+
+    /**
+     * Fetch all assets for a given event ID as collection
+     * @param $eventID
+     * @return Collection
+     */
     public function getAssetsByEventID($eventID): Collection
     {
+        $version = $this->getEventByEventID($eventID)->get('archive_version');
+
         try {
             $this->response = $this->client->get('assets/episode/' . $eventID);
         } catch (GuzzleException $exception) {
@@ -145,16 +171,32 @@ class OpencastService
         // change the xml response to xml object
         $xmlResponse = simplexml_load_string((string)$this->response->getBody());
 
+        //format the response and include the created/modified date
+        $dateCreated = (string)$xmlResponse->attributes()->start;
+
         // isolate the media key from XML Object
         $xmlResponse = (array)$xmlResponse->media;
+
 
         // create a collection from the XML Object track value
         $opencastAssets = collect($xmlResponse['track']);
 
         // return a collection map with uid => delivery tags
-        return $opencastAssets->mapWithKeys(function ($element) {
+        return $opencastAssets->mapWithKeys(function ($element) use ($version, $dateCreated) {
+            $extension = match (true) {
+                ((string)$element->mimetype === 'audio/mpeg') => '.mp3',
+                default => '.m4v',
+            };
             return [
-                (string)$element->attributes()->id => (string)$element->attributes()->type];
+                (string)$element->attributes()->id => [
+                    "tag"           => (string)$element->attributes()->type,
+                    "type"          => (string)$element->mimetype,
+                    'video'         => ((string)$element->video->resolution) ?: null,
+                    "version"       => $version,
+                    "date_modified" => Carbon::createFromTimeString($dateCreated)->toDateTimeString(),
+                    "name"          => $element->attributes()->id . $extension,
+                ]
+            ];
         });
     }
 

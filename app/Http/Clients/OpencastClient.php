@@ -6,5 +6,4 @@ use GuzzleHttp\Client;
 
 class OpencastClient extends Client
 {
-
 }

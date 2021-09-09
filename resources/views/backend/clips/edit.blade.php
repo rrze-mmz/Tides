@@ -136,7 +136,7 @@
                        type="submit"
                        text="Go to public page"
         />
-
+        
         @if ($clip->assets()->count())
             <x-form.button :link="route('admin.clips.triggerSmilFiles', $clip)"
                            type="submit"

@@ -79,4 +79,14 @@ class SeriesClipsTest extends TestCase
 
         $this->assertEquals(1, $series->clips()->count());
     }
+
+    /** @test */
+    public function an_admin_can_add_clip_to_series(): void
+    {
+        $series = SeriesFactory::ownedBy($this->signInRole('admin'))->create();
+
+        $this->post(route('series.clip.store', $series), Clip::factory()->raw())->assertStatus(302);
+
+        $this->assertEquals(1, $series->clips()->count());
+    }
 }

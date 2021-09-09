@@ -8,7 +8,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class VideoUploaded extends Mailable
+class AssetsTransferred extends Mailable
 {
     use Queueable;
     use SerializesModels;

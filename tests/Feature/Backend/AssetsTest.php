@@ -4,7 +4,7 @@
 namespace Tests\Feature\Backend;
 
 use App\Jobs\ConvertVideoForStreaming;
-use App\Mail\VideoUploaded;
+use App\Mail\AssetsTransferred;
 use App\Models\Asset;
 use Facades\Tests\Setup\ClipFactory;
 use Facades\Tests\Setup\FileFactory;
@@ -148,7 +148,7 @@ class AssetsTest extends TestCase
 
         $this->post(route('admin.assets.store', $clip), ['asset' => $file = FileFactory::videoFile()]);
 
-        Mail::assertSent(VideoUploaded::class);
+        Mail::assertSent(AssetsTransferred::class);
     }
 
     /** @test */

@@ -5,14 +5,14 @@ namespace Tests\Feature\Backend;
 
 use App\Jobs\CreateWowzaSmilFile;
 use App\Jobs\SendEmail;
-use App\Jobs\TransferDropzoneFiles;
-use App\Mail\VideoUploaded;
+use App\Jobs\TransferAssetsJob;
+use App\Jobs\TransferOpencastAssets;
+use App\Mail\AssetsTransferred;
 use App\Services\OpencastService;
 use Facades\Tests\Setup\ClipFactory;
 use Facades\Tests\Setup\FileFactory;
 use Facades\Tests\Setup\SeriesFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\Testing\File;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Mail;
@@ -48,7 +48,8 @@ class AssetsTransferTest extends TestCase
     /** @test */
     public function it_has_a_transfer_view_for_dropzone_files(): void
     {
-        $this->get(route('admin.clips.dropzone.listFiles', ClipFactory::ownedBy($this->signInRole($this->role))->create()))
+        $this->get(route('admin.clips.dropzone.listFiles',
+            ClipFactory::ownedBy($this->signInRole($this->role))->create()))
             ->assertStatus(200)
             ->assertViewIs('backend.clips.dropzone.listFiles');
     }
@@ -72,10 +73,75 @@ class AssetsTransferTest extends TestCase
             ->assertStatus(200)
             ->assertSee('no videos');
 
-        $disk->putFileAs('', File::create('export_video.mp4', 1000), 'export_video.mp4');
+        $disk->putFileAs('', FileFactory::videoFile(), 'export_video_1080.mp4');
 
         $this->get(route('admin.clips.dropzone.listFiles', ['clip' => $clip]))
-            ->assertSee(sha1('export_video.mp4'));
+            ->assertSee(sha1('export_video_1080.mp4'));
+    }
+
+    /** @test */
+    public function a_moderator_cannot_transfer_drop_zone_files_for_a_not_owned_clip(): void
+    {
+        $this->signInRole($this->role);
+
+        $this->post(route('admin.clips.dropzone.transfer', ClipFactory::create()))->assertStatus(403);
+    }
+
+    /** @test */
+    public function it_transfers_files_from_dropzone_to_clip(): void
+    {
+        Storage::fake('videos');
+        $fakeStorage = Storage::fake('video_dropzone');
+
+        $fakeStorage->putFileAs('', FileFactory::audioFile(), 'export_audio.mp3');
+        $fakeStorage->putFileAs('', FileFactory::videoFile(), 'export_video_1080.mp4');
+        $fakeStorage->putFileAs('', FileFactory::videoFile(), 'export_video_720.mp4');
+        $fakeStorage->putFileAs('', FileFactory::videoFile(), 'export_video_360.mp4');
+
+        $files = fetchDropZoneFiles()->sortBy('date_modified');
+
+        $videoHashHD = $files->keys()->first();
+        $videoHashSD = $files->keys()->last();
+
+        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
+
+        $this->followingRedirects()->post(route('admin.clips.dropzone.transfer', $clip),
+            ["files" => [$videoHashHD, $videoHashSD]]
+        )->assertStatus(200);
+
+        $this->get($clip->adminPath())
+            ->assertSee($files->first()['name'])
+            ->assertSee($files->last()['name'])
+            ->assertSee('camera.smil');
+    }
+
+    /** @test */
+    public function it_should_queue_the_transfer_dropzone_to_clip_job(): void
+    {
+        Bus::fake();
+
+        $this->post(route('admin.clips.dropzone.transfer',
+            ClipFactory::ownedBy($this->signInRole($this->role))->create()), [
+            'files' => [sha1('test_file_name')
+            ]]);
+
+        Bus::assertChained([
+            TransferAssetsJob::class,
+            CreateWowzaSmilFile::class,
+        ]);
+    }
+
+    /** @test */
+    public function it_should_send_an_email_after_transfer_job_is_completed(): void
+    {
+        Mail::fake();
+
+        $this->post(route('admin.clips.dropzone.transfer',
+            ClipFactory::ownedBy($this->signInRole($this->role))->create()), [
+            'files' => [sha1('test_file_name')
+            ]]);
+
+        Mail::assertQueued(AssetsTransferred::class);
     }
 
     /** @test */
@@ -109,9 +175,8 @@ class AssetsTransferTest extends TestCase
 
         $this->opencastService = app(OpencastService::class);
 
-        $mockHandler->append($this->mockSeriesProcessedEvents($series));
-
-        $mockHandler->append($this->mockSeriesCanceledEvents($series));
+        $mockHandler->append($this->mockEventResponse($series));
+        $mockHandler->append($this->mockEventResponse($series, 'STOPPED'));
 
         $this->get(route('admin.clips.opencast.listEvents', ['clip' => $series->clips()->first()]))
             ->assertStatus(200)
@@ -121,63 +186,100 @@ class AssetsTransferTest extends TestCase
     }
 
     /** @test */
-    public function a_moderator_cannot_transfer_drop_zone_files_for_a_not_owned_clip(): void
+    public function a_moderator_cannot_view_opencast_events_list_for_a_not_owned_clip(): void
     {
         $this->signInRole($this->role);
 
-        $this->post(route('admin.clips.dropzone.transfer', ClipFactory::create()))->assertStatus(403);
+        $this->get(route('admin.clips.opencast.listEvents', ClipFactory::create()))->assertStatus(403);
     }
 
     /** @test */
-    public function it_transfers_files_from_dropzone_to_clip(): void
-    {
-        Storage::fake('videos');
-
-        Storage::fake('video_dropzone')->putFileAs('', FileFactory::videoFile(), 'export_video_1080.mp4');
-        Storage::fake('video_dropzone')->putFileAs('', FileFactory::videoFile(), 'export_video_720.mp4');
-        Storage::fake('video_dropzone')->putFileAs('', FileFactory::videoFile(), 'export_video_360.mp4');
-
-
-        $files = fetchDropZoneFiles()->sortBy('date_modified');
-
-        $videoHD = $files->first();
-        $videoSD = $files->last();
-
-        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
-
-        $this->followingRedirects()->post(route('admin.clips.dropzone.transfer', $clip),
-            ["files" => [$videoHD['hash'], $videoSD['hash']]]
-        )->assertStatus(200);
-
-
-        $this->get($clip->adminPath())
-            ->assertSee($videoHD['name'])
-            ->assertSee($videoSD['name']);
-    }
-
-    /** @test */
-    public function it_should_queue_the_transfer_dropzone_to_clip_job(): void
+    public function it_should_queue_the_transfer_opencast_assets_job(): void
     {
         Bus::fake();
 
-        $this->post(route('admin.clips.dropzone.transfer', ClipFactory::ownedBy($this->signInRole($this->role))->create()), [
-            'files' => [sha1('test_file_name')]]);
+        $opencastEventID = $this->faker->uuid();
+
+        $archiveVersion = 2;
+        $audioUID = $this->faker->uuid();
+        $videoHD_UID = $this->faker->uuid();
+
+        $mockHandler = $this->swapOpencastClient();
+
+        $this->opencastService = app(OpencastService::class);
+
+        $mockHandler->append($this->mockEventByEventID($opencastEventID, 'SUCCEEDED', $archiveVersion));
+        $mockHandler->append($this->mockEventAssets($videoHD_UID, $audioUID));
+        $this->opencastService = app(OpencastService::class);
+
+        $this->post(route('admin.clips.opencast.transfer',
+            ClipFactory::ownedBy($this->signInRole($this->role))->create()), [
+            'eventID' => $this->faker->uuid()
+        ]);
 
         Bus::assertChained([
-            TransferDropzoneFiles::class,
+            TransferAssetsJob::class,
             CreateWowzaSmilFile::class,
-
         ]);
     }
 
     /** @test */
-    public function it_should_send_an_email_after_transfer_job_is_completed(): void
+    public function it_shows_an_error_on_opencast_transfer_if_event_is_not_a_uuid(): void
     {
-        Mail::fake();
+        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
 
-        $this->post(route('admin.clips.dropzone.transfer', ClipFactory::ownedBy($this->signInRole($this->role))->create()), [
-            'files' => [sha1('test_file_name')]]);
+        $this->post(route('admin.clips.opencast.transfer', $clip), ['eventID' => 'test'])
+            ->assertSessionHasErrors('eventID');
 
-        Mail::assertQueued(VideoUploaded::class);
+        $eventID = $this->faker->uuid();
+
+        $this->post(route('admin.clips.opencast.transfer', $clip), ['eventID' => $eventID])
+            ->assertSessionDoesntHaveErrors('eventID');
+    }
+
+    /** @test */
+    public function it_transfers_opencast_event_assets_to_clip(): void
+    {
+        Storage::fake('videos');
+        $fakeStorage = Storage::fake('opencast_archive');
+
+        $opencastEventID = $this->faker->uuid();
+        $archiveVersion = 2;
+        $audioUID = $this->faker->uuid();
+        $videoHD_UID = $this->faker->uuid();
+
+        $mockHandler = $this->swapOpencastClient();
+
+        $this->opencastService = app(OpencastService::class);
+
+        $mockHandler->append($this->mockEventByEventID($opencastEventID, 'SUCCEEDED', $archiveVersion));
+        $mockHandler->append($this->mockEventAssets($videoHD_UID, $audioUID));
+
+
+        $fakeStorage
+            ->putFileAs(
+                '',
+                FileFactory::videoFile(), '/archive/mh_default_org/' .
+                $opencastEventID . '/' . $archiveVersion . '/' . $audioUID . '.mp3'
+            );
+        $fakeStorage
+            ->putFileAs(
+                '',
+                FileFactory::videoFile(), '/archive/mh_default_org/' .
+                $opencastEventID . '/' . $archiveVersion . '/' . $videoHD_UID . '.m4v'
+            );
+
+        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
+
+        $this->post(route('admin.clips.opencast.transfer', $clip),
+            ["eventID" => $opencastEventID]
+        )->assertStatus(302);
+
+        $mockHandler->append($this->mockHealthResponse());
+
+        $this->get($clip->adminPath())
+            ->assertSee($videoHD_UID)
+            ->assertSee($audioUID)
+            ->assertSee('camera.smil');
     }
 }

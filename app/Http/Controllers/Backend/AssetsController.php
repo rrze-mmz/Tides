@@ -6,7 +6,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UploadAssetRequest;
 use App\Jobs\ConvertVideoForStreaming;
-use App\Mail\VideoUploaded;
+use App\Mail\AssetsTransferred;
 use App\Models\Asset;
 use App\Models\Clip;
 use FFMpeg\Exception\ExecutableNotFoundException;
@@ -66,7 +66,7 @@ class AssetsController extends Controller
             $this->dispatch(new ConvertVideoForStreaming($this->asset));
         }
 
-        Mail::to(auth()->user()->email)->send(new VideoUploaded($clip));
+        Mail::to(auth()->user()->email)->send(new AssetsTransferred($clip));
 
         return redirect($clip->adminPath());
     }

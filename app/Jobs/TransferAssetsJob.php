@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
 
-class TransferDropzoneFiles implements ShouldQueue
+class TransferAssetsJob implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
@@ -28,8 +28,9 @@ class TransferDropzoneFiles implements ShouldQueue
      *
      * @param Clip $clip
      * @param Collection $files
+     * @param string $eventID
      */
-    public function __construct(protected Clip $clip, protected Collection $files)
+    public function __construct(protected Clip $clip, protected Collection $files, protected string $eventID = '')
     {
     }
 
@@ -37,18 +38,23 @@ class TransferDropzoneFiles implements ShouldQueue
      * Copy a collection of video files to clip path
      *
      * @return void
-     * @throws FileExistsException
+     * @throws FileExistsException|FileNotFoundException
      */
     public function handle(): void
     {
         $clipStoragePath = getClipStoragePath($this->clip);
 
         $this->files->each(function ($file, $key) use ($clipStoragePath) {
+            $isVideo = (bool)$file['video'];
+            $storageDisk = ($this->eventID !== '')
+                ? Storage::disk('opencast_archive')->readStream('/' . config('opencast.archive_path') .
+                    '/' . $this->eventID .
+                    '/' . $file['version'] .
+                    '/' . $file['name'])
+                : Storage::disk('video_dropzone')->readStream($file['name']);
+
             try {
-                Storage::disk('videos')->writeStream(
-                    $clipStoragePath . '/' . $file['name'],
-                    Storage::disk('video_dropzone')->readStream($file['name'])
-                );
+                Storage::disk('videos')->writeStream($clipStoragePath . '/' . $file['name'], $storageDisk);
             } catch (FileNotFoundException $e) {
                 Log::error($e);
             }
@@ -61,20 +67,26 @@ class TransferDropzoneFiles implements ShouldQueue
                 'original_file_name' => $file['name'],
                 'path'               => $storedFile,
                 'duration'           => $ffmpeg->getDurationInSeconds(),
-                'width'              => $ffmpeg->getVideoStream()->getDimensions()->getWidth(),
-                'height'             => $ffmpeg->getVideoStream()->getDimensions()->getHeight(),
+                'width'              => ($isVideo)
+                    ? $ffmpeg->getVideoStream()->getDimensions()->getWidth()
+                    : 0,
+                'height'             => ($isVideo)
+                    ? $ffmpeg->getVideoStream()->getDimensions()->getHeight()
+                    : 0,
                 'type'               => 'video',
             ];
 
             $this->clip->addAsset($attributes);
 
-            //generate a poster image for the clip
-            $ffmpeg->getFrameFromSeconds(5)
-                ->export()
-                ->toDisk('thumbnails')
-                ->save($this->clip->id . '_poster.png');
+            if ($isVideo) {
+                //generate a poster image for the clip
+                $ffmpeg->getFrameFromSeconds(5)
+                    ->export()
+                    ->toDisk('thumbnails')
+                    ->save($this->clip->id . '_poster.png');
 
-            $this->clip->updatePosterImage();
+                $this->clip->updatePosterImage();
+            }
         });
     }
 }

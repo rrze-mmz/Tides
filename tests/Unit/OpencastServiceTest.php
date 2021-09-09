@@ -72,7 +72,7 @@ class OpencastServiceTest extends TestCase
     }
 
     /** @test */
-    public function it_fetch_running_workflows_for_a_series(): void
+    public function it_fetch_running_workflows_for_a_given_series(): void
     {
         $series = Series::factory()->create(['opencast_series_id' => Str::uuid()]);
 
@@ -86,13 +86,12 @@ class OpencastServiceTest extends TestCase
     }
 
     /** @test */
-    public function if_fetches_all_finished_events_for_a_series(): void
+    public function if_fetches_a_collection_of_all_finished_events_for_a_given_series(): void
     {
         $series = Series::factory()->create(['opencast_series_id' => Str::uuid()]);
 
-        $this->mockHandler->append($this->mockSeriesProcessedEvents($series));
-
-        $this->mockHandler->append($this->mockSeriesCanceledEvents($series));
+        $this->mockHandler->append($this->mockEventResponse($series, 'SUCCEEDED'));
+        $this->mockHandler->append($this->mockEventResponse($series, 'STOPPED'));
 
         $response = $this->opencastService->getEventsBySeriesID($series);
 
@@ -101,6 +100,32 @@ class OpencastServiceTest extends TestCase
         $this->assertTrue($response->pluck('processing_state')->contains('STOPPED'));
 
         $this->assertTrue($response->pluck('processing_state')->contains('SUCCEEDED'));
+
+        $this->assertEquals($series->opencast_series_id, $response->first()['is_part_of']);
+
+    }
+
+    /** @test */
+    public function it_fetches_a_collection_of_all_assets_for_a_given_event(): void
+    {
+        $this->mockHandler->append($this->mockEventAssets($this->faker->uuid(), $this->faker->uuid()));
+        $this->mockHandler->append($this->mockEventAssets($this->faker->uuid(), $this->faker->uuid()));
+
+        $response = $this->opencastService->getAssetsByEventID($this->faker->uuid);
+
+        $this->assertInstanceOf(Collection::class, $response);
+    }
+
+    /** @test */
+    public function it_fetches_all_metadata_for_a_single_event(): void
+    {
+        $series = Series::factory()->create(['opencast_series_id' => Str::uuid()]);
+
+        $this->mockHandler->append($this->mockEventResponse($series));
+
+        $response = $this->opencastService->getEventByEventID($this->faker->uuid());
+
+        $this->assertInstanceOf(Collection::class, $response);
     }
 
     /** @test */

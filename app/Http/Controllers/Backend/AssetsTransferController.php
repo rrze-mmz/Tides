@@ -6,11 +6,11 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Jobs\CreateWowzaSmilFile;
 use App\Jobs\SendEmail;
-use App\Jobs\TransferDropzoneFiles;
-use App\Mail\VideoUploaded;
+use App\Jobs\TransferAssetsJob;
+use App\Jobs\TransferOpencastAssets;
+use App\Mail\AssetsTransferred;
 use App\Models\Clip;
 use App\Services\OpencastService;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -26,7 +26,6 @@ class AssetsTransferController extends Controller
      *
      * @param Clip $clip
      * @return View
-     * @throws AuthorizationException
      */
     public function listDropzoneFiles(Clip $clip): View
     {
@@ -42,21 +41,27 @@ class AssetsTransferController extends Controller
      * @param Clip $clip
      * @param Request $request
      * @return RedirectResponse
-     * @throws AuthorizationException
      */
     public function transferDropzoneFiles(Clip $clip, Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'files' => 'required|array'
+            'files'   => 'required|array',
+            'files.*' => 'alpha_num',
         ]);
 
+        $assets = fetchDropZoneFiles()->filter(function ($file, $key) use ($validated) {
+            if (in_array($key, $validated['files'])) {
+                return $file;
+            }
+        });
+
         Bus::chain([
-            new TransferDropzoneFiles($clip, fetchDropZoneFiles()->whereIn('hash', $validated['files'])),
+            new TransferAssetsJob($clip, $assets),
             new CreateWowzaSmilFile($clip),
         ])->dispatch();
 
         //mail can be chained via anonymous function inside the bus but then the test  fails
-        Mail::to($clip->owner->email)->queue(new VideoUploaded($clip));
+        Mail::to($clip->owner->email)->queue(new AssetsTransferred($clip));
 
         return redirect($clip->adminPath());
     }
@@ -85,17 +90,27 @@ class AssetsTransferController extends Controller
      * @param Clip $clip
      * @param Request $request
      * @param OpencastService $opencastService
+     * @return RedirectResponse
      */
     public function transferOpencastFiles(Clip $clip, Request $request, OpencastService $opencastService)
     {
         $validated = $request->validate([
-            'eventID' => 'required|uuid'
+            'eventID' => 'required|uuid',
         ]);
 
         $assets = $opencastService->getAssetsByEventID($validated['eventID']);
 
-        dd($assets->filter(function ($value, $item) {
-            return Str::contains($value, 'final');
-        }));
+        $deliveryAssets = $assets->filter(function ($value, $item) {
+            return Str::contains($value['tag'], 'final');
+        });
+
+        Bus::chain([
+            new TransferAssetsJob($clip, $deliveryAssets, $validated['eventID']),
+            new CreateWowzaSmilFile($clip),
+        ])->dispatch();
+
+        Mail::to($clip->owner->email)->queue(new AssetsTransferred($clip));
+
+        return redirect($clip->adminPath());
     }
 }

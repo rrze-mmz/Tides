@@ -10,8 +10,10 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use PHPUnit\Util\Xml;
+use Spatie\ArrayToXml\ArrayToXml;
 
 
 trait WorksWithOpencastClient
@@ -58,7 +60,14 @@ trait WorksWithOpencastClient
         ]));
     }
 
-    public function mockSeriesProcessedEvents(Series $series): Response
+    /**
+     * Openast single event metadata response
+     *
+     * @param Series $series
+     * @param string $status "SUCCEEDED" | "STOPPED"
+     * @return Response
+     */
+    public function mockEventResponse(Series $series, string $status = 'SUCCEEDED', int $archiveVersion = 4): Response
     {
         return new Response(201, [], json_encode([
                 [
@@ -73,9 +82,9 @@ trait WorksWithOpencastClient
                     'language'           => '',
                     'source'             => '',
                     'title'              => 'Processed event',
-                    'processing_state'   => 'SUCCEEDED',
+                    'processing_state'   => $status,
                     'license'            => '',
-                    'archive_version'    => 4,
+                    'archive_version'    => $archiveVersion,
                     'contributor'        => [],
                     'series'             => $series->title,
                     'has_previews'       => false,
@@ -88,34 +97,81 @@ trait WorksWithOpencastClient
         );
     }
 
-    public function mockSeriesCanceledEvents(Series $series): Response
+    /**
+     * Openast single event metadata response
+     *
+     * @param Series $series
+     * @param string $status "SUCCEEDED" | "STOPPED"
+     * @return Response
+     */
+    public function mockEventByEventID($eventID, string $status = 'SUCCEEDED', int $archiveVersion = 4): Response
     {
         return new Response(201, [], json_encode([
-                [
-                    'identifier'         => Str::uuid(),
-                    'creator'            => 'Opencast Project Administrator',
-                    'presenter'          => [],
-                    'created'            => '2021-05-10T14:21:00Z',
-                    'is_part_of'         => $series->opencast_series_id,
-                    'subjects'           => [],
-                    'start'              => '2021-05-17T14:21:21Z',
-                    'description'        => '',
-                    'language'           => '',
-                    'source'             => '',
-                    'title'              => 'Canceled event',
-                    'processing_state'   => 'STOPPED',
-                    'license'            => '',
-                    'archive_version'    => 4,
-                    'contributor'        => [],
-                    'series'             => $series->title,
-                    'has_previews'       => false,
-                    'location'           => '',
-                    'rightsholder'       => '',
-                    'publication_status' => [],
-                    'status'             => 'EVENTS.EVENTS.STATUS.PROCESSING_CANCELED',
-                ],
+                'identifier'         => $eventID,
+                'creator'            => 'Opencast Project Administrator',
+                'presenter'          => [],
+                'created'            => '2021-05-10T14:21:00Z',
+                'is_part_of'         => $this->faker->uuid(),
+                'subjects'           => [],
+                'start'              => '2021-05-10T14:21:21Z',
+                'description'        => '',
+                'language'           => '',
+                'source'             => '',
+                'title'              => 'Processed event',
+                'processing_state'   => $status,
+                'license'            => '',
+                'archive_version'    => $archiveVersion,
+                'contributor'        => [],
+                'series'             => $this->faker->sentence(10),
+                'has_previews'       => false,
+                'location'           => '',
+                'rightsholder'       => '',
+                'publication_status' => [],
+                'status'             => 'EVENTS.EVENTS.STATUS.PROCESSED',
             ])
         );
+    }
+
+    public function mockEventAssets($videoHDAssetID, $audioAssetID): Response
+    {
+        $output = new ArrayToXml([
+            'media' => [
+                'track' => [
+                    [
+                        '_attributes' => [
+                            'id'   => $this->faker->uuid(),
+                            'type' => 'source/presenter',
+                        ],
+                        'mimetype'    => 'video/mp4',
+                        'video'       => [
+                            'resolution' => '1280x720']
+                    ],
+                    [
+                        '_attributes' => [
+                            'id'   => $videoHDAssetID,
+                            'type' => 'final/presenter',
+                        ],
+                        'mimetype'    => 'video/mp4',
+                        'video'       => [
+                            'resolution' => '1280x720']
+                    ],
+                    [
+                        '_attributes' => [
+                            'id'   => $audioAssetID,
+                            'type' => 'final/soundfile',
+                        ],
+                        'mimetype'    => 'audio/mpeg',
+                    ]
+                ],
+            ]],
+            ['rootElementName' => 'mediapackage',
+             '_attributes'     => [
+                 'start' => Carbon::now()->toIso8601ZuluString(),
+             ]], true, 'UTF-8', '1.0', []);
+
+        return new Response(200, [], (
+        $output->toXml()
+        ));
     }
 
     public function mockSeriesRunningWorkflowsResponse(Series $series, bool $multiple): Response
