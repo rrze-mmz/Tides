@@ -142,11 +142,7 @@ class ClipTest extends TestCase
     /** @test */
     public function a_visitor_cannot_view_a_clip_that_belongs_to_a_not_public_series(): void
     {
-        $series = SeriesFactory::create();
-
-        $series->isPublic = false;
-
-        $series->save();
+        $series = SeriesFactory::notPublic()->create();
 
         $this->clip->series_id = $series->id;
 
@@ -162,11 +158,7 @@ class ClipTest extends TestCase
 
         $user = $this->signIn();
 
-        $series = SeriesFactory::create();
-
-        $series->isPublic = false;
-
-        $series->save();
+        $series = SeriesFactory::notPublic()->create();
 
         $this->clip->series_id = $series->id;
         $this->clip->owner_id = $user->id;

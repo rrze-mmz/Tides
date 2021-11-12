@@ -88,12 +88,12 @@ class OpencastServiceTest extends TestCase
     /** @test */
     public function if_fetches_a_collection_of_all_finished_events_for_a_given_series(): void
     {
-        $series = Series::factory()->create(['opencast_series_id' => Str::uuid()]);
+        $seriesID = $this->faker->uuid();
 
-        $this->mockHandler->append($this->mockEventResponse($series, 'SUCCEEDED'));
-        $this->mockHandler->append($this->mockEventResponse($series, 'STOPPED'));
+        $this->mockHandler->append($this->mockEventResponse($seriesID, 'SUCCEEDED'));
+        $this->mockHandler->append($this->mockEventResponse($seriesID, 'STOPPED'));
 
-        $response = $this->opencastService->getEventsBySeriesID($series);
+        $response = $this->opencastService->getEventsBySeriesID($seriesID);
 
         $this->assertInstanceOf(Collection::class, $response);
 
@@ -101,7 +101,7 @@ class OpencastServiceTest extends TestCase
 
         $this->assertTrue($response->pluck('processing_state')->contains('SUCCEEDED'));
 
-        $this->assertEquals($series->opencast_series_id, $response->first()['is_part_of']);
+        $this->assertEquals($seriesID, $response->first()['is_part_of']);
 
     }
 

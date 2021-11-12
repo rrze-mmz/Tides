@@ -61,24 +61,29 @@ trait WorksWithOpencastClient
     }
 
     /**
-     * Openast single event metadata response
+     * Opencast single event metadata response
      *
-     * @param Series $series
+     * @param $seriesID
+     * @param string $identifier
      * @param string $status "SUCCEEDED" | "STOPPED"
+     * @param int $archiveVersion
      * @return Response
      */
-    public function mockEventResponse(Series $series, string $status = 'SUCCEEDED', int $archiveVersion = 4): Response
+    public function mockEventResponse($seriesID,
+                                      string $status = 'SUCCEEDED',
+                                      int $archiveVersion = 4,
+                                      string $identifier = 'a131d2e2-9de2-40cb-9716-af9824055f4a'): Response
     {
         return new Response(201, [], json_encode([
                 [
-                    'identifier'         => Str::uuid(),
+                    'identifier'         => $identifier,
                     'creator'            => 'Opencast Project Administrator',
                     'presenter'          => [],
-                    'created'            => '2021-05-10T14:21:00Z',
-                    'is_part_of'         => $series->opencast_series_id,
+                    'created'            => Carbon::now()->toIso8601ZuluString(),
+                    'is_part_of'         => $seriesID,
                     'subjects'           => [],
-                    'start'              => '2021-05-10T14:21:21Z',
-                    'description'        => '',
+                    'start'              => Carbon::now()->addMinutes(1)->toIso8601ZuluString(),
+                    'description'        => '1', // A clip ID that belongs to the series
                     'language'           => '',
                     'source'             => '',
                     'title'              => 'Processed event',
@@ -86,7 +91,7 @@ trait WorksWithOpencastClient
                     'license'            => '',
                     'archive_version'    => $archiveVersion,
                     'contributor'        => [],
-                    'series'             => $series->title,
+                    'series'             => $this->faker->text(),
                     'has_previews'       => false,
                     'location'           => '',
                     'rightsholder'       => '',
@@ -98,20 +103,25 @@ trait WorksWithOpencastClient
     }
 
     /**
-     * Openast single event metadata response
+     * Opencast single event metadata response
      *
-     * @param Series $series
+     * @param $eventID
      * @param string $status "SUCCEEDED" | "STOPPED"
+     * @param int $archiveVersion
+     * @param string $seriesID
      * @return Response
      */
-    public function mockEventByEventID($eventID, string $status = 'SUCCEEDED', int $archiveVersion = 4): Response
+    public function mockEventByEventID($eventID,
+                                       string $status = 'SUCCEEDED',
+                                       int $archiveVersion = 4,
+                                       string $seriesID = 'a131d2e2-9de2-40cb-9716-af9824055f23'): Response
     {
         return new Response(201, [], json_encode([
                 'identifier'         => $eventID,
                 'creator'            => 'Opencast Project Administrator',
                 'presenter'          => [],
                 'created'            => '2021-05-10T14:21:00Z',
-                'is_part_of'         => $this->faker->uuid(),
+                'is_part_of'         => $seriesID,
                 'subjects'           => [],
                 'start'              => '2021-05-10T14:21:21Z',
                 'description'        => '',

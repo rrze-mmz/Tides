@@ -45,11 +45,7 @@ class SeriesTest extends TestCase
     /** @test */
     public function it_shows_not_authorized_page_for_non_public_series_for_visitors(): void
     {
-        $series = SeriesFactory::withClips(2)->withAssets(1)->create();
-
-        $series->isPublic = false;
-
-        $series->save();
+        $series = SeriesFactory::withClips(2)->withAssets(1)->notPublic()->create();
 
         $this->get(route('frontend.series.show', $series))->assertStatus(403);
     }
@@ -57,11 +53,7 @@ class SeriesTest extends TestCase
     /** @test */
     public function it_shows_not_authorized_page_for_non_public_series_for_now_series_owner(): void
     {
-        $series = SeriesFactory::withClips(2)->withAssets(1)->create();
-
-        $series->isPublic = false;
-
-        $series->save();
+        $series = SeriesFactory::withClips(2)->withAssets(1)->notPublic()->create();
 
         $this->signIn();
 
@@ -71,11 +63,7 @@ class SeriesTest extends TestCase
     /** @test */
     public function a_series_owner_can_view_a_non_public_series(): void
     {
-        $series = SeriesFactory::ownedBy($this->signIn())->withClips(2)->withAssets(1)->create();
-
-        $series->isPublic = false;
-
-        $series->save();
+        $series = SeriesFactory::ownedBy($this->signIn())->withClips(2)->withAssets(1)->notPublic()->create();
 
         $this->get(route('frontend.series.show', $series))->assertStatus(200);
     }
@@ -83,11 +71,7 @@ class SeriesTest extends TestCase
     /** @test */
     public function an_admin_can_view_a_non_public_series(): void
     {
-        $series = SeriesFactory::withClips(2)->withAssets(1)->create();
-
-        $series->isPublic = false;
-
-        $series->save();
+        $series = SeriesFactory::withClips(2)->withAssets(1)->notPublic()->create();
 
         $this->signInRole('admin');
 

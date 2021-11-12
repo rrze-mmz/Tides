@@ -16,11 +16,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class AssetsTransferController extends Controller
 {
+    use Transferable;
+
     /**
      * List all available files inside the dropzone folder
      *
@@ -49,20 +50,8 @@ class AssetsTransferController extends Controller
             'files.*' => 'alpha_num',
         ]);
 
-        $assets = fetchDropZoneFiles()->filter(function ($file, $key) use ($validated) {
-            if (in_array($key, $validated['files'])) {
-                return $file;
-            }
-        });
-
-        Bus::chain([
-            new TransferAssetsJob($clip, $assets),
-            new CreateWowzaSmilFile($clip),
-        ])->dispatch();
-
-        //mail can be chained via anonymous function inside the bus but then the test  fails
-        Mail::to($clip->owner->email)->queue(new AssetsTransferred($clip));
-
+        $this->checkDropzoneFilesForClipUpload($clip, $validated);
+        
         return redirect($clip->adminPath());
     }
 
@@ -75,7 +64,7 @@ class AssetsTransferController extends Controller
      */
     public function listOpencastEvents(OpencastService $opencastService, Clip $clip): View
     {
-        $events = $opencastService->getEventsBySeriesID($clip->series);
+        $events = $opencastService->getEventsBySeriesID($clip->series->opencast_series_id);
 
         return view('backend.clips.opencast.listEvents', [
             'clip'   => $clip,
@@ -92,24 +81,16 @@ class AssetsTransferController extends Controller
      * @param OpencastService $opencastService
      * @return RedirectResponse
      */
-    public function transferOpencastFiles(Clip $clip, Request $request, OpencastService $opencastService)
-    {
+    public function transferOpencastFiles(
+        Clip            $clip,
+        Request         $request,
+        OpencastService $opencastService
+    ): RedirectResponse {
         $validated = $request->validate([
             'eventID' => 'required|uuid',
         ]);
 
-        $assets = $opencastService->getAssetsByEventID($validated['eventID']);
-
-        $deliveryAssets = $assets->filter(function ($value, $item) {
-            return Str::contains($value['tag'], 'final');
-        });
-
-        Bus::chain([
-            new TransferAssetsJob($clip, $deliveryAssets, $validated['eventID']),
-            new CreateWowzaSmilFile($clip),
-        ])->dispatch();
-
-        Mail::to($clip->owner->email)->queue(new AssetsTransferred($clip));
+        $this->checkOpencastAssetsForClipUpload($clip, $validated['eventID'], $opencastService);
 
         return redirect($clip->adminPath());
     }

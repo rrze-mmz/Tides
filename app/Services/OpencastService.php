@@ -104,18 +104,18 @@ class OpencastService
 
     /**
      * Returning opencast processed and canceled events for a series
-     *
-     * @param Series $series
+     *$events = $opencastService->getEventsBySeriesID($clip->series->opencast_series_id);
+     * @param $seriesID
      * @return Collection
      */
-    public function getEventsBySeriesID(Series $series): Collection
+    public function getEventsBySeriesID($seriesID): Collection
     {
         $merged = collect([]);
 
         try {
             $proccessed = $this->client->get('api/events', [
                 'query' => [
-                    'filter' => 'series:' . $series->opencast_series_id . ',status:EVENTS.EVENTS.STATUS.PROCESSED',
+                    'filter' => 'series:' . $seriesID . ',status:EVENTS.EVENTS.STATUS.PROCESSED',
                     'sort'   => 'start_date:ASC'
                 ]
             ]);
@@ -123,7 +123,7 @@ class OpencastService
                 'query' => [
                     'filter'
                            =>
-                        'series:' . $series->opencast_series_id . ',status:EVENTS.EVENTS.STATUS.PROCESSING_CANCELED',
+                        'series:' . $seriesID . ',status:EVENTS.EVENTS.STATUS.PROCESSING_CANCELED',
                     'sort' => 'start_date:ASC'
                 ]
             ]);

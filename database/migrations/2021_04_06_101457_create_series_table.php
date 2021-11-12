@@ -19,7 +19,7 @@ class CreateSeriesTable extends Migration
             $table->foreignId('owner_id')->references('id')->on('users');
             $table->string('slug')->unique();
             $table->text('description')->nullable();
-            $table->uuid('opencast_series_id')->nullable()->default(null);
+            $table->text('opencast_series_id')->nullable()->default(null);
             $table->string('password')->nullable();
             $table->boolean('isPublic')->default(true);
             $table->timestamps();

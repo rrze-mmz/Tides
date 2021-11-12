@@ -162,6 +162,22 @@ class ManageSeriesTest extends TestCase
     }
 
     /** @test */
+    public function an_admin_can_create_a_series(): void
+    {
+        $this->signInRole('admin');
+
+        $this->post(route('series.store'),
+            [
+                'title'           => 'Test title',
+                'description'     => 'Test description',
+                'organization_id' => '1',
+            ]
+        );
+
+        $this->assertDatabaseHas('series', ['title' => 'Test title']);
+    }
+
+    /** @test */
     public function it_shows_a_flash_message_when_a_series_is_created(): void
     {
         $this->signInRole($this->role);

@@ -17,7 +17,7 @@ class SeriesPolicy
      */
     public function create(User $user): bool
     {
-        return auth()->check() && $user->isModerator();
+        return auth()->check() && ($user->isModerator() || $user->isAdmin());
     }
 
     /**

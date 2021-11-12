@@ -10,6 +10,7 @@ use App\Services\OpencastService;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Log;
 
 class SeriesController extends Controller
 {

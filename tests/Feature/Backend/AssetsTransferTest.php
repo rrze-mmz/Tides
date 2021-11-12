@@ -149,11 +149,8 @@ class AssetsTransferTest extends TestCase
     {
         $series = SeriesFactory::withClips(2)
             ->ownedBy($this->signInRole($this->role))
+            ->withOpencastID()
             ->create();
-
-        $series->opencast_series_id = Str::uuid();
-
-        $series->save();
 
         $this->get(route('admin.clips.opencast.listEvents', ['clip' => $series->clips()->first()]))
             ->assertStatus(200)
@@ -165,18 +162,15 @@ class AssetsTransferTest extends TestCase
     {
         $series = SeriesFactory::withClips(2)
             ->ownedBy($this->signInRole($this->role))
+            ->withOpencastID()
             ->create();
-
-        $series->opencast_series_id = Str::uuid();
-
-        $series->save();
 
         $mockHandler = $this->swapOpencastClient();
 
         $this->opencastService = app(OpencastService::class);
 
-        $mockHandler->append($this->mockEventResponse($series));
-        $mockHandler->append($this->mockEventResponse($series, 'STOPPED'));
+        $mockHandler->append($this->mockEventResponse($series->opencast_series_id));
+        $mockHandler->append($this->mockEventResponse($series->opencast_series_id, 'STOPPED'));
 
         $this->get(route('admin.clips.opencast.listEvents', ['clip' => $series->clips()->first()]))
             ->assertStatus(200)
