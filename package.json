@@ -14,7 +14,7 @@
         "autoprefixer": "^10.2.4",
         "axios": "^0.21",
         "jquery": "^3.6.0",
-        "jquery-ui": "^1.12.1",
+        "jquery-ui": "^1.13.0",
         "laravel-mix": "^6.0.13",
         "lodash": "^4.17.19",
         "postcss": "^8.2.6",
