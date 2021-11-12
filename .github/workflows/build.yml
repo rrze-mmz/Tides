@@ -29,9 +29,9 @@ jobs:
     - name: Directory Permissions
       run: chmod -R 777 storage bootstrap/cache
     - name: Create Log Dir
-      run: mkdir /var/log/tides
+      run: sudo mkdir /var/log/tides
     - name: Set log permissions
-      run: chmod -R 644 /var/log/tides
+      run: sudo chmod -R 644 /var/log/tides
     - name: Create Database
       run: |
         mkdir -p database
