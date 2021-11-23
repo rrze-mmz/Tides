@@ -43,8 +43,8 @@ class FetchOpencastAssetsCommandTest extends TestCase
 
         $seriesWithoutAssets = SeriesFactory::withClips(1)->withOpencastID()->create();
 
-        $this->mockHandler->append($this->mockEventResponse($seriesWithoutAssets->opencast_series_id,
-            'SUCCEEDED', 4, $opencastEventID));
+        $this->mockHandler->append($this->mockEventResponse($seriesWithoutAssets,
+            'SUCCEEDED', 'EVENTS.EVENTS.STATUS.SUCCEDED', 4, $opencastEventID));
 
         $this->mockHandler->append($this->mockEventAssets($videoHD_UID, $audioUID));
         $this->mockHandler->append($this->mockEventByEventID($opencastEventID, 'SUCCEEDED', $archiveVersion));

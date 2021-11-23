@@ -17,7 +17,6 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use Tests\Setup\WorksWithOpencastClient;
 use Tests\TestCase;
 
@@ -169,8 +168,8 @@ class AssetsTransferTest extends TestCase
 
         $this->opencastService = app(OpencastService::class);
 
-        $mockHandler->append($this->mockEventResponse($series->opencast_series_id));
-        $mockHandler->append($this->mockEventResponse($series->opencast_series_id, 'STOPPED'));
+        $mockHandler->append($this->mockEventResponse($series));
+        $mockHandler->append($this->mockEventResponse($series, 'STOPPED', 'EVENTS.EVENTS.STATUS.STOPPED'));
 
         $this->get(route('admin.clips.opencast.listEvents', ['clip' => $series->clips()->first()]))
             ->assertStatus(200)

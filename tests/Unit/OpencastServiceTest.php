@@ -86,14 +86,30 @@ class OpencastServiceTest extends TestCase
     }
 
     /** @test */
+    public function it_fetch_failed_workflows_for_a_given_series(): void
+    {
+        $series = Series::factory()->create(['opencast_series_id' => Str::uuid()]);
+
+        $this->mockHandler->append($this->mockEventResponse(
+            $series, 'FAILED', 'EVENTS.EVENTS.STATUS.PROCESSING_FAILURE'
+        ));
+
+        $response = $this->opencastService->getFailedEventsBySeries($series);
+
+        $this->assertTrue($response->pluck('processing_state')->contains('FAILED'));
+
+        $this->assertEquals($series->opencast_series_id, $response->first()['is_part_of']);
+    }
+
+    /** @test */
     public function if_fetches_a_collection_of_all_finished_events_for_a_given_series(): void
     {
-        $seriesID = $this->faker->uuid();
+        $series = SeriesFactory::withClips(1)->withOpencastID()->create();
 
-        $this->mockHandler->append($this->mockEventResponse($seriesID, 'SUCCEEDED'));
-        $this->mockHandler->append($this->mockEventResponse($seriesID, 'STOPPED'));
+        $this->mockHandler->append($this->mockEventResponse($series));
+        $this->mockHandler->append($this->mockEventResponse($series, 'STOPPED', 'EVENTS.EVENTS.STATUS.STOPPED'));
 
-        $response = $this->opencastService->getEventsBySeriesID($seriesID);
+        $response = $this->opencastService->getProcessedEventsBySeriesID($series->opencast_series_id);
 
         $this->assertInstanceOf(Collection::class, $response);
 
@@ -101,7 +117,7 @@ class OpencastServiceTest extends TestCase
 
         $this->assertTrue($response->pluck('processing_state')->contains('SUCCEEDED'));
 
-        $this->assertEquals($seriesID, $response->first()['is_part_of']);
+        $this->assertEquals($series->opencast_series_id, $response->first()['is_part_of']);
 
     }
 

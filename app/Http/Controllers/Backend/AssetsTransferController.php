@@ -51,7 +51,7 @@ class AssetsTransferController extends Controller
         ]);
 
         $this->checkDropzoneFilesForClipUpload($clip, $validated);
-        
+
         return redirect($clip->adminPath());
     }
 
@@ -64,7 +64,7 @@ class AssetsTransferController extends Controller
      */
     public function listOpencastEvents(OpencastService $opencastService, Clip $clip): View
     {
-        $events = $opencastService->getEventsBySeriesID($clip->series->opencast_series_id);
+        $events = $opencastService->getProcessedEventsBySeriesID($clip->series->opencast_series_id);
 
         return view('backend.clips.opencast.listEvents', [
             'clip'   => $clip,
@@ -85,7 +85,8 @@ class AssetsTransferController extends Controller
         Clip            $clip,
         Request         $request,
         OpencastService $opencastService
-    ): RedirectResponse {
+    ): RedirectResponse
+    {
         $validated = $request->validate([
             'eventID' => 'required|uuid',
         ]);

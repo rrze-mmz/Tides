@@ -38,6 +38,14 @@ class ManageSeriesTest extends TestCase
     }
 
     /** @test */
+    public function it_shows_a_create_series_button_if_user_has_no_series(): void
+    {
+        $this->signInRole('moderator');
+
+        $this->get(route('series.index'))->assertSee('Create new series');
+    }
+
+    /** @test */
     public function it_shows_series_information_in_index_page(): void
     {
         $series = SeriesFactory::ownedBy($this->signInRole($this->role))
@@ -242,7 +250,8 @@ class ManageSeriesTest extends TestCase
         $this->withoutExceptionHandling();
         $series = SeriesFactory::ownedBy($this->signInRole($this->role))->create();
 
-        $this->mockHandler->append($this->mockSeriesRunningWorkflowsResponse($series, false));
+        $this->mockHandler->append($this->mockSeriesRunningWorkflowsResponse($series, false),
+            $this->mockEventResponse($series));
 
         $this->get($series->adminPath())
             ->assertStatus(200)
@@ -265,7 +274,7 @@ class ManageSeriesTest extends TestCase
     {
         $series = SeriesFactory::create();
 
-        $this->mockHandler->append($this->mockSeriesRunningWorkflowsResponse($series, false));
+        $this->mockHandler->append($this->mockSeriesRunningWorkflowsResponse($series, false), $this->mockEventResponse($series));
 
         $this->signInRole('admin');
 
@@ -299,15 +308,37 @@ class ManageSeriesTest extends TestCase
         $series = SeriesFactory::ownedBy($this->signInRole($this->role))->create();
 
         //pass an empty opencast response
-        $mockData = $this->mockSeriesRunningWorkflowsResponse($series, true);
+        $runningWorkflow = $this->mockSeriesRunningWorkflowsResponse($series, true);
 
-        $this->mockHandler->append($mockData);
+        $this->mockHandler->append($runningWorkflow);
+        $this->mockHandler->append($this->mockEventResponse(
+            $series, 'FAILED', 'EVENTS.EVENTS.STATUS.PROCESSING_FAILURE'
+        ));
 
-        $opencastViewData = collect(json_decode($mockData->getBody(), true));
+        $opencastViewData = collect(json_decode($runningWorkflow->getBody(), true));
 
         $this->get(route('series.edit', $series))
-            ->assertViewHas(['opencastSeriesRunningWorkflows'])
+            ->assertViewHas(['opencastWorkflows'])
             ->assertSee($opencastViewData['workflows']['workflow']['0']['mediapackage']['title']);
+    }
+
+    /** @test */
+    public function edit_series_should_display_opencast_failed_events_if_any(): void
+    {
+        $series = SeriesFactory::ownedBy($this->signInRole($this->role))->create();
+
+        //pass an empty opencast response
+        $failedWorkflow = $this->mockEventResponse(
+            $series, 'FAILED', 'EVENTS.EVENTS.STATUS.PROCESSING_FAILURE'
+        );
+        $this->mockHandler->append($this->mockSeriesRunningWorkflowsResponse($series, true));
+        $this->mockHandler->append($failedWorkflow);
+
+        $failedWorkflowResponse = collect(json_decode($failedWorkflow->getBody(), true));
+
+        $this->get(route('series.edit', $series))
+            ->assertViewHas(['opencastWorkflows'])
+            ->assertSee($failedWorkflowResponse->pluck('title')->first());
     }
 
     /** @test */

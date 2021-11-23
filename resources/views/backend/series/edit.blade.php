@@ -70,23 +70,53 @@
 
     </div>
 
-    <div class="flex pt-8 pb-2 font-semibold border-b border-black font-2xl">
-        More actions
+    <div class="flex pt-8 pb-2  font-2xl w-full">
+        <div x-data="{
+            activeTab:1,
+            activeClass: 'inline-block px-4 py-2 bg-blue-800',
+            inactiveClass : 'inline-block px-4 py-2 bg-blue-500'
+         }" class="w-full">
+            <ul class="flex space-x-1  pt-8 pb-2 text-white border-b border-black">
+                <li>
+                    <a href="#actions"
+                       x-on:click="activeTab = 1"
+                       :class="activeTab === 1 ? activeClass : inactiveClass"
+                    >
+                        Actions
+                    </a>
+                </li>
+                <li>
+                    <a href="#opencast" x-on:click="activeTab = 2"
+                       :class="activeTab === 2 ? activeClass : inactiveClass"
+                    >
+                        Opencast
+                    </a>
+                </li>
+                <li>
+                    <a href="#" x-on:click="activeTab = 3"
+                       :class="activeTab === 3 ? activeClass : inactiveClass"
+                    >
+                        More actions
+                    </a>
+                </li>
+            </ul>
+            <div class="mt-6 ">
+                <div x-show="activeTab === 1" id="actions" class="w-full">
+                    @include('backend.clips.options.edit')
+                    @include('backend.clips.list')
+                </div>
+                <div x-show="activeTab === 2" id="opencast">
+                    @if(isset($opencastWorkflows) && !empty($opencastWorkflows))
+                        @include('backend.clips.opencast.workflows')
+                    @endif
+                </div>
+                <div x-show="activeTab === 3">Tab 3 Content show Lorem ipsum dolor sit amet consectetur
+                    adipisicing elit. Amet,
+                    distinctio
+                    voluptas quis cum reprehenderit libero ea quidem voluptatem sunt suscipit, excepturi, tenetur
+                    assumenda sequi eius minus temporibus earum odit soluta.
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="flex items-center pt-3 space-x-6">
-        <x-form.button :link="route('frontend.series.show',$series)" type="submit" text="Go to public page"/>
-
-        <x-form.button :link="route('series.clip.create',$series)" type="submit" text="Add new clip"/>
-
-        <form action="{{$series->adminPath()}}"
-              method="POST">
-            @csrf
-            @method('DELETE')
-            <x-form.button :link="$link=false" type="delete" text="Delete Series"/>
-        </form>
-    </div>
-    @if(isset($opencastSeriesRunningWorkflows['workflows']) && $opencastSeriesRunningWorkflows['workflows']['totalCount'] > 0)
-        @include('backend.opencast.running-workflows')
-    @endif
-    @include('backend.clips.list')
 @endsection

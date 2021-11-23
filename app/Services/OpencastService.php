@@ -103,12 +103,12 @@ class OpencastService
     }
 
     /**
-     * Returning opencast processed and canceled events for a series
-     *$events = $opencastService->getEventsBySeriesID($clip->series->opencast_series_id);
+     * Returning a collection with opencast processed and canceled events for a series
+     *
      * @param $seriesID
      * @return Collection
      */
-    public function getEventsBySeriesID($seriesID): Collection
+    public function getProcessedEventsBySeriesID($seriesID): Collection
     {
         $merged = collect([]);
 
@@ -138,7 +138,28 @@ class OpencastService
     }
 
     /**
+     * @param $seriesID
+     * @return Collection
+     */
+    public function getFailedEventsBySeries(Series $series): Collection
+    {
+        try {
+            $this->response = $this->client->get('api/events', [
+                'query' => [
+                    'filter' => 'series:' . $series->opencast_series_id . ',status:EVENTS.EVENTS.STATUS.PROCESSING_FAILURE',
+                    'sort'   => 'start_date:ASC'
+                ]
+            ]);
+        } catch (GuzzleException $exception) {
+            Log::error($exception);
+        }
+
+        return collect(json_decode((string)$this->response->getBody(), true));
+    }
+
+    /**
      * Fetch event metadata information as a collection
+     *
      * @param $eventID
      * @return Collection
      */

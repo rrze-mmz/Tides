@@ -63,15 +63,16 @@ trait WorksWithOpencastClient
     /**
      * Opencast single event metadata response
      *
-     * @param $seriesID
-     * @param string $identifier
+     * @param Series $series
      * @param string $status "SUCCEEDED" | "STOPPED"
      * @param int $archiveVersion
+     * @param string $identifier
      * @return Response
      */
-    public function mockEventResponse($seriesID,
-                                      string $status = 'SUCCEEDED',
-                                      int $archiveVersion = 4,
+    public function mockEventResponse(Series $series,
+                                      string $state = 'SUCCEEDED',
+                                      string $status = 'EVENTS.EVENTS.STATUS.PROCESSED',
+                                      int    $archiveVersion = 4,
                                       string $identifier = 'a131d2e2-9de2-40cb-9716-af9824055f4a'): Response
     {
         return new Response(201, [], json_encode([
@@ -80,23 +81,23 @@ trait WorksWithOpencastClient
                     'creator'            => 'Opencast Project Administrator',
                     'presenter'          => [],
                     'created'            => Carbon::now()->toIso8601ZuluString(),
-                    'is_part_of'         => $seriesID,
+                    'is_part_of'         => $series->opencast_series_id,
                     'subjects'           => [],
                     'start'              => Carbon::now()->addMinutes(1)->toIso8601ZuluString(),
                     'description'        => '1', // A clip ID that belongs to the series
                     'language'           => '',
                     'source'             => '',
                     'title'              => 'Processed event',
-                    'processing_state'   => $status,
+                    'processing_state'   => $state,
                     'license'            => '',
                     'archive_version'    => $archiveVersion,
                     'contributor'        => [],
-                    'series'             => $this->faker->text(),
+                    'series'             => $series->title,
                     'has_previews'       => false,
                     'location'           => '',
                     'rightsholder'       => '',
                     'publication_status' => [],
-                    'status'             => 'EVENTS.EVENTS.STATUS.PROCESSED',
+                    'status'             => $status,
                 ],
             ])
         );

@@ -59,7 +59,7 @@ class FetchOpencastAssets extends Command
         $emptyClips->each(function ($clip) use ($opencastService) {
 
             //find finished workflows for every clip
-            $events = $opencastService->getEventsBySeriesID($clip->series->opencast_series_id);
+            $events = $opencastService->getProcessedEventsBySeriesID($clip->series->opencast_series_id);
 
             $events->each(function ($event) use ($clip, $opencastService) {
                 if ($clip->created_at->format('Y-m-d') === Carbon::parse($event['created'])->format('Y-m-d')) {
