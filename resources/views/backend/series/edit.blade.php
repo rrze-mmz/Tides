@@ -85,13 +85,15 @@
                         Actions
                     </a>
                 </li>
-                <li>
-                    <a href="#opencast" x-on:click="activeTab = 2"
-                       :class="activeTab === 2 ? activeClass : inactiveClass"
-                    >
-                        Opencast
-                    </a>
-                </li>
+                @if(isset($opencastSeriesInfo['health']) && $opencastSeriesInfo['health'])
+                    <li>
+                        <a href="#opencast" x-on:click="activeTab = 2"
+                           :class="activeTab === 2 ? activeClass : inactiveClass"
+                        >
+                            Opencast
+                        </a>
+                    </li>
+                @endif
                 <li>
                     <a href="#" x-on:click="activeTab = 3"
                        :class="activeTab === 3 ? activeClass : inactiveClass"
@@ -106,7 +108,7 @@
                     @include('backend.clips.list')
                 </div>
                 <div x-show="activeTab === 2" id="opencast">
-                    @if(isset($opencastWorkflows) && !empty($opencastWorkflows))
+                    @if($opencastSeriesInfo->isNotEmpty())
                         @include('backend.clips.opencast.workflows')
                     @endif
                 </div>

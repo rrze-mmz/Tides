@@ -11,6 +11,8 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Psr\Http\Message\ResponseInterface;
+use function Illuminate\Events\queueable;
+use function Symfony\Component\String\s;
 
 class OpencastService
 {
@@ -29,13 +31,32 @@ class OpencastService
      */
     public function getHealth(): Collection
     {
+        $health = collect([]);
         try {
             $this->response = $this->client->get('info/health');
+            $health = collect(json_decode((string)$this->response->getBody(), true));
         } catch (GuzzleException $exception) {
             Log::error($exception);
         }
 
-        return collect(json_decode((string)$this->response->getBody(), true));
+        return $health;
+    }
+
+    /**
+     * Fetch all relevant info for a given series like running, failed workflows, etc.
+     * @param Series $series
+     * @return Collection
+     */
+    public function getSeriesInfo(Series $series): Collection
+    {
+        $opencastSeriesInfo = collect([]);
+        if ($health = $this->getHealth()->isNotEmpty()) {
+            $opencastSeriesInfo->prepend($health, 'health');
+            $opencastSeriesInfo->prepend($this->getSeriesRunningWorkflows($series), 'running');
+            $opencastSeriesInfo->prepend($this->getFailedEventsBySeries($series), 'failed');
+        }
+
+        return $opencastSeriesInfo;
     }
 
     /**
@@ -45,6 +66,7 @@ class OpencastService
      */
     public function getSeriesRunningWorkflows(Series $series): Collection
     {
+        $runningWorkflows = collect([]);
         try {
             $this->response = $this->client->get('workflow/instances.json', [
                 'query' => [
@@ -54,11 +76,14 @@ class OpencastService
                     'sort'     => 'DATE_CREATED_DESC'
                 ]
             ]);
+            $runningWorkflows = collect(
+                $this->transformRunningWorkflowsResponse(json_decode((string)$this->response->getBody(), true))
+            );
         } catch (GuzzleException $exception) {
             Log::error($exception);
         }
 
-        return collect($this->transformRunningWorkflowsResponse(json_decode((string)$this->response->getBody(), true)));
+        return $runningWorkflows;
     }
 
     /**
@@ -110,10 +135,10 @@ class OpencastService
      */
     public function getProcessedEventsBySeriesID($seriesID): Collection
     {
-        $merged = collect([]);
+        $processedEvents = collect([]);
 
         try {
-            $proccessed = $this->client->get('api/events', [
+            $processed = $this->client->get('api/events', [
                 'query' => [
                     'filter' => 'series:' . $seriesID . ',status:EVENTS.EVENTS.STATUS.PROCESSED',
                     'sort'   => 'start_date:ASC'
@@ -127,14 +152,14 @@ class OpencastService
                     'sort' => 'start_date:ASC'
                 ]
             ]);
-            $collection = collect(json_decode((string)$proccessed->getBody(), true));
+            $collection = collect(json_decode((string)$processed->getBody(), true));
 
-            $merged = $collection->merge(collect(json_decode((string)$canceled->getBody(), true)));
+            $processedEvents = $collection->merge(collect(json_decode((string)$canceled->getBody(), true)));
         } catch (GuzzleException $exception) {
             Log::error($exception);
         }
 
-        return $merged;
+        return $processedEvents;
     }
 
     /**
@@ -143,18 +168,21 @@ class OpencastService
      */
     public function getFailedEventsBySeries(Series $series): Collection
     {
+        $failedEvents = collect([]);
         try {
             $this->response = $this->client->get('api/events', [
                 'query' => [
-                    'filter' => 'series:' . $series->opencast_series_id . ',status:EVENTS.EVENTS.STATUS.PROCESSING_FAILURE',
+                    'filter' =>
+                        'series:' . $series->opencast_series_id . ',status:EVENTS.EVENTS.STATUS.PROCESSING_FAILURE',
                     'sort'   => 'start_date:ASC'
                 ]
             ]);
+            $failedEvents = collect(json_decode((string)$this->response->getBody(), true));
         } catch (GuzzleException $exception) {
             Log::error($exception);
         }
 
-        return collect(json_decode((string)$this->response->getBody(), true));
+        return $failedEvents;
     }
 
     /**

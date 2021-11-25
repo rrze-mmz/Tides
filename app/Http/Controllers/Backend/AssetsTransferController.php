@@ -85,8 +85,7 @@ class AssetsTransferController extends Controller
         Clip            $clip,
         Request         $request,
         OpencastService $opencastService
-    ): RedirectResponse
-    {
+    ): RedirectResponse {
         $validated = $request->validate([
             'eventID' => 'required|uuid',
         ]);

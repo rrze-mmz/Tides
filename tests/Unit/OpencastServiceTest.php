@@ -44,6 +44,49 @@ class OpencastServiceTest extends TestCase
     }
 
     /** @test */
+    public function it_fetches_an_empty_collection_for_opencast_health_if_no_opencast_server_is_available(): void
+    {
+        $this->mockHandler->append($this->mockServerNotAvailable());
+
+        $results = $this->opencastService->getHealth();
+
+        $this->assertTrue($results->isEmpty());
+    }
+
+    /** @test */
+    public function it_fetches_opencast_series_info_for_a_given_series(): void
+    {
+        $series = SeriesFactory::create();
+
+        $this->mockHandler->append(
+            $this->mockHealthResponse(),
+            $this->mockSeriesRunningWorkflowsResponse($series),
+            $this->mockEventResponse($series)
+        );
+
+        $seriesInfo = $this->opencastService->getSeriesInfo($series);
+
+        $this->assertTrue($seriesInfo->isNotEmpty());
+        $this->assertTrue($seriesInfo['health']);
+        $this->assertArrayHasKey('running', $seriesInfo);
+        $this->assertArrayHasKey('failed', $seriesInfo);
+    }
+
+    /** @test */
+    public function it_fetches_an_empty_collection_for_opencast_series_info_if_no_opencast_server_is_available(): void
+    {
+        $series = SeriesFactory::create();
+
+        $this->mockHandler->append(
+            $this->mockServerNotAvailable()
+        );
+
+        $seriesInfo = $this->opencastService->getSeriesInfo($series);
+
+        $this->assertTrue($seriesInfo->isEmpty());
+    }
+
+    /** @test */
     public function it_creates_an_opencast_series(): void
     {
         $this->mockHandler->append($this->mockCreateSeriesResponse());
@@ -53,6 +96,18 @@ class OpencastServiceTest extends TestCase
         $response = $this->opencastService->createSeries($series);
 
         $this->assertEquals(201, $response->getStatusCode());
+    }
+
+    /** @test */
+    public function it_does_not_create_an_opencast_series_if_server_is_unavailable(): void
+    {
+        $this->mockHandler->append($this->mockServerNotAvailable());
+
+        $series = SeriesFactory::create();
+
+        $response = $this->opencastService->createSeries($series);
+
+        $this->assertEquals(200, $response->getStatusCode());
     }
 
     /** @test */
@@ -82,11 +137,25 @@ class OpencastServiceTest extends TestCase
 
         $this->assertEquals('RUNNING', $response['workflows']['workflow']['0']['state']);
 
-        $this->assertEquals($series->opencast_series_id, $response['workflows']['workflow']['0']['mediapackage']['series']);
+        $this->assertEquals(
+            $series->opencast_series_id, $response['workflows']['workflow']['0']['mediapackage']['series']
+        );
     }
 
     /** @test */
-    public function it_fetch_failed_workflows_for_a_given_series(): void
+    public function it_fetches_an_empty_collection_for_running_workflows_if_no_opencast_server_is_available(): void
+    {
+        $series = SeriesFactory::create();
+
+        $this->mockHandler->append($this->mockServerNotAvailable());
+
+        $seriesInfo = $this->opencastService->getSeriesRunningWorkflows($series);
+
+        $this->assertTrue($seriesInfo->isEmpty());
+    }
+
+    /** @test */
+    public function it_fetch_failed_events_for_a_given_series(): void
     {
         $series = Series::factory()->create(['opencast_series_id' => Str::uuid()]);
 
@@ -99,6 +168,18 @@ class OpencastServiceTest extends TestCase
         $this->assertTrue($response->pluck('processing_state')->contains('FAILED'));
 
         $this->assertEquals($series->opencast_series_id, $response->first()['is_part_of']);
+    }
+
+    /** @test */
+    public function it_fetches_an_empty_collection_for_failed_events_if_no_opencast_server_is_available(): void
+    {
+        $series = SeriesFactory::create();
+
+        $this->mockHandler->append($this->mockServerNotAvailable());
+
+        $seriesInfo = $this->opencastService->getFailedEventsBySeries($series);
+
+        $this->assertTrue($seriesInfo->isEmpty());
     }
 
     /** @test */

@@ -6,8 +6,10 @@ namespace Tests\Setup;
 
 use App\Http\Clients\OpencastClient;
 use App\Models\Series;
+use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Carbon;
@@ -42,6 +44,14 @@ trait WorksWithOpencastClient
             "version"     => "1",
             "status"      => "pass",
         ]));
+    }
+
+    public function mockServerNotAvailable(): RequestException
+    {
+        return new RequestException(
+            'Failed to connect to localhost port 8080 after 0 ms: Connection refused ',
+            new Request('GET', 'localhost:8080')
+        );
     }
 
     public function mockCreateSeriesResponse(): Response
@@ -185,7 +195,7 @@ trait WorksWithOpencastClient
         ));
     }
 
-    public function mockSeriesRunningWorkflowsResponse(Series $series, bool $multiple): Response
+    public function mockSeriesRunningWorkflowsResponse(Series $series, bool $multiple = false): Response
     {
         $workflows = ($multiple) ? [
             [

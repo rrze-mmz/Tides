@@ -71,13 +71,9 @@ class SeriesController extends Controller
     {
         $this->authorize('edit', $series);
 
-        $opencastWorkflows = [
-            'running' => $opencastService->getSeriesRunningWorkflows($series),
-            'failed'  => $opencastService->getFailedEventsBySeries($series)
-        ];
+        $opencastSeriesInfo = $opencastService->getSeriesInfo($series);
 
-        \Debugbar::info($opencastWorkflows['failed']);
-        return view('backend.series.edit', compact(['series', 'opencastWorkflows']));
+        return view('backend.series.edit', compact(['series', 'opencastSeriesInfo']));
     }
 
     /**
@@ -92,8 +88,7 @@ class SeriesController extends Controller
         Series              $series,
         UpdateSeriesRequest $request,
         OpencastService     $opencastService
-    ): RedirectResponse
-    {
+    ): RedirectResponse {
         if (is_null($series->opencast_series_id)) {
             $opencastSeriesId = $opencastService->createSeries($series);
 
