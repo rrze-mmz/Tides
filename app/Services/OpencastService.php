@@ -11,8 +11,6 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Psr\Http\Message\ResponseInterface;
-use function Illuminate\Events\queueable;
-use function Symfony\Component\String\s;
 
 class OpencastService
 {

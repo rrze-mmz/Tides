@@ -86,7 +86,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Assign a role to the current user
+     * Assign a role to the current use
      *
      * @param string $role
      * @return User

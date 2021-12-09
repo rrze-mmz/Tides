@@ -1,5 +1,7 @@
 <?php
 
+use App\Providers\ElasticsearchServiceProvider;
+
 return [
 
     /*
@@ -176,6 +178,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\OpencastServiceProvider::class,
         App\Providers\WowzaServiceProvider::class,
+        App\Providers\ElasticsearchServiceProvider::class,
 
     ],
 

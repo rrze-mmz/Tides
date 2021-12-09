@@ -3,9 +3,14 @@
 namespace App\Observers;
 
 use App\Models\User;
+use App\Services\ElasticsearchService;
 
 class UserObserver
 {
+    public function __construct(private ElasticsearchService $elasticsearchService)
+    {
+    }
+
     /**
      * Handle the User "created" event.
      *
@@ -16,6 +21,8 @@ class UserObserver
     {
         $user->assignRole('user');
         session()->flash('flashMessage', $user->getFullNameAttribute() . ' ' . __FUNCTION__ . ' successfully');
+
+        $this->elasticsearchService->createIndex($user);
     }
 
     /**
@@ -27,6 +34,8 @@ class UserObserver
     public function updated(User $user)
     {
         session()->flash('flashMessage', $user->getFullNameAttribute() . ' ' . __FUNCTION__ . ' successfully');
+
+        $this->elasticsearchService->updateIndex($user);
     }
 
     /**
@@ -38,6 +47,8 @@ class UserObserver
     public function deleted(User $user)
     {
         session()->flash('flashMessage', $user->getFullNameAttribute() . ' ' . __FUNCTION__ . ' successfully');
+
+        $this->elasticsearchService->deleteIndex($user);
     }
 
     /**

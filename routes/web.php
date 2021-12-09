@@ -17,6 +17,8 @@ use App\Http\Controllers\Frontend\ShowClipsController;
 use App\Http\Controllers\Frontend\ShowSeriesController;
 use App\Http\Middleware\CheckLMSToken;
 use App\Models\Clip;
+use App\Models\Series;
+use App\Services\ElasticsearchService;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
@@ -129,5 +131,9 @@ Route::prefix('admin')->middleware(['auth', 'can:access-dashboard'])->group(func
         Route::delete('/users/{user}', [UsersController::class, 'destroy'])->name('users.destroy');
     });
 });
+
+Route::get('/test/{series}/elk', function (Series $series, ElasticsearchService $elkService) {
+    $elkService->createIndex($series);
+})->name('elasticsearch.test');
 
 Auth::routes(['register' => config('tides.allow_user_registration')]);

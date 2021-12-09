@@ -3,9 +3,14 @@
 namespace App\Observers;
 
 use App\Models\Clip;
+use App\Services\ElasticsearchService;
 
 class ClipObserver
 {
+    public function __construct(private ElasticsearchService $elasticsearchService)
+    {
+    }
+
     /**
      * Handle the Clip "created" event.
      *
@@ -15,6 +20,8 @@ class ClipObserver
     public function created(Clip $clip)
     {
         session()->flash('flashMessage', $clip->title . ' ' . __FUNCTION__ . ' successfully');
+
+        $this->elasticsearchService->createIndex($clip);
     }
 
     /**
@@ -26,6 +33,8 @@ class ClipObserver
     public function updated(Clip $clip)
     {
         session()->flash('flashMessage', $clip->title . ' ' . __FUNCTION__ . ' successfully');
+
+        $this->elasticsearchService->updateIndex($clip);
     }
 
     /**
@@ -37,6 +46,8 @@ class ClipObserver
     public function deleted(Clip $clip)
     {
         session()->flash('flashMessage', $clip->title . ' ' . __FUNCTION__ . ' successfully');
+
+        $this->elasticsearchService->deleteIndex($clip);
     }
 
     /**

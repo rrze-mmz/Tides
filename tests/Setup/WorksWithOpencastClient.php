@@ -74,6 +74,7 @@ trait WorksWithOpencastClient
      * Opencast single event metadata response
      *
      * @param Series $series
+     * @param string $state
      * @param string $status "SUCCEEDED" | "STOPPED"
      * @param int $archiveVersion
      * @param string $identifier

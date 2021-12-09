@@ -18,7 +18,8 @@
         "pbmedia/laravel-ffmpeg": "^7.5",
         "predis/predis": "^1.1",
         "spatie/array-to-xml": "^3.0",
-      "ext-dom": "*"
+        "elasticsearch/elasticsearch": "^7.0",
+        "ext-dom": "*"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.5",
@@ -53,7 +54,7 @@
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
         },
-        "files" : [
+        "files": [
             "app/helpers.php"
         ]
     },

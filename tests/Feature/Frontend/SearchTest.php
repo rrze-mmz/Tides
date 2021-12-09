@@ -6,18 +6,24 @@ namespace Tests\Feature\Frontend;
 use App\Models\Asset;
 use App\Models\Clip;
 use App\Models\User;
+use App\Services\ElasticsearchService;
+use GuzzleHttp\Handler\MockHandler;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Testing\TestResponse;
+use Tests\Setup\WorksWithElasticsearchClient;
 use Tests\TestCase;
 
 class SearchTest extends TestCase
 {
     use RefreshDatabase;
     use WithFaker;
+    use WorksWithElasticsearchClient;
 
     protected Model $clip;
+    private ElasticsearchService $elasticsearchService;
+    private MockHandler $mockHandler;
 
     /*
     /   Set up the test
@@ -34,11 +40,24 @@ class SearchTest extends TestCase
         ]);
 
         Asset::factory()->create(['clip_id' => $this->clip]);
+
+        $this->mockHandler = $this->swapElasticsearchGuzzleClient();
+        $this->elasticsearchService = app(ElasticsearchService::class);
     }
 
     protected function searchFor($term): TestResponse
     {
         return $this::get(route('search') . '?term=' . $term);
+    }
+
+    /** @test */
+    public function it_uses_elasticsearch_if_it_is_available(): void
+    {
+        $this->mockHandler->append($this->mockClusterHealthResponse());
+
+        $response = $this->searchFor('lorem');
+
+        $response->assertStatus(200)->assertSee($this->clip->id);
     }
 
     /** @test */
@@ -56,12 +75,19 @@ class SearchTest extends TestCase
     /** @test */
     public function it_renders_a_results_page(): void
     {
-        $this->searchFor('test')->assertStatus(200);
+        //disable elastisearch
+        $this->mockHandler->append($this->mockClusterNotAvailable());
+
+        $response = $this->searchFor('test');
+        $response->assertStatus(200)->assertViewHas('searchResults');
     }
 
     /** @test */
     public function it_returns_only_clips_with_assets(): void
     {
+        //disable elastisearch
+        $this->mockHandler->append($this->mockClusterNotAvailable());
+
         Clip::factory()->create(['title' => 'Clip without video']);
 
         $this->searchFor('video')->assertSee('No results found');
@@ -70,24 +96,36 @@ class SearchTest extends TestCase
     /** @test */
     public function it_searches_for_clip_title(): void
     {
+        //disable elastisearch
+        $this->mockHandler->append($this->mockClusterNotAvailable());
+
         $this->searchFor('lorem')->assertSee($this->clip->title);
     }
 
     /** @test */
     public function it_searches_for_clip_description(): void
     {
+        //disable elastisearch
+        $this->mockHandler->append($this->mockClusterNotAvailable());
+
         $this->searchFor('dolor')->assertSee($this->clip->title);
     }
 
     /** @test */
     public function it_searches_for_clip_owner(): void
     {
+        //disable elastisearch
+        $this->mockHandler->append($this->mockClusterNotAvailable());
+
         $this->searchFor('Doe')->assertSee($this->clip->owner->first_name);
     }
 
     /** @test */
     public function it_searches_for_multiple_owners(): void
     {
+        //disable elastisearch
+        $this->mockHandler->append($this->mockClusterNotAvailable());
+        
         $secondClip = Clip::factory()->create([
             'title'       => 'Lorem ipsum for testing  the search function',
             'description' => 'Dolor sit amet for testing the search function',
