@@ -5,11 +5,11 @@ namespace Tests\Setup;
 use App\Http\Clients\ElasticsearchClient;
 use Elasticsearch\ClientBuilder;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Ring\Client\MockHandler as RingMockHandler;
-use GuzzleHttp\Handler\MockHandler;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\WithFaker;
 
@@ -35,11 +35,21 @@ trait WorksWithElasticsearchClient
     public function mockClusterHealthResponse(): Response
     {
         return new Response(200, [], json_encode([
-            "releaseId"   => "8.10.0",
-            "description" => "Opencast node's health status",
-            "serviceId"   => "http://localhost:8080",
-            "version"     => "1",
-            "status"      => "pass",
+            "cluster_name"                     => "docker-cluster",
+            "status"                           => "yellow",
+            "timed_out"                        => false,
+            "number_of_nodes"                  => 1,
+            "number_of_data_nodes"             => 1,
+            "active_primary_shards"            => 48,
+            "active_shards"                    => 48,
+            "relocating_shards"                => 0,
+            "initializing_shards"              => 0,
+            "unassigned_shards"                => 4,
+            "delayed_unassigned_shards"        => 0,
+            "number_of_pending_tasks"          => 0,
+            "number_of_in_flight_fetch"        => 0,
+            "task_max_waiting_in_queue_millis" => 0,
+            "active_shards_percent_as_number"  => 92.3076923076923,
         ]));
     }
 

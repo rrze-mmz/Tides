@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Backend;
+namespace Tests\Unit\Commands;
 
 use App\Services\OpencastService;
 use GuzzleHttp\Handler\MockHandler;

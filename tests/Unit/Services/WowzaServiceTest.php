@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Services;
 
 use App\Models\Asset;
 use App\Models\Clip;
@@ -12,7 +12,8 @@ use Illuminate\Support\Facades\Storage;
 use Tests\Setup\WorksWithWowzaClient;
 use Tests\TestCase;
 
-class WowzaServiceTest extends TestCase {
+class WowzaServiceTest extends TestCase
+{
     use RefreshDatabase;
     use WorksWithWowzaClient;
 

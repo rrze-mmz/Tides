@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Services;
 
 use App\Services\ElasticsearchService;
 use Facades\Tests\Setup\SeriesFactory;

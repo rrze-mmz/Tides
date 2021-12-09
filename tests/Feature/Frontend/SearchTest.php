@@ -56,7 +56,6 @@ class SearchTest extends TestCase
         $this->mockHandler->append($this->mockClusterHealthResponse());
 
         $response = $this->searchFor('lorem');
-
         $response->assertStatus(200)->assertSee($this->clip->id);
     }
 
@@ -75,7 +74,7 @@ class SearchTest extends TestCase
     /** @test */
     public function it_renders_a_results_page(): void
     {
-        //disable elastisearch
+        //disable elasticsearch
         $this->mockHandler->append($this->mockClusterNotAvailable());
 
         $response = $this->searchFor('test');
@@ -125,7 +124,7 @@ class SearchTest extends TestCase
     {
         //disable elastisearch
         $this->mockHandler->append($this->mockClusterNotAvailable());
-        
+
         $secondClip = Clip::factory()->create([
             'title'       => 'Lorem ipsum for testing  the search function',
             'description' => 'Dolor sit amet for testing the search function',
