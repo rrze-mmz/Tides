@@ -18,7 +18,8 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             RoleUserSeeder::class,
             AclSeeder::class,
-            OrganizationSeeder::class
+            OrganizationSeeder::class,
+            SemesterSeeder::class,
         ]);
     }
 }

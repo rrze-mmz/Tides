@@ -2,7 +2,7 @@
 
 @section('content')
     <main class="container mx-auto md:mt-24">
-        @if(isset($searchResults['hits']))
+        @if(isset($searchResults['clips']['hits']))
             <div class="flex justify-between pb-2 border-b-2 border-black">
                 <h2 class="text-2xl font-bold">
                     Search results: found {{ $searchResults['clips']['hits']['total']['value'] . ' Clips'}}

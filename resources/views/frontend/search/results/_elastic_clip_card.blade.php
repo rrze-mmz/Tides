@@ -6,7 +6,7 @@
     <div class="flex flex-col justify-between p-4 w-full bg-white">
         <div class="mb-1">
             <div class="text-sm font-bold text-gray-900">
-                <a href="/clip/{{$clip->get('slug')}}"
+                <a href="/clips/{{$clip->get('slug')}}"
                    class="underline"
                 >{{ $clip->get('title') }}</a>
             </div>
@@ -53,6 +53,6 @@
                 </svg>
             </div>
         </div>
-        
+
     </div>
 </div>

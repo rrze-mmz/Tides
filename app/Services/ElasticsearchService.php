@@ -16,13 +16,13 @@ class ElasticsearchService
 {
     private string $type;
     private Collection $response;
-    private Response $guzzleRespose;
+    private Response $guzzleResponse;
 
     public function __construct(private ClientBuilder $clientBuilder, private ElasticsearchClient $client)
     {
         $this->type = '';
         $this->response = collect([]);
-        $this->guzzleRespose = new Response(200, [], json_encode([]));
+        $this->guzzleResponse = new Response(200, [], json_encode([]));
     }
 
     /**
@@ -32,8 +32,8 @@ class ElasticsearchService
     {
         $health = collect([]);
         try {
-            $this->guzzleRespose = $this->client->get('/_cluster/health');
-            $health = collect(json_decode((string)$this->guzzleRespose->getBody(), true));
+            $this->guzzleResponse = $this->client->get('/_cluster/health');
+            $health = collect(json_decode((string)$this->guzzleResponse->getBody(), true));
         } catch (GuzzleException $exception) {
             Log::error($exception->getMessage());
         }
@@ -143,20 +143,20 @@ class ElasticsearchService
     public function deleteIndexes(string $model = ''): Collection
     {
         try {
-            $this->guzzleRespose = $this->client->delete('/tides_' . Str::lower($model));
+            $this->guzzleResponse = $this->client->delete('/tides_' . Str::lower($model));
         } catch (Exception $exception) {
             Log::error($exception->getMessage());
         }
 
-        return collect($this->guzzleRespose);
+        return collect($this->guzzleResponse);
     }
 
     /**
      * @param $term
-     * @param $index
+     * @param string $index
      * @return Collection
      */
-    public function searchIndexes($term, $index = 'tides_clips'): Collection
+    public function searchIndexes($term, string $index = 'tides_clips'): Collection
     {
         try {
             $params = [
@@ -198,7 +198,6 @@ class ElasticsearchService
         } catch (Exception $exception) {
             Log::error($exception->getMessage());
         }
-
         return $this->response;
     }
 }

@@ -84,7 +84,7 @@ class SearchTest extends TestCase
     /** @test */
     public function it_returns_only_clips_with_assets(): void
     {
-        //disable elastisearch
+        //disable elasticsearch
         $this->mockHandler->append($this->mockClusterNotAvailable());
 
         Clip::factory()->create(['title' => 'Clip without video']);
@@ -95,7 +95,7 @@ class SearchTest extends TestCase
     /** @test */
     public function it_searches_for_clip_title(): void
     {
-        //disable elastisearch
+        //disable elasticsearch
         $this->mockHandler->append($this->mockClusterNotAvailable());
 
         $this->searchFor('lorem')->assertSee($this->clip->title);
@@ -104,7 +104,7 @@ class SearchTest extends TestCase
     /** @test */
     public function it_searches_for_clip_description(): void
     {
-        //disable elastisearch
+        //disable elasticsearch
         $this->mockHandler->append($this->mockClusterNotAvailable());
 
         $this->searchFor('dolor')->assertSee($this->clip->title);
@@ -113,7 +113,7 @@ class SearchTest extends TestCase
     /** @test */
     public function it_searches_for_clip_owner(): void
     {
-        //disable elastisearch
+        //disable elasticsearch
         $this->mockHandler->append($this->mockClusterNotAvailable());
 
         $this->searchFor('Doe')->assertSee($this->clip->owner->first_name);
@@ -122,7 +122,7 @@ class SearchTest extends TestCase
     /** @test */
     public function it_searches_for_multiple_owners(): void
     {
-        //disable elastisearch
+        //disable elasticsearch
         $this->mockHandler->append($this->mockClusterNotAvailable());
 
         $secondClip = Clip::factory()->create([

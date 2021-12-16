@@ -74,6 +74,16 @@ class Clip extends BaseModel
     }
 
     /**
+     * Presenters relationship
+     *
+     * @return BelongsToMany
+     */
+    public function presenters(): BelongsToMany
+    {
+        return $this->belongsToMany(Presenter::class, 'clip_presenter')->withTimestamps();
+    }
+
+    /**
      * Asset relationship
      *
      * @return HasMany

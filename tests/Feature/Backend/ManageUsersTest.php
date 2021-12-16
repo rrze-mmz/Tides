@@ -6,7 +6,7 @@ use App\Http\Livewire\UserDataTable;
 use App\Mail\EmailUserPassword;
 use App\Models\Role;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Notification;
 use Livewire\Livewire;
@@ -14,7 +14,7 @@ use Tests\TestCase;
 
 class ManageUsersTest extends TestCase
 {
-    use RefreshDatabase;
+    use LazilyRefreshDatabase;
     use WithFaker;
 
     protected function setUp(): void

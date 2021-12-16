@@ -5,6 +5,7 @@ use App\Http\Controllers\Backend\AssetsTransferController;
 use App\Http\Controllers\Backend\ClipsController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\OpencastController;
+use App\Http\Controllers\Backend\PresentersController;
 use App\Http\Controllers\Backend\SeriesClipsController;
 use App\Http\Controllers\Backend\SeriesController;
 use App\Http\Controllers\Backend\TriggerSmilFilesController;
@@ -121,14 +122,23 @@ Route::prefix('admin')->middleware(['auth', 'can:access-dashboard'])->group(func
 
     // Basic portal user administration
     Route::middleware(['user.admin'])->group(function () {
-        Route::get('/users', [UsersController::class, 'index'])->name('users.index');
-        Route::get('/users/create', [UsersController::class, 'create'])->name('users.create');
-        Route::post('/users/create', [UsersController::class, 'store'])->name('users.store');
-        Route::get('/users/{user}/edit', [UsersController::class, 'edit'])->name('users.edit');
-//        TODO
-//        Route::get('/users/{user}', [UsersController::class,'show'])->name('users.show')
-        Route::patch('/users/{user}', [UsersController::class, 'update'])->name('users.update');
-        Route::delete('/users/{user}', [UsersController::class, 'destroy'])->name('users.destroy');
+
+        Route::resource('users', UsersController::class)->except(['show']);
+
+//        Route::get('/users', [UsersController::class, 'index'])->name('users.index');
+//        Route::get('/users/create', [UsersController::class, 'create'])->name('users.create');
+//        Route::post('/users/create', [UsersController::class, 'store'])->name('users.store');
+//        Route::get('/users/{user}/edit', [UsersController::class, 'edit'])->name('users.edit');
+////        TODO
+////        Route::get('/users/{user}', [UsersController::class,'show'])->name('users.show')
+//        Route::patch('/users/{user}', [UsersController::class, 'update'])->name('users.update');
+//        Route::delete('/users/{user}', [UsersController::class, 'destroy'])->name('users.destroy');
+
+        Route::get('/presenters', [PresentersController::class, 'index'])->name('presenters.index');
+        Route::get('/presenters/create', [PresentersController::class, 'create'])->name('presenters.create');
+        Route::post('presenters/create', [PresentersController::class, 'store'])->name('presenters.store');
+        Route::get('/presenters/{presenter}/edit', [PresentersController::class, 'edit'])->name('presenters.edit');
+        Route::delete('/presenters/{presenter}', [PresentersController::class, 'destroy'])->name('presenters.destroy');
     });
 });
 
