@@ -5,9 +5,11 @@ namespace App\Providers;
 use App\Events\AssetDeleted;
 use App\Listeners\DeleteAssetFile;
 use App\Models\Clip;
+use App\Models\Presenter;
 use App\Models\Series;
 use App\Models\User;
 use App\Observers\ClipObserver;
+use App\Observers\PresenterObserver;
 use App\Observers\SeriesObserver;
 use App\Observers\UserObserver;
 use Illuminate\Auth\Events\Registered;
@@ -40,5 +42,6 @@ class EventServiceProvider extends ServiceProvider
         Series::observe(SeriesObserver::class);
         Clip::observe(ClipObserver::class);
         User::observe(UserObserver::class);
+        Presenter::observe(PresenterObserver::class);
     }
 }

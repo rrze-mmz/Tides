@@ -93,9 +93,9 @@ class UsersController extends Controller
      * Deletes a single user
      *
      * @param User $user
-     * @return Redirector|Application|RedirectResponse
+     * @return RedirectResponse
      */
-    public function destroy(User $user): Redirector|Application|RedirectResponse
+    public function destroy(User $user): RedirectResponse
     {
         $user->delete();
 

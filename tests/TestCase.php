@@ -98,7 +98,6 @@ abstract class TestCase extends BaseTestCase
     }
 
     /**
-     * @param User $user
      * @param string $role
      * @return User
      */

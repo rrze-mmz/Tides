@@ -4,20 +4,19 @@ namespace Tests\Feature\Backend;
 
 use App\Http\Livewire\PresenterDataTable;
 use App\Models\Presenter;
-use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Livewire\Livewire;
 use Tests\TestCase;
 
 class ManagePresenters extends TestCase
 {
-    use LazilyRefreshDatabase;
+    use RefreshDatabase;
     use WithFaker;
 
     protected function setUp(): void
     {
         parent::setUp();
-
 
         $this->signInRole('admin');
     }
@@ -186,13 +185,14 @@ class ManagePresenters extends TestCase
     public function create_presenter_form_should_remember_old_values_on_validation_error()
     {
         $attributes = [
-            'first_name' => $this->faker->firstName(),
-            'last_name'  => $this->faker->lastName(),
-            'username'   => $this->faker->userName(),
-            'email'      => ''
+            'degree_title' => 'Dr.',
+            'first_name'   => 'John',
+            'last_name'    => '',
+            'username'     => 'johndoe13',
+            'email'        => ''
         ];
 
-        $this->post(route('presenters.store'), $attributes)->assertSessionHasErrors(['user']);
+        $this->post(route('presenters.store'), $attributes)->assertSessionHasErrors(['last_name']);
 
         $this->followingRedirects();
 
@@ -206,12 +206,116 @@ class ManagePresenters extends TestCase
             'degree_title' => 'Dr. Ing-',
             'first_name'   => $this->faker->firstNameFemale(),
             'last_name'    => $this->faker->lastName(),
-            'username'     => $this->faker->userName(),
-            'email'        => $this->faker->email(),
+            'username'     => 'johndoe13',
+            'email'        => 'john.doe@test.com',
         ];
 
         $this->post(route('presenters.store'), $attributes);
 
         $this->assertDatabaseHas('presenters', ['username' => $attributes['username']]);
+    }
+
+    /** @test */
+    public function a_moderator_is_not_allowed_to_view_presenter_edit_form(): void
+    {
+        auth()->logout();
+
+        $this->get(route('presenters.edit', $presenter = Presenter::factory()->create()))
+            ->assertRedirect(route('login'));
+
+        $this->signInRole('moderator');
+
+        $this->get(route('presenters.edit', $presenter))->assertStatus(403);
+    }
+
+    /** @test */
+    public function admin_user_can_view_edit_presenter_form(): void
+    {
+        $presenter = Presenter::factory()->create();
+
+        $this->get(route('presenters.edit', $presenter))
+            ->assertStatus(200)
+            ->assertSee($presenter->degree_title)
+            ->assertSee($presenter->first_name)
+            ->assertSee($presenter->last_name)
+            ->assertSee($presenter->username)
+            ->assertSee($presenter->email);
+    }
+
+    /** @test */
+    public function an_admin_can_update_presenter_information(): void
+    {
+        $presenter = Presenter::factory()->create();
+
+        $this->patch(route('presenters.update', $presenter), [
+            'first_name' => 'John',
+            'last_name'  => 'Doe',
+            'username'   => 'johndoe13',
+            'email'      => 'john.doe@test.com'
+        ]);
+
+        $presenter->refresh();
+
+        $this->assertDatabaseHas('presenters', ['first_name' => 'John']);
+    }
+
+    /** @test */
+    public function it_should_display_an_error_if_a_presenter_with_the_same_username_exists(): void
+    {
+        $john = Presenter::factory()->create();
+        $alice = Presenter::factory()->create();
+
+        $this->patch(route('presenters.update', $alice), [
+            'first_name' => $alice->first_name,
+            'last_name'  => $alice->last_name,
+            'username'   => $john->username,
+            'email'      => $alice->email,
+        ])->assertSessionHasErrors(['username']);
+
+        $alice->refresh();
+
+        $this->assertNotEquals($john->username, $alice->usernmae);
+    }
+
+    /** @test */
+    public function it_should_display_an_error_if_a_presenter_with_the_same_email_exists(): void
+    {
+        $john = Presenter::factory()->create();
+        $alice = Presenter::factory()->create();
+
+        $this->patch(route('presenters.update', $alice), [
+            'first_name' => $alice->first_name,
+            'last_name'  => $alice->last_name,
+            'username'   => $alice->username,
+            'email'      => $john->email,
+        ])->assertSessionHasErrors(['email']);
+
+        $alice->refresh();
+
+        $this->assertNotEquals($john->email, $alice->email);
+    }
+
+    /** @test */
+    public function a_moderator_is_not_allowed_to_delete_a_presenter(): void
+    {
+        $presenter = Presenter::factory()->create();
+
+        auth()->logout();
+
+        $this->delete(route('presenters.destroy', $presenter))->assertRedirect(route('login'));
+
+        $this->signInRole('moderator');
+
+        $this->delete(route('presenters.destroy', $presenter))->assertStatus(403);
+    }
+
+    /** @test */
+    public function an_admin_can_delete_a_presenter(): void
+    {
+        $presenter = Presenter::factory()->create();
+
+        $this->delete(route('presenters.destroy', $presenter));
+
+        $this->assertDatabaseMissing('presenters', ['id' => $presenter->id]);
     }
 }

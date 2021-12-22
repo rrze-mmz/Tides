@@ -50,26 +50,4 @@ class UserObserver
 
         $this->elasticsearchService->deleteIndex($user);
     }
-
-    /**
-     * Handle the User "restored" event.
-     *
-     * @param User $user
-     * @return void
-     */
-    public function restored(User $user)
-    {
-        session()->flash('flashMessage', $user->getFullNameAttribute() . ' ' . __FUNCTION__ . ' successfully');
-    }
-
-    /**
-     * Handle the User "force deleted" event.
-     *
-     * @param User $user
-     * @return void
-     */
-    public function forceDeleted(User $user)
-    {
-        session()->flash('flashMessage', $user->getFullNameAttribute() . ' ' . __FUNCTION__ . ' successfully');
-    }
 }

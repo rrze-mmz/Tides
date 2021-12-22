@@ -9,6 +9,11 @@ class Presenter extends BaseModel
 {
     use HasFactory;
 
+    public function getFullNameAttribute(): string
+    {
+        return "{$this->degree_title} {$this->first_name} {$this->last_name}";
+    }
+
     /**
      * Clip relationship
      *

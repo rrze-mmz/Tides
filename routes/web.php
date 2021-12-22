@@ -120,25 +120,10 @@ Route::prefix('admin')->middleware(['auth', 'can:access-dashboard'])->group(func
     //Opencast routes
     Route::get('/opencast', OpencastController::class)->name('opencast.status');
 
-    // Basic portal user administration
+    // Portal admin resources
     Route::middleware(['user.admin'])->group(function () {
-
         Route::resource('users', UsersController::class)->except(['show']);
-
-//        Route::get('/users', [UsersController::class, 'index'])->name('users.index');
-//        Route::get('/users/create', [UsersController::class, 'create'])->name('users.create');
-//        Route::post('/users/create', [UsersController::class, 'store'])->name('users.store');
-//        Route::get('/users/{user}/edit', [UsersController::class, 'edit'])->name('users.edit');
-////        TODO
-////        Route::get('/users/{user}', [UsersController::class,'show'])->name('users.show')
-//        Route::patch('/users/{user}', [UsersController::class, 'update'])->name('users.update');
-//        Route::delete('/users/{user}', [UsersController::class, 'destroy'])->name('users.destroy');
-
-        Route::get('/presenters', [PresentersController::class, 'index'])->name('presenters.index');
-        Route::get('/presenters/create', [PresentersController::class, 'create'])->name('presenters.create');
-        Route::post('presenters/create', [PresentersController::class, 'store'])->name('presenters.store');
-        Route::get('/presenters/{presenter}/edit', [PresentersController::class, 'edit'])->name('presenters.edit');
-        Route::delete('/presenters/{presenter}', [PresentersController::class, 'destroy'])->name('presenters.destroy');
+        Route::resource('presenters', PresentersController::class)->except(['show']);
     });
 });
 
