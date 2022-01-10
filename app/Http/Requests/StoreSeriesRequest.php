@@ -41,6 +41,7 @@ class StoreSeriesRequest extends FormRequest
             'description'     => ['max:255'],
             'organization_id' => ['required', 'integer'],
             'presenters'      => ['array'],
+            'presenters.*'    => ['integer', 'nullable'],
             'slug'            => ['required'],
             'password'        => ['nullable', Password::min(8)->mixedCase()],
             'isPublic'        => ['boolean'],

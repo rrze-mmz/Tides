@@ -110,6 +110,17 @@ class ManageClipsTest extends TestCase
     }
 
     /** @test */
+    public function it_shows_an_error_if_presenters_array_has_no_integer_values(): void
+    {
+        $this->signInRole($this->role);
+
+        $data = Clip::factory()->raw(['presenters' => ['1.3', 'test']]);
+
+        $this->post(route('clips.store', $data))->assertSessionHasErrors('presenters.*');
+
+    }
+
+    /** @test */
     public function a_moderator_can_see_the_create_clip_form_and_all_form_fields(): void
     {
         $this->signInRole($this->role);

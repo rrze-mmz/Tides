@@ -154,12 +154,12 @@
                                 @if(auth()->user()->id !== $user->id)
                                     <div class="flex space-x-2">
                                         <x-form.button :link="route('users.edit',$user)" type="submit"
-                                                       text="Edit user"/>
+                                                       text="Edit"/>
                                         <form action="{{ route('users.destroy', $user) }}"
                                               method="POST">
                                             @csrf
                                             @method('DELETE')
-                                            <x-form.button :link="$link=false" type="delete" text="delete user"/>
+                                            <x-form.button :link="$link=false" type="delete" text="Delete"/>
                                         </form>
                                     </div>
                                 @endif

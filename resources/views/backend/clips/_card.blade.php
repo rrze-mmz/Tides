@@ -32,8 +32,7 @@
             </div>
             <div class="text-sm">
                 <p class="italic text-gray-900">
-                    {{ Illuminate\Support\Carbon::createFromFormat('Y-m-d H:i:s', $clip->updated_at)
-                                                                                        ->format('Y-m-d')  }}
+                    {{ Illuminate\Support\Carbon::createFromFormat('Y-m-d H:i:s', $clip->updated_at)->format('Y-m-d') }}
                 </p>
             </div>
         </div>

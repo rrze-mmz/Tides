@@ -42,6 +42,7 @@ class UpdateSeriesRequest extends FormRequest
             'organization_id'    => ['required ', 'integer'],
             'slug'               => ['required'],
             'presenters'         => ['array'],
+            'presenters.*'       => ['integer', 'nullable'],
             'opencast_series_id' => ['null', 'uuid'],
             'password'           => ['nullable', Password::min(8)->mixedCase()],
             'isPublic'           => ['boolean'],
