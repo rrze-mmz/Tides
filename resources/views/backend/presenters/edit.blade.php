@@ -56,13 +56,21 @@
 
                 <div class="col-span-7 w-4/5">
                     <x-form.button :link="$link=false" type="submit" text="Edit presenter"/>
-                    <a href="{{route('presenters.index')}}">
-                        <span class="py-2 px-8 text-white rounded-md bg-green-700 focus:outline-noe hover:shadow-lg">
-                            Back to clip
-                        </span>
-                    </a>
+                    <x-form.button :link="route('presenters.index')" type="back" text="Back to presenters index"/>
                 </div>
             </div>
         </form>
     </div>
+
+    <div class="flex pt-6 pb-2 font-semibold border-b border-black font-2xl">
+        {{ $presenter->getFullNameAttribute() }} clips
+    </div>
+    <div class="grid grid-cols-3 gap-4 pt-8 h48">
+        @forelse($presenter->clips as $clip)
+            @include('backend.clips._card',['clip'=> $clip])
+        @empty
+            No clips found
+        @endforelse
+    </div>
+
 @endsection

@@ -139,12 +139,12 @@
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap text-right text-sm leading-5 font-medium">
                                 <div class="flex space-x-2">
                                     <x-form.button :link="route('presenters.edit',$presenter)" type="submit"
-                                                   text="Edit user"/>
+                                                   text="Edit"/>
                                     <form action="{{ route('presenters.destroy', $presenter) }}"
                                           method="POST">
                                         @csrf
                                         @method('DELETE')
-                                        <x-form.button :link="$link=false" type="delete" text="delete presenter"/>
+                                        <x-form.button :link="$link=false" type="delete" text="Delete"/>
                                     </form>
                                 </div>
                             </td>

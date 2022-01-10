@@ -3,6 +3,7 @@
 namespace Tests\Feature\Backend;
 
 use App\Http\Livewire\PresenterDataTable;
+use App\Models\Clip;
 use App\Models\Presenter;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -240,6 +241,20 @@ class ManagePresenters extends TestCase
             ->assertSee($presenter->last_name)
             ->assertSee($presenter->username)
             ->assertSee($presenter->email);
+    }
+
+    /** @test */
+    public function it_shows_all_presenters_clips_on_edit_page(): void
+    {
+        $presenter = Presenter::factory()->create();
+        $clip = Clip::factory()->create();
+
+        $clip->addPresenters($presenter->get());
+
+        //flush session data to remove the update clip model message
+        session()->flush();
+
+        $this->get(route('presenters.edit', $presenter))->assertSee($clip->title);
     }
 
     /** @test */

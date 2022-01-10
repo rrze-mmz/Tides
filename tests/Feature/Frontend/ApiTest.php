@@ -4,6 +4,7 @@
 namespace Tests\Feature\Frontend;
 
 use App\Models\Organization;
+use App\Models\Presenter;
 use App\Models\Tag;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -18,9 +19,21 @@ class ApiTest extends TestCase
         Tag::factory()->create(['name' => 'algebra']);
 
         $response = $this->get(route('api.tags') . '?query=algebra');
-
+        
         $response->assertJson([
             ["id" => 1, "name" => 'algebra']
+        ]);
+    }
+
+    /** @test */
+    public function it_search_presenters(): void
+    {
+        Presenter::factory()->create(['first_name' => 'John', 'last_name' => 'Doe']);
+
+        $response = $this->get(route('api.presenters') . '?query=john');
+
+        $response->assertJson([
+            ["id" => 1, "name" => 'Dr. John Doe']
         ]);
     }
 

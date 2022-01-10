@@ -4,7 +4,7 @@
     <div class="flex items center  w-full pb-2 font-semibold border-b border-black font-2xl">
         <div class="flex justify-between items-end w-full">
             <div class="">
-                Edit {{ $clip->title }} [ ID: {{ $clip->id }} ]
+                Edit1 {{ $clip->title }} [ ID: {{ $clip->id }} ]
                 <span class="pl-2 italic font-sm"> created at {{$clip->created_at}}</span>
             </div>
             <div class="flex space-x-2">
@@ -65,6 +65,12 @@
                                        model="semester"
                                        :selectedItem="$clip->semester_id"
                 />
+
+                <x-form.select2-multiple field-name="presenters"
+                                         :model="$clip"
+                                         label="Presenters"
+                                         select-class="select2-tides-presenters"
+                                         :items="$clip->presenters"/>
 
                 <x-form.select2-multiple field-name="tags"
                                          :model="$clip"
@@ -136,7 +142,7 @@
                        type="submit"
                        text="Go to public page"
         />
-        
+
         @if ($clip->assets()->count())
             <x-form.button :link="route('admin.clips.triggerSmilFiles', $clip)"
                            type="submit"
@@ -148,13 +154,6 @@
                        type="submit"
                        text=" Transfer files from drop zone"
         />
-
-        @if($opencastConnectionCollection)
-            <x-form.button :link="route('admin.clips.opencast.listEvents', $clip)"
-                           type="submit"
-                           text=" Transfer files from Opencast"
-            />
-        @endif
 
         <form action="{{ $clip->adminPath() }}"
               method="POST"
@@ -168,6 +167,14 @@
             />
 
         </form>
+
+        @if($opencastConnectionCollection)
+            <x-form.button :link="route('admin.clips.opencast.listEvents', $clip)"
+                           type="submit"
+                           text=" Transfer files from Opencast"
+            />
+        @endif
+
     </div>
 
     @include('backend.assets.list', ['assets'=>$clip->assets])

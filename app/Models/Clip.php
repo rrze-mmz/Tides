@@ -187,6 +187,21 @@ class Clip extends BaseModel
         }
     }
 
+    /**
+     * Add presenters to a clip
+     *
+     * @param Collection $presentersCollection
+     * @return void
+     */
+    public function addPresenters(Collection $presentersCollection): void
+    {
+        if ($presentersCollection->isNotEmpty()) {
+            $this->presenters()->sync($presentersCollection);
+        } else {
+            $this->presenters()->detach();
+        }
+    }
+
     /*
      * Return next and previous Models based on current Model episode attribute
      */

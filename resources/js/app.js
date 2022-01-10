@@ -16,7 +16,7 @@ $(() => {
         placeholder: 'Add a tag',
         tags: true,
         minimumInputLength: 2,
-        ajax:{
+        ajax: {
             url: "/api/tags/",
             delay: 250,
             data: function (params) {
@@ -27,9 +27,36 @@ $(() => {
             },
             processResults: function (data, params) {
                 params.page = params.page || 1;
-                return  {
+                return {
                     results: $.map(data, function (obj) {
                         return {id: obj.name, text: obj.name};
+                    }),
+                    pagination: {
+                        more: (params.page * 30) < data.total_count
+                    }
+                };
+            },
+        }
+    });
+
+    $('.select2-tides-presenters').select2({
+        allowClear: true,
+        placeholder: 'Add a presenter',
+        minimumInputLength: 2,
+        ajax: {
+            url: "/api/presenters/",
+            delay: 250,
+            data: function (params) {
+                return {
+                    query: params.term, // search term
+                    page: params.page
+                };
+            },
+            processResults: function (data, params) {
+                params.page = params.page || 1;
+                return {
+                    results: $.map(data, function (obj) {
+                        return {id: obj.id, text: obj.name};
                     }),
                     pagination: {
                         more: (params.page * 30) < data.total_count
@@ -42,7 +69,7 @@ $(() => {
     $('.select2-tides-organization').select2({
         placeholder: 'select an organization',
         minimumInputLength: 2,
-        ajax:{
+        ajax: {
             url: "/api/organizations/",
             delay: 250,
             data: function (params) {
@@ -53,7 +80,7 @@ $(() => {
             },
             processResults: function (data, params) {
                 params.page = params.page || 1;
-                return  {
+                return {
                     results: $.map(data, function (obj) {
                         return {id: obj.id, text: obj.name};
                     }),
@@ -114,6 +141,7 @@ document.addEventListener("DOMContentLoaded", () => {
             loadSprite: false,
         });
     }
+
     function updateQuality(newQuality) {
         window.hls.levels.forEach((level, levelIndex) => {
             if (level.height === newQuality) {

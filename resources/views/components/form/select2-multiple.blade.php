@@ -8,7 +8,7 @@
     </div>
     <div class="col-start-2 col-end-6">
         <select class="p-2 w-full {{ $selectClass}}
-                                            focus:outline-none focus:bg-white focus:border-blue-500"
+            focus:outline-none focus:bg-white focus:border-blue-500"
                 name="{{ $fieldName }}[]"
                 multiple="multiple"
                 style="width: 100%"
@@ -16,17 +16,19 @@
             @if($fieldName== 'acls')
                 @forelse($items as $item)
                     <option value="{{ $item->id }}"
-                            @if($model?->acls->contains($item->id)) {{'selected'}} @endif
-                        >{{ $item->name }}</option>
-                    @empty
-                        <option value="1"></option>
-                    @endforelse
-            @else
-                @forelse($items as $item)
-                    <option value="{{$item->name }}" selected="selected">{{$item->name }}</option>
+                    @if($model?->acls->contains($item->id)) {{'selected'}} @endif
+                    >{{ $item->name }}</option>
                 @empty
-                    <option value="1" ></option>
+                    <option value="1"></option>
                 @endforelse
+            @elseif($fieldName=='presenters')
+                @foreach($items as $item)
+                    <option value="{{$item->id }}" selected="selected">{{$item->getFullNameAttribute() }}</option>
+                @endforeach
+            @else
+                @foreach($items as $item)
+                    <option value="{{$item->name }}" selected="selected">{{$item->name }}</option>
+                @endforeach
             @endif
         </select>
     </div>

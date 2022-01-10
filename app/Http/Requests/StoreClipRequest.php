@@ -16,6 +16,8 @@ class StoreClipRequest extends FormRequest
             'slug'           => Str::slug($this->title),
             'tags'           => $this->tags = $this->tags ?? [], //set empty array if select2 tags is empty
             'acls'           => $this->acls = $this->acls ?? [], //set empty array if select2 acls is empty
+            'presenters'     =>
+                $this->presenters = $this->presenters ?? [], //set empty array if select2 presenters is empty
             'allow_comments' => $this->allow_comments === 'on',
             'isPublic'       => $this->isPublic === 'on',
         ]);
@@ -44,6 +46,7 @@ class StoreClipRequest extends FormRequest
             'organization_id' => ['required', 'integer'],
             'slug'            => ['required'],
             'semester_id'     => ['required', 'integer'],
+            'presenters'      => ['array'],
             'tags'            => ['array'],
             'acls'            => ['array'],
             'episode'         => ['required', 'integer'],

@@ -24,7 +24,7 @@
                 <a
                     href="{{ route('presenters.index') }}"
                     class="block mb-4 text-lg  {{ setActiveLink(route('presenters.index')) }} font-bold hover:text-gray-200"
-                >Presenter</a>
+                >Presenters</a>
             </li>
             <li>
                 <a

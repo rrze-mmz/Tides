@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Models\Clip;
+use App\Models\Presenter;
 use App\Models\Series;
 use Facades\Tests\Setup\SeriesFactory;
 use Illuminate\Database\Eloquent\Builder;

@@ -4,6 +4,7 @@
 namespace Tests\Feature\Backend;
 
 use App\Models\Clip;
+use App\Models\Presenter;
 use App\Models\Tag;
 use App\Services\OpencastService;
 use Facades\Tests\Setup\ClipFactory;
@@ -72,7 +73,7 @@ class ManageClipsTest extends TestCase
     }
 
     /** @test */
-    public function it_must_have_a_strong_password_if_any(): void
+    public function it_must_have_it_must_have_a_strong_password_if_anya_strong_password_if_any(): void
     {
         $this->signInRole($this->role);
 
@@ -116,6 +117,7 @@ class ManageClipsTest extends TestCase
         $this->get(route('clips.create'))
             ->assertSee('title')
             ->assertSee('description')
+            ->assertSee('presenters')
             ->assertSee('organization')
             ->assertSee('tags')
             ->assertSee('acls')
@@ -146,6 +148,7 @@ class ManageClipsTest extends TestCase
             ->assertSee('tags')
             ->assertSee('organization')
             ->assertSee('tags')
+            ->assertSee('presenters')
             ->assertSee('semester')
             ->assertSee('isPublic')
             ->assertSee('acls');
@@ -195,6 +198,27 @@ class ManageClipsTest extends TestCase
         $this->assertDatabaseCount('tags', 3);
 
         $this->assertEquals(3, $clip->tags()->count());
+    }
+
+    /** @test */
+    public function a_moderator_can_create_a_clip_with_presenters(): void
+    {
+        Presenter::factory(2)->create();
+        $presenter1 = Presenter::find(1);
+        $presenter2 = Presenter::find(2);
+        $this->signInRole($this->role);
+
+        $attributes = Clip::factory()->raw([
+            'presenters' => [$presenter1->id, $presenter2->id]
+        ]);
+
+        $this->post(route('clips.store'), $attributes);
+
+        $clip = Clip::first();
+
+        $this->assertDatabaseCount('clip_presenter', 2);
+
+        $this->assertEquals(2, $clip->presenters()->count());
     }
 
     /** @test */

@@ -39,7 +39,6 @@ class SeriesClipsController extends Controller
         $clip = $series->addClip($validated);
 
         $clip->addTags(collect($validated['tags']));
-
         $clip->addAcls(collect($validated['acls']));
 
         $request->session()->flash('clip_created_successfully', 'Clip created successfully');
