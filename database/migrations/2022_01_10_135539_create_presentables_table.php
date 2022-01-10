@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateClipPresenterTable extends Migration
+class CreatePresentablesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,13 @@ class CreateClipPresenterTable extends Migration
      */
     public function up()
     {
-        Schema::create('clip_presenter', function (Blueprint $table) {
-            $table->primary(['clip_id', 'presenter_id']);
-            $table->foreignId('clip_id')->references('id')->on('clips')->onDelete('cascade');
+        Schema::create('presentables', function (Blueprint $table) {
+            $table->primary(['presenter_id', 'presentable_id', 'presentable_type']);
+
             $table->foreignId('presenter_id')->references('id')->on('presenters')->onDelete('cascade');
+            $table->foreignId('presentable_id');
+            $table->string('presentable_type');
+
             $table->timestamps();
         });
     }
@@ -28,6 +31,6 @@ class CreateClipPresenterTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('clip_presenter');
+        Schema::dropIfExists('presentables');
     }
 }

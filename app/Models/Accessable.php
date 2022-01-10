@@ -8,6 +8,11 @@ use Illuminate\Support\Collection;
 
 trait Accessable
 {
+    /**
+     * Given model acls relationship
+     *
+     * @return MorphToMany
+     */
     public function acls(): MorphToMany
     {
         return $this->morphToMany(Acl::class, 'accessable')->withTimestamps();

@@ -13,6 +13,7 @@ use Facades\Tests\Setup\FileFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
@@ -111,6 +112,12 @@ class ClipTest extends TestCase
     }
 
     /** @test */
+    public function it_has_many_presenters_using_presentable_trait(): void
+    {
+        $this->assertInstanceOf(MorphToMany::class, $this->clip->presenters());
+    }
+
+    /** @test */
     public function it_can_add_an_asset(): void
     {
         $asset = $this->clip->addAsset([
@@ -148,16 +155,6 @@ class ClipTest extends TestCase
         $this->clip->addTags(collect(['php', 'tides']));
 
         $this->assertEquals(2, $this->clip->tags()->count());
-    }
-
-    /** @test */
-    public function it_can_add_presenters(): void
-    {
-        Presenter::factory(2)->create();
-        $this->clip->addPresenters(collect(['1', '2']));
-
-        $this->assertEquals(2, $this->clip->presenters()->count());
-
     }
 
     /** @test */

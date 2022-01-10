@@ -12,8 +12,10 @@ class StoreSeriesRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            'slug'     => Str::slug($this->title),
-            'isPublic' => $this->isPublic === 'on',
+            'slug'       => Str::slug($this->title),
+            'isPublic'   => $this->isPublic === 'on',
+            'presenters' =>
+                $this->presenters = $this->presenters ?? [], //set empty array if select2 presenters is empty
         ]);
     }
 
@@ -38,6 +40,7 @@ class StoreSeriesRequest extends FormRequest
             'title'           => ['required'],
             'description'     => ['max:255'],
             'organization_id' => ['required', 'integer'],
+            'presenters'      => ['array'],
             'slug'            => ['required'],
             'password'        => ['nullable', Password::min(8)->mixedCase()],
             'isPublic'        => ['boolean'],

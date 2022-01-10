@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Storage;
 class Clip extends BaseModel
 {
     use Accessable;
+    use Presentable;
     use Slugable;
 
     protected $attributes = [
@@ -71,16 +72,6 @@ class Clip extends BaseModel
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class, 'clip_tag')->withTimestamps();
-    }
-
-    /**
-     * Presenters relationship
-     *
-     * @return BelongsToMany
-     */
-    public function presenters(): BelongsToMany
-    {
-        return $this->belongsToMany(Presenter::class, 'clip_presenter')->withTimestamps();
     }
 
     /**
@@ -184,21 +175,6 @@ class Clip extends BaseModel
             })->pluck('id'));
         } else {
             $this->tags()->detach();
-        }
-    }
-
-    /**
-     * Add presenters to a clip
-     *
-     * @param Collection $presentersCollection
-     * @return void
-     */
-    public function addPresenters(Collection $presentersCollection): void
-    {
-        if ($presentersCollection->isNotEmpty()) {
-            $this->presenters()->sync($presentersCollection);
-        } else {
-            $this->presenters()->detach();
         }
     }
 

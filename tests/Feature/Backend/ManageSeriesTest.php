@@ -88,6 +88,7 @@ class ManageSeriesTest extends TestCase
         $this->get(route('series.create'))
             ->assertSee('title')
             ->assertSee('description')
+            ->assertSee('presenters')
             ->assertSee('acls')
             ->assertSee('password')
             ->assertSee('isPublic')
@@ -258,6 +259,7 @@ class ManageSeriesTest extends TestCase
         $this->get($series->adminPath())
             ->assertStatus(200)
             ->assertSee('title')
+            ->assertSee('presenters')
             ->assertSee('description');
     }
 
@@ -311,7 +313,7 @@ class ManageSeriesTest extends TestCase
     public function edit_series_should_display_opencast_running_events_if_any(): void
     {
         $series = SeriesFactory::ownedBy($this->signInRole($this->role))->create();
-        
+
         $runningWorkflow = $this->mockSeriesRunningWorkflowsResponse($series, true);
 
         $this->mockHandler->append(

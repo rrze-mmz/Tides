@@ -54,7 +54,7 @@ class ClipsController extends Controller
         $validated = $request->validated();
 
 
-        $clip = auth()->user()->clips()->create(Arr::except($request->validated(), ['tags', 'acls', 'presenters']));
+        $clip = auth()->user()->clips()->create(Arr::except($validated, ['tags', 'acls', 'presenters']));
 
         $clip->addTags(collect($validated['tags']));
         $clip->addPresenters(collect($validated['presenters']));
@@ -97,7 +97,7 @@ class ClipsController extends Controller
     {
         $validated = $request->validated();
 
-        $clip->update(Arr::except($request->validated(), ['tags', 'acls', 'presenters']));
+        $clip->update(Arr::except($validated, ['tags', 'acls', 'presenters']));
 
         $clip->addTags(collect($validated['tags']));
         $clip->addPresenters(collect($validated['presenters']));

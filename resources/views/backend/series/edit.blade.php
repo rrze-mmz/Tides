@@ -44,6 +44,12 @@
                                        :selectedItem="$series->organization_id"
                 />
 
+                <x-form.select2-multiple field-name="presenters"
+                                         :model="$series"
+                                         label="Presenters"
+                                         select-class="select2-tides-presenters"
+                                         :items="$series->presenters"/>
+
                 <x-form.password field-name="password"
                                  :value="$series->password"
                                  label="Password"

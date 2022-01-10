@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class Presenter extends BaseModel
 {
@@ -15,12 +15,22 @@ class Presenter extends BaseModel
     }
 
     /**
+     * Series relationship
+     *
+     * @return MorphToMany
+     */
+    public function series(): MorphToMany
+    {
+        return $this->morphedByMany(Series::class, 'presentable')->withTimestamps();
+    }
+
+    /**
      * Clip relationship
      *
-     * @return BelongsToMany
+     * @return MorphToMany
      */
-    public function clips(): BelongsToMany
+    public function clips(): MorphToMany
     {
-        return $this->belongsToMany(Clip::class, 'clip_presenter')->withTimestamps();
+        return $this->morphedByMany(Clip::class, 'presentable')->withTimestamps();
     }
 }

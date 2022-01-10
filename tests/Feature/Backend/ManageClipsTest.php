@@ -216,7 +216,7 @@ class ManageClipsTest extends TestCase
 
         $clip = Clip::first();
 
-        $this->assertDatabaseCount('clip_presenter', 2);
+        $this->assertDatabaseCount('presentables', 2);
 
         $this->assertEquals(2, $clip->presenters()->count());
     }

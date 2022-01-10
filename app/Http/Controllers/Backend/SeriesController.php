@@ -10,6 +10,7 @@ use App\Services\OpencastService;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Arr;
 use Log;
 
 class SeriesController extends Controller
@@ -48,11 +49,14 @@ class SeriesController extends Controller
      */
     public function store(StoreSeriesRequest $request, OpencastService $opencastService): RedirectResponse
     {
-        $series = auth()->user()->series()->create($request->validated());
+        $validated = $request->validated();
+
+        $series = auth()->user()->series()->create(Arr::except($validated, ['presenters']));
 
         $opencastSeriesId = $opencastService->createSeries($series);
 
         $series->updateOpencastSeriesId($opencastSeriesId);
+        $series->addPresenters(collect($validated['presenters']));
 
         session()->flash('flashMessage', 'Clip created successfully');
 
@@ -91,12 +95,14 @@ class SeriesController extends Controller
         OpencastService     $opencastService
     ): RedirectResponse
     {
+        $validated = $request->validated();
         if (is_null($series->opencast_series_id)) {
             $opencastSeriesId = $opencastService->createSeries($series);
 
             $series->updateOpencastSeriesId($opencastSeriesId);
         }
-        $series->update($request->validated());
+        $series->update(Arr::except($validated, ['presenters']));
+        $series->addPresenters(collect($validated['presenters']));
 
         return redirect($series->adminPath());
     }

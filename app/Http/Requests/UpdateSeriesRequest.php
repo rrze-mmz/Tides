@@ -12,8 +12,10 @@ class UpdateSeriesRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            'slug'     => Str::slug($this->title),
-            'isPublic' => $this->isPublic === 'on',
+            'slug'       => Str::slug($this->title),
+            'isPublic'   => $this->isPublic === 'on',
+            'presenters' =>
+                $this->presenters = $this->presenters ?? [], //set empty array if select2 presenters is empty
         ]);
     }
 
@@ -39,6 +41,7 @@ class UpdateSeriesRequest extends FormRequest
             'description'        => ['max:500'],
             'organization_id'    => ['required ', 'integer'],
             'slug'               => ['required'],
+            'presenters'         => ['array'],
             'opencast_series_id' => ['null', 'uuid'],
             'password'           => ['nullable', Password::min(8)->mixedCase()],
             'isPublic'           => ['boolean'],

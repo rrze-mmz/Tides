@@ -21,6 +21,12 @@ class PresenterTest extends TestCase
     }
 
     /** @test */
+    public function it_belongs_to_many_series(): void
+    {
+        $this->assertInstanceOf(BelongsToMany::class, $this->presenter->series());
+    }
+
+    /** @test */
     public function it_belongs_to_many_clips(): void
     {
         $this->assertInstanceOf(BelongsToMany::class, $this->presenter->clips());

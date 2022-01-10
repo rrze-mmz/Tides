@@ -63,7 +63,18 @@
     </div>
 
     <div class="flex pt-6 pb-2 font-semibold border-b border-black font-2xl">
-        {{ $presenter->getFullNameAttribute() }} clips
+        {{ $presenter->getFullNameAttribute() }} appears on these series
+    </div>
+    <div class="grid grid-cols-3 gap-4 pt-8 h48">
+        @forelse($presenter->series as $series)
+            @include('backend.series._card',['series'=> $series])
+        @empty
+            No series found
+        @endforelse
+    </div>
+
+    <div class="flex pt-6 pb-2 font-semibold border-b border-black font-2xl">
+        {{ $presenter->getFullNameAttribute() }} appears on these clips
     </div>
     <div class="grid grid-cols-3 gap-4 pt-8 h48">
         @forelse($presenter->clips as $clip)
