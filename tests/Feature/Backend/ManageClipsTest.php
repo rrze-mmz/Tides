@@ -623,4 +623,16 @@ class ManageClipsTest extends TestCase
 
         $this->get(route('clips.edit', $clip))->assertSee('camera.smil');
     }
+
+    /** @test */
+    public function clip_edit_page_has_a_assign_series_option_if_clip_has_no_series(): void
+    {
+        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create(['series_id' => 1]);
+
+        $this->get(route('clips.edit', $clip))->assertDontSee('Assign series');
+
+        $clip = ClipFactory::create();
+
+        $this->get(route('clips.edit', $clip))->assertSee('Assign series ');
+    }
 }

@@ -4,7 +4,7 @@
     <div class="flex items center  w-full pb-2 font-semibold border-b border-black font-2xl">
         <div class="flex justify-between items-end w-full">
             <div class="">
-                Edit1 {{ $clip->title }} [ ID: {{ $clip->id }} ]
+                <span class="text-2xl"> [ ID: {{ $clip->id }} ] {{ $clip->title }}</span>
                 <span class="pl-2 italic font-sm"> created at {{$clip->created_at}}</span>
             </div>
             <div class="flex space-x-2">
@@ -101,12 +101,16 @@
 
             </div>
 
-            <x-form.button :link="$link=false" type="submit" text="Save"/>
+            <x-form.button :link="$link=false"
+                           type="submit"
+                           text="Save"/>
         </form>
 
         <div class="space-y-5 w-1/5 h-full">
             @if(! is_null($clip->series_id) )
                 @include('backend.clips.sidebar._series-options')
+            @else
+                @include('backend.clips.sidebar._assign-series')
             @endif
 
             @include('backend.clips.sidebar._upload-video')
@@ -116,21 +120,8 @@
             @endif
 
             @if(auth()->user()->isAdmin() && $clip->acls->pluck('id')->contains('2'))
-                <div class="w-full py-4 px-4 mx-4 h-full bg-white rounded border">
-                    <header class="items-center pb-2 mb-2 font-semibold text-center border-b">
-                        LMS Test Link
-                    </header>
-                    <p>
-                        <a
-                            href="{{generateLMSToken($clip, dechex(time()), true)}}"
-                            type="button"
-                            class="mt-2 py-2 px-8 text-white bg-green-500 rounded shadow hover:bg-green-600
-                            focus:shadow-outline focus:outline-none"
-                        >LMS Test Link</a>
-                    </p>
-                </div>
+                @include('backend.clips.sidebar._lms_test_link')
             @endif
-
         </div>
     </div>
 
@@ -162,8 +153,9 @@
             @method('DELETE')
 
             <x-form.button :link="$link=false"
-                           type="delete"
+                           type="submit"
                            text="Delete"
+                           color="red"
             />
 
         </form>

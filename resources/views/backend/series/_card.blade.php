@@ -114,5 +114,16 @@
             </div>
         @endif
 
+        @if(isset($action) && $action == 'assignClip')
+            <form action="{{route('series.clips.assign',['series'=>$series,'clip'=>$clip])}}"
+                  method="POST"
+                  class="flex flex-col py-2"
+            >
+                @csrf
+                <x-form.button :link="$link=false"
+                               type="submit"
+                               text="Select this series"/>
+            </form>
+        @endif
     </div>
 </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreClipRequest;
+use App\Models\Clip;
 use App\Models\Series;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\View\View;
@@ -42,6 +43,59 @@ class SeriesClipsController extends Controller
         $clip->addAcls(collect($validated['acls']));
 
         $request->session()->flash('clip_created_successfully', 'Clip created successfully');
+
+        return redirect(route('clips.edit', $clip));
+    }
+
+    /**
+     * @param Clip $clip
+     * @return View
+     * @throws AuthorizationException
+     */
+    public function listSeries(Clip $clip): View
+    {
+        $this->authorize('edit', $clip);
+
+        return view('backend.seriesClips.listSeries', [
+            'clip'   => $clip,
+            'series' =>
+                (auth()->user()->isAdmin())
+                    ? Series::orderByDesc('updated_at')->paginate(12)
+                    : auth()->user()->series()->orderByDesc('updated_at')->paginate(12)
+        ]);
+    }
+
+    /**
+     * Assign the given series to the given clip
+     *
+     * @param Series $series
+     * @param Clip $clip
+     * @return RedirectResponse
+     * @throws AuthorizationException
+     */
+    public function assign(Series $series, Clip $clip): RedirectResponse
+    {
+        $this->authorize('edit-series', $series);
+
+        $clip->episode = $series->clips()->count() + 1;
+        $clip->series()->associate($series);
+        $clip->save();
+
+        return redirect(route('clips.edit', $clip));
+    }
+
+    /**
+     * @param Clip $clip
+     * @return RedirectResponse
+     * @throws AuthorizationException
+     */
+    public function remove(Clip $clip): RedirectResponse
+    {
+        $this->authorize('edit-clips', $clip);
+
+        $clip->episode = 1;
+        $clip->series()->dissociate();
+        $clip->save();
 
         return redirect(route('clips.edit', $clip));
     }

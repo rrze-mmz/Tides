@@ -14,15 +14,10 @@ const mix = require('laravel-mix');
 //     jquery: ['$', 'jQuery', 'window.jQuery']
 // });
 
-mix
-    .js('resources/js/app.js', 'public/js').vue()
+mix.js('resources/js/app.js', 'public/js')
     .postCss('resources/css/app.css', 'public/css', [
-        require('postcss-import'),
-        require('postcss-nested'),
-        require('autoprefixer'),
         require('tailwindcss'),
-    ])
-    .version();
+    ]);
 
 if (mix.inProduction()) {
     mix

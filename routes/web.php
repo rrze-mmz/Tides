@@ -114,6 +114,13 @@ Route::prefix('admin')->middleware(['auth', 'can:access-dashboard'])->group(func
     Route::get('/series/{series}/addClip', [SeriesClipsController::class, 'create'])->name('series.clip.create');
     Route::post('series/{series}/addClip', [SeriesClipsController::class, 'store'])->name('series.clip.store');
 
+    //add/remove an existing clip to selected series
+    Route::get('/series/listSeries/{clip}', [SeriesClipsController::class, 'listSeries'])
+        ->name('series.clips.listSeries');
+    Route::post('/series/{series}/assignSeries/{clip}', [SeriesClipsController::class, 'assign'])
+        ->name('series.clips.assign');
+    Route::delete('/clip/removeSeries/{clip}', [SeriesClipsController::class, 'remove'])
+        ->name('series.clips.remove');
     //Assets routes
     Route::post('/clips/{clip}/assets', [AssetsController::class, 'store'])->name('admin.assets.store');
     Route::delete('assets/{asset}', [AssetsController::class, 'destroy'])->name('assets.destroy');

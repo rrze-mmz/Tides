@@ -3,9 +3,11 @@
 namespace Tests\Feature\Backend;
 
 use App\Models\Clip;
+use App\Models\Series;
 use Facades\Tests\Setup\SeriesFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Facades\Tests\Setup\ClipFactory;
 use Tests\TestCase;
 
 class SeriesClipsTest extends TestCase
@@ -88,5 +90,49 @@ class SeriesClipsTest extends TestCase
         $this->post(route('series.clip.store', $series), Clip::factory()->raw())->assertStatus(302);
 
         $this->assertEquals(1, $series->clips()->count());
+    }
+
+    /** @test */
+    public function it_has_a_view_for_selecting_a_series_for_a_certain_clip(): void
+    {
+        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
+        $series = SeriesFactory::ownedBy($clip->owner)->create();
+
+        $this->get(route('series.clips.listSeries', $clip))->assertSee($series->title);
+    }
+
+    /** @test */
+    public function it_lists_only_series_that_belong_to_the_moderator(): void
+    {
+        $series = SeriesFactory::create();
+        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
+
+        $this->get(route('series.clips.listSeries', $clip))->assertDontSee($series->title);
+    }
+
+    /** @test */
+    public function it_assigns_a_clip_to_a_series(): void
+    {
+        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
+        $series = SeriesFactory::withClips(2)->ownedBy($clip->owner)->create();
+
+        $this->post(route('series.clips.assign', compact('series', 'clip')))->assertStatus(302);
+
+        $clip->refresh();
+
+        $this->assertEquals($series->id, $clip->series_id);
+        $this->assertEquals(3, $clip->episode);
+    }
+
+    /** @test */
+    public function it_removes_a_clip_from_series(): void
+    {
+        $series = SeriesFactory::withClips(3)->ownedBy($this->signInRole($this->role))->create();
+
+        $clip = $series->clips()->first();
+
+        $this->delete(route('series.clips.remove', $clip))->assertStatus(302);
+
+        $this->assertEquals(2, $series->clips()->count());
     }
 }
