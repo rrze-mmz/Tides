@@ -16,12 +16,12 @@
         "browser-sync-webpack-plugin": "^2.3.0",
         "jquery": "^3.6.0",
         "jquery-ui": "^1.13.0",
-        "laravel-mix": "^6.0.39",
+        "laravel-mix": "^6.0.18",
         "lodash": "^4.17.19",
         "postcss": "^8.4.5",
         "postcss-import": "^13.0",
-        "postcss-nested": "^4.2",
-        "vue-loader": "^15.9.7",
+        "postcss-nested": "^5.0.6",
+        "vue-loader": "^17.0.0",
         "vue-template-compiler": "^2.6.11"
     },
     "dependencies": {
