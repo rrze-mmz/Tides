@@ -35,6 +35,14 @@ class ManageClipsTest extends TestCase
     }
 
     /** @test */
+    public function it_shows_a_create_clip_button_if_moderator_has_no_series(): void
+    {
+        $this->signInRole('moderator');
+
+        $this->get(route('clips.index'))->assertSee('Create new clip');
+    }
+
+    /** @test */
     public function it_paginates_users_clips_in_dashboard_index_page(): void
     {
         Clip::factory(20)->create(['owner_id' => $this->signInRole($this->role)]);

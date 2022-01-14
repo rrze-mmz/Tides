@@ -93,8 +93,7 @@ class SeriesController extends Controller
         Series              $series,
         UpdateSeriesRequest $request,
         OpencastService     $opencastService
-    ): RedirectResponse
-    {
+    ): RedirectResponse {
         $validated = $request->validated();
         if (is_null($series->opencast_series_id)) {
             $opencastSeriesId = $opencastService->createSeries($series);

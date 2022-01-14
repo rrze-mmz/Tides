@@ -38,7 +38,7 @@ class ManageSeriesTest extends TestCase
     }
 
     /** @test */
-    public function it_shows_a_create_series_button_if_user_has_no_series(): void
+    public function it_shows_a_create_series_button_if_moderator_has_no_series(): void
     {
         $this->signInRole('moderator');
 

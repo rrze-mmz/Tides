@@ -28,7 +28,7 @@ class ClipsController extends Controller
             [
                 'clips' => (auth()->user()->isAdmin())
                     ? Clip::orderBy('title')->paginate(12)
-                    : auth()->user()->series()->orderBy('updated_at')->paginate(12),
+                    : auth()->user()->clips()->orderBy('updated_at')->paginate(12),
             ]
         );
     }//end index()

@@ -277,7 +277,7 @@ class ManageUsersTest extends TestCase
             'email'      => 'john@doe.com'
         ];
 
-        $this->post(route('users.store'), $attributes);
+        $this->post(route('users.store'), $attributes)->assertStatus(302);
 
         $this->assertDatabaseHas('users', ['username' => $attributes['username']]);
     }

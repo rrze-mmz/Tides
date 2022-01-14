@@ -12,12 +12,13 @@ class Button extends Component
      *
      * @return void
      */
-    public function __construct(public string $link,
-                                public string $type,
-                                public string $text,
-                                public string $color = '',
-                                public string $additionalClasses = '')
-    {
+    public function __construct(
+        public string $link,
+        public string $type,
+        public string $text,
+        public string $color = '',
+        public string $additionalClasses = ''
+    ) {
         //
     }
 
