@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Models\Clip;
 use App\Services\WowzaService;
+use DOMException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
 
@@ -16,7 +17,7 @@ class TriggerSmilFilesController extends Controller
      * @param Clip $clip
      * @param WowzaService $wowzaService
      * @return RedirectResponse
-     * @throws AuthorizationException|\DOMException
+     * @throws AuthorizationException|DOMException
      */
     public function __invoke(Clip $clip, WowzaService $wowzaService): RedirectResponse
     {
