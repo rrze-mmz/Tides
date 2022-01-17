@@ -40,7 +40,7 @@ class AccessableTraitTest extends TestCase
         //clip is open
         $this->assertTrue($this->clip->checkAcls());
 
-        //clip is available only for logged in users
+        //clip is available only for logged-in users
         $this->clip->addAcls(collect(['1']));
 
         $this->clip->refresh();
