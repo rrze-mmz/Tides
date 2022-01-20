@@ -76,7 +76,6 @@ class SeriesController extends Controller
         $this->authorize('edit', $series);
 
         $opencastSeriesInfo = $opencastService->getSeriesInfo($series);
-        \Debugbar::info($opencastSeriesInfo);
 
         return view('backend.series.edit', compact(['series', 'opencastSeriesInfo']));
     }
@@ -93,7 +92,8 @@ class SeriesController extends Controller
         Series              $series,
         UpdateSeriesRequest $request,
         OpencastService     $opencastService
-    ): RedirectResponse {
+    ): RedirectResponse
+    {
         $validated = $request->validated();
         if (is_null($series->opencast_series_id)) {
             $opencastSeriesId = $opencastService->createSeries($series);

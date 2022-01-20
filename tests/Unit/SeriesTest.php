@@ -3,8 +3,8 @@
 namespace Tests\Unit;
 
 use App\Models\Clip;
-use App\Models\Presenter;
 use App\Models\Series;
+use App\Models\User;
 use Facades\Tests\Setup\SeriesFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -110,5 +110,19 @@ class SeriesTest extends TestCase
     public function it_has_a_public_scope(): void
     {
         $this->assertInstanceOf(Builder::class, Series::isPublic());
+    }
+
+    /** @test */
+    public function series_owner_can_be_null(): void
+    {
+        $user = User::factory()->create();
+
+        $series = $user->series()->create(['title' => 'test', 'slug' => 'test']);
+
+        $user->delete();
+
+        $series = Series::find($series->id);
+
+        $this->assertNull($series->owner_id);
     }
 }

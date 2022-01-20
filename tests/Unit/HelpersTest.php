@@ -52,6 +52,21 @@ class HelpersTest extends TestCase
     }
 
     /** @test */
+    public function it_ignores_hidden_files_in_dropzone(): void
+    {
+        $disk = Storage::fake('video_dropzone');
+
+        $disk->putFileAs('', FileFactory::videoFile(), 'export_video_1080.mp4');
+        $disk->putFileAs('', FileFactory::simpleFile(), '.DS_Store');
+
+        $collection = fetchDropZoneFiles();
+
+        $this->assertInstanceOf('Illuminate\Support\Collection', $collection);
+
+        $this->assertTrue($collection->contains('name', 'export_video_1080.mp4'));
+    }
+
+    /** @test */
     public function it_returns_active_class_if_current_url_matches_href()
     {
         $this->get(route('dashboard'));

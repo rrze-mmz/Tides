@@ -16,7 +16,7 @@ class CreateClipsTable extends Migration
         Schema::create('clips', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->foreignId('owner_id')->references('id')->on('users');
+            $table->foreignId('owner_id')->nullable()->references('id')->on('users')->nullOnDelete();
             $table->foreignId(('semester_id'))->references('id')->on('semesters');
             $table->string('slug')->unique();
             $table->text('description')->nullable();

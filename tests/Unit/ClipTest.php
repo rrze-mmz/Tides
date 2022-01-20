@@ -208,4 +208,18 @@ class ClipTest extends TestCase
     {
         $this->assertInstanceOf(Builder::class, Clip::public());
     }
+
+    /** @test */
+    public function clip_owner_can_be_null(): void
+    {
+        $user = User::factory()->create();
+
+        $clip = $user->clips()->create(['title' => 'test', 'slug' => 'test', 'semester_id' => 1]);
+
+        $user->delete();
+
+        $clip = Clip::find($clip->id);
+
+        $this->assertNull($clip->owner_id);
+    }
 }

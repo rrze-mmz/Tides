@@ -43,23 +43,34 @@ function getClipStoragePath(Clip $clip): string
  */
 function fetchDropZoneFiles(): Collection
 {
-    return collect(Storage::disk('video_dropzone')->files())
-        ->mapWithKeys(function ($file) {
-            $video = FFMpeg::fromDisk('video_dropzone')->open($file)->getVideoStream();
-            $mime = mime_content_type(Storage::disk('video_dropzone')->getAdapter()->applyPathPrefix($file));
+    /*
+     *  Use Storage instead of File Facade. That way although hidden files will be fetched,
+     * it's easy to mock and create the test. The hidden files will be filtered.
+     */
+    return
+        collect(Storage::disk('video_dropzone')->files())
+            ->filter(function ($file) {
+                /*
+                 * filter hidden files
+                 */
+                return $file[0] !== '.';
+            })
+            ->mapWithKeys(function ($file) {
+                $video = FFMpeg::fromDisk('video_dropzone')->open($file)->getVideoStream();
+                $mime = mime_content_type(Storage::disk('video_dropzone')->getAdapter()->applyPathPrefix($file));
 
-            return [sha1($file) => [
-                'tag'           => 'dropzone/file',
-                'type'          => $mime,
-                'video'         => ($video !== null) ? $video->get('width') . 'x' . $video->get('height') : null,
-                'version'       => '1',
-                'date_modified' => Carbon::createFromTimestamp(Storage::disk('video_dropzone')
-                    ->lastModified($file))
-                    ->format('Y-m-d H:i:s'),
-                'name'          => $file,
-            ]
-            ];
-        })->sortBy('date_modified');
+                return [sha1($file) => [
+                    'tag'           => 'dropzone/file',
+                    'type'          => $mime,
+                    'video'         => ($video !== null) ? $video->get('width') . 'x' . $video->get('height') : null,
+                    'version'       => '1',
+                    'date_modified' => Carbon::createFromTimestamp(Storage::disk('video_dropzone')
+                        ->lastModified($file))
+                        ->format('Y-m-d H:i:s'),
+                    'name'          => $file,
+                ]
+                ];
+            })->sortBy('date_modified');
 }
 
 /**
@@ -74,7 +85,7 @@ function setActiveLink(string $route): string
 }
 
 /**
- * Generates a LMS token based on the given object (series|clip)
+ * Generates an LMS token based on the given object (series|clip)
  *
  * @param $obj
  * @param $time

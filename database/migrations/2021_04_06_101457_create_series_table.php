@@ -16,7 +16,7 @@ class CreateSeriesTable extends Migration
         Schema::create('series', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->foreignId('owner_id')->references('id')->on('users');
+            $table->foreignId('owner_id')->nullable()->references('id')->on('users')->nullOnDelete();
             $table->string('slug')->unique();
             $table->text('description')->nullable();
             $table->text('opencast_series_id')->nullable()->default(null);

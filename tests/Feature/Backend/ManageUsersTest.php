@@ -10,6 +10,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Notification;
 use Livewire\Livewire;
+use Facades\Tests\Setup\SeriesFactory;
 use Tests\TestCase;
 
 class ManageUsersTest extends TestCase
@@ -383,7 +384,7 @@ class ManageUsersTest extends TestCase
 
         $this->assertDatabaseMissing('users', ['id' => $user->id]);
     }
-
+    
     /** @test */
     public function an_admin_can_assign_a_role_to_a_user(): void
     {

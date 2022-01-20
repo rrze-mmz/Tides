@@ -70,7 +70,7 @@
 
         @if(auth()->user()->isAdmin())
             <div class="w-1/5">
-                Series owner is {{ $series->owner->getFullNameAttribute() }}
+                Series owner is {{ $series->owner?->getFullNameAttribute() }}
             </div>
         @endif
 

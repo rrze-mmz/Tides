@@ -83,7 +83,7 @@
             </div>
             <div class="text-sm">
                 <p class="italic text-gray-900">
-                    {{ $series->owner->getFullNameAttribute() }}
+                    {{ $series->owner?->getFullNameAttribute() }}
                 </p>
             </div>
         </div>

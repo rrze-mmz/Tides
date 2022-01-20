@@ -29,7 +29,7 @@
         "facade/ignition": "^2.5",
         "fakerphp/faker": "^1.9.1",
         "laravel-frontend-presets/tailwindcss": "^4.3",
-        "laravel/sail": "^1.0.1",
+        "laravel/sail": "^1.13",
         "mockery/mockery": "^1.4.2",
         "nunomaduro/collision": "^5.0",
         "nunomaduro/larastan": "^0.7.12",

@@ -22,4 +22,10 @@ class FileFactory
                 storage_path() . '/tests/Sample_Audio_file.mp3', 'Sample_Audio_file.mp3', 'audio/mpeg', null, true
             );
     }
+
+    public function simpleFile(): UploadedFile
+    {
+        return
+            UploadedFile::fake()->create('.DS_Store', '10', 'application/octet-stream');
+    }
 }
