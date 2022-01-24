@@ -54,6 +54,7 @@ class TransferAssetsJob implements ShouldQueue
                 : Storage::disk('video_dropzone')->readStream($file['name']);
 
             try {
+                Storage::disk('videos')->makeDirectory($clipStoragePath);
                 Storage::disk('videos')->writeStream($clipStoragePath . '/' . $file['name'], $storageDisk);
             } catch (FileNotFoundException $e) {
                 Log::error($e);

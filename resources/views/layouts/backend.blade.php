@@ -67,11 +67,10 @@
         <div class="min-h-screen max-h-full  bg-gray-800 w-1/7">
             @include('backend.dashboard._sidebar-navigation')
         </div>
-        <div class="pt-8 w-full lg:flex-grow lg:mx-10">
+        <div class="pt-8 w-full lg:flex-grow lg:mx-10 pb-10">
             @if(Session::has('flashMessage'))
                 <x-alerts.flash-alert :message="Session::get('flashMessage', 'default')"/>
             @endif
-
             @yield('content')
         </div>
     </main>

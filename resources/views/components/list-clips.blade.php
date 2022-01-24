@@ -21,7 +21,8 @@
                     </div>
                 </div>
                 <div class="w-3/12"> {{ $clip->title }}</div>
-                <div class="w-2/12">{{ ($clip->acls->isEmpty())?'open':$clip->acls()->pluck('name')->implode(',') }}</div>
+                <div
+                    class="w-2/12">{{ ($clip->acls->isEmpty())?'open':$clip->acls()->pluck('name')->implode(',') }}</div>
                 <div class="w-2/12">{{ $clip->semester->name }}</div>
                 <div class="w-1/12"> {{ $clip->assets->first()?->durationToHours()  }}</div>
                 <div class="w-1/12">
@@ -60,7 +61,13 @@
             </li>
 
         @empty
-            No clips
+            <div class="flex">
+                <ul class="pt-3 w-full">
+                    <li class="flex content-center items-center p-5 mb-4 text-lg bg-gray-400 rounded text-center">
+                        No clips
+                    </li>
+                </ul>
+            </div>
         @endforelse
     </ul>
 </div>

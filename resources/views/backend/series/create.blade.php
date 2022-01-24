@@ -35,11 +35,13 @@
                 <x-form.select2-multiple field-name="presenters"
                                          label="Presenters"
                                          select-class="select2-tides-presenters"
+                                         :model="null"
                                          :items="[]"
                 />
 
                 <x-form.select2-multiple field-name="acls"
                                          label="Accessible via"
+                                         :model="null"
                                          select-class="select2-tides"
                 />
 

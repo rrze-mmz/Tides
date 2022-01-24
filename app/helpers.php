@@ -41,6 +41,9 @@ function getClipStoragePath(Clip $clip): string
  *
  * @return Collection
  */
+/**
+ * @return Collection
+ */
 function fetchDropZoneFiles(): Collection
 {
     /*
@@ -56,13 +59,23 @@ function fetchDropZoneFiles(): Collection
                 return $file[0] !== '.';
             })
             ->mapWithKeys(function ($file) {
-                $video = FFMpeg::fromDisk('video_dropzone')->open($file)->getVideoStream();
-                $mime = mime_content_type(Storage::disk('video_dropzone')->getAdapter()->applyPathPrefix($file));
+                $video = null;
+                $mime = null;
+                $lastModified = Carbon::createFromTimestamp(Storage::disk('video_dropzone')->lastModified($file))
+                    ->format('Y-m-d H:i:s');
+
+                // Check whether is file is at the moment written at the disk
+                if (Carbon::now()->diffInMinutes($lastModified) > 2) {
+                    $video = FFMpeg::fromDisk('video_dropzone')->open($file)->getVideoStream();
+                    $mime = mime_content_type(Storage::disk('video_dropzone')->getAdapter()->applyPathPrefix($file));
+                }
 
                 return [sha1($file) => [
                     'tag'           => 'dropzone/file',
                     'type'          => $mime,
-                    'video'         => ($video !== null) ? $video->get('width') . 'x' . $video->get('height') : null,
+                    'video'         => ($video !== null)
+                        ? $video->get('width') . 'x' . $video->get('height')
+                        : null,
                     'version'       => '1',
                     'date_modified' => Carbon::createFromTimestamp(Storage::disk('video_dropzone')
                         ->lastModified($file))
@@ -70,7 +83,7 @@ function fetchDropZoneFiles(): Collection
                     'name'          => $file,
                 ]
                 ];
-            })->sortBy('date_modified');
+            })->sortByDesc('date_modified');
 }
 
 /**

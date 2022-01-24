@@ -6,6 +6,7 @@ namespace Tests\Unit;
 use App\Models\Clip;
 use Facades\Tests\Setup\ClipFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Facades\Tests\Setup\FileFactory;
 use Tests\TestCase;

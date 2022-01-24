@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Clip;
 use App\Services\WowzaService;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\View\View;
 
@@ -28,7 +29,7 @@ class ShowClipsController extends Controller
      * @param Clip $clip
      * @param WowzaService $wowzaService
      * @return View
-     * @throws AuthorizationException
+     * @throws AuthorizationException|GuzzleException
      */
     public function show(Clip $clip, WowzaService $wowzaService): View
     {

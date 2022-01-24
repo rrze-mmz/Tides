@@ -29,7 +29,11 @@
                 </div>
             </li>
         @empty
-            No assets
+            <div class="flex text-center">
+                <div class="text-lg">
+                    No assets
+                </div>
+            </div>
         @endforelse
     </ul>
 </div>
