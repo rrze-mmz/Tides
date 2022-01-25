@@ -23,7 +23,8 @@
                 @endforelse
             @elseif($fieldName=='presenters')
                 @foreach($items as $item)
-                    <option value="{{$item->id }}" selected="selected">{{$item->getFullNameAttribute() }}</option>
+                    <option value="{{$item->id }}" selected="selected"
+                            class="p-4">{{$item->getFullNameAttribute() }}</option>
                 @endforeach
             @else
                 @foreach($items as $item)

@@ -68,11 +68,11 @@
 
         </form>
 
-        @if(auth()->user()->isAdmin())
-            <div class="w-1/5">
-                Series owner is {{ $series->owner?->getFullNameAttribute() }}
-            </div>
-        @endif
+        <div class="space-y-5 w-1/5 h-full">
+            @if(auth()->user()->isAdmin())
+                @include('backend.series.sidebar._series-owner')
+            @endif
+        </div>
 
     </div>
 

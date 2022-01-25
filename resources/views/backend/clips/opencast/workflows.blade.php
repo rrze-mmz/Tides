@@ -10,7 +10,7 @@
         @endforeach
     </ul>
 @else
-    <div>No running workflows found</div>
+    <div class="py-5">No running workflows found</div>
 @endif
 
 @if($opencastSeriesInfo['failed']->isNotEmpty())

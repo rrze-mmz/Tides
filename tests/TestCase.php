@@ -81,7 +81,6 @@ abstract class TestCase extends BaseTestCase
         Role::create([
             'name' => 'user',
         ]);
-
     }
 
     /**

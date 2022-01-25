@@ -4,6 +4,7 @@
 namespace Tests\Feature\Frontend;
 
 use App\Models\Clip;
+use App\Models\Presenter;
 use App\Services\WowzaService;
 use Facades\Tests\Setup\ClipFactory;
 use Facades\Tests\Setup\SeriesFactory;
@@ -218,6 +219,22 @@ class ClipTest extends TestCase
         $this->get(route('frontend.clips.show', $this->clip))
             ->assertSee('Tags')
             ->assertSee('testTags');
+    }
+
+    /** @test */
+    public function it_shows_clip_presenters_if_any(): void
+    {
+        $this->mockHandler->append(new Response(), new Response());
+
+        $presenters = Presenter::factory(2)->create();
+
+        $this->get(route('frontend.clips.show', $this->clip))->assertDontSee('Tags');
+
+        $this->clip->addPresenters($presenters);
+
+        $this->get(route('frontend.clips.show', $this->clip))
+            ->assertSee(Presenter::find(1)->getFullNameAttribute())
+            ->assertSee(Presenter::find(2)->getFullNameAttribute());
     }
 
     /** @test */

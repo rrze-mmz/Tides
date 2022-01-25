@@ -2,19 +2,19 @@
 
 @section('content')
     <div class="flex pb-2 font-semibold border-b border-black font-2xl">
-        Welcome {{ auth()->user()->name }} !! This is your personal Dashboard
+        Welcome to your personal dashboard, {{ auth()->user()->getFullNameAttribute() }} !
     </div>
     <div class="flex flex-col py-2 px-2">
         <div>
             <p class="pt-2">
-                <span class="mr-2">Start by creating a new series (series are a collection of clips)</span>
+                <span class="mr-2">Start by creating a new series (series is a collection of clips)</span>
                 <x-form.button :link="route('series.create')" type="submit" text="New series"/>
             </p>
         </div>
         <div>
-            <p class="pt-2 mt-4
-                            <span class=" mr-2">Start by creating a new video clip</span>
-            <x-form.button :link="route('clips.create')" type="submit" text="New clip"/>
+            <p class="pt-2 mt-4">
+                <span class=" mr-2">Start by creating a new video clip</span>
+                <x-form.button :link="route('clips.create')" type="submit" text="New clip"/>
 
             </p>
         </div>

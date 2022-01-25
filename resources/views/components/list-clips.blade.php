@@ -61,12 +61,10 @@
             </li>
 
         @empty
-            <div class="flex">
-                <ul class="pt-3 w-full">
-                    <li class="flex content-center items-center p-5 mb-4 text-lg bg-gray-400 rounded text-center">
-                        No clips
-                    </li>
-                </ul>
+            <div class="grid place-items-center">
+                <div class=" w-full p-5 mb-4 text-2xl bg-gray-200 rounded text-center">
+                    No clips
+                </div>
             </div>
         @endforelse
     </ul>

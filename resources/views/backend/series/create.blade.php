@@ -29,7 +29,7 @@
                                        label="Organization"
                                        select-class="select2-tides-organization"
                                        model="organization"
-                                       :selectedItem="old('organization_id')"
+                                       :selectedItem="(old('organization_id'))?? 1 "
                 />
 
                 <x-form.select2-multiple field-name="presenters"
