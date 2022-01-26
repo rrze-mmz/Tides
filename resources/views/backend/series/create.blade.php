@@ -5,7 +5,7 @@
         Create new series
     </div>
     <div class="flex py-2 px-2">
-        <form action="/admin/series/"
+        <form action="{{ route('series.store') }}"
               method="POST"
               class="w-4/5">
             @csrf

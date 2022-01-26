@@ -25,7 +25,7 @@
         </div>
     </div>
     <div class="flex py-2 px-2">
-        <form action="{{ $clip->adminPath() }}"
+        <form action="{{ route('clips.update', $clip) }}"
               method="POST"
               class="w-4/5"
         >
@@ -129,7 +129,7 @@
         More actions
     </div>
     <div class="flex items-center pt-3 space-x-6">
-        <x-form.button :link="$clip->path()"
+        <x-form.button :link="route('frontend.clips.show',$clip)"
                        type="submit"
                        text="Go to public page"
         />
@@ -146,7 +146,7 @@
                        text=" Transfer files from drop zone"
         />
 
-        <form action="{{ $clip->adminPath() }}"
+        <form action="{{ route('clips.destroy',$clip) }}"
               method="POST"
         >
             @csrf

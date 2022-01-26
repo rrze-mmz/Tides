@@ -21,27 +21,13 @@
     </div>
     <div class="flex">
         <div class="w-2/3">
-            <div class="pt-10 pb-2 font-semibold border-b border-black font-2xl">
-                Your Latest Series
-            </div>
-            <div class="grid grid-cols-3 gap-4 pt-8 h48">
-                @forelse($series as $single)
-                    @include('backend.series._card',['series'=> $single])
-                @empty
-                    No series found
-                @endforelse
-            </div>
+            @can('view-opencast-workflows')
+                @include('backend.dashboard._opencast-workflows',['opencastWorkflows' => $opencastRunningWorkflows])
+            @endcan
 
-            <div class="pt-10 pb-2 font-semibold border-b border-black font-2xl">
-                Your Latest Clips
-            </div>
-            <div class="grid grid-cols-3 gap-4 pt-8 h48">
-                @forelse($clips as $clip)
-                    @include('backend.clips._card',['clip'=> $clip])
-                @empty
-                    No clips found
-                @endforelse
-            </div>
+            @include('backend.users.series._layout',['layoutHeader' => 'Your Latest Series', 'series'=> $userSeries])
+
+            @include('backend.users.clips._layout',['layoutHeader' => 'Your Latest Clips', 'clips'=> $userClips])
         </div>
 
         <div class="pl-2 w-1/3">

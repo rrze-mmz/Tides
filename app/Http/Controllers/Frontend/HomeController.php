@@ -20,7 +20,8 @@ class HomeController extends Controller
         return view('frontend.homepage.index', [
             'series' => Series::isPublic()
                 ->whereHas('clips', function ($q) {
-                    $q->whereHas('assets');
+                    //fetch clips that are public and have video files
+                    $q->public()->whereHas('assets');
                 })
                 ->orderByDesc('updated_at')
                 ->limit(18)

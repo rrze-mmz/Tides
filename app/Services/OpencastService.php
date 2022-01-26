@@ -59,6 +59,31 @@ class OpencastService
 
     /**
      *  Return opencast running workflows for a series
+     * @return Collection
+     */
+    public function getAllRunningWorkflows(): Collection
+    {
+        $runningWorkflows = collect([]);
+        try {
+            $this->response = $this->client->get('workflow/instances.json', [
+                'query' => [
+                    'state' => "running",
+                    'sort'  => 'DATE_CREATED_DESC'
+                ]
+            ]);
+            $runningWorkflows = collect(
+                $this->transformRunningWorkflowsResponse(json_decode((string)$this->response->getBody(), true))
+            );
+        } catch (GuzzleException $exception) {
+            Log::error($exception);
+        }
+
+//        dd($runningWorkflows);
+        return $runningWorkflows;
+    }
+
+    /**
+     *  Return opencast running workflows for a series
      * @param Series $series
      * @return Collection
      */
@@ -77,6 +102,35 @@ class OpencastService
             $runningWorkflows = collect(
                 $this->transformRunningWorkflowsResponse(json_decode((string)$this->response->getBody(), true))
             );
+        } catch (GuzzleException $exception) {
+            Log::error($exception);
+        }
+
+        return $runningWorkflows;
+    }
+
+    /**
+     *  Return opencast events based on status
+     *
+     * @param $status
+     * @return Collection
+     */
+    public function getEventsByStatus($status): Collection
+    {
+        $status = match ($status) {
+            'running' => 'EVENTS.EVENTS.STATUS.PROCESSING',
+            'failed' => 'EVENTS.EVENTS.STATUS.PROCESSING_FAILURE',
+        };
+        $runningWorkflows = collect([]);
+
+        try {
+            $this->response = $this->client->get('api/events', [
+                'query' => [
+                    'filter' => "status:" . $status
+                    ,
+                ]
+            ]);
+            $runningWorkflows = collect((json_decode((string)$this->response->getBody(), true)));
         } catch (GuzzleException $exception) {
             Log::error($exception);
         }

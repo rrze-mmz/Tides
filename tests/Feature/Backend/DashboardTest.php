@@ -3,17 +3,20 @@
 
 namespace Tests\Feature\Backend;
 
+use App\Services\OpencastService;
 use Facades\Tests\Setup\ClipFactory;
 use Facades\Tests\Setup\SeriesFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Storage;
+use Tests\Setup\WorksWithOpencastClient;
 use Tests\TestCase;
 
 class DashboardTest extends TestCase
 {
     use RefreshDatabase;
     use WithFaker;
+    use WorksWithOpencastClient;
 
     private string $role;
 
@@ -136,5 +139,31 @@ class DashboardTest extends TestCase
 
         $this->get(route('dashboard'))->assertDontSee('Opencast')
             ->assertDontSee('Users');
+    }
+
+    /** @test */
+    public function it_should_display_opencast_running_workflows_for_admins_if_any(): void
+    {
+        $series = SeriesFactory::withOpencastID()->create();
+
+        app(OpencastService::class);
+        $mockHandler = $this->swapOpencastClient();
+        $mockHandler->append($this->mockEventResponse($series, 'RUNNING', 'EVENTS.EVENTS.STATUS.PROCESSING', 2));
+        $this->signInRole('admin');
+
+        $this->get(route('dashboard'))->assertSee('Opencast running workflows');
+    }
+
+    /** @test */
+    public function it_should_not_display_opencast_running_workflows_for_moderators(): void
+    {
+        $series = SeriesFactory::withOpencastID()->create();
+
+        app(OpencastService::class);
+        $mockHandler = $this->swapOpencastClient();
+        $mockHandler->append($this->mockEventResponse($series, 'RUNNING', 'EVENTS.EVENTS.STATUS.PROCESSING', 2));
+        $this->signInRole($this->role);
+
+        $this->get(route('dashboard'))->assertDontSee('Opencast running workflows');
     }
 }

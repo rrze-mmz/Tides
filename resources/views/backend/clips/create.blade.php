@@ -5,7 +5,7 @@
         Creates new clip
     </div>
     <div class="flex py-2 px-2">
-        <form action="/admin/clips/"
+        <form action="{{ route('clips.store')}}"
               method="POST"
               class="w-4/5">
             @csrf

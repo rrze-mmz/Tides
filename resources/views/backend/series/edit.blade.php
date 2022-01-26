@@ -6,7 +6,7 @@
             class="text-xs italic pl-2 pt-1"> created at {{$series->created_at }} </span>
     </div>
     <div class="flex justify-center content-center content-between py-2 px-2">
-        <form action="{{ $series->adminPath() }}"
+        <form action="{{ route('series.update',$series) }}"
               method="POST"
               class=" @if(auth()->user()->isAdmin()) w-4/5 @else w-full @endif"
         >
@@ -115,7 +115,8 @@
                 </div>
                 <div x-show="activeTab === 2" id="opencast">
                     @if($opencastSeriesInfo->isNotEmpty())
-                        @include('backend.clips.opencast.workflows')
+                        @include('backend.dashboard._opencast-workflows',[
+                                    'opencastWorkflows' => $opencastSeriesInfo])
                     @endif
                 </div>
                 <div x-show="activeTab === 3">Tab 3 Content show Lorem ipsum dolor sit amet consectetur

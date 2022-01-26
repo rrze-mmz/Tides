@@ -29,4 +29,9 @@ class UserPolicy
     {
         return $user->hasRole('superadmin') || $user->hasRole('admin') || $user->hasRole('moderator');
     }
+
+    public function opencastWorkflows(User $user): bool
+    {
+        return $user->hasRole('superadmin') || $user->hasRole('admin');
+    }
 }

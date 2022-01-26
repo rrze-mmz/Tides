@@ -79,6 +79,22 @@ class SeriesTest extends TestCase
     }
 
     /** @test */
+    public function it_lists_all_public_clips(): void
+    {
+        $series = SeriesFactory::withClips(2)->withAssets(1)->create();
+
+        $firstClip = Clip::find(1);
+        $secondClip = Clip::find(2);
+
+        $firstClip->isPublic = false;
+        $firstClip->save();
+
+        $this->get(route('frontend.series.show', $series))
+            ->assertSee($secondClip->title)
+            ->assertDontSee($firstClip->title);
+    }
+
+    /** @test */
     public function it_lists_all_clips_acls(): void
     {
         $series = SeriesFactory::withClips(2)->withAssets(1)->create();
