@@ -204,20 +204,27 @@ trait WorksWithOpencastClient
                 'state'        => 'RUNNING',
                 'title'        => 'Transcode after upload',
                 'mediapackage' => [
-                    'id'     => Str::uuid(),
-                    'title'  => $this->faker->sentence,
-                    'series' => $series->opencast_series_id,
+                    'duration' => 3048683,
+                    'id'       => Str::uuid(),
+                    'start'    => Carbon::now()->addMinutes(1)->toIso8601ZuluString(),
+                    'title'    => $this->faker->sentence,
+                    'series'   => $series->opencast_series_id,
+                    'creators' => [
+                        'creator' => 'Dr. John Doe'
+                    ]
                 ],
                 'operations'   => [
-                    'operation' =>
-                        [
+                    'operation' => [
+                        0 => [
                             'id'    => 'ingest-download',
                             'state' => 'SUCCEEDED'
                         ],
-                    [
-                        'id'    => 'encode',
-                        'state' => 'RUNNING'
-                    ]
+                        1 => [
+                            'id'          => 'encode',
+                            'state'       => 'RUNNING',
+                            'description' => 'Encode presenter for adaptive stream',
+                        ]
+                    ],
                 ]
             ],
             [
@@ -225,20 +232,24 @@ trait WorksWithOpencastClient
                 'state'        => 'RUNNING',
                 'title'        => 'Transcode after upload',
                 'mediapackage' => [
-                    'id'     => Str::uuid(),
-                    'title'  => $this->faker->sentence,
-                    'series' => $series->opencast_series_id,
+                    'duration' => 3048683,
+                    'id'       => Str::uuid(),
+                    'start'    => Carbon::now()->addMinutes(1)->toIso8601ZuluString(),
+                    'title'    => $this->faker->sentence,
+                    'series'   => $series->opencast_series_id,
                 ],
                 'operations'   => [
-                    'operation' =>
-                        [
+                    'operation' => [
+                        0 => [
                             'id'    => 'ingest-download',
                             'state' => 'SUCCEEDED'
                         ],
-                    [
-                        'id'    => 'encode',
-                        'state' => 'RUNNING'
-                    ]
+                        1 => [
+                            'id'          => 'encode',
+                            'state'       => 'RUNNING',
+                            'description' => 'Encode presenter for adaptive stream',
+                        ]
+                    ],
                 ]
             ],
         ] :
@@ -247,20 +258,27 @@ trait WorksWithOpencastClient
                 'state'        => 'RUNNING',
                 'title'        => 'Transcode after upload',
                 'mediapackage' => [
-                    'id'     => Str::uuid(),
-                    'title'  => $this->faker->sentence,
-                    'series' => $series->opencast_series_id,
+                    'duration' => 3048683,
+                    'id'       => Str::uuid(),
+                    'start'    => Carbon::now()->addMinutes(1)->toIso8601ZuluString(),
+                    'title'    => $this->faker->sentence,
+                    'series'   => $series->opencast_series_id,
+                    'creators' => [
+                        'creator' => 'Dr. John Doe'
+                    ]
                 ],
                 'operations'   => [
-                    'operation' =>
-                        [
+                    'operation' => [
+                        0 => [
                             'id'    => 'ingest-download',
                             'state' => 'SUCCEEDED'
                         ],
-                    [
-                        'id'    => 'encode',
-                        'state' => 'RUNNING'
-                    ]
+                        1 => [
+                            'id'          => 'encode',
+                            'state'       => 'RUNNING',
+                            'description' => 'Encode presenter for adaptive stream',
+                        ]
+                    ],
                 ]
             ];
 
