@@ -17,7 +17,7 @@
                        type="submit"
                        text="Remove Series"
                        color="red"
-                       additional-classes="w-full my-2"
+                       additional-classes="w-full text-center my-2"
         />
 
     </form>

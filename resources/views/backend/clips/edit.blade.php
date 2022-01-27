@@ -152,12 +152,12 @@
             @csrf
             @method('DELETE')
 
-            <x-form.button :link="$link=false"
-                           type="submit"
-                           text="Delete"
-                           color="red"
-            />
-
+            <button type="delete" class="inline-flex items-center px-4 py-1 border border-transparent text-base leading-6
+                                font-medium rounded-md text-white
+                        bg-red-600  focus:shadow-outline-indigo hover:bg-red-700
+                        hover:shadow-lg ">
+                Delete Series
+            </button>
         </form>
 
         @if($opencastConnectionCollection)

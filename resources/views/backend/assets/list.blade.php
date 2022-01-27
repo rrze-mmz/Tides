@@ -24,7 +24,7 @@
                     >
                         @csrf
                         @method('DELETE')
-                        <x-form.button :link="$link=false" type="delete" text="Delete"/>
+                        <x-form.button :link="$link=false" type="delete" text="Delete" color="red"/>
                     </form>
                 </div>
             </li>

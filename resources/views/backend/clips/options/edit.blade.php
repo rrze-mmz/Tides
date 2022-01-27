@@ -8,6 +8,6 @@
           method="POST">
         @csrf
         @method('DELETE')
-        <x-form.button :link="$link=false" type="delete" text="Delete Series"/>
+        <x-form.button :link="$link=false" type="delete" text="Delete Series" color="red"/>
     </form>
 </div>

@@ -8,7 +8,6 @@ window.$ = window.jQuery = $;
 
 
 $(() => {
-
     $('.select2-tides').select2();
 
     $('.select2-tides-tags').select2({

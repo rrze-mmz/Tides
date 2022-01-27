@@ -1,6 +1,7 @@
 module.exports = {
     content: [
         './resources/views/**/*.blade.php',
+        './resources/views/components/**/*.blade.php',
         './resources/css/**/*.css',
     ],
     theme: {

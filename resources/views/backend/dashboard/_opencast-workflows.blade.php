@@ -35,41 +35,41 @@
                         <tbody>
                         @foreach($opencastWorkflows['running']['workflows']['workflow'] as $workflow)
                             <tr class="bg-white border-b">
-                                <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                <td class="text-sm text-gray-900 font-light px-6 py-4 ">
                                     {{ $workflow['mediapackage']['title'] }}
                                 </td>
-                                <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                <td class="text-sm text-gray-900 font-light px-6 py-4 ">
                                     @if(Illuminate\Support\Arr::exists($workflow['mediapackage'], 'seriestitle'))
                                         {{ $workflow['mediapackage']['seriestitle']  }}
                                     @else
                                         {{ 'EVENTS_WITHOUT_SERIES' }}
                                     @endif
                                 </td>
-                                <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                <td class="text-sm text-gray-900 font-light px-6 py-4 ">
                                     {{ $workflow['mediapackage']['start'] }}
                                 </td>
-                                <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                <td class="text-sm text-gray-900 font-light px-6 py-4 ">
                                     @if (isset($workflow['mediapackage']['creators']))
                                         {{ $workflow['mediapackage']['creators']['creator']  }}
                                     @else
                                         {{ 'No presenter' }}
                                     @endif
                                 </td>
-                                <td class="text-sm text-green-700 font-light px-6 py-4 whitespace-nowrap">
+                                <td class="text-sm text-green-700 font-light px-6 py-4 ">
                                     {{ $workflow['state'] }}
                                 </td>
-                                <td class="text-sm text-green-900 font-light px-6 py-4 whitespace-nowrap">
+                                <td class="text-sm text-green-900 font-light px-6 py-4 ">
                                     @foreach ($workflow['operations']['operation'] as $operation)
                                         @if($operation['state']==='RUNNING')
                                             {{$operation['description']}}
                                         @endif
                                     @endforeach
                                 </td>
-                                <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                <td class="text-sm text-gray-900 font-light px-6 py-4 ">
                                     <div class="mt-2 bg-gray-600 rounded-full">
-                                        <div class="w-6/12 mt-2 bg-purple-900 py-0 rounded-full">
+                                        <div class="w-6/12 mt-2 bg-indigo-900 py-0 rounded-full">
                                             <div
-                                                class=" text-white text-sm inline-block bg-purple-700 px-2 rounded-full">
+                                                class=" text-white font-bold text-sm inline-block bg-indigo-700 px-2 rounded-full">
                                                 50%
                                             </div>
                                         </div>

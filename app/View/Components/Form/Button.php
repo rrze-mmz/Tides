@@ -18,7 +18,8 @@ class Button extends Component
         public string $text,
         public string $color = '',
         public string $additionalClasses = ''
-    ) {
+    )
+    {
         //
     }
 
@@ -29,6 +30,7 @@ class Button extends Component
      */
     public function render(): View
     {
+
         return view('components.form.button');
     }
 }
