@@ -13,14 +13,14 @@
 
             <div class="flex flex-col gap-6">
 
-                <x-form.input field-name="degree_title"
-                              input-type="text"
-                              :value="old('degree_title')"
-                              label="Degree title"
-                              :full-col="false"
-                              :required="false"
+                <x-form.select2-single field-name="academic_degree_id"
+                                       label="Degree title"
+                                       select-class="select2-tides"
+                                       model="academicDegree"
+                                       :full-col="false"
+                                       :selectedItem="(old('academic_degree_id'))?? 0 "
                 />
-
+                
                 <x-form.input field-name="first_name"
                               input-type="text"
                               :value="old('first_name')"

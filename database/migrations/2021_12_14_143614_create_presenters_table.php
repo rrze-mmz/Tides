@@ -15,11 +15,15 @@ class CreatePresentersTable extends Migration
     {
         Schema::create('presenters', function (Blueprint $table) {
             $table->id();
-            $table->string('degree_title')->nullable();
+            $table->foreignId('academic_degree_id')
+                ->nullable()
+                ->references('id')
+                ->on('academic_degrees')
+                ->nullOnDelete();
             $table->string('first_name');
             $table->string('last_name');
-            $table->string('username')->unique();
-            $table->string('email')->unique();
+            $table->string('username')->nullable();
+            $table->string('email')->nullable();
             $table->timestamps();
         });
     }

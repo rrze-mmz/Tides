@@ -25,11 +25,11 @@ class StorePresenterRequest extends FormRequest
     public function rules()
     {
         return [
-            'degree_title' => ['string', 'nullable'],
-            'first_name'   => ['required', 'alpha', 'min:2', 'max:30'],
-            'last_name'    => ['required', 'alpha', 'min:2', 'max:100'],
-            'username'     => ['nullable', 'sometimes', 'alpha_num', 'unique:presenters'],
-            'email'        => ['nullable', 'sometimes', 'email', 'unique:presenters'],
+            'academic_degree_id' => ['integer', 'nullable'],
+            'first_name'         => ['required', 'alpha', 'min:2', 'max:30'],
+            'last_name'          => ['required', 'alpha', 'min:2', 'max:100'],
+            'username'           => ['nullable', 'sometimes', 'alpha_num', 'unique:presenters'],
+            'email'              => ['nullable', 'sometimes', 'email', 'unique:presenters'],
         ];
     }
 }

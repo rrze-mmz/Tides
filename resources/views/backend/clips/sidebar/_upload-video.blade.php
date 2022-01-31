@@ -1,4 +1,4 @@
-<div class="w-full py-4 px-4 mx-4 h-full bg-white rounded border">
+<div class="px-4 py-4 mx-4 w-full h-full bg-white rounded border">
     <header class="items-center pb-2 mb-2 font-semibold text-center border-b"> Upload a Video</header>
     <form action="{{ $clip->adminPath().'/assets' }}"
           enctype="multipart/form-data"
@@ -7,7 +7,7 @@
     >
         @csrf
         <input type="file" id="asset" name="asset">
-        <div class="flex pt-4 mb-2 align-content-between items-center justify-content-center">
+        <div class="flex items-center pt-4 mb-2 align-content-between justify-content-center">
             <legend>Convert to HLS?</legend>
             <input class="mx-auto"
                    type="checkbox"

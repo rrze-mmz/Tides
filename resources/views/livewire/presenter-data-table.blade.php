@@ -106,7 +106,7 @@
                                 <div class="flex items-center">
                                     <div class="flex-shrink-0 h-10 w-10">
                                         <img class="h-10 w-10 rounded-full"
-                                             src="https://www.gravatar.com/avatar/?d=mp&f=y" alt="">
+                                             src="{{ URL::asset('/images/none.jpg') }}" alt="">
                                     </div>
                                     <div class="ml-4">
                                         <div class="text-sm leading-5 font-medium text-gray-900">
@@ -119,7 +119,7 @@
                                 <div class="flex items-center">
                                     <div class="ml-4">
                                         <div class="text-sm leading-5 font-medium text-gray-900">
-                                            {{ $presenter->last_name.' , '.$presenter->degree_title }}
+                                            {{ $presenter->last_name.' , '.$presenter->academic_degree?->title }}
                                         </div>
                                     </div>
                                 </div>

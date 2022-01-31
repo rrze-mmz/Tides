@@ -166,4 +166,15 @@ class DashboardTest extends TestCase
 
         $this->get(route('dashboard'))->assertDontSee('Opencast running workflows');
     }
+
+    /** @test */
+    public function it_should_not_display_opencast_running_workflows_if_opencast_server_is_not_available(): void
+    {
+        app(OpencastService::class);
+        $mockHandler = $this->swapOpencastClient();
+        $mockHandler->append($this->mockServerNotAvailable());
+        $this->signInRole('admin');
+
+        $this->get(route('dashboard'))->assertDontSee('Opencast running workflows');
+    }
 }

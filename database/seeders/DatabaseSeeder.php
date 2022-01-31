@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             AclSeeder::class,
             OrganizationSeeder::class,
             SemesterSeeder::class,
+            DocDataSeeder::class,
         ]);
     }
 }

@@ -78,6 +78,12 @@ class ClipTest extends TestCase
     }
 
     /** @test */
+    public function it_belongs_to_a_series(): void
+    {
+        $this->assertInstanceOf(BelongsTo::class, $this->clip->series());
+    }
+
+    /** @test */
     public function it_has_many_assets(): void
     {
         Asset::factory(2)->create(['clip_id' => $this->clip->id]);

@@ -11,8 +11,14 @@
               class="w-4/5">
             @csrf
             @method('PATCH')
-
             <div class="flex flex-col gap-6">
+
+                <x-form.select2-single field-name="academic_degree_id"
+                                       label="Degree title"
+                                       select-class="select2-tides"
+                                       model="academicDegree"
+                                       :selectedItem="$presenter->academic_degree_id"
+                />
 
                 <x-form.input field-name="degree_title"
                               input-type="text"

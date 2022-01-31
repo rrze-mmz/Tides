@@ -69,17 +69,17 @@ class PresentersController extends Controller
         Gate::allowIf(fn($user) => $user->isAdmin());
 
         $validated = $request->validate([
-            'degree_title' => ['nullable', 'string'],
-            'first_name'   => ['required', 'alpha', 'min:2', 'max:30'],
-            'last_name'    => ['required', 'alpha', 'min:2', 'max:100'],
-            'username'     => [
+            'academic_degree_id' => ['integer', 'string'],
+            'first_name'         => ['required', 'alpha', 'min:2', 'max:30'],
+            'last_name'          => ['required', 'alpha', 'min:2', 'max:100'],
+            'username'           => [
                 'required',
                 'string',
                 'max:255',
                 'alpha_dash',
                 Rule::unique('presenters')->ignore($presenter)
             ],
-            'email'        => [
+            'email'              => [
                 'email',
                 Rule::unique('presenters')->ignore($presenter)],
         ]);

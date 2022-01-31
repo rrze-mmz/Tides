@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Models\Presenter;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -33,9 +34,16 @@ class PresenterTest extends TestCase
     }
 
     /** @test */
+    public function it_has_one_or_none_degree_title(): void
+    {
+        $this->assertInstanceOf(BelongsTo::class, $this->presenter->academic_degree());
+    }
+
+    /** @test */
     public function it_can_return_presenter_full_name(): void
     {
         $this->assertEquals($this->presenter->getFullNameAttribute(),
-            $this->presenter->degree_title . ' ' . $this->presenter->first_name . ' ' . $this->presenter->last_name);
+            $this->presenter->academic_degree->title . ' ' . $this->presenter->first_name .
+            ' ' . $this->presenter->last_name);
     }
 }

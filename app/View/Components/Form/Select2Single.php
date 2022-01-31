@@ -2,6 +2,7 @@
 
 namespace App\View\Components\Form;
 
+use App\Models\AcademicDegree;
 use App\Models\Organization;
 use App\Models\Role;
 use App\Models\Semester;
@@ -19,9 +20,10 @@ class Select2Single extends Component
         public ?string $model = null,
         public string  $label,
         public string  $fieldName,
-        public $selectClass,
-        public $selectedItem
-    ) {
+        public         $selectClass,
+        public         $selectedItem
+    )
+    {
         //
     }
 
@@ -37,6 +39,7 @@ class Select2Single extends Component
                 'semester' => Semester::where('id', '>', 1)
                     ->orderBy('id', 'desc')
                     ->get(),
+                'academicDegree' => AcademicDegree::select(['id', 'title as name'])->get(),
                 'role' => Role::where('id', '>', 0)
                     ->orderBy('id', 'desc')
                     ->get(),

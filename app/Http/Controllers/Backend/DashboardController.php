@@ -16,26 +16,25 @@ class DashboardController
      */
     public function __invoke(OpencastService $opencastService): View
     {
-        $opencastWorkflows = [];
-        if (auth()->user()->can('view-opencast-workflows')) {
-            $opencastWorkflows = [
-                'running' => $opencastService->getAllRunningWorkflows(),
-                'failed'  => $opencastService->getEventsByStatus('failed')
-            ];
+        $opencastWorkflows = collect([]);
 
+        if (auth()->user()->can('view-opencast-workflows') && $opencastService->getHealth()->isNotEmpty()) {
+            $opencastWorkflows->put('running', $opencastService->getAllRunningWorkflows())
+                ->put('failed', $opencastService->getEventsByStatus('failed'));
         }
+
         return view('backend.dashboard.index', [
-            'userSeries'               => auth()->user()->series()
+            'userSeries'        => auth()->user()->series()
                 ->orderByDesc('updated_at')
                 ->limit(10)
                 ->get(),
-            'userClips'                => auth()->user()->clips()
+            'userClips'         => auth()->user()->clips()
                 ->whereNull('series_id')
                 ->orderByDesc('updated_at')
                 ->limit(10)
                 ->get(),
-            'files'                    => fetchDropZoneFiles(),
-            'opencastRunningWorkflows' => $opencastWorkflows
+            'files'             => fetchDropZoneFiles(),
+            'opencastWorkflows' => $opencastWorkflows
         ]);
     }
 }

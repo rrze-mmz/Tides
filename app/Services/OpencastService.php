@@ -18,7 +18,7 @@ class OpencastService
 
     public function __construct(private OpencastClient $client)
     {
-        //initialize an empty responce
+        //initialize an empty response
         $this->response = new Response(200, [], json_encode([]));
     }
 
@@ -215,7 +215,7 @@ class OpencastService
     }
 
     /**
-     * @param $seriesID
+     * @param Series $series
      * @return Collection
      */
     public function getFailedEventsBySeries(Series $series): Collection

@@ -4,7 +4,7 @@
     <div class="flex pb-2 font-semibold border-b border-black font-2xl">
         Welcome to your personal dashboard, {{ auth()->user()->getFullNameAttribute() }} !
     </div>
-    <div class="flex flex-col py-2 px-2">
+    <div class="flex flex-col px-2 py-2">
         <div>
             <p class="pt-2">
                 <span class="mr-2">Start by creating a new series (series is a collection of clips)</span>
@@ -13,7 +13,7 @@
         </div>
         <div>
             <p class="pt-2 mt-4">
-                <span class=" mr-2">Start by creating a new video clip</span>
+                <span class="mr-2">Start by creating a new video clip</span>
                 <x-form.button :link="route('clips.create')" type="submit" text="New clip"/>
 
             </p>
@@ -22,7 +22,9 @@
     <div class="flex">
         <div class="w-2/3">
             @can('view-opencast-workflows')
-                @include('backend.dashboard._opencast-workflows',['opencastWorkflows' => $opencastRunningWorkflows])
+                @if($opencastWorkflows->isNotEmpty())
+                    @include('backend.dashboard._opencast-workflows',['opencastWorkflows' => $opencastWorkflows])
+                @endif
             @endcan
 
             @include('backend.users.series._layout',['layoutHeader' => 'Your Latest Series', 'series'=> $userSeries])

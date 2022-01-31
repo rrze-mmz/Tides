@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class Presenter extends BaseModel
@@ -11,7 +12,7 @@ class Presenter extends BaseModel
 
     public function getFullNameAttribute(): string
     {
-        return "{$this->degree_title} {$this->first_name} {$this->last_name}";
+        return "{$this->academic_degree?->title} {$this->first_name} {$this->last_name}";
     }
 
     /**
@@ -32,5 +33,10 @@ class Presenter extends BaseModel
     public function clips(): MorphToMany
     {
         return $this->morphedByMany(Clip::class, 'presentable')->withTimestamps();
+    }
+
+    public function academic_degree(): BelongsTo
+    {
+        return $this->belongsTo(AcademicDegree::class);
     }
 }
