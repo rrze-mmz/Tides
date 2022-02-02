@@ -138,6 +138,10 @@ class ManageClipsTest extends TestCase
             ->assertSee('description')
             ->assertSee('presenters')
             ->assertSee('organization')
+            ->assertSee('language')
+            ->assertSee('context')
+            ->assertSee('format')
+            ->assertSee('type')
             ->assertSee('tags')
             ->assertSee('acls')
             ->assertSee('semester')
@@ -166,6 +170,10 @@ class ManageClipsTest extends TestCase
             ->assertSee('description')
             ->assertSee('tags')
             ->assertSee('organization')
+            ->assertSee('language')
+            ->assertSee('context')
+            ->assertSee('format')
+            ->assertSee('type')
             ->assertSee('tags')
             ->assertSee('presenters')
             ->assertSee('semester')
@@ -268,6 +276,10 @@ class ManageClipsTest extends TestCase
             'title'           => 'changed',
             'description'     => 'changed',
             'organization_id' => '1',
+            'language_id'     => '1',
+            'context_id'      => '1',
+            'format_id'       => '1',
+            'type_id'         => '1',
             'tags'            => [],
             'semester_id'     => '1',
         ]);
@@ -289,6 +301,10 @@ class ManageClipsTest extends TestCase
             'title'           => 'changed',
             'description'     => 'changed',
             'organization_id' => '1',
+            'language_id'     => '1',
+            'context_id'      => '1',
+            'format_id'       => '1',
+            'type_id'         => '1',
             'tags'            => [$tag->name, 'another tag'],
             'semester_id'     => '1',
         ]);
@@ -305,6 +321,10 @@ class ManageClipsTest extends TestCase
             'title'           => 'Clip title',
             'description'     => $this->faker->sentence(500),
             'organization_id' => '1',
+            'language_id'     => '1',
+            'context_id'      => '1',
+            'format_id'       => '1',
+            'type_id'         => '1',
             'semester_id'     => '1',
         ];
 
@@ -328,6 +348,10 @@ class ManageClipsTest extends TestCase
             'title'           => 'changed',
             'description'     => 'changed',
             'organization_id' => '1',
+            'language_id'     => '1',
+            'context_id'      => '1',
+            'format_id'       => '1',
+            'type_id'         => '1',
             'semester_id'     => '1',
         ]);
 
@@ -356,6 +380,10 @@ class ManageClipsTest extends TestCase
             'title'           => 'changed',
             'description'     => 'changed',
             'organization_id' => '1',
+            'language_id'     => '1',
+            'context_id'      => '1',
+            'format_id'       => '1',
+            'type_id'         => '1',
             'semester_id'     => '1',
         ];
 
@@ -376,6 +404,10 @@ class ManageClipsTest extends TestCase
             'title'           => 'changed',
             'description'     => 'changed',
             'organization_id' => '1',
+            'language_id'     => '1',
+            'context_id'      => '1',
+            'format_id'       => '1',
+            'type_id'         => '1',
             'semester_id'     => '1',
         ];
 
@@ -393,6 +425,10 @@ class ManageClipsTest extends TestCase
             'episode'         => '1',
             'title'           => 'Title changed',
             'organization_id' => '1',
+            'language_id'     => '1',
+            'context_id'      => '1',
+            'format_id'       => '1',
+            'type_id'         => '1',
             'semester_id'     => '1']);
 
         $clip->refresh();
@@ -410,6 +446,10 @@ class ManageClipsTest extends TestCase
             'title'           => 'Test clip',
             'description'     => 'test',
             'organization_id' => '1',
+            'language_id'     => '1',
+            'context_id'      => '1',
+            'format_id'       => '1',
+            'type_id'         => '1',
             'semester_id'     => '1'
         ]);
 
@@ -547,6 +587,10 @@ class ManageClipsTest extends TestCase
             'title'           => $clip->title,
             'episode'         => $clip->episode,
             'organization_id' => '1',
+            'language_id'     => '1',
+            'context_id'      => '1',
+            'format_id'       => '1',
+            'type_id'         => '1',
             'semester_id'     => '1',
             'allow_comments'  => 'on'
         ]);

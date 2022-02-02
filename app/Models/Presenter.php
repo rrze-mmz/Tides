@@ -12,7 +12,9 @@ class Presenter extends BaseModel
 
     public function getFullNameAttribute(): string
     {
-        return "{$this->academic_degree?->title} {$this->first_name} {$this->last_name}";
+        return ($this->academic_degree_id > 0)
+            ? "{$this->academic_degree?->title} {$this->first_name} {$this->last_name}"
+            : "{$this->first_name} {$this->last_name}";
     }
 
     /**

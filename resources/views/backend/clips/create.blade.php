@@ -40,6 +40,38 @@
                                        :selectedItem="(old('organization_id'))?? 1 "
                 />
 
+                <x-form.select2-single field-name="language_id"
+                                       label="Language"
+                                       select-class="select2-tides"
+                                       model="language"
+                                       :selectedItem="1"
+                />
+
+                <div class="border-solid   border-b-black border-b mb-2 pb-2 font-bold text-left text-xl">
+                    Metadata
+                </div>
+
+                <x-form.select2-single field-name="context_id"
+                                       label="Context"
+                                       select-class="select2-tides"
+                                       model="context"
+                                       :selectedItem="1"
+                />
+
+                <x-form.select2-single field-name="format_id"
+                                       label="Format"
+                                       select-class="select2-tides"
+                                       model="format"
+                                       :selectedItem="1"
+                />
+
+                <x-form.select2-single field-name="type_id"
+                                       label="Type"
+                                       select-class="select2-tides"
+                                       model="type"
+                                       :selectedItem="1"
+                />
+
                 <x-form.select2-multiple field-name="presenters"
                                          label="Presenters"
                                          select-class="select2-tides-presenters"
@@ -60,6 +92,10 @@
                                          :model="null"
                                          :items="[]"
                 />
+
+                <div class="border-solid   border-b-black border-b mb-2 pb-2 font-bold text-left text-xl">
+                    Access
+                </div>
 
                 <x-form.select2-multiple field-name="acls"
                                          label="Accessible via"

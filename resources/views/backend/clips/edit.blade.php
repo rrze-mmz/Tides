@@ -59,6 +59,36 @@
                                        :selectedItem="$clip->organization_id"
                 />
 
+                <x-form.select2-single field-name="language_id"
+                                       label="Language"
+                                       select-class="select2-tides"
+                                       model="language"
+                                       :selectedItem="$clip->lanugage_id"
+                />
+
+                <div class="border-solid   border-b-black border-b mb-2 pb-2 font-bold text-left text-xl">
+                    Metadata
+                </div>
+
+                <x-form.select2-single field-name="context_id"
+                                       label="Context"
+                                       select-class="select2-tides"
+                                       model="context"
+                                       :selectedItem="$clip->context_id"
+                />
+                <x-form.select2-single field-name="format_id"
+                                       label="Format"
+                                       select-class="select2-tides"
+                                       model="format"
+                                       :selectedItem="$clip->format_id"
+                />
+                <x-form.select2-single field-name="type_id"
+                                       label="Type"
+                                       select-class="select2-tides"
+                                       model="type"
+                                       :selectedItem="$clip->type_id"
+                />
+
                 <x-form.select2-single field-name="semester_id"
                                        label="Semester"
                                        select-class="select2-tides"

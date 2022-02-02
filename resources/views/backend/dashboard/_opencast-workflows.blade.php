@@ -9,8 +9,7 @@
                     <table class="min-w-full">
                         <thead class="border-b">
                         <tr>
-                            <th scope="col" class="px-6 py-4 text-sm font-medium text-left text-gray-900">
-                                Title
+                            <th scope="col" class="px-6 py-4 text-sm font-medium text-left text-gray-900">Title
                             </th>
                             <th scope="col" class="px-6 py-4 text-sm font-medium text-left text-gray-900">
                                 Series

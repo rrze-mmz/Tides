@@ -117,11 +117,51 @@ class Clip extends BaseModel
 
     /**
      *  A clip has one organization
+     *
      * @return HasOne
      */
     public function organisation(): HasOne
     {
         return $this->hasOne(Organization::class);
+    }
+
+    /**
+     * A clip has one language
+     *
+     * @return HasOne
+     */
+    public function language(): HasOne
+    {
+        return $this->hasOne(Language::class);
+    }
+
+    /**
+     * A clip has one context
+     *
+     * @return HasOne
+     */
+    public function context(): HasOne
+    {
+        return $this->hasOne(Context::class);
+    }
+
+    /**
+     * A clip has one format
+     *
+     * @return HasOne
+     */
+    public function format(): HasOne
+    {
+        return $this->hasOne(Format::class);
+    }
+
+    /**
+     * A clip has one type
+     * @return HasOne
+     */
+    public function type(): HasOne
+    {
+        return $this->hasOne(Type::class);
     }
 
     /**

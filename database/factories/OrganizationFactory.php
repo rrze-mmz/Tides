@@ -22,7 +22,16 @@ class OrganizationFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'name'               => 'Tides organization unit',
+            'parent_org_id'      => 1,
+            'orgno'              => '0000000000',
+            'shortname'          => 'Main organization unit',
+            'staff'              => null,
+            'startdate'          => now(),
+            'operationstartdate' => now(),
+            'operationenddate'   => '2999-12-31',
+            'created_at'         => now(),
+            'updated_at'         => null,
         ];
     }
 }

@@ -104,6 +104,30 @@ class ClipTest extends TestCase
     }
 
     /** @test */
+    public function it_has_one_language(): void
+    {
+        $this->assertInstanceOf(HasOne::class, $this->clip->language());
+    }
+
+    /** @test */
+    public function it_has_one_context(): void
+    {
+        $this->assertInstanceOf(HasOne::class, $this->clip->context());
+    }
+
+    /** @test */
+    public function it_has_one_format(): void
+    {
+        $this->assertInstanceOf(HasOne::class, $this->clip->format());
+    }
+
+    /** @test */
+    public function it_has_one_type(): void
+    {
+        $this->assertInstanceOf(HasOne::class, $this->clip->type());
+    }
+
+    /** @test */
     public function it_has_many_comments(): void
     {
         Comment::factory(2)->create(['clip_id' => $this->clip->id]);

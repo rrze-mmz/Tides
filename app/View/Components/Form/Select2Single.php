@@ -3,9 +3,13 @@
 namespace App\View\Components\Form;
 
 use App\Models\AcademicDegree;
+use App\Models\Context;
+use App\Models\Format;
+use App\Models\Language;
 use App\Models\Organization;
 use App\Models\Role;
 use App\Models\Semester;
+use App\Models\Type;
 use Illuminate\View\Component;
 use Illuminate\View\View;
 
@@ -39,6 +43,10 @@ class Select2Single extends Component
                 'semester' => Semester::where('id', '>', 1)
                     ->orderBy('id', 'desc')
                     ->get(),
+                'language' => Language::select(['id', 'code as name'])->get(),
+                'context' => Context::select(['id', 'de_name as name'])->get(),
+                'format' => Format::select(['id', 'de_name as name'])->get(),
+                'type' => Type::select(['id', 'de_name as name'])->get(),
                 'academicDegree' => AcademicDegree::select(['id', 'title as name'])->get(),
                 'role' => Role::where('id', '>', 0)
                     ->orderBy('id', 'desc')

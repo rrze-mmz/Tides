@@ -9,9 +9,10 @@
                 <a
                     href="@if (str_contains(url()->current(), 'admin')) {{$series->adminPath()}}
                     @else {{ $series->path() }} @endif"
-                    class="underline"
+                    class="underline text-2xl"
                 >{{ $series->title }}
                 </a>
+                <span class="text-sm italic">von {{$series->owner?->getFullNameAttribute()}}</span>
             </div>
             <p class="py-3 text-base text-gray-700">
                 {{ (str_contains(url()->current(),'search'))?$series->description:Str::limit($series->description, 30) }}
@@ -61,29 +62,6 @@
                 <p class="italic text-gray-900">
                     {{ Illuminate\Support\Carbon::createFromFormat('Y-m-d H:i:s', $series->updated_at)
                                                             ->format('Y-m-d')  }}
-                </p>
-            </div>
-        </div>
-
-        <div class="flex items-center pt-2 justify-content-between">
-            <div class="pr-2">
-                <svg class="w-4 h-4"
-                     fill="none"
-                     stroke="currentColor"
-                     viewBox="0 0 24 24"
-                     xmlns="http://www.w3.org/2000/svg"
-                >
-                    <path stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                    >
-                    </path>
-                </svg>
-            </div>
-            <div class="text-sm">
-                <p class="italic text-gray-900">
-                    {{ $series->owner?->getFullNameAttribute() }}
                 </p>
             </div>
         </div>
