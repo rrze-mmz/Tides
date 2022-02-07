@@ -14,7 +14,7 @@
                                               name="{{ $fieldName }}"
                                               id="{{ $fieldName }}"
                                               {{($required)?'required':''}}
-                                    >{{ $value }} </textarea>
+                                    >{!!  $value  !!} </textarea>
     </div>
 
     @error($fieldName)

@@ -16,11 +16,12 @@ class CreateOrganizationsTable extends Migration
         Schema::create('organizations', function (Blueprint $table) {
             $table->id('org_id');
             $table->string('name', 255);
-            $table->foreignId('parent_org_id');
+            $table->foreignId('parent_org_id')->nullable();
             $table->string('orgno', 255);
             $table->string('shortname');
             $table->string('staff')->nullable();
             $table->date('startdate');
+            $table->date('enddate');
             $table->date('operationstartdate');
             $table->date('operationenddate');
             $table->timestamps();

@@ -44,7 +44,7 @@ function getClipStoragePath(Clip $clip): string
 /**
  * @return Collection
  */
-function fetchDropZoneFiles(): Collection
+function fetchDropZoneFiles($ffmpegCheck = true): Collection
 {
     /*
      *  Use Storage instead of File Facade. That way although hidden files will be fetched,
@@ -58,14 +58,14 @@ function fetchDropZoneFiles(): Collection
                  */
                 return $file[0] !== '.';
             })
-            ->mapWithKeys(function ($file) {
+            ->mapWithKeys(function ($file) use ($ffmpegCheck) {
                 $video = null;
                 $mime = null;
                 $lastModified = Carbon::createFromTimestamp(Storage::disk('video_dropzone')->lastModified($file))
                     ->format('Y-m-d H:i:s');
 
                 // Check whether is file is at the moment written at the disk
-                if (Carbon::now()->diffInMinutes($lastModified) > 2) {
+                if (Carbon::now()->diffInMinutes($lastModified) > 2 && $ffmpegCheck) {
                     $video = FFMpeg::fromDisk('video_dropzone')->open($file)->getVideoStream();
                     $mime = mime_content_type(Storage::disk('video_dropzone')->getAdapter()->applyPathPrefix($file));
                 }

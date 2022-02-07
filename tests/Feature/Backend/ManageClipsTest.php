@@ -71,6 +71,16 @@ class ManageClipsTest extends TestCase
     }
 
     /** @test */
+    public function it_requires_a_recording_date_creating_a_new_clip(): void
+    {
+        $this->signInRole($this->role);
+
+        $attributes = Clip::factory()->raw(['recording_date' => '']);
+
+        $this->post(route('clips.store'), $attributes)->assertSessionHasErrors('recording_date');
+    }
+
+    /** @test */
     public function it_requires_a_semester_creating_a_new_clip(): void
     {
         $this->signInRole($this->role);
@@ -136,6 +146,7 @@ class ManageClipsTest extends TestCase
         $this->get(route('clips.create'))
             ->assertSee('title')
             ->assertSee('description')
+            ->assertSee('recording_date')
             ->assertSee('presenters')
             ->assertSee('organization')
             ->assertSee('language')
@@ -170,6 +181,7 @@ class ManageClipsTest extends TestCase
             ->assertSee('description')
             ->assertSee('tags')
             ->assertSee('organization')
+            ->assertSee('recording_date')
             ->assertSee('language')
             ->assertSee('context')
             ->assertSee('format')
@@ -275,6 +287,7 @@ class ManageClipsTest extends TestCase
             'episode'         => '1',
             'title'           => 'changed',
             'description'     => 'changed',
+            'recording_date'  => now(),
             'organization_id' => '1',
             'language_id'     => '1',
             'context_id'      => '1',
@@ -300,6 +313,7 @@ class ManageClipsTest extends TestCase
             'episode'         => '1',
             'title'           => 'changed',
             'description'     => 'changed',
+            'recording_date'  => now(),
             'organization_id' => '1',
             'language_id'     => '1',
             'context_id'      => '1',
@@ -320,6 +334,7 @@ class ManageClipsTest extends TestCase
         $attributes = [
             'title'           => 'Clip title',
             'description'     => $this->faker->sentence(500),
+            'recording_date'  => now(),
             'organization_id' => '1',
             'language_id'     => '1',
             'context_id'      => '1',
@@ -347,6 +362,7 @@ class ManageClipsTest extends TestCase
             'episode'         => '1',
             'title'           => 'changed',
             'description'     => 'changed',
+            'recording_date'  => now(),
             'organization_id' => '1',
             'language_id'     => '1',
             'context_id'      => '1',
@@ -379,6 +395,7 @@ class ManageClipsTest extends TestCase
             'episode'         => '1',
             'title'           => 'changed',
             'description'     => 'changed',
+            'recording_date'  => now(),
             'organization_id' => '1',
             'language_id'     => '1',
             'context_id'      => '1',
@@ -403,6 +420,7 @@ class ManageClipsTest extends TestCase
             'episode'         => '1',
             'title'           => 'changed',
             'description'     => 'changed',
+            'recording_date'  => now(),
             'organization_id' => '1',
             'language_id'     => '1',
             'context_id'      => '1',
@@ -424,6 +442,7 @@ class ManageClipsTest extends TestCase
         $this->patch($clip->adminPath(), [
             'episode'         => '1',
             'title'           => 'Title changed',
+            'recording_date'  => now(),
             'organization_id' => '1',
             'language_id'     => '1',
             'context_id'      => '1',
@@ -444,6 +463,7 @@ class ManageClipsTest extends TestCase
         $this->post(route('clips.store'), [
             'episode'         => '1',
             'title'           => 'Test clip',
+            'recording_date'  => now(),
             'description'     => 'test',
             'organization_id' => '1',
             'language_id'     => '1',
@@ -586,6 +606,7 @@ class ManageClipsTest extends TestCase
         $this->patch(route('clips.update', $clip), [
             'title'           => $clip->title,
             'episode'         => $clip->episode,
+            'recording_date'  => now(),
             'organization_id' => '1',
             'language_id'     => '1',
             'context_id'      => '1',

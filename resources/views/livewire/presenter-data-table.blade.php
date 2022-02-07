@@ -119,7 +119,10 @@
                                 <div class="flex items-center">
                                     <div class="ml-4">
                                         <div class="text-sm leading-5 font-medium text-gray-900">
-                                            {{ $presenter->last_name.' , '.$presenter->academic_degree?->title }}
+                                            {{ $presenter->last_name}}
+                                            @if($presenter->academic_degree_id > 1 )
+                                                {{','. $presenter->academic_degree?->title}}
+                                            @endif
                                         </div>
                                     </div>
                                 </div>

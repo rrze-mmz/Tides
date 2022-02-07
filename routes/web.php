@@ -29,11 +29,11 @@ Route::redirect('/admin', '/admin/dashboard');
 //Quick search
 Route::get('search', [SearchController::class, 'search'])->name('search');
 
+Route::get('series/index', [ShowSeriesController::class, 'index'])->name('frontend.series.index');
 Route::get('/series/{series}', [ShowSeriesController::class, 'show'])->name('frontend.series.show');
 
 //Frontend clip route
 Route::get('/clips', [ShowClipsController::class, 'index'])->name('frontend.clip.index');
-
 Route::get('/clips/{clip}', [ShowClipsController::class, 'show'])
     ->name('frontend.clips.show');
 

@@ -137,4 +137,15 @@ class Series extends BaseModel
     {
         return $query->where('isPublic', 1);
     }
+
+    /**
+     * @param $query
+     * @return mixed
+     */
+    public function scopeHasClipsWithAssets($query): mixed
+    {
+        return $query->whereHas('clips', function ($q) {
+            $q->public()->whereHas('assets');
+        });
+    }
 }

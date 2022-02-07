@@ -113,6 +113,12 @@ class SeriesTest extends TestCase
     }
 
     /** @test */
+    public function it_has_a_scope_to_fetch_clips_with_assets(): void
+    {
+        $this->assertInstanceOf(Builder::class, Series::hasClipsWithAssets());
+    }
+
+    /** @test */
     public function series_owner_can_be_null(): void
     {
         $user = User::factory()->create();

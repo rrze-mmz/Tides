@@ -64,6 +64,7 @@ class SeriesClipsTest extends TestCase
 
         $this->get(route('series.clip.create', $series))->assertStatus(200)
             ->assertSee('title')
+            ->assertSee('recording_date')
             ->assertSee('description')
             ->assertSee('organization')
             ->assertSee('language')

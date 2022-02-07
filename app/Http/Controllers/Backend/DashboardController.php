@@ -33,7 +33,7 @@ class DashboardController
                 ->orderByDesc('updated_at')
                 ->limit(10)
                 ->get(),
-            'files'             => fetchDropZoneFiles(),
+            'files'             => fetchDropZoneFiles(false),
             'opencastWorkflows' => $opencastWorkflows
         ]);
     }

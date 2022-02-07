@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Services\ElasticsearchService;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 
@@ -36,6 +37,7 @@ class ElasticsearchRebuildIndexes extends Command
      *
      * @param ElasticsearchService $elasticsearchService
      * @return int
+     * @throws GuzzleException
      */
     public function handle(ElasticsearchService $elasticsearchService): int
     {

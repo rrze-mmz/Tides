@@ -13,6 +13,14 @@ class SeriesTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
+    public function it_will_paginate_all_series_on_index_page(): void
+    {
+        $series = SeriesFactory::withClips(2)->withAssets(1)->create();
+
+        $this->get(route('frontend.series.index'))->assertSee($series->title);
+    }
+
+    /** @test */
     public function a_visitor_cannot_manage_series(): void
     {
         $this->post(route('series.store'), [])->assertRedirect('login');

@@ -41,6 +41,10 @@
                               :full-col="false"
                               :required="true"/>
 
+                <x-form.datepicker field-name="recording_date"
+                                   label="Recording Date"
+                                   :value="$clip->recording_date"/>
+
                 <x-form.input field-name="title"
                               input-type="text"
                               :value="$clip->title"

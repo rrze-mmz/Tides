@@ -10,6 +10,16 @@ use Illuminate\Contracts\View\View;
 class ShowSeriesController extends Controller
 {
     /**
+     * @return View
+     */
+    public function index(): View
+    {
+        return view('frontend.series.index', [
+            'series' => Series::isPublic()->orderByDesc('updated_at')->paginate(10)
+        ]);
+    }
+
+    /**
      * Series main page
      *
      * @param Series $series

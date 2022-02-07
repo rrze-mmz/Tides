@@ -43,6 +43,7 @@ class StoreClipRequest extends FormRequest
         return [
             'title'           => ['required'],
             'description'     => ['max:500'],
+            'recording_date'  => ['required', 'date'],
             'organization_id' => ['required', 'integer'],
             'slug'            => ['required'],
             'semester_id'     => ['required', 'integer'],

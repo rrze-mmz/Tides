@@ -61,6 +61,7 @@ abstract class TestCase extends BaseTestCase
             'shortname'          => 'Main organization unit',
             'staff'              => null,
             'startdate'          => now(),
+            'enddate'            => '2999-12-31',
             'operationstartdate' => now(),
             'operationenddate'   => '2999-12-31',
             'created_at'         => now(),

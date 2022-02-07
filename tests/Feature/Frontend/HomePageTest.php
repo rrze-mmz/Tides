@@ -7,9 +7,11 @@ use Facades\Tests\Setup\ClipFactory;
 use Facades\Tests\Setup\SeriesFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Str;
 use Tests\TestCase;
 
-class HomePageTest extends TestCase {
+class HomePageTest extends TestCase
+{
     use RefreshDatabase;
     use WithFaker;
 
@@ -50,7 +52,7 @@ class HomePageTest extends TestCase {
 
         $series->clips()->save($clip);
 
-        $this->get(route('home'))->assertSee($series->title);
+        $this->get(route('home'))->assertSee(Str::limit($series->title, 20, '...'));
     }
 
     /** @test */
@@ -62,13 +64,13 @@ class HomePageTest extends TestCase {
 
         $series->clips()->save($clip);
 
-        $this->get(route('home'))->assertSee($series->title);
+        $this->get(route('home'))->assertSee(Str::limit($series->title, 20, '...'));
 
         $series->isPublic = false;
 
         $series->save();
 
-        $this->get(route('home'))->assertDontSee($series->title);
+        $this->get(route('home'))->assertDontSee(Str::limit($series->title, 20, '...'));
     }
 
     /** @test */

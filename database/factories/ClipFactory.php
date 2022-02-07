@@ -33,6 +33,7 @@ class ClipFactory extends Factory
         return [
             'title'           => $title = $this->faker->sentence(),
             'description'     => $this->faker->paragraph(),
+            'recording_date'  => now(),
             'slug'            => $title,
             'organization_id' => Organization::factory()->create()->org_id,
             'language_id'     => Language::factory()->create()->id,
