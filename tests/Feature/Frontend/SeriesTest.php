@@ -94,7 +94,7 @@ class SeriesTest extends TestCase
         $firstClip = Clip::find(1);
         $secondClip = Clip::find(2);
 
-        $firstClip->isPublic = false;
+        $firstClip->is_public = false;
         $firstClip->save();
 
         $this->get(route('frontend.series.show', $series))

@@ -29,7 +29,7 @@ class SeriesFactory extends Factory
             'slug'               => $title,
             'owner_id'           => User::factory()->create()->id,
             'opencast_series_id' => null,
-            'isPublic'           => true,
+            'is_public'          => true,
         ];
     }
 }

@@ -21,7 +21,7 @@ class CreateSeriesTable extends Migration
             $table->text('description')->nullable();
             $table->text('opencast_series_id')->nullable()->default(null);
             $table->string('password')->nullable();
-            $table->boolean('isPublic')->default(true);
+            $table->boolean('is_public')->default(true);
             $table->timestamps();
         });
     }

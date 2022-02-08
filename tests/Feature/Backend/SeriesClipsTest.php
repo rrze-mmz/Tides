@@ -75,7 +75,7 @@ class SeriesClipsTest extends TestCase
             ->assertSee('tags')
             ->assertSee('acls')
             ->assertSee('semester')
-            ->assertSee('isPublic');
+            ->assertSee('is_public');
     }
 
     /** @test */

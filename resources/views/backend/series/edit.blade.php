@@ -56,9 +56,9 @@
                                  :full-col="true"
                 />
 
-                <x-form.toggle-button :value="$series->isPublic"
+                <x-form.toggle-button :value="$series->is_public"
                                       label="Public available"
-                                      field-name="isPublic"
+                                      field-name="is_public"
                 />
             </div>
 

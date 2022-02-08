@@ -58,7 +58,7 @@ class ClipTest extends TestCase
     {
         $this->mockHandler->append($this->mockCheckApiConnection());
 
-        $this->clip->isPublic = false;
+        $this->clip->is_public = false;
 
         $this->clip->save();
 
@@ -119,7 +119,7 @@ class ClipTest extends TestCase
         $user = $this->signIn();
 
         $this->clip->owner_id = $user->id;
-        $this->clip->isPublic = false;
+        $this->clip->is_public = false;
 
         $this->clip->save();
 
@@ -133,7 +133,7 @@ class ClipTest extends TestCase
 
         $this->signInRole('admin');
 
-        $this->clip->isPublic = false;
+        $this->clip->is_public = false;
 
         $this->clip->save();
 

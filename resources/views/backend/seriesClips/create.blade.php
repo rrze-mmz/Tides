@@ -23,7 +23,7 @@
                 <x-form.datepicker field-name="recording_date"
                                    label="Recording Date"
                                    :value="now()"/>
-                
+
                 <x-form.input field-name="title"
                               input-type="text"
                               :value="old('title')"
@@ -118,9 +118,9 @@
                                       field-name="allow_comments"
                 />
 
-                <x-form.toggle-button :value="$series->isPublic"
+                <x-form.toggle-button :value="$series->is_public"
                                       label="Public available"
-                                      field-name="isPublic"
+                                      field-name="is_public"
                 />
 
             </div>

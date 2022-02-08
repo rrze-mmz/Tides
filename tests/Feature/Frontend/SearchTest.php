@@ -11,6 +11,7 @@ use GuzzleHttp\Handler\MockHandler;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Str;
 use Illuminate\Testing\TestResponse;
 use Tests\Setup\WorksWithElasticsearchClient;
 use Tests\TestCase;
@@ -98,7 +99,7 @@ class SearchTest extends TestCase
         //disable elasticsearch
         $this->mockHandler->append($this->mockClusterNotAvailable());
 
-        $this->searchFor('lorem')->assertSee($this->clip->title);
+        $this->searchFor('lorem')->assertSee(Str::limit($this->clip->title, 20, '...'));
     }
 
     /** @test */
@@ -107,7 +108,7 @@ class SearchTest extends TestCase
         //disable elasticsearch
         $this->mockHandler->append($this->mockClusterNotAvailable());
 
-        $this->searchFor('dolor')->assertSee($this->clip->title);
+        $this->searchFor('dolor')->assertSee(Str::limit($this->clip->title, 20, '...'));
     }
 
     /** @test */
@@ -134,7 +135,7 @@ class SearchTest extends TestCase
         Asset::factory()->create(['clip_id' => $secondClip]);
 
         $this->searchFor('doe')
-            ->assertSee($this->clip->title)
-            ->assertSee($secondClip->title);
+            ->assertSee(Str::limit($this->clip->title, 20, '...'))
+            ->assertSee(Str::limit($secondClip->title, 20, '...'));
     }
 }

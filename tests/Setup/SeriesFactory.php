@@ -61,7 +61,7 @@ class SeriesFactory
         $series = Series::factory()->create([
             'owner_id'           => $user = $this->user ?? User::factory(),
             'opencast_series_id' => ($this->opencastSeriesID) ? Uuid::uuid1()->toString() : '',
-            'isPublic'           => $this->isPublic,
+            'is_public'          => $this->isPublic,
         ]);
 
         if ($this->clipsCount > 0) {

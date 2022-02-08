@@ -33,7 +33,7 @@ class SeriesPolicy
          */
 
         return (
-            ($series->isPublic && $series->clips->filter(fn($clip) => $clip->assets()->count())->count() > 0)
+            ($series->is_public && $series->clips->filter(fn($clip) => $clip->assets()->count())->count() > 0)
             || (optional($user)->is($series->owner) || optional($user)->isAdmin())
         );
     }

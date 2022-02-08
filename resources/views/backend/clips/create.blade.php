@@ -119,7 +119,7 @@
 
                 <x-form.toggle-button :value="true"
                                       label="Public available"
-                                      field-name="isPublic"
+                                      field-name="is_public"
                 />
 
                 <div class="col-span-7 w-4/5">

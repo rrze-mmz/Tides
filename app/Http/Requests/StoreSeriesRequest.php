@@ -13,7 +13,7 @@ class StoreSeriesRequest extends FormRequest
     {
         $this->merge([
             'slug'       => Str::slug($this->title),
-            'isPublic'   => $this->isPublic === 'on',
+            'is_public'  => $this->is_public === 'on',
             'presenters' =>
                 $this->presenters = $this->presenters ?? [], //set empty array if select2 presenters is empty
         ]);
@@ -44,7 +44,7 @@ class StoreSeriesRequest extends FormRequest
             'presenters.*'    => ['integer', 'nullable'],
             'slug'            => ['required'],
             'password'        => ['nullable', Password::min(8)->mixedCase()],
-            'isPublic'        => ['boolean'],
+            'is_public'       => ['boolean'],
         ];
     }
 }

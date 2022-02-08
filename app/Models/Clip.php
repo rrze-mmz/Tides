@@ -243,6 +243,6 @@ class Clip extends BaseModel
      */
     public function scopePublic($query): mixed
     {
-        return $query->where('isPublic', 1);
+        return $query->where('is_public', 1);
     }
 }

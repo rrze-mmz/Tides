@@ -35,7 +35,7 @@ class ShowSeriesController extends Controller
          */
         $series->clips = (auth()->user()?->id === $series->owner_id || auth()->user()?->isAdmin())
             ? $series->clips
-            : $series->clips->filter(fn($clip) => $clip->assets()->count() && $clip->isPublic);
+            : $series->clips->filter(fn($clip) => $clip->assets()->count() && $clip->is_public);
 
         return view('frontend.series.show', compact('series'));
     }

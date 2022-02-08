@@ -128,9 +128,9 @@
                                       field-name="allow_comments"
                 />
 
-                <x-form.toggle-button :value="$clip->isPublic"
+                <x-form.toggle-button :value="$clip->is_public"
                                       label="Public available"
-                                      field-name="isPublic"
+                                      field-name="is_public"
                 />
 
             </div>

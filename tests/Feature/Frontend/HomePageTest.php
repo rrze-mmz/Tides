@@ -66,7 +66,7 @@ class HomePageTest extends TestCase
 
         $this->get(route('home'))->assertSee(Str::limit($series->title, 20, '...'));
 
-        $series->isPublic = false;
+        $series->is_public = false;
 
         $series->save();
 
@@ -78,7 +78,7 @@ class HomePageTest extends TestCase
     {
         $clip = ClipFactory::create();
 
-        $this->get(route('home'))->assertDontSee($clip->title);
+        $this->get(route('home'))->assertDontSee(Str::limit($clip->title, 20, '...'));
     }
 
     /** @test */
@@ -86,7 +86,7 @@ class HomePageTest extends TestCase
     {
         $series = SeriesFactory::withClips(1)->create();
 
-        $this->get(route('home'))->assertDontSee($series->clips()->first()->title);
+        $this->get(route('home'))->assertDontSee(Str::limit($series->clips()->first()->title, 20, '...'));
     }
 
     /** @test */
@@ -94,7 +94,7 @@ class HomePageTest extends TestCase
     {
         $clip = ClipFactory::withAssets(1)->create();
 
-        $this->get(route('home'))->assertSee($clip->title);
+        $this->get(route('home'))->assertSee(Str::limit($clip->title, 20, '...'));
     }
 
     /** @test */
@@ -102,12 +102,12 @@ class HomePageTest extends TestCase
     {
         $clip = ClipFactory::withAssets(1)->create();
 
-        $this->get(route('home'))->assertSee($clip->title);
+        $this->get(route('home'))->assertSee(Str::limit($clip->title, 20, '...'));
 
-        $clip->isPublic = false;
+        $clip->is_public = false;
 
         $clip->save();
 
-        $this->get(route('home'))->assertDontSee($clip->title);
+        $this->get(route('home'))->assertDontSee(Str::limit($clip->title, 20, '...'));
     }
 }

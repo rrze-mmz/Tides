@@ -91,7 +91,7 @@ class ManageSeriesTest extends TestCase
             ->assertSee('presenters')
             ->assertSee('acls')
             ->assertSee('password')
-            ->assertSee('isPublic')
+            ->assertSee('is_public')
             ->assertSee('Organization');
 
         $this->get(route('series.create'))->assertStatus(200)

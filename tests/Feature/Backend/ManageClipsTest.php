@@ -156,7 +156,7 @@ class ManageClipsTest extends TestCase
             ->assertSee('tags')
             ->assertSee('acls')
             ->assertSee('semester')
-            ->assertSee('isPublic');
+            ->assertSee('is_public');
 
         $this->get(route('clips.create'))->assertStatus(200)
             ->assertViewIs('backend.clips.create');
@@ -189,7 +189,7 @@ class ManageClipsTest extends TestCase
             ->assertSee('tags')
             ->assertSee('presenters')
             ->assertSee('semester')
-            ->assertSee('isPublic')
+            ->assertSee('is_public')
             ->assertSee('acls');
     }
 
@@ -334,7 +334,7 @@ class ManageClipsTest extends TestCase
         $attributes = [
             'title'           => 'Clip title',
             'description'     => $this->faker->sentence(500),
-            'recording_date'  => now(),
+            'recording_date'  => now()->toDateString(),
             'organization_id' => '1',
             'language_id'     => '1',
             'context_id'      => '1',

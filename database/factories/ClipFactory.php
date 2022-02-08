@@ -45,7 +45,7 @@ class ClipFactory extends Factory
             'posterImage'     => null,
             'series_id'       => null,
             'episode'         => $episode++,
-            'isPublic'        => true,
+            'is_public'       => true,
         ];
     }
 }

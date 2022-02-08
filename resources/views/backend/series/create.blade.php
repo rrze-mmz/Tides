@@ -53,7 +53,7 @@
 
                 <x-form.toggle-button :value="true"
                                       label="Public available"
-                                      field-name="isPublic"
+                                      field-name="is_public"
                 />
 
                 <div class="flex content-center items-center mb-6">

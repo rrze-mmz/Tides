@@ -19,7 +19,7 @@ class StoreClipRequest extends FormRequest
             'presenters'     =>
                 $this->presenters = $this->presenters ?? [], //set empty array if select2 presenters is empty
             'allow_comments' => $this->allow_comments === 'on',
-            'isPublic'       => $this->isPublic === 'on',
+            'is_public'      => $this->is_public === 'on',
         ]);
     }
 

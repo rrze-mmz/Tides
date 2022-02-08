@@ -135,7 +135,7 @@ class Series extends BaseModel
      */
     public function scopeIsPublic($query): mixed
     {
-        return $query->where('isPublic', 1);
+        return $query->where('is_public', 1);
     }
 
     /**
