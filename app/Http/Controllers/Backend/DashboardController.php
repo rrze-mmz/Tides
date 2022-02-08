@@ -26,12 +26,12 @@ class DashboardController
         return view('backend.dashboard.index', [
             'userSeries'        => auth()->user()->series()
                 ->orderByDesc('updated_at')
-                ->limit(10)
+                ->limit(12)
                 ->get(),
             'userClips'         => auth()->user()->clips()
                 ->whereNull('series_id')
                 ->orderByDesc('updated_at')
-                ->limit(10)
+                ->limit(12)
                 ->get(),
             'files'             => fetchDropZoneFiles(false),
             'opencastWorkflows' => $opencastWorkflows

@@ -32,7 +32,7 @@
         <div class="flex items-end w-full border-b justify-content-between">
             <div class="flex justify-between items-end pb-2 w-full">
                 <div class="text-2xl"> {{  __('homepage.clips.Recently added!') }}</div>
-                <a href="{{ route('frontend.clip.index') }}"
+                <a href="{{ route('frontend.clips.index') }}"
                    class="text-sm underline">{{__('homepage.clips.more clips')}}</a>
             </div>
 

@@ -33,7 +33,7 @@ Route::get('series/index', [ShowSeriesController::class, 'index'])->name('fronte
 Route::get('/series/{series}', [ShowSeriesController::class, 'show'])->name('frontend.series.show');
 
 //Frontend clip route
-Route::get('/clips', [ShowClipsController::class, 'index'])->name('frontend.clip.index');
+Route::get('/clips', [ShowClipsController::class, 'index'])->name('frontend.clips.index');
 Route::get('/clips/{clip}', [ShowClipsController::class, 'show'])
     ->name('frontend.clips.show');
 
