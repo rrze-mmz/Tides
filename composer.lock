@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8d4ef52d99d5367c2ed8ec065f2c4ec6",
+    "content-hash": "de16488041027c73f4780b3196b1daa6",
     "packages": [
         {
             "name": "alchemy/binary-driver",
@@ -8562,6 +8562,63 @@
             "time": "2020-09-13T00:01:43+00:00"
         },
         {
+            "name": "laravel/breeze",
+            "version": "v1.8.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/breeze.git",
+                "reference": "9680289ab0a9dd7708622dd4626326b07aaeb524"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/breeze/zipball/9680289ab0a9dd7708622dd4626326b07aaeb524",
+                "reference": "9680289ab0a9dd7708622dd4626326b07aaeb524",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/filesystem": "^8.42|^9.0",
+                "illuminate/support": "^8.42|^9.0",
+                "illuminate/validation": "^8.42|^9.0",
+                "php": "^7.3|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                },
+                "laravel": {
+                    "providers": [
+                        "Laravel\\Breeze\\BreezeServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Laravel\\Breeze\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylor@laravel.com"
+                }
+            ],
+            "description": "Minimal Laravel authentication scaffolding with Blade and Tailwind.",
+            "keywords": [
+                "auth",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/laravel/breeze/issues",
+                "source": "https://github.com/laravel/breeze"
+            },
+            "time": "2022-02-09T00:14:35+00:00"
+        },
+        {
             "name": "laravel/sail",
             "version": "v1.13.1",
             "source": {
@@ -8623,22 +8680,22 @@
         },
         {
             "name": "laravel/ui",
-            "version": "v3.4.2",
+            "version": "v3.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/ui.git",
-                "reference": "e01198123f7f4369d13c1f83a897c3f5e97fc9f4"
+                "reference": "64a0f43492c00780b2261c56cd7007a4f370d95b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/ui/zipball/e01198123f7f4369d13c1f83a897c3f5e97fc9f4",
-                "reference": "e01198123f7f4369d13c1f83a897c3f5e97fc9f4",
+                "url": "https://api.github.com/repos/laravel/ui/zipball/64a0f43492c00780b2261c56cd7007a4f370d95b",
+                "reference": "64a0f43492c00780b2261c56cd7007a4f370d95b",
                 "shasum": ""
             },
             "require": {
                 "illuminate/console": "^8.42|^9.0",
                 "illuminate/filesystem": "^8.42|^9.0",
-                "illuminate/support": "^8.42|^9.0",
+                "illuminate/support": "^8.82|^9.0",
                 "illuminate/validation": "^8.42|^9.0",
                 "php": "^7.3|^8.0"
             },
@@ -8678,9 +8735,9 @@
                 "ui"
             ],
             "support": {
-                "source": "https://github.com/laravel/ui/tree/v3.4.2"
+                "source": "https://github.com/laravel/ui/tree/v3.4.3"
             },
-            "time": "2022-01-25T20:15:56+00:00"
+            "time": "2022-02-08T14:19:32+00:00"
         },
         {
             "name": "maximebf/debugbar",

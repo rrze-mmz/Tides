@@ -22,6 +22,7 @@ use App\Models\Series;
 use App\Services\ElasticsearchService;
 use Illuminate\Support\Facades\Route;
 
+
 Route::get('/', HomeController::class)->name('home');
 Route::redirect('/home', '/');
 Route::redirect('/admin', '/admin/dashboard');
@@ -139,4 +140,4 @@ Route::get('/test/{series}/elk', function (Series $series, ElasticsearchService 
     $elkService->createIndex($series);
 })->name('elasticsearch.test');
 
-Auth::routes(['register' => config('tides.allow_user_registration')]);
+require __DIR__ . '/auth.php';

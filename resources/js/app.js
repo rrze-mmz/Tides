@@ -1,6 +1,8 @@
+require('./bootstrap');
+
 import Plyr from 'plyr';
 import 'select2';
-import 'alpinejs';
+import Alpine from 'alpinejs';
 import Hls from 'hls.js';
 import $ from 'jquery';
 
@@ -152,3 +154,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
+window.Alpine = Alpine;
+
+Alpine.start();

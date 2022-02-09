@@ -1,7 +1,6 @@
 @import "../../node_modules/plyr/dist/plyr.css";
 @import "../../node_modules/select2/dist/css/select2.css";
 
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
-
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';

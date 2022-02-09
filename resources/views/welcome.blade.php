@@ -64,9 +64,9 @@
                     <div class="flex flex-col justify-center items-center space-y-2
                                 sm:flex-row sm:flex-wrap sm:space-x-8 sm:space-y-0">
                         @auth
-                            <a href="{{ url('/home') }}" class="text-sm font-normal text-teal-800 no-underline
+                            <a href="{{ url('/dashboard') }}" class="text-sm font-normal text-teal-800 no-underline
                                     uppercase hover:underline"
-                            >{{ __('Home') }}</a>
+                            >{{ __('Dashboard') }}</a>
                         @else
                             <a href="{{ route('login') }}" class="text-sm font-normal text-teal-800 no-underline
                                     uppercase hover:underline"

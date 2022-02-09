@@ -43,7 +43,6 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/php-ffmpeg/php-ffmpeg" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/laravel-frontend-presets/tailwindcss" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/league/flysystem" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/laravel/ui" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/asm89/stack-cors" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/composer" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/egulias/email-validator" />
@@ -161,9 +160,10 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/dealerdirect/phpcodesniffer-composer-installer" />
       <excludeFolder url="file://$MODULE_DIR$/reports" />
       <excludeFolder url="file://$MODULE_DIR$/public/css" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/_laravel_idea" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/blade-ui-kit/blade-heroicons" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/blade-ui-kit/blade-icons" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/laravel/ui" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/laravel/breeze" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

@@ -1,25 +1,19 @@
+const defaultTheme = require('tailwindcss/defaultTheme');
+
 module.exports = {
     content: [
+        './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
+        './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
-        './resources/views/components/**/*.blade.php',
-        './resources/css/**/*.css',
     ],
+
     theme: {
-        screens: {
-            sm: '480px',
-            md: '768px',
-            lg: '976px',
-            xl: '1440px',
-        },
         extend: {
-            spacing: {
-                '128': '32rem',
-                '144': '36rem',
+            fontFamily: {
+                sans: ['Nunito', ...defaultTheme.fontFamily.sans],
             },
-            borderRadius: {
-                '4xl': '2rem',
-            }
-        }
+        },
     },
-    plugins: []
-}
+
+    plugins: [require('@tailwindcss/forms')],
+};

@@ -42,7 +42,6 @@
       <path value="$PROJECT_DIR$/vendor/php-ffmpeg/php-ffmpeg" />
       <path value="$PROJECT_DIR$/vendor/laravel-frontend-presets/tailwindcss" />
       <path value="$PROJECT_DIR$/vendor/league/flysystem" />
-      <path value="$PROJECT_DIR$/vendor/laravel/ui" />
       <path value="$PROJECT_DIR$/vendor/asm89/stack-cors" />
       <path value="$PROJECT_DIR$/vendor/composer" />
       <path value="$PROJECT_DIR$/vendor/egulias/email-validator" />
@@ -158,9 +157,10 @@
       <path value="$PROJECT_DIR$/vendor/symfony/cache" />
       <path value="$PROJECT_DIR$/vendor/symfony/var-exporter" />
       <path value="$PROJECT_DIR$/vendor/dealerdirect/phpcodesniffer-composer-installer" />
-      <path value="$PROJECT_DIR$/vendor/_laravel_idea" />
       <path value="$PROJECT_DIR$/vendor/blade-ui-kit/blade-heroicons" />
       <path value="$PROJECT_DIR$/vendor/blade-ui-kit/blade-icons" />
+      <path value="$PROJECT_DIR$/vendor/laravel/ui" />
+      <path value="$PROJECT_DIR$/vendor/laravel/breeze" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.0" />
