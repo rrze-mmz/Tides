@@ -4,3 +4,19 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
+.select2-dropdown {
+    @apply rounded-b-lg shadow-md;
+}
+
+.select2-search {
+    @apply border  rounded;
+}
+
+.select2-search__field {
+    @apply bg-blue-700;
+}
+
+.select2-results__group {
+    @apply text-lg font-bold text-gray-900;
+}

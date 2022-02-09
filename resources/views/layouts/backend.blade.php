@@ -13,9 +13,6 @@
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
 
 
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}"></script>
-
     @livewireStyles
 </head>
 <body class="h-screen font-sans antialiased leading-none bg-gray-100">
@@ -81,5 +78,7 @@
         </div>
     </footer>
 </div>
+<!-- Scripts -->
+<script src="{{ asset('js/app.js') }}" defer></script>
 </body>
 </html>

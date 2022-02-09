@@ -7,7 +7,7 @@
         </label>
     </div>
     <div class="col-start-2 col-end-6">
-        <select class="p-2 w-full {{ $selectClass}}
+        <select class="px-4 py-4 h-4 w-full  {{ $selectClass}}
             focus:outline-none focus:bg-white focus:border-blue-500"
                 name="{{ $fieldName }}[]"
                 multiple="multiple"
@@ -24,7 +24,7 @@
             @elseif($fieldName=='presenters')
                 @foreach($items as $item)
                     <option value="{{$item->id }}" selected="selected"
-                            class="p-4">{{$item->getFullNameAttribute() }}</option>
+                            class="p-4 h-4">{{$item->getFullNameAttribute() }}</option>
                 @endforeach
             @else
                 @foreach($items as $item)
