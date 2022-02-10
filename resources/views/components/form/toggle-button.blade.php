@@ -7,18 +7,20 @@
         </label>
     </div>
     <div class="col-start-2 col-end-6">
-        <div class="py-2  w-full" x-data="{ checked: {{ ($value ? 'true' : 'false') }} }">
-            <div class="relative rounded-full w-12 h-6 transition duration-200 ease-linear"
-                 :class="checked ? 'bg-green-400' : 'bg-gray-400'">
-                <label for="{{ $fieldName }}"
-                       class="absolute left-0 bg-white border-2 mb-2 w-6 h-6 rounded-full transition transform
-                            duration-100 ease-linear cursor-pointer"
-                       :class="checked ? 'translate-x-full border-green-400' : 'translate-x-0 border-gray-400'"
-                ></label>
-                <input type="checkbox" id="{{ $fieldName }}" name="{{ $fieldName }}"
-                       class="appearance-none w-full h-full active:outline-none focus:outline-none"
+        <div class="py-2  w-full bg-none" x-data="{ checked: {{ ($value ? 'true' : 'false') }} }">
+            <div class="relative  w-12 h-6 transition duration-200 ease-in select-none bg-none">
+                <input type="checkbox"
+                       id="{{ $fieldName }}"
+                       name="{{ $fieldName }}"
+                       class=" rounded-full  w-full h-full active:outline-none focus:outline-none bg-none"
                        x-model="checked"
                 >
+                <label for="{{ $fieldName }}"
+                       class=" absolute left-0  border-2 mb-2 w-6 h-6
+                               rounded-full transition transform  bg-blue-500
+                            duration-100 ease-linear cursor-pointer rounded-full  bg-blue-500"
+                       :class="checked ? 'translate-x-full bg-blue bg-none ' : 'translate-x-0 border-gray-400'"
+                ></label>
             </div>
         </div>
     </div>

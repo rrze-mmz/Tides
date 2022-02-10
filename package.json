@@ -31,8 +31,11 @@
     "dependencies": {
         "alpinejs": "^2.8.2",
         "hls.js": "^0.14.17",
+        "moment": "^2.29.1",
+        "pikaday": "^1.8.2",
         "plyr": "^3.6.4",
         "select2": "^4.1.0-rc.0",
+        "tw-elements": "^1.0.0-alpha10",
         "vue": "^2.6.12"
     }
 }

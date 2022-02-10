@@ -5,9 +5,11 @@ import 'select2';
 import Alpine from 'alpinejs';
 import Hls from 'hls.js';
 import $ from 'jquery';
+import Pikaday from 'pikaday';
 
 window.$ = window.jQuery = $;
 
+window.Pikaday = Pikaday;
 
 $(() => {
 

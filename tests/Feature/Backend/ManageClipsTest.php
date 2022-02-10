@@ -91,7 +91,7 @@ class ManageClipsTest extends TestCase
     }
 
     /** @test */
-    public function it_must_have_it_must_have_a_strong_password_if_anya_strong_password_if_any(): void
+    public function it_must_have_a_strong_password_if_any(): void
     {
         $this->signInRole($this->role);
 

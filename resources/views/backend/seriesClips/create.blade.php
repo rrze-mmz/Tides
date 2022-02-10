@@ -22,7 +22,9 @@
 
                 <x-form.datepicker field-name="recording_date"
                                    label="Recording Date"
+                                   :full-col="false"
                                    :value="now()"/>
+
 
                 <x-form.input field-name="title"
                               input-type="text"

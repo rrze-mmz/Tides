@@ -42,7 +42,7 @@ class UpdateClipRequest extends FormRequest
     {
         return [
             'title'           => ['required'],
-            'description'     => ['max:255'],
+            'description'     => ['string', 'nullable', 'max:1000'],
             'recording_date'  => ['required', 'date'],
             'organization_id' => ['required', 'integer'],
             'slug'            => ['required'],
