@@ -60,7 +60,7 @@ class SeriesController extends Controller
 
         session()->flash('flashMessage', 'Clip created successfully');
 
-        return redirect($series->adminPath());
+        return to_route('series.edit', $series);
     }
 
     /**
@@ -92,7 +92,8 @@ class SeriesController extends Controller
         Series              $series,
         UpdateSeriesRequest $request,
         OpencastService     $opencastService
-    ): RedirectResponse {
+    ): RedirectResponse
+    {
         $validated = $request->validated();
         if (is_null($series->opencast_series_id)) {
             $opencastSeriesId = $opencastService->createSeries($series);
@@ -102,7 +103,7 @@ class SeriesController extends Controller
         $series->update(Arr::except($validated, ['presenters']));
         $series->addPresenters(collect($validated['presenters']));
 
-        return redirect($series->adminPath());
+        return to_route('series.edit', $series);
     }
 
     /**
@@ -118,6 +119,6 @@ class SeriesController extends Controller
 
         $series->delete();
 
-        return redirect(route('series.index'));
+        return to_route('series.index');
     }
 }

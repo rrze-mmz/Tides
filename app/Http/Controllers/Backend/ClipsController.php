@@ -60,7 +60,7 @@ class ClipsController extends Controller
         $clip->addPresenters(collect($validated['presenters']));
         $clip->addAcls(collect($validated['acls']));
 
-        return redirect($clip->adminPath());
+        return to_route('clips.edit', $clip);
     }//end store()
 
     /**
@@ -103,7 +103,7 @@ class ClipsController extends Controller
         $clip->addPresenters(collect($validated['presenters']));
         $clip->addAcls(collect($validated['acls']));
 
-        return redirect($clip->adminPath());
+        return to_route('clips.edit', $clip);
     }//end update()
 
     /**
@@ -123,6 +123,6 @@ class ClipsController extends Controller
             return redirect(route('series.edit', $clip->series));
         }
 
-        return redirect(route('clips.index'));
+        return to_route('clips.index');
     }//end destroy()
 }//end class

@@ -53,7 +53,7 @@ class UsersController extends Controller
 
         Password::sendResetLink(['email' => $user->email]);
 
-        return redirect(route('users.index'));
+        return to_route('users.index');
     }
 
     /**
@@ -82,7 +82,7 @@ class UsersController extends Controller
 
         $user->assignRole(Role::find($validated['role_id'])->name);
 
-        return redirect(route('users.edit', $user));
+        return to_route('users.edit', $user);
     }
 
     /**
@@ -95,6 +95,6 @@ class UsersController extends Controller
     {
         $user->delete();
 
-        return redirect(route('users.index'));
+        return to_route('users.index');
     }
 }

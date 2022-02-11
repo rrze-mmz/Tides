@@ -52,7 +52,7 @@ class AssetsTransferController extends Controller
 
         $this->checkDropzoneFilesForClipUpload($clip, $validated);
 
-        return redirect($clip->adminPath());
+        return to_route('clips.edit', $clip);
     }
 
     /**
@@ -92,6 +92,6 @@ class AssetsTransferController extends Controller
 
         $this->checkOpencastAssetsForClipUpload($clip, $validated['eventID'], $opencastService);
 
-        return redirect($clip->adminPath());
+        return to_route('clips.edit', $clip);
     }
 }

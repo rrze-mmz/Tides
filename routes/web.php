@@ -29,13 +29,19 @@ Route::redirect('/admin', '/admin/dashboard');
 //Quick search
 Route::get('search', [SearchController::class, 'search'])->name('search');
 
-Route::get('series/index', [ShowSeriesController::class, 'index'])->name('frontend.series.index');
-Route::get('/series/{series}', [ShowSeriesController::class, 'show'])->name('frontend.series.show');
+//frontend series routes
+Route::controller(ShowSeriesController::class)->prefix('/series')->group(function () {
+    Route::get('/index', 'index')->name('frontend.series.index');
+    Route::get('/{series}', 'show')->name('frontend.series.show');
+});
 
-//Frontend clip route
-Route::get('/clips', [ShowClipsController::class, 'index'])->name('frontend.clips.index');
-Route::get('/clips/{clip}', [ShowClipsController::class, 'show'])
-    ->name('frontend.clips.show');
+
+//Frontend clip routes
+Route::controller(ShowClipsController::class)->prefix('/clips')->group(function () {
+    Route::get('/', 'index')->name('frontend.clips.index');
+    Route::get('/{clip}', 'show')->name('frontend.clips.show');
+});
+
 
 Route::get('/protector/link/clip/{clip:id}/{token}/{time}/{client}', function (Clip $clip, $token, $time, $client) {
     session()->put([
@@ -44,23 +50,23 @@ Route::get('/protector/link/clip/{clip:id}/{token}/{time}/{client}', function (C
         'clip_' . $clip->id . '_client' => $client,
     ]);
 
-    return redirect()->route('frontend.clips.show', $clip);
+    return to_route('frontend.clips.show', $clip);
 })
     ->middleware(['lms.token'])
     ->name('clip.lms.link');
 
+Route::controller(ApiController::class)->prefix('/api')->group(function () {
+    Route::get('/tags', 'tags')->name('api.tags');
+    Route::get('/presenters', 'presenters')->name('api.presenters');
+    Route::get('/organizations', 'organizations')->name('api.organizations');
+});
 
-Route::get('/api/tags', [ApiController::class, 'tags'])->name('api.tags');
-Route::get('api/presenters', [ApiController::class, 'presenters'])->name('api.presenters');
-Route::get('/api/organizations', [ApiController::class, 'organizations'])->name('api.organizations');
 
 //change portal language
 Route::get('/set_lang/{locale}', function ($locale) {
-
     if (!in_array($locale, ['en', 'de'])) {
         abort(400);
     }
-
     session()->put('locale', $locale);
 
     return back();
@@ -91,18 +97,16 @@ Route::prefix('admin')->middleware(['auth', 'can:access-dashboard'])->group(func
          * for an extern service ffmpeg video transcoding. In FAU case
          * the encoding is performed by the HPC cluster
          */
-        Route::get('/clips/{clip}/dropzone/list', [AssetsTransferController::class, 'listDropzoneFiles'])
-            ->name('admin.clips.dropzone.listFiles');
-        Route::post('/clips/{clip}/dropzone/transfer', [AssetsTransferController::class, 'transferDropzoneFiles'])
-            ->name('admin.clips.dropzone.transfer');
+        Route::controller(AssetsTransferController::class)->prefix('/clips')->group(function () {
+            Route::get('/{clip}/dropzone/list', 'listDropzoneFiles')->name('admin.clips.dropzone.listFiles');
+            Route::post('/{clip}/dropzone/transfer', 'transferDropzoneFiles')->name('admin.clips.dropzone.transfer');
+            /*
+             * Transfer assets from Opencast Server
+             */
+            Route::get('/{clip}/opencast/list', 'listOpencastEvents')->name('admin.clips.opencast.listEvents');
+            Route::post('/{clip}/opencast/transfer', 'transferOpencastFiles')->name('admin.clips.opencast.transfer');
+        });
 
-        /*
-         * Transfer assets from Opencast Server
-         */
-        Route::get('/clips/{clip}/opencast/list', [AssetsTransferController::class, 'listOpencastEvents'])
-            ->name('admin.clips.opencast.listEvents');
-        Route::post('/clips/{clip}/opencast/transfer', [AssetsTransferController::class, 'transferOpencastFiles'])
-            ->name('admin.clips.opencast.transfer');
 
         // Create SMIL files for WOWZA hls streaming
         Route::get('/clips/{clip}/triggerSmilFiles', TriggerSmilFilesController::class)
@@ -110,17 +114,18 @@ Route::prefix('admin')->middleware(['auth', 'can:access-dashboard'])->group(func
     });
 
 
-    // Create a clip for a certain series.
-    Route::get('/series/{series}/addClip', [SeriesClipsController::class, 'create'])->name('series.clip.create');
-    Route::post('series/{series}/addClip', [SeriesClipsController::class, 'store'])->name('series.clip.store');
+    Route::controller(SeriesClipsController::class)->prefix('/series')->group(function () {
+        // Create a clip for a certain series.
+        Route::get('/{series}/addClip', 'create')->name('series.clip.create');
+        Route::post('series/{series}/addClip', 'store')->name('series.clip.store');
 
-    //add/remove an existing clip to selected series
-    Route::get('/series/listSeries/{clip}', [SeriesClipsController::class, 'listSeries'])
-        ->name('series.clips.listSeries');
-    Route::post('/series/{series}/assignSeries/{clip}', [SeriesClipsController::class, 'assign'])
-        ->name('series.clips.assign');
-    Route::delete('/clip/removeSeries/{clip}', [SeriesClipsController::class, 'remove'])
-        ->name('series.clips.remove');
+        //add/remove an existing clip to selected series
+        Route::get('/listSeries/{clip}', 'listSeries')->name('series.clips.listSeries');
+        Route::post('/{series}/assignSeries/{clip}', 'assign')->name('series.clips.assign');
+        Route::delete('/clip/removeSeries/{clip}', 'remove')->name('series.clips.remove');
+    });
+
+
     //Assets routes
     Route::post('/clips/{clip}/assets', [AssetsController::class, 'store'])->name('admin.assets.store');
     Route::delete('assets/{asset}', [AssetsController::class, 'destroy'])->name('assets.destroy');

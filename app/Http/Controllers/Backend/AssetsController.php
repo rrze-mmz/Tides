@@ -68,7 +68,7 @@ class AssetsController extends Controller
 
         Mail::to(auth()->user()->email)->send(new AssetsTransferred($clip));
 
-        return redirect($clip->adminPath());
+        return to_route('clips.edit', $clip);
     }
 
     /**
@@ -87,6 +87,6 @@ class AssetsController extends Controller
 
         $asset->clip->updatePosterImage();
 
-        return redirect($asset->clip->adminPath());
+        return to_route('clips.edit', $asset->clip);
     }
 }

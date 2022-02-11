@@ -44,7 +44,7 @@ class SeriesClipsController extends Controller
 
         $request->session()->flash('clip_created_successfully', 'Clip created successfully');
 
-        return redirect(route('clips.edit', $clip));
+        return to_route('clips.edit', $clip);
     }
 
     /**
@@ -81,7 +81,7 @@ class SeriesClipsController extends Controller
         $clip->series()->associate($series);
         $clip->save();
 
-        return redirect(route('clips.edit', $clip));
+        return to_route('clips.edit', $clip);
     }
 
     /**
@@ -97,6 +97,6 @@ class SeriesClipsController extends Controller
         $clip->series()->dissociate();
         $clip->save();
 
-        return redirect(route('clips.edit', $clip));
+        return to_route('clips.edit', $clip);
     }
 }

@@ -43,7 +43,7 @@ class PresentersController extends Controller
     {
         Presenter::create($request->validated());
 
-        return redirect(route('presenters.index'));
+        return to_route('presenters.index');
     }
 
     /**
@@ -86,7 +86,7 @@ class PresentersController extends Controller
 
         $presenter->update($validated);
 
-        return redirect(route('presenters.edit', $presenter));
+        return to_route('presenters.edit', $presenter);
     }
 
     /**
@@ -99,6 +99,6 @@ class PresentersController extends Controller
     {
         $presenter->delete();
 
-        return redirect(route('presenters.index'));
+        return to_route('presenters.index');
     }
 }
