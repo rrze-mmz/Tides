@@ -1,9 +1,9 @@
-@import "../../node_modules/plyr/dist/plyr.css";
-@import "../../node_modules/select2/dist/css/select2.css";
-
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
+@import "../../node_modules/plyr/dist/plyr.css";
+@import "../../node_modules/select2/dist/css/select2.css";
 @import "../../node_modules/pikaday/css/pikaday.css";
 
 .select2-dropdown {
@@ -14,9 +14,21 @@
     @apply border  rounded;
 }
 
-.select2-search__field {
-    @apply bg-blue-700;
+.select2-search__ * {
+    @apply w-full border-none !important;
 }
+
+.select2-search--inline {
+    @apply border-none !important;
+}
+
+.select2-search__field {
+    @apply h-6 !important;
+}
+
+/*.select2-selection__choice {*/
+/*    @apply relative pb-1 !important;*/
+/*}*/
 
 .select2-results__group {
     @apply text-lg font-bold text-gray-900;

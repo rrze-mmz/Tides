@@ -38,7 +38,7 @@ class UpdateSeriesRequest extends FormRequest
     {
         return [
             'title'              => ['required'],
-            'description'        => ['max:500'],
+            'description'        => ['string', 'nullable', 'max:1000'],
             'organization_id'    => ['required ', 'integer'],
             'slug'               => ['required'],
             'presenters'         => ['array'],

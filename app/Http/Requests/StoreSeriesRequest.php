@@ -38,7 +38,7 @@ class StoreSeriesRequest extends FormRequest
     {
         return [
             'title'           => ['required'],
-            'description'     => ['max:255'],
+            'description'     => ['string', 'nullable', 'max:1000'],
             'organization_id' => ['required', 'integer'],
             'presenters'      => ['array'],
             'presenters.*'    => ['integer', 'nullable'],
