@@ -176,7 +176,7 @@ class ClipTest extends TestCase
 
         $this->get($this->clip->path())->assertSee(env('WOWZA_ENGINE_URL'));
 
-        Storage::disk('videos')->delete($this->clip->assets()->first()->pth);
+        Storage::disk('videos')->delete($this->clip->assets()->first()->path);
     }
 
     /** @test */

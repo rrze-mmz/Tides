@@ -13,7 +13,7 @@ class Presenter extends BaseModel
     public function getFullNameAttribute(): string
     {
         return ($this->academic_degree_id > 0)
-            ? "{$this->academic_degree?->title} {$this->first_name} {$this->last_name}"
+            ? "{$this->academicDegree?->title} {$this->first_name} {$this->last_name}"
             : "{$this->first_name} {$this->last_name}";
     }
 
@@ -37,7 +37,7 @@ class Presenter extends BaseModel
         return $this->morphedByMany(Clip::class, 'presentable')->withTimestamps();
     }
 
-    public function academic_degree(): BelongsTo
+    public function academicDegree(): BelongsTo
     {
         return $this->belongsTo(AcademicDegree::class);
     }

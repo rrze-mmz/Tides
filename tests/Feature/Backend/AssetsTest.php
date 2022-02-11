@@ -67,19 +67,21 @@ class AssetsTest extends TestCase
 
         $this->delete($asset->path());
 
-        $this->assertDeleted($asset);
+        $this->assertModelMissing($asset);
     }
 
     /** @test */
     public function a_moderator_can_delete_an_owned_clip_asset(): void
     {
+        Storage::fake('thumbnails');
+
         $clip = ClipFactory::withAssets(1)
             ->ownedBy($this->signInRole($this->role))
             ->create();
 
         $this->assertEquals(1, $clip->assets()->count());
 
-        $this->delete($clip->assets->first()->path())
+        $this->delete(route('assets.destroy', $clip->assets->first()))
             ->assertRedirect($clip->adminPath());
 
         $this->assertEquals(0, $clip->assets()->count());
@@ -100,7 +102,7 @@ class AssetsTest extends TestCase
 
         $asset->delete();
 
-        $this->assertDeleted($asset);
+        $this->assertModelMissing($asset);
 
         Storage::disk('videos')->assertMissing($asset->path);
     }

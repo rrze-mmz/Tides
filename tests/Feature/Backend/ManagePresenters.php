@@ -8,6 +8,7 @@ use App\Models\Presenter;
 use App\Models\Series;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Str;
 use Livewire\Livewire;
 use Tests\TestCase;
 
@@ -255,7 +256,7 @@ class ManagePresenters extends TestCase
         //flush session data to remove the update clip model message
         session()->flush();
 
-        $this->get(route('presenters.edit', $presenter))->assertSee($series->title);
+        $this->get(route('presenters.edit', $presenter))->assertSee(Str::limit($series->title, 20, '...'));
     }
 
     /** @test */
@@ -269,7 +270,7 @@ class ManagePresenters extends TestCase
         //flush session data to remove the update clip model message
         session()->flush();
 
-        $this->get(route('presenters.edit', $presenter))->assertSee($clip->title);
+        $this->get(route('presenters.edit', $presenter))->assertSee(Str::limit($clip->title, 20, '...'));
     }
 
     /** @test */

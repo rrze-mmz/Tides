@@ -98,14 +98,12 @@ class ManageClipsTest extends TestCase
         $this->post(route('clips.store', Clip::factory()->raw([
             'title'    => 'This is a test',
             'password' => '1234',
-        ])
-        ))->assertSessionHasErrors('password');
+        ])))->assertSessionHasErrors('password');
 
         $this->followingRedirects()->post(route('clips.store', Clip::factory()->raw([
             'title'    => 'This is a test',
             'password' => '1234qwER',
-        ])
-        ))->assertStatus(200);
+        ])))->assertStatus(200);
     }
 
     /** @test */
@@ -113,8 +111,7 @@ class ManageClipsTest extends TestCase
     {
         $this->signIn();
 
-        $this->post(route('clips.store'), $attributes = Clip::factory()->raw()
-        )->assertStatus(403);
+        $this->post(route('clips.store'), $attributes = Clip::factory()->raw())->assertStatus(403);
     }
 
     /** @test */
@@ -135,7 +132,6 @@ class ManageClipsTest extends TestCase
         $data = Clip::factory()->raw(['presenters' => ['1.3', 'test']]);
 
         $this->post(route('clips.store', $data))->assertSessionHasErrors('presenters.*');
-
     }
 
     /** @test */
@@ -348,7 +344,6 @@ class ManageClipsTest extends TestCase
         $this->followingRedirects();
 
         $this->get(route('clips.create'))->assertSee($attributes);
-
     }
 
     /** @test */

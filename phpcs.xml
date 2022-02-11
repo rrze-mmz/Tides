@@ -2,6 +2,10 @@
 <ruleset name="PHP_CodeSniffer">
     <description>The coding standard for our project.</description>
     <rule ref="PSR2"/>
+    <rule ref="PSR1.Methods.CamelCapsMethodName">
+        <exclude-pattern>./tests/*</exclude-pattern>
+    </rule>
+
 
     <file>app</file>
     <file>bootstrap</file>

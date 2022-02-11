@@ -18,8 +18,7 @@ class Button extends Component
         public string $text,
         public string $color = '',
         public string $additionalClasses = ''
-    )
-    {
+    ) {
         //
     }
 

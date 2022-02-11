@@ -36,14 +36,16 @@ class PresenterTest extends TestCase
     /** @test */
     public function it_has_one_or_none_degree_title(): void
     {
-        $this->assertInstanceOf(BelongsTo::class, $this->presenter->academic_degree());
+        $this->assertInstanceOf(BelongsTo::class, $this->presenter->academicDegree());
     }
 
     /** @test */
     public function it_can_return_presenter_full_name(): void
     {
-        $this->assertEquals($this->presenter->getFullNameAttribute(),
-            $this->presenter->academic_degree->title . ' ' . $this->presenter->first_name .
-            ' ' . $this->presenter->last_name);
+        $this->assertEquals(
+            $this->presenter->getFullNameAttribute(),
+            $this->presenter->academicDegree->title . ' ' . $this->presenter->first_name .
+            ' ' . $this->presenter->last_name
+        );
     }
 }
