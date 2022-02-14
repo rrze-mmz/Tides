@@ -3,7 +3,9 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -22,6 +24,9 @@ class Clip extends BaseModel
 
     protected $attributes = [
         'episode' => '1'
+    ];
+    protected $casts = [
+        'recording_date' => 'datetime:Y-m-d'
     ];
 
     /**

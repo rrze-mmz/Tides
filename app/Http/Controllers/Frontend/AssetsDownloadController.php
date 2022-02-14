@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Asset;
+use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class AssetsDownloadController extends Controller
@@ -16,10 +17,8 @@ class AssetsDownloadController extends Controller
      */
     public function __invoke(Asset $asset): BinaryFileResponse
     {
-        $path = $asset->disk . '/' . $asset->path;
-
         $headers = array('Content-Type' => $asset->type);
 
-        return response()->download($path, $asset->original_file_name, $headers);
+        return response()->download(Storage::disk('videos')->path($asset->path), $asset->name, $headers);
     }
 }
