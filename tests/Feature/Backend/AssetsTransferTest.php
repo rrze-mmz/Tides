@@ -20,7 +20,6 @@ use Illuminate\Support\Facades\Storage;
 use Tests\Setup\WorksWithOpencastClient;
 use Tests\TestCase;
 
-
 class AssetsTransferTest extends TestCase
 {
     use RefreshDatabase;
@@ -47,8 +46,10 @@ class AssetsTransferTest extends TestCase
     /** @test */
     public function it_has_a_transfer_view_for_dropzone_files(): void
     {
-        $this->get(route('admin.clips.dropzone.listFiles',
-            ClipFactory::ownedBy($this->signInRole($this->role))->create()))
+        $this->get(route(
+            'admin.clips.dropzone.listFiles',
+            ClipFactory::ownedBy($this->signInRole($this->role))->create()
+        ))
             ->assertStatus(200)
             ->assertViewIs('backend.clips.dropzone.listFiles');
     }
@@ -104,7 +105,8 @@ class AssetsTransferTest extends TestCase
 
         $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
 
-        $this->followingRedirects()->post(route('admin.clips.dropzone.transfer', $clip),
+        $this->followingRedirects()->post(
+            route('admin.clips.dropzone.transfer', $clip),
             ["files" => [$videoHashHD, $videoHashSD]]
         )->assertStatus(200);
 
@@ -119,8 +121,10 @@ class AssetsTransferTest extends TestCase
     {
         Bus::fake();
 
-        $this->post(route('admin.clips.dropzone.transfer',
-            ClipFactory::ownedBy($this->signInRole($this->role))->create()), [
+        $this->post(route(
+            'admin.clips.dropzone.transfer',
+            ClipFactory::ownedBy($this->signInRole($this->role))->create()
+        ), [
             'files' => [sha1('test_file_name')
             ]]);
 
@@ -135,8 +139,10 @@ class AssetsTransferTest extends TestCase
     {
         Mail::fake();
 
-        $this->post(route('admin.clips.dropzone.transfer',
-            ClipFactory::ownedBy($this->signInRole($this->role))->create()), [
+        $this->post(route(
+            'admin.clips.dropzone.transfer',
+            ClipFactory::ownedBy($this->signInRole($this->role))->create()
+        ), [
             'files' => [sha1('test_file_name')
             ]]);
 
@@ -205,8 +211,10 @@ class AssetsTransferTest extends TestCase
         $mockHandler->append($this->mockEventAssets($videoHD_UID, $audioUID));
         $this->opencastService = app(OpencastService::class);
 
-        $this->post(route('admin.clips.opencast.transfer',
-            ClipFactory::ownedBy($this->signInRole($this->role))->create()), [
+        $this->post(route(
+            'admin.clips.opencast.transfer',
+            ClipFactory::ownedBy($this->signInRole($this->role))->create()
+        ), [
             'eventID' => $this->faker->uuid()
         ]);
 
@@ -252,19 +260,22 @@ class AssetsTransferTest extends TestCase
         $fakeStorage
             ->putFileAs(
                 '',
-                FileFactory::videoFile(), '/archive/mh_default_org/' .
+                FileFactory::videoFile(),
+                '/archive/mh_default_org/' .
                 $opencastEventID . '/' . $archiveVersion . '/' . $audioUID . '.mp3'
             );
         $fakeStorage
             ->putFileAs(
                 '',
-                FileFactory::videoFile(), '/archive/mh_default_org/' .
+                FileFactory::videoFile(),
+                '/archive/mh_default_org/' .
                 $opencastEventID . '/' . $archiveVersion . '/' . $videoHD_UID . '.m4v'
             );
 
         $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
 
-        $this->post(route('admin.clips.opencast.transfer', $clip),
+        $this->post(
+            route('admin.clips.opencast.transfer', $clip),
             ["eventID" => $opencastEventID]
         )->assertStatus(302);
 
