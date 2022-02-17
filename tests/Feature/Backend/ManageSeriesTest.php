@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Backend;
 
+use App\Enums\OpencastWorkflowState;
 use App\Models\Clip;
 use App\Models\Series;
 use App\Services\OpencastService;
@@ -127,15 +128,13 @@ class ManageSeriesTest extends TestCase
             'title'           => 'This is a test',
             'password'        => '1234',
             'organization_id' => '1',
-        ])
-        ))->assertSessionHasErrors('password');
+        ])))->assertSessionHasErrors('password');
 
         $this->post(route('series.store', Series::factory()->raw([
             'title'           => 'This is a test',
             'password'        => '1234qwER',
             'organization_id' => '1',
-        ])
-        ));
+        ])));
 
         $this->assertDatabaseHas('series', ['password' => '1234qwER']);
     }
@@ -145,7 +144,8 @@ class ManageSeriesTest extends TestCase
     {
         $this->signIn();
 
-        $this->post(route('series.store'),
+        $this->post(
+            route('series.store'),
             [
                 'title'           => 'Test title',
                 'description'     => 'Test description',
@@ -159,7 +159,8 @@ class ManageSeriesTest extends TestCase
     {
         $this->signInRole($this->role);
 
-        $this->post(route('series.store'),
+        $this->post(
+            route('series.store'),
             [
                 'title'           => 'Test title',
                 'description'     => 'Test description',
@@ -175,7 +176,8 @@ class ManageSeriesTest extends TestCase
     {
         $this->signInRole('admin');
 
-        $this->post(route('series.store'),
+        $this->post(
+            route('series.store'),
             [
                 'title'           => 'Test title',
                 'description'     => 'Test description',
@@ -191,7 +193,8 @@ class ManageSeriesTest extends TestCase
     {
         $this->signInRole($this->role);
 
-        $this->post(route('series.store'),
+        $this->post(
+            route('series.store'),
             [
                 'title'           => 'Test title',
                 'description'     => 'Test description',
@@ -253,7 +256,7 @@ class ManageSeriesTest extends TestCase
         $this->mockHandler->append(
             $this->mockHealthResponse(),
             $this->mockSeriesRunningWorkflowsResponse($series, false),
-            $this->mockEventResponse($series)
+            $this->mockEventResponse($series, OpencastWorkflowState::STOPPED)
         );
 
         $this->get($series->adminPath())
@@ -281,7 +284,8 @@ class ManageSeriesTest extends TestCase
         $this->mockHandler->append(
             $this->mockHealthResponse(),
             $this->mockSeriesRunningWorkflowsResponse($series, false),
-            $this->mockEventResponse($series));
+            $this->mockEventResponse($series, OpencastWorkflowState::STOPPED)
+        );
 
         $this->signInRole('admin');
 
@@ -319,7 +323,7 @@ class ManageSeriesTest extends TestCase
         $this->mockHandler->append(
             $this->mockHealthResponse(),
             $runningWorkflow,
-            $this->mockEventResponse($series, 'FAILED', 'EVENTS.EVENTS.STATUS.PROCESSING_FAILURE')
+            $this->mockEventResponse($series, OpencastWorkflowState::FAILED)
         );
 
         $opencastViewData = collect(json_decode($runningWorkflow->getBody(), true));
@@ -338,7 +342,8 @@ class ManageSeriesTest extends TestCase
             $this->mockHealthResponse(),
             $this->mockSeriesRunningWorkflowsResponse($series, true),
             $failedWorkflow = $this->mockEventResponse(
-                $series, 'FAILED', 'EVENTS.EVENTS.STATUS.PROCESSING_FAILURE'
+                $series,
+                OpencastWorkflowState::FAILED
             ),
         );
         $this->mockHandler->append($failedWorkflow);

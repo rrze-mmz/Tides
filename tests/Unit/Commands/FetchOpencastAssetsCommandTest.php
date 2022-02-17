@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Commands;
 
+use App\Enums\OpencastWorkflowState;
 use App\Services\OpencastService;
 use GuzzleHttp\Handler\MockHandler;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -43,11 +44,14 @@ class FetchOpencastAssetsCommandTest extends TestCase
 
         $seriesWithoutAssets = SeriesFactory::withClips(1)->withOpencastID()->create();
 
-        $this->mockHandler->append($this->mockEventResponse($seriesWithoutAssets,
-            'SUCCEEDED', 'EVENTS.EVENTS.STATUS.SUCCEDED', 4, $opencastEventID));
+        $this->mockHandler->append(
+            $this->mockEventResponse($seriesWithoutAssets, OpencastWorkflowState::SUCCEEDED, 4, $opencastEventID)
+        );
 
         $this->mockHandler->append($this->mockEventAssets($videoHD_UID, $audioUID));
-        $this->mockHandler->append($this->mockEventByEventID($opencastEventID, 'SUCCEEDED', $archiveVersion));
+        $this->mockHandler->append(
+            $this->mockEventByEventID($opencastEventID, OpencastWorkflowState::SUCCEEDED, $archiveVersion)
+        );
         $this->mockHandler->append($this->mockEventAssets($videoHD_UID, $audioUID));
 
 
@@ -56,13 +60,15 @@ class FetchOpencastAssetsCommandTest extends TestCase
         $fakeStorage
             ->putFileAs(
                 '',
-                FileFactory::videoFile(), '/archive/mh_default_org/' .
+                FileFactory::videoFile(),
+                '/archive/mh_default_org/' .
                 $opencastEventID . '/' . $archiveVersion . '/' . $audioUID . '.mp3'
             );
         $fakeStorage
             ->putFileAs(
                 '',
-                FileFactory::videoFile(), '/archive/mh_default_org/' .
+                FileFactory::videoFile(),
+                '/archive/mh_default_org/' .
                 $opencastEventID . '/' . $archiveVersion . '/' . $videoHD_UID . '.m4v'
             );
 

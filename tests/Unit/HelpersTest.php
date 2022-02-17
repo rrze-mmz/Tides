@@ -103,7 +103,12 @@ class HelpersTest extends TestCase
         $url = '/protector/link/clip/1/' . $token . '/' . $time . '/studon';
 
         $this->assertNotEquals($url, generateLMSToken($clip, $time));
-
         $this->assertEquals($url, generateLMSToken($clip, $time, true));
+    }
+
+    /** @test */
+    public function it_has_an_opencast_workflow_operation_percentage_step(): void
+    {
+        $this->assertEquals('24', opencastWorkflowOperationPercentage('Generating waveform'));
     }
 }

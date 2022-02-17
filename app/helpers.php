@@ -110,3 +110,58 @@ function generateLMSToken($obj, $time, bool $withURL = false): string
 
     return ($withURL) ? '/protector/link/' . $type . '/' . $obj->id . '/' . $token . '/' . $time . '/studon' : $token;
 }
+
+/**
+ * @param string $operation
+ * @return int
+ */
+function opencastWorkflowOperationPercentage(string $operation = ''): int
+{
+    return match ($operation) {
+        'Ingesting external elements' => 2,
+        'Inspecting audio and video streams' => 4,
+        'Applying access control entries' => 6,
+        'Tagging source material for archival' => 8,
+        'Tagging metadata catalogs for publication' => 10,
+        'Preparing presenter (camera) audio and video work versions' => 12,
+        'Preparing presentation (screen) audio and video work version' => 14,
+        'Analyze tracks in media package an set control variables' => 16,
+        'Normalize audio stream' => 18,
+        'Create single-stream video preview' => 21,
+        'Create dual-stream video preview' => 22,
+        'Generating waveform' => 24,
+        'Detecting silence' => 26,
+        'Preparing silence detection for preview' => 28,
+        'Publish to preview publication channel' => 30,
+        'Archive cutting information' => 32,
+        'Mark the recording for cutting' => 34,
+        'Mark the recording for review' => 36,
+        'Sending email to user before holding for edit' => 38,
+        'Remove temporary processing artifacts' => 40,
+        'Cut the recording according to the edit decision list' => 42,
+        'Tagging cutting information for archival' => 44,
+        'Resolve the cutting flag' => 50,
+        'Resolve the review flag' => 55,
+        'Tagging metadata catalogs for archival and publication' => 58,
+        'Create static coverimage workflow generates 5 different files with dynamic image' => 62,
+        'Create a cover image' => 64,
+        'Apply the theme' => 66,
+        'Inspecting audio and video streams 2nd loop' => 68,
+        'Render watermark into presenter track' => 70,
+        'Render watermark into presentation track' => 72,
+        'Add coverimage to the combined video' => 74,
+        'Concatenate combined track with intro and outro videos' => 76,
+        'Concatenate presenter track with intro and outro videos' => 78,
+        'Concatenate presentation track with intro and outro videos' => 80,
+        'Export audio from trimmed camera file' => 82,
+        'Encode presenter for adaptive stream' => 84,
+        'Encoding presentation 1080p for multistream player' => 86,
+        'Encode combined for adaptive stream' => 88,
+        'Change Quality of Layout Video for Final Cut Pro' => 90,
+        'Detecting slide transitions in presentation track' => 92,
+        'Extracting text from presentation segments' => 94,
+        'Tagging media for archival' => 96,
+        'Remove final temporary processing artifacts' => 98,
+        default => 0,
+    };
+}

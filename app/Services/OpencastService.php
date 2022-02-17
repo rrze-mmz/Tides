@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\OpencastWorkflowState;
 use App\Http\Clients\OpencastClient;
 use App\Models\Clip;
 use App\Models\Series;
@@ -50,8 +51,10 @@ class OpencastService
         $opencastSeriesInfo = collect([]);
         if ($health = $this->getHealth()->isNotEmpty()) {
             $opencastSeriesInfo->prepend($health, 'health');
-            $opencastSeriesInfo->prepend($this->getSeriesRunningWorkflows($series), 'running');
-            $opencastSeriesInfo->prepend($this->getFailedEventsBySeries($series), 'failed');
+            $opencastSeriesInfo
+                ->prepend($this->getSeriesRunningWorkflows($series), OpencastWorkflowState::RUNNING->lower());
+            $opencastSeriesInfo
+                ->prepend($this->getFailedEventsBySeries($series), OpencastWorkflowState::FAILED->lower());
         }
 
         return $opencastSeriesInfo;
@@ -67,7 +70,7 @@ class OpencastService
         try {
             $this->response = $this->client->get('workflow/instances.json', [
                 'query' => [
-                    'state' => "running",
+                    'state' => OpencastWorkflowState::RUNNING->lower(),
                     'sort'  => 'DATE_CREATED_DESC'
                 ]
             ]);
@@ -93,7 +96,7 @@ class OpencastService
         try {
             $this->response = $this->client->get('workflow/instances.json', [
                 'query' => [
-                    'state'    => "running",
+                    'state'    => OpencastWorkflowState::RUNNING->lower(),
                     'seriesId' => $series->opencast_series_id,
                     'count'    => 20,
                     'sort'     => 'DATE_CREATED_DESC'
@@ -115,18 +118,15 @@ class OpencastService
      * @param $status
      * @return Collection
      */
-    public function getEventsByStatus($status): Collection
+    public function getEventsByStatus(OpencastWorkflowState $state): Collection
     {
-        $status = match ($status) {
-            'running' => 'EVENTS.EVENTS.STATUS.PROCESSING',
-            'failed' => 'EVENTS.EVENTS.STATUS.PROCESSING_FAILURE',
-        };
+
         $runningWorkflows = collect([]);
 
         try {
             $this->response = $this->client->get('api/events', [
                 'query' => [
-                    'filter' => "status:" . $status
+                    'filter' => "status:" . $state->value
                     ,
                 ]
             ]);
@@ -192,7 +192,7 @@ class OpencastService
         try {
             $processed = $this->client->get('api/events', [
                 'query' => [
-                    'filter' => 'series:' . $seriesID . ',status:EVENTS.EVENTS.STATUS.PROCESSED',
+                    'filter' => 'series:' . $seriesID . ',status:' . OpencastWorkflowState::SUCCEEDED->value,
                     'sort'   => 'start_date:ASC'
                 ]
             ]);
@@ -200,7 +200,7 @@ class OpencastService
                 'query' => [
                     'filter'
                            =>
-                        'series:' . $seriesID . ',status:EVENTS.EVENTS.STATUS.PROCESSING_CANCELED',
+                        'series:' . $seriesID . ',status:' . OpencastWorkflowState::STOPPED->value,
                     'sort' => 'start_date:ASC'
                 ]
             ]);
@@ -332,7 +332,7 @@ class OpencastService
 				    {"allow": true,"role": "ROLE_USER_ADMIN","action": "read"},
 				    {"allow": true,"role": "ROLE_USER_ADMIN","action": "write"},
 			    ]',
-                "theme"    => '601'
+                "theme"    => config('opencast.default_theme_id')
             ]
         ];
     }

@@ -3,6 +3,7 @@
 
 namespace Tests\Feature\Backend;
 
+use App\Enums\OpencastWorkflowState;
 use App\Jobs\CreateWowzaSmilFile;
 use App\Jobs\SendEmail;
 use App\Jobs\TransferAssetsJob;
@@ -174,8 +175,8 @@ class AssetsTransferTest extends TestCase
 
         $this->opencastService = app(OpencastService::class);
 
-        $mockHandler->append($this->mockEventResponse($series));
-        $mockHandler->append($this->mockEventResponse($series, 'STOPPED', 'EVENTS.EVENTS.STATUS.STOPPED'));
+        $mockHandler->append($this->mockEventResponse($series, OpencastWorkflowState::SUCCEEDED));
+        $mockHandler->append($this->mockEventResponse($series, OpencastWorkflowState::PAUSED));
 
         $this->get(route('admin.clips.opencast.listEvents', ['clip' => $series->clips()->first()]))
             ->assertStatus(200)
@@ -207,7 +208,7 @@ class AssetsTransferTest extends TestCase
 
         $this->opencastService = app(OpencastService::class);
 
-        $mockHandler->append($this->mockEventByEventID($opencastEventID, 'SUCCEEDED', $archiveVersion));
+        $mockHandler->append($this->mockEventByEventID($opencastEventID, OpencastWorkflowState::SUCCEEDED, $archiveVersion));
         $mockHandler->append($this->mockEventAssets($videoHD_UID, $audioUID));
         $this->opencastService = app(OpencastService::class);
 
@@ -253,7 +254,9 @@ class AssetsTransferTest extends TestCase
 
         $this->opencastService = app(OpencastService::class);
 
-        $mockHandler->append($this->mockEventByEventID($opencastEventID, 'SUCCEEDED', $archiveVersion));
+        $mockHandler->append($this
+            ->mockEventByEventID($opencastEventID, OpencastWorkflowState::SUCCEEDED, $archiveVersion)
+        );
         $mockHandler->append($this->mockEventAssets($videoHD_UID, $audioUID));
 
 

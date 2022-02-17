@@ -3,6 +3,7 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Enums\OpencastWorkflowState;
 use App\Services\OpencastService;
 use Illuminate\View\View;
 
@@ -20,7 +21,7 @@ class DashboardController
 
         if (auth()->user()->can('view-opencast-workflows') && $opencastService->getHealth()->isNotEmpty()) {
             $opencastWorkflows->put('running', $opencastService->getAllRunningWorkflows())
-                ->put('failed', $opencastService->getEventsByStatus('failed'));
+                ->put('failed', $opencastService->getEventsByStatus(OpencastWorkflowState::FAILED));
         }
 
         return view('backend.dashboard.index', [

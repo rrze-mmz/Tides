@@ -1,7 +1,7 @@
 @extends('layouts.frontend')
 
 @section('content')
-    <main class="container mx-auto mt-36 md:mt-36">
+    <main class="container mx-auto mt-6 md:mt-36">
         <div class="flex justify-between pb-2 border-b-2 border-black">
             <h2 class="text-2xl font-bold">{{ $clip->title }} [ID: {{ $clip->id }}]</h2>
             @can('edit-clips', $clip)

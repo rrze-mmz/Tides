@@ -60,7 +60,7 @@
                                 <td class="px-6 py-4 text-sm font-light text-green-900">
                                     @foreach ($workflow['operations']['operation'] as $operation)
                                         @if($operation['state']==='RUNNING')
-                                            {{$operation['description']}}
+                                            {{ $operationDesc = $operation['description']}}
                                         @endif
                                     @endforeach
                                 </td>
@@ -69,14 +69,17 @@
                                         <div class="py-0 mt-2 w-6/12 bg-indigo-900 rounded-full">
                                             <div
                                                 class="inline-block px-2 text-sm font-bold text-white bg-indigo-700 rounded-full">
-                                                50%
+                                                @foreach ($workflow['operations']['operation'] as $operation)
+                                                    @if($operation['state']==='RUNNING')
+                                                        {{ opencastWorkflowOperationPercentage( $operation['description']) }}
+                                                    @endif
+                                                @endforeach
                                             </div>
                                         </div>
                                     </div>
                                 </td>
                             </tr>
                         @endforeach
-
                         </tbody>
                     </table>
                 </div>

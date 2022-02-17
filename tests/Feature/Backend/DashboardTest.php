@@ -3,6 +3,7 @@
 
 namespace Tests\Feature\Backend;
 
+use App\Enums\OpencastWorkflowState;
 use App\Services\OpencastService;
 use Facades\Tests\Setup\ClipFactory;
 use Facades\Tests\Setup\SeriesFactory;
@@ -148,7 +149,7 @@ class DashboardTest extends TestCase
 
         app(OpencastService::class);
         $mockHandler = $this->swapOpencastClient();
-        $mockHandler->append($this->mockEventResponse($series, 'RUNNING', 'EVENTS.EVENTS.STATUS.PROCESSING', 2));
+        $mockHandler->append($this->mockEventResponse($series, OpencastWorkflowState::RUNNING, 2));
         $this->signInRole('admin');
 
         $this->get(route('dashboard'))->assertSee('Opencast running workflows');
@@ -161,7 +162,7 @@ class DashboardTest extends TestCase
 
         app(OpencastService::class);
         $mockHandler = $this->swapOpencastClient();
-        $mockHandler->append($this->mockEventResponse($series, 'RUNNING', 'EVENTS.EVENTS.STATUS.PROCESSING', 2));
+        $mockHandler->append($this->mockEventResponse($series, OpencastWorkflowState::RUNNING, 2));
         $this->signInRole($this->role);
 
         $this->get(route('dashboard'))->assertDontSee('Opencast running workflows');

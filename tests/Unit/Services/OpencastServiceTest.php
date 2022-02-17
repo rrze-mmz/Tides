@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Services;
 
+use App\Enums\OpencastWorkflowState;
 use App\Models\Series;
 use App\Services\OpencastService;
 use Facades\Tests\Setup\SeriesFactory;
@@ -61,7 +62,7 @@ class OpencastServiceTest extends TestCase
         $this->mockHandler->append(
             $this->mockHealthResponse(),
             $this->mockSeriesRunningWorkflowsResponse($series),
-            $this->mockEventResponse($series)
+            $this->mockEventResponse($series, OpencastWorkflowState::RUNNING)
         );
 
         $seriesInfo = $this->opencastService->getSeriesInfo($series);
@@ -138,7 +139,8 @@ class OpencastServiceTest extends TestCase
         $this->assertEquals('RUNNING', $response['workflows']['workflow']['0']['state']);
 
         $this->assertEquals(
-            $series->opencast_series_id, $response['workflows']['workflow']['0']['mediapackage']['series']
+            $series->opencast_series_id,
+            $response['workflows']['workflow']['0']['mediapackage']['series']
         );
     }
 
@@ -160,7 +162,8 @@ class OpencastServiceTest extends TestCase
         $series = Series::factory()->create(['opencast_series_id' => Str::uuid()]);
 
         $this->mockHandler->append($this->mockEventResponse(
-            $series, 'FAILED', 'EVENTS.EVENTS.STATUS.PROCESSING_FAILURE'
+            $series,
+            OpencastWorkflowState::FAILED
         ));
 
         $response = $this->opencastService->getFailedEventsBySeries($series);
@@ -187,8 +190,8 @@ class OpencastServiceTest extends TestCase
     {
         $series = SeriesFactory::withClips(1)->withOpencastID()->create();
 
-        $this->mockHandler->append($this->mockEventResponse($series));
-        $this->mockHandler->append($this->mockEventResponse($series, 'STOPPED', 'EVENTS.EVENTS.STATUS.STOPPED'));
+        $this->mockHandler->append($this->mockEventResponse($series, OpencastWorkflowState::SUCCEEDED));
+        $this->mockHandler->append($this->mockEventResponse($series, OpencastWorkflowState::STOPPED));
 
         $response = $this->opencastService->getProcessedEventsBySeriesID($series->opencast_series_id);
 
@@ -199,7 +202,6 @@ class OpencastServiceTest extends TestCase
         $this->assertTrue($response->pluck('processing_state')->contains('SUCCEEDED'));
 
         $this->assertEquals($series->opencast_series_id, $response->first()['is_part_of']);
-
     }
 
     /** @test */
@@ -218,7 +220,7 @@ class OpencastServiceTest extends TestCase
     {
         $series = Series::factory()->create(['opencast_series_id' => Str::uuid()]);
 
-        $this->mockHandler->append($this->mockEventResponse($series));
+        $this->mockHandler->append($this->mockEventResponse($series, OpencastWorkflowState::SUCCEEDED));
 
         $response = $this->opencastService->getEventByEventID($this->faker->uuid());
 
@@ -253,7 +255,7 @@ class OpencastServiceTest extends TestCase
 				    {"allow": true,"role": "ROLE_USER_ADMIN","action": "read"},
 				    {"allow": true,"role": "ROLE_USER_ADMIN","action": "write"},
 			    ]',
-                "theme"    => '601'
+                "theme"    => config('opencast.default_theme_id')
             ]
         ];
 
