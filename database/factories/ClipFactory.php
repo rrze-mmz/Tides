@@ -29,7 +29,6 @@ class ClipFactory extends Factory
     public function definition(): array
     {
         static $episode = 0;
-
         return [
             'title'           => $title = $this->faker->sentence(),
             'description'     => $this->faker->paragraph(),

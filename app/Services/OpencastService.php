@@ -225,7 +225,7 @@ class OpencastService
             $this->response = $this->client->get('api/events', [
                 'query' => [
                     'filter' =>
-                        'series:' . $series->opencast_series_id . ',status:EVENTS.EVENTS.STATUS.PROCESSING_FAILURE',
+                        'series:' . $series->opencast_series_id . ',status:' . OpencastWorkflowState::FAILED->value,
                     'sort'   => 'start_date:ASC'
                 ]
             ]);
@@ -327,11 +327,11 @@ class OpencastService
                          ]
                     }]',
                 "acl"      => '[
-					{"allow": true,"role": "ROLE_ADMIN","action": "read"},
-				    {"allow": true,"role": "ROLE_ADMIN","action": "write"},
-				    {"allow": true,"role": "ROLE_USER_ADMIN","action": "read"},
-				    {"allow": true,"role": "ROLE_USER_ADMIN","action": "write"},
-			    ]',
+                    {"allow": true,"role": "ROLE_ADMIN","action": "read"},
+                    {"allow": true,"role": "ROLE_ADMIN","action": "write"},
+                    {"allow": true,"role": "ROLE_USER_ADMIN","action": "read"},
+                    {"allow": true,"role": "ROLE_USER_ADMIN","action": "write"},
+                ]',
                 "theme"    => config('opencast.default_theme_id')
             ]
         ];

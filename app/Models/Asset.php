@@ -6,6 +6,7 @@ namespace App\Models;
 use App\Events\AssetDeleted;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Storage;
 
 class Asset extends BaseModel
 {
@@ -51,5 +52,15 @@ class Asset extends BaseModel
     public function path(): string
     {
         return "/admin/assets/{$this->id}";
+    }
+
+    /**
+     * Return assets download path
+     *
+     * @return string
+     */
+    public function downloadPath(): string
+    {
+        return Storage::disk('videos')->path($this->path . '/' . $this->original_file_name);
     }
 }

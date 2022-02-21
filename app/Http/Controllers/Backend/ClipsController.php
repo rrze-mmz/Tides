@@ -10,6 +10,8 @@ use App\Models\Acl;
 use App\Models\Clip;
 use App\Services\OpencastService;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Arr;
 use Illuminate\View\View;
@@ -19,9 +21,9 @@ class ClipsController extends Controller
     /**
      * Index all clips in admin portal. In case of simple user list only users clips
      *
-     * @return View
+     * @return Application|Factory|\Illuminate\Contracts\View\View
      */
-    public function index(): View
+    public function index(): Application|Factory|\Illuminate\Contracts\View\View
     {
         return view(
             'backend.clips.index',

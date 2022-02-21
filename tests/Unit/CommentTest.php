@@ -8,7 +8,8 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class CommentTest extends TestCase {
+class CommentTest extends TestCase
+{
     use RefreshDatabase;
 
     private Comment $comment;

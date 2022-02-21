@@ -6,7 +6,7 @@
                    type="button"
                    text="View Series"
                    color="green"
-                   additional-classes="w-full"
+                   additional-classes="w-full text-center my-2"
     />
     <form action="{{ route('series.clips.remove',$clip) }}"
           method="POST"

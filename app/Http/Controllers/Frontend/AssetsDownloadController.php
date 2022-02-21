@@ -17,8 +17,6 @@ class AssetsDownloadController extends Controller
      */
     public function __invoke(Asset $asset): BinaryFileResponse
     {
-        $headers = array('Content-Type' => $asset->type);
-
-        return response()->download(Storage::disk('videos')->path($asset->path), $asset->name, $headers);
+        return response()->download($asset->downloadPath(), $asset->name, ['Content-Type' => $asset->type]);
     }
 }

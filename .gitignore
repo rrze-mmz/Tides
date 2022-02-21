@@ -9,6 +9,7 @@
 /vendor
 .idea
 .idea/*
+.vscode/*
 .env
 .env.backup
 .phpunit.result.cache

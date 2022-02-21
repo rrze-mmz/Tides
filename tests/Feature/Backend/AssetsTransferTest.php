@@ -10,6 +10,7 @@ use App\Jobs\TransferAssetsJob;
 use App\Jobs\TransferOpencastAssets;
 use App\Mail\AssetsTransferred;
 use App\Services\OpencastService;
+use DOMException;
 use Facades\Tests\Setup\ClipFactory;
 use Facades\Tests\Setup\FileFactory;
 use Facades\Tests\Setup\SeriesFactory;
@@ -239,7 +240,9 @@ class AssetsTransferTest extends TestCase
             ->assertSessionDoesntHaveErrors('eventID');
     }
 
-    /** @test */
+    /** @test
+     * @throws DOMException
+     */
     public function it_transfers_opencast_event_assets_to_clip(): void
     {
         Storage::fake('videos');
@@ -255,8 +258,7 @@ class AssetsTransferTest extends TestCase
         $this->opencastService = app(OpencastService::class);
 
         $mockHandler->append($this
-            ->mockEventByEventID($opencastEventID, OpencastWorkflowState::SUCCEEDED, $archiveVersion)
-        );
+            ->mockEventByEventID($opencastEventID, OpencastWorkflowState::SUCCEEDED, $archiveVersion));
         $mockHandler->append($this->mockEventAssets($videoHD_UID, $audioUID));
 
 
