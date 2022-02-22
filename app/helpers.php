@@ -62,7 +62,7 @@ function fetchDropZoneFiles($ffmpegCheck = true): Collection
                     ->format('Y-m-d H:i:s');
 
                 // Check whether is file is at the moment written at the disk
-                if (Carbon::now()->diffInMinutes($lastModified) > 2 && $ffmpegCheck) {
+                if ((Carbon::now()->diffInMinutes($lastModified) > 2 || App::environment('testing')) && $ffmpegCheck) {
                     $video = FFMpeg::fromDisk('video_dropzone')->open($file)->getVideoStream();
                     $mime = mime_content_type(Storage::disk('video_dropzone')->path($file));
                 }

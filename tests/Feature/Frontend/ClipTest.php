@@ -54,6 +54,14 @@ class ClipTest extends TestCase
     }
 
     /** @test */
+    public function clip_url_should_work_with_clip_id(): void
+    {
+        $this->mockHandler->append($this->mockCheckApiConnection());
+
+        $this->get('/clips/' . $this->clip->id)->assertStatus(200)->assertSee($this->clip->title);
+    }
+
+    /** @test */
     public function a_visitor_cannot_view_a_not_public_clip(): void
     {
         $this->mockHandler->append($this->mockCheckApiConnection());

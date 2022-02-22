@@ -3,12 +3,14 @@
 
 namespace Tests\Feature\Backend;
 
+use App\Enums\Content;
 use App\Enums\OpencastWorkflowState;
 use App\Jobs\CreateWowzaSmilFile;
 use App\Jobs\SendEmail;
 use App\Jobs\TransferAssetsJob;
 use App\Jobs\TransferOpencastAssets;
 use App\Mail\AssetsTransferred;
+use App\Models\Asset;
 use App\Services\OpencastService;
 use DOMException;
 use Facades\Tests\Setup\ClipFactory;
@@ -16,6 +18,7 @@ use Facades\Tests\Setup\FileFactory;
 use Facades\Tests\Setup\SeriesFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
@@ -95,9 +98,9 @@ class AssetsTransferTest extends TestCase
         Storage::fake('videos');
         $fakeStorage = Storage::fake('video_dropzone');
 
-        $fakeStorage->putFileAs('', FileFactory::audioFile(), 'export_audio.mp3');
         $fakeStorage->putFileAs('', FileFactory::videoFile(), 'export_video_1080.mp4');
         $fakeStorage->putFileAs('', FileFactory::videoFile(), 'export_video_720.mp4');
+        $fakeStorage->putFileAs('', FileFactory::audioFile(), 'export_audio.mp3');
         $fakeStorage->putFileAs('', FileFactory::videoFile(), 'export_video_360.mp4');
 
         $files = fetchDropZoneFiles()->sortBy('date_modified');
@@ -116,6 +119,9 @@ class AssetsTransferTest extends TestCase
             ->assertSee($files->first()['name'])
             ->assertSee($files->last()['name'])
             ->assertSee('camera.smil');
+
+        $this->assertEquals(Content::Presenter->lower(), $clip->assets()->typeVideo()->get()->first()->type);
+        $this->assertEquals(Content::Smil->lower(), $clip->assets()->typeSmil()->get()->first()->type);
     }
 
     /** @test */

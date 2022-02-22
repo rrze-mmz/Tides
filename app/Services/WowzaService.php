@@ -2,8 +2,10 @@
 
 namespace App\Services;
 
+use App\Enums\Content;
 use App\Http\Clients\WowzaClient;
 use App\Models\Clip;
+use DOMException;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Support\Collection;
@@ -40,7 +42,7 @@ class WowzaService
     /**
      * Generates smil files for wowza streaming
      *
-     * @throws \DOMException
+     * @throws DOMException
      */
     public function createSmilFile(Clip $clip): void
     {
@@ -76,7 +78,7 @@ class WowzaService
         $clip->addAsset([
             'disk'               => 'videos',
             'original_file_name' => 'camera.smil',
-            'type'               => 'smil',
+            'type'               => Content::Smil->lower(),
             'path'               => $assetPath,
             'duration'           => '0',
             'width'              => '0',

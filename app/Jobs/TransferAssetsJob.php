@@ -3,6 +3,7 @@
 
 namespace App\Jobs;
 
+use App\Enums\Content;
 use App\Models\Clip;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Filesystem\FileExistsException;
@@ -38,12 +39,11 @@ class TransferAssetsJob implements ShouldQueue
      * Copy a collection of video files to clip path
      *
      * @return void
-     * @throws FileExistsException|FileNotFoundException
+     * @throws FileExistsException
      */
     public function handle(): void
     {
         $clipStoragePath = getClipStoragePath($this->clip);
-
         $this->files->each(function ($file, $key) use ($clipStoragePath) {
             $isVideo = (bool)$file['video'];
             $storageDisk = ($this->eventID !== '')
@@ -74,7 +74,7 @@ class TransferAssetsJob implements ShouldQueue
                 'height'             => ($isVideo)
                     ? $ffmpeg->getVideoStream()->getDimensions()->getHeight()
                     : 0,
-                'type'               => 'video',
+                'type'               => ($isVideo) ? Content::Presenter->lower() : Content::Audio->lower(),
             ];
 
             $this->clip->addAsset($attributes);

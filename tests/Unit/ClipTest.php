@@ -6,7 +6,6 @@ namespace Tests\Unit;
 use App\Models\Asset;
 use App\Models\Clip;
 use App\Models\Comment;
-use App\Models\Presenter;
 use App\Models\Series;
 use App\Models\User;
 use Facades\Tests\Setup\FileFactory;
@@ -251,5 +250,13 @@ class ClipTest extends TestCase
         $clip = Clip::find($clip->id);
 
         $this->assertNull($clip->owner_id);
+    }
+
+    /** @test */
+    public function it_resolve_also_id_in_route(): void
+    {
+        $this->get('clips/' . $this->clip->id)->assertStatus(403);
+        $this->get(route('frontend.clips.show', $this->clip))->assertStatus(403);
+        $this->get('clips/291')->assertStatus(404);
     }
 }

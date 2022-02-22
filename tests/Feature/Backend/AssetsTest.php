@@ -123,8 +123,10 @@ class AssetsTest extends TestCase
 
         $this->post(route('admin.assets.store', $clip), ['asset' => FileFactory::videoFile()]);
 
-        $this->assertEquals(10,
-            FFMpeg::fromDisk('videos')->open($clip->assets()->first()->path)->getDurationInSeconds());
+        $this->assertEquals(
+            10,
+            FFMpeg::fromDisk('videos')->open($clip->assets()->first()->path)->getDurationInSeconds()
+        );
     }
 
     /** @test */
@@ -196,7 +198,6 @@ class AssetsTest extends TestCase
         ]);
 
         Storage::disk('streamable_videos')->assertExists($clip->assets()->first()->id . '.m3u8');
-
     }
 
     /** @test */

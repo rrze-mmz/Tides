@@ -3,6 +3,7 @@
 
 namespace App\Models;
 
+use App\Enums\Content;
 use App\Events\AssetDeleted;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -62,5 +63,27 @@ class Asset extends BaseModel
     public function downloadPath(): string
     {
         return Storage::disk('videos')->path($this->path . '/' . $this->original_file_name);
+    }
+
+    public function scopeTypeVideo($query): mixed
+    {
+        return $query->where('type', Content::Presenter->lower())
+            ->orWhere('type', Content::Presentation->lower())
+            ->orWhere('type', Content::Composite->lower());
+    }
+
+    public function scopeTypeAudio($query): mixed
+    {
+        return $query->where('type', Content::Audio->lower());
+    }
+
+    public function scopeTypeCC($query): mixed
+    {
+        return $query->where('type', Content::Cc->lower());
+    }
+
+    public function scopeTypeSmil($query): mixed
+    {
+        return $query->where('type', Content::Smil->lower());
     }
 }

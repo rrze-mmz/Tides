@@ -4,6 +4,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -50,6 +51,18 @@ class Clip extends BaseModel
     }
 
     /**
+     * Clip routes should work with slug and with id to ensure backward compatibility
+     *
+     * @param $value
+     * @param $field
+     * @return Model|null
+     */
+    public function resolveRouteBinding($value, $field = null): ?Model
+    {
+        return $this->where('slug', $value)->orWhere('id', (int)$value)->firstOrFail();
+    }
+
+    /**
      * Route key should be slug instead of id
      *
      * @return string
@@ -87,6 +100,11 @@ class Clip extends BaseModel
     public function assets(): HasMany
     {
         return $this->hasMany(Asset::class);
+    }
+
+    public function latestAsset(): HasOne
+    {
+        return $this->hasOne(Asset::class)->latestOfMany();
     }
 
     /**

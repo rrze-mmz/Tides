@@ -3,6 +3,7 @@
 
 namespace Tests\Feature\Backend;
 
+use App\Enums\Content;
 use App\Models\Clip;
 use App\Models\Presenter;
 use App\Models\Tag;
@@ -682,7 +683,7 @@ class ManageClipsTest extends TestCase
         $clip->addAsset([
             'disk'               => 'videos',
             'original_file_name' => 'camera.smil',
-            'type'               => 'smil',
+            'type'               => Content::Smil->lower(),
             'path'               => '/videos/camera.smil',
             'duration'           => '0',
             'width'              => '0',
@@ -690,6 +691,24 @@ class ManageClipsTest extends TestCase
         ]);
 
         $this->get(route('clips.edit', $clip))->assertSee('camera.smil');
+    }
+
+    /** @test */
+    public function it_list_audio_files_if_any(): void
+    {
+        $clip = ClipFactory::withAssets(2)->ownedBy($this->signInRole($this->role))->create();
+
+        $clip->addAsset([
+            'disk'               => 'videos',
+            'original_file_name' => 'audio.mp3',
+            'type'               => Content::Audio->lower(),
+            'path'               => '/videos/' . $clip->folder_id . '/audio.mp3',
+            'duration'           => '120',
+            'width'              => '0',
+            'height'             => '0',
+        ]);
+
+        $this->get(route('clips.edit', $clip))->assertSee('audio.mp3');
     }
 
     /** @test */

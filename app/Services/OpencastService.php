@@ -327,11 +327,11 @@ class OpencastService
                          ]
                     }]',
                 "acl"      => '[
-                    {"allow": true,"role": "ROLE_ADMIN","action": "read"},
-                    {"allow": true,"role": "ROLE_ADMIN","action": "write"},
-                    {"allow": true,"role": "ROLE_USER_ADMIN","action": "read"},
-                    {"allow": true,"role": "ROLE_USER_ADMIN","action": "write"},
-                ]',
+					{"allow": true,"role": "ROLE_ADMIN","action": "read"},
+				    {"allow": true,"role": "ROLE_ADMIN","action": "write"},
+				    {"allow": true,"role": "ROLE_USER_ADMIN","action": "read"},
+				    {"allow": true,"role": "ROLE_USER_ADMIN","action": "write"},
+			    ]',
                 "theme"    => config('opencast.default_theme_id')
             ]
         ];
