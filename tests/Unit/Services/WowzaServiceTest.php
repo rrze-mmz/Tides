@@ -112,18 +112,11 @@ class WowzaServiceTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_wowza_smil_file_bitrates(): void
+    public function it_returns_wowza_smil_file_bitrate(): void
     {
-        $this->assertEquals('1500000', $this->wowzaService->findWowzaAssetBitrate((int)$this->asset->height));
-
-        $this->asset->height = 720;
-        $this->asset->update();
-
-        $this->assertEquals('1100000', $this->wowzaService->findWowzaAssetBitrate((int)$this->asset->height));
-
-        $this->asset->height = 360;
-        $this->asset->update();
-
-        $this->assertEquals('450000', $this->wowzaService->findWowzaAssetBitrate((int)$this->asset->height));
+        $this->assertEquals(1500000, $this->wowzaService->findWowzaAssetBitrate(1200));
+        $this->assertEquals(1500000, $this->wowzaService->findWowzaAssetBitrate(1080));
+        $this->assertEquals(1100000, $this->wowzaService->findWowzaAssetBitrate(720));
+        $this->assertEquals(450000, $this->wowzaService->findWowzaAssetBitrate(360));
     }
 }

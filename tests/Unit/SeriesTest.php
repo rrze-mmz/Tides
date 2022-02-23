@@ -131,4 +131,10 @@ class SeriesTest extends TestCase
 
         $this->assertNull($series->owner_id);
     }
+
+    /** @test */
+    public function it_has_an_opencast_series_id_scope(): void
+    {
+        $this->assertInstanceOf(Builder::class, Series::hasOpencastSeriesID());
+    }
 }

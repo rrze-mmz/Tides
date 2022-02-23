@@ -53,7 +53,7 @@ class WowzaService
             ]
         ];
 
-        // select all clip video assets, itterate them and create an array for array to xml package
+        // select all clip video assets, iterate them and create an array for array to xml package
         $xmlArray['body']['switch'] = $clip->assets
             ->where('type', '=', 'video')
             ->sortByDesc('height')
@@ -137,21 +137,18 @@ class WowzaService
     }
 
     /**
-     * Get Wowza bitrate value based on asset height
+     * Get Wowza bitrate value based on asset's height
      *
      * @param $videoPixelHeight
      * @return int
      */
     public function findWowzaAssetBitrate($videoPixelHeight): int
     {
-        if ($videoPixelHeight > 700 && $videoPixelHeight < 800) {
-            return 1100000;
-        } elseif ($videoPixelHeight > 360 && $videoPixelHeight < 700) {
-            return 750000;
-        } elseif ($videoPixelHeight <= 360) {
-            return 450000;
-        } else {
-            return 1500000;
-        }
+        return match (true) {
+            ($videoPixelHeight > 700 && $videoPixelHeight < 800) => 1100000,
+            ($videoPixelHeight > 360 && $videoPixelHeight < 700) => 750000,
+            ($videoPixelHeight <= 360) => 450000,
+            default => 1500000
+        };
     }
 }

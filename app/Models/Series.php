@@ -148,4 +148,9 @@ class Series extends BaseModel
             $q->public()->whereHas('assets');
         });
     }
+
+    public function scopeHasOpencastSeriesID($query): mixed
+    {
+        return $query->Where('opencast_series_id', '<>', '');
+    }
 }

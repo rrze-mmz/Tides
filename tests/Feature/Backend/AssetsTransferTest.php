@@ -120,8 +120,8 @@ class AssetsTransferTest extends TestCase
             ->assertSee($files->last()['name'])
             ->assertSee('camera.smil');
 
-        $this->assertEquals(Content::Presenter->lower(), $clip->assets()->typeVideo()->get()->first()->type);
-        $this->assertEquals(Content::Smil->lower(), $clip->assets()->typeSmil()->get()->first()->type);
+        $this->assertEquals(Content::Presenter->lower(), $clip->getAssetsByType('presenter')->first()->type);
+        $this->assertEquals(Content::Smil->lower(), $clip->getAssetsByType('smil')->first()->type);
     }
 
     /** @test */

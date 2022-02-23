@@ -27,7 +27,6 @@
         "barryvdh/laravel-debugbar": "^3.5",
         "barryvdh/laravel-ide-helper": "^2.10",
         "brianium/paratest": "^6.2",
-        "spatie/laravel-ignition": "^1.0",
         "fakerphp/faker": "^1.9.1",
         "laravel/breeze": "^1.8",
         "laravel/envoy": "^2.8",
@@ -39,7 +38,9 @@
         "pestphp/pest-plugin-parallel": "^1.0.0",
         "phpstan/phpstan": "^0.12.97",
         "phpunit/phpunit": "^9.3.3",
-        "squizlabs/php_codesniffer": "*"
+        "spatie/laravel-ignition": "^1.0",
+        "squizlabs/php_codesniffer": "*",
+        "worksome/envy": "^0.3.1"
     },
     "config": {
         "optimize-autoloader": true,

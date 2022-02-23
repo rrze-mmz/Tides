@@ -50,26 +50,35 @@ class FetchOpencastAssets extends Command
     public function handle(OpencastService $opencastService): int
     {
         //fetch all clips without video files
-        $emptyClips = Clip::doesntHave('assets')->get();
-
+        $emptyClips = Clip::doesntHave('assets')
+            ->whereHas('series', function ($q) {
+                $q->hasOpencastSeriesID();
+            })
+            ->limit(20)->get();
         /*
          * for each empty clip check if there are finished opencast events
          * and publish the video files
          */
-        $emptyClips->each(function ($clip) use ($opencastService) {
 
-            //find finished workflows for every clip
-            $events = $opencastService->getProcessedEventsBySeriesID($clip->series->opencast_series_id);
+        if ($emptyClips->count() > 0) {
+            $emptyClips->each(function ($clip) use ($opencastService) {
+                //find finished workflows for every clip
+                $events = $opencastService->getProcessedEventsBySeriesID($clip->series->opencast_series_id);
 
-            $events->each(function ($event) use ($clip, $opencastService) {
-                if ($clip->created_at->format('Y-m-d') === Carbon::parse($event['created'])->format('Y-m-d')) {
-                    $this->checkOpencastAssetsForClipUpload($clip, $event['identifier'], $opencastService);
+                $events->each(function ($event) use ($clip, $opencastService) {
+                    if ($clip->created_at->format('Y-m-d') === Carbon::parse($event['created'])->format('Y-m-d')) {
+                        $this->checkOpencastAssetsForClipUpload($clip, $event['identifier'], $opencastService);
 
-                    $this->info('Videos from Clip ' . $clip->title . ' is online');
-                }
+                        $this->info('Videos from Clip ' . $clip->title . ' is online');
+                    } else {
+                        $this->info('No Opencast Event found for Clip ' . $clip->title . '| [ID]:' . $clip->id);
+                    }
+                });
             });
-        });
-
-        return 0;
+            return Command::SUCCESS;
+        } else {
+            $this->info('No empty clips found');
+            return Command::FAILURE;
+        }
     }
 }

@@ -6,13 +6,13 @@ use Illuminate\Support\Str;
 
 enum Content: string
 {
-    case Presenter = "Camera video file";
-    case Presentation = "Slides video file";
-    case Composite = "Camera and slides video file";
-    case Audio = 'Only audio file';
-    case Slides = 'Slides file as pdf, ppt';
-    case Cc = 'Closed captions file';
-    case Smil = 'Smil file';
+    case Presenter = "presenter";
+    case Presentation = "presentation";
+    case Composite = "composite";
+    case Audio = 'audio';
+    case Slides = 'slides';
+    case Cc = 'cc';
+    case Smil = 'smil';
 
     //lowercase state's name
     public function lower(): string

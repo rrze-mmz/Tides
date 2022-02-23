@@ -3,6 +3,7 @@
 
 namespace App\Models;
 
+use App\Enums\Content;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -12,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 /**
  * @method static first()
@@ -259,6 +261,19 @@ class Clip extends BaseModel
     }
 
     /**
+     * Fetch all assets for a clip by type
+     *
+     * @param string $type
+     * @return HasMany
+     */
+    public function getAssetsByType(string $type): HasMany
+    {
+        return $this->assets()->where(function ($q) use ($type) {
+            $q->where('type', Content::from(Str::lower($type)));
+        });
+    }
+
+    /**
      *  Scope a query to only include public clips
      *
      * @param $query
@@ -267,5 +282,12 @@ class Clip extends BaseModel
     public function scopePublic($query): mixed
     {
         return $query->where('is_public', 1);
+    }
+
+    public function scopeTypeAssets($query, string $type): mixed
+    {
+        return $query->whereHas('assets', function ($q) use ($type) {
+            $q->where('type', Content::from(Str::lower($type)));
+        });
     }
 }

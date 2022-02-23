@@ -11,6 +11,7 @@ use App\Models\User;
 use Facades\Tests\Setup\FileFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -258,5 +259,11 @@ class ClipTest extends TestCase
         $this->get('clips/' . $this->clip->id)->assertStatus(403);
         $this->get(route('frontend.clips.show', $this->clip))->assertStatus(403);
         $this->get('clips/291')->assertStatus(404);
+    }
+
+    /** @test */
+    public function it_fetches_assets_by_type(): void
+    {
+        $this->assertInstanceOf(HasMany::class, $this->clip->getAssetsByType('presenter'));
     }
 }

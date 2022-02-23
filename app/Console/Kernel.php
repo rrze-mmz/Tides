@@ -36,6 +36,6 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('opencast:finished-events')->everyFiveMinutes();
+        $schedule->command('opencast:finished-events')->everyFiveMinutes()->withoutOverlapping();
     }
 }

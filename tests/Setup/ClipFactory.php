@@ -3,7 +3,6 @@
 
 namespace Tests\Setup;
 
-
 use App\Models\Asset;
 use App\Models\Clip;
 use App\Models\User;
@@ -31,7 +30,8 @@ class ClipFactory
     {
         $clip = Clip::factory()->create(
             !empty($attributes) ? $attributes : ['owner_id' => $this->user ?? User::factory()
-            ]);
+            ]
+        );
 
         Asset::factory($this->assetsCount)->create([
             'clip_id' => $clip->id
