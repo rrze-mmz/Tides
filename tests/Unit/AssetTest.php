@@ -8,7 +8,6 @@ use App\Models\Asset;
 use App\Models\Clip;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
-use Storage;
 use Tests\TestCase;
 
 class AssetTest extends TestCase
