@@ -46,46 +46,57 @@ class WowzaService
      */
     public function createSmilFile(Clip $clip): void
     {
-
-        $xmlArray = [
-            'body' => [
-                'switch' => []
-            ]
-        ];
-
         // select all clip video assets, iterate them and create an array for array to xml package
-        $xmlArray['body']['switch'] = $clip->assets
-            ->where('type', '=', 'video')
-            ->sortByDesc('height')
-            ->map(function ($asset) {
-                return $this->createSmilFileArray($asset);
-            })
-            ->toArray();
+        if ($clip->assets->isNotEmpty()) {
+            $this->generateSmilFile($clip, Content::Presenter);
+            $this->generateSmilFile($clip, Content::Presentation);
+            $this->generateSmilFile($clip, Content::Composite);
+        } else {
+            Log::info('Clip has no assets');
+        }
+    }
 
-        $result = new ArrayToXml($xmlArray, [
-            'rootElementName' => 'smil',
-            '_attributes'     => [
-                'title' => 'Clip ID:' . $clip->id
-            ]
-        ], true, 'UTF-8', '1.0', []);
+    /**
+     * @throws DOMException
+     */
+    public function generateSmilFile(Clip $clip, Content $type)
+    {
+        $assetsCollection = $clip->getAssetsByType($type->lower())->get();
+        if ($assetsCollection->isNotEmpty()) {
+            $xmlArray['body']['switch'] = $assetsCollection
+                ->sortByDesc('height')
+                ->map(function ($asset) {
+                    return $this->createSmilFileArray($asset);
+                })
+                ->toArray();
+
+            $result = new ArrayToXml($xmlArray, [
+                'rootElementName' => 'smil',
+                '_attributes'     => [
+                    'title' => 'Clip ID:' . $clip->id
+                ]
+            ], true, 'UTF-8', '1.0', []);
 
 
-        //store the generated file to clip path
-        Storage::disk('videos')
-            ->put($assetPath = getClipStoragePath($clip) . '/camera.smil', $xmlFile = $result->prettify()->toXml());
+            $original_file_name = $type->lower() . '.smil';
+            //store the generated file to clip path
+            Storage::disk('videos')
+                ->put(getClipStoragePath($clip) . '/' . $original_file_name, $xmlFile = $result->prettify()->toXml());
 
-        //save or update the smil file in db
-        $clip->addAsset([
-            'disk'               => 'videos',
-            'original_file_name' => 'camera.smil',
-            'type'               => Content::Smil->lower(),
-            'path'               => $assetPath,
-            'duration'           => '0',
-            'width'              => '0',
-            'height'             => '0',
-        ]);
-
-        Log::info($xmlFile);
+            //save or update the smil file in db
+            $clip->addAsset([
+                'disk'               => 'videos',
+                'original_file_name' => $original_file_name,
+                'type'               => Content::Smil->lower(),
+                'path'               => getClipStoragePath($clip),
+                'duration'           => '0',
+                'width'              => '0',
+                'height'             => '0',
+            ]);
+            Log::info($xmlFile);
+        } else {
+            Log::info('Assets not found with type' . $type->lower());
+        }
     }
 
     /**
@@ -150,5 +161,9 @@ class WowzaService
             ($videoPixelHeight <= 360) => 450000,
             default => 1500000
         };
+    }
+
+    public function checkForVideoAssets(Clip $clip)
+    {
     }
 }

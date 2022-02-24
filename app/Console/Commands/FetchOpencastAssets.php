@@ -74,12 +74,12 @@ class FetchOpencastAssets extends Command
                     }
                 });
             });
+            Log::info('Fetching Opencast Assets Command finished');
             return Command::SUCCESS;
         } else {
             Log::info('Fetching Opencast Assets Command: started');
             $this->info('No empty clips found');
             return Command::FAILURE;
         }
-        Log::info('Fetching Opencast Assets Command finished');
     }
 }

@@ -10,7 +10,6 @@ use App\Jobs\SendEmail;
 use App\Jobs\TransferAssetsJob;
 use App\Jobs\TransferOpencastAssets;
 use App\Mail\AssetsTransferred;
-use App\Models\Asset;
 use App\Services\OpencastService;
 use DOMException;
 use Facades\Tests\Setup\ClipFactory;
@@ -18,7 +17,6 @@ use Facades\Tests\Setup\FileFactory;
 use Facades\Tests\Setup\SeriesFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
@@ -118,7 +116,7 @@ class AssetsTransferTest extends TestCase
         $this->get($clip->adminPath())
             ->assertSee($files->first()['name'])
             ->assertSee($files->last()['name'])
-            ->assertSee('camera.smil');
+            ->assertSee('presenter.smil');
 
         $this->assertEquals(Content::Presenter->lower(), $clip->getAssetsByType('presenter')->first()->type);
         $this->assertEquals(Content::Smil->lower(), $clip->getAssetsByType('smil')->first()->type);
@@ -295,6 +293,6 @@ class AssetsTransferTest extends TestCase
         $this->get($clip->adminPath())
             ->assertSee($videoHD_UID)
             ->assertSee($audioUID)
-            ->assertSee('camera.smil');
+            ->assertSee('presenter.smil');
     }
 }

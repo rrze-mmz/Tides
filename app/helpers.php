@@ -26,13 +26,13 @@ function fetchClipPoster($file = null): string
  */
 function getClipStoragePath(Clip $clip): string
 {
-    return '/' . Carbon::createFromFormat('Y-m-d', $clip->recording_date->format('Y-m-d'))
+    return '/' . Carbon::createFromFormat('Y-m-d', $clip->created_at->format('Y-m-d'))
             ->year .
-        '/' . str_pad(Carbon::createFromFormat('Y-m-d', $clip->recording_date->format('Y-m-d'))
+        '/' . str_pad(Carbon::createFromFormat('Y-m-d', $clip->created_at->format('Y-m-d'))
             ->month, 2, "0", STR_PAD_LEFT) .
-        '/' . str_pad(Carbon::createFromFormat('Y-m-d', $clip->recording_date->format('Y-m-d'))
+        '/' . str_pad(Carbon::createFromFormat('Y-m-d', $clip->created_at->format('Y-m-d'))
             ->day, 2, "0", STR_PAD_LEFT) . '/'
-        . 'TIDES_Clip_ID_' . $clip->id;
+        . $clip->folder_id . '/';
 }
 
 

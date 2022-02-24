@@ -4,10 +4,8 @@
 namespace App\Models;
 
 use App\Enums\Content;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -188,17 +186,7 @@ class Clip extends BaseModel
     {
         return $this->hasOne(Type::class);
     }
-
-    /**
-     * Clip smil file
-     *
-     * @return Asset|null
-     */
-    public function getCameraSmil(): Asset|null
-    {
-        return $this->assets()->firstWhere('original_file_name', '=', 'camera.smil');
-    }
-
+    
     /**
      * Adds an asset to clip
      *
@@ -282,12 +270,5 @@ class Clip extends BaseModel
     public function scopePublic($query): mixed
     {
         return $query->where('is_public', 1);
-    }
-
-    public function scopeTypeAssets($query, string $type): mixed
-    {
-        return $query->whereHas('assets', function ($q) use ($type) {
-            $q->where('type', Content::from(Str::lower($type)));
-        });
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Services;
 
+use App\Enums\Content;
 use App\Models\Asset;
 use App\Models\Clip;
 use App\Services\WowzaService;
@@ -31,29 +32,79 @@ class WowzaServiceTest extends TestCase
         $this->wowzaService = app(WowzaService::class);
 
         $this->clip = ClipFactory::create();
+    }
 
-        $this->asset = Asset::create([
+    /** @test */
+    public function it_creates_a_wowza_presenter_smil_file(): void
+    {
+        Storage::fake('videos');
+
+        $this->clip->addAsset([
             'disk'               => 'videos',
-            'clip_id'            => $this->clip->id,
             'original_file_name' => 'test.mp4',
             'path'               => '/2021/01/01/TEST/',
             'duration'           => 300,
             'width'              => 1920,
             'height'             => 1080,
-            'type'               => 'video'
+            'type'               => Content::Presenter->lower(),
+        ]);
+
+        $this->wowzaService->createSmilFile($this->clip);
+
+        Storage::disk('videos')->assertExists(getClipStoragePath($this->clip) . '/presenter.smil');
+        Storage::disk('videos')->assertMissing(getClipStoragePath($this->clip) . '/composite.smil');
+
+        $this->assertDatabaseHas('assets', ['type' => Content::Smil->lower(), 'original_file_name' => 'presenter.smil']);
+    }
+
+    /** @test */
+    public function it_creates_a_wowza_presentation_smil_file(): void
+    {
+        Storage::fake('videos');
+
+        $this->clip->addAsset([
+            'disk'               => 'videos',
+            'original_file_name' => 'presentation.mp4',
+            'path'               => '/2021/01/01/TEST/',
+            'duration'           => 300,
+            'width'              => 1920,
+            'height'             => 1080,
+            'type'               => Content::Presentation->lower(),
+        ]);
+
+        $this->wowzaService->createSmilFile($this->clip);
+
+        Storage::disk('videos')->assertExists(getClipStoragePath($this->clip) . '/presentation.smil');
+
+        $this->assertDatabaseHas('assets', [
+            'type'               => Content::Smil->lower(),
+            'original_file_name' => 'presentation.smil'
         ]);
     }
 
     /** @test */
-    public function it_creates_a_wowza_smil_file(): void
+    public function it_creates_a_wowza_composite_smil_file(): void
     {
         Storage::fake('videos');
 
+        $this->clip->addAsset([
+            'disk'               => 'videos',
+            'original_file_name' => 'composite.mp4',
+            'path'               => '/2021/01/01/TEST/',
+            'duration'           => 300,
+            'width'              => 1920,
+            'height'             => 1080,
+            'type'               => Content::Composite->lower(),
+        ]);
+
         $this->wowzaService->createSmilFile($this->clip);
 
-        Storage::disk('videos')->assertExists(getClipStoragePath($this->clip) . '/camera.smil');
+        Storage::disk('videos')->assertExists(getClipStoragePath($this->clip) . '/composite.smil');
 
-        $this->assertDatabaseHas('assets', ['type' => 'smil']);
+        $this->assertDatabaseHas('assets', [
+            'type'               => Content::Smil->lower(),
+            'original_file_name' => 'composite.smil'
+        ]);
     }
 
     /** @test */
@@ -69,6 +120,16 @@ class WowzaServiceTest extends TestCase
     /** @test */
     public function it_generates_array_for_smil_file_based_on_asset(): void
     {
+        $this->clip->addAsset([
+            'disk'               => 'videos',
+            'original_file_name' => 'test.mp4',
+            'path'               => '/2021/01/01/TEST/',
+            'duration'           => 300,
+            'width'              => 1920,
+            'height'             => 1080,
+            'type'               => Content::Presenter->lower(),
+        ]);
+
         $expectedArray = [
             'video' => [
                 '_attributes'       => [
@@ -108,7 +169,7 @@ class WowzaServiceTest extends TestCase
             ]
         ];
 
-        $this->assertEquals($expectedArray, $this->wowzaService->createSmilFileArray($this->asset));
+        $this->assertEquals($expectedArray, $this->wowzaService->createSmilFileArray($this->clip->assets()->first()));
     }
 
     /** @test */

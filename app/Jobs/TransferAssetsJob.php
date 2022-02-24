@@ -66,7 +66,7 @@ class TransferAssetsJob implements ShouldQueue
             $attributes = [
                 'disk'               => 'videos',
                 'original_file_name' => $file['name'],
-                'path'               => $storedFile,
+                'path'               => $clipStoragePath,
                 'duration'           => $ffmpeg->getDurationInSeconds(),
                 'width'              => ($isVideo)
                     ? $ffmpeg->getVideoStream()->getDimensions()->getWidth()

@@ -18,6 +18,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Tests\Setup\ClipFactory;
 use Tests\TestCase;
 
 class ClipTest extends TestCase
@@ -216,24 +217,6 @@ class ClipTest extends TestCase
     }
 
     /** @test */
-    public function it_an_asset_instance_if_clip_has_smil_file(): void
-    {
-        $this->assertNull($this->clip->getCameraSmil());
-
-        $this->clip->addAsset([
-            'disk'               => 'videos',
-            'original_file_name' => 'camera.smil',
-            'type'               => 'smil',
-            'path'               => '/videos/camera.smil',
-            'duration'           => '0',
-            'width'              => '0',
-            'height'             => '0',
-        ]);
-
-        $this->assertInstanceOf(Asset::class, $this->clip->getCameraSmil());
-    }
-
-    /** @test */
     public function it_has_a_public_scope(): void
     {
         $this->assertInstanceOf(Builder::class, Clip::public());
@@ -265,5 +248,12 @@ class ClipTest extends TestCase
     public function it_fetches_assets_by_type(): void
     {
         $this->assertInstanceOf(HasMany::class, $this->clip->getAssetsByType('presenter'));
+    }
+
+    /** @test */
+    public function it_creates_a_folder_id_after_model_save(): void
+    {
+        //second db update will be done in clip observer class
+        $this->assertEquals('TIDES_ClipID_1', $this->clip->folder_id);
     }
 }

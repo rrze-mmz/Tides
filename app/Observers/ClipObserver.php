@@ -19,6 +19,9 @@ class ClipObserver
      */
     public function created(Clip $clip)
     {
+        $clip->folder_id = 'TIDES_ClipID_' . $clip->id;
+        $clip->save();
+
         session()->flash('flashMessage', $clip->title . ' ' . __FUNCTION__ . ' successfully');
 
         $this->elasticsearchService->createIndex($clip);
