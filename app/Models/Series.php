@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -53,6 +54,18 @@ class Series extends BaseModel
     public function adminPath(): string
     {
         return "/admin/series/{$this->slug}";
+    }
+
+    /**
+     * Series routes should work with slug and with id to ensure backward compatibility
+     *
+     * @param $value
+     * @param $field
+     * @return Model|null
+     */
+    public function resolveRouteBinding($value, $field = null): ?Model
+    {
+        return $this->where('slug', $value)->orWhere('id', (int)$value)->firstOrFail();
     }
 
     /**

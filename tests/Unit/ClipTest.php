@@ -237,10 +237,10 @@ class ClipTest extends TestCase
     }
 
     /** @test */
-    public function it_resolve_also_id_in_route(): void
+    public function it_resolves_also_id_in_route(): void
     {
         $this->get('clips/' . $this->clip->id)->assertStatus(403);
-        $this->get(route('frontend.clips.show', $this->clip))->assertStatus(403);
+        $this->get(route('frontend.clips.show', $this->clip->id))->assertStatus(403);
         $this->get('clips/291')->assertStatus(404);
     }
 

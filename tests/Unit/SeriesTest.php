@@ -148,4 +148,12 @@ class SeriesTest extends TestCase
     {
         $this->assertInstanceOf(Builder::class, Series::hasOpencastSeriesID());
     }
+
+    /** @test */
+    public function it_resolves_also_id_in_route(): void
+    {
+        $this->get('series/' . $this->series->id)->assertStatus(403);
+        $this->get(route('frontend.series.show', $this->series->id))->assertStatus(403);
+        $this->get('/series/535')->assertStatus(404);
+    }
 }
