@@ -97,6 +97,17 @@ class SeriesTest extends TestCase
     }
 
     /** @test */
+    public function it_can_reorder_clips_based_on_an_array_of_episodes(): void
+    {
+        Clip::factory(2)->create(['series_id' => $this->series->id]);
+
+        $this->assertInstanceOf(Series::class, $this->series->reorderClips(collect([
+            1 => '3',
+            2 => '1',
+        ])));
+    }
+
+    /** @test */
     public function it_updates_opencast_series_id(): void
     {
         $series = SeriesFactory::create();

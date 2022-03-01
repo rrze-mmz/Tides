@@ -253,7 +253,6 @@ class ManageUsersTest extends TestCase
         $this->followingRedirects();
 
         $this->get(route('users.create'))->assertSee($attributes);
-
     }
 
     /** @test */
@@ -384,14 +383,13 @@ class ManageUsersTest extends TestCase
 
         $this->assertDatabaseMissing('users', ['id' => $user->id]);
     }
-    
+
     /** @test */
     public function an_admin_can_assign_a_role_to_a_user(): void
     {
         $user = User::factory()->create();
 
         $this->signInRole('admin');
-
         $this->patch((route('users.update', $user)), [
             'role_id' => Role::where('name', 'moderator')->first()->id
         ]);

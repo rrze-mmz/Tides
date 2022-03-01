@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Psr\Http\Message\ResponseInterface;
 
@@ -98,6 +99,17 @@ class Series extends BaseModel
         $clip->addTags(collect($validated['tags']));
 
         return $clip;
+    }
+
+    public function reorderClips(Collection $episodes)
+    {
+        $episodes->each(function ($value, $key) {
+            $clip = Clip::find($key);
+            $clip->episode = $value;
+            $clip->save();
+        });
+
+        return $this;
     }
 
     /**

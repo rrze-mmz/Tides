@@ -26,7 +26,7 @@ class SeriesClipsTest extends TestCase
     /** @test */
     public function a_non_authorize_user_cannot_view_add_clip_to_series_form(): void
     {
-        $this->get(route('series.clip.create', SeriesFactory::create()))->assertRedirect('login');
+        $this->get(route('series.clips.create', SeriesFactory::create()))->assertRedirect('login');
     }
 
     /** @test */
@@ -36,7 +36,7 @@ class SeriesClipsTest extends TestCase
 
         $this->signInRole($this->role);
 
-        $this->get(route('series.clip.create', $series))->assertStatus(403);
+        $this->get(route('series.clips.create', $series))->assertStatus(403);
     }
 
     /** @test */
@@ -44,7 +44,7 @@ class SeriesClipsTest extends TestCase
     {
         $series = SeriesFactory::ownedBy($this->signInRole($this->role))->create();
 
-        $this->get(route('series.clip.create', $series))->assertStatus(200);
+        $this->get(route('series.clips.create', $series))->assertStatus(200);
     }
 
     /** @test */
@@ -54,7 +54,7 @@ class SeriesClipsTest extends TestCase
 
         $this->signInRole('admin');
 
-        $this->get(route('series.clip.create', $series))->assertStatus(200);
+        $this->get(route('series.clips.create', $series))->assertStatus(200);
     }
 
     /** @test */
@@ -62,7 +62,7 @@ class SeriesClipsTest extends TestCase
     {
         $series = SeriesFactory::ownedBy($this->signInRole($this->role))->create();
 
-        $this->get(route('series.clip.create', $series))->assertStatus(200)
+        $this->get(route('series.clips.create', $series))->assertStatus(200)
             ->assertSee('title')
             ->assertSee('recording_date')
             ->assertSee('description')
@@ -83,7 +83,7 @@ class SeriesClipsTest extends TestCase
     {
         $series = SeriesFactory::ownedBy($this->signInRole($this->role))->create();
 
-        $this->post(route('series.clip.store', $series), Clip::factory()->raw());
+        $this->post(route('series.clips.store', $series), Clip::factory()->raw());
 
         $this->assertEquals(1, $series->clips()->count());
     }
@@ -93,7 +93,7 @@ class SeriesClipsTest extends TestCase
     {
         $series = SeriesFactory::ownedBy($this->signInRole('admin'))->create();
 
-        $this->post(route('series.clip.store', $series), Clip::factory()->raw())->assertStatus(302);
+        $this->post(route('series.clips.store', $series), Clip::factory()->raw())->assertStatus(302);
 
         $this->assertEquals(1, $series->clips()->count());
     }
@@ -140,5 +140,66 @@ class SeriesClipsTest extends TestCase
         $this->delete(route('series.clips.remove', $clip))->assertStatus(302);
 
         $this->assertEquals(2, $series->clips()->count());
+    }
+
+    /** @test */
+    public function it_shows_a_reorder_clips_button_on_series_edit_page_for_all_admins(): void
+    {
+        $series = SeriesFactory::withClips(3)->ownedBy($this->signInRole($this->role))->create();
+
+        $this->get(route('series.edit', $series))->assertSee('Reorder clips');
+    }
+
+    /** @test */
+    public function it_has_a_view_for_reordering_series_clips_based_on_clip_episode(): void
+    {
+        $series = SeriesFactory::withClips(3)->ownedBy($this->signInRole($this->role))->create();
+        $this->get(route('series.clips.changeEpisode', $series))
+            ->assertSee($series->title)
+            ->assertSee($series->clips()->first()->title)
+            ->assertSee($series->latestClip->title);
+    }
+
+    /** @test */
+    public function it_validates_an_array_of_integers_for_changing_clips_episodes(): void
+    {
+        $series = SeriesFactory::withClips(3)->ownedBy($this->signInRole($this->role))->create();
+        $attributes = [
+            'episodes' => []
+        ];
+        $this->post(route('series.clips.reorder', $series), $attributes)->assertSessionHasErrors('episodes');
+        $attributes = [
+            'episodes' => [
+                1 => 'asdfasdfasdf',
+                2 => '1',
+                3 => '2'
+            ]
+        ];
+        $this->post(route('series.clips.reorder', $series), $attributes)->assertSessionHasErrors('episodes.*');
+        $attributes = [
+            'episodes' => [
+                1 => '3',
+                2 => '1',
+                3 => '2'
+            ]
+        ];
+        $this->post(route('series.clips.reorder', $series), $attributes)->assertSessionHasNoErrors();
+    }
+
+    /** @test */
+    public function it_changes_clips_episodes_for_a_series(): void
+    {
+        $this->withoutExceptionHandling();
+        $series = SeriesFactory::withClips(3)->ownedBy($this->signInRole($this->role))->create();
+        $attributes = [
+            'episodes' => [
+                1 => '3',
+                2 => '1',
+                3 => '2'
+            ]
+        ];
+        $this->post(route('series.clips.reorder', $series), $attributes);
+
+        $this->assertEquals(2, Clip::find(3)->episode);
     }
 }

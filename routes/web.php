@@ -116,8 +116,11 @@ Route::prefix('admin')->middleware(['auth', 'can:access-dashboard'])->group(func
 
     Route::controller(SeriesClipsController::class)->prefix('/series')->group(function () {
         // Create a clip for a certain series.
-        Route::get('/{series}/addClip', 'create')->name('series.clip.create');
-        Route::post('series/{series}/addClip', 'store')->name('series.clip.store');
+        Route::get('/{series}/addClip', 'create')->name('series.clips.create');
+        Route::post('/{series}/addClip', 'store')->name('series.clips.store');
+
+        Route::get('/{series}/reorder', 'listClips')->name('series.clips.changeEpisode');
+        Route::post('/{series}/reorder', 'reorder')->name('series.clips.reorder');
 
         //add/remove an existing clip to selected series
         Route::get('/listSeries/{clip}', 'listSeries')->name('series.clips.listSeries');

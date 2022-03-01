@@ -5,7 +5,7 @@
         Add clip to {{ $series->title }}
     </div>
     <div class="flex py-4 px-2 ">
-        <form action="{{route('series.clip.store', $series)}}"
+        <form action="{{route('series.clips.store', $series)}}"
               method="POST"
               class="w-4/5">
             @csrf

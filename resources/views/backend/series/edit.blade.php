@@ -110,7 +110,7 @@
             </ul>
             <div class="mt-6 ">
                 <div x-show="activeTab === 1" id="actions" class="w-full">
-                    @include('backend.clips.options.edit')
+                    @include('backend.series.buttons.actions')
                     @include('backend.clips.list')
                 </div>
                 <div x-show="activeTab === 2" id="opencast">
@@ -119,13 +119,9 @@
                                     'opencastWorkflows' => $opencastSeriesInfo])
                     @endif
                 </div>
-                <div x-show="activeTab === 3">Tab 3 Content show Lorem ipsum dolor sit amet consectetur
-                    adipisicing elit. Amet,
-                    distinctio
-                    voluptas quis cum reprehenderit libero ea quidem voluptatem sunt suscipit, excepturi, tenetur
-                    assumenda sequi eius minus temporibus earum odit soluta.
+                <div x-show="activeTab === 3">
+                    @include('backend.series.buttons.more-options')
                 </div>
             </div>
         </div>
-    </div>
 @endsection

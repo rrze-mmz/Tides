@@ -7,8 +7,11 @@ use App\Http\Requests\StoreClipRequest;
 use App\Models\Clip;
 use App\Models\Series;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 
 class SeriesClipsController extends Controller
 {
@@ -98,5 +101,26 @@ class SeriesClipsController extends Controller
         $clip->save();
 
         return to_route('clips.edit', $clip);
+    }
+
+    /**
+     * @param Series $series
+     * @return Factory|View|Application
+     */
+    public function listClips(Series $series): Factory|View|Application
+    {
+        return view('backend.seriesClips.reorder', compact('series'));
+    }
+
+    public function reorder(Series $series, Request $request)
+    {
+        $validated = $request->validate([
+            'episodes'   => ['required', 'array'],
+            'episodes.*' => ['integer'],
+        ]);
+
+        $series->reorderClips(collect($validated['episodes']));
+
+        return to_route('series.edit', $series);
     }
 }

@@ -13,8 +13,11 @@ class ListClips extends Component
      *
      * @return void
      */
-    public function __construct(public Series $series, public bool $dashboardAction)
-    {
+    public function __construct(
+        public Series $series,
+        public bool $dashboardAction,
+        public bool $reorder = false
+    ) {
         //
     }
 
