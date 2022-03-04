@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Traits;
 
+use App\Models\Presenter;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Collection;
 

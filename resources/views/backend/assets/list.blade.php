@@ -3,7 +3,7 @@
 </div>
 <div class="flex">
     <ul class="pt-3 w-full">
-        <li class="flex content-center items-center p-5 mb-4 bg-gray-400 rounded">
+        <li class="flex content-center items-center text-center p-5 mb-4 bg-gray-400 rounded">
             <div class="pb-2 w-1/6 border-b border-black">ID</div>
             <div class="pb-2 w-1/6 border-b border-black">Saved path</div>
             <div class="pb-2 w-1/6 border-b border-black">File Name</div>
@@ -13,9 +13,11 @@
         </li>
 
         @forelse($assets as $asset)
-            <li class="flex content-center items-center p-5 mb-4 bg-gray-200 rounded">
+            <li class="flex content-center items-center text-center p-2 mb-4 bg-gray-200 rounded">
                 <div class="w-1/6"> {{ $asset->id }}</div>
-                <div class="w-1/6"> {{ $asset->path }}</div>
+                <div class="w-1/6 mr-6">
+                    <div class="whitespace-normal">{{ $asset->path }}</div>
+                </div>
                 <div class="w-1/6"> {{ $asset->original_file_name }}</div>
                 <div class="w-1/6"> {{ $asset->durationToHours() }}</div>
                 <div class="w-1/6"> {{ $asset->width }} x {{ $asset->height }}</div>

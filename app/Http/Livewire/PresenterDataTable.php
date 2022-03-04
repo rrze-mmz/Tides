@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Models\Presenter;
+use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Contracts\View\View;
@@ -51,7 +52,7 @@ class PresenterDataTable extends Component
      */
     public function render(): View
     {
-        $search = trim(strtolower($this->search));
+        $search = trim(Str::lower($this->search));
 
         return view('livewire.presenter-data-table', [
             'presenters' => Presenter::whereRaw('lower(first_name) like (?)', ["%{$search}%"])

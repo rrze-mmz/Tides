@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Models;
+namespace App\Models\Traits;
 
 use Illuminate\Support\Str;
 
@@ -33,7 +33,7 @@ trait Slugable
         $count = 2;
 
         while (self::whereSlug($slug)->exists()) {
-            $slug = "{$original}-".$count++;
+            $slug = "{$original}-" . $count++;
         }
 
         return $slug;

@@ -444,7 +444,8 @@ class ManageClipsTest extends TestCase
             'context_id'      => '1',
             'format_id'       => '1',
             'type_id'         => '1',
-            'semester_id'     => '1']);
+            'semester_id'     => '1'
+        ]);
 
         $clip->refresh();
 

@@ -1,4 +1,4 @@
-<aside class="my-4 mx-6 text-white text-center">
+<aside class="mx-6 my-4 text-center text-white">
     <ul>
         <li class="w-full">
             <a
@@ -18,6 +18,14 @@
                 href="{{route('clips.index')}}"
                 class="block mb-4 text-lg {{ setActiveLink(route('clips.index')) }}  font-bold hover:text-gray-200"
             >Clips</a>
+        </li>
+        <li>
+            <a
+                href="{{ route('activities.index') }}"
+                class="block mb-4 text-lg  {{ setActiveLink(route('activities.index')) }} font-bold hover:text-gray-200"
+            >
+                Activities
+            </a>
         </li>
         @if(auth()->user()->isAdmin())
             <li>

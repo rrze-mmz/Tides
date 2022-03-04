@@ -4,6 +4,7 @@
 namespace App\Models;
 
 use App\Events\AssetDeleted;
+use App\Models\Traits\RecordsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Storage;
@@ -11,11 +12,12 @@ use Illuminate\Support\Facades\Storage;
 class Asset extends BaseModel
 {
     use HasFactory;
+    use RecordsActivity;
 
     protected $guarded = [];
     //this will update clips timestamp
     protected $touches = ['clip'];
-    //fire an  event on delete
+    //remove asset from disk on delete
     protected $dispatchesEvents = [
         'deleted' => AssetDeleted::class
     ];

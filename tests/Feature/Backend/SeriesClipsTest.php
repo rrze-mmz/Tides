@@ -3,7 +3,6 @@
 namespace Tests\Feature\Backend;
 
 use App\Models\Clip;
-use App\Models\Series;
 use Facades\Tests\Setup\SeriesFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;

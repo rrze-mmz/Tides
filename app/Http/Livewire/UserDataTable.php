@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -52,7 +53,7 @@ class UserDataTable extends Component
      */
     public function render(): View
     {
-        $search = trim(strtolower($this->search));
+        $search = trim(Str::lower($this->search));
 
         return view('livewire.user-data-table', [
             'users' => ($this->admin)

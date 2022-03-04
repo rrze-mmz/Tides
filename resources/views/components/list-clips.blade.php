@@ -20,6 +20,9 @@
                             @if ($reorder)
                                 <input class="w-1/2" type="number" name="episodes[{{$clip->id}}]"
                                        value="{{$clip->episode}}">
+                                @error('episodes')
+                                <p class="mt-2 w-full text-xs text-red-500">{{ $message }}</p>
+                                @enderror
                             @else
                                 {{ $clip->episode }}
                             @endif

@@ -9,17 +9,16 @@ use Illuminate\Queue\SerializesModels;
 
 class AssetDeleted
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
-
-    public $asset;
+    use Dispatchable;
+    use InteractsWithSockets;
+    use SerializesModels;
 
     /**
      * Create a new event instance.
      *
      * @param Asset $asset
      */
-    public function __construct(Asset $asset)
+    public function __construct(public Asset $asset)
     {
-        $this->asset = $asset;
     }
 }

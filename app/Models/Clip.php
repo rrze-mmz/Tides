@@ -4,6 +4,10 @@
 namespace App\Models;
 
 use App\Enums\Content;
+use App\Models\Traits\Accessable;
+use App\Models\Traits\Presentable;
+use App\Models\Traits\RecordsActivity;
+use App\Models\Traits\Slugable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -22,6 +26,7 @@ class Clip extends BaseModel
     use Accessable;
     use Presentable;
     use Slugable;
+    use RecordsActivity;
 
     protected $attributes = [
         'episode' => '1'
@@ -186,7 +191,7 @@ class Clip extends BaseModel
     {
         return $this->hasOne(Type::class);
     }
-    
+
     /**
      * Adds an asset to clip
      *

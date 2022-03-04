@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Backend\ActivitiesController;
 use App\Http\Controllers\Backend\AssetsController;
 use App\Http\Controllers\Backend\AssetsTransferController;
 use App\Http\Controllers\Backend\ClipsController;
@@ -135,6 +136,10 @@ Route::prefix('admin')->middleware(['auth', 'can:access-dashboard'])->group(func
 
     //Opencast routes
     Route::get('/opencast', OpencastController::class)->name('opencast.status');
+
+    Route::get('/activities', function () {
+        return view('backend.activities.index');
+    })->name('activities.index');
 
     // Portal admin resources
     Route::middleware(['user.admin'])->group(function () {

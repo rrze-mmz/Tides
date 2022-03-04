@@ -1,10 +1,14 @@
 <?php
 
 
-namespace App\Models;
+namespace App\Models\Traits;
 
+use App\Models\Acl;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Collection;
+use function auth;
+use function generateLMSToken;
+use function session;
 
 trait Accessable
 {

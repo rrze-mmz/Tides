@@ -134,11 +134,16 @@ class DashboardTest extends TestCase
     }
 
     /** @test */
-    public function it_hides_sidebar_menu_items_for_moderators()
+    public function it_show_sidebar_menu_items_for_moderators()
     {
+        $this->withoutExceptionHandling();
         $this->signInRole($this->role);
 
-        $this->get(route('dashboard'))->assertDontSee('Opencast')
+        $this->get(route('dashboard'))
+            ->assertSee('Series')
+            ->assertSee('Clips')
+            ->assertSee('Activities')
+            ->assertDontSee('Opencast')
             ->assertDontSee('Users');
     }
 

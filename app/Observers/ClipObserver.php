@@ -19,6 +19,8 @@ class ClipObserver
      */
     public function created(Clip $clip)
     {
+        $clip->refresh();
+        
         $clip->folder_id = 'TIDES_ClipID_' . $clip->id;
         $clip->save();
 

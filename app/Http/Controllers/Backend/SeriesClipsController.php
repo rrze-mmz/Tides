@@ -112,7 +112,14 @@ class SeriesClipsController extends Controller
         return view('backend.seriesClips.reorder', compact('series'));
     }
 
-    public function reorder(Series $series, Request $request)
+    /**
+     * Changes clips episodes for a series
+     *
+     * @param Series $series
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function reorder(Series $series, Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'episodes'   => ['required', 'array'],

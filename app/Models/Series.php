@@ -2,6 +2,10 @@
 
 namespace App\Models;
 
+use App\Models\Traits\Accessable;
+use App\Models\Traits\Presentable;
+use App\Models\Traits\RecordsActivity;
+use App\Models\Traits\Slugable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -16,6 +20,7 @@ class Series extends BaseModel
     use Accessable;
     use Presentable;
     use Slugable;
+    use RecordsActivity;
 
     /**
      * A series can have many clips

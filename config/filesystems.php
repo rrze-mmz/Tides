@@ -43,10 +43,9 @@ return [
         ],
 
         'videos' => [
-            'driver'     => 'local',
-            'root'       => storage_path('app/videos'),
-            'url'        => env('APP_URL') . '/videos',
-            'visibility' => 'public',
+            'driver' => 'local',
+            'root'   => storage_path('app/videos'),
+            'url'    => env('APP_URL') . '/videos',
         ],
 
         'streamable_videos' => [
@@ -98,7 +97,6 @@ return [
 
     'links' => [
         public_path('storage')           => storage_path('app/public'),
-        public_path('videos')            => storage_path('app/videos'),
         public_path('streamable_videos') => storage_path('app/streamable_videos'),
         public_path('thumbnails')        => storage_path('app/thumbnails'),
     ],
