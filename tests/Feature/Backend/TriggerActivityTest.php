@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\Backend;
 
+use App\Http\Livewire\ActivitiesDataTable;
+use App\Models\Activity;
 use App\Models\Asset;
 use App\Models\Clip;
 use App\Models\Presenter;
@@ -9,6 +11,7 @@ use App\Models\Series;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Livewire\Livewire;
 use Tests\TestCase;
 
 class TriggerActivityTest extends TestCase
@@ -125,5 +128,76 @@ class TriggerActivityTest extends TestCase
         Asset::factory()->create();
 
         $this->assertDatabaseHas('activities', ['change_message' => 'created asset']);
+    }
+
+    public function it_renders_a_datatable_for_activities(): void
+    {
+        $this->get(route('activities.index'))->assertStatus(200);
+    }
+
+    public function it_contains_activities_livewire_component_on_index_page(): void
+    {
+        $this->get(route('activities.index'))->assertSeeLivewire('activities-data-table');
+    }
+
+    /** @test */
+    public function it_has_a_series_checkbox_in_index_activities_data_table_that_filter_series(): void
+    {
+        $seriesActivity = Activity::factory()->create([
+            'content_type'   => 'series',
+            'change_message' => 'create series'
+        ]);
+        $clipActivity = Activity::factory()->create([
+            'content_type'   => 'clip',
+            'change_message' => 'create clip'
+        ]);
+
+        Livewire::test(ActivitiesDataTable::class)
+            ->assertSee($seriesActivity->change_message)
+            ->assertSee($clipActivity->change_message)
+            ->set('series', true)
+            ->assertSee($seriesActivity->change_message)
+            ->assertDontSee($clipActivity->change_message);
+    }
+
+    /** @test */
+    public function it_can_search_for_a_change_message_in_index_activities_data_table(): void
+    {
+        $seriesActivity = Activity::factory()->create([
+            'content_type'   => 'series',
+            'change_message' => 'create series'
+        ]);
+        $clipActivity = Activity::factory()->create([
+            'content_type'   => 'clip',
+            'change_message' => 'update clip'
+        ]);
+        Livewire::test(ActivitiesDataTable::class)
+            ->set('search', 'update')
+            ->assertSee($clipActivity->change_message)
+            ->assertDontSee($seriesActivity->change_message);
+    }
+
+    /** @test */
+    public function it_can_sort_by_content_type_in_index_activities_data_table(): void
+    {
+        $articleActivity = Activity::factory()->create([
+            'content_type'   => 'article',
+            'change_message' => 'updates article'
+        ]);
+        $seriesActivity = Activity::factory()->create([
+            'content_type'   => 'series',
+            'change_message' => 'create series'
+        ]);
+        $clipActivity = Activity::factory()->create([
+            'content_type'   => 'clip',
+            'change_message' => 'update clip'
+        ]);
+
+        Livewire::test(ActivitiesDataTable::class)
+            ->call('sortBy', 'content_type')
+            ->call('sortBy', 'content_type')
+            ->assertSeeInOrder([
+                $seriesActivity->content_type, $clipActivity->content_type, $articleActivity->content_type
+            ]);
     }
 }

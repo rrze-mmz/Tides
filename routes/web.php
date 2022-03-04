@@ -18,6 +18,7 @@ use App\Http\Controllers\Frontend\SearchController;
 use App\Http\Controllers\Frontend\ShowClipsController;
 use App\Http\Controllers\Frontend\ShowSeriesController;
 use App\Http\Middleware\CheckLMSToken;
+use App\Models\Activity;
 use App\Models\Clip;
 use App\Models\Series;
 use App\Services\ElasticsearchService;
@@ -138,7 +139,9 @@ Route::prefix('admin')->middleware(['auth', 'can:access-dashboard'])->group(func
     Route::get('/opencast', OpencastController::class)->name('opencast.status');
 
     Route::get('/activities', function () {
-        return view('backend.activities.index');
+        return view('backend.activities.index', [
+            'activities' => Activity::paginate(20),
+        ]);
     })->name('activities.index');
 
     // Portal admin resources

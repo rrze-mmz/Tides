@@ -3,12 +3,10 @@
 namespace App\Http\Livewire;
 
 use App\Models\Activity;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Contracts\View\View;
 
 class ActivitiesDataTable extends Component
 {
@@ -48,7 +46,7 @@ class ActivitiesDataTable extends Component
         $this->resetPage();
     }
 
-    public function render(): Factory|View|Application
+    public function render(): View
     {
         $search = trim(Str::lower($this->search));
 
