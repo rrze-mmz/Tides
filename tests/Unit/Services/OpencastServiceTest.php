@@ -190,8 +190,10 @@ class OpencastServiceTest extends TestCase
     {
         $series = SeriesFactory::withClips(1)->withOpencastID()->create();
 
-        $this->mockHandler->append($this->mockEventResponse($series, OpencastWorkflowState::SUCCEEDED));
-        $this->mockHandler->append($this->mockEventResponse($series, OpencastWorkflowState::STOPPED));
+        $this->mockHandler->append(
+            $this->mockEventResponse($series, OpencastWorkflowState::SUCCEEDED),
+            $this->mockEventResponse($series, OpencastWorkflowState::STOPPED)
+        );
 
         $response = $this->opencastService->getProcessedEventsBySeriesID($series->opencast_series_id);
 
@@ -207,8 +209,10 @@ class OpencastServiceTest extends TestCase
     /** @test */
     public function it_fetches_a_collection_of_all_assets_for_a_given_event(): void
     {
-        $this->mockHandler->append($this->mockEventAssets($this->faker->uuid(), $this->faker->uuid()));
-        $this->mockHandler->append($this->mockEventAssets($this->faker->uuid(), $this->faker->uuid()));
+        $this->mockHandler->append(
+            $this->mockEventAssets($this->faker->uuid(), $this->faker->uuid()),
+            $this->mockEventAssets($this->faker->uuid(), $this->faker->uuid())
+        );
 
         $response = $this->opencastService->getAssetsByEventID($this->faker->uuid);
 

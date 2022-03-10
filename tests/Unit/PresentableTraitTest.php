@@ -21,12 +21,12 @@ class PresentableTraitTest extends TestCase
 
         $this->clip = Clip::factory()->create();
         $this->series = Series::factory()->create();
+        Presenter::factory(2)->create();
     }
 
     /** @test */
     public function it_can_add_presenters_to_a_clip(): void
     {
-        Presenter::factory(2)->create();
         $this->clip->addPresenters(collect(['1', '2']));
 
         $this->assertEquals(2, $this->clip->presenters()->count());
@@ -35,7 +35,6 @@ class PresentableTraitTest extends TestCase
     /** @test */
     public function it_can_add_presenters_to_a_series(): void
     {
-        Presenter::factory(2)->create();
         $this->series->addPresenters(collect(['1', '2']));
 
         $this->assertEquals(2, $this->series->presenters()->count());

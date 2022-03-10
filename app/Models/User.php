@@ -116,19 +116,19 @@ class User extends Authenticatable
      * @param string $role
      * @return bool
      */
-    public function hasRole($role = ''): bool
+    public function hasRole(string $role = ''): bool
     {
         return (bool)$this->roles->contains('name', $role);
     }
 
     /**
-     * Check whether the current user is an admin
+     * Check whether the current user is an admin or a superadmin
      *
      * @return bool
      */
     public function isAdmin(): bool
     {
-        return $this->hasRole('admin');
+        return $this->hasRole('admin') || $this->hasRole('superadmin');
     }
 
     /**
@@ -147,5 +147,12 @@ class User extends Authenticatable
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new MailResetPasswordToken($token, $this));
+    }
+
+    public function scopeAdmins($query)
+    {
+        return $query->whereHas('roles', function ($q) {
+            $q->where('name', 'admin')->orWhere('name', 'superadmin');
+        });
     }
 }

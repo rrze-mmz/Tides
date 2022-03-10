@@ -11,7 +11,7 @@ class SeriesPolicy
     use HandlesAuthorization;
 
     /**
-     * Check whether the current user can create a clip.
+     * Check whether the current user can create a series.
      *
      * @return bool
      */
@@ -28,8 +28,10 @@ class SeriesPolicy
     public function view(?User $user, Series $series): bool
     {
         /*
-         * return true only if series is Public and contains clips with assets
-         * or user is series owner or user is  admin
+         * return true only for the following:
+         * - series is Public and contains clips with assets
+         * - user is series owner
+         * - user is  admin or superadmin
          */
 
         return (
@@ -47,6 +49,6 @@ class SeriesPolicy
      */
     public function edit(User $user, Series $series): bool
     {
-        return ($user->is($series->owner) || $user->hasRole('admin'));
+        return ($user->is($series->owner) || $user->isAdmin());
     }
 }

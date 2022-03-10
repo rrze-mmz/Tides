@@ -30,7 +30,7 @@ class ClipPolicy
      */
     public function edit(User $user, Clip $clip): bool
     {
-        return ($user->is($clip->owner) || $user->hasRole('admin'));
+        return ($user->is($clip->owner) || $user->isAdmin());
     }
 
     /**

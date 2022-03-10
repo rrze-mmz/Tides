@@ -40,8 +40,18 @@ class ManagePresenters extends TestCase
     }
 
     /** @test */
-    public function it_renders_a_datatable_for_presenters_with_admin_role(): void
+    public function it_renders_a_datatable_for_presenters_for_users_with_admin_role(): void
     {
+        $this->get(route('presenters.index'))->assertStatus(200);
+    }
+
+    /** @test */
+    public function it_renders_a_datatable_for_presenters_for_users_with_superadmin_role(): void
+    {
+        auth()->logout();
+
+        $this->signInRole('superadmin');
+
         $this->get(route('presenters.index'))->assertStatus(200);
     }
 

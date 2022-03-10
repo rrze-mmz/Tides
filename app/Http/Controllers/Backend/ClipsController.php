@@ -33,7 +33,7 @@ class ClipsController extends Controller
                     : auth()->user()->clips()->orderBy('updated_at')->paginate(12),
             ]
         );
-    }//end index()
+    }
 
     /**
      * Create form for a single clip
@@ -43,7 +43,7 @@ class ClipsController extends Controller
     public function create(): View
     {
         return view('backend.clips.create');
-    }//end create()
+    }
 
     /**
      * Store a clip in database
@@ -63,17 +63,17 @@ class ClipsController extends Controller
         $clip->addAcls(collect($validated['acls']));
 
         return to_route('clips.edit', $clip);
-    }//end store()
+    }
 
     /**
      * Edit form for a single clip
      *
      * @param Clip $clip
      * @param OpencastService $opencastService
-     * @return View
+     * @return View|Application|Factory
      * @throws AuthorizationException
      */
-    public function edit(Clip $clip, OpencastService $opencastService): View
+    public function edit(Clip $clip, OpencastService $opencastService): Application|Factory|View
     {
         $this->authorize('edit', $clip);
 
@@ -86,7 +86,7 @@ class ClipsController extends Controller
                 'opencastConnectionCollection' => $opencastService->getHealth(),
             ]
         );
-    }//end edit()
+    }
 
     /**
      * Update a single clip in the database
@@ -106,7 +106,7 @@ class ClipsController extends Controller
         $clip->addAcls(collect($validated['acls']));
 
         return to_route('clips.edit', $clip);
-    }//end update()
+    }
 
     /**
      * Delete a single clip
@@ -126,5 +126,5 @@ class ClipsController extends Controller
         }
 
         return to_route('clips.index');
-    }//end destroy()
-}//end class
+    }
+}

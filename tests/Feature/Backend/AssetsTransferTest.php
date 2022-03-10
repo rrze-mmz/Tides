@@ -180,8 +180,11 @@ class AssetsTransferTest extends TestCase
 
         $this->opencastService = app(OpencastService::class);
 
-        $mockHandler->append($this->mockEventResponse($series, OpencastWorkflowState::SUCCEEDED));
-        $mockHandler->append($this->mockEventResponse($series, OpencastWorkflowState::PAUSED));
+        $mockHandler->append(
+            $this->mockEventResponse($series, OpencastWorkflowState::SUCCEEDED),
+            $this->mockEventResponse($series, OpencastWorkflowState::PAUSED)
+
+        );
 
         $this->get(route('admin.clips.opencast.listEvents', ['clip' => $series->clips()->first()]))
             ->assertStatus(200)
@@ -213,8 +216,10 @@ class AssetsTransferTest extends TestCase
 
         $this->opencastService = app(OpencastService::class);
 
-        $mockHandler->append($this->mockEventByEventID($opencastEventID, OpencastWorkflowState::SUCCEEDED, $archiveVersion));
-        $mockHandler->append($this->mockEventAssets($videoHD_UID, $audioUID));
+        $mockHandler->append(
+            $this->mockEventByEventID($opencastEventID, OpencastWorkflowState::SUCCEEDED, $archiveVersion),
+            $this->mockEventAssets($videoHD_UID, $audioUID)
+        );
         $this->opencastService = app(OpencastService::class);
 
         $this->post(route(
@@ -261,11 +266,11 @@ class AssetsTransferTest extends TestCase
 
         $this->opencastService = app(OpencastService::class);
 
-        $mockHandler->append($this
-            ->mockEventByEventID($opencastEventID, OpencastWorkflowState::SUCCEEDED, $archiveVersion));
-        $mockHandler->append($this->mockEventAssets($videoHD_UID, $audioUID));
-
-
+        $mockHandler->append(
+            $this->mockEventByEventID($opencastEventID, OpencastWorkflowState::SUCCEEDED, $archiveVersion),
+            $this->mockEventAssets($videoHD_UID, $audioUID)
+        );
+        
         $fakeStorage
             ->putFileAs(
                 '',

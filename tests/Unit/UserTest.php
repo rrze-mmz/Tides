@@ -6,6 +6,7 @@ namespace Tests\Unit;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -75,8 +76,8 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function it_can_return_user_full_name(): void
+    public function it_has_an_admins_scope(): void
     {
-        $this->assertEquals($this->user->getFullNameAttribute(), $this->user->first_name . ' ' . $this->user->last_name);
+        $this->assertInstanceOf(Builder::class, User::admins());
     }
 }

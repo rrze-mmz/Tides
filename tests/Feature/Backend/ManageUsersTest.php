@@ -46,6 +46,14 @@ class ManageUsersTest extends TestCase
     }
 
     /** @test */
+    public function it_renders_a_datatable_for_users_with_superadmin_role(): void
+    {
+        $this->signInRole('superadmin');
+
+        $this->get(route('users.index'))->assertStatus(200);
+    }
+
+    /** @test */
     public function it_contains_user_data_table_livewire_component_on_index_page(): void
     {
         $this->signInRole('admin');
@@ -58,12 +66,14 @@ class ManageUsersTest extends TestCase
     {
         $moderator = $this->signInRole('moderator');
         $admin = $this->signInRole('admin');
+        $superadmin = $this->signInRole('superadmin');
 
         Livewire::test(UserDataTable::class)
             ->assertSee($admin->username)
             ->assertSee($moderator->username)
             ->set('admin', true)
             ->assertSee($admin->username)
+            ->assertSee($superadmin->username)
             ->assertDontSee($moderator->username);
     }
 

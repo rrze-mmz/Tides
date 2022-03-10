@@ -57,8 +57,7 @@ class UserDataTable extends Component
 
         return view('livewire.user-data-table', [
             'users' => ($this->admin)
-                ? Role::where('name', 'admin')->first()
-                    ->users()
+                ? User::admins()
                     ->where(function ($query) use ($search) {
                         $query->whereRaw('lower(first_name) like (?)', ["%{$search}%"])
                             ->orwhereRaw('lower(last_name) like (?)', ["%{$search}%"])

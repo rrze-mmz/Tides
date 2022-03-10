@@ -134,6 +134,14 @@ class DashboardTest extends TestCase
     }
 
     /** @test */
+    public function it_show_sidebar_menu_items_for_superadmins(): void
+    {
+        $this->signInRole('superadmin');
+
+        $this->get(route('dashboard'))->assertSee('Opencast');
+    }
+
+    /** @test */
     public function it_show_sidebar_menu_items_for_moderators()
     {
         $this->withoutExceptionHandling();
@@ -155,6 +163,7 @@ class DashboardTest extends TestCase
         app(OpencastService::class);
         $mockHandler = $this->swapOpencastClient();
         $mockHandler->append($this->mockEventResponse($series, OpencastWorkflowState::RUNNING, 2));
+
         $this->signInRole('admin');
 
         $this->get(route('dashboard'))->assertSee('Opencast running workflows');
@@ -168,6 +177,7 @@ class DashboardTest extends TestCase
         app(OpencastService::class);
         $mockHandler = $this->swapOpencastClient();
         $mockHandler->append($this->mockEventResponse($series, OpencastWorkflowState::RUNNING, 2));
+
         $this->signInRole($this->role);
 
         $this->get(route('dashboard'))->assertDontSee('Opencast running workflows');

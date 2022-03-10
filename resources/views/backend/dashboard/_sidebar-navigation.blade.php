@@ -27,7 +27,7 @@
                 Activities
             </a>
         </li>
-        @if(auth()->user()->isAdmin())
+        @can('menu-dashboard-admin')
             <li>
                 <a
                     href="{{ route('presenters.index') }}"
@@ -52,6 +52,6 @@
                     class="block mb-4 text-lg font-bold hover:text-gray-200"
                 >Server</a>
             </li>
-        @endif
+        @endcan
     </ul>
 </aside>

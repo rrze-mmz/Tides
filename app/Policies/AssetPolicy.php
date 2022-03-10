@@ -20,6 +20,6 @@ class AssetPolicy
      */
     public function edit(User $user, Asset $asset): bool
     {
-        return ($user->is($asset->clip->owner) || $user->hasRole('admin'));
+        return ($user->is($asset->clip->owner) || $user->isAdmin());
     }
 }

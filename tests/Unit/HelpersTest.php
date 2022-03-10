@@ -9,6 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Facades\Tests\Setup\FileFactory;
+use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class HelpersTest extends TestCase
@@ -110,5 +111,15 @@ class HelpersTest extends TestCase
     public function it_has_an_opencast_workflow_operation_percentage_step(): void
     {
         $this->assertEquals('24', opencastWorkflowOperationPercentage('Generating waveform'));
+    }
+
+    /** @test */
+    public function it_splits_a_full_name_to_first_and_last_name(): void
+    {
+        $this->assertEquals('Georgopoulos', str('Stefanos Georgopoulos')->after(' '));
+        $this->assertEquals('Stefanos', str('Stefanos Georgopoulos')->before(' '));
+
+        $this->assertEquals('van Heerden', str('Rick van Heerden')->after(' '));
+        $this->assertEquals('Rick', str('Rick van Heerden')->before(' '));
     }
 }

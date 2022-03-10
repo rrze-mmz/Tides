@@ -66,7 +66,7 @@ trait RecordsActivity
             'change_message' => $description,
             'action_flag'    => 1,
             'changes'        => $this->activityChanges(),
-            'user_real_name' => ($user?->getFullNameAttribute()) ?? 'CRONJOB'
+            'user_real_name' => ($user?->getFullNameAttribute()) ?? "CRONJOB"
         ]);
     }
 

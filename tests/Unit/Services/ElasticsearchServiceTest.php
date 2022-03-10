@@ -48,7 +48,6 @@ class ElasticsearchServiceTest extends TestCase
 
         $this->assertEquals($clip->title, $response->get('_source')['title']);
         $this->assertInstanceOf(Collection::class, $response);
-
     }
 
     protected function tearDown(): void

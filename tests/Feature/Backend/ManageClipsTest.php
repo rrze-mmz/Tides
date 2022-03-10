@@ -112,7 +112,7 @@ class ManageClipsTest extends TestCase
     {
         $this->signIn();
 
-        $this->post(route('clips.store'), $attributes = Clip::factory()->raw())->assertStatus(403);
+        $this->post(route('clips.store'), Clip::factory()->raw())->assertStatus(403);
     }
 
     /** @test */
@@ -214,6 +214,16 @@ class ManageClipsTest extends TestCase
         $clip = ClipFactory::create();
 
         $this->signInRole('admin');
+
+        $this->get($clip->adminPath())->assertStatus(200);
+    }
+
+    /** @test */
+    public function a_superadmin_can_edit_a_not_owned_clip(): void
+    {
+        $clip = ClipFactory::create();
+
+        $this->signInRole('superadmin');
 
         $this->get($clip->adminPath())->assertStatus(200);
     }

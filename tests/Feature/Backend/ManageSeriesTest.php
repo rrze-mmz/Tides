@@ -277,7 +277,7 @@ class ManageSeriesTest extends TestCase
     }
 
     /** @test */
-    public function an_admin_can_edit_an_not_owned_series(): void
+    public function an_admin_can_edit_a_not_owned_series(): void
     {
         $series = SeriesFactory::create();
 
@@ -293,9 +293,26 @@ class ManageSeriesTest extends TestCase
     }
 
     /** @test */
+    public function a_superadmin_can_edit_a_not_owned_series(): void
+    {
+        $series = SeriesFactory::create();
+
+        $this->mockHandler->append(
+            $this->mockHealthResponse(),
+            $this->mockSeriesRunningWorkflowsResponse($series, false),
+            $this->mockEventResponse($series, OpencastWorkflowState::STOPPED)
+        );
+
+        $this->signInRole('superadmin');
+
+        $this->get($series->adminPath())->assertStatus(200);
+    }
+
+    /** @test */
     public function it_has_an_add_clips_button(): void
     {
-        $this->get(route('series.edit', SeriesFactory::ownedBy($this->signInRole($this->role))->create()))->assertSee('Add new clip');
+        $this->get(route('series.edit', SeriesFactory::ownedBy($this->signInRole($this->role))->create()))
+            ->assertSee('Add new clip');
     }
 
     /** @test */

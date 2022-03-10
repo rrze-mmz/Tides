@@ -18,7 +18,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Tests\Setup\ClipFactory;
 use Tests\TestCase;
 
 class ClipTest extends TestCase

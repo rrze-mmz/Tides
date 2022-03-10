@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Backend;
 
 use App\Enums\OpencastWorkflowState;
 use App\Services\OpencastService;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\View\View;
 
 class DashboardController
@@ -13,9 +15,9 @@ class DashboardController
      * Show max 10 of user's series/clips and list dropzone files
      *
      * @param OpencastService $opencastService
-     * @return View
+     * @return Application|Factory|View
      */
-    public function __invoke(OpencastService $opencastService): View
+    public function __invoke(OpencastService $opencastService): Application|Factory|View
     {
         $opencastWorkflows = collect([]);
 
