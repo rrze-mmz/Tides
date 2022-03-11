@@ -46,7 +46,7 @@ class WowzaServiceTest extends TestCase
             'duration'           => 300,
             'width'              => 1920,
             'height'             => 1080,
-            'type'               => Content::Presenter->lower(),
+            'type'               => Content::PRESENTER(),
         ]);
 
         $this->wowzaService->createSmilFile($this->clip);
@@ -54,7 +54,7 @@ class WowzaServiceTest extends TestCase
         Storage::disk('videos')->assertExists(getClipStoragePath($this->clip) . '/presenter.smil');
         Storage::disk('videos')->assertMissing(getClipStoragePath($this->clip) . '/composite.smil');
 
-        $this->assertDatabaseHas('assets', ['type' => Content::Smil->lower(), 'original_file_name' => 'presenter.smil']);
+        $this->assertDatabaseHas('assets', ['type' => Content::SMIL(), 'original_file_name' => 'presenter.smil']);
     }
 
     /** @test */
@@ -69,7 +69,7 @@ class WowzaServiceTest extends TestCase
             'duration'           => 300,
             'width'              => 1920,
             'height'             => 1080,
-            'type'               => Content::Presentation->lower(),
+            'type'               => Content::PRESENTATION(),
         ]);
 
         $this->wowzaService->createSmilFile($this->clip);
@@ -77,7 +77,7 @@ class WowzaServiceTest extends TestCase
         Storage::disk('videos')->assertExists(getClipStoragePath($this->clip) . '/presentation.smil');
 
         $this->assertDatabaseHas('assets', [
-            'type'               => Content::Smil->lower(),
+            'type'               => Content::SMIL(),
             'original_file_name' => 'presentation.smil'
         ]);
     }
@@ -94,7 +94,7 @@ class WowzaServiceTest extends TestCase
             'duration'           => 300,
             'width'              => 1920,
             'height'             => 1080,
-            'type'               => Content::Composite->lower(),
+            'type'               => Content::COMPOSITE(),
         ]);
 
         $this->wowzaService->createSmilFile($this->clip);
@@ -102,7 +102,7 @@ class WowzaServiceTest extends TestCase
         Storage::disk('videos')->assertExists(getClipStoragePath($this->clip) . '/composite.smil');
 
         $this->assertDatabaseHas('assets', [
-            'type'               => Content::Smil->lower(),
+            'type'               => Content::SMIL(),
             'original_file_name' => 'composite.smil'
         ]);
     }
@@ -127,7 +127,7 @@ class WowzaServiceTest extends TestCase
             'duration'           => 300,
             'width'              => 1920,
             'height'             => 1080,
-            'type'               => Content::Presenter->lower(),
+            'type'               => Content::PRESENTER(),
         ]);
 
         $expectedArray = [

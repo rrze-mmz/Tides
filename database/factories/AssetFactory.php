@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\Content;
 use App\Models\Asset;
 use App\Models\Clip;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -32,7 +33,7 @@ class AssetFactory extends Factory
             'height'             => '1280',
             'duration'           => '720',
             'clip_id'            => Clip::factory(),
-            'type'               => 'video/mp4'
+            'type'               => Content::PRESENTER,
         ];
     }
 }

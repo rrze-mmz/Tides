@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\Content;
 use App\Models\Clip;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -33,6 +34,14 @@ function getClipStoragePath(Clip $clip): string
         '/' . str_pad(Carbon::createFromFormat('Y-m-d', $clip->created_at->format('Y-m-d'))
             ->day, 2, "0", STR_PAD_LEFT) . '/'
         . $clip->folder_id . '/';
+}
+
+function getClipSmilFile(Clip $clip): string
+{
+    return config('wowza.stream_url') .
+        getClipStoragePath($clip) .
+        $clip->getAssetsByType(Content::SMIL)->first()?->original_file_name .
+        '/playlist.m3u8';
 }
 
 

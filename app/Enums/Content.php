@@ -2,21 +2,17 @@
 
 namespace App\Enums;
 
-use Illuminate\Support\Str;
+use ArchTech\Enums\InvokableCases;
 
-enum Content: string
+enum Content: int
 {
-case Presenter = "presenter";
-case Presentation = "presentation";
-case Composite = "composite";
-case Audio = 'audio';
-case Slides = 'slides';
-case Cc = 'cc';
-case Smil = 'smil';
+    use InvokableCases;
 
-    //lowercase state's name
-    public function lower(): string
-    {
-        return Str::lower($this->name);
-    }
-    }
+    case PRESENTER = 1;
+    case PRESENTATION = 2;
+    case COMPOSITE = 3;
+    case AUDIO = 4;
+    case SLIDES = 5;
+    case CC = 6;
+    case SMIL = 7;
+}

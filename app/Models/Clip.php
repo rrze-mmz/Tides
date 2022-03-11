@@ -259,10 +259,10 @@ class Clip extends BaseModel
      * @param string $type
      * @return HasMany
      */
-    public function getAssetsByType(string $type): HasMany
+    public function getAssetsByType(Content $content): HasMany
     {
-        return $this->assets()->where(function ($q) use ($type) {
-            $q->where('type', Content::from(Str::lower($type)));
+        return $this->assets()->where(function ($q) use ($content) {
+            $q->where('type', $content());
         });
     }
 

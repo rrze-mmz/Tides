@@ -5,7 +5,7 @@
                 type="application/x-mpegURL"/>
     @elseif(Illuminate\Support\Str::contains($wowzaStatus['0'],'Wowza Streaming Engine'))
         <source
-            src="{{ config('wowza.stream_url').getClipStoragePath($clip).$clip->getAssetsByType('smil')->first()?->original_file_name.'/playlist.m3u8' }}"
+            src="{{ getClipSmilFile($clip) }}"
             type="application/x-mpegURL"/>
     @else
         <source src="{{ '/videos/'.$clip->assets->first()->path  }}"

@@ -3,6 +3,7 @@
 
 namespace Tests\Unit;
 
+use App\Enums\Content;
 use App\Models\Asset;
 use App\Models\Clip;
 use App\Models\Comment;
@@ -246,7 +247,7 @@ class ClipTest extends TestCase
     /** @test */
     public function it_fetches_assets_by_type(): void
     {
-        $this->assertInstanceOf(HasMany::class, $this->clip->getAssetsByType('presenter'));
+        $this->assertInstanceOf(HasMany::class, $this->clip->getAssetsByType(Content::PRESENTER));
     }
 
     /** @test */

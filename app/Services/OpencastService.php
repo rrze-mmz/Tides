@@ -192,7 +192,7 @@ class OpencastService
         try {
             $processed = $this->client->get('api/events', [
                 'query' => [
-                    'filter' => 'series:' . $seriesID . ',status:' . OpencastWorkflowState::SUCCEEDED->value,
+                    'filter' => 'series:' . $seriesID . ',status:' . OpencastWorkflowState::SUCCEEDED(),
                     'sort'   => 'start_date:ASC'
                 ]
             ]);
@@ -200,7 +200,7 @@ class OpencastService
                 'query' => [
                     'filter'
                            =>
-                        'series:' . $seriesID . ',status:' . OpencastWorkflowState::STOPPED->value,
+                        'series:' . $seriesID . ',status:' . OpencastWorkflowState::STOPPED(),
                     'sort' => 'start_date:ASC'
                 ]
             ]);
@@ -225,7 +225,7 @@ class OpencastService
             $this->response = $this->client->get('api/events', [
                 'query' => [
                     'filter' =>
-                        'series:' . $series->opencast_series_id . ',status:' . OpencastWorkflowState::FAILED->value,
+                        'series:' . $series->opencast_series_id . ',status:' . OpencastWorkflowState::FAILED(),
                     'sort'   => 'start_date:ASC'
                 ]
             ]);

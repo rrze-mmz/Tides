@@ -694,7 +694,7 @@ class ManageClipsTest extends TestCase
         $clip->addAsset([
             'disk'               => 'videos',
             'original_file_name' => 'camera.smil',
-            'type'               => Content::Smil->lower(),
+            'type'               => Content::SMIL(),
             'path'               => '/videos/camera.smil',
             'duration'           => '0',
             'width'              => '0',
@@ -712,7 +712,7 @@ class ManageClipsTest extends TestCase
         $clip->addAsset([
             'disk'               => 'videos',
             'original_file_name' => 'audio.mp3',
-            'type'               => Content::Audio->lower(),
+            'type'               => Content::AUDIO(),
             'path'               => '/videos/' . $clip->folder_id . '/audio.mp3',
             'duration'           => '120',
             'width'              => '0',

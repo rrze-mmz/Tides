@@ -74,7 +74,7 @@ class TransferAssetsJob implements ShouldQueue
                 'height'             => ($isVideo)
                     ? $ffmpeg->getVideoStream()->getDimensions()->getHeight()
                     : 0,
-                'type'               => ($isVideo) ? Content::Presenter->lower() : Content::Audio->lower(),
+                'type'               => ($isVideo) ? Content::PRESENTER() : Content::AUDIO(),
             ];
 
             $this->clip->addAsset($attributes);

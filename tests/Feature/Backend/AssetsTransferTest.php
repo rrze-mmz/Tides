@@ -118,8 +118,8 @@ class AssetsTransferTest extends TestCase
             ->assertSee($files->last()['name'])
             ->assertSee('presenter.smil');
 
-        $this->assertEquals(Content::Presenter->lower(), $clip->getAssetsByType('presenter')->first()->type);
-        $this->assertEquals(Content::Smil->lower(), $clip->getAssetsByType('smil')->first()->type);
+        $this->assertEquals(Content::PRESENTER(), $clip->getAssetsByType(Content::PRESENTER)->first()->type);
+        $this->assertEquals(Content::SMIL(), $clip->getAssetsByType(Content::SMIL)->first()->type);
     }
 
     /** @test */
@@ -270,7 +270,7 @@ class AssetsTransferTest extends TestCase
             $this->mockEventByEventID($opencastEventID, OpencastWorkflowState::SUCCEEDED, $archiveVersion),
             $this->mockEventAssets($videoHD_UID, $audioUID)
         );
-        
+
         $fakeStorage
             ->putFileAs(
                 '',

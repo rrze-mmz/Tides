@@ -4,6 +4,7 @@
 namespace Tests\Unit;
 
 use App\Models\Clip;
+use App\Services\WowzaService;
 use Facades\Tests\Setup\ClipFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
@@ -26,6 +27,20 @@ class HelpersTest extends TestCase
     public function it_fetches_a_clip_poster_image_when_poster_file_path_is_not_null(): void
     {
         $this->assertEquals('/thumbnails/1_poster.png', fetchClipPoster('1_poster.png'));
+    }
+
+    /** @test */
+    public function it_returns_clip_smil_file(): void
+    {
+        Storage::fake('videos');
+        $wowzaService = app(WowzaService::class);
+
+        $wowzaService->createSmilFile($clip = ClipFactory::withAssets(2)->create());
+
+        $this->assertEquals(
+            'http://172.17.0.2:1935/vod/content//2022/03/11/TIDES_ClipID_1/presenter.smil/playlist.m3u8',
+            getClipSmilFile($clip)
+        );
     }
 
     /** @test */

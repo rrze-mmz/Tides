@@ -46,11 +46,12 @@ class WowzaService
      */
     public function createSmilFile(Clip $clip): void
     {
+
         // select all clip video assets, iterate them and create an array for array to xml package
         if ($clip->assets->isNotEmpty()) {
-            $this->generateSmilFile($clip, Content::Presenter);
-            $this->generateSmilFile($clip, Content::Presentation);
-            $this->generateSmilFile($clip, Content::Composite);
+            $this->generateSmilFile($clip, Content::PRESENTER);
+            $this->generateSmilFile($clip, Content::PRESENTATION);
+            $this->generateSmilFile($clip, Content::COMPOSITE);
         } else {
             Log::info('Clip has no assets');
         }
@@ -61,7 +62,7 @@ class WowzaService
      */
     public function generateSmilFile(Clip $clip, Content $type)
     {
-        $assetsCollection = $clip->getAssetsByType($type->lower())->get();
+        $assetsCollection = $clip->getAssetsByType($type)->get();
         if ($assetsCollection->isNotEmpty()) {
             $xmlArray['body']['switch'] = $assetsCollection
                 ->sortByDesc('height')
@@ -77,8 +78,7 @@ class WowzaService
                 ]
             ], true, 'UTF-8', '1.0', []);
 
-
-            $original_file_name = $type->lower() . '.smil';
+            $original_file_name = str($type->name)->lower() . '.smil';
             //store the generated file to clip path
             Storage::disk('videos')
                 ->put(getClipStoragePath($clip) . '/' . $original_file_name, $xmlFile = $result->prettify()->toXml());
@@ -87,7 +87,7 @@ class WowzaService
             $clip->addAsset([
                 'disk'               => 'videos',
                 'original_file_name' => $original_file_name,
-                'type'               => Content::Smil->lower(),
+                'type'               => Content::SMIL(),
                 'path'               => getClipStoragePath($clip),
                 'duration'           => '0',
                 'width'              => '0',
@@ -95,7 +95,7 @@ class WowzaService
             ]);
             Log::info($xmlFile);
         } else {
-            Log::info('Assets not found with type' . $type->lower());
+            Log::info('Assets not found with type' . $type());
         }
     }
 
