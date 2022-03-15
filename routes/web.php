@@ -7,6 +7,7 @@ use App\Http\Controllers\Backend\ClipsController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\OpencastController;
 use App\Http\Controllers\Backend\PresentersController;
+use App\Http\Controllers\Backend\SeriesChaptersController;
 use App\Http\Controllers\Backend\SeriesClipsController;
 use App\Http\Controllers\Backend\SeriesController;
 use App\Http\Controllers\Backend\TriggerSmilFilesController;
@@ -129,6 +130,14 @@ Route::prefix('admin')->middleware(['auth', 'can:access-dashboard'])->group(func
         Route::post('/{series}/assignSeries/{clip}', 'assign')->name('series.clips.assign');
         Route::delete('/clip/removeSeries/{clip}', 'remove')->name('series.clips.remove');
     });
+
+    Route::controller(SeriesChaptersController::class)->prefix('/series')
+        ->middleware('can:edit,series')
+        ->group(function () {
+            //Create chapters for a certain series
+            Route::get('/{series}/chapters', 'index')->name('series.chapters.index');
+            Route::post('/{series}/chapters', 'store')->name('series.chapters.create');
+        });
 
 
     //Assets routes

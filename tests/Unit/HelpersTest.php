@@ -35,10 +35,10 @@ class HelpersTest extends TestCase
         Storage::fake('videos');
         $wowzaService = app(WowzaService::class);
 
-        $wowzaService->createSmilFile($clip = ClipFactory::withAssets(2)->create());
+        $wowzaService->createSmilFile($clip = ClipFactory::withAssets(2)->create(['created_at' => '01.01.2022']));
 
         $this->assertEquals(
-            'http://172.17.0.2:1935/vod/content//2022/03/11/TIDES_ClipID_1/presenter.smil/playlist.m3u8',
+            'http://172.17.0.2:1935/vod/content//2022/01/01/TIDES_ClipID_1/presenter.smil/playlist.m3u8',
             getClipSmilFile($clip)
         );
     }
@@ -126,15 +126,5 @@ class HelpersTest extends TestCase
     public function it_has_an_opencast_workflow_operation_percentage_step(): void
     {
         $this->assertEquals('24', opencastWorkflowOperationPercentage('Generating waveform'));
-    }
-
-    /** @test */
-    public function it_splits_a_full_name_to_first_and_last_name(): void
-    {
-        $this->assertEquals('Georgopoulos', str('Stefanos Georgopoulos')->after(' '));
-        $this->assertEquals('Stefanos', str('Stefanos Georgopoulos')->before(' '));
-
-        $this->assertEquals('van Heerden', str('Rick van Heerden')->after(' '));
-        $this->assertEquals('Rick', str('Rick van Heerden')->before(' '));
     }
 }

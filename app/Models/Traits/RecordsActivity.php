@@ -60,7 +60,7 @@ trait RecordsActivity
         $user = (auth()->user()) ?? $this->owner;
 
         Activity::create([
-            'user_id'        => ($user?->id) ?? 'CRONJOB',
+            'user_id'        => ($user?->id) ?? 0,
             'content_type'   => lcfirst(class_basename(static::class)),
             'object_id'      => $this->id,
             'change_message' => $description,

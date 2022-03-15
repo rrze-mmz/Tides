@@ -4,7 +4,7 @@
     </header>
     <div class="flex">
         <div class="mx-auto">
-            {{$series->owner->getFullNameAttribute()}}
+            {{$series->owner?->getFullNameAttribute()}}
         </div>
     </div>
 </div>

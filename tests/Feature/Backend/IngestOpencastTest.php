@@ -35,7 +35,6 @@ class IngestOpencastTest extends TestCase
         $this->opencastService = app(OpencastService::class);
 
         $mockHandler->append($this->mockHealthResponse());
-
     }
 
     /** @test */

@@ -7,6 +7,7 @@ use App\Models\Series;
 use App\Models\User;
 use Facades\Tests\Setup\SeriesFactory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -59,9 +60,13 @@ class SeriesTest extends TestCase
     /** @test */
     public function it_has_many_clips(): void
     {
-        Clip::factory(2)->create(['series_id' => $this->series->id]);
+        $this->assertInstanceOf(HasMany::class, $this->series->clips());
+    }
 
-        $this->assertEquals(2, $this->series->clips()->count());
+    /** @test */
+    public function it_has_many_chapters(): void
+    {
+        $this->assertInstanceOf(HasMany::class, $this->series->chapters());
     }
 
     /** @test */

@@ -19,7 +19,7 @@ class ApiTest extends TestCase
         Tag::factory()->create(['name' => 'algebra']);
 
         $response = $this->get(route('api.tags') . '?query=algebra');
-        
+
         $response->assertJson([
             ["id" => 1, "name" => 'algebra']
         ]);

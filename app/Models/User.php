@@ -142,7 +142,9 @@ class User extends Authenticatable
     }
 
     /**
-     * Send a password reset email to the user
+     * Override the default mail template
+     * and send a custom password reset email
+     * to the user
      */
     public function sendPasswordResetNotification($token)
     {
