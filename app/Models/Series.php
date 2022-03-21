@@ -96,7 +96,7 @@ class Series extends BaseModel
     /**
      * A series can have many chapters
      *
-     * @return HasMan
+     * @return HasMany
      */
     public function chapters(): HasMany
     {
@@ -195,8 +195,23 @@ class Series extends BaseModel
         });
     }
 
+    /**
+     * @param $query
+     * @return mixed
+     */
     public function scopeHasOpencastSeriesID($query): mixed
     {
         return $query->Where('opencast_series_id', '<>', '');
+    }
+
+    /**
+     * @param Chapter|null $chapter
+     * @return mixed
+     */
+    public function clipsWithoutChapter(Chapter $chapter = null): mixed
+    {
+        return $this->clips->filter(function ($clip) use ($chapter) {
+            return $clip->chapter_id !== $chapter->id || $clip->chapter_id === null;
+        });
     }
 }

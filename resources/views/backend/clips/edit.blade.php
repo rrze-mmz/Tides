@@ -104,7 +104,7 @@
                 <x-form.select2-multiple field-name="presenters"
                                          :model="$clip"
                                          label="Presenters"
-                                         select-class="select2-tides-presenters"
+                                         select-class="select2-tides"
                                          :items="$clip->presenters"/>
 
                 <x-form.select2-multiple field-name="tags"

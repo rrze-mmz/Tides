@@ -13,6 +13,7 @@ class SeriesPolicy
     /**
      * Check whether the current user can create a series.
      *
+     * @param User $user
      * @return bool
      */
     public function create(User $user): bool

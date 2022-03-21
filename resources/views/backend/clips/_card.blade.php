@@ -24,7 +24,7 @@
             </div>
             <div class="text-sm">
                 <p class="italic text-gray-900">
-                    {{ Illuminate\Support\Carbon::createFromFormat('Y-m-d H:i:s', $clip->recording_date)->format('Y-m-d') }}
+                    {{ $clip->recording_date }}
                 </p>
             </div>
         </div>
@@ -51,7 +51,7 @@
             </div>
             <div class="text-sm">
                 <p class="italic text-gray-900">
-                    {{ $clip->owner->getFullNameAttribute() }}
+                    {{ $clip->owner?->getFullNameAttribute() }}
                 </p>
             </div>
         </div>

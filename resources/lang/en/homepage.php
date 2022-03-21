@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'Start by creating something new' => 'Start by creating something new',
+    'Start by creating something new' => 'Videoportal homepage',
 
     'series' => [
         'Recently added!' => 'Latest Videoseries',

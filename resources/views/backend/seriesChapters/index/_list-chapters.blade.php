@@ -8,7 +8,8 @@
             <input type="number" min="0" name="episode" class="flex-none w-20" value="{{$chapter->position}}">
             <input type="text" name="title" class="grow w-1/2" value="{{$chapter->title}}">
             <div class="mt-1">
-                <x-form.button :link="$link=false" type="submit" text="Edit chapter"/>
+                <x-form.button :link="route('series.chapters.edit',[$series,$chapter])" type="submit"
+                               text="Edit chapter"/>
             </div>
             <div class="mt-1">
                 <x-form.button :link="$link=false" color="green" type="submit" text="Set chapter as default"/>

@@ -131,12 +131,14 @@ Route::prefix('admin')->middleware(['auth', 'can:access-dashboard'])->group(func
         Route::delete('/clip/removeSeries/{clip}', 'remove')->name('series.clips.remove');
     });
 
+    //Chapter routes for a certain series
     Route::controller(SeriesChaptersController::class)->prefix('/series')
         ->middleware('can:edit,series')
         ->group(function () {
-            //Create chapters for a certain series
             Route::get('/{series}/chapters', 'index')->name('series.chapters.index');
             Route::post('/{series}/chapters', 'store')->name('series.chapters.create');
+            Route::get('/{series}/chapters/{chapter}', 'edit')->name('series.chapters.edit');
+            Route::patch('/{series}/chapters/{chapter}', 'update')->name('series.chapters.update');
         });
 
 
