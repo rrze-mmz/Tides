@@ -9,5 +9,4 @@
         Clips
     </div>
     <x-list-clips :series="$series" dashboardAction="@can('edit-series', $series)" :reorder="true"/>
-
 @endsection

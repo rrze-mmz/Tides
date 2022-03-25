@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Events\AssetDeleted;
+use App\Events\ChapterDeleted;
 use App\Listeners\DeleteAssetFile;
+use App\Listeners\UpdateClipChapter;
 use App\Models\Clip;
 use App\Models\Presenter;
 use App\Models\Series;
@@ -24,12 +26,15 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        Registered::class   => [
+        Registered::class     => [
             SendEmailVerificationNotification::class,
         ],
-        AssetDeleted::class => [
+        AssetDeleted::class   => [
             DeleteAssetFile::class
         ],
+        ChapterDeleted::class => [
+            UpdateClipChapter::class
+        ]
     ];
 
     /**

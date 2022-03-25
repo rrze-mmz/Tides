@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Models\Chapter;
 use App\Models\Series;
-use Carbon\CarbonInterval;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -35,13 +34,17 @@ class SeriesChaptersController extends Controller
             'title'    => ['required', 'string']
         ]);
 
+        if ($series->chapters()->count() == 0) {
+            $validated['default'] = true;
+        }
+
         $series->chapters()->create($validated);
 
         return to_route('series.chapters.index', $series);
     }
 
     /**
-     * @param Series $series
+     * @param Series $serie
      * @param Chapter $chapter
      * @return Factory|View|Application
      */
@@ -52,18 +55,70 @@ class SeriesChaptersController extends Controller
 
     /**
      * @param Series $series
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function update(Series $series, Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'chapters'            => ['required', 'array'],
+            'chapters.*.position' => ['integer', 'required', 'min:0'],
+            'chapters.*.title'    => ['string', 'required'],
+        ]);
+
+        $chapters = collect($validated['chapters']);
+
+        $chapters->each(function ($ch, $id) {
+            $chapter = Chapter::find($id);
+
+            $chapter->position = $ch['position'];
+            $chapter->title = $ch['title'];
+
+            $chapter->save();
+        });
+
+        return to_route('series.chapters.index', $series);
+    }
+
+    public function destroy(Series $series, Chapter $chapter): RedirectResponse
+    {
+        $chapter->delete();
+
+        return to_route('series.chapters.index', $series);
+    }
+
+    /**
+     * @param Series $series
      * @param Chapter $chapter
      * @param Request $request
      * @return RedirectResponse
      */
-    public function update(Series $series, Chapter $chapter, Request $request): RedirectResponse
+    public function addClips(Series $series, Chapter $chapter, Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'ids'   => ['required', 'array'],
             'ids.*' => ['integer', 'nullable']
         ]);
 
-        $chapter->addClips($validated);
+        $chapter->addClips($validated['ids']);
+
+        return to_route('series.chapters.edit', [$series, $chapter]);
+    }
+
+    /**
+     * @param Series $series
+     * @param Chapter $chapter
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function removeClips(Series $series, Chapter $chapter, Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'ids'   => ['required', 'array'],
+            'ids.*' => ['integer', 'nullable']
+        ]);
+
+        $chapter->removeClips($validated['ids']);
 
         return to_route('series.chapters.edit', [$series, $chapter]);
     }

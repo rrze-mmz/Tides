@@ -256,7 +256,7 @@ class Clip extends BaseModel
     /**
      * Fetch all assets for a clip by type
      *
-     * @param string $type
+     * @param Content $content
      * @return HasMany
      */
     public function getAssetsByType(Content $content): HasMany

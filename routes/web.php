@@ -137,8 +137,12 @@ Route::prefix('admin')->middleware(['auth', 'can:access-dashboard'])->group(func
         ->group(function () {
             Route::get('/{series}/chapters', 'index')->name('series.chapters.index');
             Route::post('/{series}/chapters', 'store')->name('series.chapters.create');
+            Route::put('/{series}/chapters/', 'update')->name('series.chapters.update');
             Route::get('/{series}/chapters/{chapter}', 'edit')->name('series.chapters.edit');
-            Route::patch('/{series}/chapters/{chapter}', 'update')->name('series.chapters.update');
+            Route::patch('/{series}/chapters/{chapter}/addClips', 'addClips')->name('series.chapters.addClips');
+            Route::patch('/{series}/chapters/{chapter}/removeClips', 'removeClips')
+                ->name('series.chapters.removeClips');
+            Route::delete('/{series}/chapters/{chapter}', 'destroy')->name('series.chapters.delete');
         });
 
 

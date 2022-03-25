@@ -26,9 +26,9 @@ class ManageChapterTest extends TestCase
     }
 
     /** @test */
-    public function it_shows_an_add_chapter_button_on_series_edit_page(): void
+    public function it_shows_a_manage_chapters_button_on_series_edit_page(): void
     {
-        $this->get(route('series.edit', $this->series))->assertSee('Add series chapter');
+        $this->get(route('series.edit', $this->series))->assertSee('Manage chapters');
     }
 
     /** @test */
@@ -139,7 +139,7 @@ class ManageChapterTest extends TestCase
             'ids' => '62',
         ];
 
-        $this->patch(route('series.chapters.update', [
+        $this->patch(route('series.chapters.addClips', [
             $this->series,
             $this->chapter]), $attributes)->assertSessionHasErrors('ids');
     }
@@ -151,10 +151,82 @@ class ManageChapterTest extends TestCase
             'ids' => [$this->series->clips()->first()->id],
         ];
 
-        $this->patch(route('series.chapters.update', [
+        $this->patch(route('series.chapters.addClips', [
             $this->series,
             $this->chapter]), $attributes);
 
         $this->assertEquals(1, $this->chapter->clips()->count());
+    }
+
+    /** @test */
+    public function it_requires_an_array_of_clip_ids_to_remove_them_from_a_chapter(): void
+    {
+        $attributes = [
+            'ids' => '62',
+        ];
+
+        $this->patch(route('series.chapters.removeClips', [
+            $this->series,
+            $this->chapter]), $attributes)->assertSessionHasErrors('ids');
+    }
+
+    /** @test */
+    public function it_can_remove_a_clip_from_a_chapter(): void
+    {
+        $this->assertEquals(0, $this->chapter->clips()->count());
+
+        $clip = $this->series->clips()->first();
+        $clip->chapter_id = $this->chapter->id;
+        $clip->save();
+
+        $this->assertEquals(1, $this->chapter->clips()->count());
+
+        $attributes = [
+            'ids' => [$this->series->clips()->first()->id,]
+        ];
+
+        $this->patch(route('series.chapters.removeClips', [$this->series, $this->chapter]), $attributes);
+
+        $this->assertEquals(0, $this->chapter->clips()->count());
+    }
+
+    /** @test */
+    public function it_can_edit_chapters(): void
+    {
+        $attributes = [
+            'chapters' => [
+                $this->chapter->id => [
+                    'position' => '3',
+                    'title'    => 'changed'
+                ],
+            ]
+        ];
+
+        $this->put(route('series.chapters.update', $this->series), $attributes);
+        $this->chapter->refresh();
+
+        $this->assertEquals('changed', $this->chapter->title);
+    }
+
+    /** @test */
+    public function it_can_delete_a_chapter(): void
+    {
+        $this->delete(route('series.chapters.delete', [$this->series, $this->chapter]));
+
+        $this->assertDatabaseMissing('chapters', ['id' => $this->chapter->id]);
+    }
+
+    /** @test */
+    public function it_sets_clip_chapter_id_to_null_if_chapter_is_deleted(): void
+    {
+        $clip = $this->series->clips()->first();
+        $clip->chapter_id = $this->chapter->id;
+        $clip->save();
+
+        $this->delete(route('series.chapters.delete', [$this->series, $this->chapter]));
+
+        $clip->refresh();
+        
+        $this->assertNull($this->series->clips()->first()->chapter_id);
     }
 }

@@ -6,7 +6,7 @@
     </div>
     <ul class="flex flex-col">
         @forelse($series as $singleSeries)
-            <li class="w-full p-4 bg-white my-2 rounded ">
+            <li class="w-full p-4 bg-white my-2 rounded">
                 @include('backend.series._card',['series'=> $singleSeries,'action'=>'assignClip'])
             </li>
         @empty
