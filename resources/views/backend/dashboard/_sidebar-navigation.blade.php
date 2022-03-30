@@ -30,6 +30,12 @@
         @can('menu-dashboard-admin')
             <li>
                 <a
+                    href="{{ route('collections.index') }}"
+                    class="block mb-4 text-lg  {{ setActiveLink(route('collections.index')) }} font-bold hover:text-gray-200"
+                >Collections</a>
+            </li>
+            <li>
+                <a
                     href="{{ route('presenters.index') }}"
                     class="block mb-4 text-lg  {{ setActiveLink(route('presenters.index')) }} font-bold hover:text-gray-200"
                 >Presenters</a>

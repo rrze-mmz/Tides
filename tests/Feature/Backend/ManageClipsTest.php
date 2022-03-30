@@ -170,6 +170,7 @@ class ManageClipsTest extends TestCase
     /** @test */
     public function a_moderator_can_view_the_edit_clip_form_add_all_form_fields(): void
     {
+        $this->withoutExceptionHandling();
         $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
 
         $this->get($clip->adminPath())->assertStatus(200);

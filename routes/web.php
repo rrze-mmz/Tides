@@ -4,6 +4,7 @@ use App\Http\Controllers\Backend\ActivitiesController;
 use App\Http\Controllers\Backend\AssetsController;
 use App\Http\Controllers\Backend\AssetsTransferController;
 use App\Http\Controllers\Backend\ClipsController;
+use App\Http\Controllers\Backend\CollectionsController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\OpencastController;
 use App\Http\Controllers\Backend\PresentersController;
@@ -163,6 +164,9 @@ Route::prefix('admin')->middleware(['auth', 'can:access-dashboard'])->group(func
     Route::middleware(['user.admin'])->group(function () {
         Route::resource('users', UsersController::class)->except(['show']);
         Route::resource('presenters', PresentersController::class)->except(['show']);
+
+        //Collections administration
+        Route::resource('collections', CollectionsController::class)->except(['show']);
     });
 });
 

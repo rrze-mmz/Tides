@@ -151,7 +151,8 @@
                                         @method('DELETE')
                                         <x-form.button :link="$link=false"
                                                        type="delete"
-                                                       text="Delete" color="red"
+                                                       text="Delete"
+                                                       color="red"
                                         />
                                     </form>
                                 </div>

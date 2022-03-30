@@ -14,8 +14,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
+use App\Models\Collection as TCollection;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 /**
  * @method static first()
@@ -68,7 +68,7 @@ class Clip extends BaseModel
     }
 
     /**
-     * Route key should be slug instead of id
+     * Route key should be slugged instead of id
      *
      * @return string
      */
@@ -110,6 +110,11 @@ class Clip extends BaseModel
     public function latestAsset(): HasOne
     {
         return $this->hasOne(Asset::class)->latestOfMany();
+    }
+
+    public function collections(): BelongsToMany
+    {
+        return $this->belongsToMany(TCollection::class);
     }
 
     /**

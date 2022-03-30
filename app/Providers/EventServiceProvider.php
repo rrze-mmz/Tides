@@ -7,10 +7,12 @@ use App\Events\ChapterDeleted;
 use App\Listeners\DeleteAssetFile;
 use App\Listeners\UpdateClipChapter;
 use App\Models\Clip;
+use App\Models\Collection;
 use App\Models\Presenter;
 use App\Models\Series;
 use App\Models\User;
 use App\Observers\ClipObserver;
+use App\Observers\CollectionObserver;
 use App\Observers\PresenterObserver;
 use App\Observers\SeriesObserver;
 use App\Observers\UserObserver;
@@ -48,5 +50,6 @@ class EventServiceProvider extends ServiceProvider
         Clip::observe(ClipObserver::class);
         User::observe(UserObserver::class);
         Presenter::observe(PresenterObserver::class);
+        Collection::observe(CollectionObserver::class);
     }
 }

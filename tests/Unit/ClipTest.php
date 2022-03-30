@@ -12,6 +12,7 @@ use App\Models\User;
 use Facades\Tests\Setup\FileFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
@@ -90,6 +91,12 @@ class ClipTest extends TestCase
         Asset::factory(2)->create(['clip_id' => $this->clip->id]);
 
         $this->assertEquals(2, $this->clip->assets()->count());
+    }
+
+    /** @test */
+    public function it_has_many_collections(): void
+    {
+        $this->assertInstanceOf(BelongsToMany::class, $this->clip->collections());
     }
 
     /** @test */

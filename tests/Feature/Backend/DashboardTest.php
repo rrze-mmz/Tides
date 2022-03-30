@@ -129,7 +129,9 @@ class DashboardTest extends TestCase
     {
         $this->signInRole('admin');
 
-        $this->get(route('dashboard'))->assertSee('Opencast')
+        $this->get(route('dashboard'))
+            ->assertSee('Opencast')
+            ->assertSee('Collections')
             ->assertSee('Users');
     }
 
