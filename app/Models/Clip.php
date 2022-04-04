@@ -228,7 +228,7 @@ class Clip extends BaseModel
     {
         /*
          * Check for tags collection from post request.
-         * The closure returns a tag model, where the model is either selected or created.
+         * The closure returnsa tag model, where the model is either selected or created.
          * The tag model is synchronized with the clip tags.
          * In case the collection is empty assumed that clip has no tags and delete them
          */

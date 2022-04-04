@@ -105,7 +105,8 @@ class CollectionTest extends TestCase
             ->assertSee('title')
             ->assertSee('description')
             ->assertSee('is_public')
-            ->assertViewIs('backend.collections.edit');
+            ->assertViewIs('backend.collections.edit')
+            ->assertSee('Toggle clips');
     }
 
     /** @test */

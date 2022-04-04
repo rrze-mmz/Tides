@@ -33,7 +33,7 @@ class StoreCollectionRequest extends FormRequest
         return [
             'position'    => ['required', 'integer'],
             'title'       => ['required', 'string'],
-            'description' => ['nullable', 'max:300'],
+            'description' => ['nullable', 'max:1000'],
             'is_public'   => ['required', 'boolean']
         ];
     }

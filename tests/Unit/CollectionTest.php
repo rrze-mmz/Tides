@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Models\Clip;
 use App\Models\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -25,5 +26,18 @@ class CollectionTest extends TestCase
     {
         $this->assertInstanceOf(BelongsToMany::class, $this->collection->clips());
     }
-}
 
+    /** @test */
+    public function it_can_toggle_clips(): void
+    {
+        Clip::factory(2)->create();
+
+        $this->collection->toggleClips(collect(['1', '2']));
+
+        $this->assertEquals(2, $this->collection->clips()->count());
+
+        $this->collection->toggleClips(collect(['1', '2']));
+
+        $this->assertEquals(0, $this->collection->clips()->count());
+    }
+}

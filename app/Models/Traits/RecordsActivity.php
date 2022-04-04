@@ -18,7 +18,7 @@ trait RecordsActivity
     /**
      * Boot the trait
      */
-    public static function bootRecordsActivity()
+    public static function bootRecordsActivity(): void
     {
         foreach (self::recordableEvents() as $event) {
             static::$event(function ($model) use ($event) {
@@ -55,7 +55,7 @@ trait RecordsActivity
      *
      * @param $description
      */
-    public function recordActivity($description)
+    public function recordActivity($description): void
     {
         $user = (auth()->user()) ?? $this->owner;
 
@@ -75,7 +75,7 @@ trait RecordsActivity
      *
      * @return mixed
      */
-    public function activities()
+    public function activities(): mixed
     {
         return Activity::where('object_id', $this->id)->where('content_type', lcfirst(class_basename(static::class)));
     }

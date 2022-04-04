@@ -4,14 +4,14 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ApiRequest extends FormRequest
+class StoreClipIdsRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize(): bool
+    public function authorize()
     {
         return true;
     }
@@ -21,10 +21,11 @@ class ApiRequest extends FormRequest
      *
      * @return array
      */
-    public function rules(): array
+    public function rules()
     {
         return [
-            'query' => 'required|string'
+            'ids'   => ['required', 'array'],
+            'ids.*' => ['integer', 'nullable']
         ];
     }
 }

@@ -3,12 +3,13 @@
 use App\Http\Controllers\Backend\ActivitiesController;
 use App\Http\Controllers\Backend\AssetsController;
 use App\Http\Controllers\Backend\AssetsTransferController;
+use App\Http\Controllers\Backend\ClipsCollectionsController;
 use App\Http\Controllers\Backend\ClipsController;
 use App\Http\Controllers\Backend\CollectionsController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\OpencastController;
 use App\Http\Controllers\Backend\PresentersController;
-use App\Http\Controllers\Backend\SeriesChaptersController;
+use App\Http\Controllers\Backend\ChaptersController;
 use App\Http\Controllers\Backend\SeriesClipsController;
 use App\Http\Controllers\Backend\SeriesController;
 use App\Http\Controllers\Backend\TriggerSmilFilesController;
@@ -60,6 +61,7 @@ Route::get('/protector/link/clip/{clip:id}/{token}/{time}/{client}', function (C
     ->name('clip.lms.link');
 
 Route::controller(ApiController::class)->prefix('/api')->group(function () {
+    Route::get('/clips', 'clips')->name('api.clips');
     Route::get('/tags', 'tags')->name('api.tags');
     Route::get('/presenters', 'presenters')->name('api.presenters');
     Route::get('/organizations', 'organizations')->name('api.organizations');
@@ -133,7 +135,7 @@ Route::prefix('admin')->middleware(['auth', 'can:access-dashboard'])->group(func
     });
 
     //Chapter routes for a certain series
-    Route::controller(SeriesChaptersController::class)->prefix('/series')
+    Route::controller(ChaptersController::class)->prefix('/series')
         ->middleware('can:edit,series')
         ->group(function () {
             Route::get('/{series}/chapters', 'index')->name('series.chapters.index');
@@ -167,6 +169,8 @@ Route::prefix('admin')->middleware(['auth', 'can:access-dashboard'])->group(func
 
         //Collections administration
         Route::resource('collections', CollectionsController::class)->except(['show']);
+        Route::post('collections/{collection}/toggleClips', ClipsCollectionsController::class)
+            ->name('collections.toggleClips');
     });
 });
 

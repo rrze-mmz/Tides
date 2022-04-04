@@ -3,6 +3,7 @@
 
 namespace Tests\Feature\Frontend;
 
+use App\Models\Clip;
 use App\Models\Organization;
 use App\Models\Presenter;
 use App\Models\Tag;
@@ -12,6 +13,26 @@ use Tests\TestCase;
 class ApiTest extends TestCase
 {
     use RefreshDatabase;
+
+    /** @test */
+    public function it_search_clips(): void
+    {
+        $testClip = Clip::factory()->create(['title' => 'test clip']);
+
+        $tidesClip = Clip::factory()->create(['title' => 'tides clip']);
+
+        $response = $this->get(route('api.clips') . '?query=test')->assertOk();
+
+        $response->assertJson([
+            ["id" => 1, "name" => $testClip->title]
+        ]);
+
+        $response = $this->get(route('api.clips') . '?query=clip')->assertOk();
+        $response->assertJson([
+            ["id" => 1, "name" => $testClip->title],
+            ["id" => 2, "name" => $tidesClip->title]
+        ]);
+    }
 
     /** @test */
     public function it_search_tags(): void

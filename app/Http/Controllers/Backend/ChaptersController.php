@@ -11,7 +11,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
-class SeriesChaptersController extends Controller
+class ChaptersController extends Controller
 {
     /**
      * @param Series $series
@@ -44,7 +44,7 @@ class SeriesChaptersController extends Controller
     }
 
     /**
-     * @param Series $serie
+     * @param Series $series
      * @param Chapter $chapter
      * @return Factory|View|Application
      */

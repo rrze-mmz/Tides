@@ -27,6 +27,9 @@
                                     Description
                                 </th>
                                 <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                    Clips
+                                </th>
+                                <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4 text-left">
                                     Is public
                                 </th>
                                 <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4 text-left">
@@ -47,6 +50,9 @@
                                         {{ str()->of($collection->description)->limit(50,' (...)') }}
                                     </td>
                                     <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                        {{ $collection->clips()->count() }}
+                                    </td>
+                                    <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                                         {{$collection->is_public}}
                                     </td>
                                     <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
@@ -63,7 +69,7 @@
                                                 <x-form.button :link="$link=false"
                                                                type="delete"
                                                                color="red"
-                                                               text="delete"
+                                                               text="Delete Collection"
                                                 />
                                             </form>
                                         </div>

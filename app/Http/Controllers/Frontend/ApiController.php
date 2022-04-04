@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ApiRequest;
+use App\Models\Clip;
 use App\Models\Organization;
 use App\Models\Presenter;
 use App\Models\Tag;
@@ -12,6 +13,20 @@ use Illuminate\Http\JsonResponse;
 
 class ApiController extends Controller
 {
+    public function clips(ApiRequest $request): JsonResponse
+    {
+        $searchTerm = str($request->validated(['query']))->lower();
+
+        $clips = Clip::whereRaw('lower(title)  like (?)', ["%{$searchTerm}%"])->get();
+
+        return response()->json($clips->map(function ($clip) {
+            return [
+                'id'   => $clip->id,
+                'name' => $clip->title,
+            ];
+        }));
+    }
+
     /**
      * Tags json response for select2 component
      *
