@@ -24,7 +24,7 @@ class SeriesController extends Controller
     {
         return view('backend.series.index', [
             'series' =>
-                (auth()->user()->isAdmin())
+                (auth()->user()->can('index-all-series'))
                     ? Series::orderByDesc('updated_at')->paginate(12)
                     : auth()->user()->series()->orderByDesc('updated_at')->paginate(12)
         ]);
@@ -87,12 +87,16 @@ class SeriesController extends Controller
      * @param UpdateSeriesRequest $request
      * @param OpencastService $opencastService
      * @return RedirectResponse
+     * @throws AuthorizationException
      */
     public function update(
         Series              $series,
         UpdateSeriesRequest $request,
         OpencastService     $opencastService
-    ): RedirectResponse {
+    ): RedirectResponse
+    {
+        $this->authorize('update-series', $series);
+
         $validated = $request->validated();
         if (is_null($series->opencast_series_id)) {
             $opencastSeriesId = $opencastService->createSeries($series);
@@ -114,7 +118,7 @@ class SeriesController extends Controller
      */
     public function destroy(Series $series): RedirectResponse
     {
-        $this->authorize('edit', $series);
+        $this->authorize('delete', $series);
 
         $series->delete();
 

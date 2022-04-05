@@ -36,7 +36,7 @@ class OpencastTest extends TestCase
         $this->mockHandler->append(new Response(200, [], json_encode([])));
 
         $this->get(route('opencast.status'))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertSee('Opencast connection is not available');
     }
 
@@ -47,6 +47,6 @@ class OpencastTest extends TestCase
 
         $this->mockHandler->append($this->mockHealthResponse());
 
-        $this->get(route('opencast.status'))->assertStatus(200);
+        $this->get(route('opencast.status'))->assertOk();
     }
 }

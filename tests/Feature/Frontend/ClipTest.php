@@ -58,7 +58,7 @@ class ClipTest extends TestCase
     {
         $this->mockHandler->append($this->mockCheckApiConnection());
 
-        $this->get('/clips/' . $this->clip->id)->assertStatus(200)->assertSee($this->clip->title);
+        $this->get('/clips/' . $this->clip->id)->assertOk()->assertSee($this->clip->title);
     }
 
     /** @test */
@@ -70,7 +70,7 @@ class ClipTest extends TestCase
 
         $this->clip->save();
 
-        $this->get($this->clip->path())->assertStatus(403);
+        $this->get($this->clip->path())->assertForbidden();
     }
 
     /** @test */
@@ -80,7 +80,7 @@ class ClipTest extends TestCase
 
         $emptyClip = ClipFactory::withAssets(0)->create();
 
-        $this->get(route('frontend.clips.show', $emptyClip))->assertStatus(403);
+        $this->get(route('frontend.clips.show', $emptyClip))->assertForbidden();
     }
 
     /** @test */
@@ -92,7 +92,7 @@ class ClipTest extends TestCase
 
         $this->signIn();
 
-        $this->get(route('frontend.clips.show', $emptyClip))->assertStatus(403);
+        $this->get(route('frontend.clips.show', $emptyClip))->assertForbidden();
     }
 
     /** @test */
@@ -104,7 +104,7 @@ class ClipTest extends TestCase
 
         $this->actingAs($emptyClip->owner);
 
-        $this->get(route('frontend.clips.show', $emptyClip))->assertStatus(200);
+        $this->get(route('frontend.clips.show', $emptyClip))->assertOk();
     }
 
     /** @test */
@@ -116,7 +116,7 @@ class ClipTest extends TestCase
 
         $this->signInRole('admin');
 
-        $this->get(route('frontend.clips.show', $emptyClip))->assertStatus(200);
+        $this->get(route('frontend.clips.show', $emptyClip))->assertOk();
     }
 
     /** @test */
@@ -131,7 +131,7 @@ class ClipTest extends TestCase
 
         $this->clip->save();
 
-        $this->get($this->clip->path())->assertStatus(200);
+        $this->get($this->clip->path())->assertOk();
     }
 
     /** @test */
@@ -145,7 +145,7 @@ class ClipTest extends TestCase
 
         $this->clip->save();
 
-        $this->get($this->clip->path())->assertStatus(200);
+        $this->get($this->clip->path())->assertOk();
     }
 
     /** @test */
@@ -157,7 +157,7 @@ class ClipTest extends TestCase
 
         $this->clip->save();
 
-        $this->get($this->clip->path())->assertStatus(403);
+        $this->get($this->clip->path())->assertForbidden();
     }
 
     /** @test */
@@ -174,7 +174,7 @@ class ClipTest extends TestCase
 
         $this->clip->save();
 
-        $this->get($this->clip->path())->assertStatus(200);
+        $this->get($this->clip->path())->assertOk();
     }
 
     /** @test */

@@ -142,6 +142,15 @@ class User extends Authenticatable
     }
 
     /**
+     * Check whether the current user is an assistant
+     * @return bool
+     */
+    public function isAssistant(): bool
+    {
+        return $this->hasRole('assistant');
+    }
+
+    /**
      * Override the default mail template
      * and send a custom password reset email
      * to the user

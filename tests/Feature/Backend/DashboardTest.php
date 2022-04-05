@@ -39,7 +39,7 @@ class DashboardTest extends TestCase
     {
         $this->signIn();
 
-        $this->get(route('dashboard'))->assertStatus(403);
+        $this->get(route('dashboard'))->assertForbidden();
     }
 
     /** @test */
@@ -48,7 +48,7 @@ class DashboardTest extends TestCase
         $this->signInRole($this->role);
 
         $this->get('admin/dashboard')
-            ->assertStatus(200)
+            ->assertOk()
             ->assertViewIs('backend.dashboard.index');
     }
 
@@ -146,7 +146,6 @@ class DashboardTest extends TestCase
     /** @test */
     public function it_show_sidebar_menu_items_for_moderators()
     {
-        $this->withoutExceptionHandling();
         $this->signInRole($this->role);
 
         $this->get(route('dashboard'))

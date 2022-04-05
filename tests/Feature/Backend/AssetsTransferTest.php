@@ -53,7 +53,7 @@ class AssetsTransferTest extends TestCase
             'admin.clips.dropzone.listFiles',
             ClipFactory::ownedBy($this->signInRole($this->role))->create()
         ))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertViewIs('backend.clips.dropzone.listFiles');
     }
 
@@ -62,7 +62,7 @@ class AssetsTransferTest extends TestCase
     {
         $this->signInRole($this->role);
 
-        $this->get(route('admin.clips.dropzone.listFiles', ClipFactory::create()))->assertStatus(403);
+        $this->get(route('admin.clips.dropzone.listFiles', ClipFactory::create()))->assertForbidden();
     }
 
     /** @test */
@@ -73,7 +73,7 @@ class AssetsTransferTest extends TestCase
         $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
 
         $this->get(route('admin.clips.dropzone.listFiles', ['clip' => $clip]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertSee('no videos');
 
         $disk->putFileAs('', FileFactory::videoFile(), 'export_video_1080.mp4');
@@ -87,7 +87,7 @@ class AssetsTransferTest extends TestCase
     {
         $this->signInRole($this->role);
 
-        $this->post(route('admin.clips.dropzone.transfer', ClipFactory::create()))->assertStatus(403);
+        $this->post(route('admin.clips.dropzone.transfer', ClipFactory::create()))->assertForbidden();
     }
 
     /** @test */
@@ -111,7 +111,7 @@ class AssetsTransferTest extends TestCase
         $this->followingRedirects()->post(
             route('admin.clips.dropzone.transfer', $clip),
             ["files" => [$videoHashHD, $videoHashSD]]
-        )->assertStatus(200);
+        )->assertOk();
 
         $this->get($clip->adminPath())
             ->assertSee($files->first()['name'])
@@ -164,7 +164,7 @@ class AssetsTransferTest extends TestCase
             ->create();
 
         $this->get(route('admin.clips.opencast.listEvents', ['clip' => $series->clips()->first()]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertSee('no events found for this series');
     }
 
@@ -187,7 +187,7 @@ class AssetsTransferTest extends TestCase
         );
 
         $this->get(route('admin.clips.opencast.listEvents', ['clip' => $series->clips()->first()]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertViewHas('events', function (Collection $collection) {
                 return $collection->count() == 2;
             });
@@ -198,7 +198,7 @@ class AssetsTransferTest extends TestCase
     {
         $this->signInRole($this->role);
 
-        $this->get(route('admin.clips.opencast.listEvents', ClipFactory::create()))->assertStatus(403);
+        $this->get(route('admin.clips.opencast.listEvents', ClipFactory::create()))->assertForbidden();
     }
 
     /** @test */

@@ -132,7 +132,7 @@ class TriggerActivityTest extends TestCase
 
     public function it_renders_a_datatable_for_activities(): void
     {
-        $this->get(route('activities.index'))->assertStatus(200);
+        $this->get(route('activities.index'))->assertOk();
     }
 
     public function it_contains_activities_livewire_component_on_index_page(): void

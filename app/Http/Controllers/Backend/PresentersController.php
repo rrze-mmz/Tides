@@ -20,6 +20,8 @@ class PresentersController extends Controller
      */
     public function index(): View
     {
+        Gate::allowIf(fn($user) => $user->isAdmin() || $user->isAssistant());
+
         return view('backend.presenters.index', [
             'presenters' => Presenter::paginate(10)
         ]);
@@ -30,6 +32,8 @@ class PresentersController extends Controller
      */
     public function create(): View
     {
+        Gate::allowIf(fn($user) => $user->isAdmin() || $user->isAssistant());
+
         return view('backend.presenters.create');
     }
 
@@ -41,6 +45,8 @@ class PresentersController extends Controller
      */
     public function store(StorePresenterRequest $request): RedirectResponse
     {
+        Gate::allowIf(fn($user) => $user->isAdmin() || $user->isAssistant());
+
         Presenter::create($request->validated());
 
         return to_route('presenters.index');
@@ -54,6 +60,8 @@ class PresentersController extends Controller
      */
     public function edit(Presenter $presenter): View
     {
+        Gate::allowIf(fn($user) => $user->isAdmin() || $user->isAssistant());
+
         return view('backend.presenters.edit', compact('presenter'));
     }
 
@@ -66,7 +74,7 @@ class PresentersController extends Controller
      */
     public function update(Presenter $presenter, Request $request): RedirectResponse
     {
-        Gate::allowIf(fn($user) => $user->isAdmin());
+        Gate::allowIf(fn($user) => $user->isAdmin() || $user->isAssistant());
 
         $validated = $request->validate([
             'academic_degree_id' => ['integer'],
@@ -97,6 +105,8 @@ class PresentersController extends Controller
      */
     public function destroy(Presenter $presenter): RedirectResponse
     {
+        Gate::allowIf(fn($user) => $user->isAdmin() || $user->isAssistant());
+        
         $presenter->delete();
 
         return to_route('presenters.index');

@@ -20,14 +20,6 @@
                                        :selectedItem="$presenter->academic_degree_id"
                 />
 
-                <x-form.input field-name="degree_title"
-                              input-type="text"
-                              :value="$presenter->degree_title"
-                              label="Degree Title"
-                              :full-col="false"
-                              :required="false"
-                />
-
                 <x-form.input field-name="first_name"
                               input-type="text"
                               :value="$presenter->first_name"

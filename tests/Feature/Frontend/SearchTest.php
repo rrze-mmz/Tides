@@ -57,7 +57,7 @@ class SearchTest extends TestCase
         $this->mockHandler->append($this->mockClusterHealthResponse());
 
         $response = $this->searchFor('lorem');
-        $response->assertStatus(200)->assertSee($this->clip->id);
+        $response->assertOk()->assertSee($this->clip->id);
     }
 
     /** @test */
@@ -79,7 +79,7 @@ class SearchTest extends TestCase
         $this->mockHandler->append($this->mockClusterNotAvailable());
 
         $response = $this->searchFor('test');
-        $response->assertStatus(200)->assertViewHas('searchResults');
+        $response->assertOk()->assertViewHas('searchResults');
     }
 
     /** @test */

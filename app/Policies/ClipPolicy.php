@@ -12,13 +12,25 @@ class ClipPolicy
     use HandlesAuthorization;
 
     /**
+     * Check whether the current user can view all clips in index
+     *
+     * @param User $user
+     * @return bool
+     */
+    public function index(User $user): bool
+    {
+        return auth()->check() && ($user->isAdmin() || $user->isAssistant());
+    }
+
+    /**
      * Check whether the current user can create a clip
      *
+     * @param User $user
      * @return bool
      */
     public function create(User $user): bool
     {
-        return auth()->check() && $user->isModerator();
+        return auth()->check() && ($user->isModerator() || $user->isAssistant() || $user->isAdmin());
     }
 
     /**
@@ -30,7 +42,7 @@ class ClipPolicy
      */
     public function edit(User $user, Clip $clip): bool
     {
-        return ($user->is($clip->owner) || $user->isAdmin());
+        return ($user->is($clip->owner) || ($user->isAdmin() || $user->isAssistant()));
     }
 
     /**
@@ -40,7 +52,7 @@ class ClipPolicy
      */
     public function view(?User $user, Clip $clip): bool
     {
-        if (optional($user)->is($clip->owner) || optional($user)->isAdmin()) {
+        if (optional($user)->is($clip->owner) || optional($user)->isAdmin() || optional($user)->isAssistant()) {
             return true;
         } elseif ($clip->is_public &&
             (is_null($clip->series->is_public) || $clip->series->is_public)

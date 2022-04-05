@@ -5,16 +5,14 @@ namespace Tests\Feature\Backend;
 use App\Models\Clip;
 use App\Models\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class ClipsCollectionsTest extends TestCase
 {
     use RefreshDatabase;
-    use WithFaker;
 
     /** @test */
-    public function it_can_add_clips_to_a_collection(): void
+    public function it_can_toggle_clips_to_a_collection(): void
     {
         $this->signInRole('admin');
 
@@ -26,6 +24,14 @@ class ClipsCollectionsTest extends TestCase
             ->assertRedirect();
 
         $this->assertDatabaseHas('clip_collection', [
+            'clip_id'       => Clip::all()->first()->id,
+            'collection_id' => $collection->id
+        ]);
+
+        $this->post(route('collections.toggleClips', $collection), $attributes)
+            ->assertRedirect();
+
+        $this->assertDatabaseMissing('clip_collection', [
             'clip_id'       => Clip::all()->first()->id,
             'collection_id' => $collection->id
         ]);

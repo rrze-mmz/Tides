@@ -35,7 +35,7 @@ class SeriesClipsTest extends TestCase
 
         $this->signInRole($this->role);
 
-        $this->get(route('series.clips.create', $series))->assertStatus(403);
+        $this->get(route('series.clips.create', $series))->assertForbidden();
     }
 
     /** @test */
@@ -43,7 +43,7 @@ class SeriesClipsTest extends TestCase
     {
         $series = SeriesFactory::ownedBy($this->signInRole($this->role))->create();
 
-        $this->get(route('series.clips.create', $series))->assertStatus(200);
+        $this->get(route('series.clips.create', $series))->assertOk();
     }
 
     /** @test */
@@ -53,7 +53,7 @@ class SeriesClipsTest extends TestCase
 
         $this->signInRole('admin');
 
-        $this->get(route('series.clips.create', $series))->assertStatus(200);
+        $this->get(route('series.clips.create', $series))->assertOk();
     }
 
     /** @test */
@@ -61,7 +61,7 @@ class SeriesClipsTest extends TestCase
     {
         $series = SeriesFactory::ownedBy($this->signInRole($this->role))->create();
 
-        $this->get(route('series.clips.create', $series))->assertStatus(200)
+        $this->get(route('series.clips.create', $series))->assertOk()
             ->assertSee('title')
             ->assertSee('recording_date')
             ->assertSee('description')

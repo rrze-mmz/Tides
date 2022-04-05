@@ -35,7 +35,7 @@ class ManageChapterTest extends TestCase
     public function it_has_an_index_page_for_series_chapters(): void
     {
         $this->get(route('series.chapters.index', $this->series))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertSee($this->series->title);
     }
 
@@ -45,7 +45,7 @@ class ManageChapterTest extends TestCase
         auth()->logout();
         $this->signInRole('user');
 
-        $this->get(route('series.chapters.index', $this->series))->assertStatus(403);
+        $this->get(route('series.chapters.index', $this->series))->assertForbidden();
     }
 
     /** @test */
@@ -55,7 +55,7 @@ class ManageChapterTest extends TestCase
 
         $this->signInRole('moderator');
 
-        $this->get(route('series.chapters.index', $this->series))->assertStatus(403);
+        $this->get(route('series.chapters.index', $this->series))->assertForbidden();
     }
 
     /** @test */
@@ -115,13 +115,13 @@ class ManageChapterTest extends TestCase
 
         $this->signInRole('moderator');
 
-        $this->get(route('series.chapters.edit', [$this->series, $this->chapter]))->assertStatus(403);
+        $this->get(route('series.chapters.edit', [$this->series, $this->chapter]))->assertForbidden();
     }
 
     /** @test */
     public function it_can_edit_a_chapter(): void
     {
-        $this->get(route('series.chapters.edit', [$this->series, $this->chapter]))->assertStatus(200);
+        $this->get(route('series.chapters.edit', [$this->series, $this->chapter]))->assertOk();
     }
 
     /** @test */
@@ -226,7 +226,7 @@ class ManageChapterTest extends TestCase
         $this->delete(route('series.chapters.delete', [$this->series, $this->chapter]));
 
         $clip->refresh();
-        
+
         $this->assertNull($this->series->clips()->first()->chapter_id);
     }
 }

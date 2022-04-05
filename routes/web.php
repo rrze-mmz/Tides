@@ -156,6 +156,9 @@ Route::prefix('admin')->middleware(['auth', 'can:access-dashboard'])->group(func
     //Opencast routes
     Route::get('/opencast', OpencastController::class)->name('opencast.status');
 
+    //Presenter routes
+    Route::resource('presenters', PresentersController::class)->except(['show']);
+
     Route::get('/activities', function () {
         return view('backend.activities.index', [
             'activities' => Activity::paginate(20),
@@ -165,7 +168,6 @@ Route::prefix('admin')->middleware(['auth', 'can:access-dashboard'])->group(func
     // Portal admin resources
     Route::middleware(['user.admin'])->group(function () {
         Route::resource('users', UsersController::class)->except(['show']);
-        Route::resource('presenters', PresentersController::class)->except(['show']);
 
         //Collections administration
         Route::resource('collections', CollectionsController::class)->except(['show']);

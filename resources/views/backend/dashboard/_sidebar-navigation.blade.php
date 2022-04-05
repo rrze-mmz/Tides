@@ -27,19 +27,23 @@
                 Activities
             </a>
         </li>
-        @can('menu-dashboard-admin')
-            <li>
-                <a
-                    href="{{ route('collections.index') }}"
-                    class="block mb-4 text-lg  {{ setActiveLink(route('collections.index')) }} font-bold hover:text-gray-200"
-                >Collections</a>
-            </li>
+        @can('view-assistant-menu-items')
             <li>
                 <a
                     href="{{ route('presenters.index') }}"
                     class="block mb-4 text-lg  {{ setActiveLink(route('presenters.index')) }} font-bold hover:text-gray-200"
                 >Presenters</a>
             </li>
+        @endcan
+
+        @can('view-admin-menu-items')
+            <li>
+                <a
+                    href="{{ route('collections.index') }}"
+                    class="block mb-4 text-lg  {{ setActiveLink(route('collections.index')) }} font-bold hover:text-gray-200"
+                >Collections</a>
+            </li>
+
             <li>
                 <a
                     href="{{ route('users.index') }}"
@@ -52,6 +56,8 @@
                     class="block mb-4 text-lg {{ setActiveLink(route('opencast.status')) }} font-bold hover:text-gray-200"
                 >Opencast</a>
             </li>
+        @endcan
+        @can('view-superadmin-menu-items')
             <li>
                 <a
                     href="/"

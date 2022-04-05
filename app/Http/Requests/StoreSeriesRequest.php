@@ -26,7 +26,7 @@ class StoreSeriesRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Gate::allows('create-series', $this->route('series'));
+        return auth()->user()->isModerator() || auth()->user()->isAdmin();
     }
 
     /**
@@ -38,7 +38,7 @@ class StoreSeriesRequest extends FormRequest
     {
         return [
             'title'           => ['required'],
-            'description'     => ['string', 'nullable', 'max:1000'],
+            'description'     => ['string', 'nullable'],
             'organization_id' => ['required', 'integer'],
             'presenters'      => ['array'],
             'presenters.*'    => ['integer', 'nullable'],

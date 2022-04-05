@@ -82,6 +82,16 @@ class ManageSeriesTest extends TestCase
     }
 
     /** @test */
+    public function it_paginates_all_series_in_dashboard_index_page_for_assistant_user(): void
+    {
+        Series::factory(20)->create();
+
+        $this->signInRole('assistant');
+
+        $this->get(route('series.index') . '?page=2')->assertDontSee('You have no series yet');
+    }
+
+    /** @test */
     public function a_moderator_can_see_the_create_series_form_and_all_form_fields(): void
     {
         $this->signInRole($this->role);
@@ -95,7 +105,7 @@ class ManageSeriesTest extends TestCase
             ->assertSee('is_public')
             ->assertSee('Organization');
 
-        $this->get(route('series.create'))->assertStatus(200)
+        $this->get(route('series.create'))->assertOk()
             ->assertViewIs('backend.series.create');
     }
 
@@ -151,7 +161,23 @@ class ManageSeriesTest extends TestCase
                 'description'     => 'Test description',
                 'organization_id' => '1',
             ]
-        )->assertStatus(403);
+        )->assertForbidden();
+    }
+
+    /** @test */
+    public function an_assistant_is_not_allowed_to_create_new_series(): void
+    {
+        $this->signInRole('assistant');
+        $this->mockHandler->append($this->mockCreateSeriesResponse());
+
+        $this->post(
+            route('series.store'),
+            [
+                'title'           => 'Test title',
+                'description'     => 'Test description',
+                'organization_id' => '1',
+            ]
+        )->assertForbidden();
     }
 
     /** @test */
@@ -260,7 +286,7 @@ class ManageSeriesTest extends TestCase
         );
 
         $this->get($series->adminPath())
-            ->assertStatus(200)
+            ->assertOk()
             ->assertSee('title')
             ->assertSee('presenters')
             ->assertSee('description');
@@ -273,7 +299,7 @@ class ManageSeriesTest extends TestCase
 
         $this->signInRole($this->role);
 
-        $this->get($series->adminPath())->assertStatus(403);
+        $this->get($series->adminPath())->assertForbidden();
     }
 
     /** @test */
@@ -289,7 +315,7 @@ class ManageSeriesTest extends TestCase
 
         $this->signInRole('admin');
 
-        $this->get($series->adminPath())->assertStatus(200);
+        $this->get($series->adminPath())->assertOk();
     }
 
     /** @test */
@@ -305,7 +331,7 @@ class ManageSeriesTest extends TestCase
 
         $this->signInRole('superadmin');
 
-        $this->get($series->adminPath())->assertStatus(200);
+        $this->get($series->adminPath())->assertOk();
     }
 
     /** @test */
@@ -426,7 +452,7 @@ class ManageSeriesTest extends TestCase
             'title'           => 'changed',
             'description'     => 'changed',
             'organization_id' => '1',
-        ])->assertStatus(403);
+        ])->assertForbidden();
 
         $this->assertDatabaseMissing('series', ['title' => 'changed']);
     }
@@ -469,7 +495,19 @@ class ManageSeriesTest extends TestCase
 
         $this->signInRole($this->role);
 
-        $this->delete($series->adminPath())->assertStatus(403);
+        $this->delete($series->adminPath())->assertForbidden();
+
+        $this->assertDatabaseHas('series', $series->only('id'));
+    }
+
+    /** @test */
+    public function an_assistant_is_not_allowed_to_delete_series(): void
+    {
+        $series = SeriesFactory::create();
+
+        $this->signInRole('assistant');
+
+        $this->delete($series->adminPath())->assertForbidden();
 
         $this->assertDatabaseHas('series', $series->only('id'));
     }
@@ -481,7 +519,7 @@ class ManageSeriesTest extends TestCase
 
         $this->signInRole('admin');
 
-        $this->followingRedirects()->delete($series->adminPath())->assertStatus(200);
+        $this->followingRedirects()->delete($series->adminPath())->assertOk();
 
         $this->assertDatabaseMissing('series', $series->only('id'));
     }

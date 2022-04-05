@@ -33,16 +33,41 @@ class ManagePresenters extends TestCase
 
         $presenter = Presenter::factory()->create();
 
-        $this->get(route('presenters.index'))->assertStatus(403);
-        $this->get(route('presenters.create'))->assertStatus(403);
-        $this->post(route('presenters.store'), [])->assertStatus(403);
-        $this->delete(route('presenters.destroy', $presenter))->assertStatus(403);
+        $this->get(route('presenters.index'))->assertForbidden();
+        $this->get(route('presenters.create'))->assertForbidden();
+        $this->post(route('presenters.store'), [])->assertForbidden();
+        $this->delete(route('presenters.destroy', $presenter))->assertForbidden();
+    }
+
+    /** @test */
+    public function an_assistant_is_allowed_to_manage_presenters(): void
+    {
+        auth()->logout();
+
+        $this->signInRole('assistant');
+
+        $presenter = Presenter::factory()->create();
+
+        $this->get(route('presenters.index'))->assertOk();
+        $this->get(route('presenters.create'))->assertOk();
+        $this->post(route('presenters.store'), [])->assertRedirect(route('presenters.create'));
+        $this->delete(route('presenters.destroy', $presenter))->assertRedirect(route('presenters.index'));
+    }
+
+    /** @test */
+    public function it_renders_a_datatable_for_presenters_for_users_with_assistant_role(): void
+    {
+        auth()->logout();
+
+        $this->signInRole('assistant');
+
+        $this->get(route('presenters.index'))->assertOk();
     }
 
     /** @test */
     public function it_renders_a_datatable_for_presenters_for_users_with_admin_role(): void
     {
-        $this->get(route('presenters.index'))->assertStatus(200);
+        $this->get(route('presenters.index'))->assertOk();
     }
 
     /** @test */
@@ -52,7 +77,7 @@ class ManagePresenters extends TestCase
 
         $this->signInRole('superadmin');
 
-        $this->get(route('presenters.index'))->assertStatus(200);
+        $this->get(route('presenters.index'))->assertOk();
     }
 
     /** @test */
@@ -160,9 +185,19 @@ class ManagePresenters extends TestCase
     }
 
     /** @test */
+    public function an_assistant_can_view_add_presenter_form(): void
+    {
+        auth()->logout();
+
+        $this->signInRole('assistant');
+        
+        $this->get(route('presenters.create'))->assertOk();
+    }
+
+    /** @test */
     public function an_admin_can_view_add_presenter_form(): void
     {
-        $this->get(route('presenters.create'))->assertStatus(200);
+        $this->get(route('presenters.create'))->assertOk();
     }
 
     /** @test */
@@ -247,7 +282,7 @@ class ManagePresenters extends TestCase
         $presenter = Presenter::factory()->create();
 
         $this->get(route('presenters.edit', $presenter))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertSee($presenter->degree_title)
             ->assertSee($presenter->first_name)
             ->assertSee($presenter->last_name)

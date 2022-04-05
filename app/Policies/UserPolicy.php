@@ -27,9 +27,13 @@ class UserPolicy
      */
     public function dashboard(User $user): bool
     {
-        return $user->isAdmin() || $user->hasRole('moderator');
+        return $user->isAdmin() || $user->isModerator() || $user->isAssistant();
     }
 
+    /**
+     * @param User $user
+     * @return bool
+     */
     public function opencastWorkflows(User $user): bool
     {
         return $user->hasRole('superadmin') || $user->hasRole('admin');

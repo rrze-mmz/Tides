@@ -45,7 +45,7 @@ class AccessTest extends TestCase
 
         $link = '/protector/link/clip/1/' . $token . '/' . $time . '/studon';
 
-        $this->get($link)->assertStatus(403);
+        $this->get($link)->assertForbidden();
 
         $token = md5('clip' . '1' . $this->clip->password . '127.0.0.1' . $time . 'studon');
 

@@ -61,11 +61,11 @@
                                       field-name="is_public"
                 />
             </div>
-
-            <div class="pt-10">
-                <x-form.button :link="$link=false" type="submit" text="Update Series"/>
-            </div>
-
+            @can('update-series', $series)
+                <div class="pt-10">
+                    <x-form.button :link="$link=false" type="submit" text="Update Series"/>
+                </div>
+            @endcan
         </form>
 
         <div class="space-y-5 w-1/5 h-full">

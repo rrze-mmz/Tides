@@ -24,7 +24,7 @@ class CollectionTest extends TestCase
 
         $this->signInRole('moderator');
 
-        $this->get(route('collections.index'))->assertStatus(403);
+        $this->get(route('collections.index'))->assertForbidden();
     }
 
     /** @test */

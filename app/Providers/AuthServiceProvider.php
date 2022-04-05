@@ -41,10 +41,14 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         //series
+        Gate::define('index-all-series', [SeriesPolicy::class, 'index']);
         Gate::define('create-series', [SeriesPolicy::class, 'create']);
         Gate::define('edit-series', [SeriesPolicy::class, 'edit']);
+        Gate::define('update-series', [SeriesPolicy::class, 'update']);
         Gate::define('view-series', [SeriesPolicy::class, 'view']);
+
         //clips
+        Gate::define('index-all-clips', [ClipPolicy::class, 'index']);
         Gate::define('create-clips', [ClipPolicy::class, 'create']);
         Gate::define('edit-clips', [ClipPolicy::class, 'edit']);
         Gate::define('view-clips', [ClipPolicy::class, 'view']);
@@ -58,7 +62,17 @@ class AuthServiceProvider extends ServiceProvider
         //comments
         Gate::define('create-comment', [CommentPolicy::class, 'create']);
         Gate::define('delete-comment', [CommentPolicy::class, 'delete']);
-        //menu items
-        Gate::define('menu-dashboard-admin', [MenuPolicy::class, 'dashboard']);
+        Gate::define('view-superadmin-menu-items', function (User $user) {
+            return $user->hasRole('superadmin');
+        });
+        Gate::define('view-admin-menu-items', function (User $user) {
+            return $user->isAdmin();
+        });
+        Gate::define('view-assistant-menu-items', function (User $user) {
+            return $user->isAssistant() || $user->isAdmin();
+        });
+        Gate::define('view-moderator-menu-items', function (User $user) {
+            return $user->isModerator();
+        });
     }
 }

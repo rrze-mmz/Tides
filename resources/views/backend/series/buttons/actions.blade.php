@@ -4,10 +4,12 @@
 
     <x-form.button :link="route('series.clips.create',$series)" type="submit" text="Add new clip"/>
 
-    <form action="{{$series->adminPath()}}"
-          method="POST">
-        @csrf
-        @method('DELETE')
-        <x-form.button :link="$link=false" type="delete" text="Delete Series" color="red"/>
-    </form>
+    @can('update-series', $series)
+        <form action="{{$series->adminPath()}}"
+              method="POST">
+            @csrf
+            @method('DELETE')
+            <x-form.button :link="$link=false" type="delete" text="Delete Series" color="red"/>
+        </form>
+    @endcan
 </div>

@@ -44,6 +44,34 @@ class ManageClipsTest extends TestCase
     }
 
     /** @test */
+    public function it_shows_all_clips_in_index_page_for_assistant(): void
+    {
+        Clip::factory(10)->create();
+
+        $this->signInRole('assistant');
+
+        $this->get(route('clips.index'))
+            ->assertOk()
+            ->assertViewIs('backend.clips.index')
+            ->assertViewHas('clips')
+            ->assertSee(Clip::all()->first()->title);
+    }
+
+    /** @test */
+    public function it_shows_all_clips_in_index_page_for_admins(): void
+    {
+        Clip::factory(10)->create();
+
+        $this->signInRole('admin');
+
+        $this->get(route('clips.index'))
+            ->assertOk()
+            ->assertViewIs('backend.clips.index')
+            ->assertViewHas('clips')
+            ->assertSee(Clip::all()->first()->title);
+    }
+
+    /** @test */
     public function it_paginates_users_clips_in_dashboard_index_page(): void
     {
         Clip::factory(20)->create(['owner_id' => $this->signInRole($this->role)]);
@@ -104,7 +132,7 @@ class ManageClipsTest extends TestCase
         $this->followingRedirects()->post(route('clips.store', Clip::factory()->raw([
             'title'    => 'This is a test',
             'password' => '1234qwER',
-        ])))->assertStatus(200);
+        ])))->assertOk();
     }
 
     /** @test */
@@ -112,13 +140,47 @@ class ManageClipsTest extends TestCase
     {
         $this->signIn();
 
-        $this->post(route('clips.store'), Clip::factory()->raw())->assertStatus(403);
+        $this->post(route('clips.store'), Clip::factory()->raw())->assertForbidden();
+    }
+
+    /** @test */
+    public function a_moderator_can_load_create_clip_view(): void
+    {
+        $this->signInRole($this->role);
+
+        $this->get(route('clips.create'))->assertOk()->assertViewIs('backend.clips.create');
+    }
+
+    /** @test */
+    public function an_assistant_can_load_create_clip_view(): void
+    {
+        $this->signInRole('assistant');
+
+        $this->get(route('clips.create'))->assertOk()->assertViewIs('backend.clips.create');
+    }
+
+    /** @test */
+    public function an_admin_can_load_create_clip_view(): void
+    {
+        $this->signInRole('admin');
+
+        $this->get(route('clips.create'))->assertOk()->assertViewIs('backend.clips.create');
     }
 
     /** @test */
     public function a_moderator_can_create_a_clip(): void
     {
         $this->signInRole($this->role);
+
+        $this->followingRedirects()
+            ->post(route('clips.store'), $attributes = Clip::factory()->raw())
+            ->assertSee($attributes['title']);
+    }
+
+    /** @test */
+    public function an_admin_can_create_a_clip(): void
+    {
+        $this->signInRole('admin');
 
         $this->followingRedirects()
             ->post(route('clips.store'), $attributes = Clip::factory()->raw())
@@ -155,7 +217,7 @@ class ManageClipsTest extends TestCase
             ->assertSee('semester')
             ->assertSee('is_public');
 
-        $this->get(route('clips.create'))->assertStatus(200)
+        $this->get(route('clips.create'))->assertOk()
             ->assertViewIs('backend.clips.create');
     }
 
@@ -173,7 +235,7 @@ class ManageClipsTest extends TestCase
         $this->withoutExceptionHandling();
         $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
 
-        $this->get($clip->adminPath())->assertStatus(200);
+        $this->get($clip->adminPath())->assertOk();
 
         $this->get($clip->adminPath())->assertSee('title')
             ->assertSee('description')
@@ -206,7 +268,7 @@ class ManageClipsTest extends TestCase
 
         $this->signInRole($this->role);
 
-        $this->get($clip->adminPath())->assertStatus(403);
+        $this->get($clip->adminPath())->assertForbidden();
     }
 
     /** @test */
@@ -216,7 +278,7 @@ class ManageClipsTest extends TestCase
 
         $this->signInRole('admin');
 
-        $this->get($clip->adminPath())->assertStatus(200);
+        $this->get($clip->adminPath())->assertOk();
     }
 
     /** @test */
@@ -226,7 +288,7 @@ class ManageClipsTest extends TestCase
 
         $this->signInRole('superadmin');
 
-        $this->get($clip->adminPath())->assertStatus(200);
+        $this->get($clip->adminPath())->assertOk();
     }
 
     /** @test */
@@ -411,7 +473,7 @@ class ManageClipsTest extends TestCase
             'semester_id'     => '1',
         ];
 
-        $this->patch($clip->adminPath(), $attributes)->assertStatus(403);
+        $this->patch($clip->adminPath(), $attributes)->assertForbidden();
 
         $this->assertDatabaseMissing('clips', $attributes);
     }
@@ -436,7 +498,7 @@ class ManageClipsTest extends TestCase
             'semester_id'     => '1',
         ];
 
-        $this->followingRedirects()->patch($clip->adminPath(), $attributes)->assertStatus(200);
+        $this->followingRedirects()->patch($clip->adminPath(), $attributes)->assertOk();
 
         $this->assertDatabaseHas('clips', $attributes);
     }
@@ -569,7 +631,7 @@ class ManageClipsTest extends TestCase
 
         $this->signInRole($this->role);
 
-        $this->delete($clip->adminPath())->assertStatus(403);
+        $this->delete($clip->adminPath())->assertForbidden();
 
         $this->assertDatabaseHas('clips', $clip->only('id'));
     }
@@ -581,7 +643,7 @@ class ManageClipsTest extends TestCase
 
         $this->signInRole('admin');
 
-        $this->followingRedirects()->delete($clip->adminPath())->assertStatus(200);
+        $this->followingRedirects()->delete($clip->adminPath())->assertOk();
 
         $this->assertDatabaseMissing('clips', $clip->only('id'));
     }

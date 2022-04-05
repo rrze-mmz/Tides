@@ -26,7 +26,7 @@ class UpdateSeriesRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Gate::allows('edit-series', $this->route('series'));
+        return Gate::allows('update-series', $this->route('series'));
     }
 
     /**
@@ -38,7 +38,7 @@ class UpdateSeriesRequest extends FormRequest
     {
         return [
             'title'              => ['required'],
-            'description'        => ['string', 'nullable', 'max:1000'],
+            'description'        => ['string', 'nullable'],
             'organization_id'    => ['required ', 'integer'],
             'slug'               => ['required'],
             'presenters'         => ['array'],

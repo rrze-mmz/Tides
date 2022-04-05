@@ -55,7 +55,7 @@ class AssetsTest extends TestCase
 
         $this->signInRole($this->role);
 
-        $this->delete($asset->path())->assertStatus(403);
+        $this->delete($asset->path())->assertForbidden();
     }
 
     /** @test */

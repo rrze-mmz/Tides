@@ -45,9 +45,9 @@ class SeriesTest extends TestCase
 
         auth()->logout();
 
-        $this->get(route('frontend.series.show', $series))->assertStatus(403);
+        $this->get(route('frontend.series.show', $series))->assertForbidden();
 
-        $this->actingAs($user)->get(route('frontend.series.show', $series))->assertStatus(200);
+        $this->actingAs($user)->get(route('frontend.series.show', $series))->assertOk();
     }
 
     /** @test */
@@ -55,7 +55,7 @@ class SeriesTest extends TestCase
     {
         $series = SeriesFactory::withClips(2)->withAssets(1)->notPublic()->create();
 
-        $this->get(route('frontend.series.show', $series))->assertStatus(403);
+        $this->get(route('frontend.series.show', $series))->assertForbidden();
     }
 
     /** @test */
@@ -65,7 +65,7 @@ class SeriesTest extends TestCase
 
         $this->signIn();
 
-        $this->get(route('frontend.series.show', $series))->assertStatus(403);
+        $this->get(route('frontend.series.show', $series))->assertForbidden();
     }
 
     /** @test */
@@ -73,7 +73,7 @@ class SeriesTest extends TestCase
     {
         $series = SeriesFactory::ownedBy($this->signIn())->withClips(2)->withAssets(1)->notPublic()->create();
 
-        $this->get(route('frontend.series.show', $series))->assertStatus(200);
+        $this->get(route('frontend.series.show', $series))->assertOk();
     }
 
     /** @test */
@@ -83,7 +83,7 @@ class SeriesTest extends TestCase
 
         $this->signInRole('admin');
 
-        $this->get(route('frontend.series.show', $series))->assertStatus(200);
+        $this->get(route('frontend.series.show', $series))->assertOk();
     }
 
     /** @test */

@@ -12,8 +12,8 @@
             <div class="pb-2 w-1/6 border-b border-black">Actions</div>
         </li>
 
-        @forelse($assets as $asset)
-            <li class="flex content-center items-center text-center p-2 mb-4 bg-gray-200 rounded">
+        @forelse($assets->sortByDesc('height') as $asset)
+            <li class="flex content-center text-sm items-center text-center p-2 mb-4 bg-gray-200 rounded">
                 <div class="w-1/6"> {{ $asset->id }}</div>
                 <div class="w-1/6 mr-6">
                     <div class="whitespace-normal">{{ $asset->path }}</div>

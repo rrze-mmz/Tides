@@ -110,4 +110,28 @@ class HomePageTest extends TestCase
 
         $this->get(route('home'))->assertDontSee(Str::limit($clip->title, 20, '...'));
     }
+
+    /** @test */
+    public function it_shows_dashboard_menu_item_for_admins(): void
+    {
+        $this->signInRole('admin');
+
+        $this->get(route('home'))->assertSee('Dashboard');
+    }
+
+    /** @test */
+    public function it_shows_dashboard_menu_item_for_moderators(): void
+    {
+        $this->signInRole('moderator');
+
+        $this->get(route('home'))->assertSee('Dashboard');
+    }
+
+    /** @test */
+    public function it_shows_dashboard_menu_item_for_assistants(): void
+    {
+        $this->signInRole('assistant');
+
+        $this->get(route('home'))->assertSee('Dashboard');
+    }
 }

@@ -1,11 +1,10 @@
 @extends('layouts.backend')
 
 @section('content')
-    <div class="flex items center  w-full pb-2 font-semibold border-b border-black font-2xl">
-        <div class="flex justify-between items-end w-full">
+    <div class="flex-row  w-full pb-2 border-b border-black font-2xl">
+        <div class="flex justify-between items-center  w-full">
             <div class="">
                 <span class="text-2xl"> [ ID: {{ $clip->id }} ] {{ $clip->title }}</span>
-                <span class="pl-2 italic font-sm"> created at {{$clip->created_at}}</span>
             </div>
             <div class="flex space-x-2">
                 @if(!is_null($previousNextClipCollection->get('previousClip')))
@@ -22,6 +21,9 @@
                     />
                 @endif
             </div>
+        </div>
+        <div class="flex font-light text-sm italic pt-2">
+            <span class="pl-2"> created at {{$clip->created_at}}</span>
         </div>
     </div>
     <div class="flex py-2 px-2">
@@ -181,6 +183,13 @@
                        text=" Transfer files from drop zone"
         />
 
+        @if($opencastConnectionCollection)
+            <x-form.button :link="route('admin.clips.opencast.listEvents', $clip)"
+                           type="submit"
+                           text=" Transfer files from Opencast"
+            />
+        @endif
+
         <form action="{{ route('clips.destroy',$clip) }}"
               method="POST"
         >
@@ -191,17 +200,9 @@
                                 font-medium rounded-md text-white
                         bg-red-600  focus:shadow-outline-indigo hover:bg-red-700
                         hover:shadow-lg ">
-                Delete Series
+                Delete Clip
             </button>
         </form>
-
-        @if($opencastConnectionCollection)
-            <x-form.button :link="route('admin.clips.opencast.listEvents', $clip)"
-                           type="submit"
-                           text=" Transfer files from Opencast"
-            />
-        @endif
-
     </div>
 
     @include('backend.assets.list', ['assets'=>$clip->assets])

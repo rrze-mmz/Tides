@@ -34,7 +34,7 @@ class ManageUsersTest extends TestCase
 
         $this->signInRole('moderator');
 
-        $this->get(route('users.index'))->assertStatus(403);
+        $this->get(route('users.index'))->assertForbidden();
     }
 
     /** @test */
@@ -42,7 +42,7 @@ class ManageUsersTest extends TestCase
     {
         $this->signInRole('admin');
 
-        $this->get(route('users.index'))->assertStatus(200);
+        $this->get(route('users.index'))->assertOk();
     }
 
     /** @test */
@@ -50,7 +50,7 @@ class ManageUsersTest extends TestCase
     {
         $this->signInRole('superadmin');
 
-        $this->get(route('users.index'))->assertStatus(200);
+        $this->get(route('users.index'))->assertOk();
     }
 
     /** @test */
@@ -184,7 +184,7 @@ class ManageUsersTest extends TestCase
 
         $this->signInRole('moderator');
 
-        $this->get(route('users.create'))->assertStatus(403);
+        $this->get(route('users.create'))->assertForbidden();
     }
 
     /** @test */
@@ -274,7 +274,7 @@ class ManageUsersTest extends TestCase
 
         $this->signInRole('moderator');
 
-        $this->get(route('users.store'), [])->assertStatus(403);
+        $this->get(route('users.store'), [])->assertForbidden();
     }
 
     /** @test */
@@ -320,7 +320,7 @@ class ManageUsersTest extends TestCase
 
         $this->signInRole('moderator');
 
-        $this->get(route('users.edit', $user))->assertStatus(403);
+        $this->get(route('users.edit', $user))->assertForbidden();
     }
 
     /** @test */
@@ -329,7 +329,7 @@ class ManageUsersTest extends TestCase
         $user = User::factory()->create();
 
         $this->get(route('users.edit', $user))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertSee('first_name')
             ->assertSee('last_name')
             ->assertSee('email')
@@ -347,7 +347,7 @@ class ManageUsersTest extends TestCase
 
         $this->signInRole('moderator');
 
-        $this->patch(route('users.update', $user), [])->assertStatus(403);
+        $this->patch(route('users.update', $user), [])->assertForbidden();
     }
 
     /** @test */
@@ -381,7 +381,7 @@ class ManageUsersTest extends TestCase
 
         $this->signInRole('moderator');
 
-        $this->delete(route('users.destroy', $user))->assertStatus(403);
+        $this->delete(route('users.destroy', $user))->assertForbidden();
     }
 
     /** @test */

@@ -76,6 +76,14 @@ class UserTest extends TestCase
     }
 
     /** @test */
+    public function it_check_for_assistant_role(): void
+    {
+        $this->signInRole('assistant');
+
+        $this->assertTrue(auth()->user()->isAssistant());
+    }
+
+    /** @test */
     public function it_has_an_admins_scope(): void
     {
         $this->assertInstanceOf(Builder::class, User::admins());

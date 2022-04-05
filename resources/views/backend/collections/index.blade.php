@@ -30,16 +30,14 @@
                                     Clips
                                 </th>
                                 <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4 text-left">
-                                    Is public
-                                </th>
-                                <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4 text-left">
                                     Actions
                                 </th>
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach ($collections as $collection)
-                                <tr class="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
+                            @foreach ($collections->sortBy('position') as $collection)
+                                <tr class="@if ($collection->is_public) bg-gray-300 @else bg-white @endif
+                                    border-b transition duration-300 ease-in-out hover:bg-gray-100">
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                         {{ $collection->position }}
                                     </td>
@@ -51,9 +49,6 @@
                                     </td>
                                     <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                                         {{ $collection->clips()->count() }}
-                                    </td>
-                                    <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                        {{$collection->is_public}}
                                     </td>
                                     <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                                         <div class="flex space-x-2">

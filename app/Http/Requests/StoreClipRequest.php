@@ -30,7 +30,7 @@ class StoreClipRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Gate::allows('create-clips', $this->route('clip')) || $this->user()->isAdmin();
+        return Gate::allows('create-clips', $this->route('clip'));
     }
 
     /**
@@ -42,7 +42,7 @@ class StoreClipRequest extends FormRequest
     {
         return [
             'title'           => ['required'],
-            'description'     => ['string', 'nullable', 'max:1000'],
+            'description'     => ['string', 'nullable'],
             'recording_date'  => ['required', 'date'],
             'organization_id' => ['required', 'integer'],
             'slug'            => ['required'],
