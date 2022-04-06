@@ -3,14 +3,19 @@
 namespace App\Models;
 
 use App\Models\Traits\RecordsActivity;
+use App\Models\Traits\Searchable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class Presenter extends BaseModel
 {
+    use Searchable;
     use HasFactory;
     use RecordsActivity;
+
+    //search columns for searchable trait
+    protected array $searchable = ['first_name', 'last_name', 'email', 'username'];
 
     public function getFullNameAttribute(): string
     {
@@ -39,6 +44,11 @@ class Presenter extends BaseModel
         return $this->morphedByMany(Clip::class, 'presentable')->withTimestamps();
     }
 
+    /**
+     * Degree relationship
+     *
+     * @return BelongsTo
+     */
     public function academicDegree(): BelongsTo
     {
         return $this->belongsTo(AcademicDegree::class);

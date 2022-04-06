@@ -10,6 +10,11 @@ class Language extends Model
 {
     use HasFactory;
 
+    /**
+     * Language can have many clips
+     *
+     * @return HasMany
+     */
     public function clips(): HasMany
     {
         return $this->hasMany(Clip::class);

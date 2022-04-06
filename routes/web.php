@@ -25,6 +25,7 @@ use App\Models\Activity;
 use App\Models\Clip;
 use App\Models\Series;
 use App\Services\ElasticsearchService;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
@@ -160,6 +161,7 @@ Route::prefix('admin')->middleware(['auth', 'can:access-dashboard'])->group(func
     Route::resource('presenters', PresentersController::class)->except(['show']);
 
     Route::get('/activities', function () {
+        Gate::allowIf(fn($user) => $user->isAdmin() || $user->isAssistant());
         return view('backend.activities.index', [
             'activities' => Activity::paginate(20),
         ]);

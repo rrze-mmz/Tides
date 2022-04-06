@@ -13,7 +13,9 @@ class Collection extends BaseModel
     use RecordsActivity;
 
     /*
-     * A collection can have many clips
+     * Clips relationship
+     *
+     * @return BelongsToMany
      */
     public function clips(): BelongsToMany
     {
@@ -21,6 +23,8 @@ class Collection extends BaseModel
     }
 
     /**
+     * Add/remove clips for the given collection
+     *
      * @param LCollection $ids
      * @return void
      */

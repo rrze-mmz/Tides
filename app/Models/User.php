@@ -4,19 +4,23 @@
 namespace App\Models;
 
 use App\Models\Traits\RecordsActivity;
+use App\Models\Traits\Searchable;
 use App\Notifications\MailResetPasswordToken;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable
 {
+    use Searchable;
     use HasFactory;
     use Notifiable;
     use RecordsActivity;
 
+    protected array $searchable = ['first_name', 'last_name', 'username', 'email'];
     /**
      * The attributes that are mass assignable.
      *
@@ -165,5 +169,15 @@ class User extends Authenticatable
         return $query->whereHas('roles', function ($q) {
             $q->where('name', 'admin')->orWhere('name', 'superadmin');
         });
+    }
+
+    /*
+     * Only for test purposes and with use in tinker!
+     *
+     */
+    public function resetPassword(): void
+    {
+        $this->password = Hash::make('12341234');
+        $this->save();
     }
 }

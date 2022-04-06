@@ -19,20 +19,20 @@
                 class="block mb-4 text-lg {{ setActiveLink(route('clips.index')) }}  font-bold hover:text-gray-200"
             >Clips</a>
         </li>
-        <li>
-            <a
-                href="{{ route('activities.index') }}"
-                class="block mb-4 text-lg  {{ setActiveLink(route('activities.index')) }} font-bold hover:text-gray-200"
-            >
-                Activities
-            </a>
-        </li>
         @can('view-assistant-menu-items')
             <li>
                 <a
                     href="{{ route('presenters.index') }}"
                     class="block mb-4 text-lg  {{ setActiveLink(route('presenters.index')) }} font-bold hover:text-gray-200"
                 >Presenters</a>
+            </li>
+            <li>
+                <a
+                    href="{{ route('activities.index') }}"
+                    class="block mb-4 text-lg  {{ setActiveLink(route('activities.index')) }} font-bold hover:text-gray-200"
+                >
+                    Activities
+                </a>
             </li>
         @endcan
 

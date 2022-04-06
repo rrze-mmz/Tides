@@ -68,10 +68,7 @@ class UserDataTable extends Component
                         $query->orderBy($this->sortField, $this->sortAsc ? 'asc' : 'desc');
                     })
                     ->paginate(10)
-                : User::whereRaw('lower(first_name) like (?)', ["%{$search}%"])
-                    ->orwhereRaw('lower(last_name) like (?)', ["%{$search}%"])
-                    ->orwhereRaw('lower(username) like (?)', ["%{$search}%"])
-                    ->orwhereRaw('lower(email) like (?)', ["%{$search}%"])
+                : User::search($search)
                     ->when($this->sortField, function ($query) {
                         $query->orderBy($this->sortField, $this->sortAsc ? 'asc' : 'desc');
                     })

@@ -7,6 +7,7 @@ use App\Enums\Content;
 use App\Models\Traits\Accessable;
 use App\Models\Traits\Presentable;
 use App\Models\Traits\RecordsActivity;
+use App\Models\Traits\Searchable;
 use App\Models\Traits\Slugable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -23,11 +24,14 @@ use Illuminate\Support\Facades\Storage;
  */
 class Clip extends BaseModel
 {
+    use Searchable;
     use Accessable;
     use Presentable;
     use Slugable;
     use RecordsActivity;
 
+    //search columns for searchable trait
+    protected array $searchable = ['title', 'description'];
     protected $attributes = [
         'episode' => '1'
     ];

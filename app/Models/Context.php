@@ -10,6 +10,11 @@ class Context extends Model
 {
     use HasFactory;
 
+    /**
+     * Clips relationship
+     *
+     * @return HasMany
+     */
     public function clips(): HasMany
     {
         return $this->hasMany(Clip::class);

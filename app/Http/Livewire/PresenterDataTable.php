@@ -13,7 +13,7 @@ class PresenterDataTable extends Component
     use WithPagination;
 
     public $admin = false;
-    public $search;
+    public $search = '';
     public $sortField;
     public $sortAsc = true;
     protected $queryString = ['search', 'admin', 'sortAsc'];
@@ -52,13 +52,8 @@ class PresenterDataTable extends Component
      */
     public function render(): View
     {
-        $search = trim(Str::lower($this->search));
-
         return view('livewire.presenter-data-table', [
-            'presenters' => Presenter::whereRaw('lower(first_name) like (?)', ["%{$search}%"])
-                ->orwhereRaw('lower(last_name) like (?)', ["%{$search}%"])
-                ->orwhereRaw('lower(username) like (?)', ["%{$search}%"])
-                ->orwhereRaw('lower(email) like (?)', ["%{$search}%"])
+            'presenters' => Presenter::search($this->search)
                 ->when($this->sortField, function ($query) {
                     $query->orderBy($this->sortField, $this->sortAsc ? 'asc' : 'desc');
                 })

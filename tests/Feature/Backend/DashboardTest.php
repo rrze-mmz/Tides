@@ -151,7 +151,7 @@ class DashboardTest extends TestCase
         $this->get(route('dashboard'))
             ->assertSee('Series')
             ->assertSee('Clips')
-            ->assertSee('Activities')
+            ->assertDontSee('Activities')
             ->assertDontSee('Opencast')
             ->assertDontSee('Users');
     }

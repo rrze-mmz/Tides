@@ -13,7 +13,7 @@ class ActivitiesDataTable extends Component
     use WithPagination;
 
     public $series = false;
-    public $search;
+    public $search = '';
     public $sortField;
     public $sortAsc = true;
     protected $queryString = ['search', 'series', 'sortAsc'];
@@ -48,23 +48,17 @@ class ActivitiesDataTable extends Component
 
     public function render(): View
     {
-        $search = trim(Str::lower($this->search));
-
         return view('livewire.activities-data-table', [
             'activities' => ($this->series)
                 ? Activity::where('content_type', 'series')
-                    ->where(function ($query) use ($search) {
-                        $query->whereRaw('lower(content_type) like (?)', ["%{$search}%"])
-                            ->orwhereRaw('lower(change_message) like (?)', ["%{$search}%"])
-                            ->orwhereRaw('lower(user_real_name) like (?)', ["%{$search}%"]);
+                    ->where(function ($query) {
+                        $query->search($this->search);
                     })->when($this->sortField, function ($query) {
                         $query->orderBy($this->sortField, $this->sortAsc ? 'asc' : 'desc');
                     })
                     ->orderBy('id', 'desc')
                     ->paginate(20)
-                : Activity::whereRaw('lower(content_type) like (?)', ["%{$search}%"])
-                    ->orwhereRaw('lower(change_message) like (?)', ["%{$search}%"])
-                    ->orwhereRaw('lower(user_real_name) like (?)', ["%{$search}%"])
+                : Activity::search($this->search)
                     ->when($this->sortField, function ($query) {
                         $query->orderBy($this->sortField, $this->sortAsc ? 'asc' : 'desc');
                     })

@@ -9,6 +9,11 @@ class AcademicDegree extends BaseModel
 {
     use HasFactory;
 
+    /**
+     * Presenters relationship
+     *
+     * @return HasMany
+     */
     public function presenters(): HasMany
     {
         return $this->hasMany(Presenter::class);

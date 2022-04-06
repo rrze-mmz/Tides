@@ -15,9 +15,7 @@ class ApiController extends Controller
 {
     public function clips(ApiRequest $request): JsonResponse
     {
-        $searchTerm = str($request->validated(['query']))->lower();
-
-        $clips = Clip::whereRaw('lower(title)  like (?)', ["%{$searchTerm}%"])->get();
+        $clips = Clip::search($request->validated(['query']))->get();
 
         return response()->json($clips->map(function ($clip) {
             return [
@@ -37,11 +35,9 @@ class ApiController extends Controller
     {
         $validated = $request->validated();
 
-        $searchTerm = strtolower($validated['query']);
-
         return response()->json(
             Tag::select(['id', 'name'])
-                ->whereRaw('lower(name)  like (?)', ["%{$searchTerm}%"])
+                ->search($validated['query'])
                 ->get(),
         );
     }
@@ -56,11 +52,9 @@ class ApiController extends Controller
     {
         $validated = $request->validated();
 
-        $searchTerm = strtolower($validated['query']);
-
         return response()->json(
             Organization::select(['org_id as id', 'name'])
-                ->whereRaw('lower(name)  like (?)', ["%{$searchTerm}%"])
+                ->search($validated['query'])
                 ->get(),
         );
     }
@@ -75,10 +69,7 @@ class ApiController extends Controller
     {
         $validated = $request->validated();
 
-        $searchTerm = strtolower($validated['query']);
-
-        $presenters = Presenter::whereRaw('lower(first_name)  like (?)', ["%{$searchTerm}%"])
-            ->orWhereRaw('lower(last_name)  like (?)', ["%{$searchTerm}%"])->get();
+        $presenters = Presenter::search($validated['query'])->get();
 
         $names = $presenters->map(function ($presenter) {
             return [
