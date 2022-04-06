@@ -5084,6 +5084,35 @@ jquery__WEBPACK_IMPORTED_MODULE_4___default()(function () {
       }
     }
   });
+  jquery__WEBPACK_IMPORTED_MODULE_4___default()('.select2-tides-users').select2({
+    placeholder: 'Search for a user',
+    minimumInputLength: 2,
+    ajax: {
+      url: "/api/users/",
+      delay: 250,
+      data: function data(params) {
+        return {
+          query: params.term,
+          // search term
+          page: params.page
+        };
+      },
+      processResults: function processResults(data, params) {
+        params.page = params.page || 1;
+        return {
+          results: jquery__WEBPACK_IMPORTED_MODULE_4___default().map(data, function (obj) {
+            return {
+              id: obj.id,
+              text: obj.name
+            };
+          }),
+          pagination: {
+            more: params.page * 30 < data.total_count
+          }
+        };
+      }
+    }
+  });
   jquery__WEBPACK_IMPORTED_MODULE_4___default()('.select2-tides-organization').select2({
     placeholder: 'select an organization',
     minimumInputLength: 2,
@@ -5169,7 +5198,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 });
-window.Alpine = alpinejs__WEBPACK_IMPORTED_MODULE_2__["default"];
 alpinejs__WEBPACK_IMPORTED_MODULE_2__["default"].start();
 
 /***/ }),

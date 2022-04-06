@@ -13,7 +13,7 @@
     <!-- Styles -->
     <link rel="icon" href="{{ URL::asset('/css/favicon.ico') }}" type="image/x-icon"/>
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
-    @livewireStyes
+    @livewireStyles
 </head>
 <body class="font-sans antialiased leading-none bg-gray-100 ">
 <div id="app" class="flex flex-col min-h-screen">
@@ -74,5 +74,6 @@
     </footer>
 </div>
 <script src="{{ mix('js/app.js') }}"></script>
+@livewireScripts
 </body>
 </html>

@@ -156,7 +156,7 @@
                 @include('backend.clips.sidebar._ingest-video')
             @endif
 
-            @if(auth()->user()->isAdmin() && $clip->acls->pluck('id')->contains('2'))
+            @if(auth()->user()->isAdmin() && $clip->acls->pluck('id')->contains('4'))
                 @include('backend.clips.sidebar._lms_test_link')
             @endif
         </div>

@@ -171,6 +171,13 @@ class User extends Authenticatable
         });
     }
 
+    public function scopeModerators($query)
+    {
+        return $query->whereHas('roles', function ($q) {
+            $q->where('name', 'moderator');
+        });
+    }
+
     /*
      * Only for test purposes and with use in tinker!
      *

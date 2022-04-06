@@ -60,7 +60,7 @@ class ManageSeriesTest extends TestCase
 
         $this->get(route('series.index'))
             ->assertSee($series->title)
-            ->assertSee('intern, lms');
+            ->assertSee('free, portal');
     }
 
     /** @test */

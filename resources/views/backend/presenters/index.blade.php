@@ -10,5 +10,4 @@
         </div>
     </div>
     <livewire:presenter-data-table/>
-    @livewireScripts
 @endsection

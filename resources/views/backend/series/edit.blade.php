@@ -72,6 +72,7 @@
             @if(auth()->user()->isAdmin())
                 @include('backend.series.sidebar._series-owner')
             @endif
+            @include('backend.series.sidebar._invite')
         </div>
 
     </div>

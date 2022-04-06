@@ -7,6 +7,7 @@ use App\Models\Clip;
 use App\Models\Organization;
 use App\Models\Presenter;
 use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -21,17 +22,18 @@ class ApiTest extends TestCase
 
         $tidesClip = Clip::factory()->create(['title' => 'tides clip']);
 
-        $response = $this->get(route('api.clips') . '?query=test')->assertOk();
+        $this->get(route('api.clips') . '?query=test')
+            ->assertOk()
+            ->assertJson([
+                ["id" => 1, "name" => $testClip->title]
+            ]);
 
-        $response->assertJson([
-            ["id" => 1, "name" => $testClip->title]
-        ]);
-
-        $response = $this->get(route('api.clips') . '?query=clip')->assertOk();
-        $response->assertJson([
-            ["id" => 1, "name" => $testClip->title],
-            ["id" => 2, "name" => $tidesClip->title]
-        ]);
+        $this->get(route('api.clips') . '?query=clip')
+            ->assertOk()
+            ->assertJson([
+                ["id" => 1, "name" => $testClip->title],
+                ["id" => 2, "name" => $tidesClip->title]
+            ]);
     }
 
     /** @test */
@@ -39,11 +41,11 @@ class ApiTest extends TestCase
     {
         Tag::factory()->create(['name' => 'algebra']);
 
-        $response = $this->get(route('api.tags') . '?query=algebra');
-
-        $response->assertJson([
-            ["id" => 1, "name" => 'algebra']
-        ]);
+        $this->get(route('api.tags') . '?query=algebra')
+            ->assertOk()
+            ->assertJson([
+                ["id" => 1, "name" => 'algebra']
+            ]);
     }
 
     /** @test */
@@ -51,10 +53,36 @@ class ApiTest extends TestCase
     {
         Presenter::factory()->create(['first_name' => 'John', 'last_name' => 'Doe']);
 
-        $response = $this->get(route('api.presenters') . '?query=john');
+        $this->get(route('api.presenters') . '?query=john')
+            ->assertOk()
+            ->assertJson([
+                ["id" => 1, "name" => 'Dr. John Doe']
+            ]);
+    }
+
+    /** @test */
+    public function it_is_not_allowed_for_guest_or_simple_users_to_use_user_api(): void
+    {
+        $this->get(route('api.users') . '?query=john')->assertForbidden();
+    }
+
+    /** @test */
+    public function it_search_users_only_for_admin_and_moderator_roles(): void
+    {
+        $john = User::factory()->create(['first_name' => 'John', 'last_name' => 'Doe', 'username' => 'test123']);
+        $jane = User::factory()->create(['first_name' => 'Jane', 'last_name' => 'Drake']);
+        $john->assignRole('moderator');
+        $jane->assignRole('moderator');
+
+        $this->signInRole('moderator');
+
+        $response = $this->get(route('api.users') . '?query=john')->assertOk();
 
         $response->assertJson([
-            ["id" => 1, "name" => 'Dr. John Doe']
+            [
+                'id'   => $john->id,
+                'name' => 'John Doe/tes****',
+            ]
         ]);
     }
 
@@ -75,10 +103,10 @@ class ApiTest extends TestCase
             'updated_at'         => null,
         ]);
 
-        $response = $this->get(route('api.organizations') . '?query=test');
-
-        $response->assertJson([
-            ["id" => 2, "name" => 'This is a test']
-        ]);
+        $this->get(route('api.organizations') . '?query=test')
+            ->assertOk()
+            ->assertJson([
+                ["id" => 2, "name" => 'This is a test']
+            ]);
     }
 }

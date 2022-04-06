@@ -11,14 +11,13 @@ use Illuminate\Database\Eloquent\Builder;
 
 trait Searchable
 {
-    private function lowerCaseTerm($term)
+    /**
+     * @param $term
+     * @return array|string
+     */
+    private function lowerCaseTerm($term): array|string
     {
-        if ($term == "") {
-            return $term;
-        }
-
-        $reservedSymbols = ['-', '+', '<', '>', '(', ')', '~'];
-        $term = str_replace($reservedSymbols, '', $term);
+        $term = str_replace(['-', '+', '<', '>', '(', ')', '~'], '', $term);
 
         trim(str($term)->lower());
 

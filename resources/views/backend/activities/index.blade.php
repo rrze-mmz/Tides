@@ -7,5 +7,4 @@
         </div>
     </div>
     <livewire:activities-data-table/>
-    @livewireScripts
 @endsection

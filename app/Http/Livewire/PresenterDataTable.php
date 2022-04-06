@@ -3,7 +3,6 @@
 namespace App\Http\Livewire;
 
 use App\Models\Presenter;
-use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Contracts\View\View;

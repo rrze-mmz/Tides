@@ -98,6 +98,32 @@ $(() => {
         }
     });
 
+    $('.select2-tides-users').select2({
+        placeholder: 'Search for a user',
+        minimumInputLength: 2,
+        ajax: {
+            url: "/api/users/",
+            delay: 250,
+            data: function (params) {
+                return {
+                    query: params.term, // search term
+                    page: params.page
+                };
+            },
+            processResults: function (data, params) {
+                params.page = params.page || 1;
+                return {
+                    results: $.map(data, function (obj) {
+                        return {id: obj.id, text: obj.name};
+                    }),
+                    pagination: {
+                        more: (params.page * 30) < data.total_count
+                    }
+                };
+            },
+        }
+    });
+
     $('.select2-tides-organization').select2({
         placeholder: 'select an organization',
         minimumInputLength: 2,
@@ -183,7 +209,5 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
-
-window.Alpine = Alpine;
 
 Alpine.start();

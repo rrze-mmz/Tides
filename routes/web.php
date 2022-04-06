@@ -20,6 +20,7 @@ use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\SearchController;
 use App\Http\Controllers\Frontend\ShowClipsController;
 use App\Http\Controllers\Frontend\ShowSeriesController;
+use App\Http\Controllers\SeriesInvitationsController;
 use App\Http\Middleware\CheckLMSToken;
 use App\Models\Activity;
 use App\Models\Clip;
@@ -65,6 +66,7 @@ Route::controller(ApiController::class)->prefix('/api')->group(function () {
     Route::get('/clips', 'clips')->name('api.clips');
     Route::get('/tags', 'tags')->name('api.tags');
     Route::get('/presenters', 'presenters')->name('api.presenters');
+    Route::get('/users', 'users')->name('api.users');
     Route::get('/organizations', 'organizations')->name('api.organizations');
 });
 
@@ -90,10 +92,41 @@ Route::prefix('admin')->middleware(['auth', 'can:access-dashboard'])->group(func
     Route::resource('series', SeriesController::class)->except(['show', 'edit']);
     Route::get('/series/{series}', [SeriesController::class, 'edit'])->name('series.edit');
 
+    Route::controller(SeriesClipsController::class)->prefix('/series')->group(function () {
+        // Create a clip for a certain series.
+        Route::get('/{series}/addClip', 'create')->name('series.clips.create');
+        Route::post('/{series}/addClip', 'store')->name('series.clips.store');
+
+        Route::get('/{series}/reorder', 'listClips')->name('series.clips.changeEpisode');
+        Route::post('/{series}/reorder', 'reorder')->name('series.clips.reorder');
+
+        //add/remove an existing clip to selected series
+        Route::get('/listSeries/{clip}', 'listSeries')->name('series.clips.listSeries');
+        Route::post('/{series}/assignSeries/{clip}', 'assign')->name('series.clips.assign');
+        Route::delete('/clip/removeSeries/{clip}', 'remove')->name('series.clips.remove');
+    });
+
+    //Series chapters
+    Route::controller(ChaptersController::class)->prefix('/series')
+        ->middleware('can:edit,series')
+        ->group(function () {
+            Route::get('/{series}/chapters', 'index')->name('series.chapters.index');
+            Route::post('/{series}/chapters', 'store')->name('series.chapters.create');
+            Route::put('/{series}/chapters/', 'update')->name('series.chapters.update');
+            Route::get('/{series}/chapters/{chapter}', 'edit')->name('series.chapters.edit');
+            Route::patch('/{series}/chapters/{chapter}/addClips', 'addClips')->name('series.chapters.addClips');
+            Route::patch('/{series}/chapters/{chapter}/removeClips', 'removeClips')
+                ->name('series.chapters.removeClips');
+            Route::delete('/{series}/chapters/{chapter}', 'destroy')->name('series.chapters.delete');
+        });
+
+    //Series invitations - Invite a user to be a member of a Series
+    Route::post('/series/{series}/invitations', SeriesInvitationsController::class)->name('series.invitations');
+
+
     //Clip routes
     Route::resource('clips', ClipsController::class)->except(['show', 'edit']);
     Route::get('/clips/{clip}/', [ClipsController::class, 'edit'])->name('clips.edit');
-
     /*
      * A group of clip assets functions
      */
@@ -119,35 +152,6 @@ Route::prefix('admin')->middleware(['auth', 'can:access-dashboard'])->group(func
         Route::get('/clips/{clip}/triggerSmilFiles', TriggerSmilFilesController::class)
             ->name('admin.clips.triggerSmilFiles');
     });
-
-
-    Route::controller(SeriesClipsController::class)->prefix('/series')->group(function () {
-        // Create a clip for a certain series.
-        Route::get('/{series}/addClip', 'create')->name('series.clips.create');
-        Route::post('/{series}/addClip', 'store')->name('series.clips.store');
-
-        Route::get('/{series}/reorder', 'listClips')->name('series.clips.changeEpisode');
-        Route::post('/{series}/reorder', 'reorder')->name('series.clips.reorder');
-
-        //add/remove an existing clip to selected series
-        Route::get('/listSeries/{clip}', 'listSeries')->name('series.clips.listSeries');
-        Route::post('/{series}/assignSeries/{clip}', 'assign')->name('series.clips.assign');
-        Route::delete('/clip/removeSeries/{clip}', 'remove')->name('series.clips.remove');
-    });
-
-    //Chapter routes for a certain series
-    Route::controller(ChaptersController::class)->prefix('/series')
-        ->middleware('can:edit,series')
-        ->group(function () {
-            Route::get('/{series}/chapters', 'index')->name('series.chapters.index');
-            Route::post('/{series}/chapters', 'store')->name('series.chapters.create');
-            Route::put('/{series}/chapters/', 'update')->name('series.chapters.update');
-            Route::get('/{series}/chapters/{chapter}', 'edit')->name('series.chapters.edit');
-            Route::patch('/{series}/chapters/{chapter}/addClips', 'addClips')->name('series.chapters.addClips');
-            Route::patch('/{series}/chapters/{chapter}/removeClips', 'removeClips')
-                ->name('series.chapters.removeClips');
-            Route::delete('/{series}/chapters/{chapter}', 'destroy')->name('series.chapters.delete');
-        });
 
 
     //Assets routes

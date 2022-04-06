@@ -579,7 +579,7 @@ class ManageClipsTest extends TestCase
 
         $this->get(route('clips.edit', $adminClip))->assertDontSee('LMS Test Link');
 
-        $adminClip->addAcls(collect(['2']));
+        $adminClip->addAcls(collect(['4']));
 
         $this->get(route('clips.edit', $adminClip))->assertSee('LMS Test Link');
     }

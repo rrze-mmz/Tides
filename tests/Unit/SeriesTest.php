@@ -7,6 +7,7 @@ use App\Models\Series;
 use App\Models\User;
 use Facades\Tests\Setup\SeriesFactory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
@@ -67,6 +68,12 @@ class SeriesTest extends TestCase
     public function it_has_many_chapters(): void
     {
         $this->assertInstanceOf(HasMany::class, $this->series->chapters());
+    }
+
+    /** @test */
+    public function it_has_many_members(): void
+    {
+        $this->assertInstanceOf(BelongsToMany::class, $this->series->members());
     }
 
     /** @test */
