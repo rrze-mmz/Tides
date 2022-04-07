@@ -71,6 +71,15 @@ class User extends Authenticatable
         return $this->hasMany(Series::class, 'owner_id');
     }
 
+    public function accessableSeries()
+    {
+        return Series::where('owner_id', $this->id)
+            ->orWhereHas('members', function ($query) {
+                $query->where('user_id', $this->id);
+            })
+            ->orderBy('updated_at');
+    }
+
     /**
      * Clip relationship
      *
@@ -115,6 +124,16 @@ class User extends Authenticatable
     }
 
     /**
+     * Series Membership relationship
+     *
+     * @return BelongsToMany
+     */
+    public function memberships(): BelongsToMany
+    {
+        return $this->belongsToMany(Series::class, 'series_members')->withTimestamps();
+    }
+
+    /**
      * Check whether the current user has given role
      *
      * @param string $role
@@ -147,11 +166,23 @@ class User extends Authenticatable
 
     /**
      * Check whether the current user is an assistant
+     *
      * @return bool
      */
     public function isAssistant(): bool
     {
         return $this->hasRole('assistant');
+    }
+
+    /**
+     * Check whether the current user is part of a series
+     *
+     * @param Series $series
+     * @return bool
+     */
+    public function isMemberOf(Series $series): bool
+    {
+        return $this->memberships()->get()->contains($series);
     }
 
     /**
@@ -179,7 +210,7 @@ class User extends Authenticatable
     }
 
     /*
-     * Only for test purposes and with use in tinker!
+     * Only for test purpoes and with use in tinker!
      *
      */
     public function resetPassword(): void

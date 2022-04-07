@@ -16,7 +16,7 @@ class SeriesMembershipRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Gate::allows('edit-series', $this->route('series'));
+        return Gate::allows('delete-series', $this->route('series'));
     }
 
     /**

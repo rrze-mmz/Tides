@@ -86,6 +86,34 @@ class ManageSeriesTest extends TestCase
     }
 
     /** @test */
+    public function a_moderator_can_see_only_owned_series_in_index(): void
+    {
+        $user = $this->signInRole($this->role);
+
+        $userSeries = Series::factory(3)->create(['owner_id' => $user->id]);
+
+        $this->get(route('series.index'))->assertSee($userSeries->first()->get()->first()->title);
+    }
+
+    /** @test */
+    public function a_moderator_can_see_in_series_index_all_series_that_is_member_of(): void
+    {
+        $series = Series::factory()->create(['title' => 'First series']);
+
+        $user = $this->signInRole($this->role);
+
+        $userSeries = Series::factory(3)->create(['owner_id' => $user->id, 'title' => 'User series']);
+
+        $this->get(route('series.index'))
+            ->assertSee('User series')
+            ->assertDontSee('First series');
+
+        $series->addMember($user);
+
+        $this->get(route('series.index'))->assertSee('First series');
+    }
+
+    /** @test */
     public function it_paginates_all_series_in_dashboard_index_page_for_assistant_user(): void
     {
         $this->markTestSkipped('Livewire/Tailwind ERROR Using $this when not in object context in file');
@@ -291,11 +319,33 @@ class ManageSeriesTest extends TestCase
             $this->mockEventResponse($series, OpencastWorkflowState::STOPPED)
         );
 
-        $this->get($series->adminPath())
+        $this->get(route('series.edit', $series))
             ->assertOk()
+            ->assertViewIs('backend.series.edit')
             ->assertSee('title')
             ->assertSee('presenters')
             ->assertSee('description');
+    }
+
+    /** @test */
+    public function a_series_member_can_view_edit_form_fields(): void
+    {
+        $series = SeriesFactory::ownedBy($this->signInRole($this->role))->create();
+        auth()->logout();
+
+        $user2 = $this->signInRole('moderator');
+
+        $this->get(route('series.edit', $series))->assertForbidden();
+
+        $series->addMember($user2);
+
+        $this->mockHandler->append(
+            $this->mockHealthResponse(),
+            $this->mockSeriesRunningWorkflowsResponse($series, false),
+            $this->mockEventResponse($series, OpencastWorkflowState::STOPPED)
+        );
+
+        $this->get(route('series.edit', $series))->assertOk();
     }
 
     /** @test */
@@ -305,7 +355,7 @@ class ManageSeriesTest extends TestCase
 
         $this->signInRole($this->role);
 
-        $this->get($series->adminPath())->assertForbidden();
+        $this->get(route('series.edit', $series))->assertForbidden();
     }
 
     /** @test */
@@ -321,7 +371,7 @@ class ManageSeriesTest extends TestCase
 
         $this->signInRole('admin');
 
-        $this->get($series->adminPath())->assertOk();
+        $this->get(route('series.edit', $series))->assertOk();
     }
 
     /** @test */
@@ -337,7 +387,7 @@ class ManageSeriesTest extends TestCase
 
         $this->signInRole('superadmin');
 
-        $this->get($series->adminPath())->assertOk();
+        $this->get(route('series.edit', $series))->assertOk();
     }
 
     /** @test */
@@ -411,7 +461,7 @@ class ManageSeriesTest extends TestCase
 
         $series = SeriesFactory::ownedBy($this->signInRole($this->role))->create();
 
-        $this->patch($series->adminPath(), [
+        $this->patch(route('series.edit', $series), [
             'title'           => 'changed',
             'description'     => 'changed',
             'organization_id' => '1',
@@ -425,7 +475,7 @@ class ManageSeriesTest extends TestCase
             'organization_id' => '1',
         ]);
 
-        $this->get($series->adminPath())->assertSee('changed');
+        $this->get(route('series.edit', $series))->assertSee('changed');
     }
 
     /** @test */
@@ -436,7 +486,7 @@ class ManageSeriesTest extends TestCase
         //pass an empty opencast response
         $this->mockHandler->append($this->mockCreateSeriesResponse());
 
-        $this->patch($series->adminPath(), [
+        $this->patch(route('series.edit', $series), [
             'title'           => 'changed',
             'description'     => 'changed',
             'organization_id' => '1',
@@ -454,7 +504,7 @@ class ManageSeriesTest extends TestCase
 
         $this->signInRole($this->role);
 
-        $this->patch($series->adminPath(), [
+        $this->patch(route('series.edit', $series), [
             'title'           => 'changed',
             'description'     => 'changed',
             'organization_id' => '1',
@@ -473,7 +523,7 @@ class ManageSeriesTest extends TestCase
         //pass an empty opencast respons
         $this->mockHandler->append($this->mockSeriesRunningWorkflowsResponse($series, false));
 
-        $this->patch($series->adminPath(), [
+        $this->patch(route('series.edit', $series), [
             'title'           => 'changed',
             'description'     => 'changed',
             'organization_id' => '1',
@@ -487,7 +537,7 @@ class ManageSeriesTest extends TestCase
     {
         $series = SeriesFactory::ownedBy($this->signInRole($this->role))->create();
 
-        $this->patch($series->adminPath(), [
+        $this->patch(route('series.edit', $series), [
             'title'           => 'changed',
             'description'     => 'changed',
             'organization_id' => '1',
@@ -501,7 +551,7 @@ class ManageSeriesTest extends TestCase
 
         $this->signInRole($this->role);
 
-        $this->delete($series->adminPath())->assertForbidden();
+        $this->delete(route('series.edit', $series))->assertForbidden();
 
         $this->assertDatabaseHas('series', $series->only('id'));
     }
@@ -513,7 +563,7 @@ class ManageSeriesTest extends TestCase
 
         $this->signInRole('assistant');
 
-        $this->delete($series->adminPath())->assertForbidden();
+        $this->delete(route('series.edit', $series))->assertForbidden();
 
         $this->assertDatabaseHas('series', $series->only('id'));
     }
@@ -525,7 +575,7 @@ class ManageSeriesTest extends TestCase
 
         $this->signInRole('admin');
 
-        $this->followingRedirects()->delete($series->adminPath())->assertOk();
+        $this->followingRedirects()->delete(route('series.edit', $series))->assertOk();
 
         $this->assertDatabaseMissing('series', $series->only('id'));
     }
@@ -535,7 +585,7 @@ class ManageSeriesTest extends TestCase
     {
         $series = SeriesFactory::ownedBy($this->signInRole($this->role))->create();
 
-        $this->delete($series->adminPath());
+        $this->delete(route('series.edit', $series));
 
         $this->assertDatabaseMissing('series', $series->only('id'));
     }
@@ -545,7 +595,7 @@ class ManageSeriesTest extends TestCase
     {
         $series = SeriesFactory::ownedBy($this->signInRole($this->role))->create();
 
-        $this->delete($series->adminPath())->assertSessionHas($this->flashMessageName);
+        $this->delete(route('series.edit', $series))->assertSessionHas($this->flashMessageName);
     }
 
     /** @test */

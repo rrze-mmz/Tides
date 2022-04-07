@@ -59,6 +59,18 @@ class SeriesMembershipTest extends TestCase
     }
 
     /** @test */
+    public function a_series_member_cannot_add_users_to_series(): void
+    {
+        $series = SeriesFactory::create();
+
+        $user = $series->addMember(User::factory()->create()->assignRole('moderator'));
+
+        $this->signIn($user);
+
+        $this->get(route('series.edit', $series))->assertDontSee('Add a moderator as series member');
+    }
+
+    /** @test */
     public function it_sends_an_email_to_user_after_being_added_in_series(): void
     {
         Notification::fake();
@@ -83,9 +95,7 @@ class SeriesMembershipTest extends TestCase
         $series = SeriesFactory::ownedBy($this->signInRole('moderator'))->create();
         $this->assertEquals(0, $series->members()->count());
 
-        $user = User::factory()->create();
-        $user->assignRole('moderator');
-        $series->addMember($user);
+        $user = $series->addMember(User::factory()->create()->assignRole('moderator'));
 
         $this->assertEquals(1, $series->members()->count());
 

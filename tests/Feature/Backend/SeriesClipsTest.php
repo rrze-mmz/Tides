@@ -3,6 +3,7 @@
 namespace Tests\Feature\Backend;
 
 use App\Models\Clip;
+use App\Models\User;
 use Facades\Tests\Setup\SeriesFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -47,6 +48,22 @@ class SeriesClipsTest extends TestCase
     }
 
     /** @test */
+    public function a_series_member_can_add_a_clip_to_series(): void
+    {
+        $series = SeriesFactory::create();
+
+        $user = User::factory()->create()->assignRole($this->role);
+
+        $this->signIn($user);
+
+        $this->get(route('series.clips.create', $series))->assertForbidden();
+
+        $series->addMember($user);
+
+        $this->get(route('series.clips.create', $series))->assertOk();
+    }
+
+    /** @test */
     public function an_admin_can_view_add_clip_to_series_form_for_not_owned_series(): void
     {
         $series = SeriesFactory::create();
@@ -84,6 +101,20 @@ class SeriesClipsTest extends TestCase
 
         $this->post(route('series.clips.store', $series), Clip::factory()->raw());
 
+        $this->assertEquals(1, $series->clips()->count());
+    }
+
+    /** @test */
+    public function a_series_member_can_add_clip_to_series(): void
+    {
+        $series = SeriesFactory::create();
+
+        $user = $series->addMember(User::factory()->create()->assignRole($this->role));
+
+        $this->signIn($user);
+
+        $this->post(route('series.clips.store', $series), Clip::factory()->raw());
+        
         $this->assertEquals(1, $series->clips()->count());
     }
 

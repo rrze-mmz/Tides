@@ -17,7 +17,7 @@
                 @foreach($series->members as $member)
                     <li class="p-2 mx-4 flex ">
                         <div>
-                            {{ $member->getFullNameAttribute() }}
+                            {{ $member->getFullNameAttribute().'/'.$member->username }}
                         </div>
                         <div class="pl-4">
                             <form action="{{route('series.membership.removeUser', $series)}}"

@@ -92,7 +92,7 @@ class Series extends BaseModel
     {
         return $this->belongsToMany(User::class, 'series_members')->withTimestamps();
     }
-
+    
     /**
      * Add a user to series
      *

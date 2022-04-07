@@ -26,7 +26,7 @@ class SeriesController extends Controller
             'series' =>
                 (auth()->user()->can('index-all-series'))
                     ? Series::orderByDesc('updated_at')->paginate(12)
-                    : auth()->user()->series()->orderByDesc('updated_at')->paginate(12)
+                    : auth()->user()->accessableSeries()->paginate(12)
         ]);
     }
 

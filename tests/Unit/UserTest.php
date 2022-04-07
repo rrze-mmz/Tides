@@ -3,6 +3,7 @@
 
 namespace Tests\Unit;
 
+use App\Models\Series;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -39,6 +40,18 @@ class UserTest extends TestCase
     public function it_has_many_roles(): void
     {
         $this->assertInstanceOf(BelongsToMany::class, $this->user->roles());
+    }
+
+    /** @test */
+    public function it_has_many_memberships(): void
+    {
+        $this->assertInstanceOf(BelongsToMany::class, $this->user->memberships());
+    }
+
+    /** @test */
+    public function it_checks_whether_a_user_is_member_of_a_series(): void
+    {
+        $this->assertFalse($this->user->isMemberOf(Series::factory()->create()));
     }
 
     /** @test */
