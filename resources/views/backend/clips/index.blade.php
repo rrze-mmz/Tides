@@ -8,11 +8,9 @@
         @forelse($clips as $clip)
             @include('backend.clips._card',['clip'=> $clip])
         @empty
-            No clips found
-            <div class="pt-10 py-10">
-                <x-form.button :link="route('clips.create')" type="submit" text="Create new clip"/>
-            </div>
+            No more clips found
         @endforelse
+        <a href="{{route('clips.create')}}">Create new clip</a>
     </div>
 
     <div class="py-10">

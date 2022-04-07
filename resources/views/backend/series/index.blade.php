@@ -11,12 +11,9 @@
             </li>
         @empty
             <li class="w-full p-4 bg-white my-2 rounded">
-                You have no series yet...Maybe create one?
+                No more series found
             </li>
-
-            <div class="pt-10 py-10">
-                <x-form.button :link="route('series.create')" type="submit" text="Create new series"/>
-            </div>
+            <a href="{{route('clips.create')}}">Create new series</a>
         @endforelse
         <div class="py-10">
             {{ $series->links() }}
