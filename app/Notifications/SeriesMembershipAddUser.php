@@ -2,13 +2,12 @@
 
 namespace App\Notifications;
 
-use App\Models\Clip;
+use App\Models\Series;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class AssetsTransferred extends Notification
+class SeriesMembershipAddUser extends Notification
 {
     use Queueable;
 
@@ -17,7 +16,7 @@ class AssetsTransferred extends Notification
      *
      * @return void
      */
-    public function __construct(protected Clip $clip)
+    public function __construct(protected Series $series)
     {
         //
     }
@@ -39,11 +38,13 @@ class AssetsTransferred extends Notification
      * @param mixed $notifiable
      * @return MailMessage
      */
-    public function toMail($notifiable)
+    public function toMail($notifiable): MailMessage
     {
         return (new MailMessage)
-            ->line('Your video files for "' . $this->clip->title . '" are transferred.')
-            ->action('Check your clip', route('clips.edit', $this->clip))
+            ->subject('You have been added to ' . $this->series->title . ' Series as moderator!')
+            ->line('Hi ' . $notifiable->getFullNameAttribute())
+            ->line('you have been added by ' . auth()->user()->getFullNameAttribute() . ' as Series moderator')
+            ->action('Check you series edit page', route('series.edit', $this->series))
             ->line('Thanks!');
     }
 
@@ -53,7 +54,7 @@ class AssetsTransferred extends Notification
      * @param mixed $notifiable
      * @return array
      */
-    public function toArray($notifiable)
+    public function toArray($notifiable): array
     {
         return [
             //

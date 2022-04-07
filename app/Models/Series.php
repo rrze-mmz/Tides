@@ -93,9 +93,28 @@ class Series extends BaseModel
         return $this->belongsToMany(User::class, 'series_members')->withTimestamps();
     }
 
-    public function invite(User $user): void
+    /**
+     * Add a user to series
+     *
+     * @param User $moderatorUser
+     * @return User
+     */
+    public function addMember(User $moderatorUser): User
     {
-        $this->members()->attach($user);
+        $this->members()->attach($moderatorUser);
+        return $moderatorUser;
+    }
+
+    /**
+     * Remove a user from series
+     *
+     * @param User $moderatorUser
+     * @return User
+     */
+    public function removeMember(User $moderatorUser): User
+    {
+        $this->members()->detach($moderatorUser);
+        return $moderatorUser;
     }
 
     /**

@@ -77,6 +77,18 @@ class SeriesTest extends TestCase
     }
 
     /** @test */
+    public function it_has_an_add_member_function_for_membership(): void
+    {
+        $this->assertInstanceOf(User::class, $this->series->addMember(User::factory()->create()));
+    }
+
+    /** @test */
+    public function it_han_a_remove_member_function_for_membership(): void
+    {
+        $this->assertInstanceOf(User::class, $this->series->removeMember(User::factory()->create()));
+    }
+
+    /** @test */
     public function it_has_many_presenters_using_presentable_trait(): void
     {
         $this->assertInstanceOf(MorphToMany::class, $this->series->presenters());

@@ -15,8 +15,25 @@
         <div class="pt-4">
             <ul class="list-disc">
                 @foreach($series->members as $member)
-                    <li class="p-2 mx-4">
-                        {{ $member->getFullNameAttribute() }}
+                    <li class="p-2 mx-4 flex ">
+                        <div>
+                            {{ $member->getFullNameAttribute() }}
+                        </div>
+                        <div class="pl-4">
+                            <form action="{{route('series.membership.removeUser', $series)}}"
+                                  method="POST">
+                                @csrf
+                                <input hidden type="number"
+                                       value="{{$member->id}}"
+                                       name="userID"/>
+                                <button type="submit">
+                                    <x-heroicon-o-x-circle class="w-6 h-6 text-red-500"/>
+                                </button>
+                                @error('userID')
+                                <div>{{$message}}</div>
+                                @enderror
+                            </form>
+                        </div>
                     </li>
                 @endforeach
             </ul>

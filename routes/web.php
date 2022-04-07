@@ -3,15 +3,16 @@
 use App\Http\Controllers\Backend\ActivitiesController;
 use App\Http\Controllers\Backend\AssetsController;
 use App\Http\Controllers\Backend\AssetsTransferController;
+use App\Http\Controllers\Backend\ChaptersController;
 use App\Http\Controllers\Backend\ClipsCollectionsController;
 use App\Http\Controllers\Backend\ClipsController;
 use App\Http\Controllers\Backend\CollectionsController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\OpencastController;
 use App\Http\Controllers\Backend\PresentersController;
-use App\Http\Controllers\Backend\ChaptersController;
 use App\Http\Controllers\Backend\SeriesClipsController;
 use App\Http\Controllers\Backend\SeriesController;
+use App\Http\Controllers\Backend\SeriesMembershipController;
 use App\Http\Controllers\Backend\TriggerSmilFilesController;
 use App\Http\Controllers\Backend\UsersController;
 use App\Http\Controllers\Frontend\ApiController;
@@ -20,7 +21,6 @@ use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\SearchController;
 use App\Http\Controllers\Frontend\ShowClipsController;
 use App\Http\Controllers\Frontend\ShowSeriesController;
-use App\Http\Controllers\SeriesInvitationsController;
 use App\Http\Middleware\CheckLMSToken;
 use App\Models\Activity;
 use App\Models\Clip;
@@ -121,7 +121,10 @@ Route::prefix('admin')->middleware(['auth', 'can:access-dashboard'])->group(func
         });
 
     //Series invitations - Invite a user to be a member of a Series
-    Route::post('/series/{series}/invitations', SeriesInvitationsController::class)->name('series.invitations');
+    Route::post('/series/{series}/membership/addUser', [SeriesMembershipController::class, 'add'])
+        ->name('series.membership.addUser');
+    Route::post('/series/{series}/membership/removeUser', [SeriesMembershipController::class, 'remove'])
+        ->name('series.membership.removeUser');
 
 
     //Clip routes

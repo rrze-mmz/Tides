@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 
-class SeriesInvitationRequest extends FormRequest
+class SeriesMembershipRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

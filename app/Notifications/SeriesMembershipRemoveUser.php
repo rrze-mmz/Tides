@@ -2,13 +2,12 @@
 
 namespace App\Notifications;
 
-use App\Models\Clip;
+use App\Models\Series;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class AssetsTransferred extends Notification
+class SeriesMembershipRemoveUser extends Notification
 {
     use Queueable;
 
@@ -17,7 +16,7 @@ class AssetsTransferred extends Notification
      *
      * @return void
      */
-    public function __construct(protected Clip $clip)
+    public function __construct(protected Series $series)
     {
         //
     }
@@ -42,8 +41,9 @@ class AssetsTransferred extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->line('Your video files for "' . $this->clip->title . '" are transferred.')
-            ->action('Check your clip', route('clips.edit', $this->clip))
+            ->subject('You have been removed as moderator from ' . $this->series->title . ' !')
+            ->line('Hi ' . $notifiable->getFullNameAttribute())
+            ->line('you have been removed by ' . auth()->user()->getFullNameAttribute() . ' as Series moderator')
             ->line('Thanks!');
     }
 
