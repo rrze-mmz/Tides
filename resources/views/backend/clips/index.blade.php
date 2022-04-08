@@ -10,9 +10,13 @@
         @empty
             No more clips found
         @endforelse
-        <a href="{{route('clips.create')}}">Create new clip</a>
     </div>
 
+    <div class="flex pt-4">
+        <x-form.button :link="route('clips.create')"
+                       type="submit"
+                       text="Create new clip"/>
+    </div>
     <div class="py-10">
         {{ $clips->links() }}
     </div>

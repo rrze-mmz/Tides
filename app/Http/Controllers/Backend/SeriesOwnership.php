@@ -8,10 +8,13 @@ use App\Models\Series;
 use App\Models\User;
 use App\Notifications\SeriesMembershipAddUser;
 use App\Notifications\SeriesMembershipRemoveUser;
+use App\Notifications\SeriesOwnershipAddUser;
+use App\Notifications\SeriesOwnershipRemoveUser;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
 use function to_route;
 
-class SeriesMembershipController extends Controller
+class SeriesOwnership extends Controller
 {
     /**
      * Handle the incoming request.
@@ -19,24 +22,23 @@ class SeriesMembershipController extends Controller
      * @param Series $series
      * @param SeriesMembershipRequest $request
      * @return RedirectResponse
+     * @throws AuthorizationException
      */
-    public function add(Series $series, SeriesMembershipRequest $request)
+    public function __invoke(Series $series, SeriesMembershipRequest $request): RedirectResponse
     {
+        $this->authorize('change-series-owner');
+
         $validated = $request->validated();
+
         $user = User::findOrFail($validated['userID']);
 
-        //after adding the user to series notify him via email
-        $series->addMember($user)->notify(new SeriesMembershipAddUser($series));
+        if (!is_null($series->owner)) {
+            $series->owner->notify(new SeriesOwnershipRemoveUser($series));
+        }
 
-        return to_route('series.edit', $series);
-    }
-
-    public function remove(Series $series, SeriesMembershipRequest $request)
-    {
-        $validated = $request->validated();
-        $user = User::findOrFail($validated['userID']);
-
-        $series->removeMember($user)->notify(new SeriesMembershipRemoveUser($series));
+        $series->owner_id = $user->id;
+        $series->save();
+        $user->notify(new SeriesOwnershipAddUser($series));
 
         return to_route('series.edit', $series);
     }

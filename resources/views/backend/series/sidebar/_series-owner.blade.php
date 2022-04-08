@@ -2,10 +2,39 @@
     <h2 class="text-xl font-normal py-4 -ml-5 mb-3 border-l-4 border-blue-600 pl-4 ">
         Series Administrator
     </h2>
-    <div class="flex">
-        <div class="text-lg italic">
-            {{$series->owner?->getFullNameAttribute().'-'.$series->owner?->username}}
-        </div>
+    <div class="flex-row">
+        @if(is_null($series->owner))
+            <div class="w-full pb-6">
+                {{ 'Series has no owner yet' }}
+            </div>
+        @else
+            <div class="text-lg italic">
+                {{$series->owner?->getFullNameAttribute().'-'.$series->owner?->username}}
+            </div>
+        @endif
+        @can('change-series-owner')
+            <div class="w-full pt-6">
+                <form
+                    method="POST"
+                    class="px-2"
+                    action="{{route('series.ownership.change',$series)}}"
+                >
+                    @csrf
+
+                    <div class="w-full pb-6">
+                        <label>
+                            <select
+                                class="p-2 w-full select2-tides-users focus:outline-none focus:bg-white focus:border-blue-500"
+                                name="userID"
+                                style="width: 100%"
+                            >
+                            </select>
+                        </label>
+                    </div>
+                    <x-form.button :link="$link=false" type="submit" text="Set series owner"/>
+                </form>
+            </div>
+        @endcan
     </div>
 
     @if($series->members()->count() > 0)
@@ -19,21 +48,25 @@
                         <div>
                             {{ $member->getFullNameAttribute().'/'.$member->username }}
                         </div>
-                        <div class="pl-4">
-                            <form action="{{route('series.membership.removeUser', $series)}}"
-                                  method="POST">
-                                @csrf
-                                <input hidden type="number"
-                                       value="{{$member->id}}"
-                                       name="userID"/>
-                                <button type="submit">
-                                    <x-heroicon-o-x-circle class="w-6 h-6 text-red-500"/>
-                                </button>
-                                @error('userID')
-                                <div>{{$message}}</div>
-                                @enderror
-                            </form>
-                        </div>
+                        @can('delete-series', $series)
+                            <div class="pl-4">
+                                <form action="{{route('series.membership.removeUser', $series)}}"
+                                      method="POST">
+                                    @csrf
+                                    <label>
+                                        <input hidden type="number"
+                                               value="{{$member->id}}"
+                                               name="userID"/>
+                                    </label>
+                                    <button type="submit">
+                                        <x-heroicon-o-x-circle class="w-6 h-6 text-red-500"/>
+                                    </button>
+                                    @error('userID')
+                                    <div>{{$message}}</div>
+                                    @enderror
+                                </form>
+                            </div>
+                        @endcan
                     </li>
                 @endforeach
             </ul>

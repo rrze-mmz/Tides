@@ -64,7 +64,7 @@ class SeriesClipsController extends Controller
             'series' =>
                 (auth()->user()->isAdmin())
                     ? Series::orderByDesc('updated_at')->paginate(12)
-                    : auth()->user()->series()->orderByDesc('updated_at')->paginate(12)
+                    : auth()->user()->accessableSeries()->paginate(12)
         ]);
     }
 

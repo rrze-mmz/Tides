@@ -47,6 +47,7 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('update-series', [SeriesPolicy::class, 'update']);
         Gate::define('view-series', [SeriesPolicy::class, 'view']);
         Gate::define('delete-series', [SeriesPolicy::class, 'delete']);
+        Gate::define('change-series-owner', [SeriesPolicy::class, 'changeOwner']);
 
         //clips
         Gate::define('index-all-clips', [ClipPolicy::class, 'index']);

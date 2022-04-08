@@ -114,7 +114,7 @@ class SeriesClipsTest extends TestCase
         $this->signIn($user);
 
         $this->post(route('series.clips.store', $series), Clip::factory()->raw());
-        
+
         $this->assertEquals(1, $series->clips()->count());
     }
 
@@ -144,6 +144,24 @@ class SeriesClipsTest extends TestCase
         $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
 
         $this->get(route('series.clips.listSeries', $clip))->assertDontSee($series->title);
+    }
+
+    /** @test */
+    public function it_lists_series_that_user_has_access_to(): void
+    {
+        $series = SeriesFactory::create();
+
+        $user = User::factory()->create()->assignRole($this->role);
+
+        $this->signIn($user);
+
+        $clip = ClipFactory::ownedBy($user)->create();
+
+        $this->get(route('series.clips.listSeries', $clip))->assertSee('You have no series yet');
+
+        $series->addMember($user);
+
+        $this->get(route('series.clips.listSeries', $clip))->assertSee(str()->limit($series->title, 20, '...'));
     }
 
     /** @test */

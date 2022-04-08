@@ -13,6 +13,7 @@ use App\Http\Controllers\Backend\PresentersController;
 use App\Http\Controllers\Backend\SeriesClipsController;
 use App\Http\Controllers\Backend\SeriesController;
 use App\Http\Controllers\Backend\SeriesMembershipController;
+use App\Http\Controllers\Backend\SeriesOwnership;
 use App\Http\Controllers\Backend\TriggerSmilFilesController;
 use App\Http\Controllers\Backend\UsersController;
 use App\Http\Controllers\Frontend\ApiController;
@@ -121,6 +122,7 @@ Route::prefix('admin')->middleware(['auth', 'can:access-dashboard'])->group(func
         });
 
     //Series invitations - Invite a user to be a member of a Series
+    Route::post('/series/{series}/ownership', SeriesOwnership::class)->name('series.ownership.change');
     Route::post('/series/{series}/membership/addUser', [SeriesMembershipController::class, 'add'])
         ->name('series.membership.addUser');
     Route::post('/series/{series}/membership/removeUser', [SeriesMembershipController::class, 'remove'])

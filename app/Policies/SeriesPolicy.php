@@ -101,4 +101,13 @@ class SeriesPolicy
             ? Response::allow()
             : Response::deny('You do not own this series');
     }
+
+    /**
+     * @param User $user
+     * @return bool
+     */
+    public function changeOwner(User $user): bool
+    {
+        return $user->isAdmin();
+    }
 }

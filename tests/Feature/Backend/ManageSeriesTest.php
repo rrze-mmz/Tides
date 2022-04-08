@@ -328,7 +328,7 @@ class ManageSeriesTest extends TestCase
     }
 
     /** @test */
-    public function a_series_member_can_view_edit_form_fields(): void
+    public function a_series_member_can_view_edit_form_fields_and_owner_name_and_username(): void
     {
         $series = SeriesFactory::ownedBy($this->signInRole($this->role))->create();
         auth()->logout();
@@ -345,7 +345,9 @@ class ManageSeriesTest extends TestCase
             $this->mockEventResponse($series, OpencastWorkflowState::STOPPED)
         );
 
-        $this->get(route('series.edit', $series))->assertOk();
+        $this->get(route('series.edit', $series))
+            ->assertOk()
+            ->assertSee($series->owner->username);
     }
 
     /** @test */
