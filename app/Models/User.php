@@ -210,7 +210,7 @@ class User extends Authenticatable
     }
 
     /*
-     * Only for test purpoes and with use in tinker!
+     * Only for test purposes and with use in tinker!
      *
      */
     public function resetPassword(): void

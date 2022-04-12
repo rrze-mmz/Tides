@@ -23,13 +23,15 @@
             <li>
                 <a
                     href="{{ route('presenters.index') }}"
-                    class="block mb-4 text-lg  {{ setActiveLink(route('presenters.index')) }} font-bold hover:text-gray-200"
+                    class="block mb-4 text-lg  {{ setActiveLink(route('presenters.index')) }} font-bold
+                    hover:text-gray-200"
                 >Presenters</a>
             </li>
             <li>
                 <a
                     href="{{ route('activities.index') }}"
-                    class="block mb-4 text-lg  {{ setActiveLink(route('activities.index')) }} font-bold hover:text-gray-200"
+                    class="block mb-4 text-lg  {{ setActiveLink(route('activities.index')) }} font-bold
+                    hover:text-gray-200"
                 >
                     Activities
                 </a>
@@ -39,8 +41,17 @@
         @can('view-admin-menu-items')
             <li>
                 <a
+                    href="{{ route('devices.index') }}"
+                    class="block mb-4 text-lg  {{ setActiveLink(route('devices.index')) }} font-bold
+                    hover:text-gray-200"
+                >Devices</a>
+            </li>
+
+            <li>
+                <a
                     href="{{ route('collections.index') }}"
-                    class="block mb-4 text-lg  {{ setActiveLink(route('collections.index')) }} font-bold hover:text-gray-200"
+                    class="block mb-4 text-lg  {{ setActiveLink(route('collections.index')) }} font-bold
+                    hover:text-gray-200"
                 >Collections</a>
             </li>
 
@@ -53,7 +64,8 @@
             <li>
                 <a
                     href="{{route('opencast.status')}}"
-                    class="block mb-4 text-lg {{ setActiveLink(route('opencast.status')) }} font-bold hover:text-gray-200"
+                    class="block mb-4 text-lg {{ setActiveLink(route('opencast.status')) }} font-bold
+                    hover:text-gray-200"
                 >Opencast</a>
             </li>
         @endcan

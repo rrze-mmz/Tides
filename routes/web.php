@@ -8,6 +8,7 @@ use App\Http\Controllers\Backend\ClipsCollectionsController;
 use App\Http\Controllers\Backend\ClipsController;
 use App\Http\Controllers\Backend\CollectionsController;
 use App\Http\Controllers\Backend\DashboardController;
+use App\Http\Controllers\Backend\DevicesController;
 use App\Http\Controllers\Backend\OpencastController;
 use App\Http\Controllers\Backend\PresentersController;
 use App\Http\Controllers\Backend\SeriesClipsController;
@@ -175,6 +176,8 @@ Route::prefix('admin')->middleware(['auth', 'can:access-dashboard'])->group(func
             'activities' => Activity::paginate(20),
         ]);
     })->name('activities.index');
+
+    Route::get('/devices', [DevicesController::class, 'index'])->name('devices.index');
 
     // Portal admin resources
     Route::middleware(['user.admin'])->group(function () {

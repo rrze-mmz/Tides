@@ -93,8 +93,7 @@ class SeriesController extends Controller
         Series              $series,
         UpdateSeriesRequest $request,
         OpencastService     $opencastService
-    ): RedirectResponse
-    {
+    ): RedirectResponse {
         $this->authorize('update-series', $series);
 
         $validated = $request->validated();
