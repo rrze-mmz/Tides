@@ -5,13 +5,12 @@ namespace App\Models;
 use App\Models\Traits\Searchable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Device extends BaseModel
 {
     use HasFactory;
     use Searchable;
-
+    
     protected array $searchable = [
         'name', 'description', 'comment', 'opencast_device_name', 'url', 'telephone_number'
     ];

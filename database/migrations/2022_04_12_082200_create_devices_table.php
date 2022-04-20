@@ -14,7 +14,6 @@ return new class extends Migration {
     {
         Schema::create('devices', function (Blueprint $table) {
             $table->id();
-            $table->smallInteger('type_id')->nullable();
             $table->text('description')->nullable();
             $table->text('comment')->nullable();
             $table->boolean('has_livestream_func')->nullable();

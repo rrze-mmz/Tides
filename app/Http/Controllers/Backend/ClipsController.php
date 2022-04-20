@@ -54,8 +54,7 @@ class ClipsController extends Controller
     public function store(StoreClipRequest $request): RedirectResponse
     {
         $validated = $request->validated();
-
-
+        
         $clip = auth()->user()->clips()->create(Arr::except($validated, ['tags', 'acls', 'presenters']));
 
         $clip->addTags(collect($validated['tags']));

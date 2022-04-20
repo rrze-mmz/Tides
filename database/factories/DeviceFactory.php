@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\DeviceLocation;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,6 @@ class DeviceFactory extends Factory
     public function definition()
     {
         return [
-            'type_id'              => 1,
             'description'          => 'A device description',
             'comment'              => $this->faker->sentence(),
             'has_livestream_func'  => true,
@@ -26,7 +26,7 @@ class DeviceFactory extends Factory
             'url'                  => $this->faker->url(),
             'telephone_number'     => $this->faker->phoneNumber(),
             'ip_address'           => $this->faker->ipv4(),
-            'location_id'          => 2,
+            'location_id'          => DeviceLocation::factory()->create(),
             'camera_url'           => $this->faker->url(),
             'power_outlet_url'     => $this->faker->url(),
             'organization_id'      => 1,

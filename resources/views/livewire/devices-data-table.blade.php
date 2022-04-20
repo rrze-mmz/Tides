@@ -6,13 +6,7 @@
                     <label for="search" class="sr-only">Search</label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <svg class="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd"
-                                      d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1
-                                                1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                                      clip-rule="evenodd">
-                                </path>
-                            </svg>
+                            <x-heroicon-o-search class="h-5 w-5 text-gray-400"/>
                         </div>
                         <input wire:model="search"
                                id="search"
@@ -23,19 +17,9 @@
                                placeholder="Search" type="search">
                     </div>
                 </div>
-                <div class="relative flex items-start">
-                    <div class="flex items-center h-5">
-                        <input wire:model="admin" id="admin" type="checkbox"
-                               class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
-                    </div>
-                    <div class="ml-3 text-sm leading-5">
-                        <label for="admin" class="font-medium text-gray-700">SMP-352</label>
-                    </div>
-                </div>
             </div>
 
             <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg mt-4">
-
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead>
                     <tr>
@@ -170,6 +154,7 @@
                     </thead>
 
                     <tbody class="bg-white divide-y divide-gray-200">
+
                     @foreach ($devices as $device)
                         <tr>
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
@@ -255,7 +240,12 @@
                             </td>
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap text-right text-sm leading-5 font-medium">
                                 <div class="flex space-x-2">
-                                    <form action="{{ route('devices.index') }}"
+                                    <x-form.button :link="route('devices.edit',$device)"
+                                                   type="submit"
+                                                   text="Edit"
+                                                   color="green"
+                                    />
+                                    <form action="{{ route('devices.destroy', $device) }}"
                                           method="POST">
                                         @csrf
                                         @method('DELETE')

@@ -10,6 +10,8 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
 
 class DevicesController extends Controller
@@ -20,7 +22,7 @@ class DevicesController extends Controller
      * @return Application|Factory|View
      * @throws AuthorizationException
      */
-    public function index()
+    public function index(): Application|Factory|View
     {
         Gate::allowIf(fn($user) => $user->isAdmin() || $user->isAssistant());
 
@@ -30,54 +32,40 @@ class DevicesController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View
+     * @throws AuthorizationException
      */
-    public function create()
+    public function create(): Application|Factory|View
     {
         Gate::allowIf(fn($user) => $user->isAdmin() || $user->isAssistant());
 
-
-        //
+        return view('backend.devices.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param \App\Http\Requests\StoreDeviceRequest $request
-     * @return \Illuminate\Http\Response
+     * @param StoreDeviceRequest $request
+     * @return RedirectResponse
      */
-    public function store(StoreDeviceRequest $request)
+    public function store(StoreDeviceRequest $request): RedirectResponse
     {
-        Gate::allowIf(fn($user) => $user->isAdmin() || $user->isAssistant());
+        $device = Device::create($request->validated());
 
-
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param \App\Models\Device $device
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Device $device)
-    {
-        Gate::allowIf(fn($user) => $user->isAdmin() || $user->isAssistant());
-
-
-        //
+        return to_route('devices.edit', $device);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param \App\Models\Device $device
-     * @return \Illuminate\Http\Response
+     * @param Device $device
+     * @return Application|Factory|View
      */
-    public function edit(Device $device)
+    public function edit(Device $device): Application|Factory|View
     {
         Gate::allowIf(fn($user) => $user->isAdmin() || $user->isAssistant());
 
+        return view('backend.devices.edit', compact('device'));
 
         //
     }
@@ -85,29 +73,31 @@ class DevicesController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \App\Http\Requests\UpdateDeviceRequest $request
-     * @param \App\Models\Device $device
-     * @return \Illuminate\Http\Response
+     * @param UpdateDeviceRequest $request
+     * @param Device $device
+     * @return RedirectResponse
      */
     public function update(UpdateDeviceRequest $request, Device $device)
     {
-        Gate::allowIf(fn($user) => $user->isAdmin() || $user->isAssistant());
 
+        $device->update($request->validated());
 
-        //
+        return to_route('devices.edit', $device);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Models\Device $device
-     * @return \Illuminate\Http\Response
+     * @param Device $device
+     * @return RedirectResponse
      */
-    public function destroy(Device $device)
+    public function destroy(Device $device): RedirectResponse
     {
         Gate::allowIf(fn($user) => $user->isAdmin() || $user->isAssistant());
 
+        $device->delete();
 
+        return to_route('devices.index');
         //
     }
 }

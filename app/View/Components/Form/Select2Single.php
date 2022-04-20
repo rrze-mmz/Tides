@@ -4,6 +4,7 @@ namespace App\View\Components\Form;
 
 use App\Models\AcademicDegree;
 use App\Models\Context;
+use App\Models\DeviceLocation;
 use App\Models\Format;
 use App\Models\Language;
 use App\Models\Organization;
@@ -24,9 +25,10 @@ class Select2Single extends Component
         public ?string $model = null,
         public string  $label,
         public string  $fieldName,
-        public $selectClass,
-        public $selectedItem
-    ) {
+        public         $selectClass,
+        public         $selectedItem
+    )
+    {
         //
     }
 
@@ -43,6 +45,7 @@ class Select2Single extends Component
                     ->orderBy('id', 'desc')
                     ->get(),
                 'language' => Language::select(['id', 'code as name'])->get(),
+                'location' => DeviceLocation::select(['id', 'name'])->get(),
                 'context' => Context::select(['id', 'de_name as name'])->get(),
                 'format' => Format::select(['id', 'de_name as name'])->get(),
                 'type' => Type::select(['id', 'de_name as name'])->get(),

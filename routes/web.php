@@ -26,6 +26,7 @@ use App\Http\Controllers\Frontend\ShowSeriesController;
 use App\Http\Middleware\CheckLMSToken;
 use App\Models\Activity;
 use App\Models\Clip;
+use App\Models\Device;
 use App\Models\Series;
 use App\Services\ElasticsearchService;
 use Illuminate\Support\Facades\Gate;
@@ -177,7 +178,7 @@ Route::prefix('admin')->middleware(['auth', 'can:access-dashboard'])->group(func
         ]);
     })->name('activities.index');
 
-    Route::get('/devices', [DevicesController::class, 'index'])->name('devices.index');
+    Route::resource('devices', DevicesController::class)->except(['show']);
 
     // Portal admin resources
     Route::middleware(['user.admin'])->group(function () {
