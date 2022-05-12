@@ -9,6 +9,7 @@ use App\Models\Traits\Presentable;
 use App\Models\Traits\RecordsActivity;
 use App\Models\Traits\Searchable;
 use App\Models\Traits\Slugable;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -38,6 +39,17 @@ class Clip extends BaseModel
     protected $casts = [
         'recording_date' => 'datetime:Y-m-d'
     ];
+
+    protected function description(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => html_entity_decode(
+                htmlspecialchars_decode(
+                    html_entity_decode(html_entity_decode($value, ENT_NOQUOTES, "UTF-8"))
+                )
+            )
+        );
+    }
 
     /**
      * Clip frontend link

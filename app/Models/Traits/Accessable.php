@@ -52,7 +52,7 @@ trait Accessable
         if ($acls->pluck('id')->contains('1')) {
             $check = (auth()->check() && auth()->user()->can('view-video', $this));
         }
-        if ($acls->pluck('id')->contains('2')) {
+        if ($acls->pluck('id')->contains('4')) {
             $check = (
                 session()->get($tokenType . '_' . $this->id . '_token') === generateLMSToken($this, $tokenTime)
                 || ((auth()->check() && auth()->user()->can('view-video', $this)))

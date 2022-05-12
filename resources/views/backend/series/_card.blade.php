@@ -19,7 +19,7 @@
                 <span class=" text-sm italic">von {{$series->owner?->getFullNameAttribute()}}</span>
             </div>
             <p class="py-3 text-base text-gray-700">
-                {!!  (str_contains(url()->current(),'search'))?$series->description : Str::limit($series->description, 30) !!}
+                {{ strip_tags((str_contains(url()->current(),'search'))?$series->description : Str::limit($series->description, 30))  }}
             </p>
         </div>
 

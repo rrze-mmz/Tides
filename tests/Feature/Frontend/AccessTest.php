@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Frontend;
 
+use App\Models\Acl;
 use App\Models\Clip;
 use Facades\Tests\Setup\ClipFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -35,7 +36,7 @@ class AccessTest extends TestCase
     /** @test */
     public function a_clip_can_be_only_accessable_for_lms_users(): void
     {
-        $this->clip->addAcls(collect(['2']));
+        $this->clip->addAcls(collect(['4']));
 
         $this->get($this->clip->path())->assertDontSee('plyr-player');
 
@@ -59,7 +60,7 @@ class AccessTest extends TestCase
     /** @test */
     public function a_lms_clip_is_accessable_for_clip_owner(): void
     {
-        $this->clip->addAcls(collect(['2']));
+        $this->clip->addAcls(collect(['4']));
 
         $this->get($this->clip->path())->assertDontSee('plyr-player');
 
@@ -71,7 +72,7 @@ class AccessTest extends TestCase
     /** @test */
     public function a_lms_clip_is_accessable_for_admin(): void
     {
-        $this->clip->addAcls(collect(['2']));
+        $this->clip->addAcls(collect(['4']));
 
         $this->get($this->clip->path())->assertDontSee('plyr-player');
 

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\Accessable;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use App\Models\Traits\Presentable;
 use App\Models\Traits\RecordsActivity;
 use App\Models\Traits\Slugable;
@@ -22,6 +23,17 @@ class Series extends BaseModel
     use Presentable;
     use Slugable;
     use RecordsActivity;
+
+    protected function description(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => html_entity_decode(
+                htmlspecialchars_decode(
+                    html_entity_decode(html_entity_decode($value, ENT_NOQUOTES, "UTF-8"))
+                )
+            )
+        );
+    }
 
     /**
      * Series routes should work with slug and with id to ensure backward compatibility
@@ -92,7 +104,7 @@ class Series extends BaseModel
     {
         return $this->belongsToMany(User::class, 'series_members')->withTimestamps();
     }
-    
+
     /**
      * Add a user to series
      *

@@ -14,6 +14,7 @@
 
 
     @livewireStyles
+    @trixassets
 </head>
 <body class="h-screen font-sans antialiased leading-none bg-gray-100">
 <div id="app">

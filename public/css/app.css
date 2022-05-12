@@ -560,8 +560,6 @@ Ensure the default browser behavior of the `hidden` attribute.
   margin-right: 0.75rem !important;
 }.mb-5{
   margin-bottom: 1.25rem !important;
-}.mr-6{
-  margin-right: 1.5rem !important;
 }.mb-1{
   margin-bottom: 0.25rem !important;
 }.mb-3{
@@ -570,6 +568,8 @@ Ensure the default browser behavior of the `hidden` attribute.
   margin-right: 0.5rem !important;
 }.mb-6{
   margin-bottom: 1.5rem !important;
+}.mr-6{
+  margin-right: 1.5rem !important;
 }.mt-32{
   margin-top: 8rem !important;
 }.mr-1{
@@ -654,6 +654,8 @@ Ensure the default browser behavior of the `hidden` attribute.
   width: 2.5rem !important;
 }.w-1\/6{
   width: 16.666667% !important;
+}.w-2\/6{
+  width: 33.333333% !important;
 }.w-4\/5{
   width: 80% !important;
 }.w-1\/5{
@@ -1146,6 +1148,8 @@ Ensure the default browser behavior of the `hidden` attribute.
   line-height: 1.5rem !important;
 }.leading-tight{
   line-height: 1.25 !important;
+}.leading-loose{
+  line-height: 2 !important;
 }.tracking-widest{
   letter-spacing: 0.1em !important;
 }.tracking-wider{

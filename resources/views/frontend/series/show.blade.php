@@ -11,8 +11,8 @@
 
         <div class="flex flex-col pt-10">
             <h2 class="text-2xl font-semibold">Description</h2>
-            <p class="pt-4">
-                {{ $series->description }}
+            <p class="pt-4 leading-loose">
+                {!! $series->description !!}
             </p>
         </div>
         <div class="flex justify-around pt-8 pb-3 border-b-2 border-gray-500">

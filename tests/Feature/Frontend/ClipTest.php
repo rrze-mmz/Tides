@@ -3,6 +3,7 @@
 
 namespace Tests\Feature\Frontend;
 
+use App\Models\Acl;
 use App\Models\Clip;
 use App\Models\Presenter;
 use App\Services\WowzaService;
@@ -175,6 +176,37 @@ class ClipTest extends TestCase
         $this->clip->save();
 
         $this->get($this->clip->path())->assertOk();
+    }
+
+    /** @test */
+    public function an_admin_can_view_a_clip_with_lms_access(): void
+    {
+        $this->mockHandler->append($this->mockCheckApiConnection(), $this->mockCheckApiConnection());
+
+        $this->clip->addAcls(collect(['4']));
+
+        $this->get($this->clip->path())->assertSee('You are not authorized to view this video!');
+
+        $this->signInRole('admin');
+
+        $this->get(route('frontend.clips.show', $this->clip))->assertSee('plyr-player');
+    }
+
+    /** @test */
+    public function a_superadmin_can_view_a_clip_with_lms_access(): void
+    {
+        $this->mockHandler->append($this->mockCheckApiConnection());
+
+        $this->clip->addAcls(collect(['4']));
+
+        $this->get($this->clip->path())
+            ->assertSee('You are not authorized to view this video!');
+
+        $this->signInRole('superadmin');
+
+        $this->mockHandler->append($this->mockCheckApiConnection());
+
+        $this->get(route('frontend.clips.show', $this->clip))->assertSee('plyr-player');
     }
 
     /** @test */

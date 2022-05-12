@@ -5143,6 +5143,7 @@ jquery__WEBPACK_IMPORTED_MODULE_4___default()(function () {
     }
   });
 });
+jquery__WEBPACK_IMPORTED_MODULE_4___default()('.solution-trix-field-wrapper').find(jquery__WEBPACK_IMPORTED_MODULE_4___default()('trix-editor')).css("min-height", "350px");
 document.addEventListener("DOMContentLoaded", function () {
   var video = document.querySelector("video");
   var source = video.getElementsByTagName("source")[0].src; // For more options see: https://github.com/sampotts/plyr/#options

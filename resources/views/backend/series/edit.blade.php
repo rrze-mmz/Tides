@@ -24,7 +24,7 @@
                 />
 
                 <x-form.textarea field-name="description"
-                                 :value="$series->description"
+                                 :value="strip_tags($series->description)"
                                  label="Description"
                 />
 

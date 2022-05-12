@@ -151,6 +151,7 @@ $(() => {
     });
 });
 
+$('.solution-trix-field-wrapper').find($('trix-editor')).css("min-height", "350px");
 
 document.addEventListener("DOMContentLoaded", () => {
     const video = document.querySelector("video");

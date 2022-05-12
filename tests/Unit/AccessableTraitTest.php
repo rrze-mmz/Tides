@@ -63,7 +63,7 @@ class AccessableTraitTest extends TestCase
         auth()->logout();
 
         //clip is now only for LMS users available
-        $this->clip->addAcls(collect(['2']));
+        $this->clip->addAcls(collect(['4']));
 
         $this->clip->refresh();
 

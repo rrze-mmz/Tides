@@ -4,9 +4,8 @@
 <div class="flex">
     <ul class="pt-3 w-full">
         <li class="flex content-center items-center text-center p-5 mb-4 bg-gray-400 rounded">
-            <div class="pb-2 w-1/6 border-b border-black">ID</div>
             <div class="pb-2 w-1/6 border-b border-black">Saved path</div>
-            <div class="pb-2 w-1/6 border-b border-black">File Name</div>
+            <div class="pb-2 w-2/6 border-b border-black w-full">File Name</div>
             <div class="pb-2 w-1/6 border-b border-black">Duration</div>
             <div class="pb-2 w-1/6 border-b border-black">Resolution</div>
             <div class="pb-2 w-1/6 border-b border-black">Actions</div>
@@ -14,11 +13,10 @@
 
         @forelse($assets->sortByDesc('height') as $asset)
             <li class="flex content-center text-sm items-center text-center p-2 mb-4 bg-gray-200 rounded">
-                <div class="w-1/6"> {{ $asset->id }}</div>
-                <div class="w-1/6 mr-6">
+                <div class="w-1/6 ">
                     <div class="whitespace-normal">{{ $asset->path }}</div>
                 </div>
-                <div class="w-1/6"> {{ $asset->original_file_name }}</div>
+                <div class="w-2/6 w-full"> {{ $asset->original_file_name }}</div>
                 <div class="w-1/6"> {{ $asset->durationToHours() }}</div>
                 <div class="w-1/6"> {{ $asset->width }} x {{ $asset->height }}</div>
                 <div class="w-1/6 flex items-center align-items-center space-x-1">

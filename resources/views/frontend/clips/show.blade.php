@@ -36,7 +36,7 @@
             <div class="flex flex-col pt-10">
                 <h2 class="text-2xl font-semibold pb-2 w-full border-b-2 border-black">Description</h2>
                 <p class="pt-4">
-                    {{ $clip->description }}
+                    {!!   $clip->description !!}
                 </p>
             </div>
         @endif
