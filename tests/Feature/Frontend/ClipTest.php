@@ -185,7 +185,7 @@ class ClipTest extends TestCase
 
         $this->clip->addAcls(collect(['4']));
 
-        $this->get($this->clip->path())->assertSee('You are not authorized to view this video!');
+        $this->get($this->clip->path())->assertSee(__('clip.frontend.not authorized to view video'));
 
         $this->signInRole('admin');
 
@@ -200,7 +200,7 @@ class ClipTest extends TestCase
         $this->clip->addAcls(collect(['4']));
 
         $this->get($this->clip->path())
-            ->assertSee('You are not authorized to view this video!');
+            ->assertSee(__('clip.frontend.not authorized to view video'));
 
         $this->signInRole('superadmin');
 
@@ -290,8 +290,8 @@ class ClipTest extends TestCase
         $nextClip = Clip::find(4);
 
         $this->get($clip->path())
-            ->assertSee('Previous')
-            ->assertSee('Next')
+            ->assertSee(__('common.previous'))
+            ->assertSee(__('common.next'))
             ->assertSee($previousClip->path())
             ->assertSee($nextClip->path());
     }

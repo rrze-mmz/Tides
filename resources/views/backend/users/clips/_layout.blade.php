@@ -5,6 +5,6 @@
     @forelse($clips as $clip)
         @include('backend.clips._card',['clip'=> $clip])
     @empty
-        No clips found
+        {{ __('clip.common.no clips') }}
     @endforelse
 </div>

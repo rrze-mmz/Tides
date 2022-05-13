@@ -2,19 +2,20 @@
 
 @section('content')
     <div class="flex pb-2 font-semibold border-b border-black font-2xl">
-        Welcome to your personal dashboard, {{ auth()->user()->getFullNameAttribute() }} !
+        {{ __('dashboard.welcome to personal dashboard', ['fullName' => auth()->user()->getFullNameAttribute() ]) }}
+        !
     </div>
     <div class="flex flex-col px-2 py-2">
         <div>
             <p class="pt-2">
-                <span class="mr-2">Start by creating a new series (series is a collection of clips)</span>
-                <x-form.button :link="route('series.create')" type="submit" text="New series"/>
+                <span class="mr-2">{{ __('dashboard.start creating new series') }}</span>
+                <x-form.button :link="route('series.create')" type="submit" text="{{ __('dashboard.new series') }}"/>
             </p>
         </div>
         <div>
             <p class="pt-2 mt-4">
-                <span class="mr-2">Start by creating a new video clip</span>
-                <x-form.button :link="route('clips.create')" type="submit" text="New clip"/>
+                <span class="mr-2">{{ __('dashboard.start creating a new clip') }}</span>
+                <x-form.button :link="route('clips.create')" type="submit" text="{{ __('dashboard.new clip') }}"/>
 
             </p>
         </div>
@@ -27,9 +28,9 @@
                 @endif
             @endcan
 
-            @include('backend.users.series._layout',['layoutHeader' => 'Your Latest Series', 'series'=> $userSeries])
+            @include('backend.users.series._layout',['layoutHeader' => __('dashboard.your last series'), 'series'=> $userSeries])
 
-            @include('backend.users.clips._layout',['layoutHeader' => 'Your Latest Clips', 'clips'=> $userClips])
+            @include('backend.users.clips._layout',['layoutHeader' => __('dashboard.your last clips'), 'clips'=> $userClips])
         </div>
 
         <div class="pl-2 w-1/3">

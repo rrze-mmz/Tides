@@ -4,7 +4,7 @@
         @if($clip->checkAcls())
             <x-player :clip="$clip" :wowzaStatus="$wowzaStatus"/>
         @else
-            <p>You are not authorized to view this video!</p>
+            <p>{{ __('clip.frontend.not authorized to view video') }}</p>
         @endif
 
     </div>

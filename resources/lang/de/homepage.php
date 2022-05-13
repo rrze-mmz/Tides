@@ -2,6 +2,7 @@
 
 return [
     'Start by creating something new' => 'Videoportal Startseite!',
+    'Search form placeholder'         => 'Suche',
     'series'                          => [
         'Recently added!' => 'Letzte Videoreihen',
         'more clips'      => 'mehr Videoreihen',

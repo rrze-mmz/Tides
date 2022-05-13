@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Backend;
 
+use App\Models\Activity;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -34,7 +35,9 @@ class ActivitiesTest extends TestCase
     /** @test */
     public function an_admin_is_allowed_to_view_activities_index(): void
     {
+        Activity::factory(3)->create();
         $this->signInRole('admin');
+
 
         $this->get(route('activities.index'))->assertOk();
     }

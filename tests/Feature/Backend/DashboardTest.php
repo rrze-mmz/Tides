@@ -57,7 +57,7 @@ class DashboardTest extends TestCase
     {
         $this->signInRole($this->role);
 
-        $this->get(route('dashboard'))->assertSee('New series');
+        $this->get(route('dashboard'))->assertSee(__('dashboard.new series'));
     }
 
     /** @test */
@@ -65,7 +65,7 @@ class DashboardTest extends TestCase
     {
         $this->signInRole($this->role);
 
-        $this->get(route('dashboard'))->assertSee('New clip');
+        $this->get(route('dashboard'))->assertSee(__('dashboard.new clip'));
     }
 
     /** @test */
@@ -81,7 +81,7 @@ class DashboardTest extends TestCase
     {
         $this->signInRole($this->role);
 
-        $this->get(route('dashboard'))->assertSee('No clips found');
+        $this->get(route('dashboard'))->assertSee(__('clip.common.no clips'));
     }
 
     /** @test */
@@ -105,7 +105,7 @@ class DashboardTest extends TestCase
 
         ClipFactory::create();
 
-        $this->get(route('dashboard'))->assertSee('No clips found');
+        $this->get(route('dashboard'))->assertSee(__('clip.common.no clips'));
 
         $userClip = ClipFactory::ownedBy($user)->create();
 
@@ -130,10 +130,10 @@ class DashboardTest extends TestCase
         $this->signInRole('admin');
 
         $this->get(route('dashboard'))
-            ->assertSee('Opencast')
-            ->assertSee('Devices')
-            ->assertSee('Collections')
-            ->assertSee('Users');
+            ->assertSee(__('common.opencast'))
+            ->assertSee(trans_choice('common.device', 2))
+            ->assertSee(trans_choice('common.collection', 2))
+            ->assertSee(trans_choice('common.user', 2));
     }
 
     /** @test */

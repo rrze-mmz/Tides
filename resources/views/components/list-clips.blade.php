@@ -5,13 +5,13 @@
             @endif
             <ul class="pt-3 w-full">
                 <li class="flex content-center items-center p-5 mb-4 text-lg bg-gray-400 rounded text-center">
-                    <div class="pb-2 w-1/12 border-b border-black">Episode</div>
-                    <div class="pb-2 w-2/12 border-b border-black">Poster</div>
-                    <div class="pb-2 w-3/12 border-b border-black">Title</div>
-                    <div class="pb-2 w-2/12 border-b border-black">Access via</div>
-                    <div class="pb-2 w-2/12 border-b border-black">Semester</div>
-                    <div class="pb-2 w-1/12 border-b border-black">Duration</div>
-                    <div class="pb-2 w-1/12 border-b border-black">Actions</div>
+                    <div class="pb-2 w-1/12 border-b border-black">{{ __('series.common.episode') }}</div>
+                    <div class="pb-2 w-2/12 border-b border-black">{{ __('series.common.poster') }}</div>
+                    <div class="pb-2 w-3/12 border-b border-black">{{ __('series.common.title') }}</div>
+                    <div class="pb-2 w-2/12 border-b border-black">{{ __('series.common.access via') }}</div>
+                    <div class="pb-2 w-2/12 border-b border-black">{{ __('series.common.semester') }}</div>
+                    <div class="pb-2 w-1/12 border-b border-black">{{ __('series.common.duration') }}</div>
+                    <div class="pb-2 w-1/12 border-b border-black">{{ __('series.common.actions') }}</div>
                 </li>
 
                 @forelse($series->clips->sortBy('episode', SORT_NATURAL) as $clip)
@@ -29,8 +29,10 @@
                         </div>
                         <div class="w-2/12">
                             <div class="flex justify-center justify-items-center place-items-center mx-2 w-48 h-full">
-                                <a href="{{$clip->adminPath()}}"><img
-                                        src="{{ fetchClipPoster($clip->posterImage) }}" alt="preview image">
+                                <a href="{{$clip->adminPath()}}">
+                                    <img src="{{ fetchClipPoster($clip->posterImage) }}"
+                                         alt="preview image"
+                                    >
                                 </a>
                             </div>
                         </div>
@@ -60,7 +62,7 @@
                 @empty
                     <div class="grid place-items-center">
                         <div class=" w-full p-5 mb-4 text-2xl bg-gray-200 rounded text-center">
-                            No clips
+                            {{ __('series.common.no clips') }}
                         </div>
                     </div>
                 @endforelse

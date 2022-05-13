@@ -8,7 +8,9 @@
                 <a class="mt-2 py-2 px-8 text-white bg-blue-500 rounded shadow hover:bg-blue-600
                         focus:shadow-outline focus:outline-none"
                    href="{{ $clip->adminPath() }}"
-                > Back to edit page </a>
+                >
+                    Back to edit page
+                </a>
             @endcan
         </div>
 
@@ -20,21 +22,23 @@
             @if(!is_null($previousNextClipCollection->get('previousClip')))
                 <x-form.button :link="$previousNextClipCollection->get('previousClip')->path()"
                                type="submit"
-                               text="Previous"
+                               text="{{ __('common.previous') }}"
                 />
             @endif
 
             @if(!is_null($previousNextClipCollection->get('nextClip')))
                 <x-form.button :link="$previousNextClipCollection->get('nextClip')->path()"
                                type="submit"
-                               text="Next"
+                               text="{{ __('common.next') }}"
                 />
             @endif
         </div>
 
         @if($clip->description !== null)
             <div class="flex flex-col pt-10">
-                <h2 class="text-2xl font-semibold pb-2 w-full border-b-2 border-black">Description</h2>
+                <h2 class="text-2xl font-semibold pb-2 w-full border-b-2 border-black">
+                    {{ __('common.description') }}
+                </h2>
                 <p class="pt-4">
                     {!!   $clip->description !!}
                 </p>
@@ -43,7 +47,9 @@
 
         @if ($clip->tags->isNotEmpty())
             <div class="flex flex-col pt-10 ">
-                <h2 class="text-2xl font-semibold pb-2 w-full border-b-2 border-black">Tags</h2>
+                <h2 class="text-2xl font-semibold pb-2 w-full border-b-2 border-black">
+                    Tags
+                </h2>
                 <span class="pt-4 ">
                         @foreach($clip->tags as $tag)
                         <div
@@ -59,8 +65,9 @@
 
         @can ('view-comments', $clip)
             <div class="flex flex-col pt-10">
-                <h2 class="text-2xl font-semibold pb-2 border-b-2 border-black">Comments</h2>
-
+                <h2 class="text-2xl font-semibold pb-2 border-b-2 border-black">
+                    {{ __('clip.frontend.comments') }}
+                </h2>
                 <livewire:comments-section :clip="$clip"/>
                 @livewireScripts
 

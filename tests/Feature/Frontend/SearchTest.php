@@ -90,7 +90,7 @@ class SearchTest extends TestCase
 
         Clip::factory()->create(['title' => 'Clip without video']);
 
-        $this->searchFor('video')->assertSee('No results found');
+        $this->searchFor('video')->assertSee(__('search.no results found'));
     }
 
     /** @test */
