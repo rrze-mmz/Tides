@@ -9,6 +9,7 @@ use App\Http\Controllers\Backend\ClipsController;
 use App\Http\Controllers\Backend\CollectionsController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\DevicesController;
+use App\Http\Controllers\Backend\DocumentController;
 use App\Http\Controllers\Backend\OpencastController;
 use App\Http\Controllers\Backend\PresentersController;
 use App\Http\Controllers\Backend\SeriesClipsController;
@@ -167,6 +168,9 @@ Route::prefix('admin')->middleware(['auth', 'can:access-dashboard'])->group(func
 
     //Opencast routes
     Route::get('/opencast', OpencastController::class)->name('opencast.status');
+
+    //Documents routes
+    Route::post('/document/upload', DocumentController::class)->name('documents.upload');
 
     //Presenter routes
     Route::resource('presenters', PresentersController::class)->except(['show']);

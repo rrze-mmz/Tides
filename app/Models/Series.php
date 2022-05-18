@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\Accessable;
+use App\Models\Traits\Documentable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use App\Models\Traits\Presentable;
 use App\Models\Traits\RecordsActivity;
@@ -20,6 +21,7 @@ use Psr\Http\Message\ResponseInterface;
 class Series extends BaseModel
 {
     use Accessable;
+    use Documentable;
     use Presentable;
     use Slugable;
     use RecordsActivity;

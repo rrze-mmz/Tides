@@ -44,6 +44,15 @@ class ManageClipsTest extends TestCase
     }
 
     /** @test */
+    public function it_load_the_editor_on_clip_form_textarea(): void
+    {
+        $this->signInRole('admin');
+
+        $this->get(route('clips.create'))->assertSee('trix-editor');
+        $this->get(route('clips.edit', ClipFactory::create()))->assertSee('trix-editor');
+    }
+
+    /** @test */
     public function it_shows_all_clips_in_index_page_for_assistant(): void
     {
         Clip::factory(10)->create();

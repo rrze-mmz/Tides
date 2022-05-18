@@ -159,6 +159,8 @@
             @if(auth()->user()->isAdmin() && $clip->acls->pluck('id')->contains('4'))
                 @include('backend.clips.sidebar._lms_test_link')
             @endif
+
+            @include('backend.documents.upload',['resource'=> $clip ])
         </div>
     </div>
 

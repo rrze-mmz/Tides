@@ -73,6 +73,7 @@
             @can('delete-series',$series)
                 @include('backend.series.sidebar._invite')
             @endif
+            @include('backend.documents.upload',['resource' => $series ])
         </div>
 
     </div>

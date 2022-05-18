@@ -22,13 +22,18 @@ trait Accessable
         return $this->morphToMany(Acl::class, 'accessable')->withTimestamps();
     }
 
-    public function addAcls(Collection $aclsCollection)
+    /**
+     * Assign an acl collection to the give type
+     *
+     * @param Collection $aclsCollection
+     * @return void
+     */
+    public function addAcls(Collection $aclsCollection): void
     {
         /*
          * Check for tags collection from post request.
          * The closure returns a tag model, where the model is either selected or created.
-         * The tag model is synchronized with the clip tags.
-         * In case the collection is empty assumed that clip has no tags and delete them
+         * The acl model is synchronized with the type acls.
          */
 
         if ($aclsCollection->isNotEmpty()) {

@@ -5,6 +5,7 @@ namespace App\Models;
 
 use App\Enums\Content;
 use App\Models\Traits\Accessable;
+use App\Models\Traits\Documentable;
 use App\Models\Traits\Presentable;
 use App\Models\Traits\RecordsActivity;
 use App\Models\Traits\Searchable;
@@ -27,6 +28,7 @@ class Clip extends BaseModel
 {
     use Searchable;
     use Accessable;
+    use Documentable;
     use Presentable;
     use Slugable;
     use RecordsActivity;

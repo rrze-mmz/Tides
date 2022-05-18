@@ -65,6 +65,11 @@ return [
             'root'   => storage_path('app/opencast'),
         ],
 
+        'documents' => [
+            'driver' => 'local',
+            'root'   => storage_path('app/documents'),
+        ],
+
         'thumbnails' => [
             'driver'     => 'local',
             'root'       => storage_path('app/thumbnails'),
