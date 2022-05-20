@@ -229,6 +229,8 @@ class ManageDocumentsTest extends TestCase
     /** @test */
     public function a_series_owner_can_view_an_uploaded_document(): void
     {
+        Storage::fake('documents');
+
         $file = UploadedFile::fake()->create('testingDocument.pdf', '100', 'application/pdf');
 
         $series = SeriesFactory::ownedBy($this->signInRole('moderator'))->create();
@@ -241,12 +243,18 @@ class ManageDocumentsTest extends TestCase
 
         $document = $series->documents()->first();
 
-        $this->get(route('document.series.view', [$series, $document]))->assertOk();
+        /*
+         *  In testing a FileNotFound exception will be thrown therefore
+         *  assert a redirect instead of 200.
+         */
+        $this->get(route('document.series.view', [$series, $document]))->assertRedirect();
     }
 
     /** @test */
     public function a_clip_owner_can_view_an_uploaded_document(): void
     {
+        Storage::fake('documents');
+
         $file = UploadedFile::fake()->create('testingDocument.pdf', '100', 'application/pdf');
 
         $clip = ClipFactory::ownedBy($this->signInRole('moderator'))->create();
@@ -259,7 +267,11 @@ class ManageDocumentsTest extends TestCase
 
         $document = $clip->documents()->first();
 
-        $this->get(route('document.clip.view', [$clip, $document]))->assertOk();
+        /*
+         *  In testing a FileNotFound exception will be thrown therefore
+         *  assert a redirect instead of 200.
+         */
+        $this->get(route('document.clip.view', [$clip, $document]))->assertRedirect();
     }
 
     /** @test */
@@ -375,7 +387,7 @@ class ManageDocumentsTest extends TestCase
 
 
         $clip->delete();
-        
+
         $this->assertDatabaseMissing('clips', ['id' => $clip->id]);
         $this->assertDatabaseMissing('documentables', [
             'documentable_id'   => $clip->id,

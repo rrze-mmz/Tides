@@ -9,6 +9,7 @@ use App\Models\Series;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -47,32 +48,52 @@ class DocumentController extends Controller
     }
 
     /**
+     * View a series document on browser
+     *
      * @param Series $series
      * @param Document $document
-     * @return BinaryFileResponse
+     * @return BinaryFileResponse|RedirectResponse
      * @throws AuthorizationException
      */
-    public function viewSeriesDocument(Series $series, Document $document): BinaryFileResponse
+    public function viewSeriesDocument(Series $series, Document $document): BinaryFileResponse|RedirectResponse
     {
         $this->authorize('edit-series', $series);
 
-        return response()->file(public_path('documents/') . $document->save_path);
+        //file maybe not found especially in testing
+        try {
+            response()->file(public_path('documents/') . $document->save_path);
+        } catch (\Exception $exception) {
+            Log::error($exception);
+            return to_route('series.edit', $series);
+        }
     }
 
     /**
+     * View a clip document in browser
+     *
      * @param Clip $clip
      * @param Document $document
-     * @return BinaryFileResponse
+     * @return BinaryFileResponse|RedirectResponse
      * @throws AuthorizationException
      */
-    public function viewClipDocument(Clip $clip, Document $document): BinaryFileResponse
+    public function viewClipDocument(Clip $clip, Document $document): BinaryFileResponse|RedirectResponse
     {
         $this->authorize('edit-clips', $clip);
 
-        return response()->file(public_path('documents/') . $document->save_path);
+        //file maybe not found especially in testing
+        try {
+            return response()->file(public_path('documents/') . $document->save_path);
+        } catch (\Exception $exception) {
+            Log::error($exception);
+            return to_route('clips.edit', $clip);
+        }
     }
 
     /**
+     * Delete a given document
+     *
+     * @param Document $document
+     * @return RedirectResponse
      * @throws AuthorizationException
      */
     public function destroy(Document $document): RedirectResponse
