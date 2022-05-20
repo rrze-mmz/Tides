@@ -1,6 +1,5 @@
 require('./bootstrap');
 
-import Plyr from 'plyr';
 import 'select2';
 import Alpine from 'alpinejs';
 import Hls from 'hls.js';

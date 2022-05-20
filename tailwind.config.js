@@ -1,7 +1,7 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
-    important: true,
+    important: '#app',
     content: [
         './resources/**/*.blade.php',
         './resources/**/*.js',

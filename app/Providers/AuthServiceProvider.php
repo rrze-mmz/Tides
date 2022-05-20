@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Policies\AssetPolicy;
 use App\Policies\ClipPolicy;
 use App\Policies\CommentPolicy;
+use App\Policies\DocumentPolicy;
 use App\Policies\MenuPolicy;
 use App\Policies\SeriesPolicy;
 use App\Policies\UserPolicy;
@@ -28,7 +29,7 @@ class AuthServiceProvider extends ServiceProvider
         Asset::class   => AssetPolicy::class,
         Series::class  => SeriesPolicy::class,
         Comment::class => CommentPolicy::class,
-        User::class    => UserPolicy::class
+        User::class    => UserPolicy::class,
     ];
 
     /**

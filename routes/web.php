@@ -170,7 +170,12 @@ Route::prefix('admin')->middleware(['auth', 'can:access-dashboard'])->group(func
     Route::get('/opencast', OpencastController::class)->name('opencast.status');
 
     //Documents routes
-    Route::post('/document/upload', DocumentController::class)->name('documents.upload');
+    Route::post('/document/upload', [DocumentController::class, 'upload'])->name('documents.upload');
+    Route::get('/series/{series}/document/{document}', [DocumentController::class, 'viewSeriesDocument'])
+        ->name('document.series.view');
+    Route::get('/clip/{clip}/document/{document}', [DocumentController::class, 'viewClipDocument'])
+        ->name('document.clip.view');
+    Route::delete('/document/{document}', [DocumentController::class, 'destroy'])->name('documents.destroy');
 
     //Presenter routes
     Route::resource('presenters', PresentersController::class)->except(['show']);

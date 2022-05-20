@@ -15,7 +15,7 @@ return new class extends Migration {
         Schema::create('documentables', function (Blueprint $table) {
             $table->primary(['document_id', 'documentable_id', 'documentable_type']);
 
-            $table->foreignId('document_id')->references('id')->on('documents');
+            $table->foreignId('document_id')->references('id')->on('documents')->onDelete('cascade');
             $table->foreignId('documentable_id');
             $table->string('documentable_type');
             $table->timestamps();

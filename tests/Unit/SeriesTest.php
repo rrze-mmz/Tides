@@ -95,6 +95,12 @@ class SeriesTest extends TestCase
     }
 
     /** @test */
+    public function it_has_many_documents_using_documentable_trait(): void
+    {
+        $this->assertInstanceOf(MorphToMany::class, $this->series->documents());
+    }
+
+    /** @test */
     public function it_fetches_the_latest_clip(): void
     {
         $this->assertInstanceOf(HasOne::class, $this->series->latestClip());

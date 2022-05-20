@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Collection;
@@ -153,6 +154,12 @@ class ClipTest extends TestCase
     public function it_has_many_presenters_using_presentable_trait(): void
     {
         $this->assertInstanceOf(MorphToMany::class, $this->clip->presenters());
+    }
+
+    /** @test */
+    public function it_has_many_documents_using_documentable_trait(): void
+    {
+        $this->assertInstanceOf(MorphToMany::class, $this->clip->documents());
     }
 
     /** @test */

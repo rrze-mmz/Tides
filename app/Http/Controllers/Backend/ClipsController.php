@@ -54,7 +54,7 @@ class ClipsController extends Controller
     public function store(StoreClipRequest $request): RedirectResponse
     {
         $validated = $request->validated();
-        
+
         $clip = auth()->user()->clips()->create(Arr::except($validated, ['tags', 'acls', 'presenters']));
 
         $clip->addTags(collect($validated['tags']));
@@ -120,10 +120,6 @@ class ClipsController extends Controller
 
         $clip->delete();
 
-        if ($clip->series_id) {
-            return redirect(route('series.edit', $clip->series));
-        }
-
-        return to_route('clips.index');
+        return ($clip->series_id) ? to_route('series.edit', $clip->series) : to_route('clips.index');
     }
 }

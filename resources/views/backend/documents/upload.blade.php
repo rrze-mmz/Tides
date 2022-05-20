@@ -31,13 +31,32 @@
 
         @if($resource->documents()->count()> 0)
             <h4 class="pt-6 border-b-2 pb-2">
-                Series documents
+                {{ class_basename($resource) }} documents
             </h4>
             <div class="flex py-6 pl-4">
                 <ul class="list-disc">
                     @foreach($resource->documents()->get() as $document)
                         <li>
                             {{ str($document->name)->limit(30,'...')}}
+                            <div class="flex"
+                            >
+                                <a data-message="view-document"
+                                   href="{{ route('document.'.str(class_basename($resource))->lower().'.view',[$resource, $document]) }}">
+                                    <x-heroicon-o-eye class="w-6 h-6"/>
+                                </a>
+                                <div>
+                                    <form action="{{route('documents.destroy',$document)}}"
+                                          method="POST"
+                                    >
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" data-message="delete-document">
+                                            <x-heroicon-o-x-circle class="w-6 h-6"/>
+                                        </button>
+
+                                    </form>
+                                </div>
+                            </div>
                         </li>
                     @endforeach
                 </ul>

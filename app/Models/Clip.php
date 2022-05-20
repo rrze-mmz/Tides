@@ -4,6 +4,7 @@
 namespace App\Models;
 
 use App\Enums\Content;
+use App\Events\ClipDeleted;
 use App\Models\Traits\Accessable;
 use App\Models\Traits\Documentable;
 use App\Models\Traits\Presentable;
@@ -35,12 +36,9 @@ class Clip extends BaseModel
 
     //search columns for searchable trait
     protected array $searchable = ['title', 'description'];
-    protected $attributes = [
-        'episode' => '1'
-    ];
-    protected $casts = [
-        'recording_date' => 'datetime:Y-m-d'
-    ];
+    protected $dispatchesEvents = ['deleted' => ClipDeleted::class];
+    protected $attributes = ['episode' => '1'];
+    protected $casts = ['recording_date' => 'datetime:Y-m-d'];
 
     protected function description(): Attribute
     {

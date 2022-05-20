@@ -68,6 +68,7 @@ return [
         'documents' => [
             'driver' => 'local',
             'root'   => storage_path('app/documents'),
+            'url'    => env('APP_URL') . '/documents',
         ],
 
         'thumbnails' => [
@@ -104,6 +105,7 @@ return [
         public_path('storage')           => storage_path('app/public'),
         public_path('streamable_videos') => storage_path('app/streamable_videos'),
         public_path('thumbnails')        => storage_path('app/thumbnails'),
+        public_path('documents')         => storage_path('app/documents'),
     ],
 
 ];

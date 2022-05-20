@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\SeriesDeleted;
 use App\Models\Traits\Accessable;
 use App\Models\Traits\Documentable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -25,6 +26,8 @@ class Series extends BaseModel
     use Presentable;
     use Slugable;
     use RecordsActivity;
+
+    protected $dispatchesEvents = ['deleted' => SeriesDeleted::class];
 
     protected function description(): Attribute
     {
