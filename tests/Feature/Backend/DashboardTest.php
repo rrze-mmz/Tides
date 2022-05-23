@@ -130,10 +130,10 @@ class DashboardTest extends TestCase
         $this->signInRole('admin');
 
         $this->get(route('dashboard'))
-            ->assertSee(__('common.opencast'))
-            ->assertSee(trans_choice('common.device', 2))
-            ->assertSee(trans_choice('common.collection', 2))
-            ->assertSee(trans_choice('common.user', 2));
+            ->assertSee(__('common.menu.opencast'))
+            ->assertSee(trans_choice('common.menu.device', 2))
+            ->assertSee(trans_choice('common.menu.collection', 2))
+            ->assertSee(trans_choice('common.menu.user', 2));
     }
 
     /** @test */

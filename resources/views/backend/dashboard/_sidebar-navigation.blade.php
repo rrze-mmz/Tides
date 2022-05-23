@@ -6,7 +6,7 @@
                 class="block  py-2 mb-4 text-lg font-bold {{ setActiveLink(route('dashboard')) }}
                     border-white hover:text-gray-200"
             >
-                {{ __('common.dashboard') }}
+                {{ __('common.menu.dashboard') }}
             </a>
         </li>
         <li>
@@ -14,7 +14,7 @@
                 href="{{route('series.index')}}"
                 class="block mb-4 text-lg font-bold  {{ setActiveLink(route('series.index')) }} hover:text-gray-200"
             >
-                {{ __('common.series') }}
+                {{ __('common.menu.series') }}
             </a>
         </li>
         <li>
@@ -22,7 +22,7 @@
                 href="{{route('clips.index')}}"
                 class="block mb-4 text-lg {{ setActiveLink(route('clips.index')) }}  font-bold hover:text-gray-200"
             >
-                {{ trans_choice('common.clip', 2) }}
+                {{ trans_choice('common.menu.clip', 2) }}
             </a>
         </li>
         @can('view-assistant-menu-items')
@@ -32,7 +32,7 @@
                     class="block mb-4 text-lg  {{ setActiveLink(route('presenters.index')) }} font-bold
                     hover:text-gray-200"
                 >
-                    {{ trans_choice('common.presenter', 2) }}
+                    {{ trans_choice('common.menu.presenter', 2) }}
                 </a>
             </li>
             <li>
@@ -53,7 +53,7 @@
                     class="block mb-4 text-lg  {{ setActiveLink(route('devices.index')) }} font-bold
                     hover:text-gray-200"
                 >
-                    {{ trans_choice('common.device', 2) }}
+                    {{ trans_choice('common.menu.device', 2) }}
                 </a>
             </li>
 
@@ -63,7 +63,7 @@
                     class="block mb-4 text-lg  {{ setActiveLink(route('collections.index')) }} font-bold
                     hover:text-gray-200"
                 >
-                    {{ trans_choice('common.collection', 2) }}
+                    {{ trans_choice('common.menu.collection', 2) }}
                 </a>
             </li>
 
@@ -72,7 +72,7 @@
                     href="{{ route('users.index') }}"
                     class="block mb-4 text-lg  {{ setActiveLink(route('users.index')) }} font-bold hover:text-gray-200"
                 >
-                    {{ trans_choice('common.user', 2) }}
+                    {{ trans_choice('common.menu.user', 2) }}
                 </a>
             </li>
             <li>
@@ -81,7 +81,7 @@
                     class="block mb-4 text-lg {{ setActiveLink(route('opencast.status')) }} font-bold
                     hover:text-gray-200"
                 >
-                    {{ __('common.opencast') }}
+                    {{ __('common.menu.opencast') }}
                 </a>
             </li>
         @endcan

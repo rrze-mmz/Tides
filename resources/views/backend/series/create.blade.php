@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="flex pb-2 font-semibold border-b border-black font-2xl">
-        Create new series
+        {{ __('common.heading.create new series') }}
     </div>
     <div class="flex py-2 px-2">
         <form action="{{ route('series.store') }}"
@@ -15,39 +15,39 @@
                 <x-form.input field-name="title"
                               input-type="text"
                               :value="old('title')"
-                              label="Title"
+                              label="{{ __('common.forms.title') }}"
                               :full-col="true"
                               :required="true"
                 />
 
                 <x-form.textarea field-name="description"
                                  :value="old('description')"
-                                 label="Description"
+                                 label="{{ __('common.forms.description') }}"
                 />
 
                 <x-form.select2-single field-name="organization_id"
-                                       label="Organization"
+                                       label="{{ __('common.forms.organization') }}"
                                        select-class="select2-tides-organization"
                                        model="organization"
                                        :selectedItem="(old('organization_id'))?? 1 "
                 />
 
                 <x-form.select2-multiple field-name="presenters"
-                                         label="Presenters"
+                                         label="{{ trans_choice('common.menu.presenter', 2) }}"
                                          select-class="select2-tides-presenters"
                                          :model="null"
                                          :items="[]"
                 />
 
                 <x-form.select2-multiple field-name="acls"
-                                         label="Accessible via"
+                                         label="{{ __('series.common.access via') }}"
                                          :model="null"
                                          select-class="select2-tides"
                 />
 
                 <x-form.password field-name="password"
                                  :value="old('password')"
-                                 label="Password"
+                                 label="{{ __('common.password') }}"
                                  :full-col="true"
                 />
 
@@ -59,7 +59,7 @@
                 <div class="flex content-center items-center mb-6">
                 </div>
                 <div class="col-span-7 w-4/5">
-                    <x-form.button :link="$link=false" type="submit" text="Create series"/>
+                    <x-form.button :link="$link=false" type="submit" text="{{ __('common.forms.create series') }}"/>
                 </div>
             </div>
 
