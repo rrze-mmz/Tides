@@ -68,15 +68,16 @@
         </form>
     </div>
 
-    @include('backend.users.series._layout',[
-                        'layoutHeader'=> $presenter->getFullNameAttribute() .' appears on these series',
-                         'series' => $presenter->series
-    ])
+    <div>
+        @include('backend.users.series._layout',[
+                            'layoutHeader'=> $presenter->getFullNameAttribute() .' appears on these series',
+                             'series' => $presenter->series
+        ])
 
-    @include('backend.users.clips._layout',[
-                        'layoutHeader' => $presenter->getFullNameAttribute().' appears on these clips',
-                        'clips' => $presenter->clips,
-    ])
+        @include('backend.users.clips._layout',[
+                            'layoutHeader' => $presenter->getFullNameAttribute().' appears on these clips',
+                            'clips' => $presenter->clipsWithoutSeries(),
+        ])
     </div>
 
 @endsection

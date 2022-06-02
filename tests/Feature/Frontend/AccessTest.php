@@ -24,13 +24,15 @@ class AccessTest extends TestCase
     /** @test */
     public function a_clip_can_be_only_accessable_for_logged_in_users(): void
     {
-        $this->clip->addAcls(collect(['1']));
+        $this->withoutExceptionHandling();
+        //assign portal acl
+        $this->clip->addAcls(collect(['2']));
 
-        $this->get($this->clip->path())->assertDontSee('plyr-player');
+        $this->get(route('frontend.clips.show', $this->clip))->assertDontSee('plyr-player');
 
         $this->signIn();
 
-        $this->get($this->clip->path())->assertSee('plyr-player');
+        $this->get(route('frontend.clips.show', $this->clip))->assertSee('plyr-player');
     }
 
     /** @test */
@@ -38,7 +40,7 @@ class AccessTest extends TestCase
     {
         $this->clip->addAcls(collect(['4']));
 
-        $this->get($this->clip->path())->assertDontSee('plyr-player');
+        $this->get(route('frontend.clips.show', $this->clip))->assertDontSee('plyr-player');
 
         $time = dechex(time());
 
@@ -54,7 +56,7 @@ class AccessTest extends TestCase
 
         $this->get($link)->assertStatus(302);
 
-        $this->get($this->clip->path())->assertSee('plyr-player');
+        $this->get(route('frontend.clips.show', $this->clip))->assertSee('plyr-player');
     }
 
     /** @test */
@@ -62,11 +64,11 @@ class AccessTest extends TestCase
     {
         $this->clip->addAcls(collect(['4']));
 
-        $this->get($this->clip->path())->assertDontSee('plyr-player');
+        $this->get(route('frontend.clips.show', $this->clip))->assertDontSee('plyr-player');
 
         $this->actingAs($this->clip->owner);
 
-        $this->get($this->clip->path())->assertSee('plyr-player');
+        $this->get(route('frontend.clips.show', $this->clip))->assertSee('plyr-player');
     }
 
     /** @test */
@@ -74,10 +76,10 @@ class AccessTest extends TestCase
     {
         $this->clip->addAcls(collect(['4']));
 
-        $this->get($this->clip->path())->assertDontSee('plyr-player');
+        $this->get(route('frontend.clips.show', $this->clip))->assertDontSee('plyr-player');
 
         $this->signInRole('admin');
 
-        $this->get($this->clip->path())->assertSee('plyr-player');
+        $this->get(route('frontend.clips.show', $this->clip))->assertSee('plyr-player');
     }
 }

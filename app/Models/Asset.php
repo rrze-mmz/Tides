@@ -63,6 +63,6 @@ class Asset extends BaseModel
      */
     public function downloadPath(): string
     {
-        return Storage::disk('videos')->path($this->path . '/' . $this->original_file_name);
+        return Storage::disk('videos')->path($this->path);
     }
 }

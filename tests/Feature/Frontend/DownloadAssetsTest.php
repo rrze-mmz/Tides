@@ -25,11 +25,14 @@ class DownloadAssetsTest extends TestCase
 
         $clip = ClipFactory::ownedBy($this->signInRole('moderator'))->create();
 
-        $this->post(route('admin.assets.store', $clip), ['asset' => FileFactory::videoFile()]);
+        $this->post(route('admin.clips.asset.transferSingle', $clip), ['asset' => FileFactory::videoFile()]);
 
         $asset = $clip->assets()->first();
 
-        $this->assertInstanceOf(BinaryFileResponse::class, response()->download(Storage::disk('videos')->path($asset->path)));
+        $this->assertInstanceOf(
+            BinaryFileResponse::class,
+            response()->download(Storage::disk('videos')->path($asset->path))
+        );
 
         Storage::disk('videos')->delete($asset->path);
     }

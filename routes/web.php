@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Backend\ActivitiesController;
-use App\Http\Controllers\Backend\AssetsController;
+use App\Http\Controllers\Backend\AssetDestroyController;
 use App\Http\Controllers\Backend\AssetsTransferController;
 use App\Http\Controllers\Backend\ChaptersController;
 use App\Http\Controllers\Backend\ClipsCollectionsController;
@@ -146,6 +146,8 @@ Route::prefix('admin')->middleware(['auth', 'can:access-dashboard'])->group(func
          * the encoding is performed by the HPC cluster
          */
         Route::controller(AssetsTransferController::class)->prefix('/clips')->group(function () {
+            Route::post('/{clip}/transferSingle', 'transferSingleAsset')->name('admin.clips.asset.transferSingle');
+
             Route::get('/{clip}/dropzone/list', 'listDropzoneFiles')->name('admin.clips.dropzone.listFiles');
             Route::post('/{clip}/dropzone/transfer', 'transferDropzoneFiles')->name('admin.clips.dropzone.transfer');
             /*
@@ -163,8 +165,7 @@ Route::prefix('admin')->middleware(['auth', 'can:access-dashboard'])->group(func
 
 
     //Assets routes
-    Route::post('/clips/{clip}/assets', [AssetsController::class, 'store'])->name('admin.assets.store');
-    Route::delete('assets/{asset}', [AssetsController::class, 'destroy'])->name('assets.destroy');
+    Route::delete('assets/{asset}', AssetDestroyController::class)->name('assets.destroy');
 
     //Opencast routes
     Route::get('/opencast', OpencastController::class)->name('opencast.status');

@@ -54,8 +54,9 @@ trait Accessable
         if ($acls->isEmpty()) {
             return true;
         }
-        if ($acls->pluck('id')->contains('1')) {
-            $check = (auth()->check() && auth()->user()->can('view-video', $this));
+        if ($acls->pluck('id')->contains('2') && auth()->check()) {
+            $check = (($this->assets->count() > 0 && $this->is_public)
+                || auth()->user()->can('view-video', $this));
         }
         if ($acls->pluck('id')->contains('4')) {
             $check = (

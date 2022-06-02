@@ -17,7 +17,7 @@ class AssetTest extends TestCase
     {
         $clip = ClipFactory::create();
 
-        $this->post(route('admin.assets.store', $clip), ['asset' => FileFactory::videoFile()])
+        $this->post(route('admin.clips.asset.transferSingle', $clip), ['asset' => FileFactory::videoFile()])
             ->assertRedirect('login');
     }
 

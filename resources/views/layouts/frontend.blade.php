@@ -15,8 +15,8 @@
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
     @livewireStyles
 </head>
-<body class="font-sans antialiased leading-none bg-gray-100 ">
-<div id="app" class="flex flex-col min-h-screen">
+<body class="h-screen font-sans antialiased leading-none bg-gray-100 ">
+<div id="app">
     <header class="fixed top-0 z-10 p-2 py-4 mt-0 w-full bg-gray-800 ">
         <nav class="container flex justify-between items-center px-6 mx-auto">
             <div>
@@ -63,11 +63,13 @@
         </nav>
     </header>
 
-    <main class="mb-auto flex-grow ">
-        @yield('content')
+    <main class="pt-12 mx-auto lg:flex min-h-screen max-h-full ">
+        <div class=" w-full lg:flex-grow pb-10">
+            @yield('content')
+        </div>
     </main>
 
-    <footer class="flex bg-gray-800 h-10 mt-6 justify-center items-center  sticky bottom-0">
+    <footer class="flex bg-gray-800 h-10 justify-center items-center">
         <div class="space-x-4 text-sm text-gray-300 sm:text-base">
             Copyright @ {{ Illuminate\Support\Carbon::now()->year }} MIT Licence
         </div>

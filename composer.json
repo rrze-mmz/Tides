@@ -23,7 +23,8 @@
         "pbmedia/laravel-ffmpeg": "^8.0",
         "predis/predis": "^1.1",
         "spatie/array-to-xml": "^3.0",
-        "te7a-houdini/laravel-trix": "^2.0"
+        "te7a-houdini/laravel-trix": "^2.0",
+      "ext-fileinfo": "*"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.5",

@@ -27,7 +27,7 @@ class MailResetPasswordToken extends Notification
      * @param mixed $notifiable
      * @return array
      */
-    public function via($notifiable)
+    public function via(mixed $notifiable): array
     {
         return ['mail'];
     }
@@ -38,7 +38,7 @@ class MailResetPasswordToken extends Notification
      * @param mixed $notifiable
      * @return MailMessage
      */
-    public function toMail($notifiable)
+    public function toMail(mixed $notifiable): MailMessage
     {
         return (new MailMessage())
             ->subject("Welcome to Tides Portal")
@@ -56,7 +56,7 @@ class MailResetPasswordToken extends Notification
      * @param mixed $notifiable
      * @return array
      */
-    public function toArray($notifiable)
+    public function toArray(mixed $notifiable): array
     {
         return [
             //

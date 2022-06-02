@@ -210,6 +210,23 @@ class ClipTest extends TestCase
     }
 
     /** @test */
+    public function a_clip_owner_can_view_a_clip_with_assets(): void
+    {
+        $this->withoutExceptionHandling();
+
+        $this->signInRole('superadmin');
+
+        $clip = ClipFactory::withAssets(1)->ownedBy(auth()->user())->create();
+
+        $clip->addAcls(collect([2]));
+
+        $this->mockHandler->append($this->mockCheckApiConnection());
+
+        $this->get(route('frontend.clips.show', $clip))
+            ->assertDontSee(__('clip.frontend.not authorized to view video'));
+    }
+
+    /** @test */
     public function it_is_using_a_wowza_source_link_if_wowza_server_is_available(): void
     {
         $this->mockHandler->append($this->mockCheckApiConnection());

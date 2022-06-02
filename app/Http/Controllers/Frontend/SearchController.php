@@ -25,7 +25,6 @@ class SearchController extends Controller
         if ($elasticsearchService->clusterHealth()->isNotEmpty()) {
             $results = $elasticsearchService->searchIndexes($request->term);
             $searchResults = $searchResults->put('clips', $results);
-            \Debugbar::info($searchResults);
             return view('frontend.search.results.elasticsearch', compact('searchResults'));
         } else { //use slow db search if no elasticsearch node is found
             $clips = Clip::has('assets') // fetch only clips with assets

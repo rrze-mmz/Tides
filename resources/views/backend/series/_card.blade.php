@@ -1,10 +1,16 @@
-<div class="flex my-2 w-full bg-gray-50">
-    <div class="flex justify-center justify-items-center  place-items-center mx-2 w-48 h-full">
-        <img src="{{ fetchClipPoster($series->clips()->get()->last()?->posterImage) }}" alt="preview image">
+<div class="flex-row my-2 w-46 bg-gray-50">
+    <div class="relative w-60 h-30 overflow-hidden">
+        <img src="{{ fetchClipPoster($series->clips()->get()->last()?->posterImage) }}" alt="preview image"
+             class="object-cover w-full h-full"/>
+        <div
+            class="absolute w-full py-2.5 bottom-0 inset-x-0 bg-blue-400 text-white
+                    text-xs text-right pr-2 pb-2 leading-4">
+            00:04:30
+        </div>
     </div>
 
-    <div class="flex flex-col justify-between p-4 w-full bg-gray-50">
-        <div class="mb-1">
+    <div class="flex flex-col justify-between p-2 w-full bg-gray-50">
+        <div class="flex-row mb-1">
             <div class="text-md font-bold text-gray-900">
                 <a
                     hover:
@@ -14,11 +20,14 @@
                 >
                     {{ (request()->routeIs('series.index') || request()->routeIs('frontend.series.index'))
                         ? $series->title
-                        : Str::limit($series->title, 20, '...') }}
+                        :  $series->title}}
                 </a>
+
+            </div>
+            <div>
                 <span class=" text-sm italic">von {{$series->owner?->getFullNameAttribute()}}</span>
             </div>
-            <p class="py-3 text-base text-gray-700">
+            <p class="text-base text-gray-700">
                 {{ strip_tags((str_contains(url()->current(),'search'))?$series->description : Str::limit($series->description, 30))  }}
             </p>
         </div>
@@ -52,7 +61,7 @@
         </div>
 
         @if($seriesAcls = $series->fetchClipsAcls())
-            <div class="flex items-center pt-2 justify-content-between">
+            <div class="flex items-center justify-content-between">
                 <div class="pr-2">
                     <x-heroicon-o-lock-closed class="w-4 h-4"/>
                 </div>

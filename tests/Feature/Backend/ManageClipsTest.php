@@ -574,14 +574,6 @@ class ManageClipsTest extends TestCase
     }
 
     /** @test */
-    public function it_has_a_convert_to_hls_option_in_edit_form(): void
-    {
-        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
-
-        $this->get(route('clips.edit', $clip))->assertSee('Convert to HLS?');
-    }
-
-    /** @test */
     public function it_shows_an_lms_test_link_if_clip_has_an_lms_acl_and_user_is_admin(): void
     {
         $userClip = ClipFactory::ownedBy($this->signInRole($this->role))->create();

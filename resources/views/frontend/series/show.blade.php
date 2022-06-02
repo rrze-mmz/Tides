@@ -1,7 +1,7 @@
 @extends('layouts.frontend')
 
 @section('content')
-    <main class="container mx-auto mt-32 h-screen md:mt-32">
+    <div class="container mx-auto mt-32 md:mt-32">
         <div class="flex justify-between pb-2 border-b-2 border-black">
             <h2 class="text-2xl font-bold">{{ $series->title }} [ID: {{ $series->id }}]</h2>
             @can('edit-series', $series)
@@ -48,5 +48,5 @@
 
         </div>
         @include('backend.clips.list')
-    </main>
+    </div>
 @endsection

@@ -26,7 +26,6 @@ class WowzaService
      * Check whether Wowza Server is online
      *
      * @return Collection
-     * @throws GuzzleException
      */
     public function checkApiConnection(): Collection
     {

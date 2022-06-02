@@ -52,7 +52,7 @@ class HomePageTest extends TestCase
 
         $series->clips()->save($clip);
 
-        $this->get(route('home'))->assertSee(Str::limit($series->title, 20, '...'));
+        $this->get(route('home'))->assertSee(Str::limit($series->title, 20, ''));
     }
 
     /** @test */
@@ -64,13 +64,13 @@ class HomePageTest extends TestCase
 
         $series->clips()->save($clip);
 
-        $this->get(route('home'))->assertSee(Str::limit($series->title, 20, '...'));
+        $this->get(route('home'))->assertSee(Str::limit($series->title, 20, ''));
 
         $series->is_public = false;
 
         $series->save();
 
-        $this->get(route('home'))->assertDontSee(Str::limit($series->title, 20, '...'));
+        $this->get(route('home'))->assertDontSee(Str::limit($series->title, 20, ''));
     }
 
     /** @test */

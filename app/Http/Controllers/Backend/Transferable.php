@@ -22,33 +22,35 @@ trait Transferable
     public function checkOpencastAssetsForClipUpload(Clip $clip, $eventID, OpencastService $opencastService)
     {
         $assets = $opencastService->getAssetsByEventID($eventID);
+        $sourceDisk = 'opencast_archive';
 
         $deliveryAssets = $assets->filter(function ($value) {
             return Str::contains($value['tag'], 'final');
         });
 
-        $this->uploadAssets($clip, $deliveryAssets, $eventID);
+        $this->uploadAssets($clip, $deliveryAssets, $eventID, $sourceDisk);
     }
 
     public function checkDropzoneFilesForClipUpload(Clip $clip, array $validatedFiles)
     {
+        $sourceDisk = 'video_dropzone';
         $assets = fetchDropZoneFiles()->filter(function ($file, $key) use ($validatedFiles) {
             if (in_array($key, $validatedFiles['files'])) {
                 return $file;
             }
         });
 
-        $this->uploadAssets($clip, $assets);
+        $this->uploadAssets($clip, $assets, '', $sourceDisk);
     }
 
-    private function uploadAssets(Clip $clip, Collection $assets, string $eventID = '')
+    private function uploadAssets(Clip $clip, Collection $assets, string $eventID = '', string $sourceDisk = '')
     {
         Bus::chain([
-            new TransferAssetsJob($clip, $assets, $eventID),
+            new TransferAssetsJob($clip, $assets, $eventID, $sourceDisk),
             new CreateWowzaSmilFile($clip),
         ])->dispatch();
 
-        //mail can be chained via anonymous function inside the bus but then the test  fails
+        //mail can be chained inside anonymous function bus parameter but then the test  fails
         Mail::to($clip->owner->email)->queue(new AssetsTransferred($clip));
     }
 }

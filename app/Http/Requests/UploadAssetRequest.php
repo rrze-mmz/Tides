@@ -26,8 +26,7 @@ class UploadAssetRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'asset'                 => ['required', 'file', 'mimetypes:video/mp4,video/mpeg,video/x-matroska'],
-            'should_convert_to_hls' => ['string', 'max:2'],
+            'asset' => ['required', 'file', 'mimetypes:video/mp4,video/mpeg,video/x-matroska'],
         ];
     }
 }

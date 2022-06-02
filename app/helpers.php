@@ -65,31 +65,61 @@ function fetchDropZoneFiles($ffmpegCheck = true): Collection
                 return $file[0] !== '.';
             })
             ->mapWithKeys(function ($file) use ($ffmpegCheck) {
-                $video = null;
-                $mime = null;
-                $lastModified = Carbon::createFromTimestamp(Storage::disk('video_dropzone')->lastModified($file))
-                    ->format('Y-m-d H:i:s');
-
-                // Check whether is file is at the moment written at the disk
-                if ((Carbon::now()->diffInMinutes($lastModified) > 2 || App::environment('testing')) && $ffmpegCheck) {
-                    $video = FFMpeg::fromDisk('video_dropzone')->open($file)->getVideoStream();
-                    $mime = mime_content_type(Storage::disk('video_dropzone')->path($file));
-                }
-
-                return [sha1($file) => [
-                    'tag'           => 'dropzone/file',
-                    'type'          => $mime,
-                    'video'         => ($video !== null)
-                        ? $video->get('width') . 'x' . $video->get('height')
-                        : null,
-                    'version'       => '1',
-                    'date_modified' => Carbon::createFromTimestamp(Storage::disk('video_dropzone')
-                        ->lastModified($file))
-                        ->format('Y-m-d H:i:s'),
-                    'name'          => $file,
-                ]
-                ];
+                return prepareFileForUpload($file, true, $ffmpegCheck);
             })->sortByDesc('date_modified');
+}
+
+/**
+ * @param $file
+ * @param bool $isDropZoneFile
+ * @param bool $ffmpegCheck
+ * @return array[]
+ */
+function prepareFileForUpload($file, bool $isDropZoneFile, bool $ffmpegCheck = true): array
+{
+    $video = null;
+    $mime = null;
+
+    $dateModified = Carbon::createFromTimestamp(now())->format('Y-m-d H:i:s');
+
+    if ($isDropZoneFile) {
+        $lastModified = Carbon::createFromTimestamp(Storage::disk('video_dropzone')->lastModified($file))
+            ->format('Y-m-d H:i:s');
+        $tag = 'dropzone/file';
+    } else {
+        /*
+         * Uploaded file is not allowed to pass to an instance of a job instead save it to disk first
+         */
+        $path = $file->store('/', 'local');
+        $tag = 'single/file';
+        $file = $path;
+    }
+
+    // Check whether is file is at the moment written at the disk
+    if ($isDropZoneFile) {
+        if ((Carbon::now()->diffInMinutes($lastModified) > 2 || App::environment('testing')) && $ffmpegCheck) {
+            $video = FFMpeg::fromDisk('video_dropzone')->open($file)->getVideoStream();
+            $mime = mime_content_type(Storage::disk('video_dropzone')->path($file));
+            $dateModified = Carbon::createFromTimestamp(Storage::disk('video_dropzone')
+                ->lastModified($file))
+                ->format('Y-m-d H:i:s');
+        }
+    } else {
+        $video = FFMpeg::open($file)->getVideoStream();
+        $mime = mime_content_type(Storage::disk('local')->path($file));
+    }
+
+    return [sha1($file) => [
+        'tag'           => $tag,
+        'type'          => $mime,
+        'video'         => ($video !== null)
+            ? $video->get('width') . 'x' . $video->get('height')
+            : null,
+        'version'       => '1',
+        'date_modified' => $dateModified,
+        'name'          => $file,
+    ]
+    ];
 }
 
 /**

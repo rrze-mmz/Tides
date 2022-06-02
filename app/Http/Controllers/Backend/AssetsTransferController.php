@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UploadAssetRequest;
 use App\Jobs\CreateWowzaSmilFile;
 use App\Jobs\SendEmail;
 use App\Jobs\TransferAssetsJob;
@@ -21,6 +22,26 @@ use Illuminate\View\View;
 class AssetsTransferController extends Controller
 {
     use Transferable;
+
+    /**
+     * Upload a single transcoded file from clip edit page
+     *
+     * @param Clip $clip
+     * @param UploadAssetRequest $request
+     * @return RedirectResponse
+     */
+    public function transferSingleAsset(Clip $clip, UploadAssetRequest $request): RedirectResponse
+    {
+        $sourceDisk = 'local';
+        $this->uploadAssets(
+            $clip,
+            collect(prepareFileForUpload($request->validated(['asset']), false, true)),
+            '',
+            $sourceDisk
+        );
+
+        return to_route('clips.edit', $clip);
+    }
 
     /**
      * List all available files inside the dropzone folder

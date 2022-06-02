@@ -161,7 +161,7 @@ class SeriesClipsTest extends TestCase
 
         $series->addMember($user);
 
-        $this->get(route('series.clips.listSeries', $clip))->assertSee(str()->limit($series->title, 20, '...'));
+        $this->get(route('series.clips.listSeries', $clip))->assertSee($series->title);
     }
 
     /** @test */

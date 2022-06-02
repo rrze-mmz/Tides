@@ -7,6 +7,7 @@ use App\Models\Traits\Searchable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Database\Eloquent\Collection;
 
 class Presenter extends BaseModel
 {
@@ -42,6 +43,11 @@ class Presenter extends BaseModel
     public function clips(): MorphToMany
     {
         return $this->morphedByMany(Clip::class, 'presentable')->withTimestamps();
+    }
+
+    public function clipsWithoutSeries(): Collection
+    {
+        return $this->clips->whereNull('series_id');
     }
 
     /**

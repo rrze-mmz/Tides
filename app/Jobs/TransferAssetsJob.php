@@ -27,12 +27,17 @@ class TransferAssetsJob implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @param Clip $clip
-     * @param Collection $files
-     * @param string $eventID
+     * @param  Clip  $clip
+     * @param  Collection  $files
+     * @param  string  $eventID
+     * @param  string  $sourceDisk
      */
-    public function __construct(protected Clip $clip, protected Collection $files, protected string $eventID = '')
-    {
+    public function __construct(
+        protected Clip $clip,
+        protected Collection $files,
+        protected string $eventID = '',
+        protected string $sourceDisk = ''
+    ) {
     }
 
     /**
@@ -45,28 +50,28 @@ class TransferAssetsJob implements ShouldQueue
     {
         $clipStoragePath = getClipStoragePath($this->clip);
         $this->files->each(function ($file, $key) use ($clipStoragePath) {
-            $isVideo = (bool)$file['video'];
+            $isVideo = (bool) $file['video'];
             $storageDisk = ($this->eventID !== '')
-                ? Storage::disk('opencast_archive')->readStream('/' . config('opencast.archive_path') .
-                    '/' . $this->eventID .
-                    '/' . $file['version'] .
-                    '/' . $file['name'])
-                : Storage::disk('video_dropzone')->readStream($file['name']);
+                ? Storage::disk($this->sourceDisk)->readStream('/'.config('opencast.archive_path').
+                    '/'.$this->eventID.
+                    '/'.$file['version'].
+                    '/'.$file['name'])
+                : Storage::disk($this->sourceDisk)->readStream($file['name']);
 
             try {
                 Storage::disk('videos')->makeDirectory($clipStoragePath);
-                Storage::disk('videos')->writeStream($clipStoragePath . '/' . $file['name'], $storageDisk);
+                Storage::disk('videos')->writeStream($clipStoragePath.'/'.$file['name'], $storageDisk);
             } catch (FileNotFoundException $e) {
                 Log::error($e);
             }
 
-            $storedFile = $clipStoragePath . '/' . $file['name'];
+            $storedFile = $clipStoragePath.'/'.$file['name'];
             $ffmpeg = FFMpeg::fromDisk('videos')->open($storedFile);
 
-            $attributes = [
+            $asset = [
                 'disk'               => 'videos',
                 'original_file_name' => $file['name'],
-                'path'               => $clipStoragePath,
+                'path'               => $storedFile,
                 'duration'           => $ffmpeg->getDurationInSeconds(),
                 'width'              => ($isVideo)
                     ? $ffmpeg->getVideoStream()->getDimensions()->getWidth()
@@ -77,16 +82,21 @@ class TransferAssetsJob implements ShouldQueue
                 'type'               => ($isVideo) ? Content::PRESENTER() : Content::AUDIO(),
             ];
 
-            $this->clip->addAsset($attributes);
+            $this->clip->addAsset($asset);
 
             if ($isVideo) {
                 //generate a poster image for the clip
                 $ffmpeg->getFrameFromSeconds(5)
                     ->export()
                     ->toDisk('thumbnails')
-                    ->save($this->clip->id . '_poster.png');
+                    ->save($this->clip->id.'_poster.png');
 
                 $this->clip->updatePosterImage();
+            }
+
+            //in case of local upload delete the tmp file
+            if ($this->sourceDisk == 'local') {
+                Storage::disk($this->sourceDisk)->delete($file['name']);
             }
         });
     }

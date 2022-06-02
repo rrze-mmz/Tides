@@ -18,7 +18,7 @@
             </div>
 
         </div>
-        <div class="grid grid-cols-3 gap-4 py-8 h48 ">
+        <div class="grid grid-cols-3 gap-4">
             @forelse($series as $single)
                 @include('backend.series._card',[
                         'series'=> $single,

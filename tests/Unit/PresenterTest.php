@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use App\Models\Presenter;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -47,5 +48,11 @@ class PresenterTest extends TestCase
             $this->presenter->academicDegree->title . ' ' . $this->presenter->first_name .
             ' ' . $this->presenter->last_name
         );
+    }
+
+    /** @test */
+    public function it_return_presenters_clips_without_series(): void
+    {
+        $this->assertInstanceOf(Collection::class, $this->presenter->clips);
     }
 }

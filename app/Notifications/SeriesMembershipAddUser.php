@@ -27,7 +27,7 @@ class SeriesMembershipAddUser extends Notification
      * @param mixed $notifiable
      * @return array
      */
-    public function via($notifiable)
+    public function via(mixed $notifiable): array
     {
         return ['mail'];
     }
@@ -38,9 +38,9 @@ class SeriesMembershipAddUser extends Notification
      * @param mixed $notifiable
      * @return MailMessage
      */
-    public function toMail($notifiable): MailMessage
+    public function toMail(mixed $notifiable): MailMessage
     {
-        return (new MailMessage)
+        return (new MailMessage())
             ->subject('You have been added to ' . $this->series->title . ' Series as moderator!')
             ->line('Hi ' . $notifiable->getFullNameAttribute())
             ->line('you have been added by ' . auth()->user()->getFullNameAttribute() . ' as Series moderator')
@@ -54,7 +54,7 @@ class SeriesMembershipAddUser extends Notification
      * @param mixed $notifiable
      * @return array
      */
-    public function toArray($notifiable): array
+    public function toArray(mixed $notifiable): array
     {
         return [
             //
