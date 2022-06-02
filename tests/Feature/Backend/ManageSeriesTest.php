@@ -70,7 +70,7 @@ class ManageSeriesTest extends TestCase
 
         Series::factory(20)->create(['owner_id' => $this->signInRole($this->role)]);
 
-        $this->get(route('series.index') . '?page=2')->assertDontSee('No more series found');
+        $this->get(route('series.index').'?page=2')->assertDontSee('No more series found');
     }
 
     /** @test */
@@ -82,7 +82,7 @@ class ManageSeriesTest extends TestCase
 
         $this->signInRole('admin');
 
-        $this->get(route('series.index') . '?page=2')->assertDontSee('No more series found');
+        $this->get(route('series.index').'?page=2')->assertDontSee('No more series found');
     }
 
     /** @test */
@@ -102,7 +102,7 @@ class ManageSeriesTest extends TestCase
 
         $user = $this->signInRole($this->role);
 
-        $userSeries = Series::factory(3)->create(['owner_id' => $user->id, 'title' => 'User series']);
+        Series::factory(3)->create(['owner_id' => $user->id, 'title' => 'User series']);
 
         $this->get(route('series.index'))
             ->assertSee('User series')
@@ -122,7 +122,7 @@ class ManageSeriesTest extends TestCase
 
         $this->signInRole('assistant');
 
-        $this->get(route('series.index') . '?page=2')->assertDontSee('No more series found');
+        $this->get(route('series.index').'?page=2')->assertDontSee('No more series found');
     }
 
     /** @test */

@@ -11,7 +11,7 @@
             method="POST"
             class="px-2"
             enctype="multipart/form-data"
-            action="{{route('documents.upload',$resource)}}"
+            action="{{ route('documents.upload') }}"
         >
             @csrf
 

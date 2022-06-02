@@ -7,7 +7,7 @@ import $ from 'jquery';
 import Pikaday from 'pikaday';
 
 window.$ = window.jQuery = $;
-
+window.Alpine = Alpine
 window.Pikaday = Pikaday;
 
 $(() => {

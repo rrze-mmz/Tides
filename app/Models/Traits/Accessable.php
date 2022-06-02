@@ -25,7 +25,7 @@ trait Accessable
     /**
      * Assign an acl collection to the give type
      *
-     * @param Collection $aclsCollection
+     * @param  Collection  $aclsCollection
      * @return void
      */
     public function addAcls(Collection $aclsCollection): void
@@ -48,10 +48,13 @@ trait Accessable
         $acls = $this->acls;
 
         $tokenType = lcfirst(class_basename($this::class));
-        $tokenTime = session()->get($tokenType . '_' . $this->id . '_time');
+        $tokenTime = session()->get($tokenType.'_'.$this->id.'_time');
 
         $check = false;
         if ($acls->isEmpty()) {
+            return true;
+        }
+        if (auth()->user()?->isAdmin()) {
             return true;
         }
         if ($acls->pluck('id')->contains('2') && auth()->check()) {
@@ -60,7 +63,7 @@ trait Accessable
         }
         if ($acls->pluck('id')->contains('4')) {
             $check = (
-                session()->get($tokenType . '_' . $this->id . '_token') === generateLMSToken($this, $tokenTime)
+                session()->get($tokenType.'_'.$this->id.'_token') === generateLMSToken($this, $tokenTime)
                 || ((auth()->check() && auth()->user()->can('view-video', $this)))
                 || (auth()->check() && auth()->user()->isAdmin())
             );

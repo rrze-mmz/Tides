@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 class DocumentController extends Controller
 {
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @return RedirectResponse
      * @throws AuthorizationException
      */
@@ -34,12 +34,12 @@ class DocumentController extends Controller
         };
         $resource = $model::findOrFail($validated['id']);
 
-        $this->authorize('edit-' . str($validated['type'])->plural(), $resource);
+        $this->authorize('edit-'.str($validated['type'])->plural(), $resource);
 
         $document = Document::create([
-            'name'      => $name = $validated['document']->getClientOriginalName(),
+            'name'      => $validated['document']->getClientOriginalName(),
             'save_path' => $validated['document']
-                ->store($validated['type'] . '_' . $resource->id, 'documents')
+                ->store($validated['type'].'_'.$resource->id, 'documents')
         ]);
 
         $resource->addDocument($document);
@@ -50,8 +50,8 @@ class DocumentController extends Controller
     /**
      * View a series document on browser
      *
-     * @param Series $series
-     * @param Document $document
+     * @param  Series  $series
+     * @param  Document  $document
      * @return BinaryFileResponse|RedirectResponse
      * @throws AuthorizationException
      */
@@ -61,7 +61,7 @@ class DocumentController extends Controller
 
         //file maybe not found especially in testing
         try {
-            response()->file(public_path('documents/') . $document->save_path);
+            return response()->file(public_path('documents/').$document->save_path);
         } catch (\Exception $exception) {
             Log::error($exception);
             return to_route('series.edit', $series);
@@ -71,8 +71,8 @@ class DocumentController extends Controller
     /**
      * View a clip document in browser
      *
-     * @param Clip $clip
-     * @param Document $document
+     * @param  Clip  $clip
+     * @param  Document  $document
      * @return BinaryFileResponse|RedirectResponse
      * @throws AuthorizationException
      */
@@ -82,7 +82,7 @@ class DocumentController extends Controller
 
         //file maybe not found especially in testing
         try {
-            return response()->file(public_path('documents/') . $document->save_path);
+            return response()->file(public_path('documents/').$document->save_path);
         } catch (\Exception $exception) {
             Log::error($exception);
             return to_route('clips.edit', $clip);
@@ -92,7 +92,7 @@ class DocumentController extends Controller
     /**
      * Delete a given document
      *
-     * @param Document $document
+     * @param  Document  $document
      * @return RedirectResponse
      * @throws AuthorizationException
      */

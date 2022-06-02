@@ -1,16 +1,16 @@
-<div class="flex-row my-2 w-46 bg-gray-50">
-    <div class="relative w-60 h-30 overflow-hidden">
+<div class="flex-row my-2 bg-gray-50">
+    <div class="relative  h-30 overflow-hidden">
         <img src="{{ fetchClipPoster($series->clips()->get()->last()?->posterImage) }}" alt="preview image"
              class="object-cover w-full h-full"/>
         <div
             class="absolute w-full py-2.5 bottom-0 inset-x-0 bg-blue-400 text-white
                     text-xs text-right pr-2 pb-2 leading-4">
-            00:04:30
+            {{ $series->latestClip?->assets->first()?->durationToHours() }}
         </div>
     </div>
 
-    <div class="flex flex-col justify-between p-2 w-full bg-gray-50">
-        <div class="flex-row mb-1">
+    <div class="flex-row justify-between p-2 w-full bg-gray-50">
+        <div class="mb-1">
             <div class="text-md font-bold text-gray-900">
                 <a
                     hover:

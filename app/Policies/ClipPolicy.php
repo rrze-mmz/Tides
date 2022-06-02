@@ -14,7 +14,7 @@ class ClipPolicy
     /**
      * Check whether the current user can view all clips in index
      *
-     * @param User $user
+     * @param  User  $user
      * @return bool
      */
     public function index(User $user): bool
@@ -25,7 +25,7 @@ class ClipPolicy
     /**
      * Check whether the current user can create a clip
      *
-     * @param User $user
+     * @param  User  $user
      * @return bool
      */
     public function create(User $user): bool
@@ -36,8 +36,8 @@ class ClipPolicy
     /**
      * Check whether the given user can edit the given clip
      *
-     * @param User $user
-     * @param Clip $clip
+     * @param  User  $user
+     * @param  Clip  $clip
      * @return bool
      */
     public function edit(User $user, Clip $clip): bool
@@ -46,8 +46,8 @@ class ClipPolicy
     }
 
     /**
-     * @param User|null $user
-     * @param Clip $clip
+     * @param  User|null  $user
+     * @param  Clip  $clip
      * @return bool
      */
     public function view(?User $user, Clip $clip): bool
@@ -66,8 +66,8 @@ class ClipPolicy
     /**
      * Check whether the current user can view the given clip comments
      *
-     * @param User|null $user
-     * @param Clip $clip
+     * @param  User|null  $user
+     * @param  Clip  $clip
      * @return bool
      */
     public function viewComments(?User $user, Clip $clip): bool
@@ -78,6 +78,6 @@ class ClipPolicy
     public function viewVideo(User $user, Clip $clip): bool
     {
         return ((auth()->check() && $clip->acls->pluck('id')->contains('1')) ||
-            $user->is($clip->owner));
+            ($user->is($clip->owner)));
     }
 }
