@@ -1,4 +1,4 @@
-<video id="player" class="plyr-player" controls data-poster="{{ fetchClipPoster($clip->posterImage)  }}">
+<video id="player" class="plyr-player" controls data-poster="{{ fetchClipPoster($clip)  }}">
     @if(Illuminate\Support\Facades\Storage::disk('streamable_videos')
                                                 ->exists($clip->assets()->first()->id.'.m3u8'))
         <source src="{{ '/streamable_videos/'.$clip->assets()->first()->id . '.m3u8'  }}"
@@ -10,8 +10,8 @@
     @else
         <source src="{{ '/videos/'.$clip->assets->first()->path  }}"
                 type="video/mp4"/>
-@endif
-<!-- Captions are optional -->
+    @endif
+    <!-- Captions are optional -->
 </video>
 
 

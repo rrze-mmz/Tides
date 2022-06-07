@@ -27,7 +27,7 @@ class HomeController extends Controller
                 ->whereHas('assets')
                 ->whereNull('series_id')
                 ->orderByDesc('updated_at')
-                ->limit(18)
+                ->limit(12)
                 ->get(),
         ]);
     }

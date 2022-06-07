@@ -39,6 +39,7 @@ class AssetsTransferTest extends TestCase
 
         Storage::fake('videos');
         Storage::fake('local');
+        Storage::fake('thumbnails');
 
         $this->role = 'moderator';
     }

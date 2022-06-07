@@ -34,24 +34,26 @@ class ClipTest extends TestCase
         parent::setUp();
 
         $this->clip = Clip::factory()->create();
+
+        Storage::fake('thumbnails');
     }
 
     /** @test */
     public function it_has_a_path(): void
     {
-        $this->assertEquals('/clips/' . $this->clip->slug, $this->clip->path());
+        $this->assertEquals('/clips/'.$this->clip->slug, $this->clip->path());
     }
 
     /** @test */
     public function it_has_a_admin_path(): void
     {
-        $this->assertEquals('/admin/clips/' . $this->clip->slug, $this->clip->adminPath());
+        $this->assertEquals('/admin/clips/'.$this->clip->slug, $this->clip->adminPath());
     }
 
     /** @test */
     public function it_has_a_slug_route(): void
     {
-        $this->assertEquals('/clips/' . Str::slug($this->clip->title), $this->clip->path());
+        $this->assertEquals('/clips/'.Str::slug($this->clip->title), $this->clip->path());
     }
 
     /** @test */
@@ -185,13 +187,11 @@ class ClipTest extends TestCase
 
         $file = FileFactory::videoFile();
 
-        $file->storeAs('thumbnails', $this->clip->id . '_poster.png');
+        $file->storeAs('thumbnails', $this->clip->id.'_poster.png');
 
         $this->clip->updatePosterImage();
 
-        $this->assertEquals('1_poster.png', $this->clip->posterImage);
-
-        Storage::disk('thumbnails')->delete($this->clip->id . '_poster.png');
+        Storage::assertExists('/thumbnails/'.$this->clip->posterImage);
     }
 
     /** @test */
@@ -253,7 +253,7 @@ class ClipTest extends TestCase
     /** @test */
     public function it_resolves_also_id_in_route(): void
     {
-        $this->get('clips/' . $this->clip->id)->assertStatus(403);
+        $this->get('clips/'.$this->clip->id)->assertStatus(403);
         $this->get(route('frontend.clips.show', $this->clip->id))->assertStatus(403);
         $this->get('clips/291')->assertStatus(404);
     }

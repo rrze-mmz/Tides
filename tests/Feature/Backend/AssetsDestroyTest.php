@@ -23,6 +23,7 @@ class AssetsDestroyTest extends TestCase
         parent::setUp();
 
         Storage::fake('videos');
+        Storage::fake('thumbnails');
 
         $this->role = 'moderator';
     }
@@ -40,8 +41,6 @@ class AssetsDestroyTest extends TestCase
     /** @test */
     public function a_moderator_can_delete_an_owned_clip_asset(): void
     {
-        Storage::fake('thumbnails');
-
         $clip = ClipFactory::withAssets(1)
             ->ownedBy($this->signInRole($this->role))
             ->create();
@@ -89,17 +88,17 @@ class AssetsDestroyTest extends TestCase
     /** @test */
     public function deleting_an_asset_should_delete_a_clip_poster(): void
     {
-        Storage::fake('thumbnails');
-
         $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
 
         $this->post(route('admin.clips.asset.transferSingle', $clip), ['asset' => FileFactory::videoFile()]);
 
         $clip->refresh();
 
+        $image = $clip->posterImage;
+
         $this->delete($clip->assets()->first()->path());
 
-        Storage::disk('thumbnails')->assertMissing($clip->posterImage);
+        Storage::disk('thumbnails')->assertMissing($image);
     }
 
     /** @test */

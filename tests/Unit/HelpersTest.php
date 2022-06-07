@@ -20,13 +20,19 @@ class HelpersTest extends TestCase
     /** @test */
     public function it_fetches_a_generic_poster_image_when_poster_file_path_is_null(): void
     {
-        $this->assertEquals('/images/generic_clip_poster_image.png', fetchClipPoster());
+        $clip = Clip::factory()->create();
+        $this->assertEquals('/images/generic_clip_poster_image.png', fetchClipPoster($clip));
     }
 
     /** @test */
     public function it_fetches_a_clip_poster_image_when_poster_file_path_is_not_null(): void
     {
-        $this->assertEquals('/thumbnails/1_poster.png', fetchClipPoster('1_poster.png'));
+        $clip = Clip::factory()->create();
+
+        $clip->posterImage = 'clip_'.$clip->id.'/2nUGJry2p8uPY9wjctep4PtlY9ABXLdJuCrbfMHS.jpg';
+        $clip->save();
+
+        $this->assertEquals('/thumbnails/'.$clip->posterImage, fetchClipPoster($clip));
     }
 
     /** @test */
@@ -102,7 +108,7 @@ class HelpersTest extends TestCase
     {
         $time = dechex(time());
 
-        $token = md5('clip' . '1' . '1234qwER' . '127.0.0.1' . $time . 'studon');
+        $token = md5('clip'.'1'.'1234qwER'.'127.0.0.1'.$time.'studon');
 
         $this->assertEquals($token, generateLMSToken(ClipFactory::create(['password' => '1234qwER']), $time));
     }
@@ -112,11 +118,11 @@ class HelpersTest extends TestCase
     {
         $time = dechex(time());
 
-        $token = md5('clip' . '1' . '1234qwER' . '127.0.0.1' . $time . 'studon');
+        $token = md5('clip'.'1'.'1234qwER'.'127.0.0.1'.$time.'studon');
 
         $clip = ClipFactory::create(['password' => '1234qwER']);
 
-        $url = '/protector/link/clip/1/' . $token . '/' . $time . '/studon';
+        $url = '/protector/link/clip/1/'.$token.'/'.$time.'/studon';
 
         $this->assertNotEquals($url, generateLMSToken($clip, $time));
         $this->assertEquals($url, generateLMSToken($clip, $time, true));

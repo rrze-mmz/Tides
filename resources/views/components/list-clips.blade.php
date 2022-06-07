@@ -30,7 +30,7 @@
                         <div class="w-2/12">
                             <div class="flex justify-center justify-items-center place-items-center mx-2 w-48 h-full">
                                 <a href="{{$clip->adminPath()}}">
-                                    <img src="{{ fetchClipPoster($clip->posterImage) }}"
+                                    <img src="{{ fetchClipPoster($clip) }}"
                                          alt="preview image"
                                     >
                                 </a>

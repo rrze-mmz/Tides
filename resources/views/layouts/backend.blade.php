@@ -64,7 +64,7 @@
             </nav>
         </nav>
     </header>
-    <main class="pt-12 mx-auto lg:flex">
+    <main class="pt-12 mx-auto lg:flex bg-gray-200">
         <div class="min-h-screen max-h-full  bg-gray-800 w-1/7">
             @include('backend.dashboard._sidebar-navigation')
         </div>

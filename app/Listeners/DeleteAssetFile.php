@@ -21,14 +21,15 @@ class DeleteAssetFile
     /**
      * Update clip poster file and delete the given video file
      *
-     * @param AssetDeleted $event
+     * @param  AssetDeleted  $event
      * @return void
      */
     public function handle(AssetDeleted $event): void
     {
         //delete poster image file
-        if ($event->asset->clip->posterImage) {
+        if (!is_null($event->asset->clip->posterImage)) {
             Storage::disk('thumbnails')->delete($event->asset->clip->posterImage);
+            $event->asset->clip->updatePosterImage();
         }
 
         //delete the video file

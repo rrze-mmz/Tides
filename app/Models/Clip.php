@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Http\File;
 use Illuminate\Support\Collection;
 use App\Models\Collection as TCollection;
 use Illuminate\Support\Facades\Storage;
@@ -80,7 +81,7 @@ class Clip extends BaseModel
      */
     public function resolveRouteBinding($value, $field = null): ?Model
     {
-        return $this->where('slug', $value)->orWhere('id', (int)$value)->firstOrFail();
+        return $this->where('slug', $value)->orWhere('id', (int) $value)->firstOrFail();
     }
 
     /**
@@ -216,7 +217,7 @@ class Clip extends BaseModel
     /**
      * Adds an asset to clip
      *
-     * @param array $attributes
+     * @param  array  $attributes
      * @return Asset
      */
     public function addAsset(array $attributes = []): Asset
@@ -229,22 +230,30 @@ class Clip extends BaseModel
      */
     public function updatePosterImage(): void
     {
-        $this->posterImage =
-            (Storage::disk('thumbnails')->exists($this->id . '_poster.png')) ? $this->id . '_poster.png' : null;
+        if (Storage::disk('thumbnails')->exists($this->id.'_poster.png')) {
+            $path = Storage::disk('thumbnails')->putFile(
+                'clip_'.$this->id,
+                new File(Storage::disk('thumbnails')->path($this->id.'_poster.png'))
+            );
 
+            $this->posterImage = $path;
+            $this->save();
+        } else {
+            $this->posterImage = null;
+        }
         $this->save();
     }
 
     /**
      * Add tags to clip
      *
-     * @param Collection $tagsCollection
+     * @param  Collection  $tagsCollection
      */
     public function addTags(Collection $tagsCollection): void
     {
         /*
          * Check for tags collection from post request.
-         * The closure returnsa tag model, where the model is either selected or created.
+         * The closure returns a tag model, where the model is either selected or created.
          * The tag model is synchronized with the clip tags.
          * In case the collection is empty assumed that clip has no tags and delete them
          */
@@ -266,10 +275,10 @@ class Clip extends BaseModel
 
         return collect([
             'previousClip' => $clipsCollection->filter(function ($value, $key) {
-                return (int)$value->episode == (int)$this->episode - 1;
+                return (int) $value->episode == (int) $this->episode - 1;
             })->first(),
             'nextClip'     => $clipsCollection->filter(function ($value, $key) {
-                return (int)$value->episode == (int)$this->episode + 1;
+                return (int) $value->episode == (int) $this->episode + 1;
             })->first()
         ]);
     }
@@ -277,7 +286,7 @@ class Clip extends BaseModel
     /**
      * Fetch all assets for a clip by type
      *
-     * @param Content $content
+     * @param  Content  $content
      * @return HasMany
      */
     public function getAssetsByType(Content $content): HasMany

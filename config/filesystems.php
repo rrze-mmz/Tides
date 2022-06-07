@@ -30,28 +30,27 @@ return [
 
     'disks' => [
 
-        'local' => [
+        'local'  => [
             'driver' => 'local',
             'root'   => storage_path('app'),
         ],
-
         'public' => [
             'driver'     => 'local',
             'root'       => storage_path('app/public'),
-            'url'        => env('APP_URL') . '/storage',
+            'url'        => env('APP_URL').'/storage',
             'visibility' => 'public',
         ],
 
         'videos' => [
             'driver' => 'local',
             'root'   => storage_path('app/videos'),
-            'url'    => env('APP_URL') . '/videos',
+            'url'    => env('APP_URL').'/videos',
         ],
 
         'streamable_videos' => [
             'driver'     => 'local',
             'root'       => storage_path('app/streamable_videos'),
-            'url'        => env('APP_URL') . '/streamable_videos',
+            'url'        => env('APP_URL').'/streamable_videos',
             'visibility' => 'public',
         ],
 
@@ -68,13 +67,13 @@ return [
         'documents' => [
             'driver' => 'local',
             'root'   => storage_path('app/documents'),
-            'url'    => env('APP_URL') . '/documents',
+            'url'    => env('APP_URL').'/documents',
         ],
 
         'thumbnails' => [
             'driver'     => 'local',
             'root'       => storage_path('app/thumbnails'),
-            'url'        => env('APP_URL') . '/thumbnails',
+            'url'        => env('APP_URL').'/thumbnails',
             'visibility' => 'public',
         ],
 

@@ -11,36 +11,38 @@ use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
 /**
  * Returns poster image relative file path of a clip or default
  *
- * @param null $file
+ * @param  Clip  $clip
  * @return string
  */
-function fetchClipPoster($file = null): string
+function fetchClipPoster(Clip $clip): string
 {
-    return (is_null($file)) ? '/images/generic_clip_poster_image.png' : '/thumbnails/' . $file;
+    return (is_null($clip?->posterImage))
+        ? '/images/generic_clip_poster_image.png'
+        : '/thumbnails/'.$clip->posterImage;
 }
 
 /**
  * Return file dir for a clip based on created date
  *
- * @param Clip $clip
+ * @param  Clip  $clip
  * @return string
  */
 function getClipStoragePath(Clip $clip): string
 {
-    return '/' . Carbon::createFromFormat('Y-m-d', $clip->created_at->format('Y-m-d'))
-            ->year .
-        '/' . str_pad(Carbon::createFromFormat('Y-m-d', $clip->created_at->format('Y-m-d'))
-            ->month, 2, "0", STR_PAD_LEFT) .
-        '/' . str_pad(Carbon::createFromFormat('Y-m-d', $clip->created_at->format('Y-m-d'))
-            ->day, 2, "0", STR_PAD_LEFT) . '/'
-        . $clip->folder_id . '/';
+    return '/'.Carbon::createFromFormat('Y-m-d', $clip->created_at->format('Y-m-d'))
+            ->year.
+        '/'.str_pad(Carbon::createFromFormat('Y-m-d', $clip->created_at->format('Y-m-d'))
+            ->month, 2, "0", STR_PAD_LEFT).
+        '/'.str_pad(Carbon::createFromFormat('Y-m-d', $clip->created_at->format('Y-m-d'))
+            ->day, 2, "0", STR_PAD_LEFT).'/'
+        .$clip->folder_id.'/';
 }
 
 function getClipSmilFile(Clip $clip): string
 {
-    return config('wowza.stream_url') .
-        getClipStoragePath($clip) .
-        $clip->getAssetsByType(Content::SMIL)->first()?->original_file_name .
+    return config('wowza.stream_url').
+        getClipStoragePath($clip).
+        $clip->getAssetsByType(Content::SMIL)->first()?->original_file_name.
         '/playlist.m3u8';
 }
 
@@ -71,8 +73,8 @@ function fetchDropZoneFiles($ffmpegCheck = true): Collection
 
 /**
  * @param $file
- * @param bool $isDropZoneFile
- * @param bool $ffmpegCheck
+ * @param  bool  $isDropZoneFile
+ * @param  bool  $ffmpegCheck
  * @return array[]
  */
 function prepareFileForUpload($file, bool $isDropZoneFile, bool $ffmpegCheck = true): array
@@ -109,23 +111,24 @@ function prepareFileForUpload($file, bool $isDropZoneFile, bool $ffmpegCheck = t
         $mime = mime_content_type(Storage::disk('local')->path($file));
     }
 
-    return [sha1($file) => [
-        'tag'           => $tag,
-        'type'          => $mime,
-        'video'         => ($video !== null)
-            ? $video->get('width') . 'x' . $video->get('height')
-            : null,
-        'version'       => '1',
-        'date_modified' => $dateModified,
-        'name'          => $file,
-    ]
+    return [
+        sha1($file) => [
+            'tag'           => $tag,
+            'type'          => $mime,
+            'video'         => ($video !== null)
+                ? $video->get('width').'x'.$video->get('height')
+                : null,
+            'version'       => '1',
+            'date_modified' => $dateModified,
+            'name'          => $file,
+        ]
     ];
 }
 
 /**
  * Returns tailwind menu active link css rule
  *
- * @param string $route
+ * @param  string  $route
  * @return string
  */
 function setActiveLink(string $route): string
@@ -138,20 +141,20 @@ function setActiveLink(string $route): string
  *
  * @param $obj
  * @param $time
- * @param false $withURL
+ * @param  false  $withURL
  * @return string
  */
 function generateLMSToken($obj, $time, bool $withURL = false): string
 {
     $type = lcfirst(class_basename($obj::class));
 
-    $token = md5($type . $obj->id . $obj->password . request()->ip() . $time . 'studon');
+    $token = md5($type.$obj->id.$obj->password.request()->ip().$time.'studon');
 
-    return ($withURL) ? '/protector/link/' . $type . '/' . $obj->id . '/' . $token . '/' . $time . '/studon' : $token;
+    return ($withURL) ? '/protector/link/'.$type.'/'.$obj->id.'/'.$token.'/'.$time.'/studon' : $token;
 }
 
 /**
- * @param string $operation
+ * @param  string  $operation
  * @return int
  */
 function opencastWorkflowOperationPercentage(string $operation = ''): int

@@ -90,8 +90,9 @@ class TransferAssetsJob implements ShouldQueue
                     ->export()
                     ->toDisk('thumbnails')
                     ->save($this->clip->id.'_poster.png');
-
                 $this->clip->updatePosterImage();
+
+                Storage::disk('thumbnails')->delete($this->clip->id.'_poster.png');
             }
 
             //in case of local upload delete the tmp file

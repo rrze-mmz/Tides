@@ -1,7 +1,11 @@
-<div class="flex-row my-2 bg-gray-50">
+<div class="my-2 bg-gray-50">
     <div class="relative  h-30 overflow-hidden">
-        <img src="{{ fetchClipPoster($series->clips()->get()->last()?->posterImage) }}" alt="preview image"
-             class="object-cover w-full h-full"/>
+        <img
+            src="{{ ($series->clips()->count() > 0)
+                    ? fetchClipPoster($series->latestClip)
+                    : "/images/generic_clip_poster_image.png" }}"
+            alt="preview image"
+            class="object-cover w-full h-full"/>
         <div
             class="absolute w-full py-2.5 bottom-0 inset-x-0 bg-blue-400 text-white
                     text-xs text-right pr-2 pb-2 leading-4">
@@ -14,7 +18,7 @@
             <div class="text-md font-bold text-gray-900">
                 <a
                     hover:
-                    href="@if (str_contains(url()->current(), 'admin')) {{$series->adminPath()}}
+                    href="@if(str_contains(url()->current(), 'admin')) {{$series->adminPath()}}
                     @else {{ $series->path() }} @endif"
                     class="underline text-md"
                 >
@@ -85,4 +89,14 @@
             </form>
         @endif
     </div>
+    @can('edit-series',$series)
+        <div class="flex flex-row-reverse">
+            <div my-4>
+                <x-form.button :link="route('series.edit', $series)"
+                               type="submit"
+                               text="Edit series"
+                />
+            </div>
+        </div>
+    @endcan
 </div>
