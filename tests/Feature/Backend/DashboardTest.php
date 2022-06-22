@@ -145,6 +145,40 @@ class DashboardTest extends TestCase
     }
 
     /** @test */
+    public function it_shows_a_go_to_series_or_clip(): void
+    {
+        $this->signInRole('superadmin');
+
+        $this->get(route('dashboard'))
+            ->assertSee('Go to')
+            ->assertSee('Series ID')
+            ->assertSee('Clip ID');
+    }
+
+    /** @test */
+    public function it_does_not_show_go_to_series_or_clip_for_moderator(): void
+    {
+        $this->signInRole('moderator');
+
+        $this->get(route('dashboard'))
+            ->assertDontSee('Go to')
+            ->assertDontSee('Series ID')
+            ->assertDontSee('Clip ID');
+    }
+
+    /** @test */
+    public function should_redirect_to_dashboard_if_no_series_or_clip_exists(): void
+    {
+        $this->signInRole('moderator');
+
+        $this->post(route('goto.series', ['seriesID' => 100]))
+            ->assertRedirect(route('dashboard'));
+
+        $this->post(route('goto.clip', ['clipID' => 100]))
+            ->assertRedirect(route('dashboard'));
+    }
+
+    /** @test */
     public function it_show_sidebar_menu_items_for_moderators()
     {
         $this->signInRole($this->role);

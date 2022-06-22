@@ -27,11 +27,10 @@ use App\Http\Controllers\Frontend\ShowSeriesController;
 use App\Http\Middleware\CheckLMSToken;
 use App\Models\Activity;
 use App\Models\Clip;
-use App\Models\Device;
 use App\Models\Series;
 use App\Services\ElasticsearchService;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Route;
+use  \Illuminate\Http\Request;
 
 Route::get('/', HomeController::class)->name('home');
 Route::redirect('/home', '/');
@@ -56,9 +55,9 @@ Route::controller(ShowClipsController::class)->prefix('/clips')->group(function 
 
 Route::get('/protector/link/clip/{clip:id}/{token}/{time}/{client}', function (Clip $clip, $token, $time, $client) {
     session()->put([
-        'clip_' . $clip->id . '_token'  => $token,
-        'clip_' . $clip->id . '_time'   => $time,
-        'clip_' . $clip->id . '_client' => $client,
+        'clip_'.$clip->id.'_token'  => $token,
+        'clip_'.$clip->id.'_time'   => $time,
+        'clip_'.$clip->id.'_client' => $client,
     ]);
 
     return to_route('frontend.clips.show', $clip);
@@ -91,6 +90,23 @@ Route::get('/assetDownload/{asset}', AssetsDownloadController::class)->name('ass
 Route::prefix('admin')->middleware(['auth', 'can:access-dashboard'])->group(function () {
     //Dashboard
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
+    Route::post('/goto/series', function (Request $request) {
+        $validated = $request->validate([
+            'seriesID' => ['required', 'integer'],
+        ]);
+        $series = Series::find($validated['seriesID']);
+        return (is_null($series)) ? to_route('dashboard')->with('flashMessage', 'Series not found')
+            : to_route('series.edit', $series);
+    })->name('goto.series');
+
+    Route::post('/goto/clip', function (Request $request) {
+        $validated = $request->validate([
+            'clipID' => ['required', 'integer'],
+        ]);
+        $clip = Clip::find($validated['clipID']);
+        return (is_null($clip)) ? to_route('dashboard')->with('flashMessage', 'Clip not found')
+            : to_route('clips.edit', $clip);
+    })->name('goto.clip');
 
     //Series routes
     Route::resource('series', SeriesController::class)->except(['show', 'edit']);
@@ -205,4 +221,4 @@ Route::get('/test/{series}/elk', function (Series $series, ElasticsearchService 
     $elkService->createIndex($series);
 })->name('elasticsearch.test');
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';

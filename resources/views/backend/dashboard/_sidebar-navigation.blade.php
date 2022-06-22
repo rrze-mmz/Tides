@@ -94,4 +94,26 @@
             </li>
         @endcan
     </ul>
+    @can('view-superadmin-menu-items')
+        <div class="mt-8 pt-2 block w-full items-center">
+            <h4 class="font-bold">
+                Go to
+            </h4>
+        </div>
+
+        <div class="flex justify-center text-black">
+            <form action="{{route('goto.series')}}" method="POST">
+                @csrf
+                <input class="rounded w-1/2 mt-2" type="text" name="seriesID" placeholder="Series ID"/>
+            </form>
+        </div>
+
+        <div class="flex justify-center text-black">
+            <form action="{{route('goto.clip')}}" method="POST">
+                @csrf
+                <input class="rounded w-1/2 mt-2" type="text" name="clipID" placeholder="Clip ID"/>
+            </form>
+        </div>
+
+    @endcan
 </aside>
