@@ -5,7 +5,7 @@
                 type="application/x-mpegURL"/>
     @elseif(Illuminate\Support\Str::contains($wowzaStatus['0'],'Wowza Streaming Engine'))
         <source
-            src="{{ getClipSmilFile($clip) }}"
+            src="{{ $wowzaService->vodSecureUrl($clip) }}"
             type="application/x-mpegURL"/>
     @else
         <source src="{{ '/videos/'.$clip->assets->first()->path  }}"

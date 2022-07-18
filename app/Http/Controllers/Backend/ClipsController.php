@@ -48,7 +48,7 @@ class ClipsController extends Controller
     /**
      * Store a clip in database
      *
-     * @param StoreClipRequest $request
+     * @param  StoreClipRequest  $request
      * @return RedirectResponse
      */
     public function store(StoreClipRequest $request): RedirectResponse
@@ -67,15 +67,14 @@ class ClipsController extends Controller
     /**
      * Edit form for a single clip
      *
-     * @param Clip $clip
-     * @param OpencastService $opencastService
+     * @param  Clip  $clip
+     * @param  OpencastService  $opencastService
      * @return View|Application|Factory
      * @throws AuthorizationException
      */
     public function edit(Clip $clip, OpencastService $opencastService): Application|Factory|View
     {
-        $this->authorize('edit', $clip);
-
+        $this->authorize('edit', $clip);;
         return view(
             'backend.clips.edit',
             [
@@ -90,8 +89,8 @@ class ClipsController extends Controller
     /**
      * Update a single clip in the database
      *
-     * @param Clip $clip
-     * @param UpdateClipRequest $request
+     * @param  Clip  $clip
+     * @param  UpdateClipRequest  $request
      * @return RedirectResponse
      */
     public function update(Clip $clip, UpdateClipRequest $request): RedirectResponse
@@ -110,7 +109,7 @@ class ClipsController extends Controller
     /**
      * Delete a single clip
      *
-     * @param Clip $clip
+     * @param  Clip  $clip
      * @return RedirectResponse
      * @throws AuthorizationException
      */

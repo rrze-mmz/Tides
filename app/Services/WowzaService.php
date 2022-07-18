@@ -11,6 +11,7 @@ use GuzzleHttp\Psr7\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Spatie\ArrayToXml\ArrayToXml;
 
 class WowzaService
@@ -34,8 +35,7 @@ class WowzaService
         } catch (GuzzleException $e) {
             Log::error($e);
         }
-
-        return collect(json_encode((string)$this->response->getBody(), true));
+        return collect(json_encode($this->response->getBody()->getContents(), true));
     }
 
     /**
@@ -73,14 +73,14 @@ class WowzaService
             $result = new ArrayToXml($xmlArray, [
                 'rootElementName' => 'smil',
                 '_attributes'     => [
-                    'title' => 'Clip ID:' . $clip->id
+                    'title' => 'Clip ID:'.$clip->id
                 ]
             ], true, 'UTF-8', '1.0', []);
 
-            $original_file_name = str($type->name)->lower() . '.smil';
+            $original_file_name = str($type->name)->lower().'.smil';
             //store the generated file to clip path
             Storage::disk('videos')
-                ->put(getClipStoragePath($clip) . '/' . $original_file_name, $xmlFile = $result->prettify()->toXml());
+                ->put(getClipStoragePath($clip).'/'.$original_file_name, $xmlFile = $result->prettify()->toXml());
 
             //save or update the smil file in db
             $clip->addAsset([
@@ -94,7 +94,7 @@ class WowzaService
             ]);
             Log::info($xmlFile);
         } else {
-            Log::info('Assets not found with type' . $type());
+            Log::info('Assets not found with type'.$type());
         }
     }
 
@@ -109,8 +109,8 @@ class WowzaService
         return [
             'video' => [
                 '_attributes'       => [
-                    'src'            => 'mp4:' . $asset->original_file_name,
-                    'system-bitrate' => $bitrate = $this->findWowzaAssetBitrate((int)$asset->height),
+                    'src'            => 'mp4:'.$asset->original_file_name,
+                    'system-bitrate' => $bitrate = $this->findWowzaAssetBitrate((int) $asset->height),
                     'width'          => $asset->width,
                     'height'         => $asset->height
                 ],
@@ -160,6 +160,37 @@ class WowzaService
             ($videoPixelHeight <= 360) => 450000,
             default => 1500000
         };
+    }
+
+    /**
+     * @param  Clip  $clip
+     * @return bool|string
+     */
+    public function vodSecureUrl(Clip $clip): bool|string
+    {
+        if ($clip->assets->count() > 0) {
+            $contentUrl = getClipSmilFile($clip, env('CHECK_FAUTV_VIDEOLINKS'));
+         
+            $contentPath = (env('CHECK_FAUTV_VIDEOLINKS'))
+                ? config('wowza.content_path').getClipStoragePath($clip).'camera.smil'
+                : config('wowza.content_path').getClipStoragePath($clip).'presenter.smil';
+            $secureToken = config('wowza.secure_token');
+            $tokenPrefix = config('wowza.token_prefix');
+            $tokenStartTime = $tokenPrefix."starttime=".time();
+            $tokenEndTime = $tokenPrefix."endTime=".(time() + 21600);
+
+            $userIP = (env('CHECK_FAUTV_VIDEOLINKS')) ? env('FAUTV_USER_IP') : $_SERVER['REMOTE_ADDR'];
+
+            $hashStr = $contentPath."?".$userIP."&".$secureToken."&".$tokenEndTime."&".$tokenStartTime;
+            $hash = hash('sha256', $hashStr, 1);
+            $usableHash = strtr(base64_encode($hash), '+/', '-_');
+
+            $url = $contentUrl."?".$tokenStartTime."&".$tokenEndTime."&".$tokenPrefix."hash=$usableHash";
+
+            return $url;
+        } else {
+            return false;
+        }
     }
 
     public function checkForVideoAssets(Clip $clip)

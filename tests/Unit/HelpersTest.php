@@ -44,8 +44,8 @@ class HelpersTest extends TestCase
         $wowzaService->createSmilFile($clip = ClipFactory::withAssets(2)->create(['created_at' => '01.01.2022']));
 
         $this->assertEquals(
-            'http://172.17.0.2:1935/vod/content//2022/01/01/TIDES_ClipID_1/presenter.smil/playlist.m3u8',
-            getClipSmilFile($clip)
+            'http://172.17.0.2:1935/vod/_definst_/2022/01/01/TIDES_ClipID_1/presenter.smil/playlist.m3u8',
+            getClipSmilFile($clip, false)
         );
     }
 

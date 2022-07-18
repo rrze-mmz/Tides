@@ -3,6 +3,7 @@
 namespace App\View\Components;
 
 use App\Models\Clip;
+use App\Services\WowzaService;
 use Illuminate\Support\Collection;
 use Illuminate\View\Component;
 use Illuminate\View\View;
@@ -14,7 +15,7 @@ class Player extends Component
      *
      * @return void
      */
-    public function __construct(public Clip $clip, public Collection $wowzaStatus)
+    public function __construct(public Clip $clip, public Collection $wowzaStatus, public WowzaService $wowzaService)
     {
         //
     }
