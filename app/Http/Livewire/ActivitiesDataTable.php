@@ -3,19 +3,22 @@
 namespace App\Http\Livewire;
 
 use App\Models\Activity;
-use Illuminate\Support\Str;
+use Illuminate\Contracts\View\View;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Illuminate\Contracts\View\View;
 
 class ActivitiesDataTable extends Component
 {
     use WithPagination;
 
     public $series = false;
+
     public $search = '';
+
     public $sortField;
+
     public $sortAsc = true;
+
     protected $queryString = ['search', 'series', 'sortAsc'];
 
     /**
@@ -25,7 +28,7 @@ class ActivitiesDataTable extends Component
      */
     public function sortBy($field): void
     {
-        $this->sortAsc = !($this->sortField === $field) || !$this->sortAsc;
+        $this->sortAsc = ! ($this->sortField === $field) || ! $this->sortAsc;
 
         $this->sortField = $field;
     }
@@ -63,7 +66,7 @@ class ActivitiesDataTable extends Component
                         $query->orderBy($this->sortField, $this->sortAsc ? 'asc' : 'desc');
                     })
                     ->orderBy('id', 'desc')
-                    ->paginate(20)
+                    ->paginate(20),
         ]);
     }
 }

@@ -20,10 +20,10 @@ class ElasticsearchServiceProvider extends ServiceProvider
             $builder = new ClientBuilder();
 
             $connectionString =
-                $config['username'] . ':' . $config['password'] . '@' . $config['url'] . ':' . $config['port'];
+                $config['username'].':'.$config['password'].'@'.$config['url'].':'.$config['port'];
 
             $builder->setHosts([$connectionString]);
-            
+
             return $builder;
         });
 
@@ -31,11 +31,11 @@ class ElasticsearchServiceProvider extends ServiceProvider
             $config = $this->app->get('config')['elasticsearch'];
 
             return new ElasticsearchClient([
-                'base_uri' => $config['url'] . ':' . $config['port'],
-                'auth'     => [
+                'base_uri' => $config['url'].':'.$config['port'],
+                'auth' => [
                     $config['username'],
-                    $config['password']
-                ]
+                    $config['password'],
+                ],
             ]);
         });
     }

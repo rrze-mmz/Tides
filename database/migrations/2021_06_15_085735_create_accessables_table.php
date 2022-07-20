@@ -14,7 +14,7 @@ class CreateAccessablesTable extends Migration
     public function up()
     {
         Schema::create('accessables', function (Blueprint $table) {
-            $table->primary(['acl_id','accessable_id','accessable_type']);
+            $table->primary(['acl_id', 'accessable_id', 'accessable_type']);
 
             $table->foreignId('acl_id')->references('id')->on('acls');
             $table->foreignId('accessable_id');

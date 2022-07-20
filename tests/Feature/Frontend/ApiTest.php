@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Tests\Feature\Frontend;
 
 use App\Models\Clip;
@@ -22,17 +21,17 @@ class ApiTest extends TestCase
 
         $tidesClip = Clip::factory()->create(['title' => 'tides clip']);
 
-        $this->get(route('api.clips') . '?query=test')
+        $this->get(route('api.clips').'?query=test')
             ->assertOk()
             ->assertJson([
-                ["id" => 1, "name" => $testClip->title]
+                ['id' => 1, 'name' => $testClip->title],
             ]);
 
-        $this->get(route('api.clips') . '?query=clip')
+        $this->get(route('api.clips').'?query=clip')
             ->assertOk()
             ->assertJson([
-                ["id" => 1, "name" => $testClip->title],
-                ["id" => 2, "name" => $tidesClip->title]
+                ['id' => 1, 'name' => $testClip->title],
+                ['id' => 2, 'name' => $tidesClip->title],
             ]);
     }
 
@@ -41,10 +40,10 @@ class ApiTest extends TestCase
     {
         Tag::factory()->create(['name' => 'algebra']);
 
-        $this->get(route('api.tags') . '?query=algebra')
+        $this->get(route('api.tags').'?query=algebra')
             ->assertOk()
             ->assertJson([
-                ["id" => 1, "name" => 'algebra']
+                ['id' => 1, 'name' => 'algebra'],
             ]);
     }
 
@@ -53,17 +52,17 @@ class ApiTest extends TestCase
     {
         Presenter::factory()->create(['first_name' => 'John', 'last_name' => 'Doe']);
 
-        $this->get(route('api.presenters') . '?query=john')
+        $this->get(route('api.presenters').'?query=john')
             ->assertOk()
             ->assertJson([
-                ["id" => 1, "name" => 'Dr. John Doe']
+                ['id' => 1, 'name' => 'Dr. John Doe'],
             ]);
     }
 
     /** @test */
     public function it_is_not_allowed_for_guest_or_simple_users_to_use_user_api(): void
     {
-        $this->get(route('api.users') . '?query=john')->assertForbidden();
+        $this->get(route('api.users').'?query=john')->assertForbidden();
     }
 
     /** @test */
@@ -76,13 +75,13 @@ class ApiTest extends TestCase
 
         $this->signInRole('moderator');
 
-        $response = $this->get(route('api.users') . '?query=john')->assertOk();
+        $response = $this->get(route('api.users').'?query=john')->assertOk();
 
         $response->assertJson([
             [
-                'id'   => $john->id,
+                'id' => $john->id,
                 'name' => 'John Doe/tes****',
-            ]
+            ],
         ]);
     }
 
@@ -90,23 +89,23 @@ class ApiTest extends TestCase
     public function it_search_organizations(): void
     {
         Organization::factory()->create([
-            'org_id'             => 2,
-            'name'               => 'This is a test',
-            'parent_org_id'      => 2,
-            'orgno'              => '0000000001',
-            'shortname'          => 'Main organization unit',
-            'staff'              => null,
-            'startdate'          => now(),
+            'org_id' => 2,
+            'name' => 'This is a test',
+            'parent_org_id' => 2,
+            'orgno' => '0000000001',
+            'shortname' => 'Main organization unit',
+            'staff' => null,
+            'startdate' => now(),
             'operationstartdate' => now(),
-            'operationenddate'   => '2999-12-31',
-            'created_at'         => now(),
-            'updated_at'         => null,
+            'operationenddate' => '2999-12-31',
+            'created_at' => now(),
+            'updated_at' => null,
         ]);
 
-        $this->get(route('api.organizations') . '?query=test')
+        $this->get(route('api.organizations').'?query=test')
             ->assertOk()
             ->assertJson([
-                ["id" => 2, "name" => 'This is a test']
+                ['id' => 2, 'name' => 'This is a test'],
             ]);
     }
 }

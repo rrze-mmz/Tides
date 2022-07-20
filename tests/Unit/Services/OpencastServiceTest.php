@@ -23,6 +23,7 @@ class OpencastServiceTest extends TestCase
     use WorksWithOpencastClient;
 
     private OpencastService $opencastService;
+
     private MockHandler $mockHandler;
 
     protected function setUp(): void
@@ -35,6 +36,15 @@ class OpencastServiceTest extends TestCase
     }
 
     /** @test */
+    public function it_returns_default_values_if_guzzle_response_is_empty(): void
+    {
+        $this->mockHandler->append($this->mockServerNotAvailable());
+        $results = $this->opencastService->getHealth();
+
+        $this->assertEquals('unknown', $results['description']);
+    }
+
+    /** @test */
     public function it_fetch_opencast_health_status(): void
     {
         $this->mockHandler->append($this->mockHealthResponse());
@@ -42,16 +52,6 @@ class OpencastServiceTest extends TestCase
         $results = $this->opencastService->getHealth();
 
         $this->assertEquals('Opencast node\'s health status', $results['description']);
-    }
-
-    /** @test */
-    public function it_fetches_an_empty_collection_for_opencast_health_if_no_opencast_server_is_available(): void
-    {
-        $this->mockHandler->append($this->mockServerNotAvailable());
-
-        $results = $this->opencastService->getHealth();
-
-        $this->assertTrue($results->isEmpty());
     }
 
     /** @test */
@@ -237,30 +237,30 @@ class OpencastServiceTest extends TestCase
         $series = SeriesFactory::create();
 
         $data = [
-            'headers'     => [
+            'headers' => [
                 'Content-Type' => 'application/x-www-form-urlencoded',
             ],
             'form_params' => [
-                "metadata" => '[{"flavor": "dublincore/series","title": "EVENTS.EVENTS.DETAILS.CATALOG.EPISODE",
+                'metadata' => '[{"flavor": "dublincore/series","title": "EVENTS.EVENTS.DETAILS.CATALOG.EPISODE",
                         "fields": [
                         {
                              "id": "title",
-                             "value": "' . $series->title . '",
+                             "value": "'.$series->title.'",
                          },
                          {
                              "id": "creator",
-                             "value": ["' . $series->owner->name . '"],
+                             "value": ["'.$series->owner->name.'"],
                          },
                          ]
                     }]',
-                "acl"      => '[
+                'acl' => '[
 					{"allow": true,"role": "ROLE_ADMIN","action": "read"},
 				    {"allow": true,"role": "ROLE_ADMIN","action": "write"},
 				    {"allow": true,"role": "ROLE_USER_ADMIN","action": "read"},
 				    {"allow": true,"role": "ROLE_USER_ADMIN","action": "write"},
 			    ]',
-                "theme"    => config('opencast.default_theme_id')
-            ]
+                'theme' => config('opencast.default_theme_id'),
+            ],
         ];
 
         $this->assertEquals($data, $this->opencastService->createOpencastSeriesFormData($series));
@@ -273,37 +273,36 @@ class OpencastServiceTest extends TestCase
 
         $series = SeriesFactory::withClips(2)->create(['opencast_series_id' => Str::uuid()]);
 
-
         $file = UploadedFile::fake()->create('video.mp4', 1000);
 
         $data = [
             'multipart' => [
                 [
-                    'name'     => 'flavor',
-                    'contents' => 'presenter/source'
+                    'name' => 'flavor',
+                    'contents' => 'presenter/source',
                 ],
                 [
-                    'name'     => 'title',
-                    'contents' => $series->clips()->first()->title
+                    'name' => 'title',
+                    'contents' => $series->clips()->first()->title,
                 ],
                 [
-                    'name'     => 'description',
-                    'contents' => $series->clips()->first()->id
+                    'name' => 'description',
+                    'contents' => $series->clips()->first()->id,
                 ],
                 [
-                    'name'     => 'publisher',
-                    'contents' => $series->clips()->first()->owner->email
+                    'name' => 'publisher',
+                    'contents' => $series->clips()->first()->owner->email,
                 ],
                 [
-                    'name'     => 'isPartOf',
-                    'contents' => $series->opencast_series_id
+                    'name' => 'isPartOf',
+                    'contents' => $series->opencast_series_id,
                 ],
                 [
-                    'name'     => 'file',
+                    'name' => 'file',
                     'contents' => file_get_contents($file),
-                    'filename' => basename($file)
-                ]
-            ]
+                    'filename' => basename($file),
+                ],
+            ],
         ];
 
         $this->assertEquals($data, $this->opencastService

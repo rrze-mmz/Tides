@@ -16,7 +16,7 @@ class AssetDeleted
     /**
      * Create a new event instance.
      *
-     * @param Asset $asset
+     * @param  Asset  $asset
      */
     public function __construct(public Asset $asset)
     {

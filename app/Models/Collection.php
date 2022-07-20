@@ -25,7 +25,7 @@ class Collection extends BaseModel
     /**
      * Add/remove clips for the given collection
      *
-     * @param LCollection $ids
+     * @param  LCollection  $ids
      * @return void
      */
     public function toggleClips(LCollection $ids): void

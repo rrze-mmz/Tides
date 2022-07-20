@@ -6,8 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\SeriesMembershipRequest;
 use App\Models\Series;
 use App\Models\User;
-use App\Notifications\SeriesMembershipAddUser;
-use App\Notifications\SeriesMembershipRemoveUser;
 use App\Notifications\SeriesOwnershipAddUser;
 use App\Notifications\SeriesOwnershipRemoveUser;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -19,9 +17,10 @@ class SeriesOwnership extends Controller
     /**
      * Handle the incoming request.
      *
-     * @param Series $series
-     * @param SeriesMembershipRequest $request
+     * @param  Series  $series
+     * @param  SeriesMembershipRequest  $request
      * @return RedirectResponse
+     *
      * @throws AuthorizationException
      */
     public function __invoke(Series $series, SeriesMembershipRequest $request): RedirectResponse
@@ -32,7 +31,7 @@ class SeriesOwnership extends Controller
 
         $user = User::findOrFail($validated['userID']);
 
-        if (!is_null($series->owner)) {
+        if (! is_null($series->owner)) {
             $series->owner->notify(new SeriesOwnershipRemoveUser($series));
         }
 

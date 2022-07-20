@@ -24,7 +24,7 @@ class SeriesMembershipRemoveUser extends Notification
     /**
      * Get the notification's delivery channels.
      *
-     * @param mixed $notifiable
+     * @param  mixed  $notifiable
      * @return array
      */
     public function via(mixed $notifiable): array
@@ -35,22 +35,22 @@ class SeriesMembershipRemoveUser extends Notification
     /**
      * Get the mail representation of the notification.
      *
-     * @param mixed $notifiable
+     * @param  mixed  $notifiable
      * @return MailMessage
      */
     public function toMail(mixed $notifiable): MailMessage
     {
         return (new MailMessage())
-            ->subject('You have been removed as moderator from ' . $this->series->title . ' !')
-            ->line('Hi ' . $notifiable->getFullNameAttribute())
-            ->line('you have been removed by ' . auth()->user()->getFullNameAttribute() . ' as Series moderator')
+            ->subject('You have been removed as moderator from '.$this->series->title.' !')
+            ->line('Hi '.$notifiable->getFullNameAttribute())
+            ->line('you have been removed by '.auth()->user()->getFullNameAttribute().' as Series moderator')
             ->line('Thanks!');
     }
 
     /**
      * Get the array representation of the notification.
      *
-     * @param mixed $notifiable
+     * @param  mixed  $notifiable
      * @return array
      */
     public function toArray(mixed $notifiable): array

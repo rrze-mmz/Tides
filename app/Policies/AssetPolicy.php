@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Policies;
 
 use App\Models\Asset;
@@ -14,12 +13,12 @@ class AssetPolicy
     /**
      * Check whether the given user can edit the given asset
      *
-     * @param User $user
-     * @param Asset $asset
+     * @param  User  $user
+     * @param  Asset  $asset
      * @return bool
      */
     public function edit(User $user, Asset $asset): bool
     {
-        return ($user->is($asset->clip->owner) || $user->isAdmin());
+        return $user->is($asset->clip->owner) || $user->isAdmin();
     }
 }

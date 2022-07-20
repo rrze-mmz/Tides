@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Models;
 
 use App\Events\AssetDeleted;
@@ -15,12 +14,15 @@ class Asset extends BaseModel
     use RecordsActivity;
 
     protected $guarded = [];
+
     //this will update clips timestamp
     protected $touches = ['clip'];
+
     //remove asset from disk on delete
     protected $dispatchesEvents = [
-        'deleted' => AssetDeleted::class
+        'deleted' => AssetDeleted::class,
     ];
+
     protected $dates = [
         'converted_for_downloading_at',
         'converted_for_streaming_at',
@@ -33,7 +35,7 @@ class Asset extends BaseModel
      */
     public function durationToHours(): string
     {
-        return gmdate("H:i:s", $this->duration);
+        return gmdate('H:i:s', $this->duration);
     }
 
     /**

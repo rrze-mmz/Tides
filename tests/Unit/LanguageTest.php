@@ -2,9 +2,9 @@
 
 namespace Tests\Unit;
 
+use App\Models\Language;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\Models\Language;
 use Tests\TestCase;
 
 class LanguageTest extends TestCase

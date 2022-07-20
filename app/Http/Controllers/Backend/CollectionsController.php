@@ -9,7 +9,6 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 
 class CollectionsController extends Controller
 {
@@ -34,7 +33,7 @@ class CollectionsController extends Controller
     /**
      * Persists a collection to database
      *
-     * @param StoreCollectionRequest $request
+     * @param  StoreCollectionRequest  $request
      * @return RedirectResponse
      */
     public function store(StoreCollectionRequest $request): RedirectResponse
@@ -45,7 +44,7 @@ class CollectionsController extends Controller
     /**
      * Edit a single collection
      *
-     * @param Collection $collection
+     * @param  Collection  $collection
      * @return Factory|View|Application
      */
     public function edit(Collection $collection): Factory|View|Application
@@ -56,8 +55,8 @@ class CollectionsController extends Controller
     /**
      * Updates a collection record on database
      *
-     * @param Collection $collection
-     * @param StoreCollectionRequest $request
+     * @param  Collection  $collection
+     * @param  StoreCollectionRequest  $request
      * @return RedirectResponse
      */
     public function update(Collection $collection, StoreCollectionRequest $request): RedirectResponse
@@ -70,7 +69,7 @@ class CollectionsController extends Controller
     /**
      * Deletes a single collection
      *
-     * @param Collection $collection
+     * @param  Collection  $collection
      * @return RedirectResponse
      */
     public function destroy(Collection $collection): RedirectResponse

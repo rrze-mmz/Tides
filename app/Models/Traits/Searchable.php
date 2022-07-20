@@ -18,7 +18,7 @@ trait Searchable
         $columns = collect($this->searchable);
 
         $columns->each(function ($column) use ($term, $query) {
-            $query->orWhereRaw("lower(" . $column . ") like ('%" . $term . "%')");
+            $query->orWhereRaw('lower('.$column.") like ('%".$term."%')");
         });
 
         return $query;

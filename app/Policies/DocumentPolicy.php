@@ -14,20 +14,20 @@ class DocumentPolicy
     /**
      * Determine whether the user can view the model.
      *
-     * @param User $user
-     * @param Document $document
+     * @param  User  $user
+     * @param  Document  $document
      * @return Response|bool
      */
     public function view(User $user, Document $document)
     {
         //
     }
-    
+
     /**
      * Determine whether the user can delete the model.
      *
-     * @param User $user
-     * @param Document $document
+     * @param  User  $user
+     * @param  Document  $document
      * @return Response|bool
      */
     public function delete(User $user, Document $document)

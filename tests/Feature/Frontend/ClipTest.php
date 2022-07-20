@@ -1,9 +1,7 @@
 <?php
 
-
 namespace Tests\Feature\Frontend;
 
-use App\Models\Acl;
 use App\Models\Clip;
 use App\Models\Presenter;
 use App\Services\WowzaService;
@@ -22,7 +20,9 @@ class ClipTest extends TestCase
     use WorksWithWowzaClient;
 
     private Clip $clip;
+
     private MockHandler $mockHandler;
+
     private WowzaService $wowzaService;
 
     protected function setUp(): void
@@ -59,7 +59,7 @@ class ClipTest extends TestCase
     {
         $this->mockHandler->append($this->mockCheckApiConnection());
 
-        $this->get('/clips/' . $this->clip->id)->assertOk()->assertSee($this->clip->title);
+        $this->get('/clips/'.$this->clip->id)->assertOk()->assertSee($this->clip->title);
     }
 
     /** @test */

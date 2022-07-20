@@ -2,7 +2,6 @@
 
 use App\Enums\Content;
 use App\Models\Clip;
-use App\Services\WowzaService;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
@@ -33,9 +32,9 @@ function getClipStoragePath(Clip $clip): string
     return '/'.Carbon::createFromFormat('Y-m-d', $clip->created_at->format('Y-m-d'))
             ->year.
         '/'.str_pad(Carbon::createFromFormat('Y-m-d', $clip->created_at->format('Y-m-d'))
-            ->month, 2, "0", STR_PAD_LEFT).
+            ->month, 2, '0', STR_PAD_LEFT).
         '/'.str_pad(Carbon::createFromFormat('Y-m-d', $clip->created_at->format('Y-m-d'))
-            ->day, 2, "0", STR_PAD_LEFT).'/'
+            ->day, 2, '0', STR_PAD_LEFT).'/'
         .$clip->folder_id.'/';
 }
 
@@ -56,7 +55,6 @@ function getClipSmilFile(Clip $clip, bool $checkFAUTVLinks): string
             '/playlist.m3u8';
     }
 }
-
 
 /*
  * Fetch all files in the dropzone with sha1 hash
@@ -124,15 +122,15 @@ function prepareFileForUpload($file, bool $isDropZoneFile, bool $ffmpegCheck = t
 
     return [
         sha1($file) => [
-            'tag'           => $tag,
-            'type'          => $mime,
-            'video'         => ($video !== null)
+            'tag' => $tag,
+            'type' => $mime,
+            'video' => ($video !== null)
                 ? $video->get('width').'x'.$video->get('height')
                 : null,
-            'version'       => '1',
+            'version' => '1',
             'date_modified' => $dateModified,
-            'name'          => $file,
-        ]
+            'name' => $file,
+        ],
     ];
 }
 

@@ -10,11 +10,10 @@ class CommentPolicy
 {
     use HandlesAuthorization;
 
-
     /**
      * Check whether the given user can create a comment
      *
-     * @param User $user
+     * @param  User  $user
      * @return bool
      */
     public function create(User $user): bool
@@ -25,12 +24,12 @@ class CommentPolicy
     /**
      * Check whether the given user can delete a comment
      *
-     * @param User $user
-     * @param Comment $comment
+     * @param  User  $user
+     * @param  Comment  $comment
      * @return bool
      */
     public function delete(User $user, Comment $comment): bool
     {
-        return ($user->is($comment->owner) || $user->isAdmin());
+        return $user->is($comment->owner) || $user->isAdmin();
     }
 }

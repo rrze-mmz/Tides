@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
@@ -14,8 +13,8 @@ class SearchController extends Controller
     /**
      * Main and basic search using ORM
      *
-     * @param SearchRequest $request
-     * @param ElasticsearchService $elasticsearchService
+     * @param  SearchRequest  $request
+     * @param  ElasticsearchService  $elasticsearchService
      * @return View
      */
     public function search(SearchRequest $request, ElasticsearchService $elasticsearchService): View
@@ -25,6 +24,7 @@ class SearchController extends Controller
         if ($elasticsearchService->clusterHealth()->isNotEmpty()) {
             $results = $elasticsearchService->searchIndexes($request->term);
             $searchResults = $searchResults->put('clips', $results);
+
             return view('frontend.search.results.elasticsearch', compact('searchResults'));
         } else { //use slow db search if no elasticsearch node is found
             $clips = Clip::has('assets') // fetch only clips with assets
@@ -39,6 +39,7 @@ class SearchController extends Controller
             ->paginate(10)
                 ->withQueryString();
             $searchResults->put('clips', $clips);
+
             return view('frontend.search.results.dbsearch', compact('searchResults'));
         }
     }

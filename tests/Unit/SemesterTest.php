@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class SemesterTest extends TestCase {
+class SemesterTest extends TestCase
+{
     use RefreshDatabase;
 
     /** @test */

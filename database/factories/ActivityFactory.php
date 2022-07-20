@@ -16,15 +16,14 @@ class ActivityFactory extends Factory
      */
     public function definition(array $types = [])
     {
-
         return [
-            'user_id'        => '1',
-            'content_type'   => 'series',
-            'object_id'      => 1,
+            'user_id' => '1',
+            'content_type' => 'series',
+            'object_id' => 1,
             'change_message' => $this->faker->sentence(),
             'user_real_name' => 'John Doe',
-            'action_flag'    => 1,
-            'changes'        => [],
+            'action_flag' => 1,
+            'changes' => [],
         ];
     }
 }

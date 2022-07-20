@@ -4,10 +4,10 @@ namespace Tests\Feature\Backend;
 
 use App\Models\Clip;
 use App\Models\User;
+use Facades\Tests\Setup\ClipFactory;
 use Facades\Tests\Setup\SeriesFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Facades\Tests\Setup\ClipFactory;
 use Tests\TestCase;
 
 class SeriesClipsTest extends TestCase
@@ -213,23 +213,23 @@ class SeriesClipsTest extends TestCase
     {
         $series = SeriesFactory::withClips(3)->ownedBy($this->signInRole($this->role))->create();
         $attributes = [
-            'episodes' => []
+            'episodes' => [],
         ];
         $this->post(route('series.clips.reorder', $series), $attributes)->assertSessionHasErrors('episodes');
         $attributes = [
             'episodes' => [
                 1 => 'asdfasdfasdf',
                 2 => '1',
-                3 => '2'
-            ]
+                3 => '2',
+            ],
         ];
         $this->post(route('series.clips.reorder', $series), $attributes)->assertSessionHasErrors('episodes.*');
         $attributes = [
             'episodes' => [
                 1 => '3',
                 2 => '1',
-                3 => '2'
-            ]
+                3 => '2',
+            ],
         ];
         $this->post(route('series.clips.reorder', $series), $attributes)->assertSessionHasNoErrors();
     }
@@ -243,8 +243,8 @@ class SeriesClipsTest extends TestCase
             'episodes' => [
                 1 => '3',
                 2 => '1',
-                3 => '2'
-            ]
+                3 => '2',
+            ],
         ];
         $this->post(route('series.clips.reorder', $series), $attributes);
 

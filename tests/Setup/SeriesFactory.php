@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Tests\Setup;
 
 use App\Models\Asset;
@@ -15,9 +14,13 @@ class SeriesFactory
     use WithFaker;
 
     protected int $clipsCount = 0;
+
     protected int $assetsCount = 0;
+
     protected bool $opencastSeriesID = false;
+
     protected bool $isPublic = true;
+
     protected User $user;
 
     public function withClips($count): static
@@ -59,22 +62,22 @@ class SeriesFactory
     {
         //use ramsey/uuid because faker shows an error
         $series = Series::factory()->create([
-            'owner_id'           => $user = $this->user ?? User::factory(),
+            'owner_id' => $user = $this->user ?? User::factory(),
             'opencast_series_id' => ($this->opencastSeriesID) ? Uuid::uuid1()->toString() : '',
-            'is_public'          => $this->isPublic,
+            'is_public' => $this->isPublic,
         ]);
 
         if ($this->clipsCount > 0) {
             Clip::factory($this->clipsCount)->create([
-                'series_id'   => $series->id,
-                'owner_id'    => $user,
+                'series_id' => $series->id,
+                'owner_id' => $user,
                 'semester_id' => 1,
             ]);
 
             if ($this->assetsCount > 0) {
                 $series->clips()->each(function ($clip) {
                     Asset::factory($this->assetsCount)->create([
-                        'clip_id' => $clip->id
+                        'clip_id' => $clip->id,
                     ]);
                 });
             }

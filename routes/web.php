@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Backend\ActivitiesController;
 use App\Http\Controllers\Backend\AssetDestroyController;
 use App\Http\Controllers\Backend\AssetsTransferController;
 use App\Http\Controllers\Backend\ChaptersController;
@@ -10,12 +9,12 @@ use App\Http\Controllers\Backend\CollectionsController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\DevicesController;
 use App\Http\Controllers\Backend\DocumentController;
-use App\Http\Controllers\Backend\OpencastController;
 use App\Http\Controllers\Backend\PresentersController;
 use App\Http\Controllers\Backend\SeriesClipsController;
 use App\Http\Controllers\Backend\SeriesController;
 use App\Http\Controllers\Backend\SeriesMembershipController;
 use App\Http\Controllers\Backend\SeriesOwnership;
+use App\Http\Controllers\Backend\SystemsCheckController;
 use App\Http\Controllers\Backend\TriggerSmilFilesController;
 use App\Http\Controllers\Backend\UsersController;
 use App\Http\Controllers\Frontend\ApiController;
@@ -24,13 +23,12 @@ use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\SearchController;
 use App\Http\Controllers\Frontend\ShowClipsController;
 use App\Http\Controllers\Frontend\ShowSeriesController;
-use App\Http\Middleware\CheckLMSToken;
 use App\Models\Activity;
 use App\Models\Clip;
 use App\Models\Series;
 use App\Services\ElasticsearchService;
-use Illuminate\Support\Facades\Gate;
-use  \Illuminate\Http\Request;
+use Illuminate\Http\Request;
+use  Illuminate\Support\Facades\Gate;
 
 Route::get('/', HomeController::class)->name('home');
 Route::redirect('/home', '/');
@@ -45,18 +43,16 @@ Route::controller(ShowSeriesController::class)->prefix('/series')->group(functio
     Route::get('/{series}', 'show')->name('frontend.series.show');
 });
 
-
 //Frontend clip routes
 Route::controller(ShowClipsController::class)->prefix('/clips')->group(function () {
     Route::get('/', 'index')->name('frontend.clips.index');
     Route::get('/{clip}', 'show')->name('frontend.clips.show');
 });
 
-
 Route::get('/protector/link/clip/{clip:id}/{token}/{time}/{client}', function (Clip $clip, $token, $time, $client) {
     session()->put([
-        'clip_'.$clip->id.'_token'  => $token,
-        'clip_'.$clip->id.'_time'   => $time,
+        'clip_'.$clip->id.'_token' => $token,
+        'clip_'.$clip->id.'_time' => $time,
         'clip_'.$clip->id.'_client' => $client,
     ]);
 
@@ -73,10 +69,9 @@ Route::controller(ApiController::class)->prefix('/api')->group(function () {
     Route::get('/organizations', 'organizations')->name('api.organizations');
 });
 
-
 //change portal language
 Route::get('/set_lang/{locale}', function ($locale) {
-    if (!in_array($locale, ['en', 'de'])) {
+    if (! in_array($locale, ['en', 'de'])) {
         abort(400);
     }
     session()->put('locale', $locale);
@@ -95,6 +90,7 @@ Route::prefix('admin')->middleware(['auth', 'can:access-dashboard'])->group(func
             'seriesID' => ['required', 'integer'],
         ]);
         $series = Series::find($validated['seriesID']);
+
         return (is_null($series)) ? to_route('dashboard')->with('flashMessage', 'Series not found')
             : to_route('series.edit', $series);
     })->name('goto.series');
@@ -104,6 +100,7 @@ Route::prefix('admin')->middleware(['auth', 'can:access-dashboard'])->group(func
             'clipID' => ['required', 'integer'],
         ]);
         $clip = Clip::find($validated['clipID']);
+
         return (is_null($clip)) ? to_route('dashboard')->with('flashMessage', 'Clip not found')
             : to_route('clips.edit', $clip);
     })->name('goto.clip');
@@ -147,7 +144,6 @@ Route::prefix('admin')->middleware(['auth', 'can:access-dashboard'])->group(func
     Route::post('/series/{series}/membership/removeUser', [SeriesMembershipController::class, 'remove'])
         ->name('series.membership.removeUser');
 
-
     //Clip routes
     Route::resource('clips', ClipsController::class)->except(['show', 'edit']);
     Route::get('/clips/{clip}/', [ClipsController::class, 'edit'])->name('clips.edit');
@@ -173,18 +169,16 @@ Route::prefix('admin')->middleware(['auth', 'can:access-dashboard'])->group(func
             Route::post('/{clip}/opencast/transfer', 'transferOpencastFiles')->name('admin.clips.opencast.transfer');
         });
 
-
         // Create SMIL files for WOWZA hls streaming
         Route::get('/clips/{clip}/triggerSmilFiles', TriggerSmilFilesController::class)
             ->name('admin.clips.triggerSmilFiles');
     });
 
-
     //Assets routes
     Route::delete('assets/{asset}', AssetDestroyController::class)->name('assets.destroy');
 
     //Opencast routes
-    Route::get('/opencast', OpencastController::class)->name('opencast.status');
+    Route::get('/systems', SystemsCheckController::class)->name('systems.status');
 
     //Documents routes
     Route::post('/document/upload', [DocumentController::class, 'upload'])->name('documents.upload');
@@ -198,7 +192,8 @@ Route::prefix('admin')->middleware(['auth', 'can:access-dashboard'])->group(func
     Route::resource('presenters', PresentersController::class)->except(['show']);
 
     Route::get('/activities', function () {
-        Gate::allowIf(fn($user) => $user->isAdmin() || $user->isAssistant());
+        Gate::allowIf(fn ($user) => $user->isAdmin() || $user->isAssistant());
+
         return view('backend.activities.index', [
             'activities' => Activity::paginate(20),
         ]);

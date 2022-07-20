@@ -3,9 +3,8 @@
 namespace Tests\Unit\Commands;
 
 use App\Enums\Content;
-use App\Models\Clip;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Facades\Tests\Setup\ClipFactory;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 

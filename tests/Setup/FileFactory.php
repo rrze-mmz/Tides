@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Tests\Setup;
 
 use Illuminate\Http\UploadedFile;
@@ -11,7 +10,7 @@ class FileFactory
     {
         return
             new UploadedFile(
-                storage_path() . '/tests/Big_Buck_Bunny.mp4', 'Big_Buck_Bunny.mp4', 'video/mp4', null, true
+                storage_path().'/tests/Big_Buck_Bunny.mp4', 'Big_Buck_Bunny.mp4', 'video/mp4', null, true
             );
     }
 
@@ -19,7 +18,7 @@ class FileFactory
     {
         return
             new UploadedFile(
-                storage_path() . '/tests/Sample_Audio_file.mp3', 'Sample_Audio_file.mp3', 'audio/mpeg', null, true
+                storage_path().'/tests/Sample_Audio_file.mp3', 'Sample_Audio_file.mp3', 'audio/mpeg', null, true
             );
     }
 

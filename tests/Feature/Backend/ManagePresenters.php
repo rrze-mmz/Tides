@@ -115,18 +115,18 @@ class ManagePresenters extends TestCase
     {
         $bob = Presenter::factory()->create([
             'first_name' => 'Bob',
-            'last_name'  => 'Tester',
-            'username'   => 'bob01'
+            'last_name' => 'Tester',
+            'username' => 'bob01',
         ]);
         $alice = Presenter::factory()->create([
             'first_name' => 'Alice',
-            'last_name'  => 'Tester',
-            'username'   => 'alice01'
+            'last_name' => 'Tester',
+            'username' => 'alice01',
         ]);
         $gregor = Presenter::factory()->create([
             'first_name' => 'Gregor',
-            'last_name'  => 'Tester',
-            'username'   => 'gregor01'
+            'last_name' => 'Tester',
+            'username' => 'gregor01',
         ]);
 
         Livewire::test(PresenterDataTable::class)
@@ -139,18 +139,18 @@ class ManagePresenters extends TestCase
     {
         $bob = Presenter::factory()->create([
             'first_name' => 'Bob',
-            'last_name'  => 'Tester',
-            'username'   => 'bob01'
+            'last_name' => 'Tester',
+            'username' => 'bob01',
         ]);
         $alice = Presenter::factory()->create([
             'first_name' => 'Alice',
-            'last_name'  => 'Tester',
-            'username'   => 'alice01'
+            'last_name' => 'Tester',
+            'username' => 'alice01',
         ]);
         $gregor = Presenter::factory()->create([
             'first_name' => 'Gregor',
-            'last_name'  => 'Tester',
-            'username'   => 'gregor01'
+            'last_name' => 'Tester',
+            'username' => 'gregor01',
         ]);
 
         Livewire::test(PresenterDataTable::class)
@@ -190,7 +190,7 @@ class ManagePresenters extends TestCase
         auth()->logout();
 
         $this->signInRole('assistant');
-        
+
         $this->get(route('presenters.create'))->assertOk();
     }
 
@@ -234,10 +234,10 @@ class ManagePresenters extends TestCase
     {
         $attributes = [
             'degree_title' => 'Dr.',
-            'first_name'   => 'John',
-            'last_name'    => '',
-            'username'     => 'johndoe13',
-            'email'        => ''
+            'first_name' => 'John',
+            'last_name' => '',
+            'username' => 'johndoe13',
+            'email' => '',
         ];
 
         $this->post(route('presenters.store'), $attributes)->assertSessionHasErrors(['last_name']);
@@ -252,10 +252,10 @@ class ManagePresenters extends TestCase
     {
         $attributes = [
             'degree_title' => 'Dr. Ing-',
-            'first_name'   => $this->faker->firstNameFemale(),
-            'last_name'    => $this->faker->lastName(),
-            'username'     => 'johndoe13',
-            'email'        => 'john.doe@test.com',
+            'first_name' => $this->faker->firstNameFemale(),
+            'last_name' => $this->faker->lastName(),
+            'username' => 'johndoe13',
+            'email' => 'john.doe@test.com',
         ];
 
         $this->post(route('presenters.store'), $attributes);
@@ -325,9 +325,9 @@ class ManagePresenters extends TestCase
 
         $this->patch(route('presenters.update', $presenter), [
             'first_name' => 'John',
-            'last_name'  => 'Doe',
-            'username'   => 'johndoe13',
-            'email'      => 'john.doe@test.com'
+            'last_name' => 'Doe',
+            'username' => 'johndoe13',
+            'email' => 'john.doe@test.com',
         ]);
 
         $presenter->refresh();
@@ -343,9 +343,9 @@ class ManagePresenters extends TestCase
 
         $this->patch(route('presenters.update', $alice), [
             'first_name' => $alice->first_name,
-            'last_name'  => $alice->last_name,
-            'username'   => $john->username,
-            'email'      => $alice->email,
+            'last_name' => $alice->last_name,
+            'username' => $john->username,
+            'email' => $alice->email,
         ])->assertSessionHasErrors(['username']);
 
         $alice->refresh();
@@ -361,9 +361,9 @@ class ManagePresenters extends TestCase
 
         $this->patch(route('presenters.update', $alice), [
             'first_name' => $alice->first_name,
-            'last_name'  => $alice->last_name,
-            'username'   => $alice->username,
-            'email'      => $john->email,
+            'last_name' => $alice->last_name,
+            'username' => $alice->username,
+            'email' => $john->email,
         ])->assertSessionHasErrors(['email']);
 
         $alice->refresh();

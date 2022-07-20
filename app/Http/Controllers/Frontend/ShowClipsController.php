@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
@@ -15,6 +14,7 @@ class ShowClipsController extends Controller
 {
     /**
      * Indexes all portal clips
+     *
      * @return View
      */
     public function index(): View
@@ -30,6 +30,7 @@ class ShowClipsController extends Controller
      * @param  Clip  $clip
      * @param  WowzaService  $wowzaService
      * @return View
+     *
      * @throws AuthorizationException|GuzzleException
      */
     public function show(Clip $clip, WowzaService $wowzaService): View
@@ -37,9 +38,10 @@ class ShowClipsController extends Controller
         $this->authorize('view-clips', $clip);
 
         Log::info('clip ID'.$clip->title);
+
         return view('frontend.clips.show', [
-            'clip'                       => $clip,
-            'wowzaStatus'                => $wowzaService->checkApiConnection(),
+            'clip' => $clip,
+            'wowzaStatus' => $wowzaService->checkApiConnection(),
             'previousNextClipCollection' => $clip->previousNextClipCollection(),
         ]);
     }

@@ -6,10 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePresenterRequest;
 use App\Models\Presenter;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
-use Illuminate\Http\Request;
 
 class PresentersController extends Controller
 {
@@ -20,10 +20,10 @@ class PresentersController extends Controller
      */
     public function index(): View
     {
-        Gate::allowIf(fn($user) => $user->isAdmin() || $user->isAssistant());
+        Gate::allowIf(fn ($user) => $user->isAdmin() || $user->isAssistant());
 
         return view('backend.presenters.index', [
-            'presenters' => Presenter::paginate(10)
+            'presenters' => Presenter::paginate(10),
         ]);
     }
 
@@ -32,7 +32,7 @@ class PresentersController extends Controller
      */
     public function create(): View
     {
-        Gate::allowIf(fn($user) => $user->isAdmin() || $user->isAssistant());
+        Gate::allowIf(fn ($user) => $user->isAdmin() || $user->isAssistant());
 
         return view('backend.presenters.create');
     }
@@ -40,12 +40,12 @@ class PresentersController extends Controller
     /**
      * Store a presenter in database
      *
-     * @param StorePresenterRequest $request
+     * @param  StorePresenterRequest  $request
      * @return RedirectResponse
      */
     public function store(StorePresenterRequest $request): RedirectResponse
     {
-        Gate::allowIf(fn($user) => $user->isAdmin() || $user->isAssistant());
+        Gate::allowIf(fn ($user) => $user->isAdmin() || $user->isAssistant());
 
         Presenter::create($request->validated());
 
@@ -55,12 +55,12 @@ class PresentersController extends Controller
     /**
      * Edit form for a presenter
      *
-     * @param Presenter $presenter
+     * @param  Presenter  $presenter
      * @return View
      */
     public function edit(Presenter $presenter): View
     {
-        Gate::allowIf(fn($user) => $user->isAdmin() || $user->isAssistant());
+        Gate::allowIf(fn ($user) => $user->isAdmin() || $user->isAssistant());
 
         return view('backend.presenters.edit', compact('presenter'));
     }
@@ -68,28 +68,28 @@ class PresentersController extends Controller
     /**
      * Update a single presenter in database
      *
-     * @param Presenter $presenter
-     * @param Request $request
+     * @param  Presenter  $presenter
+     * @param  Request  $request
      * @return RedirectResponse
      */
     public function update(Presenter $presenter, Request $request): RedirectResponse
     {
-        Gate::allowIf(fn($user) => $user->isAdmin() || $user->isAssistant());
+        Gate::allowIf(fn ($user) => $user->isAdmin() || $user->isAssistant());
 
         $validated = $request->validate([
             'academic_degree_id' => ['integer'],
-            'first_name'         => ['required', 'alpha', 'min:2', 'max:30'],
-            'last_name'          => ['required', 'alpha', 'min:2', 'max:100'],
-            'username'           => [
+            'first_name' => ['required', 'alpha', 'min:2', 'max:30'],
+            'last_name' => ['required', 'alpha', 'min:2', 'max:100'],
+            'username' => [
                 'required',
                 'string',
                 'max:255',
                 'alpha_dash',
-                Rule::unique('presenters')->ignore($presenter)
+                Rule::unique('presenters')->ignore($presenter),
             ],
-            'email'              => [
+            'email' => [
                 'email',
-                Rule::unique('presenters')->ignore($presenter)],
+                Rule::unique('presenters')->ignore($presenter), ],
         ]);
 
         $presenter->update($validated);
@@ -100,13 +100,13 @@ class PresentersController extends Controller
     /**
      * Deletes a single presenter
      *
-     * @param Presenter $presenter
+     * @param  Presenter  $presenter
      * @return RedirectResponse
      */
     public function destroy(Presenter $presenter): RedirectResponse
     {
-        Gate::allowIf(fn($user) => $user->isAdmin() || $user->isAssistant());
-        
+        Gate::allowIf(fn ($user) => $user->isAdmin() || $user->isAssistant());
+
         $presenter->delete();
 
         return to_route('presenters.index');

@@ -15,7 +15,7 @@ class FormatFactory extends Factory
     {
         return [
             'en_name' => 'lecture',
-            'de_name' => 'Vorlesung'
+            'de_name' => 'Vorlesung',
         ];
     }
 }

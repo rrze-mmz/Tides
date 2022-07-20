@@ -31,10 +31,10 @@ class StoreCollectionRequest extends FormRequest
     public function rules()
     {
         return [
-            'position'    => ['required', 'integer'],
-            'title'       => ['required', 'string'],
+            'position' => ['required', 'integer'],
+            'title' => ['required', 'string'],
             'description' => ['nullable', 'max:1000'],
-            'is_public'   => ['required', 'boolean']
+            'is_public' => ['required', 'boolean'],
         ];
     }
 }

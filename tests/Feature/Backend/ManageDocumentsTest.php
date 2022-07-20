@@ -5,11 +5,11 @@ namespace Tests\Feature\Backend;
 use App\Models\Clip;
 use App\Models\Document;
 use App\Models\Series;
+use Facades\Tests\Setup\ClipFactory;
+use Facades\Tests\Setup\SeriesFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Facades\Tests\Setup\SeriesFactory;
-use Facades\Tests\Setup\ClipFactory;
 use Tests\TestCase;
 
 class ManageDocumentsTest extends TestCase
@@ -41,15 +41,15 @@ class ManageDocumentsTest extends TestCase
 
         $attributes = [
             'document' => '',
-            'type'     => 'series',
-            'id'       => 'id',
+            'type' => 'series',
+            'id' => 'id',
         ];
         $this->post(route('documents.upload'), $attributes)->assertSessionHasErrors('document');
 
         $attributes = [
             'document' => 'test.txt',
-            'type'     => 'series',
-            'id'       => 'id',
+            'type' => 'series',
+            'id' => 'id',
         ];
         $this->post(route('documents.upload'), $attributes)->assertSessionHasErrors('document');
     }
@@ -65,28 +65,28 @@ class ManageDocumentsTest extends TestCase
 
         $attributes = [
             'document' => $file,
-            'id'       => 'id',
+            'id' => 'id',
         ];
         $this->post(route('documents.upload'), $attributes)->assertSessionHasErrors('type');
 
         $attributes = [
             'document' => $file,
-            'type'     => 'document',
-            'id'       => 'id',
+            'type' => 'document',
+            'id' => 'id',
         ];
         $this->post(route('documents.upload'), $attributes)->assertSessionHasErrors('type');
 
         $attributes = [
             'document' => $file,
-            'type'     => 'series',
-            'id'       => 'id',
+            'type' => 'series',
+            'id' => 'id',
         ];
         $this->post(route('documents.upload'), $attributes)->assertSessionDoesntHaveErrors('type');
 
         $attributes = [
             'document' => $file,
-            'type'     => 'clip',
-            'id'       => 'id',
+            'type' => 'clip',
+            'id' => 'id',
         ];
         $this->post(route('documents.upload'), $attributes)->assertSessionDoesntHaveErrors('type');
     }
@@ -102,8 +102,8 @@ class ManageDocumentsTest extends TestCase
 
         $attributes = [
             'document' => $file,
-            'type'     => 'series',
-            'id'       => '100',
+            'type' => 'series',
+            'id' => '100',
         ];
 
         $this->post(route('documents.upload'), $attributes)->assertNotFound();
@@ -122,8 +122,8 @@ class ManageDocumentsTest extends TestCase
 
         $this->post(route('documents.upload'), [
             'document' => $file,
-            'type'     => 'series',
-            'id'       => $series->id
+            'type' => 'series',
+            'id' => $series->id,
         ])->assertForbidden();
     }
 
@@ -138,8 +138,8 @@ class ManageDocumentsTest extends TestCase
 
         $this->post(route('documents.upload'), [
             'document' => $file,
-            'type'     => 'series',
-            'id'       => $series->id
+            'type' => 'series',
+            'id' => $series->id,
         ])->assertSessionDoesntHaveErrors('document');
 
         Storage::disk('documents')->assertExists($series->documents()->first()->save_path);
@@ -159,8 +159,8 @@ class ManageDocumentsTest extends TestCase
 
         $this->post(route('documents.upload'), [
             'document' => $file,
-            'type'     => 'series',
-            'id'       => $series->id
+            'type' => 'series',
+            'id' => $series->id,
         ]);
 
         $this->get(route('series.edit', $series))
@@ -182,8 +182,8 @@ class ManageDocumentsTest extends TestCase
 
         $this->post(route('documents.upload'), [
             'document' => $file,
-            'type'     => 'clip',
-            'id'       => $clip->id
+            'type' => 'clip',
+            'id' => $clip->id,
         ])->assertForbidden();
     }
 
@@ -198,8 +198,8 @@ class ManageDocumentsTest extends TestCase
 
         $this->post(route('documents.upload'), [
             'document' => $file,
-            'type'     => 'clip',
-            'id'       => $clip->id
+            'type' => 'clip',
+            'id' => $clip->id,
         ]);
 
         Storage::disk('documents')->assertExists($clip->documents()->first()->save_path);
@@ -219,8 +219,8 @@ class ManageDocumentsTest extends TestCase
 
         $this->post(route('documents.upload'), [
             'document' => $file,
-            'type'     => 'clip',
-            'id'       => $clip->id
+            'type' => 'clip',
+            'id' => $clip->id,
         ]);
 
         $this->get(route('clips.edit', $clip))->assertSee('document.pdf');
@@ -237,8 +237,8 @@ class ManageDocumentsTest extends TestCase
 
         $this->post(route('documents.upload'), [
             'document' => $file,
-            'type'     => 'series',
-            'id'       => $series->id
+            'type' => 'series',
+            'id' => $series->id,
         ]);
 
         $document = $series->documents()->first();
@@ -261,8 +261,8 @@ class ManageDocumentsTest extends TestCase
 
         $this->post(route('documents.upload'), [
             'document' => $file,
-            'type'     => 'clip',
-            'id'       => $clip->id
+            'type' => 'clip',
+            'id' => $clip->id,
         ]);
 
         $document = $clip->documents()->first();
@@ -311,8 +311,8 @@ class ManageDocumentsTest extends TestCase
 
         $this->post(route('documents.upload'), [
             'document' => $file,
-            'type'     => 'series',
-            'id'       => $series->id
+            'type' => 'series',
+            'id' => $series->id,
         ]);
 
         $document = $series->documents()->first();
@@ -348,8 +348,8 @@ class ManageDocumentsTest extends TestCase
 
         $this->post(route('documents.upload'), [
             'document' => $file,
-            'type'     => 'series',
-            'id'       => $series->id
+            'type' => 'series',
+            'id' => $series->id,
         ]);
 
         $document = $series->documents()->first();
@@ -359,7 +359,7 @@ class ManageDocumentsTest extends TestCase
 
         $this->assertDatabaseMissing('series', ['id' => $series->id]);
         $this->assertDatabaseMissing('documentables', [
-            'documentable_id'   => $series->id,
+            'documentable_id' => $series->id,
             'documentable_type' => 'series',
         ]);
         $this->assertDatabaseMissing('documents', ['name' => $document->name]);
@@ -378,19 +378,18 @@ class ManageDocumentsTest extends TestCase
 
         $this->post(route('documents.upload'), [
             'document' => $file,
-            'type'     => 'clip',
-            'id'       => $clip->id
+            'type' => 'clip',
+            'id' => $clip->id,
         ]);
 
         $document = $clip->documents()->first();
         Storage::disk('documents')->assertExists($document->save_path);
 
-
         $clip->delete();
 
         $this->assertDatabaseMissing('clips', ['id' => $clip->id]);
         $this->assertDatabaseMissing('documentables', [
-            'documentable_id'   => $clip->id,
+            'documentable_id' => $clip->id,
             'documentable_type' => 'clip',
         ]);
         $this->assertDatabaseMissing('documents', ['name' => $document->name]);

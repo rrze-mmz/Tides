@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
@@ -23,7 +22,7 @@ class HomeController extends Controller
                 ->orderByDesc('updated_at')
                 ->limit(18)
                 ->get(),
-            'clips'  => Clip::public()
+            'clips' => Clip::public()
                 ->whereHas('assets')
                 ->whereNull('series_id')
                 ->orderByDesc('updated_at')

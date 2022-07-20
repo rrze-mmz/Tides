@@ -1,21 +1,22 @@
 <?php
 
 return [
-    'previous'           => 'previous',
-    'next'               => 'next',
+    'previous' => 'previous',
+    'next' => 'next',
     'Dashboard greeting' => 'Good day :fullName',
-    'description'        => 'Description',
-    'password'           => 'Password',
+    'description' => 'Description',
+    'password' => 'Password',
 
-    'menu' => ['dashboard'  => 'Dashboard',
-               'series'     => 'Series',
-               'clip'       => 'Clip|Clips',
-               'presenters' => 'Presenter|Presenters',
-               'activity'   => 'Activity|Activities',
-               'device'     => 'Device|Devices',
-               'collection' => 'Collection|Collections',
-               'user'       => 'User|Users',
-               'opencast'   => 'Opencast',
+    'menu' => [
+        'dashboard' => 'Dashboard',
+        'series' => 'Series',
+        'clip' => 'Clip|Clips',
+        'presenter' => 'Presenter|Presenters',
+        'activity' => 'Activity|Activities',
+        'device' => 'Device|Devices',
+        'collection' => 'Collection|Collections',
+        'user' => 'User|Users',
+        'system' => 'System|Systems',
     ],
 
     'heading' => [
@@ -23,9 +24,9 @@ return [
     ],
 
     'forms' => [
-        'title'         => 'title',
-        'description'   => 'Description',
-        'organization'  => 'Organization',
+        'title' => 'title',
+        'description' => 'Description',
+        'organization' => 'Organization',
         'create series' => 'Create series',
     ],
 ];

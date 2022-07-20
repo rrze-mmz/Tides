@@ -18,11 +18,11 @@ class ChapterFactory extends Factory
     public function definition(): array
     {
         return [
-            'title'     => $this->faker->text(),
-            'position'  => 1,
+            'title' => $this->faker->text(),
+            'position' => 1,
             'parent_id' => 0,
             'series_id' => Series::factory()->create(),
-            'default'   => true,
+            'default' => true,
         ];
     }
 }

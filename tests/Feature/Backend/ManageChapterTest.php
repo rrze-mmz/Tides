@@ -3,10 +3,10 @@
 namespace Tests\Feature\Backend;
 
 use App\Models\Chapter;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\Series;
-use Illuminate\Foundation\Testing\WithFaker;
 use Facades\Tests\Setup\SeriesFactory;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class ManageChapterTest extends TestCase
@@ -15,6 +15,7 @@ class ManageChapterTest extends TestCase
     use WithFaker;
 
     private Series $series;
+
     private Chapter $chapter;
 
     protected function setUp(): void
@@ -78,7 +79,7 @@ class ManageChapterTest extends TestCase
     {
         $attributes = [
             'position' => 1,
-            'title'    => $this->faker->sentence()
+            'title' => $this->faker->sentence(),
         ];
         $this->post(route('series.chapters.create', $this->series), $attributes)
             ->assertRedirect(route('series.chapters.index', $this->series));
@@ -89,7 +90,7 @@ class ManageChapterTest extends TestCase
     {
         $attributes = [
             'position' => '',
-            'title'    => $this->faker->sentence()
+            'title' => $this->faker->sentence(),
         ];
 
         $this->post(route('series.chapters.create', $this->series), $attributes)
@@ -101,7 +102,7 @@ class ManageChapterTest extends TestCase
     {
         $attributes = [
             'position' => '1',
-            'title'    => ''
+            'title' => '',
         ];
 
         $this->post(route('series.chapters.create', $this->series), $attributes)
@@ -141,7 +142,7 @@ class ManageChapterTest extends TestCase
 
         $this->patch(route('series.chapters.addClips', [
             $this->series,
-            $this->chapter]), $attributes)->assertSessionHasErrors('ids');
+            $this->chapter, ]), $attributes)->assertSessionHasErrors('ids');
     }
 
     /** @test */
@@ -153,7 +154,7 @@ class ManageChapterTest extends TestCase
 
         $this->patch(route('series.chapters.addClips', [
             $this->series,
-            $this->chapter]), $attributes);
+            $this->chapter, ]), $attributes);
 
         $this->assertEquals(1, $this->chapter->clips()->count());
     }
@@ -167,7 +168,7 @@ class ManageChapterTest extends TestCase
 
         $this->patch(route('series.chapters.removeClips', [
             $this->series,
-            $this->chapter]), $attributes)->assertSessionHasErrors('ids');
+            $this->chapter, ]), $attributes)->assertSessionHasErrors('ids');
     }
 
     /** @test */
@@ -182,7 +183,7 @@ class ManageChapterTest extends TestCase
         $this->assertEquals(1, $this->chapter->clips()->count());
 
         $attributes = [
-            'ids' => [$this->series->clips()->first()->id,]
+            'ids' => [$this->series->clips()->first()->id],
         ];
 
         $this->patch(route('series.chapters.removeClips', [$this->series, $this->chapter]), $attributes);
@@ -197,9 +198,9 @@ class ManageChapterTest extends TestCase
             'chapters' => [
                 $this->chapter->id => [
                     'position' => '3',
-                    'title'    => 'changed'
+                    'title' => 'changed',
                 ],
-            ]
+            ],
         ];
 
         $this->put(route('series.chapters.update', $this->series), $attributes);

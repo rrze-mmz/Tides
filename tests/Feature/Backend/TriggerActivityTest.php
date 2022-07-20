@@ -144,12 +144,12 @@ class TriggerActivityTest extends TestCase
     public function it_has_a_series_checkbox_in_index_activities_data_table_that_filter_series(): void
     {
         $seriesActivity = Activity::factory()->create([
-            'content_type'   => 'series',
-            'change_message' => 'create series'
+            'content_type' => 'series',
+            'change_message' => 'create series',
         ]);
         $clipActivity = Activity::factory()->create([
-            'content_type'   => 'clip',
-            'change_message' => 'create clip'
+            'content_type' => 'clip',
+            'change_message' => 'create clip',
         ]);
 
         Livewire::test(ActivitiesDataTable::class)
@@ -164,12 +164,12 @@ class TriggerActivityTest extends TestCase
     public function it_can_search_for_a_change_message_in_index_activities_data_table(): void
     {
         $seriesActivity = Activity::factory()->create([
-            'content_type'   => 'series',
-            'change_message' => 'create series'
+            'content_type' => 'series',
+            'change_message' => 'create series',
         ]);
         $clipActivity = Activity::factory()->create([
-            'content_type'   => 'clip',
-            'change_message' => 'update clip'
+            'content_type' => 'clip',
+            'change_message' => 'update clip',
         ]);
         Livewire::test(ActivitiesDataTable::class)
             ->set('search', 'update')
@@ -181,23 +181,23 @@ class TriggerActivityTest extends TestCase
     public function it_can_sort_by_content_type_in_index_activities_data_table(): void
     {
         $articleActivity = Activity::factory()->create([
-            'content_type'   => 'article',
-            'change_message' => 'updates article'
+            'content_type' => 'article',
+            'change_message' => 'updates article',
         ]);
         $seriesActivity = Activity::factory()->create([
-            'content_type'   => 'series',
-            'change_message' => 'create series'
+            'content_type' => 'series',
+            'change_message' => 'create series',
         ]);
         $clipActivity = Activity::factory()->create([
-            'content_type'   => 'clip',
-            'change_message' => 'update clip'
+            'content_type' => 'clip',
+            'change_message' => 'update clip',
         ]);
 
         Livewire::test(ActivitiesDataTable::class)
             ->call('sortBy', 'content_type')
             ->call('sortBy', 'content_type')
             ->assertSeeInOrder([
-                $seriesActivity->content_type, $clipActivity->content_type, $articleActivity->content_type
+                $seriesActivity->content_type, $clipActivity->content_type, $articleActivity->content_type,
             ]);
     }
 }

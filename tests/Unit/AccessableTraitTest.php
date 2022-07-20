@@ -3,9 +3,9 @@
 namespace Tests\Unit;
 
 use App\Models\Clip;
+use Facades\Tests\Setup\ClipFactory;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Facades\Tests\Setup\ClipFactory;
 use Tests\TestCase;
 
 class AccessableTraitTest extends TestCase

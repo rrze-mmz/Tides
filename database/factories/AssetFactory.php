@@ -25,15 +25,16 @@ class AssetFactory extends Factory
     public function definition()
     {
         $uploadedFile = UploadedFile::fake()->create('video.mp4', '10000', 'video/mp4');
+
         return [
             'original_file_name' => $uploadedFile->getClientOriginalName(),
-            'disk'               => 'videos',
-            'path'               => 'TIDES_TEST_CLIP',
-            'width'              => $this->faker->randomNumber(),
-            'height'             => '1280',
-            'duration'           => '720',
-            'clip_id'            => Clip::factory(),
-            'type'               => Content::PRESENTER,
+            'disk' => 'videos',
+            'path' => 'TIDES_TEST_CLIP',
+            'width' => $this->faker->randomNumber(),
+            'height' => '1280',
+            'duration' => '720',
+            'clip_id' => Clip::factory(),
+            'type' => Content::PRESENTER,
         ];
     }
 }

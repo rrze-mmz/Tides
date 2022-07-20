@@ -7,8 +7,8 @@ use App\Models\User;
 use App\Notifications\SeriesMembershipAddUser;
 use App\Notifications\SeriesOwnershipAddUser;
 use App\Notifications\SeriesOwnershipRemoveUser;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Facades\Tests\Setup\SeriesFactory;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 

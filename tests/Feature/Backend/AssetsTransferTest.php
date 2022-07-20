@@ -1,14 +1,11 @@
 <?php
 
-
 namespace Tests\Feature\Backend;
 
 use App\Enums\Content;
 use App\Enums\OpencastWorkflowState;
 use App\Jobs\CreateWowzaSmilFile;
-use App\Jobs\SendEmail;
 use App\Jobs\TransferAssetsJob;
-use App\Jobs\TransferOpencastAssets;
 use App\Mail\AssetsTransferred;
 use App\Services\OpencastService;
 use DOMException;
@@ -31,6 +28,7 @@ class AssetsTransferTest extends TestCase
     use WorksWithOpencastClient;
 
     private OpencastService $opencastService;
+
     private string $role = '';
 
     protected function setUp(): void
@@ -82,7 +80,7 @@ class AssetsTransferTest extends TestCase
             'admin.clips.asset.transferSingle',
             ClipFactory::ownedBy($this->signInRole($this->role))->create()
         ), [
-            'asset' => UploadedFile::fake()->image('avatar.jpg')
+            'asset' => UploadedFile::fake()->image('avatar.jpg'),
         ])
             ->assertSessionHasErrors('asset');
     }
@@ -185,7 +183,7 @@ class AssetsTransferTest extends TestCase
 
         $this->followingRedirects()->post(
             route('admin.clips.dropzone.transfer', $clip),
-            ["files" => [$videoHashHD, $videoHashSD]]
+            ['files' => [$videoHashHD, $videoHashSD]]
         )->assertOk();
 
         $this->get($clip->adminPath())
@@ -207,8 +205,8 @@ class AssetsTransferTest extends TestCase
             ClipFactory::ownedBy($this->signInRole($this->role))->create()
         ), [
             'files' => [
-                sha1('test_file_name')
-            ]
+                sha1('test_file_name'),
+            ],
         ]);
 
         Bus::assertChained([
@@ -227,8 +225,8 @@ class AssetsTransferTest extends TestCase
             ClipFactory::ownedBy($this->signInRole($this->role))->create()
         ), [
             'files' => [
-                sha1('test_file_name')
-            ]
+                sha1('test_file_name'),
+            ],
         ]);
 
         Mail::assertQueued(AssetsTransferred::class);
@@ -305,7 +303,7 @@ class AssetsTransferTest extends TestCase
             'admin.clips.opencast.transfer',
             ClipFactory::ownedBy($this->signInRole($this->role))->create()
         ), [
-            'eventID' => $this->faker->uuid()
+            'eventID' => $this->faker->uuid(),
         ]);
 
         Bus::assertChained([
@@ -368,7 +366,7 @@ class AssetsTransferTest extends TestCase
 
         $this->post(
             route('admin.clips.opencast.transfer', $clip),
-            ["eventID" => $opencastEventID]
+            ['eventID' => $opencastEventID]
         )->assertStatus(302);
 
         $mockHandler->append($this->mockHealthResponse());

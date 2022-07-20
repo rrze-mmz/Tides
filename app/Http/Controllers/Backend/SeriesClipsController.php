@@ -18,8 +18,9 @@ class SeriesClipsController extends Controller
     /**
      *  Show create clip form to assign a clip to series
      *
-     * @param Series $series
+     * @param  Series  $series
      * @return View
+     *
      * @throws AuthorizationException
      */
     public function create(Series $series): View
@@ -32,8 +33,8 @@ class SeriesClipsController extends Controller
     /**
      * Store a clip in a series
      *
-     * @param Series $series
-     * @param StoreClipRequest $request
+     * @param  Series  $series
+     * @param  StoreClipRequest  $request
      * @return RedirectResponse
      */
     public function store(Series $series, StoreClipRequest $request): RedirectResponse
@@ -51,8 +52,9 @@ class SeriesClipsController extends Controller
     }
 
     /**
-     * @param Clip $clip
+     * @param  Clip  $clip
      * @return View
+     *
      * @throws AuthorizationException
      */
     public function listSeries(Clip $clip): View
@@ -60,20 +62,20 @@ class SeriesClipsController extends Controller
         $this->authorize('edit', $clip);
 
         return view('backend.seriesClips.listSeries', [
-            'clip'   => $clip,
-            'series' =>
-                (auth()->user()->isAdmin())
+            'clip' => $clip,
+            'series' => (auth()->user()->isAdmin())
                     ? Series::orderByDesc('updated_at')->paginate(12)
-                    : auth()->user()->accessableSeries()->paginate(12)
+                    : auth()->user()->accessableSeries()->paginate(12),
         ]);
     }
 
     /**
      * Assign the given series to the given clip
      *
-     * @param Series $series
-     * @param Clip $clip
+     * @param  Series  $series
+     * @param  Clip  $clip
      * @return RedirectResponse
+     *
      * @throws AuthorizationException
      */
     public function assign(Series $series, Clip $clip): RedirectResponse
@@ -88,8 +90,9 @@ class SeriesClipsController extends Controller
     }
 
     /**
-     * @param Clip $clip
+     * @param  Clip  $clip
      * @return RedirectResponse
+     *
      * @throws AuthorizationException
      */
     public function remove(Clip $clip): RedirectResponse
@@ -104,7 +107,7 @@ class SeriesClipsController extends Controller
     }
 
     /**
-     * @param Series $series
+     * @param  Series  $series
      * @return Factory|View|Application
      */
     public function listClips(Series $series): Factory|View|Application
@@ -115,14 +118,14 @@ class SeriesClipsController extends Controller
     /**
      * Changes clips episodes for a series
      *
-     * @param Series $series
-     * @param Request $request
+     * @param  Series  $series
+     * @param  Request  $request
      * @return RedirectResponse
      */
     public function reorder(Series $series, Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'episodes'   => ['required', 'array'],
+            'episodes' => ['required', 'array'],
             'episodes.*' => ['integer'],
         ]);
 

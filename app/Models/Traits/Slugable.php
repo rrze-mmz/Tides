@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Models\Traits;
 
 use Illuminate\Support\Str;
@@ -9,6 +8,7 @@ trait Slugable
 {
     /**
      * Set the slug to another value if another one with the same value exists
+     *
      * @param $value
      */
     public function setSlugAttribute($value)
@@ -33,7 +33,7 @@ trait Slugable
         $count = 2;
 
         while (self::whereSlug($slug)->exists()) {
-            $slug = "{$original}-" . $count++;
+            $slug = "{$original}-".$count++;
         }
 
         return $slug;

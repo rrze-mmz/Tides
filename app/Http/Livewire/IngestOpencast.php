@@ -13,17 +13,21 @@ class IngestOpencast extends Component
     use WithFileUploads;
 
     public $clip;
+
     public $videoFile;
+
     public $messageText;
+
     public $messageType;
+
     protected array $rules = [
-        'videoFile' => 'required|file|mimetypes:video/mp4,video/mpeg,video/x-matroska,video/x-m4v'
+        'videoFile' => 'required|file|mimetypes:video/mp4,video/mpeg,video/x-matroska,video/x-m4v',
     ];
 
     /**
      * Mount Livewire component
      *
-     * @param Clip $clip
+     * @param  Clip  $clip
      */
     public function mount(Clip $clip)
     {
@@ -45,6 +49,7 @@ class IngestOpencast extends Component
 
     /**
      * Render Livewire component
+     *
      * @return View
      */
     public function render(): View

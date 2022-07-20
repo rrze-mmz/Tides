@@ -4,7 +4,6 @@ namespace Tests\Unit;
 
 use App\Models\Device;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 

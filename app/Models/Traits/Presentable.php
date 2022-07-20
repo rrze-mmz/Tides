@@ -21,7 +21,7 @@ trait Presentable
     /**
      * Add presenters to a given model
      *
-     * @param Collection $presentersCollection
+     * @param  Collection  $presentersCollection
      * @return void
      */
     public function addPresenters(Collection $presentersCollection): void

@@ -23,13 +23,13 @@ class SeriesFactory extends Factory
     public function definition()
     {
         return [
-            'title'              => $title = $this->faker->sentence(),
-            'description'        => $this->faker->paragraph(2),
-            'organization_id'    => '1',
-            'slug'               => $title,
-            'owner_id'           => User::factory()->create()->id,
+            'title' => $title = $this->faker->sentence(),
+            'description' => $this->faker->paragraph(2),
+            'organization_id' => '1',
+            'slug' => $title,
+            'owner_id' => User::factory()->create()->id,
             'opencast_series_id' => null,
-            'is_public'          => true,
+            'is_public' => true,
         ];
     }
 }

@@ -19,6 +19,7 @@ class FetchOpencastAssets extends Command
      * @var string
      */
     protected $signature = 'opencast:finished-events';
+
     /**
      * The console command description.
      *
@@ -39,7 +40,7 @@ class FetchOpencastAssets extends Command
     /**
      * Execute the console command.
      *
-     * @param OpencastService $opencastService
+     * @param  OpencastService  $opencastService
      * @return int
      */
     public function handle(OpencastService $opencastService): int
@@ -56,10 +57,9 @@ class FetchOpencastAssets extends Command
          * and publish the video files
          */
 
-
         if ($counter = $emptyClips->count() > 0) {
             Log::info(
-                'Fetching Opencast Assets Command: Found ' . $counter . ' clips! Searching Opencast API for events...'
+                'Fetching Opencast Assets Command: Found '.$counter.' clips! Searching Opencast API for events...'
             );
             $emptyClips->each(function ($clip) use ($opencastService) {
                 //find finished workflows for every clip
@@ -68,17 +68,19 @@ class FetchOpencastAssets extends Command
                 $events->each(function ($event) use ($clip, $opencastService) {
                     if ($clip->created_at->format('Y-m-d') === Carbon::parse($event['created'])->format('Y-m-d')) {
                         $this->checkOpencastAssetsForClipUpload($clip, $event['identifier'], $opencastService);
-                        $this->info('Videos from Clip ' . $clip->title . ' is online');
+                        $this->info('Videos from Clip '.$clip->title.' is online');
                     } else {
-                        $this->info('No Opencast Event found for Clip ' . $clip->title . '| [ID]:' . $clip->id);
+                        $this->info('No Opencast Event found for Clip '.$clip->title.'| [ID]:'.$clip->id);
                     }
                 });
             });
             Log::info('Fetching Opencast Assets Command finished');
+
             return Command::SUCCESS;
         } else {
             Log::info('Fetching Opencast Assets Command: started');
             $this->info('No empty clips found');
+
             return Command::FAILURE;
         }
     }

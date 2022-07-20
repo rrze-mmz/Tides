@@ -14,9 +14,10 @@ class TriggerSmilFilesController extends Controller
     /**
      * Generates a wowza smil file for a clip
      *
-     * @param Clip $clip
-     * @param WowzaService $wowzaService
+     * @param  Clip  $clip
+     * @param  WowzaService  $wowzaService
      * @return RedirectResponse
+     *
      * @throws AuthorizationException|DOMException
      */
     public function __invoke(Clip $clip, WowzaService $wowzaService): RedirectResponse
@@ -25,7 +26,7 @@ class TriggerSmilFilesController extends Controller
 
         $wowzaService->createSmilFile($clip);
 
-        session()->flash('flashMessage', $clip->title . ' smil files created successfully ');
+        session()->flash('flashMessage', $clip->title.' smil files created successfully ');
 
         return back();
     }

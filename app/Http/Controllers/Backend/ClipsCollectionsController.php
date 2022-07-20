@@ -10,8 +10,8 @@ use Illuminate\Http\RedirectResponse;
 class ClipsCollectionsController extends Controller
 {
     /**
-     * @param Collection $collection
-     * @param StoreClipIdsRequest $request
+     * @param  Collection  $collection
+     * @param  StoreClipIdsRequest  $request
      * @return RedirectResponse
      */
     public function __invoke(Collection $collection, StoreClipIdsRequest $request)

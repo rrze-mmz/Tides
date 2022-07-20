@@ -13,8 +13,8 @@ class AddClipOrganizationUnitId extends Migration
      */
     public function up()
     {
-        Schema::table('clips', function(Blueprint $table){
-           $table->foreignId('organization_id')
+        Schema::table('clips', function (Blueprint $table) {
+            $table->foreignId('organization_id')
                ->default(1)
                ->references('org_id')
                ->on('organizations')

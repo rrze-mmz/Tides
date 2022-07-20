@@ -14,6 +14,7 @@ class ElasticsearchDeleteIndexes extends Command
      * @var string
      */
     protected $signature = 'elasticsearch:delete-indexes {model : The model index}';
+
     /**
      * The console command description.
      *
@@ -34,7 +35,7 @@ class ElasticsearchDeleteIndexes extends Command
     /**
      * Execute the console command.
      *
-     * @param ElasticsearchService $elasticsearchService
+     * @param  ElasticsearchService  $elasticsearchService
      * @return int
      */
     public function handle(ElasticsearchService $elasticsearchService): int
@@ -43,7 +44,7 @@ class ElasticsearchDeleteIndexes extends Command
 
         $elasticsearchService->deleteIndexes(Str::plural($this->argument('model')));
 
-        $this->info($modelName . ' Indexes deleted successfully');
+        $this->info($modelName.' Indexes deleted successfully');
 
         return Command::SUCCESS;
     }

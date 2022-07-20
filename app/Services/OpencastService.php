@@ -30,10 +30,18 @@ class OpencastService
      */
     public function getHealth(): Collection
     {
-        $health = collect([]);
+        $health = collect([
+            'releaseId' => 'unknown',
+            'description' => 'unknown',
+            'serviceId' => '127.0.0.1',
+            'version' => null,
+            'status' => 'failed',
+        ]);
         try {
             $this->response = $this->client->get('info/health');
-            $health = collect(json_decode((string)$this->response->getBody(), true));
+            if (! empty(json_decode((string) $this->response->getBody(), true))) {
+                $health = collect(json_decode((string) $this->response->getBody(), true));
+            }
         } catch (GuzzleException $exception) {
             Log::error($exception);
         }
@@ -43,13 +51,14 @@ class OpencastService
 
     /**
      * Fetch all relevant info for a given series like running, failed workflows, etc.
-     * @param Series $series
+     *
+     * @param  Series  $series
      * @return Collection
      */
     public function getSeriesInfo(Series $series): Collection
     {
         $opencastSeriesInfo = collect([]);
-        if ($health = $this->getHealth()->isNotEmpty()) {
+        if ($health = $this->getHealth()->contains('pass')) {
             $opencastSeriesInfo->prepend($health, 'health');
             $opencastSeriesInfo
                 ->prepend($this->getSeriesRunningWorkflows($series), OpencastWorkflowState::RUNNING->lower());
@@ -62,6 +71,7 @@ class OpencastService
 
     /**
      *  Return opencast running workflows for a series
+     *
      * @return Collection
      */
     public function getAllRunningWorkflows(): Collection
@@ -71,11 +81,11 @@ class OpencastService
             $this->response = $this->client->get('workflow/instances.json', [
                 'query' => [
                     'state' => OpencastWorkflowState::RUNNING->lower(),
-                    'sort'  => 'DATE_CREATED_DESC'
-                ]
+                    'sort' => 'DATE_CREATED_DESC',
+                ],
             ]);
             $runningWorkflows = collect(
-                $this->transformRunningWorkflowsResponse(json_decode((string)$this->response->getBody(), true))
+                $this->transformRunningWorkflowsResponse(json_decode((string) $this->response->getBody(), true))
             );
         } catch (GuzzleException $exception) {
             Log::error($exception);
@@ -87,7 +97,8 @@ class OpencastService
 
     /**
      *  Return opencast running workflows for a series
-     * @param Series $series
+     *
+     * @param  Series  $series
      * @return Collection
      */
     public function getSeriesRunningWorkflows(Series $series): Collection
@@ -96,14 +107,14 @@ class OpencastService
         try {
             $this->response = $this->client->get('workflow/instances.json', [
                 'query' => [
-                    'state'    => OpencastWorkflowState::RUNNING->lower(),
+                    'state' => OpencastWorkflowState::RUNNING->lower(),
                     'seriesId' => $series->opencast_series_id,
-                    'count'    => 20,
-                    'sort'     => 'DATE_CREATED_DESC'
-                ]
+                    'count' => 20,
+                    'sort' => 'DATE_CREATED_DESC',
+                ],
             ]);
             $runningWorkflows = collect(
-                $this->transformRunningWorkflowsResponse(json_decode((string)$this->response->getBody(), true))
+                $this->transformRunningWorkflowsResponse(json_decode((string) $this->response->getBody(), true))
             );
         } catch (GuzzleException $exception) {
             Log::error($exception);
@@ -120,17 +131,15 @@ class OpencastService
      */
     public function getEventsByStatus(OpencastWorkflowState $state): Collection
     {
-
         $runningWorkflows = collect([]);
 
         try {
             $this->response = $this->client->get('api/events', [
                 'query' => [
-                    'filter' => "status:" . $state->value
-                    ,
-                ]
+                    'filter' => 'status:'.$state->value,
+                ],
             ]);
-            $runningWorkflows = collect((json_decode((string)$this->response->getBody(), true)));
+            $runningWorkflows = collect((json_decode((string) $this->response->getBody(), true)));
         } catch (GuzzleException $exception) {
             Log::error($exception);
         }
@@ -141,7 +150,7 @@ class OpencastService
     /**
      * A post request to create a series in Opencast Admin node
      *
-     * @param Series $series
+     * @param  Series  $series
      * @return Response|ResponseInterface
      */
     public function createSeries(Series $series): Response|ResponseInterface
@@ -158,8 +167,8 @@ class OpencastService
     /**
      * A post request to ingest a video file and start a workflow in Opencast Admin node
      *
-     * @param Clip $clip
-     * @param string $videoFile
+     * @param  Clip  $clip
+     * @param  string  $videoFile
      * @return Response|ResponseInterface
      */
     public function ingestMediaPackage(Clip $clip, string $videoFile): Response|ResponseInterface
@@ -192,21 +201,19 @@ class OpencastService
         try {
             $processed = $this->client->get('api/events', [
                 'query' => [
-                    'filter' => 'series:' . $seriesID . ',status:' . OpencastWorkflowState::SUCCEEDED(),
-                    'sort'   => 'start_date:ASC'
-                ]
+                    'filter' => 'series:'.$seriesID.',status:'.OpencastWorkflowState::SUCCEEDED(),
+                    'sort' => 'start_date:ASC',
+                ],
             ]);
             $canceled = $this->client->get('api/events', [
                 'query' => [
-                    'filter'
-                           =>
-                        'series:' . $seriesID . ',status:' . OpencastWorkflowState::STOPPED(),
-                    'sort' => 'start_date:ASC'
-                ]
+                    'filter' => 'series:'.$seriesID.',status:'.OpencastWorkflowState::STOPPED(),
+                    'sort' => 'start_date:ASC',
+                ],
             ]);
-            $collection = collect(json_decode((string)$processed->getBody(), true));
+            $collection = collect(json_decode((string) $processed->getBody(), true));
 
-            $processedEvents = $collection->merge(collect(json_decode((string)$canceled->getBody(), true)));
+            $processedEvents = $collection->merge(collect(json_decode((string) $canceled->getBody(), true)));
         } catch (GuzzleException $exception) {
             Log::error($exception);
         }
@@ -215,7 +222,7 @@ class OpencastService
     }
 
     /**
-     * @param Series $series
+     * @param  Series  $series
      * @return Collection
      */
     public function getFailedEventsBySeries(Series $series): Collection
@@ -224,12 +231,11 @@ class OpencastService
         try {
             $this->response = $this->client->get('api/events', [
                 'query' => [
-                    'filter' =>
-                        'series:' . $series->opencast_series_id . ',status:' . OpencastWorkflowState::FAILED(),
-                    'sort'   => 'start_date:ASC'
-                ]
+                    'filter' => 'series:'.$series->opencast_series_id.',status:'.OpencastWorkflowState::FAILED(),
+                    'sort' => 'start_date:ASC',
+                ],
             ]);
-            $failedEvents = collect(json_decode((string)$this->response->getBody(), true));
+            $failedEvents = collect(json_decode((string) $this->response->getBody(), true));
         } catch (GuzzleException $exception) {
             Log::error($exception);
         }
@@ -246,16 +252,17 @@ class OpencastService
     public function getEventByEventID($eventID): Collection
     {
         try {
-            $this->response = $this->client->get('api/events/' . $eventID);
+            $this->response = $this->client->get('api/events/'.$eventID);
         } catch (GuzzleException $exception) {
             Log::error($exception);
         }
 
-        return collect(json_decode((string)$this->response->getBody(), true));
+        return collect(json_decode((string) $this->response->getBody(), true));
     }
 
     /**
      * Fetch all assets for a given event ID as collection
+     *
      * @param $eventID
      * @return Collection
      */
@@ -264,20 +271,19 @@ class OpencastService
         $version = $this->getEventByEventID($eventID)->get('archive_version');
 
         try {
-            $this->response = $this->client->get('assets/episode/' . $eventID);
+            $this->response = $this->client->get('assets/episode/'.$eventID);
         } catch (GuzzleException $exception) {
             Log::error($exception);
         }
 
         // change the xml response to xml object
-        $xmlResponse = simplexml_load_string((string)$this->response->getBody());
+        $xmlResponse = simplexml_load_string((string) $this->response->getBody());
 
         //format the response and include the created/modified date
-        $dateCreated = (string)$xmlResponse->attributes()->start;
+        $dateCreated = (string) $xmlResponse->attributes()->start;
 
         // isolate the media key from XML Object
-        $xmlResponse = (array)$xmlResponse->media;
-
+        $xmlResponse = (array) $xmlResponse->media;
 
         // create a collection from the XML Object track value
         $opencastAssets = collect($xmlResponse['track']);
@@ -285,18 +291,19 @@ class OpencastService
         // return a collection map with uid => delivery tags
         return $opencastAssets->mapWithKeys(function ($element) use ($version, $dateCreated) {
             $extension = match (true) {
-                ((string)$element->mimetype === 'audio/mpeg') => '.mp3',
+                ((string) $element->mimetype === 'audio/mpeg') => '.mp3',
                 default => '.m4v',
             };
+
             return [
-                (string)$element->attributes()->id => [
-                    "tag"           => (string)$element->attributes()->type,
-                    "type"          => (string)$element->mimetype,
-                    'video'         => ((string)$element->video->resolution) ?: null,
-                    "version"       => $version,
-                    "date_modified" => Carbon::createFromTimeString($dateCreated)->toDateTimeString(),
-                    "name"          => $element->attributes()->id . $extension,
-                ]
+                (string) $element->attributes()->id => [
+                    'tag' => (string) $element->attributes()->type,
+                    'type' => (string) $element->mimetype,
+                    'video' => ((string) $element->video->resolution) ?: null,
+                    'version' => $version,
+                    'date_modified' => Carbon::createFromTimeString($dateCreated)->toDateTimeString(),
+                    'name' => $element->attributes()->id.$extension,
+                ],
             ];
         });
     }
@@ -304,44 +311,44 @@ class OpencastService
     /**
      * forms the data for Opencast post request to series api
      *
-     * @param Series $series
+     * @param  Series  $series
      * @return array
      */
     public function createOpencastSeriesFormData(Series $series): array
     {
         return [
-            'headers'     => [
+            'headers' => [
                 'Content-Type' => 'application/x-www-form-urlencoded',
             ],
             'form_params' => [
-                "metadata" => '[{"flavor": "dublincore/series","title": "EVENTS.EVENTS.DETAILS.CATALOG.EPISODE",
+                'metadata' => '[{"flavor": "dublincore/series","title": "EVENTS.EVENTS.DETAILS.CATALOG.EPISODE",
                         "fields": [
                         {
                              "id": "title",
-                             "value": "' . $series->title . '",
+                             "value": "'.$series->title.'",
                          },
                          {
                              "id": "creator",
-                             "value": ["' . $series->owner->name . '"],
+                             "value": ["'.$series->owner->name.'"],
                          },
                          ]
                     }]',
-                "acl"      => '[
+                'acl' => '[
 					{"allow": true,"role": "ROLE_ADMIN","action": "read"},
 				    {"allow": true,"role": "ROLE_ADMIN","action": "write"},
 				    {"allow": true,"role": "ROLE_USER_ADMIN","action": "read"},
 				    {"allow": true,"role": "ROLE_USER_ADMIN","action": "write"},
 			    ]',
-                "theme"    => config('opencast.default_theme_id')
-            ]
+                'theme' => config('opencast.default_theme_id'),
+            ],
         ];
     }
 
     /**
      *  forms the data for Opencast post request to ingest a video file and start a workflow
      *
-     * @param Clip $clip
-     * @param string $file
+     * @param  Clip  $clip
+     * @param  string  $file
      * @return array
      */
     public function ingestMediaPackageFormData(Clip $clip, string $file): array
@@ -349,31 +356,31 @@ class OpencastService
         return [
             'multipart' => [
                 [
-                    'name'     => 'flavor',
-                    'contents' => 'presenter/source'
+                    'name' => 'flavor',
+                    'contents' => 'presenter/source',
                 ],
                 [
-                    'name'     => 'title',
-                    'contents' => $clip->title
+                    'name' => 'title',
+                    'contents' => $clip->title,
                 ],
                 [
-                    'name'     => 'description',
-                    'contents' => $clip->id
+                    'name' => 'description',
+                    'contents' => $clip->id,
                 ],
                 [
-                    'name'     => 'publisher',
-                    'contents' => $clip->owner->email
+                    'name' => 'publisher',
+                    'contents' => $clip->owner->email,
                 ],
                 [
-                    'name'     => 'isPartOf',
-                    'contents' => $clip->series->opencast_series_id
+                    'name' => 'isPartOf',
+                    'contents' => $clip->series->opencast_series_id,
                 ],
                 [
-                    'name'     => 'file',
+                    'name' => 'file',
                     'contents' => file_get_contents($file),
-                    'filename' => basename($file)
+                    'filename' => basename($file),
                 ],
-            ]
+            ],
         ];
     }
 
@@ -381,7 +388,7 @@ class OpencastService
      * Opencast API returns a single json object if one or an array of objects.
      * This method add a single object to an array so that the iteration still works
      *
-     * @param array $response
+     * @param  array  $response
      * @return array
      */
     private function transformRunningWorkflowsResponse(array $response): array
@@ -389,11 +396,11 @@ class OpencastService
         if (empty($response)) {
             return [];
         }
-        if ((int)$response['workflows']['totalCount'] != 1) {
+        if ((int) $response['workflows']['totalCount'] != 1) {
             return $response;
         }
 
-        $response['workflows']['workflow'] = array($response['workflows']['workflow']);
+        $response['workflows']['workflow'] = [$response['workflows']['workflow']];
 
         return $response;
     }

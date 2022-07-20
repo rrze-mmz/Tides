@@ -10,13 +10,14 @@ class Device extends BaseModel
 {
     use HasFactory;
     use Searchable;
-    
+
     protected array $searchable = [
-        'name', 'description', 'comment', 'opencast_device_name', 'url', 'telephone_number'
+        'name', 'description', 'comment', 'opencast_device_name', 'url', 'telephone_number',
     ];
 
     /**
      * Location relationship
+     *
      * @return BelongsTo
      */
     public function location(): BelongsTo

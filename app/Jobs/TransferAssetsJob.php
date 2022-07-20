@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Jobs;
 
 use App\Enums\Content;
@@ -44,6 +43,7 @@ class TransferAssetsJob implements ShouldQueue
      * Copy a collection of video files to clip path
      *
      * @return void
+     *
      * @throws FileExistsException
      */
     public function handle(): void
@@ -69,17 +69,17 @@ class TransferAssetsJob implements ShouldQueue
             $ffmpeg = FFMpeg::fromDisk('videos')->open($storedFile);
 
             $asset = [
-                'disk'               => 'videos',
+                'disk' => 'videos',
                 'original_file_name' => $file['name'],
-                'path'               => $storedFile,
-                'duration'           => $ffmpeg->getDurationInSeconds(),
-                'width'              => ($isVideo)
+                'path' => $storedFile,
+                'duration' => $ffmpeg->getDurationInSeconds(),
+                'width' => ($isVideo)
                     ? $ffmpeg->getVideoStream()->getDimensions()->getWidth()
                     : 0,
-                'height'             => ($isVideo)
+                'height' => ($isVideo)
                     ? $ffmpeg->getVideoStream()->getDimensions()->getHeight()
                     : 0,
-                'type'               => ($isVideo) ? Content::PRESENTER() : Content::AUDIO(),
+                'type' => ($isVideo) ? Content::PRESENTER() : Content::AUDIO(),
             ];
 
             $this->clip->addAsset($asset);

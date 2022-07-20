@@ -14,8 +14,8 @@ class LanguageFactory extends Factory
     public function definition()
     {
         return [
-            'code'      => 'de',
-            'name'      => 'Deutsch',
+            'code' => 'de',
+            'name' => 'Deutsch',
             'long_code' => 'de-DE',
             'order_int' => '1',
         ];

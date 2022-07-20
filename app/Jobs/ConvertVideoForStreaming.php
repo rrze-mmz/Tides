@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Jobs;
 
 use App\Models\Asset;
@@ -25,7 +24,7 @@ class ConvertVideoForStreaming implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @param Asset $asset
+     * @param  Asset  $asset
      */
     public function __construct(Asset $asset)
     {
@@ -49,7 +48,7 @@ class ConvertVideoForStreaming implements ShouldQueue
             ->addFormat($lowBitrateFormat)
             ->addFormat($midBitrateFormat)
             ->addFormat($highBitrateFormat)
-            ->save($this->asset->id . '.m3u8');
+            ->save($this->asset->id.'.m3u8');
 
         // update the database so we know the convertion is done!
         $this->asset->update([

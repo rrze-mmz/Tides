@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Models\Traits;
 
 use App\Models\Activity;
@@ -39,7 +38,7 @@ trait RecordsActivity
      */
     protected function activityDescription($description): string
     {
-        return "{$description} " . strtolower(class_basename($this));
+        return "{$description} ".strtolower(class_basename($this));
     }
 
     /**
@@ -60,13 +59,13 @@ trait RecordsActivity
         $user = (auth()->user()) ?? $this->owner;
 
         Activity::create([
-            'user_id'        => ($user?->id) ?? 0,
-            'content_type'   => lcfirst(class_basename(static::class)),
-            'object_id'      => $this->id,
+            'user_id' => ($user?->id) ?? 0,
+            'content_type' => lcfirst(class_basename(static::class)),
+            'object_id' => $this->id,
             'change_message' => $description,
-            'action_flag'    => 1,
-            'changes'        => $this->activityChanges(),
-            'user_real_name' => ($user?->getFullNameAttribute()) ?? "CRONJOB"
+            'action_flag' => 1,
+            'changes' => $this->activityChanges(),
+            'user_real_name' => ($user?->getFullNameAttribute()) ?? 'CRONJOB',
         ]);
     }
 
@@ -89,7 +88,7 @@ trait RecordsActivity
             ?
             [
                 'before' => Arr::except(array_diff($this->oldAttributes, $this->getAttributes()), ['updated_at']),
-                'after'  => Arr::except($this->getChanges(), ['updated_at'])
+                'after' => Arr::except($this->getChanges(), ['updated_at']),
             ]
             : [];
     }

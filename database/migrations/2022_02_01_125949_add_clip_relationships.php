@@ -34,7 +34,6 @@ class AddClipRelationships extends Migration
                 ->references('id')
                 ->on('types')
                 ->cascadeOnDelete();
-
         });
     }
 

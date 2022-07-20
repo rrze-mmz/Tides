@@ -22,7 +22,7 @@ class AclFactory extends Factory
     public function definition()
     {
         return [
-            'name'        => $this->faker->text(),
+            'name' => $this->faker->text(),
             'description' => $this->faker->sentence(),
         ];
     }

@@ -24,7 +24,7 @@ class SeriesMembershipAddUser extends Notification
     /**
      * Get the notification's delivery channels.
      *
-     * @param mixed $notifiable
+     * @param  mixed  $notifiable
      * @return array
      */
     public function via(mixed $notifiable): array
@@ -35,15 +35,15 @@ class SeriesMembershipAddUser extends Notification
     /**
      * Get the mail representation of the notification.
      *
-     * @param mixed $notifiable
+     * @param  mixed  $notifiable
      * @return MailMessage
      */
     public function toMail(mixed $notifiable): MailMessage
     {
         return (new MailMessage())
-            ->subject('You have been added to ' . $this->series->title . ' Series as moderator!')
-            ->line('Hi ' . $notifiable->getFullNameAttribute())
-            ->line('you have been added by ' . auth()->user()->getFullNameAttribute() . ' as Series moderator')
+            ->subject('You have been added to '.$this->series->title.' Series as moderator!')
+            ->line('Hi '.$notifiable->getFullNameAttribute())
+            ->line('you have been added by '.auth()->user()->getFullNameAttribute().' as Series moderator')
             ->action('Check you series edit page', route('series.edit', $this->series))
             ->line('Thanks!');
     }
@@ -51,7 +51,7 @@ class SeriesMembershipAddUser extends Notification
     /**
      * Get the array representation of the notification.
      *
-     * @param mixed $notifiable
+     * @param  mixed  $notifiable
      * @return array
      */
     public function toArray(mixed $notifiable): array

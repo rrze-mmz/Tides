@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Tests\Feature\Frontend;
 
 use Facades\Tests\Setup\ClipFactory;

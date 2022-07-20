@@ -20,6 +20,7 @@ class IngestOpencastTest extends TestCase
     use WorksWithOpencastClient;
 
     private OpencastService $opencastService;
+
     private Clip $clip;
 
     protected function setUp(): void

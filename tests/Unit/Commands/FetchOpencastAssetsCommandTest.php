@@ -5,15 +5,15 @@ namespace Tests\Unit\Commands;
 use App\Enums\OpencastWorkflowState;
 use App\Models\Series;
 use App\Services\OpencastService;
+use Facades\Tests\Setup\ClipFactory;
+use Facades\Tests\Setup\FileFactory;
+use Facades\Tests\Setup\SeriesFactory;
 use GuzzleHttp\Handler\MockHandler;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Facades\Tests\Setup\SeriesFactory;
 use Illuminate\Support\Facades\Storage;
-use Facades\Tests\Setup\ClipFactory;
 use Tests\Setup\WorksWithOpencastClient;
 use Tests\TestCase;
-use Facades\Tests\Setup\FileFactory;
 
 class FetchOpencastAssetsCommandTest extends TestCase
 {
@@ -22,6 +22,7 @@ class FetchOpencastAssetsCommandTest extends TestCase
     use WorksWithOpencastClient;
 
     private OpencastService $opencastService;
+
     private MockHandler $mockHandler;
 
     protected function setUp(): void

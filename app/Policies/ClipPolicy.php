@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Policies;
 
 use App\Models\Clip;
@@ -42,7 +41,7 @@ class ClipPolicy
      */
     public function edit(User $user, Clip $clip): bool
     {
-        return ($user->is($clip->owner) || ($user->isAdmin() || $user->isAssistant()));
+        return $user->is($clip->owner) || ($user->isAdmin() || $user->isAssistant());
     }
 
     /**
@@ -72,12 +71,12 @@ class ClipPolicy
      */
     public function viewComments(?User $user, Clip $clip): bool
     {
-        return (auth()->check() && $clip->allow_comments);
+        return auth()->check() && $clip->allow_comments;
     }
 
     public function viewVideo(User $user, Clip $clip): bool
     {
-        return ((auth()->check() && $clip->acls->pluck('id')->contains('1')) ||
-            ($user->is($clip->owner)));
+        return (auth()->check() && $clip->acls->pluck('id')->contains('1')) ||
+            ($user->is($clip->owner));
     }
 }

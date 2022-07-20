@@ -22,7 +22,7 @@ class AcademicDegreeFactory extends Factory
     public function definition()
     {
         return [
-            'title' => 'Dr. '
+            'title' => 'Dr. ',
         ];
     }
 }

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Tests\Feature\Backend;
 
 use App\Enums\OpencastWorkflowState;
@@ -130,7 +129,6 @@ class DashboardTest extends TestCase
         $this->signInRole('admin');
 
         $this->get(route('dashboard'))
-            ->assertSee(__('common.menu.opencast'))
             ->assertSee(trans_choice('common.menu.device', 2))
             ->assertSee(trans_choice('common.menu.collection', 2))
             ->assertSee(trans_choice('common.menu.user', 2));
@@ -141,7 +139,8 @@ class DashboardTest extends TestCase
     {
         $this->signInRole('superadmin');
 
-        $this->get(route('dashboard'))->assertSee('Opencast');
+        $this->get(route('dashboard'))
+            ->assertSee(trans_choice('common.menu.system', 2));
     }
 
     /** @test */
@@ -198,7 +197,10 @@ class DashboardTest extends TestCase
 
         app(OpencastService::class);
         $mockHandler = $this->swapOpencastClient();
-        $mockHandler->append($this->mockEventResponse($series, OpencastWorkflowState::RUNNING, 2));
+        $mockHandler->append(
+            $this->mockHealthResponse(),
+            $this->mockEventResponse($series, OpencastWorkflowState::RUNNING, 2)
+        );
 
         $this->signInRole('admin');
 

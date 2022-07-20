@@ -27,53 +27,53 @@ abstract class TestCase extends BaseTestCase
         ]);
 
         Acl::create([
-            'name'        => 'free',
+            'name' => 'free',
             'description' => 'Material is accessed via portal log in',
         ]);
         Acl::create([
-            'name'        => 'portal',
+            'name' => 'portal',
             'description' => 'Material is accessed via portal log in',
         ]);
 
         Acl::create([
-            'name'        => 'password',
+            'name' => 'password',
             'description' => 'Material is accessed via a password',
         ]);
-        
+
         Acl::create([
-            'name'        => 'lms',
+            'name' => 'lms',
             'description' => 'Material is accessed via LMS (moodle, Ilias, etc.) log in',
         ]);
 
         Semester::create([
-            'name'        => 'Sommersemester 2021',
-            'acronym'     => 'S21',
+            'name' => 'Sommersemester 2021',
+            'acronym' => 'S21',
             'short_title' => '2021',
-            'start_date'  => '2021-04-01 00:00:00',
-            'stop_date'   => '2022-09-30 23:59:59',
+            'start_date' => '2021-04-01 00:00:00',
+            'stop_date' => '2022-09-30 23:59:59',
         ]);
 
         Semester::create([
-            'name'        => 'Wintersemester 2021/2022',
-            'acronym'     => 'W21',
+            'name' => 'Wintersemester 2021/2022',
+            'acronym' => 'W21',
             'short_title' => '2021/2022',
-            'start_date'  => '2021-10-01 00:00:00',
-            'stop_date'   => '2022-03-31 23:59:59',
+            'start_date' => '2021-10-01 00:00:00',
+            'stop_date' => '2022-03-31 23:59:59',
         ]);
 
         Organization::create([
-            'org_id'             => 1,
-            'name'               => 'Tides organization unit',
-            'parent_org_id'      => 1,
-            'orgno'              => '0000000000',
-            'shortname'          => 'Main organization unit',
-            'staff'              => null,
-            'startdate'          => now(),
-            'enddate'            => '2999-12-31',
+            'org_id' => 1,
+            'name' => 'Tides organization unit',
+            'parent_org_id' => 1,
+            'orgno' => '0000000000',
+            'shortname' => 'Main organization unit',
+            'staff' => null,
+            'startdate' => now(),
+            'enddate' => '2999-12-31',
             'operationstartdate' => now(),
-            'operationenddate'   => '2999-12-31',
-            'created_at'         => now(),
-            'updated_at'         => null,
+            'operationenddate' => '2999-12-31',
+            'created_at' => now(),
+            'updated_at' => null,
         ]);
 
         Role::create([
@@ -98,7 +98,7 @@ abstract class TestCase extends BaseTestCase
     }
 
     /**
-     * @param User|null $user
+     * @param  User|null  $user
      * @return User
      */
     protected function signIn(User $user = null): User
@@ -111,7 +111,7 @@ abstract class TestCase extends BaseTestCase
     }
 
     /**
-     * @param string $role
+     * @param  string  $role
      * @return User
      */
     protected function signInRole(string $role = ''): User

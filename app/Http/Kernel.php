@@ -2,9 +2,7 @@
 
 namespace App\Http;
 
-use App\Http\Middleware\EnsureUserIsAdmin;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
-use Illuminate\Support\Facades\App;
 
 class Kernel extends HttpKernel
 {
@@ -65,7 +63,7 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'lms.token'=> \App\Http\Middleware\EnsureLMSTokenIsValid::class,
-        'user.admin' => \App\Http\Middleware\EnsureUserIsAdmin::class
+        'lms.token' => \App\Http\Middleware\EnsureLMSTokenIsValid::class,
+        'user.admin' => \App\Http\Middleware\EnsureUserIsAdmin::class,
     ];
 }

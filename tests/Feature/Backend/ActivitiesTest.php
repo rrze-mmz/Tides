@@ -38,7 +38,6 @@ class ActivitiesTest extends TestCase
         Activity::factory(3)->create();
         $this->signInRole('admin');
 
-
         $this->get(route('activities.index'))->assertOk();
     }
 }

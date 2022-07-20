@@ -9,7 +9,6 @@ use App\Models\Role;
 use App\Models\User;
 use Exception;
 use Illuminate\Contracts\View\View;
-use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
@@ -24,7 +23,7 @@ class UsersController extends Controller
     public function index(): View
     {
         return view('backend.users.index', [
-            'users' => User::paginate(10)
+            'users' => User::paginate(10),
         ]);
     }
 
@@ -47,7 +46,7 @@ class UsersController extends Controller
     {
         $validated = $request->validated();
         $secret = random_int(20, 30);
-        $validated['password'] = Hash::make((string)$secret);
+        $validated['password'] = Hash::make((string) $secret);
 
         $user = User::create($validated);
 
@@ -59,7 +58,7 @@ class UsersController extends Controller
     /**
      * Edit form for a user
      *
-     * @param User $user
+     * @param  User  $user
      * @return View
      */
     public function edit(User $user): View
@@ -70,8 +69,8 @@ class UsersController extends Controller
     /**
      * Updates a single user in database
      *
-     * @param User $user
-     * @param UpdateUserRequest $request
+     * @param  User  $user
+     * @param  UpdateUserRequest  $request
      * @return RedirectResponse
      */
     public function update(User $user, UpdateUserRequest $request): RedirectResponse
@@ -88,7 +87,7 @@ class UsersController extends Controller
     /**
      * Deletes a single user
      *
-     * @param User $user
+     * @param  User  $user
      * @return RedirectResponse
      */
     public function destroy(User $user): RedirectResponse

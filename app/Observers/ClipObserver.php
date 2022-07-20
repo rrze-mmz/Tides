@@ -14,17 +14,17 @@ class ClipObserver
     /**
      * Handle the Clip "created" event.
      *
-     * @param Clip $clip
+     * @param  Clip  $clip
      * @return void
      */
     public function created(Clip $clip)
     {
         $clip->refresh();
-        
-        $clip->folder_id = 'TIDES_ClipID_' . $clip->id;
+
+        $clip->folder_id = 'TIDES_ClipID_'.$clip->id;
         $clip->save();
 
-        session()->flash('flashMessage', $clip->title . ' ' . __FUNCTION__ . ' successfully');
+        session()->flash('flashMessage', $clip->title.' '.__FUNCTION__.' successfully');
 
         $this->elasticsearchService->createIndex($clip);
     }
@@ -32,12 +32,12 @@ class ClipObserver
     /**
      * Handle the Clip "updated" event.
      *
-     * @param Clip $clip
+     * @param  Clip  $clip
      * @return void
      */
     public function updated(Clip $clip)
     {
-        session()->flash('flashMessage', $clip->title . ' ' . __FUNCTION__ . ' successfully');
+        session()->flash('flashMessage', $clip->title.' '.__FUNCTION__.' successfully');
 
         $this->elasticsearchService->updateIndex($clip);
     }
@@ -45,12 +45,12 @@ class ClipObserver
     /**
      * Handle the Clip "deleted" event.
      *
-     * @param Clip $clip
+     * @param  Clip  $clip
      * @return void
      */
     public function deleted(Clip $clip)
     {
-        session()->flash('flashMessage', $clip->title . ' ' . __FUNCTION__ . ' successfully');
+        session()->flash('flashMessage', $clip->title.' '.__FUNCTION__.' successfully');
 
         $this->elasticsearchService->deleteIndex($clip);
     }
@@ -58,22 +58,22 @@ class ClipObserver
     /**
      * Handle the Clip "restored" event.
      *
-     * @param Clip $clip
+     * @param  Clip  $clip
      * @return void
      */
     public function restored(Clip $clip)
     {
-        session()->flash('flashMessage', $clip->title . ' ' . __FUNCTION__ . ' successfully');
+        session()->flash('flashMessage', $clip->title.' '.__FUNCTION__.' successfully');
     }
 
     /**
      * Handle the Clip "force deleted" event.
      *
-     * @param Clip $clip
+     * @param  Clip  $clip
      * @return void
      */
     public function forceDeleted(Clip $clip)
     {
-        session()->flash('flashMessage', $clip->title . ' ' . __FUNCTION__ . ' successfully');
+        session()->flash('flashMessage', $clip->title.' '.__FUNCTION__.' successfully');
     }
 }

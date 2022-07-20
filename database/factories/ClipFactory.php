@@ -29,22 +29,23 @@ class ClipFactory extends Factory
     public function definition(): array
     {
         static $episode = 0;
+
         return [
-            'title'           => $title = $this->faker->sentence(),
-            'description'     => $this->faker->paragraph(),
-            'recording_date'  => now(),
-            'slug'            => $title,
+            'title' => $title = $this->faker->sentence(),
+            'description' => $this->faker->paragraph(),
+            'recording_date' => now(),
+            'slug' => $title,
             'organization_id' => Organization::factory()->create()->org_id,
-            'language_id'     => Language::factory()->create()->id,
-            'context_id'      => Context::factory()->create()->id,
-            'format_id'       => Format::factory()->create()->id,
-            'type_id'         => Type::factory()->create()->id,
-            'owner_id'        => User::factory()->create()->id,
-            'semester_id'     => Semester::factory()->create()->id,
-            'posterImage'     => null,
-            'series_id'       => null,
-            'episode'         => $episode++,
-            'is_public'       => true,
+            'language_id' => Language::factory()->create()->id,
+            'context_id' => Context::factory()->create()->id,
+            'format_id' => Format::factory()->create()->id,
+            'type_id' => Type::factory()->create()->id,
+            'owner_id' => User::factory()->create()->id,
+            'semester_id' => Semester::factory()->create()->id,
+            'posterImage' => null,
+            'series_id' => null,
+            'episode' => $episode++,
+            'is_public' => true,
         ];
     }
 }

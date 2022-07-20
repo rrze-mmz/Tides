@@ -2,7 +2,6 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\Role;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Str;
@@ -14,9 +13,13 @@ class UserDataTable extends Component
     use WithPagination;
 
     public $admin = false;
+
     public $search;
+
     public $sortField;
+
     public $sortAsc = true;
+
     protected $queryString = ['search', 'admin', 'sortAsc'];
 
     /**
@@ -26,7 +29,7 @@ class UserDataTable extends Component
      */
     public function sortBy($field): void
     {
-        $this->sortAsc = !($this->sortField === $field) || !$this->sortAsc;
+        $this->sortAsc = ! ($this->sortField === $field) || ! $this->sortAsc;
 
         $this->sortField = $field;
     }
@@ -49,6 +52,7 @@ class UserDataTable extends Component
 
     /**
      * Render Livewire component
+     *
      * @return View
      */
     public function render(): View

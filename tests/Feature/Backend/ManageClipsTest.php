@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Tests\Feature\Backend;
 
 use App\Enums\Content;
@@ -23,7 +22,9 @@ class ManageClipsTest extends TestCase
     use WorksWithOpencastClient;
 
     private OpencastService $opencastService;
+
     private string $flashMessageName;
+
     private string $role = '';
 
     protected function setUp(): void
@@ -87,7 +88,7 @@ class ManageClipsTest extends TestCase
 
         Clip::factory(20)->create(['owner_id' => $this->signInRole($this->role)]);
 
-        $this->get(route('clips.index') . '?page=2')->assertDontSee('You have no series yet');
+        $this->get(route('clips.index').'?page=2')->assertDontSee('You have no series yet');
     }
 
     /** @test */
@@ -99,7 +100,7 @@ class ManageClipsTest extends TestCase
 
         $this->signInRole('admin');
 
-        $this->get(route('clips.index') . '?page=2')->assertDontSee('You have no series yet');
+        $this->get(route('clips.index').'?page=2')->assertDontSee('You have no series yet');
     }
 
     /** @test */
@@ -138,12 +139,12 @@ class ManageClipsTest extends TestCase
         $this->signInRole($this->role);
 
         $this->post(route('clips.store', Clip::factory()->raw([
-            'title'    => 'This is a test',
+            'title' => 'This is a test',
             'password' => '1234',
         ])))->assertSessionHasErrors('password');
 
         $this->followingRedirects()->post(route('clips.store', Clip::factory()->raw([
-            'title'    => 'This is a test',
+            'title' => 'This is a test',
             'password' => '1234qwER',
         ])))->assertOk();
     }
@@ -310,7 +311,7 @@ class ManageClipsTest extends TestCase
         $this->signInRole($this->role);
 
         $attributes = Clip::factory()->raw([
-            'tags' => ['php', 'example', 'oop']
+            'tags' => ['php', 'example', 'oop'],
         ]);
 
         $this->followingRedirects()->post(route('clips.store'), $attributes)->assertSee($attributes['tags']);
@@ -331,7 +332,7 @@ class ManageClipsTest extends TestCase
         $this->signInRole($this->role);
 
         $attributes = Clip::factory()->raw([
-            'presenters' => [$presenter1->id, $presenter2->id]
+            'presenters' => [$presenter1->id, $presenter2->id],
         ]);
 
         $this->post(route('clips.store'), $attributes);
@@ -349,7 +350,7 @@ class ManageClipsTest extends TestCase
         $this->signInRole($this->role);
 
         $attributes = Clip::factory()->raw([
-            'acls' => ['1', '2']
+            'acls' => ['1', '2'],
         ]);
 
         $this->post(route('clips.store'), $attributes);
@@ -367,17 +368,17 @@ class ManageClipsTest extends TestCase
         $clip->tags()->sync(Tag::factory()->create());
 
         $this->patch($clip->adminPath(), [
-            'episode'         => '1',
-            'title'           => 'changed',
-            'description'     => 'changed',
-            'recording_date'  => now(),
+            'episode' => '1',
+            'title' => 'changed',
+            'description' => 'changed',
+            'recording_date' => now(),
             'organization_id' => '1',
-            'language_id'     => '1',
-            'context_id'      => '1',
-            'format_id'       => '1',
-            'type_id'         => '1',
-            'tags'            => [],
-            'semester_id'     => '1',
+            'language_id' => '1',
+            'context_id' => '1',
+            'format_id' => '1',
+            'type_id' => '1',
+            'tags' => [],
+            'semester_id' => '1',
         ]);
 
         $this->assertEquals(0, $clip->tags()->count());
@@ -393,17 +394,17 @@ class ManageClipsTest extends TestCase
         $clip->tags()->sync(Tag::factory()->create());
 
         $this->patch($clip->adminPath(), [
-            'episode'         => '1',
-            'title'           => 'changed',
-            'description'     => 'changed',
-            'recording_date'  => now(),
+            'episode' => '1',
+            'title' => 'changed',
+            'description' => 'changed',
+            'recording_date' => now(),
             'organization_id' => '1',
-            'language_id'     => '1',
-            'context_id'      => '1',
-            'format_id'       => '1',
-            'type_id'         => '1',
-            'tags'            => [$tag->name, 'another tag'],
-            'semester_id'     => '1',
+            'language_id' => '1',
+            'context_id' => '1',
+            'format_id' => '1',
+            'type_id' => '1',
+            'tags' => [$tag->name, 'another tag'],
+            'semester_id' => '1',
         ]);
 
         $this->assertEquals(2, $clip->tags()->count());
@@ -415,15 +416,15 @@ class ManageClipsTest extends TestCase
         $this->signInRole($this->role);
 
         $attributes = [
-            'title'           => 'Clip title',
-            'description'     => $this->faker->sentence(500),
-            'recording_date'  => now()->toDateString(),
+            'title' => 'Clip title',
+            'description' => $this->faker->sentence(500),
+            'recording_date' => now()->toDateString(),
             'organization_id' => '1',
-            'language_id'     => '1',
-            'context_id'      => '1',
-            'format_id'       => '1',
-            'type_id'         => '1',
-            'semester_id'     => '1',
+            'language_id' => '1',
+            'context_id' => '1',
+            'format_id' => '1',
+            'type_id' => '1',
+            'semester_id' => '1',
         ];
 
         $this->post(route('clips.store'), $attributes);
@@ -441,26 +442,26 @@ class ManageClipsTest extends TestCase
         $this->get($clip->path())->assertSee($clip->title);
 
         $this->patch($clip->adminPath(), [
-            'episode'         => '1',
-            'title'           => 'changed',
-            'description'     => 'changed',
-            'recording_date'  => now(),
+            'episode' => '1',
+            'title' => 'changed',
+            'description' => 'changed',
+            'recording_date' => now(),
             'organization_id' => '1',
-            'language_id'     => '1',
-            'context_id'      => '1',
-            'format_id'       => '1',
-            'type_id'         => '1',
-            'semester_id'     => '1',
+            'language_id' => '1',
+            'context_id' => '1',
+            'format_id' => '1',
+            'type_id' => '1',
+            'semester_id' => '1',
         ]);
 
         $clip = $clip->refresh();
 
         $this->assertDatabaseHas('clips', [
-            'episode'         => '1',
-            'title'           => 'changed',
-            'description'     => 'changed',
+            'episode' => '1',
+            'title' => 'changed',
+            'description' => 'changed',
             'organization_id' => '1',
-            'semester_id'     => '1',
+            'semester_id' => '1',
         ]);
 
         $this->get($clip->adminPath())->assertSee('changed');
@@ -474,16 +475,16 @@ class ManageClipsTest extends TestCase
         $this->signInRole($this->role);
 
         $attributes = [
-            'episode'         => '1',
-            'title'           => 'changed',
-            'description'     => 'changed',
-            'recording_date'  => now(),
+            'episode' => '1',
+            'title' => 'changed',
+            'description' => 'changed',
+            'recording_date' => now(),
             'organization_id' => '1',
-            'language_id'     => '1',
-            'context_id'      => '1',
-            'format_id'       => '1',
-            'type_id'         => '1',
-            'semester_id'     => '1',
+            'language_id' => '1',
+            'context_id' => '1',
+            'format_id' => '1',
+            'type_id' => '1',
+            'semester_id' => '1',
         ];
 
         $this->patch($clip->adminPath(), $attributes)->assertForbidden();
@@ -499,16 +500,16 @@ class ManageClipsTest extends TestCase
         $this->signInRole('admin');
 
         $attributes = [
-            'episode'         => '1',
-            'title'           => 'changed',
-            'description'     => 'changed',
-            'recording_date'  => now(),
+            'episode' => '1',
+            'title' => 'changed',
+            'description' => 'changed',
+            'recording_date' => now(),
             'organization_id' => '1',
-            'language_id'     => '1',
-            'context_id'      => '1',
-            'format_id'       => '1',
-            'type_id'         => '1',
-            'semester_id'     => '1',
+            'language_id' => '1',
+            'context_id' => '1',
+            'format_id' => '1',
+            'type_id' => '1',
+            'semester_id' => '1',
         ];
 
         $this->followingRedirects()->patch($clip->adminPath(), $attributes)->assertOk();
@@ -522,15 +523,15 @@ class ManageClipsTest extends TestCase
         $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
 
         $this->patch($clip->adminPath(), [
-            'episode'         => '1',
-            'title'           => 'Title changed',
-            'recording_date'  => now(),
+            'episode' => '1',
+            'title' => 'Title changed',
+            'recording_date' => now(),
             'organization_id' => '1',
-            'language_id'     => '1',
-            'context_id'      => '1',
-            'format_id'       => '1',
-            'type_id'         => '1',
-            'semester_id'     => '1'
+            'language_id' => '1',
+            'context_id' => '1',
+            'format_id' => '1',
+            'type_id' => '1',
+            'semester_id' => '1',
         ]);
 
         $clip->refresh();
@@ -544,16 +545,16 @@ class ManageClipsTest extends TestCase
         $this->signInRole($this->role);
 
         $this->post(route('clips.store'), [
-            'episode'         => '1',
-            'title'           => 'Test clip',
-            'recording_date'  => now(),
-            'description'     => 'test',
+            'episode' => '1',
+            'title' => 'Test clip',
+            'recording_date' => now(),
+            'description' => 'test',
             'organization_id' => '1',
-            'language_id'     => '1',
-            'context_id'      => '1',
-            'format_id'       => '1',
-            'type_id'         => '1',
-            'semester_id'     => '1'
+            'language_id' => '1',
+            'context_id' => '1',
+            'format_id' => '1',
+            'type_id' => '1',
+            'semester_id' => '1',
         ]);
 
         $clip = Clip::find(1);
@@ -623,8 +624,8 @@ class ManageClipsTest extends TestCase
         $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
 
         $this->patch($clip->adminPath(), [
-            'title'           => 'changed',
-            'description'     => 'changed',
+            'title' => 'changed',
+            'description' => 'changed',
             'organization_id' => '1',
         ])->assertSessionHas($this->flashMessageName);
     }
@@ -679,16 +680,16 @@ class ManageClipsTest extends TestCase
         $this->get($clip->path())->assertDontSee('Comments');
 
         $this->patch(route('clips.update', $clip), [
-            'title'           => $clip->title,
-            'episode'         => $clip->episode,
-            'recording_date'  => now(),
+            'title' => $clip->title,
+            'episode' => $clip->episode,
+            'recording_date' => now(),
             'organization_id' => '1',
-            'language_id'     => '1',
-            'context_id'      => '1',
-            'format_id'       => '1',
-            'type_id'         => '1',
-            'semester_id'     => '1',
-            'allow_comments'  => 'on'
+            'language_id' => '1',
+            'context_id' => '1',
+            'format_id' => '1',
+            'type_id' => '1',
+            'semester_id' => '1',
+            'allow_comments' => 'on',
         ]);
 
         $this->get($clip->path())->assertSee('Comments');
@@ -739,7 +740,6 @@ class ManageClipsTest extends TestCase
 
         $previousClip = Clip::find(3);
 
-
         $this->get($clip->adminPath())
             ->assertSee('Previous')
             ->assertDontSee('Next')
@@ -760,13 +760,13 @@ class ManageClipsTest extends TestCase
         $clip = ClipFactory::withAssets(2)->ownedBy($this->signInRole($this->role))->create();
 
         $clip->addAsset([
-            'disk'               => 'videos',
+            'disk' => 'videos',
             'original_file_name' => 'camera.smil',
-            'type'               => Content::SMIL(),
-            'path'               => '/videos/camera.smil',
-            'duration'           => '0',
-            'width'              => '0',
-            'height'             => '0',
+            'type' => Content::SMIL(),
+            'path' => '/videos/camera.smil',
+            'duration' => '0',
+            'width' => '0',
+            'height' => '0',
         ]);
 
         $this->get(route('clips.edit', $clip))->assertSee('camera.smil');
@@ -778,13 +778,13 @@ class ManageClipsTest extends TestCase
         $clip = ClipFactory::withAssets(2)->ownedBy($this->signInRole($this->role))->create();
 
         $clip->addAsset([
-            'disk'               => 'videos',
+            'disk' => 'videos',
             'original_file_name' => 'audio.mp3',
-            'type'               => Content::AUDIO(),
-            'path'               => '/videos/' . $clip->folder_id . '/audio.mp3',
-            'duration'           => '120',
-            'width'              => '0',
-            'height'             => '0',
+            'type' => Content::AUDIO(),
+            'path' => '/videos/'.$clip->folder_id.'/audio.mp3',
+            'duration' => '120',
+            'width' => '0',
+            'height' => '0',
         ]);
 
         $this->get(route('clips.edit', $clip))->assertSee('audio.mp3');

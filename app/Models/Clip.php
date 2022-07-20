@@ -1,10 +1,10 @@
 <?php
 
-
 namespace App\Models;
 
 use App\Enums\Content;
 use App\Events\ClipDeleted;
+use App\Models\Collection as TCollection;
 use App\Models\Traits\Accessable;
 use App\Models\Traits\Documentable;
 use App\Models\Traits\Presentable;
@@ -19,7 +19,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Http\File;
 use Illuminate\Support\Collection;
-use App\Models\Collection as TCollection;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -37,16 +36,19 @@ class Clip extends BaseModel
 
     //search columns for searchable trait
     protected array $searchable = ['title', 'description'];
+
     protected $dispatchesEvents = ['deleted' => ClipDeleted::class];
+
     protected $attributes = ['episode' => '1'];
+
     protected $casts = ['recording_date' => 'datetime:Y-m-d'];
 
     protected function description(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => html_entity_decode(
+            get: fn ($value) => html_entity_decode(
                 htmlspecialchars_decode(
-                    html_entity_decode(html_entity_decode($value, ENT_NOQUOTES, "UTF-8"))
+                    html_entity_decode(html_entity_decode($value, ENT_NOQUOTES, 'UTF-8'))
                 )
             )
         );
@@ -207,6 +209,7 @@ class Clip extends BaseModel
 
     /**
      * A clip has one type
+     *
      * @return HasOne
      */
     public function type(): HasOne
@@ -277,9 +280,9 @@ class Clip extends BaseModel
             'previousClip' => $clipsCollection->filter(function ($value, $key) {
                 return (int) $value->episode == (int) $this->episode - 1;
             })->first(),
-            'nextClip'     => $clipsCollection->filter(function ($value, $key) {
+            'nextClip' => $clipsCollection->filter(function ($value, $key) {
                 return (int) $value->episode == (int) $this->episode + 1;
-            })->first()
+            })->first(),
         ]);
     }
 

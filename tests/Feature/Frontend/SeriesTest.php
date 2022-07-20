@@ -145,6 +145,6 @@ class SeriesTest extends TestCase
         $latestClip->save();
 
         $this->get(route('frontend.series.show', $series))
-            ->assertSee($series->clips()->first()->semester->name . ', ' . $series->latestClip->semester->name);
+            ->assertSee($series->clips()->first()->semester->name.', '.$series->latestClip->semester->name);
     }
 }

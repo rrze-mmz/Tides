@@ -2,13 +2,11 @@
 
 namespace Tests\Unit\Commands;
 
-use App\Models\Asset;
 use App\Models\Clip;
+use Facades\Tests\Setup\SeriesFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Facades\Tests\Setup\ClipFactory;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Facades\Tests\Setup\SeriesFactory;
 use Tests\TestCase;
 
 class ReorderPosterImagesTest extends TestCase

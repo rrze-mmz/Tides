@@ -28,10 +28,10 @@ class SeriesMembershipRequest extends FormRequest
     {
         return [
             'userID' => ['required', 'integer', Rule::exists('users', 'id'), function ($attibute, $id, $fail) {
-                if (!User::find($id)->hasRole('moderator')) {
+                if (! User::find($id)->hasRole('moderator')) {
                     $fail('The given userID does not have a moderator role');
                 }
-            }]
+            }],
         ];
     }
 
@@ -41,7 +41,7 @@ class SeriesMembershipRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'id.exists' => 'The user you are inviting must have a tides account'
+            'id.exists' => 'The user you are inviting must have a tides account',
         ];
     }
 }

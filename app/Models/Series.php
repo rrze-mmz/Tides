@@ -5,10 +5,10 @@ namespace App\Models;
 use App\Events\SeriesDeleted;
 use App\Models\Traits\Accessable;
 use App\Models\Traits\Documentable;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use App\Models\Traits\Presentable;
 use App\Models\Traits\RecordsActivity;
 use App\Models\Traits\Slugable;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -32,9 +32,9 @@ class Series extends BaseModel
     protected function description(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => html_entity_decode(
+            get: fn ($value) => html_entity_decode(
                 htmlspecialchars_decode(
-                    html_entity_decode(html_entity_decode($value, ENT_NOQUOTES, "UTF-8"))
+                    html_entity_decode(html_entity_decode($value, ENT_NOQUOTES, 'UTF-8'))
                 )
             )
         );
@@ -49,7 +49,7 @@ class Series extends BaseModel
      */
     public function resolveRouteBinding($value, $field = null): ?Model
     {
-        return $this->where('slug', $value)->orWhere('id', (int)$value)->firstOrFail();
+        return $this->where('slug', $value)->orWhere('id', (int) $value)->firstOrFail();
     }
 
     /**
@@ -113,29 +113,32 @@ class Series extends BaseModel
     /**
      * Add a user to series
      *
-     * @param User $moderatorUser
+     * @param  User  $moderatorUser
      * @return User
      */
     public function addMember(User $moderatorUser): User
     {
         $this->members()->attach($moderatorUser);
+
         return $moderatorUser;
     }
 
     /**
      * Remove a user from series
      *
-     * @param User $moderatorUser
+     * @param  User  $moderatorUser
      * @return User
      */
     public function removeMember(User $moderatorUser): User
     {
         $this->members()->detach($moderatorUser);
+
         return $moderatorUser;
     }
 
     /**
      * A series has one organization unit
+     *
      * @return HasOne
      */
     public function organization(): HasOne
@@ -155,6 +158,7 @@ class Series extends BaseModel
 
     /**
      * Fetch the latest clip from a series based on episode
+     *
      * @return HasOne
      */
     public function latestClip(): HasOne
@@ -165,7 +169,7 @@ class Series extends BaseModel
     /**
      * Add a clip on a series
      *
-     * @param array $validated
+     * @param  array  $validated
      * @return Clip
      */
     public function addClip(array $validated = []): Clip
@@ -182,7 +186,7 @@ class Series extends BaseModel
     /**
      * Reorder Series clips based on a collection <id, episode>
      *
-     * @param Collection $episodes
+     * @param  Collection  $episodes
      * @return $this
      */
     public function reorderClips(Collection $episodes): static
@@ -199,11 +203,11 @@ class Series extends BaseModel
     /**
      * Updates opencast series id in series table
      *
-     * @param ResponseInterface $response
+     * @param  ResponseInterface  $response
      */
     public function updateOpencastSeriesId(ResponseInterface $response): void
     {
-        if (!empty($response->getHeaders())) {
+        if (! empty($response->getHeaders())) {
             $this->opencast_series_id = Str::afterLast($response->getHeaders()['Location'][0], 'api/series/');
 
             $this->update();
@@ -255,7 +259,7 @@ class Series extends BaseModel
     }
 
     /**
-     * @param Chapter|null $chapter
+     * @param  Chapter|null  $chapter
      * @return mixed
      */
     public function clipsWithoutChapter(Chapter $chapter = null): mixed

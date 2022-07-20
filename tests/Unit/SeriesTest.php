@@ -33,19 +33,19 @@ class SeriesTest extends TestCase
     /** @test */
     public function it_has_a_path(): void
     {
-        $this->assertEquals('/series/' . $this->series->slug, $this->series->path());
+        $this->assertEquals('/series/'.$this->series->slug, $this->series->path());
     }
 
     /** @test */
     public function it_has_an_admin_path(): void
     {
-        $this->assertEquals('/admin/series/' . $this->series->slug, $this->series->adminPath());
+        $this->assertEquals('/admin/series/'.$this->series->slug, $this->series->adminPath());
     }
 
     /** @test */
     public function it_has_a_slug_route(): void
     {
-        $this->assertEquals('/series/' . Str::slug($this->series->title), $this->series->path());
+        $this->assertEquals('/series/'.Str::slug($this->series->title), $this->series->path());
     }
 
     /** @test */
@@ -118,9 +118,9 @@ class SeriesTest extends TestCase
         $this->signIn();
 
         $this->assertInstanceOf(Clip::class, $this->series->addClip([
-            'title'       => 'a clip',
-            'slug'        => 'a-clip',
-            'tags'        => [],
+            'title' => 'a clip',
+            'slug' => 'a-clip',
+            'tags' => [],
             'description' => 'clip description',
             'semester_id' => '1',
         ]));
@@ -182,7 +182,7 @@ class SeriesTest extends TestCase
     /** @test */
     public function it_resolves_also_id_in_route(): void
     {
-        $this->get('series/' . $this->series->id)->assertStatus(403);
+        $this->get('series/'.$this->series->id)->assertStatus(403);
         $this->get(route('frontend.series.show', $this->series->id))->assertStatus(403);
         $this->get('/series/535')->assertStatus(404);
     }

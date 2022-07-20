@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Tests\Feature\Frontend;
 
 use App\Models\Asset;
@@ -23,7 +22,9 @@ class SearchTest extends TestCase
     use WorksWithElasticsearchClient;
 
     protected Model $clip;
+
     private ElasticsearchService $elasticsearchService;
+
     private MockHandler $mockHandler;
 
     /*
@@ -35,9 +36,9 @@ class SearchTest extends TestCase
         parent::setUp();
 
         $this->clip = Clip::factory()->create([
-            'title'       => 'Lorem ipsum for testing  the search function',
+            'title' => 'Lorem ipsum for testing  the search function',
             'description' => 'Dolor sit amet for testing the search function',
-            'owner_id'    => User::factory()->create(['first_name' => 'John', 'last_name' => 'Doe'])
+            'owner_id' => User::factory()->create(['first_name' => 'John', 'last_name' => 'Doe']),
         ]);
 
         Asset::factory()->create(['clip_id' => $this->clip]);
@@ -48,7 +49,7 @@ class SearchTest extends TestCase
 
     protected function searchFor($term): TestResponse
     {
-        return $this::get(route('search') . '?term=' . $term);
+        return $this::get(route('search').'?term='.$term);
     }
 
     /** @test */
@@ -127,9 +128,9 @@ class SearchTest extends TestCase
         $this->mockHandler->append($this->mockClusterNotAvailable());
 
         $secondClip = Clip::factory()->create([
-            'title'       => 'Lorem ipsum for testing  the search function',
+            'title' => 'Lorem ipsum for testing  the search function',
             'description' => 'Dolor sit amet for testing the search function',
-            'owner_id'    => User::factory()->create(['first_name' => 'Bob', 'last_name' => 'Doe'])
+            'owner_id' => User::factory()->create(['first_name' => 'Bob', 'last_name' => 'Doe']),
         ]);
 
         Asset::factory()->create(['clip_id' => $secondClip]);

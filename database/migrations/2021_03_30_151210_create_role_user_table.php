@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateRoleUserTable extends Migration
 {
-
     /**
      * Run the migrations.
      *

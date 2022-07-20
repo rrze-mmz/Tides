@@ -15,6 +15,7 @@ class InsertSmilAssets extends Command
      * @var string
      */
     protected $signature = 'smil:insert';
+
     /**
      * The console command description.
      *
@@ -27,6 +28,7 @@ class InsertSmilAssets extends Command
      *
      * @param  WowzaService  $wowzaService
      * @return int
+     *
      * @throws DOMException
      */
     public function handle(WowzaService $wowzaService): int
@@ -36,7 +38,7 @@ class InsertSmilAssets extends Command
 
         $bar->start();
 
-        Clip::lazy()->each(function ($clip) use ($bar, $wowzaService) {
+        Clip::lazy()->each(function ($clip) use ($wowzaService) {
             $wowzaService->createSmilFile($clip);
 
             $this->info('Finish clip ID '.$clip->id);
@@ -46,6 +48,7 @@ class InsertSmilAssets extends Command
         $bar->finish();
 
         $this->info('All smils generated!');
+
         return Command::SUCCESS;
     }
 }

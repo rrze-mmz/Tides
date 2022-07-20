@@ -26,9 +26,9 @@ class UpdateUserRequest extends FormRequest
     {
         return [
             'first_name' => ['alpha_dash', 'min:2', 'max:30'],
-            'last_name'  => ['string', 'min:2', 'max:100'],
-            'email'      => [Rule::unique('users', 'email')->ignore($this->user->id)],
-            'role_id'    => ['integer'],
+            'last_name' => ['string', 'min:2', 'max:100'],
+            'email' => [Rule::unique('users', 'email')->ignore($this->user->id)],
+            'role_id' => ['integer'],
         ];
     }
 }

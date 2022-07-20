@@ -15,6 +15,7 @@ class ElasticsearchRebuildIndexes extends Command
      * @var string
      */
     protected $signature = 'elasticsearch:rebuild-indexes {model : The model index}';
+
     /**
      * The console command description.
      *
@@ -35,18 +36,20 @@ class ElasticsearchRebuildIndexes extends Command
     /**
      * Execute the console command.
      *
-     * @param ElasticsearchService $elasticsearchService
+     * @param  ElasticsearchService  $elasticsearchService
      * @return int
+     *
      * @throws GuzzleException
      */
     public function handle(ElasticsearchService $elasticsearchService): int
     {
         $modelName = Str::singular($this->argument('model'));
 
-        $modelClass = 'App\\Models\\' . $modelName;
+        $modelClass = 'App\\Models\\'.$modelName;
 
-        if (!class_exists($modelClass)) {
+        if (! class_exists($modelClass)) {
             $this->error('Model doesn\'t exists');
+
             return Command::FAILURE;
         }
 
@@ -54,13 +57,13 @@ class ElasticsearchRebuildIndexes extends Command
 
         $elasticsearchService->deleteIndexes(Str::plural($this->argument('model')));
 
-        $this->info($modelName . ' Indexes deleted successfully');
+        $this->info($modelName.' Indexes deleted successfully');
 
         $modelCollection->each(function ($series) use ($elasticsearchService) {
             $elasticsearchService->createIndex($series);
         });
 
-        $this->info($modelCollection->count() . ' ' . Str::plural($modelName) . ' Indexes created successfully');
+        $this->info($modelCollection->count().' '.Str::plural($modelName).' Indexes created successfully');
 
         return Command::SUCCESS;
     }

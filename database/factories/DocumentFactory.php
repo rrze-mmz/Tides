@@ -17,7 +17,7 @@ class DocumentFactory extends Factory
     public function definition()
     {
         return [
-            'name'      => 'testingDocument.pdf',
+            'name' => 'testingDocument.pdf',
             'save_path' => 'series_1/testingDocument.pdf',
         ];
     }

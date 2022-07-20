@@ -4,7 +4,6 @@ namespace App\Models\Traits;
 
 use App\Models\Document;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
-use PhpParser\Comment\Doc;
 
 trait Documentable
 {
@@ -19,7 +18,7 @@ trait Documentable
     /**
      * Assigns a document to a give type
      *
-     * @param Document $document
+     * @param  Document  $document
      * @return void
      */
     public function addDocument(Document $document): void

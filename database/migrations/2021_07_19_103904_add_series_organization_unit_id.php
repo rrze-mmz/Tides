@@ -13,7 +13,7 @@ class AddSeriesOrganizationUnitId extends Migration
      */
     public function up()
     {
-        Schema::table('series', function(Blueprint $table){
+        Schema::table('series', function (Blueprint $table) {
             $table->foreignId('organization_id')
                 ->default(1)
                 ->references('org_id')

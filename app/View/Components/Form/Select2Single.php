@@ -22,9 +22,9 @@ class Select2Single extends Component
      * @return void
      */
     public function __construct(
-        public ?string $model = null,
-        public string  $label,
-        public string  $fieldName,
+        public ?string $model,
+        public string $label,
+        public string $fieldName,
         public $selectClass,
         public $selectedItem
     ) {
@@ -56,14 +56,14 @@ class Select2Single extends Component
                     ->where('org_id', '=', $this->selectedItem)
                     ->get(),//make an api call. Therefore display only the selected option
                 'default' => []
-            }
+            },
         ]);
     }
 
     /**
      * Determine if the given option is the currently selected option.
      *
-     * @param string $option
+     * @param  string  $option
      * @return bool
      */
     public function isSelected($option): bool

@@ -15,7 +15,7 @@ class Select2Multiple extends Component
      * @return void
      */
     public function __construct(
-        public ?Model $model = null,
+        public ?Model $model,
         public string $label,
         public string $fieldName,
         public $selectClass,

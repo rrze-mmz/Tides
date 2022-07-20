@@ -15,6 +15,7 @@ class ReorderPosterImages extends Command
      * @var string
      */
     protected $signature = 'images:reorder';
+
     /**
      * The console command description.
      *
@@ -64,6 +65,7 @@ class ReorderPosterImages extends Command
         $bar->finish();
 
         $this->info('All files copied!');
+
         return Command::SUCCESS;
     }
 }

@@ -1,22 +1,14 @@
 <?php
 
-
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UploadAssetRequest;
-use App\Jobs\CreateWowzaSmilFile;
-use App\Jobs\SendEmail;
-use App\Jobs\TransferAssetsJob;
-use App\Jobs\TransferOpencastAssets;
-use App\Mail\AssetsTransferred;
 use App\Models\Clip;
 use App\Services\OpencastService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Bus;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 
 class AssetsTransferController extends Controller
@@ -26,8 +18,8 @@ class AssetsTransferController extends Controller
     /**
      * Upload a single transcoded file from clip edit page
      *
-     * @param Clip $clip
-     * @param UploadAssetRequest $request
+     * @param  Clip  $clip
+     * @param  UploadAssetRequest  $request
      * @return RedirectResponse
      */
     public function transferSingleAsset(Clip $clip, UploadAssetRequest $request): RedirectResponse
@@ -46,28 +38,28 @@ class AssetsTransferController extends Controller
     /**
      * List all available files inside the dropzone folder
      *
-     * @param Clip $clip
+     * @param  Clip  $clip
      * @return View
      */
     public function listDropzoneFiles(Clip $clip): View
     {
         return view('backend.clips.dropzone.listFiles', [
-            'clip'  => $clip,
-            'files' => fetchDropZoneFiles()
+            'clip' => $clip,
+            'files' => fetchDropZoneFiles(),
         ]);
     }
 
     /**
      * Transfer files from dropzone to clip file path
      *
-     * @param Clip $clip
-     * @param Request $request
+     * @param  Clip  $clip
+     * @param  Request  $request
      * @return RedirectResponse
      */
     public function transferDropzoneFiles(Clip $clip, Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'files'   => 'required|array',
+            'files' => 'required|array',
             'files.*' => 'alpha_num',
         ]);
 
@@ -79,8 +71,8 @@ class AssetsTransferController extends Controller
     /**
      * Lists all opencast processed events
      *
-     * @param OpencastService $opencastService
-     * @param Clip $clip
+     * @param  OpencastService  $opencastService
+     * @param  Clip  $clip
      * @return View
      */
     public function listOpencastEvents(OpencastService $opencastService, Clip $clip): View
@@ -88,23 +80,24 @@ class AssetsTransferController extends Controller
         $events = $opencastService->getProcessedEventsBySeriesID($clip->series->opencast_series_id);
 
         return view('backend.clips.opencast.listEvents', [
-            'clip'   => $clip,
+            'clip' => $clip,
             'events' => $events->map(function ($event) {
                 $event['start'] = Carbon::parse($event['start'])->addHours(2)->format('Y-m-d H:i');
+
                 return $event;
-            })
+            }),
         ]);
     }
 
     /**
-     * @param Clip $clip
-     * @param Request $request
-     * @param OpencastService $opencastService
+     * @param  Clip  $clip
+     * @param  Request  $request
+     * @param  OpencastService  $opencastService
      * @return RedirectResponse
      */
     public function transferOpencastFiles(
-        Clip            $clip,
-        Request         $request,
+        Clip $clip,
+        Request $request,
         OpencastService $opencastService
     ): RedirectResponse {
         $validated = $request->validate([

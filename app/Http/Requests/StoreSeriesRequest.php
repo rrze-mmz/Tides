@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
 
@@ -12,10 +11,9 @@ class StoreSeriesRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            'slug'       => Str::slug($this->title),
-            'is_public'  => $this->is_public === 'on',
-            'presenters' =>
-                $this->presenters = $this->presenters ?? [], //set empty array if select2 presenters is empty
+            'slug' => Str::slug($this->title),
+            'is_public' => $this->is_public === 'on',
+            'presenters' => $this->presenters = $this->presenters ?? [], //set empty array if select2 presenters is empty
         ]);
     }
 
@@ -37,14 +35,14 @@ class StoreSeriesRequest extends FormRequest
     public function rules()
     {
         return [
-            'title'           => ['required'],
-            'description'     => ['string', 'nullable'],
+            'title' => ['required'],
+            'description' => ['string', 'nullable'],
             'organization_id' => ['required', 'integer'],
-            'presenters'      => ['array'],
-            'presenters.*'    => ['integer', 'nullable'],
-            'slug'            => ['required'],
-            'password'        => ['nullable', Password::min(8)->mixedCase()],
-            'is_public'       => ['boolean'],
+            'presenters' => ['array'],
+            'presenters.*' => ['integer', 'nullable'],
+            'slug' => ['required'],
+            'password' => ['nullable', Password::min(8)->mixedCase()],
+            'is_public' => ['boolean'],
         ];
     }
 }

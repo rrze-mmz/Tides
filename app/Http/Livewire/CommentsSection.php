@@ -14,13 +14,18 @@ class CommentsSection extends Component
     use AuthorizesRequests;
 
     public Clip $clip;
+
     public $content;
+
     public $messageText;
+
     public $messageType;
+
     public $comments;
+
     protected array $rules = [
         'content' => 'required|min:3',
-        'clip'    => 'required'
+        'clip' => 'required',
     ];
 
     /**
@@ -33,7 +38,8 @@ class CommentsSection extends Component
 
     /**
      * Mount Livewire component
-     * @param Clip $clip
+     *
+     * @param  Clip  $clip
      */
     public function mount(Clip $clip): void
     {
@@ -54,9 +60,9 @@ class CommentsSection extends Component
         $this->validate();
 
         Comment::create([
-            'clip_id'  => $this->clip->id,
-            'content'  => $this->content,
-            'owner_id' => auth()->user()->id
+            'clip_id' => $this->clip->id,
+            'content' => $this->content,
+            'owner_id' => auth()->user()->id,
         ]);
 
         $this->content = '';
@@ -71,7 +77,8 @@ class CommentsSection extends Component
     /**
      * Delete a single comment
      *
-     * @param Comment $comment
+     * @param  Comment  $comment
+     *
      * @throws AuthorizationException
      */
     public function deleteComment(Comment $comment): void
@@ -89,6 +96,7 @@ class CommentsSection extends Component
 
     /**
      * Render Livewire component
+     *
      * @return View
      */
     public function render(): View

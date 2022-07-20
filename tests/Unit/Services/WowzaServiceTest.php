@@ -19,8 +19,11 @@ class WowzaServiceTest extends TestCase
     use WorksWithWowzaClient;
 
     private WowzaService $wowzaService;
+
     private MockHandler $mockHandler;
+
     private Asset $asset;
+
     private Clip $clip;
 
     protected function setUp(): void
@@ -40,19 +43,19 @@ class WowzaServiceTest extends TestCase
         Storage::fake('videos');
 
         $this->clip->addAsset([
-            'disk'               => 'videos',
+            'disk' => 'videos',
             'original_file_name' => 'test.mp4',
-            'path'               => '/2021/01/01/TEST/',
-            'duration'           => 300,
-            'width'              => 1920,
-            'height'             => 1080,
-            'type'               => Content::PRESENTER(),
+            'path' => '/2021/01/01/TEST/',
+            'duration' => 300,
+            'width' => 1920,
+            'height' => 1080,
+            'type' => Content::PRESENTER(),
         ]);
 
         $this->wowzaService->createSmilFile($this->clip);
 
-        Storage::disk('videos')->assertExists(getClipStoragePath($this->clip) . '/presenter.smil');
-        Storage::disk('videos')->assertMissing(getClipStoragePath($this->clip) . '/composite.smil');
+        Storage::disk('videos')->assertExists(getClipStoragePath($this->clip).'/presenter.smil');
+        Storage::disk('videos')->assertMissing(getClipStoragePath($this->clip).'/composite.smil');
 
         $this->assertDatabaseHas('assets', ['type' => Content::SMIL(), 'original_file_name' => 'presenter.smil']);
     }
@@ -63,22 +66,22 @@ class WowzaServiceTest extends TestCase
         Storage::fake('videos');
 
         $this->clip->addAsset([
-            'disk'               => 'videos',
+            'disk' => 'videos',
             'original_file_name' => 'presentation.mp4',
-            'path'               => '/2021/01/01/TEST/',
-            'duration'           => 300,
-            'width'              => 1920,
-            'height'             => 1080,
-            'type'               => Content::PRESENTATION(),
+            'path' => '/2021/01/01/TEST/',
+            'duration' => 300,
+            'width' => 1920,
+            'height' => 1080,
+            'type' => Content::PRESENTATION(),
         ]);
 
         $this->wowzaService->createSmilFile($this->clip);
 
-        Storage::disk('videos')->assertExists(getClipStoragePath($this->clip) . '/presentation.smil');
+        Storage::disk('videos')->assertExists(getClipStoragePath($this->clip).'/presentation.smil');
 
         $this->assertDatabaseHas('assets', [
-            'type'               => Content::SMIL(),
-            'original_file_name' => 'presentation.smil'
+            'type' => Content::SMIL(),
+            'original_file_name' => 'presentation.smil',
         ]);
     }
 
@@ -88,22 +91,22 @@ class WowzaServiceTest extends TestCase
         Storage::fake('videos');
 
         $this->clip->addAsset([
-            'disk'               => 'videos',
+            'disk' => 'videos',
             'original_file_name' => 'composite.mp4',
-            'path'               => '/2021/01/01/TEST/',
-            'duration'           => 300,
-            'width'              => 1920,
-            'height'             => 1080,
-            'type'               => Content::COMPOSITE(),
+            'path' => '/2021/01/01/TEST/',
+            'duration' => 300,
+            'width' => 1920,
+            'height' => 1080,
+            'type' => Content::COMPOSITE(),
         ]);
 
         $this->wowzaService->createSmilFile($this->clip);
 
-        Storage::disk('videos')->assertExists(getClipStoragePath($this->clip) . '/composite.smil');
+        Storage::disk('videos')->assertExists(getClipStoragePath($this->clip).'/composite.smil');
 
         $this->assertDatabaseHas('assets', [
-            'type'               => Content::SMIL(),
-            'original_file_name' => 'composite.smil'
+            'type' => Content::SMIL(),
+            'original_file_name' => 'composite.smil',
         ]);
     }
 
@@ -121,52 +124,52 @@ class WowzaServiceTest extends TestCase
     public function it_generates_array_for_smil_file_based_on_asset(): void
     {
         $this->clip->addAsset([
-            'disk'               => 'videos',
+            'disk' => 'videos',
             'original_file_name' => 'test.mp4',
-            'path'               => '/2021/01/01/TEST/',
-            'duration'           => 300,
-            'width'              => 1920,
-            'height'             => 1080,
-            'type'               => Content::PRESENTER(),
+            'path' => '/2021/01/01/TEST/',
+            'duration' => 300,
+            'width' => 1920,
+            'height' => 1080,
+            'type' => Content::PRESENTER(),
         ]);
 
         $expectedArray = [
             'video' => [
-                '_attributes'       => [
-                    'src'            => 'mp4:test.mp4',
+                '_attributes' => [
+                    'src' => 'mp4:test.mp4',
                     'system-bitrate' => 1500000,
-                    'width'          => 1920,
-                    'height'         => 1080
+                    'width' => 1920,
+                    'height' => 1080,
                 ],
-                'paramVideoBR'      => [
+                'paramVideoBR' => [
                     '_attributes' => [
-                        'name'      => 'videoBitrate',
-                        'value'     => 1500000,
+                        'name' => 'videoBitrate',
+                        'value' => 1500000,
                         'valuetype' => 'data',
-                    ]
+                    ],
                 ],
-                'paramAudioBR'      => [
+                'paramAudioBR' => [
                     '_attributes' => [
-                        'name'      => 'audioBitrate',
-                        'value'     => '44100',
+                        'name' => 'audioBitrate',
+                        'value' => '44100',
                         'valuetype' => 'data',
-                    ]
+                    ],
                 ],
                 'paramVideoCodecID' => [
                     '_attributes' => [
-                        'name'      => 'videoCodecId',
-                        'value'     => 'avc1.4d401f',
+                        'name' => 'videoCodecId',
+                        'value' => 'avc1.4d401f',
                         'valuetype' => 'data',
-                    ]
+                    ],
                 ],
                 'paramAudioCodecID' => [
                     '_attributes' => [
-                        'name'      => 'audioCodecId',
-                        'value'     => 'mp4a.40.2',
+                        'name' => 'audioCodecId',
+                        'value' => 'mp4a.40.2',
                         'valuetype' => 'data',
-                    ]
+                    ],
                 ],
-            ]
+            ],
         ];
 
         $this->assertEquals($expectedArray, $this->wowzaService->createSmilFileArray($this->clip->assets()->first()));

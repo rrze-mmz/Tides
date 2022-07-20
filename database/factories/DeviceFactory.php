@@ -18,22 +18,22 @@ class DeviceFactory extends Factory
     public function definition()
     {
         return [
-            'description'          => 'A device description',
-            'comment'              => $this->faker->sentence(),
-            'has_livestream_func'  => true,
+            'description' => 'A device description',
+            'comment' => $this->faker->sentence(),
+            'has_livestream_func' => true,
             'opencast_device_name' => 'Opencast-CA',
-            'name'                 => 'Opencast CA',
-            'url'                  => $this->faker->url(),
-            'telephone_number'     => $this->faker->phoneNumber(),
-            'ip_address'           => $this->faker->ipv4(),
-            'location_id'          => DeviceLocation::factory()->create(),
-            'camera_url'           => $this->faker->url(),
-            'power_outlet_url'     => $this->faker->url(),
-            'organization_id'      => 1,
-            'is_hybrid'            => true,
-            'has_recording_func'   => true,
-            'room_url'             => $this->faker->url(),
-            'supervisor_id'        => 1,
+            'name' => 'Opencast CA',
+            'url' => $this->faker->url(),
+            'telephone_number' => $this->faker->phoneNumber(),
+            'ip_address' => $this->faker->ipv4(),
+            'location_id' => DeviceLocation::factory()->create(),
+            'camera_url' => $this->faker->url(),
+            'power_outlet_url' => $this->faker->url(),
+            'organization_id' => 1,
+            'is_hybrid' => true,
+            'has_recording_func' => true,
+            'room_url' => $this->faker->url(),
+            'supervisor_id' => 1,
 
         ];
     }

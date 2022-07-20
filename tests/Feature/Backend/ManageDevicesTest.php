@@ -37,7 +37,6 @@ class ManageDevicesTest extends TestCase
         $this->get(route('devices.edit', $device))->assertForbidden();
         $this->put(route('devices.update', $device), ['name' => 'test'])->assertForbidden();
         $this->delete(route('devices.destroy', $device))->assertForbidden();
-
     }
 
     /** @test */
@@ -114,12 +113,12 @@ class ManageDevicesTest extends TestCase
         $computerScienceBuidling = DeviceLocation::factory()->create(['name' => 'Computer Science Building']);
 
         $recDevice1 = Device::factory()->create([
-            'name'        => 'Exon DMP 351',
-            'location_id' => $medBuilding->id
+            'name' => 'Exon DMP 351',
+            'location_id' => $medBuilding->id,
         ]);
         $recDevice2 = Device::factory()->create([
-            'name'        => 'Wolf 300',
-            'location_id' => $computerScienceBuidling->id
+            'name' => 'Wolf 300',
+            'location_id' => $computerScienceBuidling->id,
         ]);
 
         Livewire::test(DevicesDataTable::class)
@@ -211,22 +210,22 @@ class ManageDevicesTest extends TestCase
         $this->signInRole('assistant');
 
         $attributes = [
-            'name'                 => 'test device',
-            'location_id'          => 1,
-            'organization_id'      => 1,
+            'name' => 'test device',
+            'location_id' => 1,
+            'organization_id' => 1,
             'opencast_device_name' => 'test device',
-            'url'                  => 'https://www.test.com',
-            'room_url'             => 'https://www.test.com',
-            'camera_url'           => 'https://www.test.com',
-            'power_outlet_url'     => 'https://www.test.com',
-            'ip_address'           => '192.168.178.1',
-            'has_recording_func'   => true,
-            'has_livestream_func'  => true,
-            'is_hybrid'            => true,
-            'operational'          => true,
-            'description'          => 'test description',
-            'comment'              => 'test description',
-            'telephone_number'     => '',
+            'url' => 'https://www.test.com',
+            'room_url' => 'https://www.test.com',
+            'camera_url' => 'https://www.test.com',
+            'power_outlet_url' => 'https://www.test.com',
+            'ip_address' => '192.168.178.1',
+            'has_recording_func' => true,
+            'has_livestream_func' => true,
+            'is_hybrid' => true,
+            'operational' => true,
+            'description' => 'test description',
+            'comment' => 'test description',
+            'telephone_number' => '',
 
         ];
         $this->post(route('devices.store'), $attributes);
@@ -260,7 +259,7 @@ class ManageDevicesTest extends TestCase
 
         $device = Device::factory()->create();
         $attributes = [
-            'name'                 => 'test device',
+            'name' => 'test device',
             'opencast_device_name' => 'opencast test device',
         ];
         $this->put(route('devices.update', $device), $attributes)
@@ -277,8 +276,8 @@ class ManageDevicesTest extends TestCase
         $device = Device::factory()->create();
 
         $attributes = [
-            'name'                 => '',
-            'opencast_device_name' => 'test device'
+            'name' => '',
+            'opencast_device_name' => 'test device',
         ];
 
         $this->put(route('devices.update', $device), $attributes)->assertSessionHasErrors('name');

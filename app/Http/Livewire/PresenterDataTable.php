@@ -3,18 +3,22 @@
 namespace App\Http\Livewire;
 
 use App\Models\Presenter;
+use Illuminate\Contracts\View\View;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Illuminate\Contracts\View\View;
 
 class PresenterDataTable extends Component
 {
     use WithPagination;
 
     public $admin = false;
+
     public $search = '';
+
     public $sortField;
+
     public $sortAsc = true;
+
     protected $queryString = ['search', 'admin', 'sortAsc'];
 
     /**
@@ -24,7 +28,7 @@ class PresenterDataTable extends Component
      */
     public function sortBy($field): void
     {
-        $this->sortAsc = !($this->sortField === $field) || !$this->sortAsc;
+        $this->sortAsc = ! ($this->sortField === $field) || ! $this->sortAsc;
 
         $this->sortField = $field;
     }
@@ -47,6 +51,7 @@ class PresenterDataTable extends Component
 
     /**
      * Render Livewire component
+     *
      * @return View
      */
     public function render(): View

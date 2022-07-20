@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
@@ -13,8 +12,9 @@ class AssetDestroyController extends Controller
     /**
      * Delete the given asset
      *
-     * @param Asset $asset
+     * @param  Asset  $asset
      * @return RedirectResponse
+     *
      * @throws Exception
      * @throws AuthorizationException
      */

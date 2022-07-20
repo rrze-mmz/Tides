@@ -17,10 +17,10 @@ class CollectionFactory extends Factory
     public function definition()
     {
         return [
-            'title'       => $this->faker->sentence(20),
+            'title' => $this->faker->sentence(20),
             'description' => $this->faker->paragraph(50),
-            'position'    => '1',
-            'is_public'   => true,
+            'position' => '1',
+            'is_public' => true,
         ];
     }
 }

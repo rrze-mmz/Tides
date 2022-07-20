@@ -52,10 +52,10 @@ class CollectionTest extends TestCase
     public function it_requires_a_position_to_create_a_collection(): void
     {
         $attributes = [
-            'position'    => '',
-            'title'       => 'Test',
+            'position' => '',
+            'title' => 'Test',
             'description' => 'test',
-            'is_public'   => false,
+            'is_public' => false,
         ];
 
         $this->post(route('collections.store'), $attributes)->assertSessionHasErrors('position');
@@ -65,10 +65,10 @@ class CollectionTest extends TestCase
     public function it_requires_a_title_to_create_a_collection(): void
     {
         $attributes = [
-            'position'    => '1',
-            'title'       => '',
+            'position' => '1',
+            'title' => '',
             'description' => 'test',
-            'is_public'   => false,
+            'is_public' => false,
         ];
 
         $this->post(route('collections.store'), $attributes)->assertSessionHasErrors('title');
@@ -78,20 +78,20 @@ class CollectionTest extends TestCase
     public function it_persists_a_collection_to_database(): void
     {
         $attributes = [
-            'position'    => '1',
-            'title'       => 'Test',
+            'position' => '1',
+            'title' => 'Test',
             'description' => 'test',
-            'is_public'   => 'on',
+            'is_public' => 'on',
         ];
 
         $this->post(route('collections.store'), $attributes)
             ->assertRedirect();
 
         $this->assertDatabaseHas('collections', [
-            'position'    => '1',
-            'title'       => 'Test',
+            'position' => '1',
+            'title' => 'Test',
             'description' => 'test',
-            'is_public'   => true,
+            'is_public' => true,
         ]);
     }
 
@@ -120,8 +120,8 @@ class CollectionTest extends TestCase
         $this->patch(route('collections.update', $collection), $attributes)->assertRedirect();
 
         $this->assertDatabaseHas('collections', [
-            'id'          => $collection->id,
-            'description' => 'changed'
+            'id' => $collection->id,
+            'description' => 'changed',
         ]);
     }
 
@@ -137,8 +137,8 @@ class CollectionTest extends TestCase
         $this->patch(route('collections.update', $collection), $attributes)->assertSessionHasErrors('title');
 
         $this->assertDatabaseMissing('collections', [
-            'id'          => $collection->id,
-            'description' => 'changed'
+            'id' => $collection->id,
+            'description' => 'changed',
         ]);
     }
 

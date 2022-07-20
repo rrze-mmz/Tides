@@ -24,16 +24,16 @@ class ClipsCollectionsTest extends TestCase
             ->assertRedirect();
 
         $this->assertDatabaseHas('clip_collection', [
-            'clip_id'       => Clip::all()->first()->id,
-            'collection_id' => $collection->id
+            'clip_id' => Clip::all()->first()->id,
+            'collection_id' => $collection->id,
         ]);
 
         $this->post(route('collections.toggleClips', $collection), $attributes)
             ->assertRedirect();
 
         $this->assertDatabaseMissing('clip_collection', [
-            'clip_id'       => Clip::all()->first()->id,
-            'collection_id' => $collection->id
+            'clip_id' => Clip::all()->first()->id,
+            'collection_id' => $collection->id,
         ]);
     }
 }

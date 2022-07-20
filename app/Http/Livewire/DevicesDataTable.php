@@ -15,13 +15,16 @@ class DevicesDataTable extends Component
     use WithPagination;
 
     public $search;
+
     public $sortField;
+
     public $sortAsc = true;
+
     protected $queryString = ['search', 'sortAsc'];
 
     public function sortBy($field): void
     {
-        $this->sortAsc = !($this->sortField === $field) || !$this->sortAsc;
+        $this->sortAsc = ! ($this->sortField === $field) || ! $this->sortAsc;
 
         $this->sortField = $field;
     }
@@ -40,7 +43,7 @@ class DevicesDataTable extends Component
 
         $devices = Device::search($search)
             ->orWhereHas('location', function ($q) use ($search) {
-                $q->WhereRaw("lower(name) like ('%" . $search . "%')");
+                $q->WhereRaw("lower(name) like ('%".$search."%')");
             })->paginate(30);
 
         return view('livewire.devices-data-table', ['devices' => $devices]);

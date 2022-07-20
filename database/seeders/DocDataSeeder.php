@@ -16,16 +16,16 @@ class DocDataSeeder extends Seeder
     {
         //list from Videoportal
         $list = collect([
-            '0'  => '--- Ohne Titel---',
-            '1'  => 'Dr.',
-            '2'  => 'Prof.',
-            '3'  => 'Prof. Dr.',
-            '4'  => 'MA',
-            '5'  => 'Dipl.-Ing.',
-            '6'  => 'Dipl.-Inf.',
-            '7'  => 'PD Dr.',
-            '8'  => 'Dr. med.',
-            '9'  => 'Dipl.-Psych.',
+            '0' => '--- Ohne Titel---',
+            '1' => 'Dr.',
+            '2' => 'Prof.',
+            '3' => 'Prof. Dr.',
+            '4' => 'MA',
+            '5' => 'Dipl.-Ing.',
+            '6' => 'Dipl.-Inf.',
+            '7' => 'PD Dr.',
+            '8' => 'Dr. med.',
+            '9' => 'Dipl.-Psych.',
             '10' => 'Dipl.-Kffr.',
             '11' => 'Dipl.-Kfm.',
             '12' => 'Dipl.-Math.',
@@ -52,8 +52,8 @@ class DocDataSeeder extends Seeder
 
         $list->each(function ($value, $key) {
             DB::table('academic_degrees')->insert([
-                'id'         => $key,
-                'title'      => $value,
+                'id' => $key,
+                'title' => $value,
                 'created_at' => now(),
                 'updated_at' => null,
             ]);

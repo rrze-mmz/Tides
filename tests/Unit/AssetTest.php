@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Tests\Unit;
 
 use App\Events\AssetDeleted;
@@ -26,7 +25,7 @@ class AssetTest extends TestCase
     /** @test */
     public function it_has_a_path(): void
     {
-        $this->assertEquals('/admin/assets/' . $this->asset->id, $this->asset->path());
+        $this->assertEquals('/admin/assets/'.$this->asset->id, $this->asset->path());
     }
 
     /** @test */
@@ -48,7 +47,7 @@ class AssetTest extends TestCase
     /** @test */
     public function it_has_a_duration_in_hour_format(): void
     {
-        $this->assertEquals(gmdate("H:i:s", $this->asset->duration), $this->asset->durationToHours());
+        $this->assertEquals(gmdate('H:i:s', $this->asset->duration), $this->asset->durationToHours());
     }
 
     /** @test */

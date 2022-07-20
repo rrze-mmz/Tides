@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Tests\Setup;
 
 use App\Enums\OpencastWorkflowState;
@@ -27,7 +26,7 @@ trait WorksWithOpencastClient
         $mockHandler = new MockHandler();
 
         $client = new OpencastClient([
-            'handler' => HandlerStack::create($mockHandler)
+            'handler' => HandlerStack::create($mockHandler),
         ]);
 
         $this->app->instance(OpencastClient::class, $client);
@@ -38,11 +37,11 @@ trait WorksWithOpencastClient
     public function mockHealthResponse(): Response
     {
         return new Response(200, [], json_encode([
-            "releaseId"   => "8.10.0",
-            "description" => "Opencast node's health status",
-            "serviceId"   => "http://localhost:8080",
-            "version"     => "1",
-            "status"      => "pass",
+            'releaseId' => '8.10.0',
+            'description' => "Opencast node's health status",
+            'serviceId' => 'http://localhost:8080',
+            'version' => '1',
+            'status' => 'pass',
         ]));
     }
 
@@ -58,56 +57,56 @@ trait WorksWithOpencastClient
     {
         return new Response(201, [
             'Location' => [
-                '0' => 'http://localhost:8080/api/series/' . Str::uuid()
-            ]
+                '0' => 'http://localhost:8080/api/series/'.Str::uuid(),
+            ],
         ]);
     }
 
     public function mockIngestMediaPackageResponse(): Response
     {
         return new Response(200, [], json_encode([
-            new Xml()
+            new Xml(),
         ]));
     }
 
     /**
      * Opencast single event metadata response
      *
-     * @param Series $series
-     * @param OpencastWorkflowState $state
-     * @param int $archiveVersion
-     * @param string $identifier
+     * @param  Series  $series
+     * @param  OpencastWorkflowState  $state
+     * @param  int  $archiveVersion
+     * @param  string  $identifier
      * @return Response
      */
     public function mockEventResponse(
-        Series                $series,
+        Series $series,
         OpencastWorkflowState $state,
-        int                   $archiveVersion = 4,
-        string                $identifier = 'a131d2e2-9de2-40cb-9716-af9824055f4a'
+        int $archiveVersion = 4,
+        string $identifier = 'a131d2e2-9de2-40cb-9716-af9824055f4a'
     ): Response {
         return new Response(201, [], json_encode([
             [
-                'identifier'         => $identifier,
-                'creator'            => 'Opencast Project Administrator',
-                'presenter'          => [],
-                'created'            => Carbon::now()->toIso8601ZuluString(),
-                'is_part_of'         => $series->opencast_series_id,
-                'subjects'           => [],
-                'start'              => Carbon::now()->addMinutes(1)->toIso8601ZuluString(),
-                'description'        => '1', // A clip ID that belongs to the series
-                'language'           => '',
-                'source'             => '',
-                'title'              => 'Processed event',
-                'processing_state'   => $state->name,
-                'license'            => '',
-                'archive_version'    => $archiveVersion,
-                'contributor'        => [],
-                'series'             => $series->title,
-                'has_previews'       => false,
-                'location'           => '',
-                'rightsholder'       => '',
+                'identifier' => $identifier,
+                'creator' => 'Opencast Project Administrator',
+                'presenter' => [],
+                'created' => Carbon::now()->toIso8601ZuluString(),
+                'is_part_of' => $series->opencast_series_id,
+                'subjects' => [],
+                'start' => Carbon::now()->addMinutes(1)->toIso8601ZuluString(),
+                'description' => '1', // A clip ID that belongs to the series
+                'language' => '',
+                'source' => '',
+                'title' => 'Processed event',
+                'processing_state' => $state->name,
+                'license' => '',
+                'archive_version' => $archiveVersion,
+                'contributor' => [],
+                'series' => $series->title,
+                'has_previews' => false,
+                'location' => '',
+                'rightsholder' => '',
                 'publication_status' => [],
-                'status'             => $state->value,
+                'status' => $state->value,
             ],
         ]));
     }
@@ -116,9 +115,9 @@ trait WorksWithOpencastClient
      * Opencast single event metadata response
      *
      * @param $eventID
-     * @param OpencastWorkflowState $state
-     * @param int $archiveVersion
-     * @param string $seriesID
+     * @param  OpencastWorkflowState  $state
+     * @param  int  $archiveVersion
+     * @param  string  $seriesID
      * @return Response
      */
     public function mockEventByEventID(
@@ -128,27 +127,27 @@ trait WorksWithOpencastClient
         string $seriesID = 'a131d2e2-9de2-40cb-9716-af9824055f23'
     ): Response {
         return new Response(201, [], json_encode([
-            'identifier'         => $eventID,
-            'creator'            => 'Opencast Project Administrator',
-            'presenter'          => [],
-            'created'            => '2021-05-10T14:21:00Z',
-            'is_part_of'         => $seriesID,
-            'subjects'           => [],
-            'start'              => '2021-05-10T14:21:21Z',
-            'description'        => '',
-            'language'           => '',
-            'source'             => '',
-            'title'              => 'Processed event',
-            'processing_state'   => $state->name,
-            'license'            => '',
-            'archive_version'    => $archiveVersion,
-            'contributor'        => [],
-            'series'             => $this->faker->sentence(10),
-            'has_previews'       => false,
-            'location'           => '',
-            'rightsholder'       => '',
+            'identifier' => $eventID,
+            'creator' => 'Opencast Project Administrator',
+            'presenter' => [],
+            'created' => '2021-05-10T14:21:00Z',
+            'is_part_of' => $seriesID,
+            'subjects' => [],
+            'start' => '2021-05-10T14:21:21Z',
+            'description' => '',
+            'language' => '',
+            'source' => '',
+            'title' => 'Processed event',
+            'processing_state' => $state->name,
+            'license' => '',
+            'archive_version' => $archiveVersion,
+            'contributor' => [],
+            'series' => $this->faker->sentence(10),
+            'has_previews' => false,
+            'location' => '',
+            'rightsholder' => '',
             'publication_status' => [],
-            'status'             => $state->value,
+            'status' => $state->value,
         ]));
     }
 
@@ -163,35 +162,35 @@ trait WorksWithOpencastClient
                     'track' => [
                         [
                             '_attributes' => [
-                                'id'   => $this->faker->uuid(),
+                                'id' => $this->faker->uuid(),
                                 'type' => 'source/presenter',
                             ],
-                            'mimetype'    => 'video/mp4',
-                            'video'       => [
-                                'resolution' => '1280x720']
+                            'mimetype' => 'video/mp4',
+                            'video' => [
+                                'resolution' => '1280x720', ],
                         ],
                         [
                             '_attributes' => [
-                                'id'   => $videoHDAssetID,
+                                'id' => $videoHDAssetID,
                                 'type' => 'final/presenter',
                             ],
-                            'mimetype'    => 'video/mp4',
-                            'video'       => [
-                                'resolution' => '1280x720']
+                            'mimetype' => 'video/mp4',
+                            'video' => [
+                                'resolution' => '1280x720', ],
                         ],
                         [
                             '_attributes' => [
-                                'id'   => $audioAssetID,
+                                'id' => $audioAssetID,
                                 'type' => 'final/soundfile',
                             ],
-                            'mimetype'    => 'audio/mpeg',
-                        ]
+                            'mimetype' => 'audio/mpeg',
+                        ],
                     ],
-                ]],
+                ], ],
             ['rootElementName' => 'mediapackage',
-             '_attributes'     => [
-                 'start' => Carbon::now()->toIso8601ZuluString(),
-             ]],
+                '_attributes' => [
+                    'start' => Carbon::now()->toIso8601ZuluString(),
+                ], ],
             true,
             'UTF-8',
             '1.0',
@@ -207,96 +206,96 @@ trait WorksWithOpencastClient
     {
         $workflows = ($multiple) ? [
             [
-                'id'           => 2006754,
-                'state'        => OpencastWorkflowState::RUNNING->name,
-                'title'        => 'Transcode after upload',
+                'id' => 2006754,
+                'state' => OpencastWorkflowState::RUNNING->name,
+                'title' => 'Transcode after upload',
                 'mediapackage' => [
                     'duration' => 3048683,
-                    'id'       => Str::uuid(),
-                    'start'    => Carbon::now()->addMinutes(1)->toIso8601ZuluString(),
-                    'title'    => $this->faker->sentence,
-                    'series'   => $series->opencast_series_id,
+                    'id' => Str::uuid(),
+                    'start' => Carbon::now()->addMinutes(1)->toIso8601ZuluString(),
+                    'title' => $this->faker->sentence,
+                    'series' => $series->opencast_series_id,
                     'creators' => [
-                        'creator' => 'Dr. John Doe'
-                    ]
+                        'creator' => 'Dr. John Doe',
+                    ],
                 ],
-                'operations'   => [
+                'operations' => [
                     'operation' => [
                         0 => [
-                            'id'    => 'ingest-download',
-                            'state' => OpencastWorkflowState::SUCCEEDED->name
+                            'id' => 'ingest-download',
+                            'state' => OpencastWorkflowState::SUCCEEDED->name,
                         ],
                         1 => [
-                            'id'          => 'encode',
-                            'state'       => OpencastWorkflowState::RUNNING->name,
+                            'id' => 'encode',
+                            'state' => OpencastWorkflowState::RUNNING->name,
                             'description' => 'Encode presenter for adaptive stream',
-                        ]
+                        ],
                     ],
-                ]
+                ],
             ],
             [
-                'id'           => 2006752,
-                'state'        => OpencastWorkflowState::RUNNING->name,
-                'title'        => 'Transcode after upload',
+                'id' => 2006752,
+                'state' => OpencastWorkflowState::RUNNING->name,
+                'title' => 'Transcode after upload',
                 'mediapackage' => [
                     'duration' => 3048683,
-                    'id'       => Str::uuid(),
-                    'start'    => Carbon::now()->addMinutes(1)->toIso8601ZuluString(),
-                    'title'    => $this->faker->sentence,
-                    'series'   => $series->opencast_series_id,
+                    'id' => Str::uuid(),
+                    'start' => Carbon::now()->addMinutes(1)->toIso8601ZuluString(),
+                    'title' => $this->faker->sentence,
+                    'series' => $series->opencast_series_id,
                 ],
-                'operations'   => [
+                'operations' => [
                     'operation' => [
                         0 => [
-                            'id'    => 'ingest-download',
-                            'state' => OpencastWorkflowState::SUCCEEDED->name
+                            'id' => 'ingest-download',
+                            'state' => OpencastWorkflowState::SUCCEEDED->name,
                         ],
                         1 => [
-                            'id'          => 'encode',
-                            'state'       => OpencastWorkflowState::RUNNING->name,
+                            'id' => 'encode',
+                            'state' => OpencastWorkflowState::RUNNING->name,
                             'description' => 'Encode presenter for adaptive stream',
-                        ]
+                        ],
                     ],
-                ]
+                ],
             ],
         ] :
             [
-                'id'           => 2006754,
-                'state'        => OpencastWorkflowState::RUNNING->name,
-                'title'        => 'Transcode after upload',
+                'id' => 2006754,
+                'state' => OpencastWorkflowState::RUNNING->name,
+                'title' => 'Transcode after upload',
                 'mediapackage' => [
                     'duration' => 3048683,
-                    'id'       => Str::uuid(),
-                    'start'    => Carbon::now()->addMinutes(1)->toIso8601ZuluString(),
-                    'title'    => $this->faker->sentence,
-                    'series'   => $series->opencast_series_id,
+                    'id' => Str::uuid(),
+                    'start' => Carbon::now()->addMinutes(1)->toIso8601ZuluString(),
+                    'title' => $this->faker->sentence,
+                    'series' => $series->opencast_series_id,
                     'creators' => [
-                        'creator' => 'Dr. John Doe'
-                    ]
+                        'creator' => 'Dr. John Doe',
+                    ],
                 ],
-                'operations'   => [
+                'operations' => [
                     'operation' => [
                         0 => [
-                            'id'    => 'ingest-download',
-                            'state' => OpencastWorkflowState::SUCCEEDED->name
+                            'id' => 'ingest-download',
+                            'state' => OpencastWorkflowState::SUCCEEDED->name,
                         ],
                         1 => [
-                            'id'          => 'encode',
-                            'state'       => OpencastWorkflowState::RUNNING->name,
+                            'id' => 'encode',
+                            'state' => OpencastWorkflowState::RUNNING->name,
                             'description' => 'Encode presenter for adaptive stream',
-                        ]
+                        ],
                     ],
-                ]
+                ],
             ];
 
         return new Response(201, [], json_encode([
             'workflows' => [
-                'startPage'  => 0,
-                'count'      => 20,
+                'startPage' => 0,
+                'count' => 20,
                 'searchTime' => 2,
                 'totalCount' => $multiple ? 2 : 1,
-                'workflow'   => $workflows
-            ]
+                'workflow' => $workflows,
+            ],
         ]));
     }
 }

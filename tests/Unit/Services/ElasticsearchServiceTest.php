@@ -3,9 +3,9 @@
 namespace Tests\Unit\Services;
 
 use App\Services\ElasticsearchService;
+use Facades\Tests\Setup\ClipFactory;
 use Facades\Tests\Setup\SeriesFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Facades\Tests\Setup\ClipFactory;
 use Illuminate\Support\Collection;
 use Tests\Setup\WorksWithElasticsearchClient;
 use Tests\TestCase;

@@ -24,7 +24,7 @@ class MailResetPasswordToken extends Notification
     /**
      * Get the notification's delivery channels.
      *
-     * @param mixed $notifiable
+     * @param  mixed  $notifiable
      * @return array
      */
     public function via(mixed $notifiable): array
@@ -35,17 +35,17 @@ class MailResetPasswordToken extends Notification
     /**
      * Get the mail representation of the notification.
      *
-     * @param mixed $notifiable
+     * @param  mixed  $notifiable
      * @return MailMessage
      */
     public function toMail(mixed $notifiable): MailMessage
     {
         return (new MailMessage())
-            ->subject("Welcome to Tides Portal")
-            ->line("Please to log in first reset your password")
+            ->subject('Welcome to Tides Portal')
+            ->line('Please to log in first reset your password')
             ->action('Reset Password', url(route('password.reset', [
                 'token' => $this->token,
-                'email' => $this->user->email
+                'email' => $this->user->email,
             ], false)))
             ->line('Thank you for being a friend');
     }
@@ -53,7 +53,7 @@ class MailResetPasswordToken extends Notification
     /**
      * Get the array representation of the notification.
      *
-     * @param mixed $notifiable
+     * @param  mixed  $notifiable
      * @return array
      */
     public function toArray(mixed $notifiable): array

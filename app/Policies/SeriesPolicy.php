@@ -14,18 +14,18 @@ class SeriesPolicy
     /**
      * Check whether the current user can view all series in index
      *
-     * @param User $user
+     * @param  User  $user
      * @return bool
      */
     public function index(User $user): bool
     {
-        return (auth()->check() && ($user->isAdmin() || $user->isAssistant()));
+        return auth()->check() && ($user->isAdmin() || $user->isAssistant());
     }
 
     /**
      * Check whether the current user can create a series.
      *
-     * @param User $user
+     * @param  User  $user
      * @return bool
      */
     public function create(User $user): bool
@@ -34,8 +34,8 @@ class SeriesPolicy
     }
 
     /**
-     * @param User|null $user
-     * @param Series $series
+     * @param  User|null  $user
+     * @param  Series  $series
      * @return Response
      */
     public function view(?User $user, Series $series): Response
@@ -48,7 +48,7 @@ class SeriesPolicy
          */
 
         return (
-            ($series->is_public && $series->clips->filter(fn($clip) => $clip->assets()->count())->count() > 0)
+            ($series->is_public && $series->clips->filter(fn ($clip) => $clip->assets()->count())->count() > 0)
             || (optional($user)->is($series->owner) || optional($user)->isAdmin() || optional($user)->isAssistant())
         )
             ? Response::allow()
@@ -58,8 +58,8 @@ class SeriesPolicy
     /**
      * Check whether the given user can edit the given series
      *
-     * @param User $user
-     * @param Series $series
+     * @param  User  $user
+     * @param  Series  $series
      * @return Response
      */
     public function edit(User $user, Series $series): Response
@@ -76,8 +76,8 @@ class SeriesPolicy
     /**
      * Check whether the current user can create a series.
      *
-     * @param User $user
-     * @param Series $series
+     * @param  User  $user
+     * @param  Series  $series
      * @return Response
      */
     public function update(User $user, Series $series): Response
@@ -91,8 +91,8 @@ class SeriesPolicy
     /**
      * Check whether the given user can delete the given series
      *
-     * @param User $user
-     * @param Series $series
+     * @param  User  $user
+     * @param  Series  $series
      * @return Response
      */
     public function delete(User $user, Series $series): Response
@@ -103,7 +103,7 @@ class SeriesPolicy
     }
 
     /**
-     * @param User $user
+     * @param  User  $user
      * @return bool
      */
     public function changeOwner(User $user): bool

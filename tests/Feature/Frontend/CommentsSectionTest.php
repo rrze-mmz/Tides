@@ -100,9 +100,9 @@ class CommentsSectionTest extends TestCase
     public function a_comment_owner_can_delete_his_comment(): void
     {
         $comment = Comment::factory()->create([
-            'clip_id'  => $this->clip->id,
+            'clip_id' => $this->clip->id,
             'owner_id' => auth()->user()->id,
-            'content'  => 'test comment'
+            'content' => 'test comment',
         ]);
 
         Livewire::test(CommentsSection::class)
@@ -115,9 +115,9 @@ class CommentsSectionTest extends TestCase
     public function an_admin_can_delete_a_not_owned_comment(): void
     {
         $comment = Comment::factory()->create([
-            'clip_id'  => $this->clip->id,
+            'clip_id' => $this->clip->id,
             'owner_id' => auth()->user()->id,
-            'content'  => 'test comment'
+            'content' => 'test comment',
         ]);
 
         $this->signInRole('admin');

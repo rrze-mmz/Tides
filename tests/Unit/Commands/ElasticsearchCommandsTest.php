@@ -5,8 +5,8 @@ namespace Tests\Unit\Commands;
 use App\Models\Series;
 use App\Services\ElasticsearchService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 use Tests\Setup\WorksWithElasticsearchClient;
+use Tests\TestCase;
 
 class ElasticsearchCommandsTest extends TestCase
 {
@@ -30,6 +30,6 @@ class ElasticsearchCommandsTest extends TestCase
 
         $this->artisan('elasticsearch:rebuild-indexes Series')
             ->expectsOutput('Series Indexes deleted successfully')
-            ->expectsOutput($series->count() . ' Series Indexes created successfully');
+            ->expectsOutput($series->count().' Series Indexes created successfully');
     }
 }

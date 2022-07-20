@@ -18,14 +18,15 @@ class DocumentController extends Controller
     /**
      * @param  Request  $request
      * @return RedirectResponse
+     *
      * @throws AuthorizationException
      */
     public function upload(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'id'       => ['required', 'integer'],
-            'type'     => ['required', Rule::in(['series', 'clip'])], //types are not dynamic
-            'document' => ['required', 'file', 'mimes:pdf,xsl,doc']
+            'id' => ['required', 'integer'],
+            'type' => ['required', Rule::in(['series', 'clip'])], //types are not dynamic
+            'document' => ['required', 'file', 'mimes:pdf,xsl,doc'],
         ]);
 
         $model = match ($validated['type']) {
@@ -37,9 +38,9 @@ class DocumentController extends Controller
         $this->authorize('edit-'.str($validated['type'])->plural(), $resource);
 
         $document = Document::create([
-            'name'      => $validated['document']->getClientOriginalName(),
+            'name' => $validated['document']->getClientOriginalName(),
             'save_path' => $validated['document']
-                ->store($validated['type'].'_'.$resource->id, 'documents')
+                ->store($validated['type'].'_'.$resource->id, 'documents'),
         ]);
 
         $resource->addDocument($document);
@@ -53,6 +54,7 @@ class DocumentController extends Controller
      * @param  Series  $series
      * @param  Document  $document
      * @return BinaryFileResponse|RedirectResponse
+     *
      * @throws AuthorizationException
      */
     public function viewSeriesDocument(Series $series, Document $document): BinaryFileResponse|RedirectResponse
@@ -64,6 +66,7 @@ class DocumentController extends Controller
             return response()->file(public_path('documents/').$document->save_path);
         } catch (\Exception $exception) {
             Log::error($exception);
+
             return to_route('series.edit', $series);
         }
     }
@@ -74,6 +77,7 @@ class DocumentController extends Controller
      * @param  Clip  $clip
      * @param  Document  $document
      * @return BinaryFileResponse|RedirectResponse
+     *
      * @throws AuthorizationException
      */
     public function viewClipDocument(Clip $clip, Document $document): BinaryFileResponse|RedirectResponse
@@ -85,6 +89,7 @@ class DocumentController extends Controller
             return response()->file(public_path('documents/').$document->save_path);
         } catch (\Exception $exception) {
             Log::error($exception);
+
             return to_route('clips.edit', $clip);
         }
     }
@@ -94,6 +99,7 @@ class DocumentController extends Controller
      *
      * @param  Document  $document
      * @return RedirectResponse
+     *
      * @throws AuthorizationException
      */
     public function destroy(Document $document): RedirectResponse

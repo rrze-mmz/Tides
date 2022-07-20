@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Validator;
 
 class StorePresenterRequest extends FormRequest
 {
@@ -26,10 +25,10 @@ class StorePresenterRequest extends FormRequest
     {
         return [
             'academic_degree_id' => ['integer', 'nullable'],
-            'first_name'         => ['required', 'alpha', 'min:2', 'max:30'],
-            'last_name'          => ['required', 'alpha', 'min:2', 'max:100'],
-            'username'           => ['nullable', 'sometimes', 'alpha_num', 'unique:presenters'],
-            'email'              => ['nullable', 'sometimes', 'email', 'unique:presenters'],
+            'first_name' => ['required', 'alpha', 'min:2', 'max:30'],
+            'last_name' => ['required', 'alpha', 'min:2', 'max:100'],
+            'username' => ['nullable', 'sometimes', 'alpha_num', 'unique:presenters'],
+            'email' => ['nullable', 'sometimes', 'email', 'unique:presenters'],
         ];
     }
 }

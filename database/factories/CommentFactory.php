@@ -24,9 +24,9 @@ class CommentFactory extends Factory
     public function definition()
     {
         return [
-            'content'  => $this->faker->paragraph(),
-            'clip_id'  => Clip::factory()->create()->id,
-            'owner_id' => User::factory()->create()->id
+            'content' => $this->faker->paragraph(),
+            'clip_id' => Clip::factory()->create()->id,
+            'owner_id' => User::factory()->create()->id,
         ];
     }
 }

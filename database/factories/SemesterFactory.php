@@ -22,11 +22,11 @@ class SemesterFactory extends Factory
     public function definition()
     {
         return [
-            'name'        => 'Wintersemester 2021/2022',
-            'acronym'     => 'W21',
+            'name' => 'Wintersemester 2021/2022',
+            'acronym' => 'W21',
             'short_title' => '2021/2022',
-            'start_date'  => '2021-10-01 00:00:00',
-            'stop_date'   => '2022-03-31 23:59:59',
+            'start_date' => '2021-10-01 00:00:00',
+            'stop_date' => '2022-03-31 23:59:59',
         ];
     }
 }

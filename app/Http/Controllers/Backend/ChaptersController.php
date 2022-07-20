@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 class ChaptersController extends Controller
 {
     /**
-     * @param Series $series
+     * @param  Series  $series
      * @return Factory|View|Application
      */
     public function index(Series $series): Factory|View|Application
@@ -23,15 +23,15 @@ class ChaptersController extends Controller
     }
 
     /**
-     * @param Series $series
-     * @param Request $request
+     * @param  Series  $series
+     * @param  Request  $request
      * @return RedirectResponse
      */
     public function store(Series $series, Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'position' => ['required', 'integer', 'min:0'],
-            'title'    => ['required', 'string']
+            'title' => ['required', 'string'],
         ]);
 
         if ($series->chapters()->count() == 0) {
@@ -44,8 +44,8 @@ class ChaptersController extends Controller
     }
 
     /**
-     * @param Series $series
-     * @param Chapter $chapter
+     * @param  Series  $series
+     * @param  Chapter  $chapter
      * @return Factory|View|Application
      */
     public function edit(Series $series, Chapter $chapter): Factory|View|Application
@@ -54,16 +54,16 @@ class ChaptersController extends Controller
     }
 
     /**
-     * @param Series $series
-     * @param Request $request
+     * @param  Series  $series
+     * @param  Request  $request
      * @return RedirectResponse
      */
     public function update(Series $series, Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'chapters'            => ['required', 'array'],
+            'chapters' => ['required', 'array'],
             'chapters.*.position' => ['integer', 'required', 'min:0'],
-            'chapters.*.title'    => ['string', 'required'],
+            'chapters.*.title' => ['string', 'required'],
         ]);
 
         $chapters = collect($validated['chapters']);
@@ -88,16 +88,16 @@ class ChaptersController extends Controller
     }
 
     /**
-     * @param Series $series
-     * @param Chapter $chapter
-     * @param Request $request
+     * @param  Series  $series
+     * @param  Chapter  $chapter
+     * @param  Request  $request
      * @return RedirectResponse
      */
     public function addClips(Series $series, Chapter $chapter, Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'ids'   => ['required', 'array'],
-            'ids.*' => ['integer', 'nullable']
+            'ids' => ['required', 'array'],
+            'ids.*' => ['integer', 'nullable'],
         ]);
 
         $chapter->addClips($validated['ids']);
@@ -106,16 +106,16 @@ class ChaptersController extends Controller
     }
 
     /**
-     * @param Series $series
-     * @param Chapter $chapter
-     * @param Request $request
+     * @param  Series  $series
+     * @param  Chapter  $chapter
+     * @param  Request  $request
      * @return RedirectResponse
      */
     public function removeClips(Series $series, Chapter $chapter, Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'ids'   => ['required', 'array'],
-            'ids.*' => ['integer', 'nullable']
+            'ids' => ['required', 'array'],
+            'ids.*' => ['integer', 'nullable'],
         ]);
 
         $chapter->removeClips($validated['ids']);

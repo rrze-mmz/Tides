@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
@@ -12,7 +11,6 @@ use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Gate;
 
 class ApiController extends Controller
 {
@@ -22,7 +20,7 @@ class ApiController extends Controller
 
         return response()->json($clips->map(function ($clip) {
             return [
-                'id'   => $clip->id,
+                'id' => $clip->id,
                 'name' => $clip->title,
             ];
         }));
@@ -31,7 +29,7 @@ class ApiController extends Controller
     /**
      * Tags json response for select2 component
      *
-     * @param ApiRequest $request
+     * @param  ApiRequest  $request
      * @return JsonResponse
      */
     public function tags(ApiRequest $request): JsonResponse
@@ -48,7 +46,7 @@ class ApiController extends Controller
     /**
      * Organizations json response for select2 component
      *
-     * @param ApiRequest $request
+     * @param  ApiRequest  $request
      * @return JsonResponse
      */
     public function organizations(ApiRequest $request): JsonResponse
@@ -65,7 +63,7 @@ class ApiController extends Controller
     /**
      * Presenters json response for select2 component
      *
-     * @param ApiRequest $request
+     * @param  ApiRequest  $request
      * @return JsonResponse
      */
     public function presenters(ApiRequest $request): JsonResponse
@@ -76,18 +74,20 @@ class ApiController extends Controller
 
         $names = $presenters->map(function ($presenter) {
             return [
-                'id'   => $presenter->id,
-                'name' => $presenter->getFullNameAttribute()
+                'id' => $presenter->id,
+                'name' => $presenter->getFullNameAttribute(),
             ];
         });
+
         return response()->json($names);
     }
 
     /**
      * Presenters json response for select2 component
      *
-     * @param ApiRequest $request
+     * @param  ApiRequest  $request
      * @return JsonResponse
+     *
      * @throws AuthorizationException
      */
     public function users(ApiRequest $request): JsonResponse
@@ -100,10 +100,11 @@ class ApiController extends Controller
 
         $names = $users->map(function ($user) {
             return [
-                'id'   => $user->id,
-                'name' => $user->getFullNameAttribute() . '/' . str()->mask($user->username, '*', 3),
+                'id' => $user->id,
+                'name' => $user->getFullNameAttribute().'/'.str()->mask($user->username, '*', 3),
             ];
         });
+
         return response()->json($names);
     }
 }

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Tests\Unit;
 
 use App\Enums\Content;
@@ -15,7 +14,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Collection;
@@ -168,13 +166,13 @@ class ClipTest extends TestCase
     public function it_can_add_an_asset(): void
     {
         $asset = $this->clip->addAsset([
-            'disk'               => 'videos',
+            'disk' => 'videos',
             'original_file_name' => 'video.mp4',
-            'path'               => '/videos/',
-            'duration'           => '100',
-            'width'              => '1920',
-            'height'             => '1080',
-            'type'               => 'video',
+            'path' => '/videos/',
+            'duration' => '100',
+            'width' => '1920',
+            'height' => '1080',
+            'type' => 'video',
         ]);
 
         $this->assertInstanceOf(Asset::class, $asset);
@@ -208,21 +206,21 @@ class ClipTest extends TestCase
         $series = Series::factory()->create();
 
         Clip::factory()->create([
-            'title'     => 'first clip',
+            'title' => 'first clip',
             'series_id' => $series->id,
-            'episode'   => 1,
+            'episode' => 1,
         ]);
 
         $secondClip = Clip::factory()->create([
-            'title'     => 'second clip',
+            'title' => 'second clip',
             'series_id' => $series->id,
-            'episode'   => 2,
+            'episode' => 2,
         ]);
 
         Clip::factory()->create([
-            'title'     => 'third clip',
+            'title' => 'third clip',
             'series_id' => $series->id,
-            'episode'   => 3,
+            'episode' => 3,
         ]);
 
         $this->assertInstanceOf(Collection::class, $secondClip->previousNextClipCollection());

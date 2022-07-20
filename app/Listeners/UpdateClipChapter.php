@@ -4,8 +4,6 @@ namespace App\Listeners;
 
 use App\Events\ChapterDeleted;
 use App\Models\Clip;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
 class UpdateClipChapter
 {
@@ -22,7 +20,7 @@ class UpdateClipChapter
     /**
      * Handle the event.
      *
-     * @param ChapterDeleted $event
+     * @param  ChapterDeleted  $event
      * @return void
      */
     public function handle(ChapterDeleted $event)

@@ -15,7 +15,7 @@ class ContextFactory extends Factory
     {
         return [
             'de_name' => 'Collegium  Alexandrinum',
-            'en_name' => 'Collegium Alexandrinum'
+            'en_name' => 'Collegium Alexandrinum',
         ];
     }
 }

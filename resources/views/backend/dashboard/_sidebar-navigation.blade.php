@@ -41,7 +41,7 @@
                     class="block mb-4 text-lg  {{ setActiveLink(route('activities.index')) }} font-bold
                     hover:text-gray-200"
                 >
-                    {{ trans_choice('menu.backend.activity', 2)  }}
+                    {{ trans_choice('common.menu.activity', 2)  }}
                 </a>
             </li>
         @endcan
@@ -75,22 +75,16 @@
                     {{ trans_choice('common.menu.user', 2) }}
                 </a>
             </li>
-            <li>
-                <a
-                    href="{{route('opencast.status')}}"
-                    class="block mb-4 text-lg {{ setActiveLink(route('opencast.status')) }} font-bold
-                    hover:text-gray-200"
-                >
-                    {{ __('common.menu.opencast') }}
-                </a>
-            </li>
         @endcan
         @can('view-superadmin-menu-items')
             <li>
                 <a
-                    href="/"
-                    class="block mb-4 text-lg font-bold hover:text-gray-200"
-                >Server</a>
+                    href="{{route('systems.status')}}"
+                    class="block mb-4 text-lg {{ setActiveLink(route('systems.status')) }} font-bold
+                    hover:text-gray-200"
+                >
+                    {{ trans_choice('common.menu.system', 2) }}
+                </a>
             </li>
         @endcan
     </ul>

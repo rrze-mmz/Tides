@@ -25,13 +25,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        if (!app()->environment('production')) {
+        if (! app()->environment('production')) {
             Mail::alwaysTo(env('DEV_MAIL_ADDRESS'));
         }
 
         Relation::enforceMorphMap([
             'series' => 'App\Models\Series',
-            'clip'   => 'App\Models\Clip'
+            'clip' => 'App\Models\Clip',
         ]);
     }
 }

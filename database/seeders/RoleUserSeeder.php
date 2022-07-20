@@ -17,7 +17,7 @@ class RoleUserSeeder extends Seeder
         DB::table('role_user')->insert(
             [
                 'role_id' => '2',
-                'user_id' => '3'
+                'user_id' => '3',
             ],
         );
     }

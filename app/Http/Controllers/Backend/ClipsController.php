@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
@@ -70,17 +69,19 @@ class ClipsController extends Controller
      * @param  Clip  $clip
      * @param  OpencastService  $opencastService
      * @return View|Application|Factory
+     *
      * @throws AuthorizationException
      */
     public function edit(Clip $clip, OpencastService $opencastService): Application|Factory|View
     {
-        $this->authorize('edit', $clip);;
+        $this->authorize('edit', $clip);
+
         return view(
             'backend.clips.edit',
             [
-                'clip'                         => $clip,
-                'acls'                         => Acl::all(),
-                'previousNextClipCollection'   => $clip->previousNextClipCollection(),
+                'clip' => $clip,
+                'acls' => Acl::all(),
+                'previousNextClipCollection' => $clip->previousNextClipCollection(),
                 'opencastConnectionCollection' => $opencastService->getHealth(),
             ]
         );
@@ -111,6 +112,7 @@ class ClipsController extends Controller
      *
      * @param  Clip  $clip
      * @return RedirectResponse
+     *
      * @throws AuthorizationException
      */
     public function destroy(Clip $clip): RedirectResponse

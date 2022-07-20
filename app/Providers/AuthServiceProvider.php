@@ -10,8 +10,6 @@ use App\Models\User;
 use App\Policies\AssetPolicy;
 use App\Policies\ClipPolicy;
 use App\Policies\CommentPolicy;
-use App\Policies\DocumentPolicy;
-use App\Policies\MenuPolicy;
 use App\Policies\SeriesPolicy;
 use App\Policies\UserPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -25,11 +23,11 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        Clip::class    => ClipPolicy::class,
-        Asset::class   => AssetPolicy::class,
-        Series::class  => SeriesPolicy::class,
+        Clip::class => ClipPolicy::class,
+        Asset::class => AssetPolicy::class,
+        Series::class => SeriesPolicy::class,
         Comment::class => CommentPolicy::class,
-        User::class    => UserPolicy::class,
+        User::class => UserPolicy::class,
     ];
 
     /**

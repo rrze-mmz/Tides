@@ -30,60 +30,60 @@ return [
 
     'disks' => [
 
-        'local'  => [
+        'local' => [
             'driver' => 'local',
-            'root'   => storage_path('app'),
+            'root' => storage_path('app'),
         ],
         'public' => [
-            'driver'     => 'local',
-            'root'       => storage_path('app/public'),
-            'url'        => env('APP_URL').'/storage',
+            'driver' => 'local',
+            'root' => storage_path('app/public'),
+            'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
         ],
 
         'videos' => [
             'driver' => 'local',
-            'root'   => storage_path('app/videos'),
-            'url'    => env('APP_URL').'/videos',
+            'root' => storage_path('app/videos'),
+            'url' => env('APP_URL').'/videos',
         ],
 
         'streamable_videos' => [
-            'driver'     => 'local',
-            'root'       => storage_path('app/streamable_videos'),
-            'url'        => env('APP_URL').'/streamable_videos',
+            'driver' => 'local',
+            'root' => storage_path('app/streamable_videos'),
+            'url' => env('APP_URL').'/streamable_videos',
             'visibility' => 'public',
         ],
 
         'video_dropzone' => [
             'driver' => 'local',
-            'root'   => storage_path('app/video_drop_zone'),
+            'root' => storage_path('app/video_drop_zone'),
         ],
 
         'opencast_archive' => [
             'driver' => 'local',
-            'root'   => storage_path('app/opencast'),
+            'root' => storage_path('app/opencast'),
         ],
 
         'documents' => [
             'driver' => 'local',
-            'root'   => storage_path('app/documents'),
-            'url'    => env('APP_URL').'/documents',
+            'root' => storage_path('app/documents'),
+            'url' => env('APP_URL').'/documents',
         ],
 
         'thumbnails' => [
-            'driver'     => 'local',
-            'root'       => storage_path('app/thumbnails'),
-            'url'        => env('APP_URL').'/thumbnails',
+            'driver' => 'local',
+            'root' => storage_path('app/thumbnails'),
+            'url' => env('APP_URL').'/thumbnails',
             'visibility' => 'public',
         ],
 
         's3' => [
-            'driver'   => 's3',
-            'key'      => env('AWS_ACCESS_KEY_ID'),
-            'secret'   => env('AWS_SECRET_ACCESS_KEY'),
-            'region'   => env('AWS_DEFAULT_REGION'),
-            'bucket'   => env('AWS_BUCKET'),
-            'url'      => env('AWS_URL'),
+            'driver' => 's3',
+            'key' => env('AWS_ACCESS_KEY_ID'),
+            'secret' => env('AWS_SECRET_ACCESS_KEY'),
+            'region' => env('AWS_DEFAULT_REGION'),
+            'bucket' => env('AWS_BUCKET'),
+            'url' => env('AWS_URL'),
             'endpoint' => env('AWS_ENDPOINT'),
         ],
 
@@ -101,10 +101,10 @@ return [
     */
 
     'links' => [
-        public_path('storage')           => storage_path('app/public'),
+        public_path('storage') => storage_path('app/public'),
         public_path('streamable_videos') => storage_path('app/streamable_videos'),
-        public_path('thumbnails')        => storage_path('app/thumbnails'),
-        public_path('documents')         => storage_path('app/documents'),
+        public_path('thumbnails') => storage_path('app/thumbnails'),
+        public_path('documents') => storage_path('app/documents'),
     ],
 
 ];

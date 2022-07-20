@@ -152,7 +152,7 @@
 
             @include('backend.clips.sidebar._upload-video')
 
-            @if ($opencastConnectionCollection = $opencastConnectionCollection->isNotEmpty())
+            @if ($opencastConnectionCollection['status']==='pass')
                 @include('backend.clips.sidebar._ingest-video')
             @endif
 
@@ -185,7 +185,7 @@
                        text=" Transfer files from drop zone"
         />
 
-        @if($opencastConnectionCollection)
+        @if($opencastConnectionCollection['status']==='pass')
             <x-form.button :link="route('admin.clips.opencast.listEvents', $clip)"
                            type="submit"
                            text=" Transfer files from Opencast"

@@ -37,7 +37,7 @@ class Chapter extends BaseModel
     }
 
     /**
-     * @param array $clipIDs
+     * @param  array  $clipIDs
      * @return int
      */
     public function addClips(array $clipIDs): int
@@ -46,7 +46,7 @@ class Chapter extends BaseModel
     }
 
     /**
-     * @param array $clipIDs
+     * @param  array  $clipIDs
      * @return int
      */
     public function removeClips(array $clipIDs): int

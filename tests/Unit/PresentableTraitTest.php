@@ -13,6 +13,7 @@ class PresentableTraitTest extends TestCase
     use RefreshDatabase;
 
     protected Clip $clip;
+
     protected Series $series;
 
     protected function setUp(): void

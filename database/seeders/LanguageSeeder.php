@@ -16,17 +16,17 @@ class LanguageSeeder extends Seeder
     {
         DB::table('languages')->insert([
             [
-                'code'      => 'de',
-                'name'      => 'Deutsch',
+                'code' => 'de',
+                'name' => 'Deutsch',
                 'long_code' => 'de-DE',
                 'order_int' => '1',
             ],
             [
-                'code'      => 'en',
-                'name'      => 'English',
+                'code' => 'en',
+                'name' => 'English',
                 'long_code' => 'en-US',
                 'order_int' => '2',
-            ]
+            ],
         ]);
     }
 }

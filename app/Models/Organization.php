@@ -13,6 +13,7 @@ class Organization extends BaseModel
 
     //search columns for searchable trait
     protected array $searchable = ['name'];
+
     protected $primaryKey = 'org_id';
 
     /**

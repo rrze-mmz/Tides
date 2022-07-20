@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -15,7 +16,7 @@ return new class extends Migration {
         Schema::create('series_members', function (Blueprint $table) {
             $table->primary([
                 'series_id',
-                'user_id'
+                'user_id',
             ]);
             $table->foreignId('series_id');
             $table->foreignId('user_id');

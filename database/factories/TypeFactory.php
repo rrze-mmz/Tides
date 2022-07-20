@@ -15,7 +15,7 @@ class TypeFactory extends Factory
     {
         return [
             'en_name' => 'university lecture',
-            'de_name' => 'universitäre Vorlesung'
+            'de_name' => 'universitäre Vorlesung',
         ];
     }
 }

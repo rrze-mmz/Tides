@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Tests\Feature\Backend;
 
 use App\Models\Asset;

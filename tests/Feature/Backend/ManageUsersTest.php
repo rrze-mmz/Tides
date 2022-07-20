@@ -10,7 +10,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Notification;
 use Livewire\Livewire;
-use Facades\Tests\Setup\SeriesFactory;
 use Tests\TestCase;
 
 class ManageUsersTest extends TestCase
@@ -106,18 +105,18 @@ class ManageUsersTest extends TestCase
     {
         $bob = User::factory()->create([
             'first_name' => 'Bob',
-            'last_name'  => 'Tester',
-            'username'   => 'bob01'
+            'last_name' => 'Tester',
+            'username' => 'bob01',
         ]);
         $alice = User::factory()->create([
             'first_name' => 'Alice',
-            'last_name'  => 'Tester',
-            'username'   => 'alice01'
+            'last_name' => 'Tester',
+            'username' => 'alice01',
         ]);
         $gregor = User::factory()->create([
             'first_name' => 'Gregor',
-            'last_name'  => 'Tester',
-            'username'   => 'gregor01'
+            'last_name' => 'Tester',
+            'username' => 'gregor01',
         ]);
 
         Livewire::test(UserDataTable::class)
@@ -130,18 +129,18 @@ class ManageUsersTest extends TestCase
     {
         $bob = User::factory()->create([
             'first_name' => 'Bob',
-            'last_name'  => 'Tester',
-            'username'   => 'bob01'
+            'last_name' => 'Tester',
+            'username' => 'bob01',
         ]);
         $alice = User::factory()->create([
             'first_name' => 'Alice',
-            'last_name'  => 'Tester',
-            'username'   => 'alice01'
+            'last_name' => 'Tester',
+            'username' => 'alice01',
         ]);
         $gregor = User::factory()->create([
             'first_name' => 'Gregor',
-            'last_name'  => 'Tester',
-            'username'   => 'gregor01'
+            'last_name' => 'Tester',
+            'username' => 'gregor01',
         ]);
 
         Livewire::test(UserDataTable::class)
@@ -253,9 +252,9 @@ class ManageUsersTest extends TestCase
     {
         $attributes = [
             'first_name' => $this->faker->firstName(),
-            'last_name'  => $this->faker->lastName(),
-            'username'   => $this->faker->userName(),
-            'email'      => auth()->user()->email
+            'last_name' => $this->faker->lastName(),
+            'username' => $this->faker->userName(),
+            'email' => auth()->user()->email,
         ];
 
         $this->post(route('users.store'), $attributes);
@@ -282,9 +281,9 @@ class ManageUsersTest extends TestCase
     {
         $attributes = [
             'first_name' => 'John',
-            'last_name'  => 'Doe',
-            'username'   => 'johndoe21',
-            'email'      => 'john@doe.com'
+            'last_name' => 'Doe',
+            'username' => 'johndoe21',
+            'email' => 'john@doe.com',
         ];
 
         $this->post(route('users.store'), $attributes)->assertStatus(302);
@@ -299,9 +298,9 @@ class ManageUsersTest extends TestCase
 
         $attributes = [
             'first_name' => 'John',
-            'last_name'  => 'Doe',
-            'username'   => 'johndoe21',
-            'email'      => 'john@doe.com'
+            'last_name' => 'Doe',
+            'username' => 'johndoe21',
+            'email' => 'john@doe.com',
         ];
 
         $this->post(route('users.store'), $attributes);
@@ -357,16 +356,16 @@ class ManageUsersTest extends TestCase
 
         $this->patch(route('users.update', $user), [
             'first_name' => 'John',
-            'last_name'  => 'Doe',
-            'email'      => $user->email
+            'last_name' => 'Doe',
+            'email' => $user->email,
         ]);
 
         $user->refresh();
 
         $this->assertDatabaseHas('users', [
             'first_name' => 'John',
-            'last_name'  => 'Doe',
-            'email'      => $user->email
+            'last_name' => 'Doe',
+            'email' => $user->email,
         ]);
     }
 
@@ -401,7 +400,7 @@ class ManageUsersTest extends TestCase
 
         $this->signInRole('admin');
         $this->patch((route('users.update', $user)), [
-            'role_id' => Role::where('name', 'moderator')->first()->id
+            'role_id' => Role::where('name', 'moderator')->first()->id,
         ]);
 
         $this->assertTrue($user->isModerator());

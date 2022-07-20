@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Listeners;
 
 use App\Events\AssetDeleted;
@@ -27,7 +26,7 @@ class DeleteAssetFile
     public function handle(AssetDeleted $event): void
     {
         //delete poster image file
-        if (!is_null($event->asset->clip->posterImage)) {
+        if (! is_null($event->asset->clip->posterImage)) {
             Storage::disk('thumbnails')->delete($event->asset->clip->posterImage);
             $event->asset->clip->updatePosterImage();
         }

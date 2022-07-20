@@ -11,7 +11,6 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Arr;
-use Log;
 
 class SeriesController extends Controller
 {
@@ -23,10 +22,9 @@ class SeriesController extends Controller
     public function index(): View
     {
         return view('backend.series.index', [
-            'series' =>
-                (auth()->user()->can('index-all-series'))
+            'series' => (auth()->user()->can('index-all-series'))
                     ? Series::orderByDesc('updated_at')->paginate(12)
-                    : auth()->user()->accessableSeries()->paginate(12)
+                    : auth()->user()->accessableSeries()->paginate(12),
         ]);
     }
 
@@ -43,8 +41,8 @@ class SeriesController extends Controller
     /**
      * Store a series in database
      *
-     * @param StoreSeriesRequest $request
-     * @param OpencastService $opencastService
+     * @param  StoreSeriesRequest  $request
+     * @param  OpencastService  $opencastService
      * @return RedirectResponse
      */
     public function store(StoreSeriesRequest $request, OpencastService $opencastService): RedirectResponse
@@ -66,9 +64,10 @@ class SeriesController extends Controller
     /**
      * Edit form for a series
      *
-     * @param Series $series
-     * @param OpencastService $opencastService
+     * @param  Series  $series
+     * @param  OpencastService  $opencastService
      * @return View
+     *
      * @throws AuthorizationException
      */
     public function edit(Series $series, OpencastService $opencastService): View
@@ -83,16 +82,17 @@ class SeriesController extends Controller
     /**
      * Update a single series in the database
      *
-     * @param Series $series
-     * @param UpdateSeriesRequest $request
-     * @param OpencastService $opencastService
+     * @param  Series  $series
+     * @param  UpdateSeriesRequest  $request
+     * @param  OpencastService  $opencastService
      * @return RedirectResponse
+     *
      * @throws AuthorizationException
      */
     public function update(
-        Series              $series,
+        Series $series,
         UpdateSeriesRequest $request,
-        OpencastService     $opencastService
+        OpencastService $opencastService
     ): RedirectResponse {
         $this->authorize('update-series', $series);
 
@@ -111,8 +111,9 @@ class SeriesController extends Controller
     /**
      * Delete a single series
      *
-     * @param Series $series
+     * @param  Series  $series
      * @return RedirectResponse
+     *
      * @throws AuthorizationException
      */
     public function destroy(Series $series): RedirectResponse

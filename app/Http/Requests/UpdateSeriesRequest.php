@@ -12,10 +12,9 @@ class UpdateSeriesRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            'slug'       => Str::slug($this->title),
-            'is_public'  => $this->is_public === 'on',
-            'presenters' =>
-                $this->presenters = $this->presenters ?? [], //set empty array if select2 presenters is empty
+            'slug' => Str::slug($this->title),
+            'is_public' => $this->is_public === 'on',
+            'presenters' => $this->presenters = $this->presenters ?? [], //set empty array if select2 presenters is empty
         ]);
     }
 
@@ -37,15 +36,15 @@ class UpdateSeriesRequest extends FormRequest
     public function rules()
     {
         return [
-            'title'              => ['required'],
-            'description'        => ['string', 'nullable'],
-            'organization_id'    => ['required ', 'integer'],
-            'slug'               => ['required'],
-            'presenters'         => ['array'],
-            'presenters.*'       => ['integer', 'nullable'],
+            'title' => ['required'],
+            'description' => ['string', 'nullable'],
+            'organization_id' => ['required ', 'integer'],
+            'slug' => ['required'],
+            'presenters' => ['array'],
+            'presenters.*' => ['integer', 'nullable'],
             'opencast_series_id' => ['null', 'uuid'],
-            'password'           => ['nullable', Password::min(8)->mixedCase()],
-            'is_public'          => ['boolean'],
+            'password' => ['nullable', Password::min(8)->mixedCase()],
+            'is_public' => ['boolean'],
         ];
     }
 }
