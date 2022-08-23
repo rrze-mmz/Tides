@@ -55,7 +55,7 @@ class ElasticsearchRebuildIndexes extends Command
 
         $modelCollection = $modelClass::all();
 
-        $elasticsearchService->deleteIndexes(Str::plural($this->argument('model')));
+//        $elasticsearchService->deleteIndexes(Str::plural($this->argument('model')));
 
         $this->info($modelName.' Indexes deleted successfully');
 

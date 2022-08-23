@@ -1,6 +1,6 @@
 <div class="w-full py-4 px-4 mx-4 h-full bg-white rounded border">
     <h2 class="text-xl font-normal py-4 -ml-5 mb-3 border-l-4 border-blue-600 pl-4 ">
-        Series Administrator
+        {{__('series.backend.Series administrator')}}
     </h2>
     <div class="flex-row">
         @if(is_null($series->owner))
@@ -24,14 +24,18 @@
                     <div class="w-full pb-6">
                         <label>
                             <select
-                                class="p-2 w-full select2-tides-users focus:outline-none focus:bg-white focus:border-blue-500"
+                                class="p-2 w-full select2-tides-users
+                                        focus:outline-none focus:bg-white focus:border-blue-500"
                                 name="userID"
                                 style="width: 100%"
                             >
                             </select>
                         </label>
                     </div>
-                    <x-form.button :link="$link=false" type="submit" text="Set series owner"/>
+                    <x-form.button :link="$link=false"
+                                   type="submit"
+                                   text="Set series owner"
+                    />
                 </form>
             </div>
         @endcan
@@ -39,7 +43,7 @@
 
     @if($series->members()->count() > 0)
         <h4 class="pt-6 border-b-2 pb-2">
-            Members
+            {{ trans_choice('common.menu.member', 2) }}
         </h4>
         <div class="pt-4">
             <ul class="list-disc">

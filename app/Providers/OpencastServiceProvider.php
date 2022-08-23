@@ -12,7 +12,7 @@ class OpencastServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->app->singleton(OpencastClient::class, function () {
             $config = $this->app->get('config')['opencast'];

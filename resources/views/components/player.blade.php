@@ -3,7 +3,7 @@
                                                 ->exists($clip->assets()->first()->id.'.m3u8'))
         <source src="{{ '/streamable_videos/'.$clip->assets()->first()->id . '.m3u8'  }}"
                 type="application/x-mpegURL"/>
-    @elseif(Illuminate\Support\Str::contains($wowzaStatus['0'],'Wowza Streaming Engine'))
+    @elseif($wowzaStatus->contains('pass'))
         <source
             src="{{ $wowzaService->vodSecureUrl($clip) }}"
             type="application/x-mpegURL"/>

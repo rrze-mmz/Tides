@@ -10,6 +10,7 @@ use Facades\Tests\Setup\ClipFactory;
 use GuzzleHttp\Handler\MockHandler;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Storage;
+use Tests\Setup\WorksWithOpencastClient;
 use Tests\Setup\WorksWithWowzaClient;
 use Tests\TestCase;
 
@@ -17,6 +18,7 @@ class WowzaServiceTest extends TestCase
 {
     use RefreshDatabase;
     use WorksWithWowzaClient;
+    use WorksWithOpencastClient;
 
     private WowzaService $wowzaService;
 
@@ -35,6 +37,16 @@ class WowzaServiceTest extends TestCase
         $this->wowzaService = app(WowzaService::class);
 
         $this->clip = ClipFactory::create();
+    }
+
+    /** @test */
+    public function it_returns_default_values_if_guzzle_response_is_empty(): void
+    {
+        $this->mockHandler->append($this->mockServerNotAvailable());
+
+        $results = $this->wowzaService->getHealth();
+
+        $this->assertEquals('failed', $results['status']);
     }
 
     /** @test */
@@ -115,9 +127,9 @@ class WowzaServiceTest extends TestCase
     {
         $this->mockHandler->append($this->mockCheckApiConnection());
 
-        $results = $this->wowzaService->checkApiConnection();
+        $results = $this->wowzaService->getHealth();
 
-        $this->assertStringContainsString('Wowza Streaming Engine', $results->get(0));
+        $this->assertStringContainsString('Wowza Streaming Engine', $results->get('releaseId'));
     }
 
     /** @test */

@@ -15,5 +15,10 @@ return [
         'views' => ':counter Ansichten',
     ],
     'backend' => [
+        'Series administrator' => 'Serien Administrator',
+        'Set a series owner' => 'Serien-Besitzer einsetzen',
+        'Update Series' => 'Serien aktualisieren',
+        'Add a series member' => 'Neue Serien-Teilnehmer hinzufügen',
+
     ],
 ];

@@ -198,7 +198,7 @@ trait WorksWithOpencastClient
         );
 
         return new Response(200, [], (
-        $output->toXml()
+            $output->toXml()
         ));
     }
 

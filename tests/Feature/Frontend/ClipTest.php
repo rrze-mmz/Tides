@@ -11,6 +11,7 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Storage;
+use Tests\Setup\WorksWithOpencastClient;
 use Tests\Setup\WorksWithWowzaClient;
 use Tests\TestCase;
 
@@ -18,6 +19,7 @@ class ClipTest extends TestCase
 {
     use RefreshDatabase;
     use WorksWithWowzaClient;
+    use WorksWithOpencastClient;
 
     private Clip $clip;
 
@@ -239,7 +241,7 @@ class ClipTest extends TestCase
     /** @test */
     public function it_is_loads_the_video_file_as_source_in_player(): void
     {
-        $this->mockHandler->append(new Response());
+        $this->mockHandler->append($this->mockServerNotAvailable());
 
         $this->get($this->clip->path())->assertDontSee('http://172.17.0.2:1935');
 

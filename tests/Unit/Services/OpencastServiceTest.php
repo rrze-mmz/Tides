@@ -41,7 +41,7 @@ class OpencastServiceTest extends TestCase
         $this->mockHandler->append($this->mockServerNotAvailable());
         $results = $this->opencastService->getHealth();
 
-        $this->assertEquals('unknown', $results['description']);
+        $this->assertEquals('failed', $results['status']);
     }
 
     /** @test */

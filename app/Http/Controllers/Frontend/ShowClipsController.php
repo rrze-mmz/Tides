@@ -41,7 +41,7 @@ class ShowClipsController extends Controller
 
         return view('frontend.clips.show', [
             'clip' => $clip,
-            'wowzaStatus' => $wowzaService->checkApiConnection(),
+            'wowzaStatus' => $wowzaService->getHealth(),
             'previousNextClipCollection' => $clip->previousNextClipCollection(),
         ]);
     }

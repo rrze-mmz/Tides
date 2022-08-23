@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="flex pb-2 font-semibold border-b border-black font-2xl">
-        Edit {{ $series->title }} [ ID : {{ $series->id }}]<span
+        {{__('common.actions.edit')}} {{ $series->title }} [ ID : {{ $series->id }}]<span
             class="text-xs italic pl-2 pt-1"> created at {{$series->created_at }} </span>
     </div>
     <div class="flex justify-center content-center content-between py-2 px-2">
@@ -18,27 +18,27 @@
                 <x-form.input field-name="title"
                               input-type="text"
                               :value="$series->title"
-                              label="Title"
+                              label="{{__('common.forms.title')}}"
                               :full-col="true"
                               :required="true"
                 />
 
                 <x-form.textarea field-name="description"
                                  :value="strip_tags($series->description)"
-                                 label="Description"
+                                 label="{{__('common.forms.description')}}"
                 />
 
                 <x-form.input field-name="opencast_series_id"
                               input-type="text"
                               :value="$series->opencast_series_id"
-                              label="Opencast Series ID"
+                              label="{{__('common.forms.Opencast series ID')}}"
                               :full-col="true"
                               :disabled="true"
                               :required="true"
                 />
 
                 <x-form.select2-single field-name="organization_id"
-                                       label="Organization"
+                                       label="{{__('common.forms.organization')}}"
                                        select-class="select2-tides-organization"
                                        model="organization"
                                        :selectedItem="$series->organization_id"
@@ -46,24 +46,24 @@
 
                 <x-form.select2-multiple field-name="presenters"
                                          :model="$series"
-                                         label="Presenters"
+                                         label="{{trans_choice('common.menu.presenter',2)}}"
                                          select-class="select2-tides-presenters"
                                          :items="$series->presenters"/>
 
                 <x-form.password field-name="password"
                                  :value="$series->password"
-                                 label="Password"
+                                 label="{{__('common.password')}}"
                                  :full-col="true"
                 />
 
                 <x-form.toggle-button :value="$series->is_public"
-                                      label="Public available"
+                                      label="{{__('common.forms.public')}}"
                                       field-name="is_public"
                 />
             </div>
             @can('update-series', $series)
                 <div class="pt-10">
-                    <x-form.button :link="$link=false" type="submit" text="Update Series"/>
+                    <x-form.button :link="$link=false" type="submit" text="{{__('series.backend.Update Series')}}"/>
                 </div>
             @endcan
         </form>
@@ -90,7 +90,7 @@
                        x-on:click="activeTab = 1"
                        :class="activeTab === 1 ? activeClass : inactiveClass"
                     >
-                        Actions
+                        {{ __('series.common.actions') }}
                     </a>
                 </li>
                 @if(isset($opencastSeriesInfo['health']) && $opencastSeriesInfo['health'])

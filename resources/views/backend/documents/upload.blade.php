@@ -4,7 +4,7 @@
 @if($resource)
     <div class="w-full py-4 px-4 mx-4 h-full bg-white rounded border">
         <h2 class="text-xl font-normal py-4 -ml-5 mb-3 border-l-4 border-blue-600 pl-4 ">
-            Upload a document
+            {{ __('common.forms.Upload a document') }}
         </h2>
 
         <form
@@ -31,7 +31,7 @@
 
         @if($resource->documents()->count()> 0)
             <h4 class="pt-6 border-b-2 pb-2">
-                {{ class_basename($resource) }} documents
+                {{ class_basename($resource) }} {{trans_choice('common.menu.document', 2)}}
             </h4>
             <div class="flex py-6 pl-4">
                 <ul class="list-disc">

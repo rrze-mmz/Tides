@@ -22,7 +22,7 @@ class ManageDocumentsTest extends TestCase
         $this->signInRole('admin');
 
         $this->get(route('series.edit', Series::factory()->create()))
-            ->assertSee('Upload a document');
+            ->assertSee(__('common.forms.Upload a document'));
     }
 
     /** @test */
@@ -31,7 +31,7 @@ class ManageDocumentsTest extends TestCase
         $this->signInRole('admin');
 
         $this->get(route('clips.edit', Clip::factory()->create()))
-            ->assertSee('Upload a document');
+            ->assertSee(__('common.forms.Upload a document'));
     }
 
     /** @test */

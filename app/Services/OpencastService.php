@@ -30,23 +30,24 @@ class OpencastService
      */
     public function getHealth(): Collection
     {
-        $health = collect([
-            'releaseId' => 'unknown',
+        $response = collect([
+            'releaseId' => 'Opencast server not available',
             'description' => 'unknown',
             'serviceId' => '127.0.0.1',
             'version' => null,
             'status' => 'failed',
         ]);
+
         try {
             $this->response = $this->client->get('info/health');
             if (! empty(json_decode((string) $this->response->getBody(), true))) {
-                $health = collect(json_decode((string) $this->response->getBody(), true));
+                $response = collect(json_decode((string) $this->response->getBody(), true));
             }
         } catch (GuzzleException $exception) {
             Log::error($exception);
         }
 
-        return $health;
+        return $response;
     }
 
     /**

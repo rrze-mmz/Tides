@@ -27,15 +27,24 @@ class WowzaService
      *
      * @return Collection
      */
-    public function checkApiConnection(): Collection
+    public function getHealth(): Collection
     {
+        $response = collect([
+            'releaseId' => 'Wowza server not available',
+            'status' => 'failed',
+        ]);
+
         try {
             $this->response = $this->client->get('/');
+            if (! empty(json_encode((string) $this->response->getBody(), true))) {
+                $response->put('releaseId', json_encode((string) $this->response->getBody(), true))
+                    ->put('status', 'pass');
+            }
         } catch (GuzzleException $e) {
             Log::error($e);
         }
 
-        return collect(json_encode($this->response->getBody()->getContents(), true));
+        return $response;
     }
 
     /**

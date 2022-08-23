@@ -21,7 +21,7 @@ class SearchController extends Controller
     {
         $searchResults = collect([]);
         //check whether elasticsearch server is up and running
-        if ($elasticsearchService->clusterHealth()->isNotEmpty()) {
+        if ($elasticsearchService->getHealth()->contains('pass')) {
             $results = $elasticsearchService->searchIndexes($request->term);
             $searchResults = $searchResults->put('clips', $results);
 

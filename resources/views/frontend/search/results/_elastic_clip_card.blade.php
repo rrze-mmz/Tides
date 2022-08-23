@@ -1,6 +1,7 @@
 <div class="flex my-2 w-full bg-white">
     <div class="flex justify-center justify-items-center  place-items-center mx-2 w-48 h-full">
-        <img src="{{ fetchClipPoster($clip->get('poster_image')) }}" alt="preview image">
+        <img src="{{ 'thumbnails/'.$clip->get('posterImage') }}"
+             alt="preview image">
     </div>
 
     <div class="flex flex-col justify-between p-4 w-full bg-white">

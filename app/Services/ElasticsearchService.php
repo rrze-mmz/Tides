@@ -6,7 +6,6 @@ use App\Http\Clients\ElasticsearchClient;
 use Elasticsearch\ClientBuilder;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\Psr7\Response;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -18,29 +17,38 @@ class ElasticsearchService
 
     private Collection $response;
 
-    private Response $guzzleResponse;
-
     public function __construct(private ClientBuilder $clientBuilder, private ElasticsearchClient $client)
     {
         $this->type = '';
         $this->response = collect([]);
-        $this->guzzleResponse = new Response(200, [], json_encode([]));
     }
 
     /**
      * @return Collection
      */
-    public function clusterHealth(): Collection
+    public function getHealth(): Collection
     {
-        $health = collect([]);
+        $this->response = collect([
+            'releaseId' => [
+                'version' => [
+                    'number' => 'Elasticsearch server not available',
+                    'build_type' => 'unknown',
+                ],
+            ],
+            'status' => 'failed',
+        ]);
         try {
-            $this->guzzleResponse = $this->client->get('/_cluster/health');
-            $health = collect(json_decode((string) $this->guzzleResponse->getBody(), true));
+            $response = $this->client->get('/');
+            if (! empty(json_encode((string) $response->getBody(), true))) {
+                $this->response->put('releaseId', json_decode((string) $response->getBody(), true))
+                    ->put('status', 'pass');
+            }
         } catch (GuzzleException $exception) {
             Log::error($exception->getMessage());
         }
+        \Debugbar::info($this->response);
 
-        return $health;
+        return $this->response;
     }
 
     /**
@@ -146,12 +154,12 @@ class ElasticsearchService
     public function deleteIndexes(string $model = ''): Collection
     {
         try {
-            $this->guzzleResponse = $this->client->delete('/tides_'.Str::lower($model));
+            $this->response = collect($this->client->delete('/tides_'.Str::lower($model)));
         } catch (Exception $exception) {
             Log::error($exception->getMessage());
         }
 
-        return collect($this->guzzleResponse);
+        return $this->response;
     }
 
     /**

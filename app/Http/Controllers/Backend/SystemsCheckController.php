@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Services\ElasticsearchService;
 use App\Services\OpencastService;
 use App\Services\WowzaService;
 use Illuminate\Contracts\View\View;
@@ -14,15 +15,20 @@ class SystemsCheckController extends Controller
      *
      * @param  OpencastService  $opencastService
      * @param  WowzaService  $wowzaService
+     * @param  ElasticsearchService  $elasticsearchService
      * @return View
      */
-    public function __invoke(OpencastService $opencastService, WowzaService $wowzaService): View
-    {
+    public function __invoke(
+        OpencastService $opencastService,
+        WowzaService $wowzaService,
+        ElasticsearchService $elasticsearchService
+    ): View {
         $opencastStatus = $opencastService->getHealth();
-        $wowzaStatus = $wowzaService->checkApiConnection();
+        $wowzaStatus = $wowzaService->getHealth();
+        $elasticsearchStatus = $elasticsearchService->getHealth();
 
         return view('backend.systems.status', compact([
-            'opencastStatus', 'wowzaStatus',
+            'opencastStatus', 'wowzaStatus', 'elasticsearchStatus',
         ]));
     }
 }

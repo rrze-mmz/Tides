@@ -15,5 +15,10 @@ return [
         'views' => ':counter views',
     ],
     'backend' => [
+        'Series administrator' => 'Series administrator',
+        'Set a series owner' => 'Set a series owner',
+        'Update Series' => 'Update series',
+        'Add a series member' => 'Add a series member',
+
     ],
 ];

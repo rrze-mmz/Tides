@@ -13,7 +13,7 @@ class ElasticsearchServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->app->singleton(ClientBuilder::class, function () {
             $config = $this->app->get('config')['elasticsearch'];
@@ -32,6 +32,7 @@ class ElasticsearchServiceProvider extends ServiceProvider
 
             return new ElasticsearchClient([
                 'base_uri' => $config['url'].':'.$config['port'],
+                'verify' => config('app.env') === 'production',
                 'auth' => [
                     $config['username'],
                     $config['password'],

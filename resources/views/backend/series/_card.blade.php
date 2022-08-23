@@ -94,7 +94,7 @@
             <div my-4>
                 <x-form.button :link="route('series.edit', $series)"
                                type="submit"
-                               text="Edit series"
+                               text="Series {{__('common.actions.edit')}}"
                 />
             </div>
         </div>

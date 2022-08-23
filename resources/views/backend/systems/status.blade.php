@@ -12,7 +12,7 @@
         <div class="m-2 p-2 border-black border-solid rounded-lg border-2">
             <div class="flex  justify-between place-content-around">
                 <div>
-                    <h3 class="pb-6 font-semibold">Opencast
+                    <h3 class="pb-6 font-semibold text-green-500">Opencast
                     </h3>
                 </div>
                 <div>
@@ -33,19 +33,53 @@
                 </div>
             </div>
         </div>
-        <div class="border-black border-solid rounded-lg border-2 m-2 p-2">
-            <h3>Wowza</h3>
+        <div class="m-2 p-2 border-black border-solid rounded-lg border-2">
+            <div class="flex  justify-between place-content-around">
+                <div>
+                    <h3 class="pb-6 font-semibold text-orange-500">Wowza
+                    </h3>
+                </div>
+                <div>
+                    @if($wowzaStatus->contains('pass'))
+                        <x-heroicon-o-check-circle class="w-6 h-6 rounded text-green-600"/>
+                    @else
+                        <x-heroicon-o-x-circle class="w-6 h-6 rounded text-red-600"/>
+                    @endif
+                </div>
+            </div>
 
             <div>
-                <p>Status: $opencast</p>
+                <div>
+                    Wowza description:<span class=" font-bold"> {{str($wowzaStatus['releaseId'])->remove('"')}} </span>
+                </div>
             </div>
         </div>
 
-        <div class="border-black border-solid rounded-lg border-2 m-2 p-2">
-            <h3>Elasticsearch node</h3>
+        <div class="m-2 p-2 border-black border-solid rounded-lg border-2">
+            <div class="flex  justify-between place-content-around">
+                <div>
+                    <h3 class="pb-6 font-semibold">Elasticsearch
+                    </h3>
+                </div>
+                <div>
+                    @if($elasticsearchStatus->contains('pass'))
+                        <x-heroicon-o-check-circle class="w-6 h-6 rounded text-green-600"/>
+                    @else
+                        <x-heroicon-o-x-circle class="w-6 h-6 rounded text-red-600"/>
+                    @endif
+                </div>
+            </div>
 
             <div>
-                <p>Status: $opencast</p>
+                <div>
+                    Version:<span
+                        class=" font-bold"> {{ $elasticsearchStatus->get('releaseId')['version']['number'] }} </span>
+                </div>
+                <div>
+                    Description:<span
+                        class=" font-bold">{{ $elasticsearchStatus->get('releaseId')['version']['build_type'] }}
+                    </span>
+                </div>
             </div>
         </div>
     </div>
