@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Commands;
+namespace Tests\Feature\Console\Commands;
 
 use App\Models\Clip;
 use Facades\Tests\Setup\SeriesFactory;

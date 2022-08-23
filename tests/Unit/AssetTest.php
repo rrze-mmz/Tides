@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use App\Events\AssetDeleted;
 use App\Models\Asset;
 use App\Models\Clip;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
@@ -54,5 +55,17 @@ class AssetTest extends TestCase
     public function it_has_a_download_path(): void
     {
         $this->assertIsString($this->asset->downloadPath());
+    }
+
+    /** @test */
+    public function it_has_video_format_scope(): void
+    {
+        $this->assertInstanceOf(Builder::class, Asset::FormatVideo());
+    }
+
+    /** @test */
+    public function it_has_audio_format_scope(): void
+    {
+        $this->assertInstanceOf(Builder::class, Asset::FormatAudio());
     }
 }

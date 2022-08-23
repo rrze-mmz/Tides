@@ -217,7 +217,7 @@ class ManageUsersTest extends TestCase
         $this->post(route('users.store'), ['last_name' => '12'])
             ->assertSessionHasErrors('last_name');
 
-        $this->post(route('users.store'), ['last_name' => $this->faker->lastName()])
+        $this->post(route('users.store'), ['last_name' => 'Doe'])
             ->assertSessionDoesntHaveErrors('last_name');
     }
 

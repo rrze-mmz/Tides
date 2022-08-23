@@ -12,6 +12,7 @@ use Facades\Tests\Setup\SeriesFactory;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Str;
 use Tests\Setup\WorksWithOpencastClient;
 use Tests\TestCase;
 
@@ -764,6 +765,7 @@ class ManageClipsTest extends TestCase
             'original_file_name' => 'camera.smil',
             'type' => Content::SMIL(),
             'path' => '/videos/camera.smil',
+            'guid' => Str::uuid(),
             'duration' => '0',
             'width' => '0',
             'height' => '0',
@@ -782,6 +784,7 @@ class ManageClipsTest extends TestCase
             'original_file_name' => 'audio.mp3',
             'type' => Content::AUDIO(),
             'path' => '/videos/'.$clip->folder_id.'/audio.mp3',
+            'guid' => Str::uuid(),
             'duration' => '120',
             'width' => '0',
             'height' => '0',

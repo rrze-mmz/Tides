@@ -6,8 +6,6 @@
     @endif
 
     <form wire:submit.prevent="submitForm" action="#"
-          enctype="multipart/form-data"
-          method="POST"
           class="flex flex-col"
     >
         @csrf

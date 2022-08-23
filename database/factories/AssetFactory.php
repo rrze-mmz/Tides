@@ -7,6 +7,7 @@ use App\Models\Asset;
 use App\Models\Clip;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Str;
 
 class AssetFactory extends Factory
 {
@@ -34,6 +35,7 @@ class AssetFactory extends Factory
             'height' => '1280',
             'duration' => '720',
             'clip_id' => Clip::factory(),
+            'guid' => Str::uuid(),
             'type' => Content::PRESENTER,
         ];
     }

@@ -9,8 +9,10 @@ use DOMException;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Spatie\ArrayToXml\ArrayToXml;
 
 class WowzaService
@@ -96,6 +98,7 @@ class WowzaService
                 'disk' => 'videos',
                 'original_file_name' => $original_file_name,
                 'type' => Content::SMIL(),
+                'guid' => Str::uuid(),
                 'path' => getClipStoragePath($clip),
                 'duration' => '0',
                 'width' => '0',
@@ -188,8 +191,7 @@ class WowzaService
             $tokenStartTime = $tokenPrefix.'starttime='.time();
             $tokenEndTime = $tokenPrefix.'endTime='.(time() + 21600);
 
-            $userIP = (env('CHECK_FAUTV_VIDEOLINKS')) ? env('FAUTV_USER_IP') : $_SERVER['REMOTE_ADDR'];
-
+            $userIP = (App::environment(['testing', 'local'])) ? env('FAUTV_USER_IP') : $_SERVER['REMOTE_ADDR'];
             $hashStr = $contentPath.'?'.$userIP.'&'.$secureToken.'&'.$tokenEndTime.'&'.$tokenStartTime;
             $hash = hash('sha256', $hashStr, 1);
             $usableHash = strtr(base64_encode($hash), '+/', '-_');

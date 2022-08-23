@@ -5,9 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Clip;
 use App\Services\WowzaService;
-use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
 class ShowClipsController extends Controller
@@ -31,13 +29,11 @@ class ShowClipsController extends Controller
      * @param  WowzaService  $wowzaService
      * @return View
      *
-     * @throws AuthorizationException|GuzzleException
+     * @throws AuthorizationException
      */
     public function show(Clip $clip, WowzaService $wowzaService): View
     {
         $this->authorize('view-clips', $clip);
-
-        Log::info('clip ID'.$clip->title);
 
         return view('frontend.clips.show', [
             'clip' => $clip,

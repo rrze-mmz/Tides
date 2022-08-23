@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Models\Asset;
 use App\Models\Clip;
 use App\Services\WowzaService;
 use Facades\Tests\Setup\ClipFactory;
@@ -129,5 +130,15 @@ class HelpersTest extends TestCase
     public function it_has_an_opencast_workflow_operation_percentage_step(): void
     {
         $this->assertEquals('24', opencastWorkflowOperationPercentage('Generating waveform'));
+    }
+
+    /** @test */
+    public function it_has_a_helper_for_returning_an_assets_extension(): void
+    {
+        $this->assertEquals('mp4', getFileExtension(Asset::factory()->create(['original_file_name' => 'test.mp4'])));
+        $this->assertEquals(
+            'mp4',
+            getFileExtension(Asset::factory()->create(['original_file_name' => 'test.340.mp4']))
+        );
     }
 }

@@ -14,6 +14,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
 
 class TransferAssetsJob implements ShouldQueue
@@ -72,6 +73,7 @@ class TransferAssetsJob implements ShouldQueue
                 'disk' => 'videos',
                 'original_file_name' => $file['name'],
                 'path' => $storedFile,
+                'guid' => (string) Str::uuid(),
                 'duration' => $ffmpeg->getDurationInSeconds(),
                 'width' => ($isVideo)
                     ? $ffmpeg->getVideoStream()->getDimensions()->getWidth()

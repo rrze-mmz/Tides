@@ -170,6 +170,7 @@ class ClipTest extends TestCase
             'original_file_name' => 'video.mp4',
             'path' => '/videos/',
             'duration' => '100',
+            'guid' => Str::uuid(),
             'width' => '1920',
             'height' => '1080',
             'type' => 'video',

@@ -20,10 +20,6 @@ class IngestOpencast extends Component
 
     public $messageType;
 
-    protected array $rules = [
-        'videoFile' => 'required|file|mimetypes:video/mp4,video/mpeg,video/x-matroska,video/x-m4v',
-    ];
-
     /**
      * Mount Livewire component
      *
@@ -39,7 +35,9 @@ class IngestOpencast extends Component
      */
     public function submitForm(): void
     {
-        $this->validate();
+        $this->validate([
+            'videoFile' => 'required|file|mimetypes:video/mp4,video/mpeg,video/x-matroska,video/x-m4v',
+        ]);
 
         dispatch(new IngestVideoFileToOpencast($this->clip, $this->videoFile->getRealPath()));
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Commands;
+namespace Tests\Feature\Console\Commands;
 
 use App\Enums\OpencastWorkflowState;
 use App\Models\Series;

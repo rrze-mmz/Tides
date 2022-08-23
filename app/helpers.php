@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\Content;
+use App\Models\Asset;
 use App\Models\Clip;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -160,6 +161,11 @@ function generateLMSToken($obj, $time, bool $withURL = false): string
     $token = md5($type.$obj->id.$obj->password.request()->ip().$time.'studon');
 
     return ($withURL) ? '/protector/link/'.$type.'/'.$obj->id.'/'.$token.'/'.$time.'/studon' : $token;
+}
+
+function getFileExtension(Asset $asset): string
+{
+    return Str::afterLast($asset->original_file_name, '.');
 }
 
 /**

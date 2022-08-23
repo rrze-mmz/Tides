@@ -10,6 +10,7 @@ use Facades\Tests\Setup\ClipFactory;
 use GuzzleHttp\Handler\MockHandler;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Tests\Setup\WorksWithOpencastClient;
 use Tests\Setup\WorksWithWowzaClient;
 use Tests\TestCase;
@@ -59,6 +60,7 @@ class WowzaServiceTest extends TestCase
             'original_file_name' => 'test.mp4',
             'path' => '/2021/01/01/TEST/',
             'duration' => 300,
+            'guid' => Str::uuid(),
             'width' => 1920,
             'height' => 1080,
             'type' => Content::PRESENTER(),
@@ -83,6 +85,7 @@ class WowzaServiceTest extends TestCase
             'path' => '/2021/01/01/TEST/',
             'duration' => 300,
             'width' => 1920,
+            'guid' => Str::uuid(),
             'height' => 1080,
             'type' => Content::PRESENTATION(),
         ]);
@@ -108,6 +111,7 @@ class WowzaServiceTest extends TestCase
             'path' => '/2021/01/01/TEST/',
             'duration' => 300,
             'width' => 1920,
+            'guid' => Str::uuid(),
             'height' => 1080,
             'type' => Content::COMPOSITE(),
         ]);
@@ -141,6 +145,7 @@ class WowzaServiceTest extends TestCase
             'path' => '/2021/01/01/TEST/',
             'duration' => 300,
             'width' => 1920,
+            'guid' => Str::uuid(),
             'height' => 1080,
             'type' => Content::PRESENTER(),
         ]);

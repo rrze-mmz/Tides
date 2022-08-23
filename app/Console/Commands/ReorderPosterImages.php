@@ -28,7 +28,7 @@ class ReorderPosterImages extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         $this->info('Counting clips...');
 

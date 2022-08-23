@@ -69,7 +69,12 @@ return [
             'root' => storage_path('app/documents'),
             'url' => env('APP_URL').'/documents',
         ],
-
+        'assetsSymLinks' => [
+            'driver' => 'local',
+            'root' => storage_path('app/assetsSymLinks'),
+            'url' => env('APP_URL').'/assetsSymLinks',
+            'visibility' => 'public',
+        ],
         'thumbnails' => [
             'driver' => 'local',
             'root' => storage_path('app/thumbnails'),
@@ -105,6 +110,7 @@ return [
         public_path('streamable_videos') => storage_path('app/streamable_videos'),
         public_path('thumbnails') => storage_path('app/thumbnails'),
         public_path('documents') => storage_path('app/documents'),
+        public_path('links') => storage_path('app/assetsSymLinks'),
     ],
 
 ];

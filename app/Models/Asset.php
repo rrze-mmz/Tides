@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Content;
 use App\Events\AssetDeleted;
 use App\Models\Traits\RecordsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -66,5 +67,29 @@ class Asset extends BaseModel
     public function downloadPath(): string
     {
         return Storage::disk('videos')->path($this->path);
+    }
+
+    /**
+     * Scope a query to only include video assets
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function scopeFormatVideo($query): mixed
+    {
+        return $query->where('type', Content::PRESENTER())
+            ->orWhere('type', Content::PRESENTATION())
+            ->orWhere('type', Content::COMPOSITE());
+    }
+
+    /**
+     * Scope a query to only include audio assets
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function scopeFormatAudio($query): mixed
+    {
+        return $query->where('type', Content::AUDIO());
     }
 }
