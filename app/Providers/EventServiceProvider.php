@@ -11,6 +11,8 @@ use App\Listeners\DeleteAssetFile;
 use App\Listeners\DeleteClipResources;
 use App\Listeners\DeleteDocumentFile;
 use App\Listeners\DeleteSeriesResources;
+use App\Listeners\Saml2UserSignedIn;
+use App\Listeners\Saml2UserSignedOut;
 use App\Listeners\UpdateClipChapter;
 use App\Models\Clip;
 use App\Models\Collection;
@@ -25,6 +27,8 @@ use App\Observers\UserObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use Slides\Saml2\Events\SignedIn as Saml2SignedIn;
+use Slides\Saml2\Events\SignedOut as Saml2SignedOut;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -34,6 +38,12 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
+        Saml2SignedIn::class => [
+            Saml2UserSignedIn::class
+        ],
+        Saml2SignedOut::class => [
+            Saml2UserSignedOut::class,
+        ],
         AssetDeleted::class => [
             DeleteAssetFile::class,
         ],

@@ -43,7 +43,7 @@ return [
 
         'videos' => [
             'driver' => 'local',
-            'root' => storage_path('app/videos'),
+            'root' => env('NFS_PATH', storage_path('app/videos')),
             'url' => env('APP_URL').'/videos',
         ],
 
@@ -56,42 +56,31 @@ return [
 
         'video_dropzone' => [
             'driver' => 'local',
-            'root' => storage_path('app/video_drop_zone'),
+            'root' => env('VIDEOS_DROPZONE', storage_path('app/video_drop_zone')),
         ],
 
         'opencast_archive' => [
             'driver' => 'local',
-            'root' => storage_path('app/opencast'),
+            'root' => env('OPENCAST_ARCHIVE_PATH', storage_path('app/opencast')),
         ],
 
         'documents' => [
             'driver' => 'local',
-            'root' => storage_path('app/documents'),
+            'root' => env('DOCUMENTS_PATH', storage_path('app/documents')),
             'url' => env('APP_URL').'/documents',
         ],
         'assetsSymLinks' => [
             'driver' => 'local',
-            'root' => storage_path('app/assetsSymLinks'),
+            'root' => env('ASSETS_SYMBOLIC_LINKS_PATH', storage_path('app/assetsSymLinks')),
             'url' => env('APP_URL').'/assetsSymLinks',
             'visibility' => 'public',
         ],
         'thumbnails' => [
             'driver' => 'local',
-            'root' => storage_path('app/thumbnails'),
+            'root' => env('PLAYER_THUMBNAILS_PATH', storage_path('app/thumbnails')),
             'url' => env('APP_URL').'/thumbnails',
             'visibility' => 'public',
         ],
-
-        's3' => [
-            'driver' => 's3',
-            'key' => env('AWS_ACCESS_KEY_ID'),
-            'secret' => env('AWS_SECRET_ACCESS_KEY'),
-            'region' => env('AWS_DEFAULT_REGION'),
-            'bucket' => env('AWS_BUCKET'),
-            'url' => env('AWS_URL'),
-            'endpoint' => env('AWS_ENDPOINT'),
-        ],
-
     ],
 
     /*
