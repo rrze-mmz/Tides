@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use App\Events\AssetDeleted;
 use App\Events\ChapterDeleted;
-use App\Events\ClipDeleted;
+use App\Events\ClipDeleting;
 use App\Events\DocumentDeleted;
 use App\Events\SeriesDeleted;
 use App\Listeners\DeleteAssetFile;
@@ -43,7 +43,7 @@ class EventServiceProvider extends ServiceProvider
         ChapterDeleted::class => [
             UpdateClipChapter::class,
         ],
-        ClipDeleted::class => [
+        ClipDeleting::class => [
             DeleteClipResources::class,
         ],
         Registered::class => [

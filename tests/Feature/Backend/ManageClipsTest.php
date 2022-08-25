@@ -12,7 +12,9 @@ use Facades\Tests\Setup\SeriesFactory;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Facades\Tests\Setup\FileFactory;
 use Tests\Setup\WorksWithOpencastClient;
 use Tests\TestCase;
 
@@ -660,11 +662,51 @@ class ManageClipsTest extends TestCase
     {
         $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
 
-        $this->delete($clip->adminPath())->assertRedirect(route('clips.index'));
+        $this->delete(route('clips.destroy', $clip))->assertRedirect(route('clips.index'));
 
         $this->assertDatabaseMissing('clips', $clip->only('id'));
     }
 
+    /** @test */
+    public function it_delete_all_clip_assets_on_clip_delete(): void
+    {
+        Storage::fake('videos');
+
+        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
+
+        $this->post(route('admin.clips.asset.transferSingle', $clip), ['asset' => FileFactory::videoFile()]);
+
+        Storage::disk('videos')->assertExists($clip->assets->first()->path);
+
+        $this->delete(route('clips.destroy', $clip));
+
+        Storage::disk('videos')->assertMissing($clip->assets->first()->path);
+    }
+
+
+    /** @test */
+    public function it_deletes_symbolic_link_if_clip_is_deleted(): void
+    {
+        Storage::fake('videos');
+        Storage::fake('assetsSymLinks');
+
+        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
+
+        $this->post(route('admin.clips.asset.transferSingle', $clip), ['asset' => FileFactory::videoFile()]);
+
+        $clip->addAcls(collect(1));
+
+        $asset = $clip->assets()->first();
+
+        $this->artisan('links:update-assets-symbolic-links');
+
+        Storage::disk('assetsSymLinks')->assertExists($asset->guid.'.'.getFileExtension($asset));
+
+        $this->delete(route('clips.destroy', $clip));
+
+        Storage::disk('assetsSymLinks')->assertMissing($asset->guid.'.'.getFileExtension($asset));
+    }
+    
     /** @test */
     public function it_shows_a_flash_message_when_a_clip_is_deleted(): void
     {

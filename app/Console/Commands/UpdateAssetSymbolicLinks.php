@@ -39,7 +39,7 @@ class UpdateAssetSymbolicLinks extends Command
 
         $assets->each(function ($asset) use ($bar) {
             if (Storage::disk('assetsSymLinks')->exists($asset->guid.'.'.getFileExtension($asset))
-                && (!$asset->clip->is_public || $asset->clip->acls->pluck('id')->doesntContain('1'))) {
+                && (! $asset->clip->is_public || $asset->clip->acls->pluck('id')->doesntContain('1'))) {
                 unlink(Storage::disk('assetsSymLinks')->path($asset->guid.'.'.getFileExtension($asset)));
                 $this->info('Clip Acl changed. Deleting symbolic link...');
                 $this->newLine(2);
