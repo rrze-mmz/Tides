@@ -2,6 +2,8 @@
 
 namespace App\Listeners;
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Slides\Saml2\Events\SignedOut;
 
 class Saml2UserSignedOut
@@ -19,14 +21,12 @@ class Saml2UserSignedOut
     /**
      * Handle the event.
      *
-     * @param  SignedOut  $event
+     * @param SignedOut $event
      * @return void
      */
     public function handle(SignedOut $event): void
     {
-        Event::listen('Slides\Saml2\Events\SignedOut', function (SignedOut $event) {
-            Auth::logout();
-            Session::save();
-        });
+        Auth::logout();
+        Session::save();
     }
 }
