@@ -1,7 +1,7 @@
 <div class="pt-10 pb-2 mb-3 font-semibold border-b border-black font-2xl">
     Opencast running workflows
 </div>
-@if(($opencastWorkflows['running']['workflows']['totalCount'] > 0))
+@if($opencastWorkflows['running']->isNotEmpty() && $opencastWorkflows['running']['workflows']['totalCount'] > 0)
     <div class="flex flex-col">
         <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div class="inline-block py-2 min-w-full sm:px-6 lg:px-8">
@@ -91,7 +91,7 @@
 <div class="pt-10 pb-2 mb-3 font-semibold border-b border-black font-2xl">
     Opencast failed workflows
 </div>
-@if(!empty($opencastWorkflows['failed']))
+@if($opencastWorkflows['failed']->isNotEmpty())
     <div class="flex flex-col">
         <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div class="inline-block py-2 min-w-full sm:px-6 lg:px-8">

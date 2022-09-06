@@ -8,13 +8,13 @@ use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Str;
 use Log;
 
 class ElasticsearchService
 {
     private string $type;
-
     private Collection $response;
 
     public function __construct(private ClientBuilder $clientBuilder, private ElasticsearchClient $client)
@@ -31,28 +31,27 @@ class ElasticsearchService
         $this->response = collect([
             'releaseId' => [
                 'version' => [
-                    'number' => 'Elasticsearch server not available',
+                    'number'     => 'Elasticsearch server not available',
                     'build_type' => 'unknown',
                 ],
             ],
-            'status' => 'failed',
+            'status'    => 'failed',
         ]);
         try {
             $response = $this->client->get('/');
-            if (! empty(json_encode((string) $response->getBody(), true))) {
-                $this->response->put('releaseId', json_decode((string) $response->getBody(), true))
+            if (!empty(json_encode((string)$response->getBody(), true))) {
+                $this->response->put('releaseId', json_decode((string)$response->getBody(), true))
                     ->put('status', 'pass');
             }
         } catch (GuzzleException $exception) {
             Log::error($exception->getMessage());
         }
-        \Debugbar::info($this->response);
 
         return $this->response;
     }
 
     /**
-     * @param  Model  $model
+     * @param Model $model
      * @return Collection
      */
     public function createIndex(Model $model): Collection
@@ -61,10 +60,10 @@ class ElasticsearchService
 
         try {
             $params = [
-                'index' => 'tides_'.$this->type,
-                'type' => $this->type,
-                'id' => $this->type.'_'.$model->id,
-                'body' => $model->toJson(),
+                'index' => 'tides_' . $this->type,
+                'type'  => $this->type,
+                'id'    => $this->type . '_' . $model->id,
+                'body'  => $model->toJson(),
             ];
 
             $this->response = collect($this->clientBuilder->build()->index($params));
@@ -76,7 +75,7 @@ class ElasticsearchService
     }
 
     /**
-     * @param  Model  $model
+     * @param Model $model
      * @return Collection
      */
     public function updateIndex(Model $model): Collection
@@ -85,24 +84,27 @@ class ElasticsearchService
 
         try {
             $params = [
-                'index' => 'tides_'.$this->type,
-                'id' => $this->type.'_'.$model->id,
-                'body' => [
-                    'doc' => $model->toArray(),
+                'index' => 'tides_' . $this->type,
+                'id'    => $this->type . '_' . $model->id,
+                'body'  => [
+                    'doc'           => $model->toArray(),
                     'doc_as_upsert' => true,
                 ],
             ];
 
             $this->response = collect($this->clientBuilder->build()->update($params));
         } catch (Exception $exception) {
-            Log::error($exception->getMessage());
+            //avoid error messages if it is running on console command
+            if (!App::runningInConsole()) {
+                Log::error($exception->getMessage());
+            }
         }
 
         return $this->response;
     }
 
     /**
-     * @param  Model  $model
+     * @param Model $model
      * @return Collection
      */
     public function deleteIndex(Model $model): Collection
@@ -111,9 +113,9 @@ class ElasticsearchService
 
         try {
             $params = [
-                'index' => 'tides_'.$this->type,
-                'type' => $this->type,
-                'id' => $this->type.'_'.$model->id,
+                'index' => 'tides_' . $this->type,
+                'type'  => $this->type,
+                'id'    => $this->type . '_' . $model->id,
             ];
 
             $this->response = collect($this->clientBuilder->build()->delete($params));
@@ -134,7 +136,7 @@ class ElasticsearchService
         try {
             $params = [
                 'index' => $index,
-                'id' => $id,
+                'id'    => $id,
             ];
 
             $this->response = collect($this->clientBuilder->build()->getSource($params));
@@ -146,7 +148,7 @@ class ElasticsearchService
     }
 
     /**
-     * @param  string  $model
+     * @param string $model
      * @return Collection
      *
      * @throws GuzzleException
@@ -154,7 +156,7 @@ class ElasticsearchService
     public function deleteIndexes(string $model = ''): Collection
     {
         try {
-            $this->response = collect($this->client->delete('/tides_'.Str::lower($model)));
+            $this->response = collect($this->client->delete('/tides_' . Str::lower($model)));
         } catch (Exception $exception) {
             Log::error($exception->getMessage());
         }
@@ -164,7 +166,7 @@ class ElasticsearchService
 
     /**
      * @param $term
-     * @param  string  $index
+     * @param string $index
      * @return Collection
      */
     public function searchIndexes($term, string $index = 'tides_clips'): Collection
@@ -172,35 +174,35 @@ class ElasticsearchService
         try {
             $params = [
                 'index' => $index,
-                'body' => [
-                    'sort' => [
+                'body'  => [
+                    'sort'      => [
                         [
                             'updated_at' => [
                                 'order' => 'desc',
                             ],
                         ],
                     ],
-                    'query' => [
+                    'query'     => [
                         'multi_match' => [
-                            'query' => "'.$term.'",
-                            'fields' => [
+                            'query'          => "'.$term.'",
+                            'fields'         => [
                                 'title',
                                 'description',
                             ],
-                            'fuzziness' => 1,
-                            'slop' => 1,
+                            'fuzziness'      => 1,
+                            'slop'           => 1,
                             'max_expansions' => 1,
-                            'prefix_length' => 1,
+                            'prefix_length'  => 1,
                         ],
                     ],
-                    '_source' => [
+                    '_source'   => [
                         '*',
                     ],
-                    'size' => 100,
+                    'size'      => 100,
                     'highlight' => [
-                        'pre_tags' => '<mark>',
+                        'pre_tags'  => '<mark>',
                         'post_tags' => '<\/mark>',
-                        'fields' => [
+                        'fields'    => [
                         ],
                     ],
                 ],

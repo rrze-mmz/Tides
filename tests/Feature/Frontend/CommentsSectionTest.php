@@ -100,9 +100,9 @@ class CommentsSectionTest extends TestCase
     public function a_comment_owner_can_delete_his_comment(): void
     {
         $comment = Comment::factory()->create([
-            'clip_id' => $this->clip->id,
+            'clip_id'  => $this->clip->id,
             'owner_id' => auth()->user()->id,
-            'content' => 'test comment',
+            'content'  => 'test comment',
         ]);
 
         Livewire::test(CommentsSection::class)
@@ -112,12 +112,31 @@ class CommentsSectionTest extends TestCase
     }
 
     /** @test */
+    public function a_user_cannot_delete_other_users_comment(): void
+    {
+        $comment = Comment::factory()->create([
+            'clip_id'  => $this->clip->id,
+            'owner_id' => auth()->user()->id,
+            'content'  => 'test comment',
+        ]);
+
+        auth()->logout();
+
+        $this->signIn();
+
+        Livewire::test(CommentsSection::class)
+            ->set('clip', $this->clip)
+            ->call('deleteComment', $comment)
+            ->assertSee('test comment');
+    }
+
+    /** @test */
     public function an_admin_can_delete_a_not_owned_comment(): void
     {
         $comment = Comment::factory()->create([
-            'clip_id' => $this->clip->id,
+            'clip_id'  => $this->clip->id,
             'owner_id' => auth()->user()->id,
-            'content' => 'test comment',
+            'content'  => 'test comment',
         ]);
 
         $this->signInRole('admin');

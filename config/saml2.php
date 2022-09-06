@@ -76,7 +76,6 @@ return [
 
     'logoutRoute' => env('SAML2_LOGOUT_URL'),
 
-
     /*
     |--------------------------------------------------------------------------
     | Login error redirection URL.
@@ -201,7 +200,7 @@ return [
         */
 
         'singleLogoutService' => [
-            'url' => ''
+            'url' => '',
         ],
     ],
 
@@ -349,11 +348,11 @@ return [
     'contactPerson' => [
         'technical' => [
             'givenName' => env('SAML2_CONTACT_TECHNICAL_NAME', 'name'),
-            'emailAddress' => env('SAML2_CONTACT_TECHNICAL_EMAIL', 'no@reply.com')
+            'emailAddress' => env('SAML2_CONTACT_TECHNICAL_EMAIL', 'no@reply.com'),
         ],
         'support' => [
             'givenName' => env('SAML2_CONTACT_SUPPORT_NAME', 'Support'),
-            'emailAddress' => env('SAML2_CONTACT_SUPPORT_EMAIL', 'no@reply.com')
+            'emailAddress' => env('SAML2_CONTACT_SUPPORT_EMAIL', 'no@reply.com'),
         ],
     ],
 
@@ -370,7 +369,7 @@ return [
         'en-US' => [
             'name' => env('SAML2_ORGANIZATION_NAME', 'Name'),
             'displayname' => env('SAML2_ORGANIZATION_NAME', 'Display Name'),
-            'url' => env('SAML2_ORGANIZATION_URL', 'http://url')
+            'url' => env('SAML2_ORGANIZATION_URL', 'http://url'),
         ],
     ],
 

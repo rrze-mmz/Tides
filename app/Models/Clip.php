@@ -48,7 +48,7 @@ class Clip extends BaseModel
     protected function description(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => html_entity_decode(
+            get: fn ($value) => html_entity_decode(
                 htmlspecialchars_decode(
                     html_entity_decode(html_entity_decode($value, ENT_NOQUOTES, 'UTF-8'))
                 )

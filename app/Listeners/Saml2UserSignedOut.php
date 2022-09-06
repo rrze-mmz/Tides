@@ -2,9 +2,6 @@
 
 namespace App\Listeners;
 
-use App\Events\SlidesSaml2SignedIn;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use Slides\Saml2\Events\SignedOut;
 
 class Saml2UserSignedOut

@@ -43,7 +43,7 @@ Route::controller(ShowSeriesController::class)->prefix('/series')->group(functio
     Route::get('/{series}', 'show')->name('frontend.series.show');
 });
 
-//Frontend clip routes
+//Frontend clip routes·
 Route::controller(ShowClipsController::class)->prefix('/clips')->group(function () {
     Route::get('/', 'index')->name('frontend.clips.index');
     Route::get('/{clip}', 'show')->name('frontend.clips.show');

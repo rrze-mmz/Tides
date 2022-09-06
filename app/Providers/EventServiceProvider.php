@@ -39,7 +39,7 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $listen = [
         Saml2SignedIn::class => [
-            Saml2UserSignedIn::class
+            Saml2UserSignedIn::class,
         ],
         Saml2SignedOut::class => [
             Saml2UserSignedOut::class,

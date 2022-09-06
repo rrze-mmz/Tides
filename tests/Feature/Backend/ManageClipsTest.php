@@ -8,13 +8,13 @@ use App\Models\Presenter;
 use App\Models\Tag;
 use App\Services\OpencastService;
 use Facades\Tests\Setup\ClipFactory;
+use Facades\Tests\Setup\FileFactory;
 use Facades\Tests\Setup\SeriesFactory;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Facades\Tests\Setup\FileFactory;
 use Tests\Setup\WorksWithOpencastClient;
 use Tests\TestCase;
 
@@ -254,7 +254,9 @@ class ManageClipsTest extends TestCase
 
         $this->get($clip->adminPath())->assertOk();
 
-        $this->get($clip->adminPath())->assertSee('title')
+        $this->get($clip->adminPath())
+            ->assertSee('by '.auth()->user()->getFullNameAttribute())
+            ->assertSee('title')
             ->assertSee('description')
             ->assertSee('tags')
             ->assertSee('organization')
@@ -683,7 +685,6 @@ class ManageClipsTest extends TestCase
         Storage::disk('videos')->assertMissing($clip->assets->first()->path);
     }
 
-
     /** @test */
     public function it_deletes_symbolic_link_if_clip_is_deleted(): void
     {
@@ -706,7 +707,7 @@ class ManageClipsTest extends TestCase
 
         Storage::disk('assetsSymLinks')->assertMissing($asset->guid.'.'.getFileExtension($asset));
     }
-    
+
     /** @test */
     public function it_shows_a_flash_message_when_a_clip_is_deleted(): void
     {

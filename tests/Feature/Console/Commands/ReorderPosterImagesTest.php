@@ -33,6 +33,15 @@ class ReorderPosterImagesTest extends TestCase
     }
 
     /** @test */
+    public function it_skips_folder_creation_if_clip_has_no_assets(): void
+    {
+        Clip::factory()->create();
+        $this->artisan('images:reorder');
+
+        $this->assertEmpty(Storage::disk('thumbnails')->directories());
+    }
+
+    /** @test */
     public function it_move_player_previews_to_folders(): void
     {
         UploadedFile::fake()->create('1_preview.img', 100)->storeAs('player_previews', '1_preview.img');

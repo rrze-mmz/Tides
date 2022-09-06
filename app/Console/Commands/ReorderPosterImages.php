@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Clip;
 use Illuminate\Console\Command;
 use Illuminate\Http\File;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class ReorderPosterImages extends Command
@@ -37,10 +38,10 @@ class ReorderPosterImages extends Command
         $bar->start();
 
         Clip::lazy()->each(function ($clip) use ($bar) {
-            Storage::disk('thumbnails')->makeDirectory('clip_'.$clip->id);
             $assets = $clip->assets;
 
             if ($assets->count() > 0) {
+                Storage::disk('thumbnails')->makeDirectory('clip_'.$clip->id);
                 $assets->each(function ($asset) use ($clip) {
                     if (Storage::exists('player_previews/'.$asset->id.'_preview.img')) {
                         $path = Storage::disk('thumbnails')->putFile(
@@ -51,6 +52,7 @@ class ReorderPosterImages extends Command
                         $clip->save();
                     }
                 });
+                Log::info('CLIP POSTER for ID :'.$clip->id.' IS '.$clip->posterImage);
                 $bar->advance();
             } else {
                 $this->info('Assets not found for Clip ID '.$clip->id.'! Skipping...');

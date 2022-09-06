@@ -23,7 +23,8 @@
             </div>
         </div>
         <div class="flex font-light text-sm italic pt-2">
-            <span class="pl-2"> created at {{$clip->created_at}}</span>
+            <span
+                class="pl-2"> created by {{ $clip->owner->getFullNameAttribute() }} ({{ $clip->owner->username }}) at {{$clip->created_at}}</span>
         </div>
     </div>
     <div class="flex py-2 px-2">

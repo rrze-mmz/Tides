@@ -2,7 +2,6 @@
 
 namespace App\Listeners;
 
-use App\Events\SlidesSaml2SignedIn;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
 use Slides\Saml2\Events\SignedIn;
@@ -37,23 +36,21 @@ class Saml2UserSignedIn
                 'id' => $samlUser->getUserId(),
                 'attributes' => $samlUser->getAttributes(),
                 'sessionIndex' => $samlUser->getSessionIndex(),
-                'nameId' => $samlUser->getNameId()
+                'nameId' => $samlUser->getNameId(),
             ];
 
             Log::info($samlUser);
             //check if email already exists and fetch user
             $user = User::firstOrCreate(
                 [
-                    'username' => $samlUser['attributes']['urn:mace:dir:attribute-def:uid'][0]
+                    'username' => $samlUser['attributes']['urn:mace:dir:attribute-def:uid'][0],
                 ],
                 [
                     'username' => $samlUser['attributes']['urn:mace:dir:attribute-def:uid'][0],
                     'email' => $samlUser['attributes']['urn:mace:dir:attribute-def:mail'][0],
                     'password' => bcrypt(str()->random(40)),
-                    'first_name' =>
-                        str($samlUser['attributes']['urn:mace:dir:attribute-def:displayName'][0])->before(' '),
-                    'last_name' =>
-                        str($samlUser['attributes']['urn:mace:dir:attribute-def:displayName'][0])->after(' '),
+                    'first_name' => str($samlUser['attributes']['urn:mace:dir:attribute-def:displayName'][0])->before(' '),
+                    'last_name' => str($samlUser['attributes']['urn:mace:dir:attribute-def:displayName'][0])->after(' '),
                 ]
             );
             //insert sessionIndex and nameId into session
