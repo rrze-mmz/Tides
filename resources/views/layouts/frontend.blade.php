@@ -34,11 +34,6 @@
                     <a class="no-underline hover:underline"
                        href="{{ route('login.select') }}"
                     >{{ __('auth.Login') }}</a>
-                    @if (Route::has('register'))
-                        <a class="no-underline hover:underline"
-                           href="{{ route('register') }}"
-                        >{{ __('auth.Register') }}</a>
-                    @endif
                 @else
                     <span>Hi, {{ Auth::user()->getFullNameAttribute() }}</span>
                     @if(!str_contains(url()->current(), 'admin') && auth()->user()->can('access-dashboard'))
