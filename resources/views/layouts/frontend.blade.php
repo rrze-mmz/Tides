@@ -32,7 +32,7 @@
                     </span>
                 @guest
                     <a class="no-underline hover:underline"
-                       href="{{ route('login') }}"
+                       href="{{ route('login.select') }}"
                     >{{ __('auth.Login') }}</a>
                     @if (Route::has('register'))
                         <a class="no-underline hover:underline"

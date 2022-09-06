@@ -5,11 +5,32 @@ namespace Tests\Feature\Auth;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Str;
+use Slides\Saml2\Models\Tenant;
 use Tests\TestCase;
 
 class AuthenticationTest extends TestCase
 {
     use RefreshDatabase;
+
+    /** @test */
+    public function it_has_a_login_selection_page_with_options(): void
+    {
+        Tenant::create([
+            'key'            => 'test',
+            'uuid'           => Str::uuid(),
+            'idp_entity_id'  => 'WebSSO',
+            'idp_login_url'  => 'test.com/login',
+            'idp_logout_url' => 'test.com/logout',
+            'idp_x509_cert'  => 'JDKJGkljdfWKJSDFjkj',
+            'metadata'       => 'test',
+        ]);
+
+        $this->get(route('login.select'))
+            ->assertOk()
+            ->assertSee('WebSSO')
+            ->assertSee('Local login');
+    }
 
     public function test_login_screen_can_be_rendered()
     {

@@ -29,7 +29,8 @@ use App\Models\Series;
 use App\Models\User;
 use App\Services\ElasticsearchService;
 use Illuminate\Http\Request;
-use  Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Gate;
+use Slides\Saml2\Models\Tenant;
 
 Route::get('/', HomeController::class)->name('home');
 Route::redirect('/home', '/');
@@ -216,5 +217,14 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
 Route::get('/test/{series}/elk', function (Series $series, ElasticsearchService $elkService) {
     $elkService->createIndex($series);
 })->name('elasticsearch.test');
+
+Route::get('/selectLogin', function () {
+    $tenant_uuid = (Tenant::count() > 0) ? Tenant::all()->first()->uuid : null;
+
+    if (is_null($tenant_uuid)) {
+        return to_route('login');
+    }
+    return view('auth.select-login', ['tenant_uuid' => $tenant_uuid]);
+})->name('login.select');
 
 require __DIR__ . '/auth.php';
