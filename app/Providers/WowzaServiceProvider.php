@@ -19,11 +19,11 @@ class WowzaServiceProvider extends ServiceProvider
 
             return new WowzaClient([
                 'base_uri' => $config['base_uri'],
-                'verify' => config('app.env') === 'production',
-                'auth' => [
+                'verify'   => config('app.env') === 'production',
+                'auth'     => [
                     $config['digest_user'],
                     $config['digest_pass'],
-                    'basic',
+                    'digest',
                 ],
             ]);
         });

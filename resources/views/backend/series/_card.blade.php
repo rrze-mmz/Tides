@@ -91,7 +91,7 @@
     </div>
     @can('edit-series',$series)
         <div class="flex flex-row-reverse">
-            <div my-4>
+            <div class="mb-4">
                 <x-form.button :link="route('series.edit', $series)"
                                type="submit"
                                text="Series {{__('common.actions.edit')}}"

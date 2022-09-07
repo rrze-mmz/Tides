@@ -21,7 +21,7 @@ class RegistrationTest extends TestCase
     public function test_new_users_can_register_only_for_superadmins()
     {
         $this->signInRole('superadmin');
-        
+
         $response = $this->post('/register', [
             'first_name'            => 'Test User',
             'last_name'             => 'User',

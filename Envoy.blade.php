@@ -42,6 +42,7 @@ npm_run_prod
 update_symlinks
 clear-optimizer
 rebuild-cache
+fix-broken-links
 clean_old_releases
 {{--set_permissions--}}
 @endstory
@@ -145,6 +146,13 @@ php {{ $currentDir }}/artisan route:cache
 php {{ $currentDir }}/artisan config:cache
 
 php {{ $currentDir }}/artisan icons:cache
+@endtask
+
+@task('fix-broken-links',['on'=>'development'])
+cd {{ $currentReleaseDir }};
+rm {{ $currentDir }}/public/links
+rm {{ $currentDir }}/public/documents
+php {{ $currentDir }}/artisan storage:link
 @endtask
 
 
