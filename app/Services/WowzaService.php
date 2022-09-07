@@ -183,7 +183,7 @@ class WowzaService
         if ($clip->assets->count() > 0) {
             $contentUrl = getClipSmilFile($clip, config('wowza.check_fautv_links'));
 
-            $contentPath = (env('CHECK_FAUTV_VIDEOLINKS'))
+            $contentPath = (config('wowza.check_fautv_links'))
                 ? config('wowza.content_path') . getClipStoragePath($clip) . 'camera.smil'
                 : config('wowza.content_path') . getClipStoragePath($clip) . 'presenter.smil';
             $secureToken = config('wowza.secure_token');
@@ -192,6 +192,7 @@ class WowzaService
             $tokenEndTime = $tokenPrefix . 'endTime=' . (time() + 21600);
 
             $userIP = (App::environment(['testing', 'local'])) ? env('FAUTV_USER_IP') : $_SERVER['REMOTE_ADDR'];
+            Log::info($userIP);
             $hashStr = $contentPath . '?' . $userIP . '&' . $secureToken . '&' . $tokenEndTime . '&' . $tokenStartTime;
             $hash = hash('sha256', $hashStr, 1);
             $usableHash = strtr(base64_encode($hash), '+/', '-_');
