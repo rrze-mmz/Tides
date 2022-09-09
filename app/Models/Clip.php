@@ -6,6 +6,7 @@ use App\Enums\Content;
 use App\Events\ClipDeleting;
 use App\Models\Collection as TCollection;
 use App\Models\Traits\Accessable;
+use App\Models\Traits\Commentable;
 use App\Models\Traits\Documentable;
 use App\Models\Traits\Presentable;
 use App\Models\Traits\RecordsActivity;
@@ -17,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Http\File;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
@@ -36,19 +38,16 @@ class Clip extends BaseModel
 
     //search columns for searchable trait
     protected array $searchable = ['title', 'description'];
-
     protected $dispatchesEvents = [
         'deleting' => ClipDeleting::class,
     ];
-
     protected $attributes = ['episode' => '1'];
-
     protected $casts = ['recording_date' => 'datetime:Y-m-d'];
 
     protected function description(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => html_entity_decode(
+            get: fn($value) => html_entity_decode(
                 htmlspecialchars_decode(
                     html_entity_decode(html_entity_decode($value, ENT_NOQUOTES, 'UTF-8'))
                 )
@@ -85,7 +84,7 @@ class Clip extends BaseModel
      */
     public function resolveRouteBinding($value, $field = null): ?Model
     {
-        return $this->where('slug', $value)->orWhere('id', (int) $value)->firstOrFail();
+        return $this->where('slug', $value)->orWhere('id', (int)$value)->firstOrFail();
     }
 
     /**
@@ -150,16 +149,6 @@ class Clip extends BaseModel
     }
 
     /**
-     * Comments relationship
-     *
-     * @return HasMany
-     */
-    public function comments(): HasMany
-    {
-        return $this->hasMany(Comment::class);
-    }
-
-    /**
      *  A clip hat one semester
      *
      * @return BelongsTo
@@ -200,6 +189,14 @@ class Clip extends BaseModel
     }
 
     /**
+     * Get all the clips's comments.
+     */
+    public function comments(): MorphMany
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
+
+    /**
      * A clip has one format
      *
      * @return HasOne
@@ -222,7 +219,7 @@ class Clip extends BaseModel
     /**
      * Adds an asset to clip
      *
-     * @param  array  $attributes
+     * @param array $attributes
      * @return Asset
      */
     public function addAsset(array $attributes = []): Asset
@@ -235,10 +232,10 @@ class Clip extends BaseModel
      */
     public function updatePosterImage(): void
     {
-        if (Storage::disk('thumbnails')->exists($this->id.'_poster.png')) {
+        if (Storage::disk('thumbnails')->exists($this->id . '_poster.png')) {
             $path = Storage::disk('thumbnails')->putFile(
-                'clip_'.$this->id,
-                new File(Storage::disk('thumbnails')->path($this->id.'_poster.png'))
+                'clip_' . $this->id,
+                new File(Storage::disk('thumbnails')->path($this->id . '_poster.png'))
             );
 
             $this->posterImage = $path;
@@ -252,7 +249,7 @@ class Clip extends BaseModel
     /**
      * Add tags to clip
      *
-     * @param  Collection  $tagsCollection
+     * @param Collection $tagsCollection
      */
     public function addTags(Collection $tagsCollection): void
     {
@@ -280,10 +277,10 @@ class Clip extends BaseModel
 
         return collect([
             'previousClip' => $clipsCollection->filter(function ($value, $key) {
-                return (int) $value->episode == (int) $this->episode - 1;
+                return (int)$value->episode == (int)$this->episode - 1;
             })->first(),
-            'nextClip' => $clipsCollection->filter(function ($value, $key) {
-                return (int) $value->episode == (int) $this->episode + 1;
+            'nextClip'     => $clipsCollection->filter(function ($value, $key) {
+                return (int)$value->episode == (int)$this->episode + 1;
             })->first(),
         ]);
     }
@@ -291,7 +288,7 @@ class Clip extends BaseModel
     /**
      * Fetch all assets for a clip by type
      *
-     * @param  Content  $content
+     * @param Content $content
      * @return HasMany
      */
     public function getAssetsByType(Content $content): HasMany

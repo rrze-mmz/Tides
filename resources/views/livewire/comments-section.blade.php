@@ -52,32 +52,34 @@
     </form>
 
     <div wire:poll.30s="fetchComments">
-        @foreach ($clip->comments->sortDesc() as $comment)
-            <div class="flex justify-between my-10">
-                <img class="flex-none h-10 w-10 rounded-full"
-                     src="{{ URL::asset('/images/none.jpg') }}"
-                     alt="avatar">
-                <div class="ml-4 flex-grow">
-                    <div class="flex items-center">
-                        <div class="font-semibold">{{ $comment->owner->name }}</div>
-                        <div class="text-gray-500 ml-2">{{ $comment->created_at->diffForHumans() }}</div>
-                    </div>
-                    <div class="flex flex-col">
-                        <div class="text-gray-700 mt-2 w-full ">{{ $comment->content }}</div>
-                        @can('delete-comment', $comment)
-                            <div class="flex">
-                                <a href="#comments-section"
-                                   class="pt-2 underline text-red-800 hover:text-red-700"
-                                   wire:click="deleteComment({{ $comment }})">
-                                    <span>Delete</span>
-                                </a>
-                            </div>
-                        @endcan
-                    </div>
+        @if($comments->count() > 0)
+            @foreach ($comments->sortDesc() as $comment)
+                <div class="flex justify-between my-10">
+                    <img class="flex-none h-10 w-10 rounded-full"
+                         src="{{ URL::asset('/images/none.jpg') }}"
+                         alt="avatar">
+                    <div class="ml-4 flex-grow">
+                        <div class="flex items-center">
+                            <div class="font-semibold">{{ $comment->owner->name }}</div>
+                            <div class="text-gray-500 ml-2">{{ $comment->created_at->diffForHumans() }}</div>
+                        </div>
+                        <div class="flex flex-col">
+                            <div class="text-gray-700 mt-2 w-full ">{{ $comment->content }}</div>
+                            @can('delete-comment', $comment)
+                                <div class="flex">
+                                    <a href="#comments-section"
+                                       class="pt-2 underline text-red-800 hover:text-red-700"
+                                       wire:click="deleteComment({{ $comment }})">
+                                        <span>Delete</span>
+                                    </a>
+                                </div>
+                            @endcan
+                        </div>
 
+                    </div>
                 </div>
-            </div>
-        @endforeach
+            @endforeach
+        @endif
     </div>
 
 </div>

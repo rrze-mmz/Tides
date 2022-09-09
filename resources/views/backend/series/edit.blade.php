@@ -75,14 +75,13 @@
             @endif
             @include('backend.documents.upload',['resource' => $series ])
         </div>
-
     </div>
 
     <div class="flex pt-8 pb-2  font-2xl w-full">
         <div x-data="{
             activeTab:1,
-            activeClass: 'inline-block px-4 py-2 bg-blue-800',
-            inactiveClass : 'inline-block px-4 py-2 bg-blue-500'
+            activeClass: 'inline-block px-4 py-2 bg-blue-800  rounded-lg',
+            inactiveClass : 'inline-block px-4 py-2 bg-blue-500  rounded-lg'
          }" class="w-full">
             <ul class="flex space-x-1  pt-8 pb-2 text-white border-b border-black">
                 <li>
@@ -103,10 +102,17 @@
                     </li>
                 @endif
                 <li>
-                    <a href="#" x-on:click="activeTab = 3"
+                    <a href="#moreActions" x-on:click="activeTab = 3"
                        :class="activeTab === 3 ? activeClass : inactiveClass"
                     >
                         More actions
+                    </a>
+                </li>
+                <li>
+                    <a href="#comments-section" x-on:click="activeTab = 4"
+                       :class="activeTab === 4 ? activeClass : inactiveClass"
+                    >
+                        Comments
                     </a>
                 </li>
             </ul>
@@ -121,8 +127,18 @@
                                     'opencastWorkflows' => $opencastSeriesInfo])
                     @endif
                 </div>
-                <div x-show="activeTab === 3">
+                <div x-show="activeTab === 3" id="moreActions">
                     @include('backend.series.buttons.more-options')
+                </div>
+                <div x-show="activeTab === 4" id="comments-section">
+                    <div class="flex flex-col pt-10">
+                        <h2 class="text-2xl font-semibold pb-2 border-b-2 border-black">
+                            Backend {{ __('clip.frontend.comments') }}
+                        </h2>
+                        <livewire:comments-section :model="$series" :type="'backend'"/>
+                        @livewireScripts
+
+                    </div>
                 </div>
             </div>
         </div>

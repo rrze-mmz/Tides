@@ -5,8 +5,11 @@ namespace Tests\Feature\Frontend;
 use App\Http\Livewire\CommentsSection;
 use App\Models\Clip;
 use App\Models\Comment;
+use App\Models\User;
+use App\Notifications\NewComment;
 use Facades\Tests\Setup\ClipFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Notification;
 use Livewire\Livewire;
 use Tests\TestCase;
 
@@ -35,8 +38,10 @@ class CommentsSectionTest extends TestCase
     /** @test */
     public function it_allows_posting_comments_only_to_logged_in_users(): void
     {
-        Livewire::test(CommentsSection::class)
-            ->set('clip', $this->clip)
+        Livewire::test(CommentsSection::class, [
+            'model' => $this->clip,
+            'type'  => 'frontend',
+        ])
             ->set('content', 'Test comment')
             ->call('postComment')
             ->assertSee('Comment posted successfully')
@@ -46,8 +51,10 @@ class CommentsSectionTest extends TestCase
     /** @test */
     public function it_post_a_valid_comment(): void
     {
-        Livewire::test(CommentsSection::class)
-            ->set('clip', $this->clip)
+        Livewire::test(CommentsSection::class, [
+            'model' => $this->clip,
+            'type'  => 'frontend',
+        ])
             ->set('content', 'Test comment')
             ->call('postComment')
             ->assertSee('Comment posted successfully')
@@ -57,8 +64,10 @@ class CommentsSectionTest extends TestCase
     /** @test */
     public function it_requires_a_content(): void
     {
-        Livewire::test(CommentsSection::class)
-            ->set('clip', $this->clip)
+        Livewire::test(CommentsSection::class, [
+            'model' => $this->clip,
+            'type'  => 'frontend',
+        ])
             ->set('content', '')
             ->call('postComment')
             ->assertHasErrors(['content' => 'required']);
@@ -67,32 +76,60 @@ class CommentsSectionTest extends TestCase
     /** @test */
     public function it_requires_content_min_characters(): void
     {
-        Livewire::test(CommentsSection::class)
-            ->set('clip', $this->clip)
+        Livewire::test(CommentsSection::class, [
+            'model' => $this->clip,
+            'type'  => 'frontend',
+        ])
             ->set('content', 'ab')
             ->call('postComment')
             ->assertHasErrors(['content' => 'min']);
     }
 
     /** @test */
+    public function it_displays_comments_based_on_type(): void
+    {
+        $this->clip->comments()->save(Comment::factory()->create([
+            'content' => 'Backend comment',
+            'type'    => 'backend'
+        ]));
+
+        Livewire::test(CommentsSection::class, [
+            'model' => $this->clip,
+            'type'  => 'frontend',
+        ])
+            ->set('content', 'Test comment')
+            ->call('postComment')
+            ->assertSee('Comment posted successfully')
+            ->assertSee('Test comment')
+            ->assertDontSee('Backend comment');
+    }
+
+    /** @test */
     public function it_displays_a_delete_button_for_comment_owner(): void
     {
-        Comment::factory()->create(['clip_id' => $this->clip->id, 'owner_id' => auth()->user()->id]);
-
-        Livewire::test(CommentsSection::class)
-            ->set('clip', $this->clip)
+        $this->clip->comments()->save(Comment::factory()->create([
+            'owner_id' => auth()->user()->id,
+            'type'     => 'frontend'
+        ]));
+        $this->clip->refresh();
+        Livewire::test(CommentsSection::class, [
+            'model' => $this->clip,
+            'type'  => 'frontend',
+        ])
             ->assertSee('Delete');
     }
 
     /** @test */
     public function it_displays_a_delete_button_for_admin_users(): void
     {
-        Comment::factory()->create(['clip_id' => $this->clip->id]);
+        $this->clip->comments()->save(Comment::factory()->create(['type' => 'frontend']));
 
         $this->signInRole('admin');
 
-        Livewire::test(CommentsSection::class)
-            ->set('clip', $this->clip)
+        Livewire::test(CommentsSection::class, [
+            'model' => $this->clip,
+            'type'  => 'frontend',
+        ])
             ->assertSee('Delete');
     }
 
@@ -100,13 +137,17 @@ class CommentsSectionTest extends TestCase
     public function a_comment_owner_can_delete_his_comment(): void
     {
         $comment = Comment::factory()->create([
-            'clip_id'  => $this->clip->id,
             'owner_id' => auth()->user()->id,
             'content'  => 'test comment',
+            'type'     => 'frontend',
         ]);
 
-        Livewire::test(CommentsSection::class)
-            ->set('clip', $this->clip)
+        $this->clip->comments()->save($comment);
+
+        Livewire::test(CommentsSection::class, [
+            'model' => $this->clip,
+            'type'  => 'frontend',
+        ])
             ->call('deleteComment', $comment)
             ->assertDontSee('test comment');
     }
@@ -115,17 +156,20 @@ class CommentsSectionTest extends TestCase
     public function a_user_cannot_delete_other_users_comment(): void
     {
         $comment = Comment::factory()->create([
-            'clip_id'  => $this->clip->id,
             'owner_id' => auth()->user()->id,
             'content'  => 'test comment',
+            'type'     => 'frontend'
         ]);
 
+        $this->clip->comments()->save($comment);
         auth()->logout();
 
         $this->signIn();
 
-        Livewire::test(CommentsSection::class)
-            ->set('clip', $this->clip)
+        Livewire::test(CommentsSection::class, [
+            'model' => $this->clip,
+            'type'  => 'frontend',
+        ])
             ->call('deleteComment', $comment)
             ->assertSee('test comment');
     }
@@ -134,16 +178,60 @@ class CommentsSectionTest extends TestCase
     public function an_admin_can_delete_a_not_owned_comment(): void
     {
         $comment = Comment::factory()->create([
-            'clip_id'  => $this->clip->id,
             'owner_id' => auth()->user()->id,
             'content'  => 'test comment',
         ]);
 
+        $this->clip->comments()->save($comment);
         $this->signInRole('admin');
 
-        Livewire::test(CommentsSection::class)
-            ->set('clip', $this->clip)
+        Livewire::test(CommentsSection::class, [
+            'model' => $this->clip,
+            'type'  => 'frontend',
+        ])
             ->call('deleteComment', $comment)
             ->assertDontSee('test comment');
+    }
+
+    /** @test */
+    public function it_notifies_model_admin_on_new_comment(): void
+    {
+        Notification::fake();
+
+        Livewire::test(CommentsSection::class, [
+            'model' => $this->clip,
+            'type'  => 'frontend',
+        ])
+            ->set('content', 'Test comment')
+            ->call('postComment')
+            ->assertSee('Comment posted successfully')
+            ->assertSee('Test comment');
+
+        Notification::assertSentTo([$this->clip->owner], NewComment::class);
+    }
+
+    /** @test */
+    public function it_notifies_portal_admins_if_model_has_no_admin(): void
+    {
+        $this->signInRole('superadmin');
+        auth()->logout();
+        $this->signIn();
+
+        Notification::fake();
+
+        $this->clip->owner_id = null;
+        $this->clip->save();
+        $this->clip->refresh();
+
+        Livewire::test(CommentsSection::class, [
+            'model' => $this->clip,
+            'type'  => 'frontend',
+        ])
+            ->set('content', 'Test comment')
+            ->call('postComment')
+            ->assertSee('Comment posted successfully')
+            ->assertSee('Test comment');
+
+        Notification::assertSentTo(User::admins()->get(), NewComment::class);
     }
 }

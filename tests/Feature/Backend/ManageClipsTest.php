@@ -3,6 +3,7 @@
 namespace Tests\Feature\Backend;
 
 use App\Enums\Content;
+use App\Http\Livewire\CommentsSection;
 use App\Models\Clip;
 use App\Models\Presenter;
 use App\Models\Tag;
@@ -15,6 +16,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Livewire\Livewire;
 use Tests\Setup\WorksWithOpencastClient;
 use Tests\TestCase;
 
@@ -95,7 +97,7 @@ class ManageClipsTest extends TestCase
     /** @test */
     public function it_paginates_all_clips_in_dashboard_index_page_for_admin_user(): void
     {
-        $this->markTestSkipped('Livewire/Tailwind Using $this when not in object context in file');
+//        $this->markTestSkipped('Livewire/Tailwind Using $this when not in object context in file');
 
         Clip::factory(20)->create();
 
@@ -247,7 +249,6 @@ class ManageClipsTest extends TestCase
     /** @test */
     public function a_moderator_can_view_the_edit_clip_form_add_all_form_fields(): void
     {
-        $this->withoutExceptionHandling();
         $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
 
         $this->get(route('clips.edit', $clip))->assertOk();
@@ -857,5 +858,31 @@ class ManageClipsTest extends TestCase
         $clip = ClipFactory::create();
 
         $this->get(route('clips.edit', $clip))->assertSee('Assign series ');
+    }
+
+    /** @test */
+    public function it_loads_comments_component_at_edit_page(): void
+    {
+        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
+
+        $this->get(route('clips.edit', $clip))->assertSeeLivewire('comments-section');
+    }
+
+    /** @test */
+    public function it_shows_clip_comments_on_edit_page(): void
+    {
+        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
+
+        $this->get(route('clips.edit', $clip))
+            ->assertSee(__('clip.frontend.comments'));
+
+        Livewire::test(CommentsSection::class, [
+            'model' => $clip,
+            'type'  => 'backend',
+        ])
+            ->set('content', 'Admin clip comment')
+            ->call('postComment')
+            ->assertSee('Comment posted successfully')
+            ->assertSee('Admin clip comment');
     }
 }

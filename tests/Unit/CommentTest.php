@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use App\Models\Clip;
 use App\Models\Comment;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -24,7 +25,13 @@ class CommentTest extends TestCase
     /** @test */
     public function it_belongs_to_a_clip(): void
     {
-        $this->assertInstanceOf(Clip::class, $this->comment->clip);
+        $this->assertInstanceOf(BelongsTo::class, $this->comment->commentable());
+    }
+
+    /** @test */
+    public function it_belongs_to_a_series(): void
+    {
+        $this->assertInstanceOf(BelongsTo::class, $this->comment->commentable());
     }
 
     /** @test */

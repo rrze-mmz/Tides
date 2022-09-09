@@ -3,17 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Comment extends BaseModel
 {
     /**
-     * Clip relationship
-     *
-     * @return BelongsTo
+     * Get the parent commentable model (series or clip).
      */
-    public function clip(): BelongsTo
+    public function commentable(): MorphTo
     {
-        return $this->belongsTo(Clip::class);
+        return $this->morphTo();
     }
 
     /**

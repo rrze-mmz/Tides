@@ -71,12 +71,12 @@
     <div>
         @include('backend.users.series._layout',[
                             'layoutHeader'=> $presenter->getFullNameAttribute() .' appears on these series',
-                             'series' => $presenter->series
+                             'series' => $presenter->series()->orderByDesc('created_at')->paginate()
         ])
 
         @include('backend.users.clips._layout',[
                             'layoutHeader' => $presenter->getFullNameAttribute().' appears on these clips',
-                            'clips' => $presenter->clipsWithoutSeries(),
+                            'clips' => $presenter->clipsWithoutSeries()->sortByDesc('created_at'),
         ])
     </div>
 

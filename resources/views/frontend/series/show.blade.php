@@ -47,6 +47,16 @@
             </div>
 
         </div>
+        <div class="flex flex-col pt-10">
+            <h2 class="text-2xl font-semibold pb-2 border-b-2 border-black">
+                {{ __('clip.frontend.comments') }}
+            </h2>
+            <livewire:comments-section :model="$series" :type="'frontend'"/>
+            @livewireScripts
+
+        </div>
         @include('backend.clips.list')
+
     </div>
+
 @endsection

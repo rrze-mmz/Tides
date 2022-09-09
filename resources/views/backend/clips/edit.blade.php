@@ -212,5 +212,15 @@
         </form>
     </div>
 
+    <div x-show="activeTab === 4" id="comments">
+        <div class="flex flex-col pt-10">
+            <h2 class="text-2xl font-semibold pb-2 border-b-2 border-black">
+                Backend {{ __('clip.frontend.comments') }}
+            </h2>
+            <livewire:comments-section :model="$clip" :type="'backend'"/>
+            @livewireScripts
+
+        </div>
+
     @include('backend.assets.list', ['assets'=>$clip->assets])
 @endsection

@@ -73,7 +73,7 @@
                 <h2 class="text-2xl font-semibold pb-2 border-b-2 border-black">
                     {{ __('clip.frontend.comments') }}
                 </h2>
-                <livewire:comments-section :clip="$clip"/>
+                <livewire:comments-section :model="$clip" :type="'frontend'"/>
                 @livewireScripts
 
             </div>

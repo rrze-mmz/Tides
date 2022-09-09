@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Events\SeriesDeleted;
 use App\Models\Traits\Accessable;
+use App\Models\Traits\Commentable;
 use App\Models\Traits\Documentable;
 use App\Models\Traits\Presentable;
 use App\Models\Traits\RecordsActivity;
@@ -14,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -32,7 +34,7 @@ class Series extends BaseModel
     protected function description(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => html_entity_decode(
+            get: fn($value) => html_entity_decode(
                 htmlspecialchars_decode(
                     html_entity_decode(html_entity_decode($value, ENT_NOQUOTES, 'UTF-8'))
                 )
@@ -49,7 +51,7 @@ class Series extends BaseModel
      */
     public function resolveRouteBinding($value, $field = null): ?Model
     {
-        return $this->where('slug', $value)->orWhere('id', (int) $value)->firstOrFail();
+        return $this->where('slug', $value)->orWhere('id', (int)$value)->firstOrFail();
     }
 
     /**
@@ -113,7 +115,7 @@ class Series extends BaseModel
     /**
      * Add a user to series
      *
-     * @param  User  $moderatorUser
+     * @param User $moderatorUser
      * @return User
      */
     public function addMember(User $moderatorUser): User
@@ -126,7 +128,7 @@ class Series extends BaseModel
     /**
      * Remove a user from series
      *
-     * @param  User  $moderatorUser
+     * @param User $moderatorUser
      * @return User
      */
     public function removeMember(User $moderatorUser): User
@@ -157,6 +159,14 @@ class Series extends BaseModel
     }
 
     /**
+     * Get all the series's comments.
+     */
+    public function comments(): MorphMany
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
+
+    /**
      * Fetch the latest clip from a series based on episode
      *
      * @return HasOne
@@ -169,7 +179,7 @@ class Series extends BaseModel
     /**
      * Add a clip on a series
      *
-     * @param  array  $validated
+     * @param array $validated
      * @return Clip
      */
     public function addClip(array $validated = []): Clip
@@ -186,7 +196,7 @@ class Series extends BaseModel
     /**
      * Reorder Series clips based on a collection <id, episode>
      *
-     * @param  Collection  $episodes
+     * @param Collection $episodes
      * @return $this
      */
     public function reorderClips(Collection $episodes): static
@@ -203,11 +213,11 @@ class Series extends BaseModel
     /**
      * Updates opencast series id in series table
      *
-     * @param  ResponseInterface  $response
+     * @param ResponseInterface $response
      */
     public function updateOpencastSeriesId(ResponseInterface $response): void
     {
-        if (! empty($response->getHeaders())) {
+        if (!empty($response->getHeaders())) {
             $this->opencast_series_id = Str::afterLast($response->getHeaders()['Location'][0], 'api/series/');
 
             $this->update();
@@ -259,7 +269,7 @@ class Series extends BaseModel
     }
 
     /**
-     * @param  Chapter|null  $chapter
+     * @param Chapter|null $chapter
      * @return mixed
      */
     public function clipsWithoutChapter(Chapter $chapter = null): mixed
