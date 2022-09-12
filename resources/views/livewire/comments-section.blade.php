@@ -60,7 +60,7 @@
                          alt="avatar">
                     <div class="ml-4 flex-grow">
                         <div class="flex items-center">
-                            <div class="font-semibold">{{ $comment->owner->name }}</div>
+                            <div class="font-semibold">{{ $comment->owner->getFullNameAttribute() }}</div>
                             <div class="text-gray-500 ml-2">{{ $comment->created_at->diffForHumans() }}</div>
                         </div>
                         <div class="flex flex-col">

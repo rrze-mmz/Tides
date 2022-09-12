@@ -97,7 +97,7 @@ class ManageClipsTest extends TestCase
     /** @test */
     public function it_paginates_all_clips_in_dashboard_index_page_for_admin_user(): void
     {
-//        $this->markTestSkipped('Livewire/Tailwind Using $this when not in object context in file');
+        $this->markTestSkipped('Livewire/Tailwind Using $this when not in object context in file');
 
         Clip::factory(20)->create();
 

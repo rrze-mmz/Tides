@@ -2,7 +2,6 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\Clip;
 use App\Models\Comment;
 use App\Models\User;
 use App\Notifications\NewComment;
