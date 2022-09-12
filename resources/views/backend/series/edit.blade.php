@@ -1,10 +1,17 @@
 @extends('layouts.backend')
 
 @section('content')
-    <div class="flex pb-2 font-semibold border-b border-black font-2xl">
-        {{__('common.actions.edit')}} {{ $series->title }} [ ID : {{ $series->id }}]<span
-            class="text-xs italic pl-2 pt-1"> created at {{$series->created_at }} </span>
+    <div class="flex border-b border-black text-2xl flex-col">
+        <div class="font-semibold">
+            {{ $series->title }} [ ID : {{ $series->id }}]
+        </div>
+        <div>
+     <span
+         class="text-sm italic"> created at {{$series->created_at }} </span>
+        </div>
+
     </div>
+
     <div class="flex justify-center content-center content-between py-2 px-2">
         <form action="{{ route('series.update',$series) }}"
               method="POST"

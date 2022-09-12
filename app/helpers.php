@@ -143,7 +143,7 @@ function prepareFileForUpload($file, bool $isDropZoneFile, bool $ffmpegCheck = t
  */
 function setActiveLink(string $route): string
 {
-    return (Str::contains(url()->current(), $route)) ? 'border-b-2' : '';
+    return (Str::contains(url()->current(), $route)) ? 'active-nav-link opacity-100' : '';
 }
 
 /**
