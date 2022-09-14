@@ -26,10 +26,9 @@ class AuthenticationTest extends TestCase
             'metadata'       => 'test',
         ]);
 
-        $this->get(route('login.select'))
+        $this->get(route('login'))
             ->assertOk()
-            ->assertSee('WebSSO')
-            ->assertSee('Local login');
+            ->assertSee('WebSSO');
     }
 
     public function test_login_screen_can_be_rendered()

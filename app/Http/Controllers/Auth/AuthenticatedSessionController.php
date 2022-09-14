@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
+use Slides\Saml2\Models\Tenant;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -22,13 +23,15 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(): \Illuminate\Contracts\View\View|Factory|Application
     {
-        return view('auth.login');
+        $saml2TenantUUID = (Tenant::count() > 0) ? Tenant::all()->first()->uuid : null;
+        
+        return view('auth.select-login', ['saml2TenantUUID' => $saml2TenantUUID]);
     }
 
     /**
      * Handle an incoming authentication request.
      *
-     * @param  LoginRequest  $request
+     * @param LoginRequest $request
      * @return RedirectResponse
      *
      * @throws ValidationException
@@ -45,7 +48,7 @@ class AuthenticatedSessionController extends Controller
     /**
      * Destroy an authenticated session.
      *
-     * @param  Request  $request
+     * @param Request $request
      * @return RedirectResponse
      */
     public function destroy(Request $request): RedirectResponse

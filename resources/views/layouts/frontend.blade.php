@@ -32,7 +32,7 @@
                     </span>
                 @guest
                     <a class="no-underline hover:underline"
-                       href="{{ route('login.select') }}"
+                       href="{{ route('login') }}"
                     >{{ __('auth.Login') }}</a>
                 @else
                     <span>Hi, {{ Auth::user()->getFullNameAttribute() }}</span>

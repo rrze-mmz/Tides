@@ -149,7 +149,6 @@ class DashboardTest extends TestCase
         $this->signInRole('superadmin');
 
         $this->get(route('dashboard'))
-            ->assertSee('Go to')
             ->assertSee('Series ID')
             ->assertSee('Clip ID');
     }

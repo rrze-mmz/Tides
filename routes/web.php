@@ -218,13 +218,4 @@ Route::get('/test/{series}/elk', function (Series $series, ElasticsearchService 
     $elkService->createIndex($series);
 })->name('elasticsearch.test');
 
-Route::get('/selectLogin', function () {
-    $tenant_uuid = (Tenant::count() > 0) ? Tenant::all()->first()->uuid : null;
-
-    if (is_null($tenant_uuid)) {
-        return to_route('login');
-    }
-    return view('auth.select-login', ['tenant_uuid' => $tenant_uuid]);
-})->name('login.select');
-
 require __DIR__ . '/auth.php';
