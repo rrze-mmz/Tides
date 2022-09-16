@@ -13,7 +13,7 @@ class DashboardController
     /**
      * Show max 10 of user's series/clips and list dropzone files
      *
-     * @param OpencastService $opencastService
+     * @param  OpencastService  $opencastService
      * @return Application|Factory|View
      */
     public function __invoke(OpencastService $opencastService): Application|Factory|View
@@ -26,17 +26,18 @@ class DashboardController
                 ->put('failed', $opencastService->getEventsByStatus(OpencastWorkflowState::FAILED));
         }
 
+//        $supervisedSeries = auth()->user
         return view('backend.dashboard.index', [
-            'userSeries'        => auth()->user()->series()
+            'userSeries' => auth()->user()->getAllSeries()
+                ->currentSemester()
                 ->orderByDesc('updated_at')
-                ->limit(12)
-                ->get(),
-            'userClips'         => auth()->user()->clips()
+                ->simplePaginate(12),
+            'userClips' => auth()->user()->clips()
                 ->whereNull('series_id')
                 ->orderByDesc('updated_at')
                 ->limit(12)
                 ->get(),
-            'files'             => fetchDropZoneFiles(false),
+            'files' => fetchDropZoneFiles(false),
             'opencastWorkflows' => $opencastWorkflows,
         ]);
     }

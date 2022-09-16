@@ -8,3 +8,7 @@
         No series found
     @endforelse
 </div>
+
+<div class="py-10">
+    {{ $series->links() }}
+</div>

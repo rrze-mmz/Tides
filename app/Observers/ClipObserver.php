@@ -17,11 +17,14 @@ class ClipObserver
      * @param  Clip  $clip
      * @return void
      */
-    public function created(Clip $clip)
+    public function created(Clip $clip): void
     {
         $clip->refresh();
 
         $clip->folder_id = 'TIDES_ClipID_'.$clip->id;
+        if (auth()->user()?->isAdmin()) {
+            $clip->supervisor_id = auth()->user()->id;
+        }
         $clip->save();
 
         session()->flash('flashMessage', $clip->title.' '.__FUNCTION__.' successfully');
@@ -35,8 +38,13 @@ class ClipObserver
      * @param  Clip  $clip
      * @return void
      */
-    public function updated(Clip $clip)
+    public function updated(Clip $clip): void
     {
+        if (auth()->user()?->isAdmin() && $clip->supervisor_id !== auth()->user()->id) {
+            $clip->supervisor_id = auth()->user()->id;
+            $clip->save();
+        }
+
         session()->flash('flashMessage', $clip->title.' '.__FUNCTION__.' successfully');
 
         $this->elasticsearchService->updateIndex($clip);
@@ -48,7 +56,7 @@ class ClipObserver
      * @param  Clip  $clip
      * @return void
      */
-    public function deleted(Clip $clip)
+    public function deleted(Clip $clip): void
     {
         session()->flash('flashMessage', $clip->title.' '.__FUNCTION__.' successfully');
 
@@ -61,7 +69,7 @@ class ClipObserver
      * @param  Clip  $clip
      * @return void
      */
-    public function restored(Clip $clip)
+    public function restored(Clip $clip): void
     {
         session()->flash('flashMessage', $clip->title.' '.__FUNCTION__.' successfully');
     }
@@ -72,7 +80,7 @@ class ClipObserver
      * @param  Clip  $clip
      * @return void
      */
-    public function forceDeleted(Clip $clip)
+    public function forceDeleted(Clip $clip): void
     {
         session()->flash('flashMessage', $clip->title.' '.__FUNCTION__.' successfully');
     }

@@ -23,8 +23,11 @@ class ManageSeriesTest extends TestCase
     use WorksWithOpencastClient;
 
     private OpencastService $opencastService;
+
     private MockHandler $mockHandler;
+
     private string $flashMessageName;
+
     private string $role = '';
 
     protected function setUp(): void
@@ -71,7 +74,7 @@ class ManageSeriesTest extends TestCase
 
         Series::factory(20)->create(['owner_id' => $this->signInRole($this->role)]);
 
-        $this->get(route('series.index') . '?page=2')->assertDontSee('No more series found');
+        $this->get(route('series.index').'?page=2')->assertDontSee('No more series found');
     }
 
     /** @test */
@@ -83,7 +86,7 @@ class ManageSeriesTest extends TestCase
 
         $this->signInRole('admin');
 
-        $this->get(route('series.index') . '?page=2')->assertDontSee('No more series found');
+        $this->get(route('series.index').'?page=2')->assertDontSee('No more series found');
     }
 
     /** @test */
@@ -123,7 +126,7 @@ class ManageSeriesTest extends TestCase
 
         $this->signInRole('assistant');
 
-        $this->get(route('series.index') . '?page=2')->assertDontSee('No more series found');
+        $this->get(route('series.index').'?page=2')->assertDontSee('No more series found');
     }
 
     /** @test */
@@ -170,14 +173,14 @@ class ManageSeriesTest extends TestCase
         $this->signInRole($this->role);
 
         $this->post(route('series.store', Series::factory()->raw([
-            'title'           => 'This is a test',
-            'password'        => '1234',
+            'title' => 'This is a test',
+            'password' => '1234',
             'organization_id' => '1',
         ])))->assertSessionHasErrors('password');
 
         $this->post(route('series.store', Series::factory()->raw([
-            'title'           => 'This is a test',
-            'password'        => '1234qwER',
+            'title' => 'This is a test',
+            'password' => '1234qwER',
             'organization_id' => '1',
         ])));
 
@@ -192,8 +195,8 @@ class ManageSeriesTest extends TestCase
         $this->post(
             route('series.store'),
             [
-                'title'           => 'Test title',
-                'description'     => 'Test description',
+                'title' => 'Test title',
+                'description' => 'Test description',
                 'organization_id' => '1',
             ]
         )->assertForbidden();
@@ -208,8 +211,8 @@ class ManageSeriesTest extends TestCase
         $this->post(
             route('series.store'),
             [
-                'title'           => 'Test title',
-                'description'     => 'Test description',
+                'title' => 'Test title',
+                'description' => 'Test description',
                 'organization_id' => '1',
             ]
         )->assertForbidden();
@@ -223,8 +226,8 @@ class ManageSeriesTest extends TestCase
         $this->post(
             route('series.store'),
             [
-                'title'           => 'Test title',
-                'description'     => 'Test description',
+                'title' => 'Test title',
+                'description' => 'Test description',
                 'organization_id' => '1',
             ]
         );
@@ -240,8 +243,8 @@ class ManageSeriesTest extends TestCase
         $this->post(
             route('series.store'),
             [
-                'title'           => 'Test title',
-                'description'     => 'Test description',
+                'title' => 'Test title',
+                'description' => 'Test description',
                 'organization_id' => '1',
             ]
         );
@@ -257,8 +260,8 @@ class ManageSeriesTest extends TestCase
         $this->post(
             route('series.store'),
             [
-                'title'           => 'Test title',
-                'description'     => 'Test description',
+                'title' => 'Test title',
+                'description' => 'Test description',
                 'organization_id' => '1',
             ]
         )->assertSessionHas($this->flashMessageName);
@@ -272,8 +275,8 @@ class ManageSeriesTest extends TestCase
         $this->mockHandler->append($this->mockCreateSeriesResponse());
 
         $this->post(route('series.store'), [
-            'title'           => 'Series title',
-            'description'     => 'test',
+            'title' => 'Series title',
+            'description' => 'test',
             'organization_id' => '1',
         ]);
 
@@ -298,7 +301,7 @@ class ManageSeriesTest extends TestCase
         $this->signInRole($this->role);
 
         $attributes = [
-            'title'       => '',
+            'title' => '',
             'description' => 'test',
         ];
 
@@ -476,7 +479,7 @@ class ManageSeriesTest extends TestCase
 
         Livewire::test(CommentsSection::class, [
             'model' => $series,
-            'type'  => 'backend',
+            'type' => 'backend',
         ])
             ->set('content', 'Admin series comment')
             ->call('postComment')
@@ -492,16 +495,16 @@ class ManageSeriesTest extends TestCase
         $series = SeriesFactory::ownedBy($this->signInRole($this->role))->create();
 
         $this->patch(route('series.edit', $series), [
-            'title'           => 'changed',
-            'description'     => 'changed',
+            'title' => 'changed',
+            'description' => 'changed',
             'organization_id' => '1',
         ]);
 
         $series->refresh();
 
         $this->assertDatabaseHas('series', [
-            'title'           => 'changed',
-            'description'     => 'changed',
+            'title' => 'changed',
+            'description' => 'changed',
             'organization_id' => '1',
         ]);
 
@@ -517,8 +520,8 @@ class ManageSeriesTest extends TestCase
         $this->mockHandler->append($this->mockCreateSeriesResponse());
 
         $this->patch(route('series.edit', $series), [
-            'title'           => 'changed',
-            'description'     => 'changed',
+            'title' => 'changed',
+            'description' => 'changed',
             'organization_id' => '1',
         ]);
 
@@ -535,8 +538,8 @@ class ManageSeriesTest extends TestCase
         $this->signInRole($this->role);
 
         $this->patch(route('series.edit', $series), [
-            'title'           => 'changed',
-            'description'     => 'changed',
+            'title' => 'changed',
+            'description' => 'changed',
             'organization_id' => '1',
         ])->assertForbidden();
 
@@ -554,8 +557,8 @@ class ManageSeriesTest extends TestCase
         $this->mockHandler->append($this->mockSeriesRunningWorkflowsResponse($series, false));
 
         $this->patch(route('series.edit', $series), [
-            'title'           => 'changed',
-            'description'     => 'changed',
+            'title' => 'changed',
+            'description' => 'changed',
             'organization_id' => '1',
         ]);
 
@@ -568,8 +571,8 @@ class ManageSeriesTest extends TestCase
         $series = SeriesFactory::ownedBy($this->signInRole($this->role))->create();
 
         $this->patch(route('series.edit', $series), [
-            'title'           => 'changed',
-            'description'     => 'changed',
+            'title' => 'changed',
+            'description' => 'changed',
             'organization_id' => '1',
         ])->assertSessionHas($this->flashMessageName);
     }

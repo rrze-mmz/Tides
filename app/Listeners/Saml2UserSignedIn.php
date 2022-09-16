@@ -24,7 +24,7 @@ class Saml2UserSignedIn
     /**
      * Handle the event.
      *
-     * @param SignedIn $event
+     * @param  SignedIn  $event
      * @return RedirectResponse
      */
     public function handle(SignedIn $event): RedirectResponse
@@ -35,10 +35,10 @@ class Saml2UserSignedIn
         $samlUser = $event->getSaml2User();
 
         $samlUser = [
-            'id'           => $samlUser->getUserId(),
-            'attributes'   => $samlUser->getAttributes(),
+            'id' => $samlUser->getUserId(),
+            'attributes' => $samlUser->getAttributes(),
             'sessionIndex' => $samlUser->getSessionIndex(),
-            'nameId'       => $samlUser->getNameId(),
+            'nameId' => $samlUser->getNameId(),
         ];
 
         Log::info($samlUser);
@@ -48,11 +48,11 @@ class Saml2UserSignedIn
                 'username' => $samlUser['attributes']['urn:mace:dir:attribute-def:uid'][0],
             ],
             [
-                'username'   => $samlUser['attributes']['urn:mace:dir:attribute-def:uid'][0],
-                'email'      => $samlUser['attributes']['urn:mace:dir:attribute-def:mail'][0],
-                'password'   => Hash::make(bcrypt(str()->random(40))),
+                'username' => $samlUser['attributes']['urn:mace:dir:attribute-def:uid'][0],
+                'email' => $samlUser['attributes']['urn:mace:dir:attribute-def:mail'][0],
+                'password' => Hash::make(bcrypt(str()->random(40))),
                 'first_name' => str($samlUser['attributes']['urn:mace:dir:attribute-def:displayName'][0])->before(' '),
-                'last_name'  => str($samlUser['attributes']['urn:mace:dir:attribute-def:displayName'][0])->after(' '),
+                'last_name' => str($samlUser['attributes']['urn:mace:dir:attribute-def:displayName'][0])->after(' '),
             ]
         );
         // Login a user

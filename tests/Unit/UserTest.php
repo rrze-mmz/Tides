@@ -5,8 +5,8 @@ namespace Tests\Unit;
 use App\Models\Series;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -24,15 +24,27 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function a_user_has_series(): void
+    public function it_has_many_series(): void
     {
-        $this->assertInstanceOf(Collection::class, $this->user->series);
+        $this->assertInstanceOf(HasMany::class, $this->user->series());
     }
 
     /** @test */
-    public function a_user_has_clips(): void
+    public function it_has_many_clips(): void
     {
-        $this->assertInstanceOf(Collection::class, $this->user->clips);
+        $this->assertInstanceOf(HasMany::class, $this->user->clips());
+    }
+
+    /** @test */
+    public function it_has_many_supervised_clips(): void
+    {
+        $this->assertInstanceOf(HasMany::class, $this->user->supervisedClips());
+    }
+
+    /** @test */
+    public function it_fetch_all_user_series(): void
+    {
+        $this->assertInstanceOf(Builder::class, $this->user->getAllSeries());
     }
 
     /** @test */

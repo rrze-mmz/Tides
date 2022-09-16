@@ -16,15 +16,21 @@ class CommentsSection extends Component
     use AuthorizesRequests;
 
     public $model;
+
     public $content;
+
     public $messageText = '';
+
     public $messageType = '';
+
     public $type;
+
     public $comments;
+
     protected array $rules = [
         'content' => 'required|min:3',
-        'model'   => 'required',
-        'type'    => 'required|string'
+        'model' => 'required',
+        'type' => 'required|string',
     ];
 
     /**
@@ -52,9 +58,9 @@ class CommentsSection extends Component
         $this->validate();
 
         $comment = $this->model->comments()->save(Comment::create([
-            'content'  => $this->content,
+            'content' => $this->content,
             'owner_id' => auth()->user()->id,
-            'type'     => $this->type
+            'type' => $this->type,
         ]));
 
         $this->content = '';
@@ -79,7 +85,7 @@ class CommentsSection extends Component
     /**
      * Delete a single comment
      *
-     * @param Comment $comment
+     * @param  Comment  $comment
      *
      * @throws AuthorizationException
      */

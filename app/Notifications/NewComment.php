@@ -25,7 +25,7 @@ class NewComment extends Notification
     /**
      * Get the notification's delivery channels.
      *
-     * @param mixed $notifiable
+     * @param  mixed  $notifiable
      * @return array
      */
     public function via($notifiable)
@@ -36,7 +36,7 @@ class NewComment extends Notification
     /**
      * Get the mail representation of the notification.
      *
-     * @param mixed $notifiable
+     * @param  mixed  $notifiable
      * @return MailMessage
      */
     public function toMail($notifiable)
@@ -47,18 +47,18 @@ class NewComment extends Notification
                 : $this->comment->commentable->adminPath();
 
         return (new MailMessage)
-            ->greeting('Hi ' . $this->comment->commentable->owner?->getFullNameAttribute())
+            ->greeting('Hi '.$this->comment->commentable->owner?->getFullNameAttribute())
             ->line('There is a new comment on your
-            ' . Str::ucfirst($this->comment->commentable_type) . ' :' . $this->comment->commentable->title)
+            '.Str::ucfirst($this->comment->commentable_type).' :'.$this->comment->commentable->title)
             ->line($this->comment->content)
-            ->action('Go to comment', url($url . '#comments-section'))
+            ->action('Go to comment', url($url.'#comments-section'))
             ->line('Thanks!');
     }
 
     /**
      * Get the array representation of the notification.
      *
-     * @param mixed $notifiable
+     * @param  mixed  $notifiable
      * @return array
      */
     public function toArray($notifiable)

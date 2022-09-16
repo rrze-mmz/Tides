@@ -2,7 +2,6 @@
 
 namespace Tests\Unit;
 
-use App\Models\Clip;
 use App\Models\Comment;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

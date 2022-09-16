@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Traits\RecordsActivity;
 use App\Models\Traits\Searchable;
 use App\Notifications\MailResetPasswordToken;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -90,6 +91,11 @@ class User extends Authenticatable
     public function clips(): HasMany
     {
         return $this->hasMany(Clip::class, 'owner_id');
+    }
+
+    public function supervisedClips(): HasMany
+    {
+        return $this->hasMany(Clip::class, 'supervisor_id');
     }
 
     /**
@@ -185,6 +191,16 @@ class User extends Authenticatable
     public function isMemberOf(Series $series): bool
     {
         return $this->memberships()->get()->contains($series);
+    }
+
+    /**
+     * @return Builder|Series
+     */
+    public function getAllSeries(): Builder|Series
+    {
+        return Series::whereHas('clips', function ($q) {
+            $q->where('supervisor_id', $this->id);
+        })->orWhere('owner_id', $this->id);
     }
 
     /**

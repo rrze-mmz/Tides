@@ -5,7 +5,6 @@ namespace Tests\Unit;
 use App\Enums\Content;
 use App\Models\Asset;
 use App\Models\Clip;
-use App\Models\Comment;
 use App\Models\Series;
 use App\Models\User;
 use Facades\Tests\Setup\FileFactory;
@@ -40,19 +39,19 @@ class ClipTest extends TestCase
     /** @test */
     public function it_has_a_path(): void
     {
-        $this->assertEquals('/clips/' . $this->clip->slug, $this->clip->path());
+        $this->assertEquals('/clips/'.$this->clip->slug, $this->clip->path());
     }
 
     /** @test */
     public function it_has_a_admin_path(): void
     {
-        $this->assertEquals('/admin/clips/' . $this->clip->slug, $this->clip->adminPath());
+        $this->assertEquals('/admin/clips/'.$this->clip->slug, $this->clip->adminPath());
     }
 
     /** @test */
     public function it_has_a_slug_route(): void
     {
-        $this->assertEquals('/clips/' . Str::slug($this->clip->title), $this->clip->path());
+        $this->assertEquals('/clips/'.Str::slug($this->clip->title), $this->clip->path());
     }
 
     /** @test */
@@ -165,14 +164,14 @@ class ClipTest extends TestCase
     public function it_can_add_an_asset(): void
     {
         $asset = $this->clip->addAsset([
-            'disk'               => 'videos',
+            'disk' => 'videos',
             'original_file_name' => 'video.mp4',
-            'path'               => '/videos/',
-            'duration'           => '100',
-            'guid'               => Str::uuid(),
-            'width'              => '1920',
-            'height'             => '1080',
-            'type'               => 'video',
+            'path' => '/videos/',
+            'duration' => '100',
+            'guid' => Str::uuid(),
+            'width' => '1920',
+            'height' => '1080',
+            'type' => 'video',
         ]);
 
         $this->assertInstanceOf(Asset::class, $asset);
@@ -185,11 +184,11 @@ class ClipTest extends TestCase
 
         $file = FileFactory::videoFile();
 
-        $file->storeAs('thumbnails', $this->clip->id . '_poster.png');
+        $file->storeAs('thumbnails', $this->clip->id.'_poster.png');
 
         $this->clip->updatePosterImage();
 
-        Storage::assertExists('/thumbnails/' . $this->clip->posterImage);
+        Storage::assertExists('/thumbnails/'.$this->clip->posterImage);
     }
 
     /** @test */
@@ -206,21 +205,21 @@ class ClipTest extends TestCase
         $series = Series::factory()->create();
 
         Clip::factory()->create([
-            'title'     => 'first clip',
+            'title' => 'first clip',
             'series_id' => $series->id,
-            'episode'   => 1,
+            'episode' => 1,
         ]);
 
         $secondClip = Clip::factory()->create([
-            'title'     => 'second clip',
+            'title' => 'second clip',
             'series_id' => $series->id,
-            'episode'   => 2,
+            'episode' => 2,
         ]);
 
         Clip::factory()->create([
-            'title'     => 'third clip',
+            'title' => 'third clip',
             'series_id' => $series->id,
-            'episode'   => 3,
+            'episode' => 3,
         ]);
 
         $this->assertInstanceOf(Collection::class, $secondClip->previousNextClipCollection());
@@ -251,7 +250,7 @@ class ClipTest extends TestCase
     /** @test */
     public function it_resolves_also_id_in_route(): void
     {
-        $this->get('clips/' . $this->clip->id)->assertStatus(403);
+        $this->get('clips/'.$this->clip->id)->assertStatus(403);
         $this->get(route('frontend.clips.show', $this->clip->id))->assertStatus(403);
         $this->get('clips/291')->assertStatus(404);
     }

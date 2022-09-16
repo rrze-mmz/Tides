@@ -158,7 +158,7 @@ return [
         |
         */
 
-        'x509cert'   => env('SAML2_SP_CERT_x509', ''),
+        'x509cert' => env('SAML2_SP_CERT_x509', ''),
         'privateKey' => env('SAML2_SP_CERT_PRIVATEKEY', ''),
 
         /*
@@ -347,11 +347,11 @@ return [
 
     'contactPerson' => [
         'technical' => [
-            'givenName'    => env('SAML2_CONTACT_TECHNICAL_NAME', 'name'),
+            'givenName' => env('SAML2_CONTACT_TECHNICAL_NAME', 'name'),
             'emailAddress' => env('SAML2_CONTACT_TECHNICAL_EMAIL', 'no@reply.com'),
         ],
-        'support'   => [
-            'givenName'    => env('SAML2_CONTACT_SUPPORT_NAME', 'Support'),
+        'support' => [
+            'givenName' => env('SAML2_CONTACT_SUPPORT_NAME', 'Support'),
             'emailAddress' => env('SAML2_CONTACT_SUPPORT_EMAIL', 'no@reply.com'),
         ],
     ],
@@ -367,9 +367,9 @@ return [
 
     'organization' => [
         'en-US' => [
-            'name'        => env('SAML2_ORGANIZATION_NAME', 'Name'),
+            'name' => env('SAML2_ORGANIZATION_NAME', 'Name'),
             'displayname' => env('SAML2_ORGANIZATION_NAME', 'Display Name'),
-            'url'         => env('SAML2_ORGANIZATION_URL', 'http://url'),
+            'url' => env('SAML2_ORGANIZATION_URL', 'http://url'),
         ],
     ],
 

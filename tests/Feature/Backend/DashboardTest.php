@@ -98,6 +98,19 @@ class DashboardTest extends TestCase
     }
 
     /** @test */
+    public function it_display_user_supervised_series(): void
+    {
+        $user = $this->signInRole('superadmin');
+
+        $series = SeriesFactory::withClips(1)->withAssets(4)->create();
+
+        $series->clips()->first()->supervisor_id = $user->id;
+        $series->clips()->first()->save();
+
+        $this->get(route('dashboard'))->assertSee($series->title);
+    }
+
+    /** @test */
     public function it_display_user_clips(): void
     {
         $user = $this->signInRole($this->role);

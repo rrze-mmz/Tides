@@ -17,13 +17,13 @@ class AuthenticationTest extends TestCase
     public function it_has_a_login_selection_page_with_options(): void
     {
         Tenant::create([
-            'key'            => 'test',
-            'uuid'           => Str::uuid(),
-            'idp_entity_id'  => 'WebSSO',
-            'idp_login_url'  => 'test.com/login',
+            'key' => 'test',
+            'uuid' => Str::uuid(),
+            'idp_entity_id' => 'WebSSO',
+            'idp_login_url' => 'test.com/login',
             'idp_logout_url' => 'test.com/logout',
-            'idp_x509_cert'  => 'JDKJGkljdfWKJSDFjkj',
-            'metadata'       => 'test',
+            'idp_x509_cert' => 'JDKJGkljdfWKJSDFjkj',
+            'metadata' => 'test',
         ]);
 
         $this->get(route('login'))

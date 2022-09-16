@@ -6,6 +6,7 @@ use App\Http\Livewire\UserDataTable;
 use App\Mail\EmailUserPassword;
 use App\Models\Role;
 use App\Models\User;
+use Facades\Tests\Setup\ClipFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Notification;
@@ -404,5 +405,42 @@ class ManageUsersTest extends TestCase
         ]);
 
         $this->assertTrue($user->isModerator());
+    }
+
+    /** @test */
+    public function it_updates_clip_supervisor_id_if_a_portal_admin_creats_a_clip(): void
+    {
+        $clip = ClipFactory::ownedBy($adminA = $this->signInRole('admin'))->create();
+
+        $this->assertNotNull($clip->supervisor_id);
+    }
+
+    /** @test */
+    public function it_updates_clip_supervisor_id_if_a_portal_admin_updates_a_clip(): void
+    {
+        $clip = ClipFactory::ownedBy($this->signInRole('moderator'))->create();
+
+        $this->assertNull($clip->supervisor_id);
+
+        auth()->logout();
+
+        $this->signInRole('admin');
+
+        $this->patch(route('clips.edit', $clip), [
+            'episode' => '1',
+            'title' => 'changed',
+            'description' => 'changed',
+            'recording_date' => now(),
+            'organization_id' => '1',
+            'language_id' => '1',
+            'context_id' => '1',
+            'format_id' => '1',
+            'type_id' => '1',
+            'semester_id' => '1',
+        ]);
+
+        $clip->refresh();
+
+        $this->assertNotNull($clip->supervisor_id);
     }
 }

@@ -2,8 +2,8 @@
 
 namespace App\View\Components;
 
-use App\Models\Series;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\View\Component;
 
 class ListClips extends Component
@@ -14,7 +14,7 @@ class ListClips extends Component
      * @return void
      */
     public function __construct(
-        public Series $series,
+        public Model $series,
         public bool $dashboardAction,
         public bool $reorder = false
     ) {

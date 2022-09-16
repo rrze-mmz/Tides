@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\Clip;
 use App\Models\Comment;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -24,7 +23,7 @@ class CommentFactory extends Factory
     public function definition()
     {
         return [
-            'content'  => $this->faker->paragraph(),
+            'content' => $this->faker->paragraph(),
             'owner_id' => User::factory()->create()->id,
         ];
     }

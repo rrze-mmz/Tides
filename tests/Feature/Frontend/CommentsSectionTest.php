@@ -40,7 +40,7 @@ class CommentsSectionTest extends TestCase
     {
         Livewire::test(CommentsSection::class, [
             'model' => $this->clip,
-            'type'  => 'frontend',
+            'type' => 'frontend',
         ])
             ->set('content', 'Test comment')
             ->call('postComment')
@@ -53,7 +53,7 @@ class CommentsSectionTest extends TestCase
     {
         Livewire::test(CommentsSection::class, [
             'model' => $this->clip,
-            'type'  => 'frontend',
+            'type' => 'frontend',
         ])
             ->set('content', 'Test comment')
             ->call('postComment')
@@ -66,7 +66,7 @@ class CommentsSectionTest extends TestCase
     {
         Livewire::test(CommentsSection::class, [
             'model' => $this->clip,
-            'type'  => 'frontend',
+            'type' => 'frontend',
         ])
             ->set('content', '')
             ->call('postComment')
@@ -78,7 +78,7 @@ class CommentsSectionTest extends TestCase
     {
         Livewire::test(CommentsSection::class, [
             'model' => $this->clip,
-            'type'  => 'frontend',
+            'type' => 'frontend',
         ])
             ->set('content', 'ab')
             ->call('postComment')
@@ -90,12 +90,12 @@ class CommentsSectionTest extends TestCase
     {
         $this->clip->comments()->save(Comment::factory()->create([
             'content' => 'Backend comment',
-            'type'    => 'backend'
+            'type' => 'backend',
         ]));
 
         Livewire::test(CommentsSection::class, [
             'model' => $this->clip,
-            'type'  => 'frontend',
+            'type' => 'frontend',
         ])
             ->set('content', 'Test comment')
             ->call('postComment')
@@ -109,12 +109,12 @@ class CommentsSectionTest extends TestCase
     {
         $this->clip->comments()->save(Comment::factory()->create([
             'owner_id' => auth()->user()->id,
-            'type'     => 'frontend'
+            'type' => 'frontend',
         ]));
         $this->clip->refresh();
         Livewire::test(CommentsSection::class, [
             'model' => $this->clip,
-            'type'  => 'frontend',
+            'type' => 'frontend',
         ])
             ->assertSee('Delete');
     }
@@ -128,7 +128,7 @@ class CommentsSectionTest extends TestCase
 
         Livewire::test(CommentsSection::class, [
             'model' => $this->clip,
-            'type'  => 'frontend',
+            'type' => 'frontend',
         ])
             ->assertSee('Delete');
     }
@@ -138,15 +138,15 @@ class CommentsSectionTest extends TestCase
     {
         $comment = Comment::factory()->create([
             'owner_id' => auth()->user()->id,
-            'content'  => 'test comment',
-            'type'     => 'frontend',
+            'content' => 'test comment',
+            'type' => 'frontend',
         ]);
 
         $this->clip->comments()->save($comment);
 
         Livewire::test(CommentsSection::class, [
             'model' => $this->clip,
-            'type'  => 'frontend',
+            'type' => 'frontend',
         ])
             ->call('deleteComment', $comment)
             ->assertDontSee('test comment');
@@ -157,8 +157,8 @@ class CommentsSectionTest extends TestCase
     {
         $comment = Comment::factory()->create([
             'owner_id' => auth()->user()->id,
-            'content'  => 'test comment',
-            'type'     => 'frontend'
+            'content' => 'test comment',
+            'type' => 'frontend',
         ]);
 
         $this->clip->comments()->save($comment);
@@ -168,7 +168,7 @@ class CommentsSectionTest extends TestCase
 
         Livewire::test(CommentsSection::class, [
             'model' => $this->clip,
-            'type'  => 'frontend',
+            'type' => 'frontend',
         ])
             ->call('deleteComment', $comment)
             ->assertSee('test comment');
@@ -179,7 +179,7 @@ class CommentsSectionTest extends TestCase
     {
         $comment = Comment::factory()->create([
             'owner_id' => auth()->user()->id,
-            'content'  => 'test comment',
+            'content' => 'test comment',
         ]);
 
         $this->clip->comments()->save($comment);
@@ -187,7 +187,7 @@ class CommentsSectionTest extends TestCase
 
         Livewire::test(CommentsSection::class, [
             'model' => $this->clip,
-            'type'  => 'frontend',
+            'type' => 'frontend',
         ])
             ->call('deleteComment', $comment)
             ->assertDontSee('test comment');
@@ -200,7 +200,7 @@ class CommentsSectionTest extends TestCase
 
         Livewire::test(CommentsSection::class, [
             'model' => $this->clip,
-            'type'  => 'frontend',
+            'type' => 'frontend',
         ])
             ->set('content', 'Test comment')
             ->call('postComment')
@@ -225,7 +225,7 @@ class CommentsSectionTest extends TestCase
 
         Livewire::test(CommentsSection::class, [
             'model' => $this->clip,
-            'type'  => 'frontend',
+            'type' => 'frontend',
         ])
             ->set('content', 'Test comment')
             ->call('postComment')
