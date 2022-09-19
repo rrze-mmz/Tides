@@ -52,9 +52,9 @@ Route::controller(ShowClipsController::class)->prefix('/clips')->group(function 
 
 Route::get('/protector/link/clip/{clip:id}/{token}/{time}/{client}', function (Clip $clip, $token, $time, $client) {
     session()->put([
-        'clip_'.$clip->id.'_token' => $token,
-        'clip_'.$clip->id.'_time' => $time,
-        'clip_'.$clip->id.'_client' => $client,
+        'clip_' . $clip->id . '_token'  => $token,
+        'clip_' . $clip->id . '_time'   => $time,
+        'clip_' . $clip->id . '_client' => $client,
     ]);
 
     return to_route('frontend.clips.show', $clip);
@@ -72,7 +72,7 @@ Route::controller(ApiController::class)->prefix('/api')->group(function () {
 
 //change portal language
 Route::get('/set_lang/{locale}', function ($locale) {
-    if (! in_array($locale, ['en', 'de'])) {
+    if (!in_array($locale, ['en', 'de'])) {
         abort(400);
     }
     session()->put('locale', $locale);
@@ -178,9 +178,6 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
     //Assets routes
     Route::delete('assets/{asset}', AssetDestroyController::class)->name('assets.destroy');
 
-    //Opencast routes
-    Route::get('/systems', SystemsCheckController::class)->name('systems.status');
-
     //Documents routes
     Route::post('/document/upload', [DocumentController::class, 'upload'])->name('documents.upload');
     Route::get('/series/{series}/document/{document}', [DocumentController::class, 'viewSeriesDocument'])
@@ -193,7 +190,7 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
     Route::resource('presenters', PresentersController::class)->except(['show']);
 
     Route::get('/activities', function () {
-        Gate::allowIf(fn ($user) => $user->isAdmin() || $user->isAssistant());
+        Gate::allowIf(fn($user) => $user->isAdmin() || $user->isAssistant());
 
         return view('backend.activities.index', [
             'activities' => Activity::paginate(20),
@@ -213,8 +210,17 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
     });
 });
 
+//Superadmin routes
+Route::middleware('can:view-superadmin-pages')->group(function () {
+    Route::get('/systems', SystemsCheckController::class)->name('systems.status');
+    Route::get('/portal-settings', function () {
+        return 'under construction';
+    })->name('portal.settings');
+});
+
+
 Route::get('/test/{series}/elk', function (Series $series, ElasticsearchService $elkService) {
     $elkService->createIndex($series);
 })->name('elasticsearch.test');
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

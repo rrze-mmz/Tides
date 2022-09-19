@@ -12,7 +12,7 @@ class UserPolicy
     /**
      * Check whether the given user is an admin and can view a user
      *
-     * @param  User  $user
+     * @param User $user
      * @return bool
      */
     public function view(User $user): bool
@@ -21,7 +21,7 @@ class UserPolicy
     }
 
     /**
-     * @param  User  $user
+     * @param User $user
      * @return bool
      */
     public function dashboard(User $user): bool
@@ -30,11 +30,16 @@ class UserPolicy
     }
 
     /**
-     * @param  User  $user
+     * @param User $user
      * @return bool
      */
     public function opencastWorkflows(User $user): bool
     {
-        return $user->hasRole('superadmin') || $user->hasRole('admin');
+        return $user->isAdmin();
+    }
+
+    public function viewSuperadminPages(User $user): bool
+    {
+        return $user->isSuperAdmin();
     }
 }

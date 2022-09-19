@@ -84,6 +84,14 @@ class UserTest extends TestCase
     }
 
     /** @test */
+    public function it_check_for_superadmin_role(): void
+    {
+        $this->signInRole('superadmin');
+
+        $this->assertTrue(auth()->user()->isSuperAdmin());
+    }
+
+    /** @test */
     public function it_check_for_admin_role(): void
     {
         $this->signInRole('admin');

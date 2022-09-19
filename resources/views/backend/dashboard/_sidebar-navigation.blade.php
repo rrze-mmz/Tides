@@ -67,6 +67,14 @@
     >
         {{ trans_choice('common.menu.system', 2) }}
     </a>
+
+    <a
+        href="{{route('portal.settings')}}"
+        class="flex items-center text-white opacity-75 hover:opacity-100 py-4
+        pl-6 nav-item  {{ setActiveLink(route('portal.settings')) }}"
+    >
+        {{ __('common.menu.portal settings') }}
+    </a>
 @endcan
 @can('view-superadmin-menu-items')
     <div class="pt-10git ">

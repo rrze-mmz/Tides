@@ -153,7 +153,8 @@ class DashboardTest extends TestCase
         $this->signInRole('superadmin');
 
         $this->get(route('dashboard'))
-            ->assertSee(trans_choice('common.menu.system', 2));
+            ->assertSee(trans_choice('common.menu.system', 2))
+            ->assertSee(__('common.menu.portal settings'));
     }
 
     /** @test */
