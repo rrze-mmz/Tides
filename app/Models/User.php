@@ -21,6 +21,7 @@ class User extends Authenticatable
     use RecordsActivity;
 
     protected array $searchable = ['first_name', 'last_name', 'username', 'email'];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -33,6 +34,7 @@ class User extends Authenticatable
         'email',
         'password',
     ];
+
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -42,6 +44,7 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
     /**
      * The attributes that should be cast to native types.
      *
@@ -108,7 +111,7 @@ class User extends Authenticatable
     /**
      * Assign a role to the current use
      *
-     * @param string $role
+     * @param  string  $role
      * @return User
      */
     public function assignRole(string $role = ''): static
@@ -141,12 +144,12 @@ class User extends Authenticatable
     /**
      * Check whether the current user has given role
      *
-     * @param string $role
+     * @param  string  $role
      * @return bool
      */
     public function hasRole(string $role = ''): bool
     {
-        return (bool)$this->roles->contains('name', $role);
+        return (bool) $this->roles->contains('name', $role);
     }
 
     /**
@@ -192,7 +195,7 @@ class User extends Authenticatable
     /**
      * Check whether the current user is part of a series
      *
-     * @param Series $series
+     * @param  Series  $series
      * @return bool
      */
     public function isMemberOf(Series $series): bool

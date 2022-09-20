@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             SemesterSeeder::class,
             DocDataSeeder::class,
             LanguageSeeder::class,
+            SettingsSeeder::class,
         ]);
     }
 }

@@ -9,11 +9,14 @@ use App\Http\Controllers\Backend\CollectionsController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\DevicesController;
 use App\Http\Controllers\Backend\DocumentController;
+use App\Http\Controllers\Backend\OpencastSettingsController;
+use App\Http\Controllers\Backend\PortalSettingsController;
 use App\Http\Controllers\Backend\PresentersController;
 use App\Http\Controllers\Backend\SeriesClipsController;
 use App\Http\Controllers\Backend\SeriesController;
 use App\Http\Controllers\Backend\SeriesMembershipController;
 use App\Http\Controllers\Backend\SeriesOwnership;
+use App\Http\Controllers\Backend\SettingsController;
 use App\Http\Controllers\Backend\SystemsCheckController;
 use App\Http\Controllers\Backend\TriggerSmilFilesController;
 use App\Http\Controllers\Backend\UsersController;
@@ -26,8 +29,8 @@ use App\Http\Controllers\Frontend\ShowSeriesController;
 use App\Models\Activity;
 use App\Models\Clip;
 use App\Models\Series;
-use App\Models\User;
 use App\Services\ElasticsearchService;
+use Elasticsearch\Endpoints\Indices\Open;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
@@ -213,11 +216,12 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
 //Superadmin routes
 Route::middleware('can:view-superadmin-pages')->group(function () {
     Route::get('/systems', SystemsCheckController::class)->name('systems.status');
-    Route::get('/portal-settings', function () {
-        return 'under construction';
-    })->name('portal.settings');
+    Route::get('/settings/index', SettingsController::class)->name('settings.portal.index');
+    Route::get('/settings/portal', [PortalSettingsController::class, 'show'])->name('settings.portal.show');
+    Route::put('/settings/portal', [PortalSettingsController::class, 'update'])->name('settings.portal.update');
+    Route::get('/settings/opencast', [OpencastSettingsController::class, 'show'])->name('settings.opencast.show');
+    Route::put('/settings/opencast', [OpencastSettingsController::class, 'update'])->name('settings.opencast.update');
 });
-
 
 Route::get('/test/{series}/elk', function (Series $series, ElasticsearchService $elkService) {
     $elkService->createIndex($series);

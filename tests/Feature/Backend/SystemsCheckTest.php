@@ -22,10 +22,15 @@ class SystemsCheckTest extends TestCase
     use WorksWithElasticsearchClient;
 
     private OpencastService $opencastService;
+
     private WowzaService $wowzaService;
+
     private ElasticsearchService $elasticsearchService;
+
     private MockHandler $mockOpencastHandler;
+
     private MockHandler $mockWowzaHandler;
+
     private MockHandler $mockElasticsearchHandler;
 
     protected function setUp(): void

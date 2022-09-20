@@ -23,11 +23,11 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        Clip::class    => ClipPolicy::class,
-        Asset::class   => AssetPolicy::class,
-        Series::class  => SeriesPolicy::class,
+        Clip::class => ClipPolicy::class,
+        Asset::class => AssetPolicy::class,
+        Series::class => SeriesPolicy::class,
         Comment::class => CommentPolicy::class,
-        User::class    => UserPolicy::class,
+        User::class => UserPolicy::class,
     ];
 
     /**
@@ -62,9 +62,9 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('view-opencast-workflows', [UserPolicy::class, 'opencastWorkflows']);
         Gate::define('view-superadmin-pages', [UserPolicy::class, 'viewSuperadminPages']);
         Gate::define('view-superadmin-menu-items', [UserPolicy::class, 'viewSuperadminPages']);
-        Gate::define('view-admin-menu-items', fn(User $user) => $user->isAdmin());
-        Gate::define('view-assistant-menu-items', fn(User $user) => $user->isAssistant() || $user->isAdmin());
-        Gate::define('view-moderator-menu-items', fn(User $user) => $user->isModerator());
+        Gate::define('view-admin-menu-items', fn (User $user) => $user->isAdmin());
+        Gate::define('view-assistant-menu-items', fn (User $user) => $user->isAssistant() || $user->isAdmin());
+        Gate::define('view-moderator-menu-items', fn (User $user) => $user->isModerator());
         //comments
         Gate::define('create-comment', [CommentPolicy::class, 'create']);
         Gate::define('delete-comment', [CommentPolicy::class, 'delete']);

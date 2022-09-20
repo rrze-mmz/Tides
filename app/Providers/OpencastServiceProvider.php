@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Http\Clients\OpencastClient;
+use App\Models\Setting;
 use Illuminate\Support\ServiceProvider;
 
 class OpencastServiceProvider extends ServiceProvider
@@ -15,14 +16,26 @@ class OpencastServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(OpencastClient::class, function () {
-            $config = $this->app->get('config')['opencast'];
+            $setting = Setting::firstOrCreate(
+                ['name' => 'opencast'],
+                [
+                    'data' => [
+                        'url'              => 'localhost:8080',
+                        'username'         => 'admin',
+                        'password'         => 'opencast',
+                        'archive_path'     => '/archive/mh_default',
+                        'default_workflow' => 'fast',
+                    ]
+                ]
+            );
+            $settingData = $setting->data;
 
             return new OpencastClient([
-                'base_uri' => $config['base_uri'],
-                'verify' => config('app.env') === 'production',
-                'auth' => [
-                    $config['digest_user'],
-                    $config['digest_pass'],
+                'base_uri' => $settingData['url'],
+                'verify'   => config('app.env') === 'production',
+                'auth'     => [
+                    $settingData['username'],
+                    $settingData['password'],
                 ],
             ]);
         });
