@@ -90,15 +90,28 @@ abstract class TestCase extends BaseTestCase
                 'theme_id_tl'         => '501',
                 'theme_id_bl'         => '502',
                 'theme_id_br'         => '502',
-            ]
+            ],
         ]);
+
+        Setting::create([
+            'name' => 'streaming',
+            'data' => [
+                'engine_url'   => 'localhost:1935',
+                'api_url'      => 'localhost:8087',
+                'username'     => 'digest_user',
+                'password'     => 'digest_password',
+                'content_path' => '/content/videoportal',
+                'secure_token' => 'awsTides12tvv10',
+                'token_prefix' => 'tides',
+            ],
+        ]);
+
         Setting::create([
             'name' => 'portal',
             'data' => [
-                'maintenance_mode' => true,
-            ]
+                'maintenance_mode' => false,
+            ],
         ]);
-
 
         Role::create([
             'name' => 'superadmin',

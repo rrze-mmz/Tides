@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Http\Clients\WowzaClient;
+use App\Models\Setting;
 use Illuminate\Support\ServiceProvider;
 
 class WowzaServiceProvider extends ServiceProvider
@@ -15,15 +16,29 @@ class WowzaServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(WowzaClient::class, function () {
-            $config = $this->app->get('config')['wowza'];
 
+            $setting = Setting::firstOrCreate(
+                ['name' => 'streaming'],
+                [
+                    'data' => [
+                        'engine_url' => 'localhost:1935',
+                        'api_url'    => 'localhost:8087',
+                        'username'   => 'admin',
+                        'password'   => 'opencast',
+                    ]
+                ]
+            );
+
+            $settingsData = $setting->data;
+
+            $authType = config('app.env') === 'local' ? 'basic' : 'digest';
             return new WowzaClient([
-                'base_uri' => $config['base_uri'],
-                'verify' => config('app.env') === 'production',
-                'auth' => [
-                    $config['digest_user'],
-                    $config['digest_pass'],
-                    'digest',
+                'base_uri' => $settingsData['api_url'],
+                'verify'   => config('app.env') === 'production',
+                'auth'     => [
+                    $settingsData['username'],
+                    $settingsData['password'],
+                    $authType,
                 ],
             ]);
         });

@@ -28,5 +28,17 @@
                 </div>
             </div>
         </div>
+        <div class="m-2 p-2 border-black border-solid rounded-lg border-2">
+            <div class="flex flex-col justify-between place-content-around">
+                <div>
+                    <h3 class="pb-6 font-semibold font-light">Streaming
+                    </h3>
+                </div>
+                <div>
+                    <x-form.button :link="route('settings.streaming.show')" type="submit"
+                                   text="Go to settings"/>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection

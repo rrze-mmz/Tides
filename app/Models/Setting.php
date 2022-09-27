@@ -17,13 +17,36 @@ class Setting extends BaseModel
         );
     }
 
-    public function scopeOpencast($query)
+    /**
+     * Scope a query to only include opencast settings
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function scopeOpencast($query): mixed
     {
         return $query->where('name', 'opencast')->firstOrFail();
     }
 
-    public function scopePortal($query)
+    /**
+     * Scope a query to only include portal settings
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function scopePortal($query): mixed
     {
         return $query->where('name', 'portal')->firstOrFail();
+    }
+
+    /**
+     * Scope a query to only include streaming settings
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function scopeStreaming($query): mixed
+    {
+        return $query->where('name', 'streaming')->firstOrFail();
     }
 }

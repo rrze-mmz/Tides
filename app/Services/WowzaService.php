@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Enums\Content;
 use App\Http\Clients\WowzaClient;
 use App\Models\Clip;
+use App\Models\Setting;
 use DOMException;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Response;
@@ -18,10 +19,12 @@ use Spatie\ArrayToXml\ArrayToXml;
 class WowzaService
 {
     private Response $response;
+    private Setting $streamingSettings;
 
     public function __construct(private WowzaClient $client)
     {
         $this->response = new Response(200, []);
+        $this->streamingSettings = Setting::streaming();
     }
 
     /**
@@ -33,13 +36,13 @@ class WowzaService
     {
         $response = collect([
             'releaseId' => 'Wowza server not available',
-            'status' => 'failed',
+            'status'    => 'failed',
         ]);
 
         try {
             $this->response = $this->client->get('/');
-            if (! empty(json_encode((string) $this->response->getBody(), true))) {
-                $response->put('releaseId', json_encode((string) $this->response->getBody(), true))
+            if (!empty(json_encode((string)$this->response->getBody(), true))) {
+                $response->put('releaseId', json_encode((string)$this->response->getBody(), true))
                     ->put('status', 'pass');
             }
         } catch (GuzzleException $e) {
@@ -69,7 +72,7 @@ class WowzaService
     /**
      * @throws DOMException
      */
-    public function generateSmilFile(Clip $clip, Content $type)
+    public function generateSmilFile(Clip $clip, Content $type): void
     {
         $assetsCollection = $clip->getAssetsByType($type)->get();
         if ($assetsCollection->isNotEmpty()) {
@@ -82,30 +85,30 @@ class WowzaService
 
             $result = new ArrayToXml($xmlArray, [
                 'rootElementName' => 'smil',
-                '_attributes' => [
-                    'title' => 'Clip ID:'.$clip->id,
+                '_attributes'     => [
+                    'title' => 'Clip ID:' . $clip->id,
                 ],
             ], true, 'UTF-8', '1.0', []);
 
-            $original_file_name = str($type->name)->lower().'.smil';
+            $original_file_name = str($type->name)->lower() . '.smil';
             //store the generated file to clip path
             Storage::disk('videos')
-                ->put(getClipStoragePath($clip).'/'.$original_file_name, $xmlFile = $result->prettify()->toXml());
+                ->put(getClipStoragePath($clip) . '/' . $original_file_name, $xmlFile = $result->prettify()->toXml());
 
             //save or update the smil file in db
             $clip->addAsset([
-                'disk' => 'videos',
+                'disk'               => 'videos',
                 'original_file_name' => $original_file_name,
-                'type' => Content::SMIL(),
-                'guid' => Str::uuid(),
-                'path' => getClipStoragePath($clip),
-                'duration' => '0',
-                'width' => '0',
-                'height' => '0',
+                'type'               => Content::SMIL(),
+                'guid'               => Str::uuid(),
+                'path'               => getClipStoragePath($clip),
+                'duration'           => '0',
+                'width'              => '0',
+                'height'             => '0',
             ]);
             Log::info($xmlFile);
         } else {
-            Log::info('Assets not found with type'.$type());
+            Log::info('Assets not found with type' . $type());
         }
     }
 
@@ -119,37 +122,37 @@ class WowzaService
     {
         return [
             'video' => [
-                '_attributes' => [
-                    'src' => 'mp4:'.$asset->original_file_name,
-                    'system-bitrate' => $bitrate = $this->findWowzaAssetBitrate((int) $asset->height),
-                    'width' => $asset->width,
-                    'height' => $asset->height,
+                '_attributes'       => [
+                    'src'            => 'mp4:' . $asset->original_file_name,
+                    'system-bitrate' => $bitrate = $this->findWowzaAssetBitrate((int)$asset->height),
+                    'width'          => $asset->width,
+                    'height'         => $asset->height,
                 ],
-                'paramVideoBR' => [
+                'paramVideoBR'      => [
                     '_attributes' => [
-                        'name' => 'videoBitrate',
-                        'value' => $bitrate,
+                        'name'      => 'videoBitrate',
+                        'value'     => $bitrate,
                         'valuetype' => 'data',
                     ],
                 ],
-                'paramAudioBR' => [
+                'paramAudioBR'      => [
                     '_attributes' => [
-                        'name' => 'audioBitrate',
-                        'value' => '44100',
+                        'name'      => 'audioBitrate',
+                        'value'     => '44100',
                         'valuetype' => 'data',
                     ],
                 ],
                 'paramVideoCodecID' => [
                     '_attributes' => [
-                        'name' => 'videoCodecId',
-                        'value' => 'avc1.4d401f',
+                        'name'      => 'videoCodecId',
+                        'value'     => 'avc1.4d401f',
                         'valuetype' => 'data',
                     ],
                 ],
                 'paramAudioCodecID' => [
                     '_attributes' => [
-                        'name' => 'audioCodecId',
-                        'value' => 'mp4a.40.2',
+                        'name'      => 'audioCodecId',
+                        'value'     => 'mp4a.40.2',
                         'valuetype' => 'data',
                     ],
                 ],
@@ -174,7 +177,9 @@ class WowzaService
     }
 
     /**
-     * @param  Clip  $clip
+     * Generates a wowza streaming link with secure token settings
+     *
+     * @param Clip $clip
      * @return bool|string
      */
     public function vodSecureUrl(Clip $clip): bool|string
@@ -183,28 +188,23 @@ class WowzaService
             $contentUrl = getClipSmilFile($clip, config('wowza.check_fautv_links'));
 
             $contentPath = (config('wowza.check_fautv_links'))
-                ? config('wowza.content_path').getClipStoragePath($clip).'camera.smil'
-                : config('wowza.content_path').getClipStoragePath($clip).'presenter.smil';
-            $secureToken = config('wowza.secure_token');
-            $tokenPrefix = config('wowza.token_prefix');
-            $tokenStartTime = $tokenPrefix.'starttime='.time();
-            $tokenEndTime = $tokenPrefix.'endTime='.(time() + 21600);
+                ? $this->streamingSettings->data['content_path'] . getClipStoragePath($clip) . 'camera.smil'
+                : $this->streamingSettings->data['content_path'] . getClipStoragePath($clip) . 'presenter.smil';
+            $secureToken = $this->streamingSettings->data['secure_token'];
+            $tokenPrefix = $this->streamingSettings->data['token_prefix'];
+            $tokenStartTime = $tokenPrefix . 'starttime=' . time();
+            $tokenEndTime = $tokenPrefix . 'endTime=' . (time() + 21600);
 
             $userIP = (App::environment(['testing', 'local'])) ? env('FAUTV_USER_IP') : $_SERVER['REMOTE_ADDR'];
-            Log::info($userIP);
-            $hashStr = $contentPath.'?'.$userIP.'&'.$secureToken.'&'.$tokenEndTime.'&'.$tokenStartTime;
+            $hashStr = $contentPath . '?' . $userIP . '&' . $secureToken . '&' . $tokenEndTime . '&' . $tokenStartTime;
             $hash = hash('sha256', $hashStr, 1);
             $usableHash = strtr(base64_encode($hash), '+/', '-_');
 
-            $url = $contentUrl.'?'.$tokenStartTime.'&'.$tokenEndTime.'&'.$tokenPrefix."hash=$usableHash";
+            $url = $contentUrl . '?' . $tokenStartTime . '&' . $tokenEndTime . '&' . $tokenPrefix . "hash=$usableHash";
 
             return $url;
         } else {
             return false;
         }
-    }
-
-    public function checkForVideoAssets(Clip $clip)
-    {
     }
 }

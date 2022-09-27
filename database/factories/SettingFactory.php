@@ -20,17 +20,17 @@ class SettingFactory extends Factory
         return [
             'name' => 'opencast',
             'data' => [
-                'url'                   => 'localhost:8080',
-                'username'              => 'admin',
-                'password'              => 'opencast',
-                'archive_path'          => '/archive/mh_default',
-                'default_workflow_id'   => 'fast',
-                'upload_workflow_id'    => 'fast',
-                'theme_id_top_right'    => '500',
-                'theme_id_top_left'     => '501',
-                'theme_id_bottom_left'  => '502',
+                'url' => 'localhost:8080',
+                'username' => 'admin',
+                'password' => 'opencast',
+                'archive_path' => '/archive/mh_default',
+                'default_workflow_id' => 'fast',
+                'upload_workflow_id' => 'fast',
+                'theme_id_top_right' => '500',
+                'theme_id_top_left' => '501',
+                'theme_id_bottom_left' => '502',
                 'theme_id_bottom_right' => '502',
-            ]
+            ],
         ];
     }
 }

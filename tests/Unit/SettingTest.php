@@ -25,4 +25,12 @@ class SettingTest extends TestCase
 
         $this->assertInstanceOf(Setting::class, Setting::portal());
     }
+
+    /** @test */
+    public function it_has_a_streaming_scope(): void
+    {
+        Setting::factory()->create(['name' => 'streaming']);
+
+        $this->assertInstanceOf(Setting::class, Setting::streaming());
+    }
 }

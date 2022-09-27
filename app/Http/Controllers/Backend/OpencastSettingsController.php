@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateOpencastSettings;
 use App\Models\Setting;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 
 class OpencastSettingsController extends Controller
 {
@@ -40,27 +40,14 @@ class OpencastSettingsController extends Controller
     /**
      * Update Opencast settings
      *
-     * @param Request $request
+     * @param UpdateOpencastSettings $request
      * @return RedirectResponse
      */
-    public function update(Request $request): RedirectResponse
+    public function update(UpdateOpencastSettings $request): RedirectResponse
     {
         $setting = Setting::opencast();
 
-        $validated = $request->validate([
-            'url'                   => ['required'],
-            'username'              => ['required', 'string'],
-            'password'              => ['required'],
-            'archive_path'          => ['required'],
-            'default_workflow_id'   => ['required', 'string'],
-            'upload_workflow_id'    => ['required', 'string'],
-            'theme_id_top_right'    => ['required', 'numeric'] ?? '500',
-            'theme_id_top_left'     => ['required', 'string'] ?? '501',
-            'theme_id_bottom_left'  => ['required', 'string'] ?? '502',
-            'theme_id_bottom_right' => ['required', 'string'] ?? '503',
-        ]);
-
-        $setting->data = $validated;
+        $setting->data = $request->validated();
 
         $setting->save();
 

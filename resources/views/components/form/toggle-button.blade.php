@@ -1,12 +1,12 @@
-<div class="grid grid-cols-8">
-    <div class="content-center items-center">
+<div class="grid grid-cols-12 gap-4 content-center items-center ">
+    <div class=" col-span-2 ">
         <label for="{{ $fieldName }}"
                class="block py-2 mr-6 font-bold text-gray-700 text-md"
         >
             {{ $label }}
         </label>
     </div>
-    <div class="col-start-2 col-end-6">
+    <div class="">
         <div class="py-2  w-full bg-none" x-data="{ checked: {{ ($value ? 'true' : 'false') }} }">
             <div class="relative  w-12 h-6 transition duration-200 ease-in select-none bg-none">
                 <input type="checkbox"
