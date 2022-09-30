@@ -16,17 +16,18 @@ use App\Http\Controllers\Backend\SeriesClipsController;
 use App\Http\Controllers\Backend\SeriesController;
 use App\Http\Controllers\Backend\SeriesMembershipController;
 use App\Http\Controllers\Backend\SeriesOwnership;
-use App\Http\Controllers\Backend\SettingsController;
 use App\Http\Controllers\Backend\StreamingSettingsController;
 use App\Http\Controllers\Backend\SystemsCheckController;
 use App\Http\Controllers\Backend\TriggerSmilFilesController;
 use App\Http\Controllers\Backend\UsersController;
+use App\Http\Controllers\Frontend\AcceptUseTermsController;
 use App\Http\Controllers\Frontend\ApiController;
 use App\Http\Controllers\Frontend\AssetsDownloadController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\SearchController;
 use App\Http\Controllers\Frontend\ShowClipsController;
 use App\Http\Controllers\Frontend\ShowSeriesController;
+use App\Http\Controllers\Frontend\UserSettingsController;
 use App\Models\Activity;
 use App\Models\Clip;
 use App\Models\Series;
@@ -53,11 +54,22 @@ Route::controller(ShowClipsController::class)->prefix('/clips')->group(function 
     Route::get('/{clip}', 'show')->name('frontend.clips.show');
 });
 
+//Frontend myPortal links
+Route::prefix('/my'.str(config('app.name')))->middleware(['auth'])->group(function () {
+    Route::put('/', AcceptUseTermsController::class)->name('frontend.acceptUseTerms');
+    Route::middleware(['use.terms'])->group(function () {
+        Route::get('/settings', [UserSettingsController::class, 'edit'])
+            ->name('frontend.userSettings.edit');
+        Route::put('/settings', [UserSettingsController::class, 'update'])
+            ->name('frontend.userSettings.update');
+    });
+});
+
 Route::get('/protector/link/clip/{clip:id}/{token}/{time}/{client}', function (Clip $clip, $token, $time, $client) {
     session()->put([
-        'clip_' . $clip->id . '_token'  => $token,
-        'clip_' . $clip->id . '_time'   => $time,
-        'clip_' . $clip->id . '_client' => $client,
+        'clip_'.$clip->id.'_token' => $token,
+        'clip_'.$clip->id.'_time' => $time,
+        'clip_'.$clip->id.'_client' => $client,
     ]);
 
     return to_route('frontend.clips.show', $clip);
@@ -65,6 +77,7 @@ Route::get('/protector/link/clip/{clip:id}/{token}/{time}/{client}', function (C
     ->middleware(['lms.token'])
     ->name('clip.lms.link');
 
+//Routes used for select2 js component
 Route::controller(ApiController::class)->prefix('/api')->group(function () {
     Route::get('/clips', 'clips')->name('api.clips');
     Route::get('/tags', 'tags')->name('api.tags');
@@ -75,7 +88,7 @@ Route::controller(ApiController::class)->prefix('/api')->group(function () {
 
 //change portal language
 Route::get('/set_lang/{locale}', function ($locale) {
-    if (!in_array($locale, ['en', 'de'])) {
+    if (! in_array($locale, ['en', 'de'])) {
         abort(400);
     }
     session()->put('locale', $locale);
@@ -193,7 +206,7 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
     Route::resource('presenters', PresentersController::class)->except(['show']);
 
     Route::get('/activities', function () {
-        Gate::allowIf(fn($user) => $user->isAdmin() || $user->isAssistant());
+        Gate::allowIf(fn ($user) => $user->isAdmin() || $user->isAssistant());
 
         return view('backend.activities.index', [
             'activities' => Activity::paginate(20),
@@ -234,4 +247,4 @@ Route::get('/test/{series}/elk', function (Series $series, ElasticsearchService 
     $elkService->createIndex($series);
 })->name('elasticsearch.test');
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';

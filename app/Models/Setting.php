@@ -12,9 +12,14 @@ class Setting extends BaseModel
     protected function data(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => json_decode($value, true),
-            set: fn($value) => json_encode($value),
+            get: fn ($value) => json_decode($value, true),
+            set: fn ($value) => json_encode($value),
         );
+    }
+
+    public function scopeUser($query, User $user)
+    {
+        return $query->where('name', $user->username);
     }
 
     /**

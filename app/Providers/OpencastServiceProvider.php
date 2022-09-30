@@ -20,11 +20,7 @@ class OpencastServiceProvider extends ServiceProvider
                 ['name' => 'opencast'],
                 [
                     'data' => [
-                        'url' => 'localhost:8080',
-                        'username' => 'admin',
-                        'password' => 'opencast',
-                        'archive_path' => '/archive/mh_default',
-                        'default_workflow' => 'fast',
+                        config('settings.opencast'),
                     ],
                 ]
             );

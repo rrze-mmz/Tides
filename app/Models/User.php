@@ -214,6 +214,35 @@ class User extends Authenticatable
     }
 
     /**
+     * Fetch User settings
+     *
+     * @return BaseModel
+     */
+    public function settings(): BaseModel
+    {
+        return Setting::where('name', $this->username)->firstOrCreate(
+            ['name' => $this->username],
+            ['data' => config('settings.user')]
+        );
+    }
+
+    /**
+     * Resets user settings to default values
+     *
+     * @return BaseModel
+     */
+    public function resetSettings(): BaseModel
+    {
+        $setting = Setting::where('name', $this->username)->firstOrFail();
+
+        //set user settings to default
+        $setting->data = config('settings.user');
+        $setting->save();
+
+        return $this->settings();
+    }
+
+    /**
      * Override the default mail template
      * and send a custom password reset email
      * to the user

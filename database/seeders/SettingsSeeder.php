@@ -17,7 +17,7 @@ class SettingsSeeder extends Seeder
         DB::table('settings')->insert([
             'name' => 'portal',
             'data' => json_encode([
-                'maintenace_mode' => false,
+                'maintenance_mode' => false,
             ]),
         ]);
 

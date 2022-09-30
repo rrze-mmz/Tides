@@ -39,7 +39,7 @@ class PortalSettingsController extends Controller
     /**
      * Update Portal settings
      *
-     * @param UpdatePortalSettings $request
+     * @param  UpdatePortalSettings  $request
      * @return void
      */
     public function update(UpdatePortalSettings $request)

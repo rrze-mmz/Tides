@@ -70,5 +70,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'lms.token' => \App\Http\Middleware\EnsureLMSTokenIsValid::class,
         'user.admin' => \App\Http\Middleware\EnsureUserIsAdmin::class,
+        'use.terms' => \App\Http\Middleware\AcceptUseTerms::class,
     ];
 }

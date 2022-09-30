@@ -8,8 +8,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
-
-
+    
     <!-- Styles -->
     <link rel="icon" href="{{ URL::asset('/css/favicon.ico') }}" type="image/x-icon"/>
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
@@ -18,44 +17,7 @@
 <body class="h-screen font-sans antialiased leading-none bg-gray-100 ">
 <div id="app">
     <header class="fixed top-0 z-10 p-2 py-4 mt-0 w-full bg-gray-800 ">
-        <nav class="container flex justify-between items-center px-6 mx-auto">
-            <div>
-                <a href="{{ url('/') }}" class="text-lg font-semibold text-gray-100 no-underline">
-                    {{ config('app.name', 'Laravel') }}
-                </a>
-            </div>
-            <nav class="space-x-4 text-sm font-semibold text-gray-300 sm:text-base">
-
-                    <span class="no-underline mr-10">
-                        <a href="/set_lang/en" class="{{ (session('locale') === 'en')?'underline':'' }}">EN</a> |
-                        <a href="/set_lang/de" class="{{ (session('locale') === 'de')?'underline':'' }}">DE</a>
-                    </span>
-                @guest
-                    <a class="no-underline hover:underline"
-                       href="{{ route('login') }}"
-                    >{{ __('auth.Login') }}</a>
-                @else
-                    <span>Hi, {{ Auth::user()->getFullNameAttribute() }}</span>
-                    @if(!str_contains(url()->current(), 'admin') && auth()->user()->can('access-dashboard'))
-                        <a href="/admin/dashboard"
-                           class="no-underline hover:underline"
-                        > Dashboard </a>
-                    @endif
-
-                    <a href="{{ route('logout') }}"
-                       class="no-underline hover:underline"
-                       onclick="event.preventDefault();
-                                document.getElementById('logout-form').submit();"
-                    >{{ __('Logout') }}</a>
-                    <form id="logout-form"
-                          action="{{ route('logout') }}"
-                          method="POST"
-                          class="hidden">
-                        {{ csrf_field() }}
-                    </form>
-                @endguest
-            </nav>
-        </nav>
+        @include('layouts.frontend.top-navigation')
     </header>
 
     <main class="pt-12 mx-auto lg:flex min-h-screen max-h-full ">

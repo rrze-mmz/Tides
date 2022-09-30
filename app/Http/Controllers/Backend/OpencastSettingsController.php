@@ -22,15 +22,15 @@ class OpencastSettingsController extends Controller
         $setting = Setting::opencast();
 
         $setting->data = [
-            'url'                   => $setting->data['url'] ?? 'localhost:8080',
-            'username'              => $setting->data['username'] ?? 'admin',
-            'password'              => $setting->data['password'] ?? 'username',
-            'archive_path'          => $setting->data['archive_path'] ?? '/opencast/archive/mh_default_org',
-            'default_workflow_id'   => $setting->data['default_workflow_id'] ?? 'fast',
-            'upload_workflow_id'    => $setting->data['upload_workflow_id'] ?? 'fast',
-            'theme_id_top_right'    => $setting->data['theme_id_top_right'] ?? '500',
-            'theme_id_top_left'     => $setting->data['theme_id_top_left'] ?? '501',
-            'theme_id_bottom_left'  => $setting->data['theme_id_bottom_left'] ?? '502',
+            'url' => $setting->data['url'] ?? 'localhost:8080',
+            'username' => $setting->data['username'] ?? 'admin',
+            'password' => $setting->data['password'] ?? 'username',
+            'archive_path' => $setting->data['archive_path'] ?? '/opencast/archive/mh_default_org',
+            'default_workflow_id' => $setting->data['default_workflow_id'] ?? 'fast',
+            'upload_workflow_id' => $setting->data['upload_workflow_id'] ?? 'fast',
+            'theme_id_top_right' => $setting->data['theme_id_top_right'] ?? '500',
+            'theme_id_top_left' => $setting->data['theme_id_top_left'] ?? '501',
+            'theme_id_bottom_left' => $setting->data['theme_id_bottom_left'] ?? '502',
             'theme_id_bottom_right' => $setting->data['theme_id_bottom_right'] ?? '503',
         ];
 
@@ -40,7 +40,7 @@ class OpencastSettingsController extends Controller
     /**
      * Update Opencast settings
      *
-     * @param UpdateOpencastSettings $request
+     * @param  UpdateOpencastSettings  $request
      * @return RedirectResponse
      */
     public function update(UpdateOpencastSettings $request): RedirectResponse

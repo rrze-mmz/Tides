@@ -1,5 +1,5 @@
-<div class="grid grid-cols-12 gap-4 content-center items-center ">
-    <div class=" col-span-2 ">
+<div class="grid grid-cols-12 gap-4 content-center items-center">
+    <div class=" {{ $labelClass }} ">
         <label for="{{ $fieldName }}"
                class="block py-2 mr-6 font-bold text-gray-700 text-md"
         >

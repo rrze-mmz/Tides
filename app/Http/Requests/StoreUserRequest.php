@@ -21,7 +21,7 @@ class StoreUserRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'first_name' => ['required', 'alpha', 'min:2', 'max:30'],

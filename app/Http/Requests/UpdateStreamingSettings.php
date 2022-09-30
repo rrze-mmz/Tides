@@ -24,10 +24,10 @@ class UpdateStreamingSettings extends FormRequest
     public function rules()
     {
         return [
-            'engine_url'   => ['required', 'url'],
-            'api_url'      => ['required', 'url'],
-            'username'     => ['required', 'string'],
-            'password'     => ['required'],
+            'engine_url' => ['required', 'url'],
+            'api_url' => ['required', 'url'],
+            'username' => ['required', 'string'],
+            'password' => ['required'],
             'content_path' => ['required'],
             'secure_token' => ['required'],
             'token_prefix' => ['required'],

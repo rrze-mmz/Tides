@@ -57,6 +57,8 @@ class Saml2UserSignedIn
         );
         // Login a user
         Auth::login($user);
+        $lang = $user->setings()->data['language'];
+        session()->put('locale', $lang);
 
         return to_route('home');
     }

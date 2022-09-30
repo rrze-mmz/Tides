@@ -15,7 +15,8 @@ class ToggleButton extends Component
     public function __construct(
         public bool $value,
         public string $label,
-        public string $fieldName
+        public string $fieldName,
+        public string $labelClass = 'col-span-2',
     ) {
         //
     }

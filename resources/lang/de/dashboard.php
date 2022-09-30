@@ -13,4 +13,12 @@ return [
     'files in dropzone' => 'Dateien in der Dropzone',
     'no files found' => 'Keinen Dateien gefunden',
     'file last modified' => 'zuletzt geändert um :modifiedDate',
+
+    'user' => [
+        'use terms' => 'Damit die folgenden Darstellungsoptionen im Videoportal genutzt werden können,
+        müssen die Einstellungen auf der nächsten Seite gespeichert werden.
+        Diese Daten werden bis zu Ihrem Ausscheiden aus der FAU gespeichert.
+        Danach werden diese Daten automatisch gelöscht.',
+        'accept checkbox' => 'Ich habe die o.a.Nutzungsbedingungen gelesen und akzeptiere sie. ',
+    ],
 ];
