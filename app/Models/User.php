@@ -74,6 +74,16 @@ class User extends Authenticatable
         return $this->hasMany(Series::class, 'owner_id');
     }
 
+    /**
+     *  Subscriptions relationship
+     *
+     * @return BelongsToMany
+     */
+    public function subscriptions(): BelongsToMany
+    {
+        return $this->belongsToMany(Series::class, 'series_subscriptions');
+    }
+
     public function accessableSeries()
     {
         return Series::where('owner_id', $this->id)

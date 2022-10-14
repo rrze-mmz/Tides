@@ -113,7 +113,8 @@ class SeriesTest extends TestCase
         $firstClip->addAcls(collect(['1']));
         $secondClip->addAcls(collect(['1', '2']));
 
-        $this->get(route('frontend.series.show', $series))->assertSee(Acl::find(1)->name)->assertSee(Acl::find(2)->name);
+        $this->get(route('frontend.series.show', $series))
+            ->assertSee(Acl::find(1)->name)->assertSee(Acl::find(2)->name);
     }
 
     /** @test */
@@ -138,13 +139,25 @@ class SeriesTest extends TestCase
     {
         $series = SeriesFactory::withClips(2)->withAssets(1)->create();
 
-        $latestClip = $series->latestClip;
+        $firstClip = $series->clips()->first();
 
-        $latestClip->semester_id = 2;
+        $firstClip->semester_id = 1;
 
-        $latestClip->save();
+        $firstClip->save();
 
         $this->get(route('frontend.series.show', $series))
             ->assertSee($series->clips()->first()->semester->name.', '.$series->latestClip->semester->name);
+    }
+
+    /** @test */
+    public function it_shows_a_subscribe_button_for_logged_in_users(): void
+    {
+        $series = SeriesFactory::withClips(2)->withAssets(1)->create();
+
+        $this->get(route('frontend.series.show', $series))->assertDontSee('Subscribe');
+
+        $this->signIn();
+
+        $this->get(route('frontend.series.show', $series))->assertSee('Subscribe');
     }
 }

@@ -16,7 +16,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Psr\Http\Message\ResponseInterface;
@@ -105,11 +104,23 @@ class Series extends BaseModel
     }
 
     /**
+     * Series members
+     *
      * @return BelongsToMany
      */
     public function members(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'series_members')->withTimestamps();
+    }
+
+    /**
+     * Series subscribers
+     *
+     * @return BelongsToMany
+     */
+    public function subscribers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'series_subscriptions')->withTimestamps();
     }
 
     /**
@@ -263,7 +274,7 @@ class Series extends BaseModel
     {
         return $query->whereHas('clips', function ($q) {
             $q->whereHas('semester', function ($q) {
-                $q->where('start_date', '<=', Carbon::now())->where('stop_date', '>=', Carbon::now());
+                $q->current();
             });
         });
     }

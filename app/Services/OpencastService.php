@@ -358,6 +358,7 @@ class OpencastService
     public function ingestMediaPackageFormData(Clip $clip, string $file): array
     {
         return [
+
             'multipart' => [
                 [
                     'name' => 'flavor',

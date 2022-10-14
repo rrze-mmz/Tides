@@ -80,11 +80,10 @@ class ManageUsersTest extends TestCase
     /** @test */
     public function it_can_search_for_user_name_in_index_users_data_table(): void
     {
-        $bob = User::factory()->create(['first_name' => 'Bob', 'last_name' => 'Tester']);
-        $alice = User::factory()->create(['first_name' => 'Alice', 'last_name' => 'Tester']);
+        [$bob, $alice] = User::factory(2)->create();
 
         Livewire::test(UserDataTable::class)
-            ->set('search', 'bob')
+            ->set('search', $bob->first_name)
             ->assertSee($bob->username)
             ->assertDontSee($alice->username);
     }
@@ -92,11 +91,10 @@ class ManageUsersTest extends TestCase
     /** @test */
     public function it_can_search_for_user_email_in_index_users_data_table(): void
     {
-        $bob = User::factory()->create(['email' => 'bob@example.org']);
-        $alice = User::factory()->create(['email' => 'alice@example.org']);
+        [$bob, $alice] = User::factory(2)->create();
 
         Livewire::test(UserDataTable::class)
-            ->set('search', 'bob@example.org')
+            ->set('search', $bob->email)
             ->assertSee($bob->username)
             ->assertDontSee($alice->username);
     }

@@ -9,12 +9,19 @@
             @endcan
         </div>
 
-        <div class="flex flex-col pt-10">
-            <h2 class="text-2xl font-semibold">{{ __('common.description') }}</h2>
-            <p class="pt-4 leading-loose">
-                {!! $series->description !!}
-            </p>
-        </div>
+        @if($series->description!=='')
+            <div class="flex flex-col pt-4">
+                <h2 class="text-2xl font-semibold">{{ __('common.description') }}</h2>
+                <p class="pt-4 leading-loose">
+                    {!! $series->description !!}
+                </p>
+            </div>
+        @endif
+
+        @auth()
+            <livewire:subscribe-section :series="$series"/>
+        @endauth
+
         <div class="flex justify-around pt-8 pb-3 border-b-2 border-gray-500">
 
             <div class="flex items-center w-1/4">
@@ -47,14 +54,17 @@
             </div>
 
         </div>
-        <div class="flex flex-col pt-10">
-            <h2 class="text-2xl font-semibold pb-2 border-b-2 border-black">
-                {{ __('clip.frontend.comments') }}
-            </h2>
-            <livewire:comments-section :model="$series" :type="'frontend'"/>
-            @livewireScripts
+        @auth()
+            <div class="flex flex-col pt-10">
+                <h2 class="text-2xl font-semibold pb-2 border-b-2 border-black">
+                    {{ __('clip.frontend.comments') }}
+                </h2>
+                <livewire:comments-section :model="$series" :type="'frontend'"/>
+                @livewireScripts
 
-        </div>
+            </div>
+        @endauth
+        
         @include('backend.clips.list')
 
     </div>

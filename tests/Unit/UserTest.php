@@ -42,6 +42,12 @@ class UserTest extends TestCase
     }
 
     /** @test */
+    public function it_has_many_subscriptions(): void
+    {
+        $this->assertInstanceOf(BelongsToMany::class, $this->user->subscriptions());
+    }
+
+    /** @test */
     public function it_fetch_all_user_series(): void
     {
         $this->assertInstanceOf(Builder::class, $this->user->getAllSeries());

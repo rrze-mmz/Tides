@@ -4,6 +4,7 @@ namespace Tests\Setup;
 
 use App\Models\Asset;
 use App\Models\Clip;
+use App\Models\Semester;
 use App\Models\Series;
 use App\Models\User;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -71,7 +72,7 @@ class SeriesFactory
             Clip::factory($this->clipsCount)->create([
                 'series_id' => $series->id,
                 'owner_id' => $user,
-                'semester_id' => 1,
+                'semester_id' => Semester::current()->get()->first()->id,
             ]);
 
             if ($this->assetsCount > 0) {

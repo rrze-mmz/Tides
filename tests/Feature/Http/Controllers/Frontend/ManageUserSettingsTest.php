@@ -87,6 +87,11 @@ class ManageUserSettingsTest extends TestCase
         ]);
     }
 
+    /** @test */
+    public function it_updates_user_language_preferences(): void
+    {
+    }
+
     /*
      * Helper functions
      *

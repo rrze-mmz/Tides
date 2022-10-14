@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Frontend;
+namespace Tests\Feature\Http\Livewire;
 
 use App\Http\Livewire\CommentsSection;
 use App\Models\Clip;
@@ -8,6 +8,7 @@ use App\Models\Comment;
 use App\Models\User;
 use App\Notifications\NewComment;
 use Facades\Tests\Setup\ClipFactory;
+use Facades\Tests\Setup\SeriesFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
 use Livewire\Livewire;
@@ -29,7 +30,26 @@ class CommentsSectionTest extends TestCase
     }
 
     /** @test */
+    public function it_does_not_contain_comments_section_for_non_logged_in_users(): void
+    {
+        auth()->logout();
+
+        $this->get(route('frontend.clips.show', $this->clip))
+            ->assertDontSeeLivewire('comments-section');
+
+        $this->get(route('frontend.series.show', SeriesFactory::withClips(2)->withAssets(3)->create()))
+            ->assertDontSeeLivewire('comments-section');
+    }
+
+    /** @test */
     public function it_contains_comments_section_livewire_component_on_clip_show_page(): void
+    {
+        $this->get(route('frontend.clips.show', $this->clip))
+            ->assertSeeLivewire('comments-section');
+    }
+
+    /** @test */
+    public function it_contains_comments_section_livewire_component_on_series_show_page(): void
     {
         $this->get(route('frontend.clips.show', $this->clip))
             ->assertSeeLivewire('comments-section');

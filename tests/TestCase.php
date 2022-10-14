@@ -10,6 +10,7 @@ use App\Models\Semester;
 use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 
 abstract class TestCase extends BaseTestCase
@@ -47,19 +48,19 @@ abstract class TestCase extends BaseTestCase
         ]);
 
         Semester::create([
-            'name' => 'Sommersemester 2021',
+            'name' => 'Sommersemester '.Carbon::now()->year,
             'acronym' => 'S21',
-            'short_title' => '2021',
-            'start_date' => '2021-04-01 00:00:00',
-            'stop_date' => '2022-09-30 23:59:59',
+            'short_title' => Carbon::now()->year,
+            'start_date' => Carbon::now()->year.'-04-01 00:00:00',
+            'stop_date' => Carbon::now()->year.'-09-30 23:59:59',
         ]);
 
         Semester::create([
-            'name' => 'Wintersemester 2021/2022',
+            'name' => 'Wintersemester '.Carbon::now()->year.'/'.Carbon::now()->year + 1,
             'acronym' => 'W21',
-            'short_title' => '2021/2022',
-            'start_date' => '2021-10-01 00:00:00',
-            'stop_date' => '2022-03-31 23:59:59',
+            'short_title' => Carbon::now()->year.'/'.Carbon::now()->year + 1,
+            'start_date' => Carbon::now()->year.'-10-01 00:00:00',
+            'stop_date' => Carbon::now()->year + 1 .'-03-31 23:59:59',
         ]);
 
         Organization::create([

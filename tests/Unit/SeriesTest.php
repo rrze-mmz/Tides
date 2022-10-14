@@ -78,6 +78,12 @@ class SeriesTest extends TestCase
     }
 
     /** @test */
+    public function it_has_many_subscribers(): void
+    {
+        $this->assertInstanceOf(BelongsToMany::class, $this->series->subscribers());
+    }
+
+    /** @test */
     public function it_has_an_add_member_function_for_membership(): void
     {
         $this->assertInstanceOf(User::class, $this->series->addMember(User::factory()->create()));

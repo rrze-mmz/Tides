@@ -86,6 +86,7 @@ class DashboardTest extends TestCase
     /** @test */
     public function it_display_user_series(): void
     {
+        $this->withoutExceptionHandling();
         $user = $this->signInRole($this->role);
 
         SeriesFactory::create();
