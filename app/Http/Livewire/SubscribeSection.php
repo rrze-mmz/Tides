@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Notifications\UserSubscribed;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -45,10 +46,13 @@ class SubscribeSection extends Component
      */
     public function subscribe(): void
     {
+        $delay = now()->addMinutes(1);
         $this->user->subscriptions()->attach($this->series);
         $this->isUserSubscribed = true;
         $this->formAction = 'unsubscribe';
         $this->btnText = 'unsubscribe';
+
+        $this->user->notify((new UserSubscribed($this->series))->delay($delay));
     }
 
     /**

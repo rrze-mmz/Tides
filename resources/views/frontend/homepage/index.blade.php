@@ -10,6 +10,28 @@
     <main class="sm:container sm:mx-auto sm:mt-16">
         @include('frontend.search._searchbar')
 
+        @auth()
+            @if(auth()->user()->settings()->data['show_subscriptions_to_home_page'])
+                <div class="flex items-end w-full border-b justify-content-between">
+                    <div class="flex justify-between items-end pb-2 w-full">
+                        <div class="text-2xl"> Your Series subscriptions</div>
+                        <a href="{{ route('frontend.series.index') }}"
+                           class="text-sm underline">{{__('homepage.series.more series') }}</a>
+                    </div>
+                </div>
+                <div class="grid grid-cols-4 gap-4">
+                    @forelse(auth()->user()->subscriptions as $single)
+                        @include('backend.series._card',[
+                                'series'=> $single,
+                                'route' => 'admin'
+                                ])
+                    @empty
+                        You are not subscribed to any series
+                    @endforelse
+                </div>
+            @endif
+        @endauth
+
         <div class="flex items-end w-full border-b justify-content-between">
             <div class="flex justify-between items-end pb-2 w-full">
                 <div class="text-2xl">  {{  __('homepage.series.Recently added!') }} </div>
@@ -18,7 +40,7 @@
             </div>
 
         </div>
-        <div class="grid grid-cols-3 gap-4">
+        <div class="grid grid-cols-4 gap-4">
             @forelse($series as $single)
                 @include('backend.series._card',[
                         'series'=> $single,

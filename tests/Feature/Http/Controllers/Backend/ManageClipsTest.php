@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers\Backend;
 
+use App\Enums\Acl;
 use App\Enums\Content;
 use App\Http\Livewire\CommentsSection;
 use App\Models\Clip;
@@ -369,7 +370,7 @@ class ManageClipsTest extends TestCase
         $this->signInRole($this->role);
 
         $attributes = Clip::factory()->raw([
-            'acls' => ['1', '2'],
+            'acls' => [Acl::PASSWORD(), Acl::LMS()],
         ]);
 
         $this->post(route('clips.store'), $attributes);
@@ -604,7 +605,7 @@ class ManageClipsTest extends TestCase
 
         $this->get(route('clips.edit', $adminClip))->assertDontSee('LMS Test Link');
 
-        $adminClip->addAcls(collect(['4']));
+        $adminClip->addAcls(collect([Acl::LMS()]));
 
         $this->get(route('clips.edit', $adminClip))->assertSee('LMS Test Link');
     }
@@ -709,7 +710,7 @@ class ManageClipsTest extends TestCase
 
         $this->post(route('admin.clips.asset.transferSingle', $clip), ['asset' => FileFactory::videoFile()]);
 
-        $clip->addAcls(collect(1));
+        $clip->addAcls(collect(Acl::PUBLIC()));
 
         $asset = $clip->assets()->first();
 

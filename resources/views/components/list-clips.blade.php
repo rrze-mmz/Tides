@@ -18,8 +18,10 @@
                     <li class="flex content-center items-center p-5 mb-4 text-lg bg-gray-200 rounded text-center">
                         <div class="w-1/12">
                             @if ($reorder)
-                                <input class="w-1/2" type="number" name="episodes[{{$clip->id}}]"
-                                       value="{{$clip->episode}}">
+                                <label>
+                                    <input class="w-1/2" type="number" name="episodes[{{$clip->id}}]"
+                                           value="{{$clip->episode}}">
+                                </label>
                                 @error('episodes')
                                 <p class="mt-2 w-full text-xs text-red-500">{{ $message }}</p>
                                 @enderror
@@ -38,7 +40,21 @@
                         </div>
                         <div class="w-3/12"> {{ $clip->title }}</div>
                         <div
-                            class="w-2/12">{{ ($clip->acls->isEmpty())?'open':$clip->acls()->pluck('name')->implode(',') }}</div>
+                            class="w-2/12 flex items-center content-center">
+                            <div>
+                                {{ ($clip->acls->isEmpty())?'open':$clip->acls()->pluck('name')->implode(',') }}
+                            </div>
+                            <div class="pl-4">
+                                @can('view', $clip)
+                                    <x-heroicon-o-lock-open class="w-4 h-4 text-green-500"/>
+                                    <span class="sr-only">Lock clip</span>
+                                @else
+                                    <x-heroicon-o-lock-closed class="w-4 h-4 text-red-700"/>
+                                    <span class="sr-only">Unlock clip</span>
+                                @endcan
+
+                            </div>
+                        </div>
                         <div class="w-2/12">{{ $clip->semester->name }}</div>
                         <div class="w-1/12"> {{ $clip->assets->first()?->durationToHours()  }}</div>
                         <div class="w-1/12">
@@ -70,7 +86,7 @@
                     <div class="pt-10">
                         <x-form.button :link="$link=false" type="submit" text="Reorder Series clips"/>
                     </div>
+            </ul>
         </form>
-        @endif
-        </ul>
+    @endif
 </div>

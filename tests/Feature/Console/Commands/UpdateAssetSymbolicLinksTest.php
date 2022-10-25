@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Console\Commands;
 
+use App\Enums\Acl;
 use App\Models\Asset;
 use Facades\Tests\Setup\ClipFactory;
 use Facades\Tests\Setup\FileFactory;
@@ -41,7 +42,7 @@ class UpdateAssetSymbolicLinksTest extends TestCase
 
         $this->post(route('admin.clips.asset.transferSingle', $clip), ['asset' => FileFactory::videoFile()]);
 
-        $clip->addAcls(collect(1));
+        $clip->addAcls(collect(Acl::PUBLIC()));
 
         $this->artisan('links:update-assets-symbolic-links');
 
@@ -65,7 +66,7 @@ class UpdateAssetSymbolicLinksTest extends TestCase
 
         Storage::disk('assetsSymLinks')->assertExists($asset->guid.'.'.getFileExtension($asset));
 
-        $clip->addAcls(collect([2, 3]));
+        $clip->addAcls(collect([Acl::PORTAL(), Acl::PASSWORD()]));
 
         $this->artisan('links:update-assets-symbolic-links');
 
@@ -79,7 +80,7 @@ class UpdateAssetSymbolicLinksTest extends TestCase
 
         $this->post(route('admin.clips.asset.transferSingle', $clip), ['asset' => FileFactory::videoFile()]);
 
-        $clip->addAcls(collect(2));
+        $clip->addAcls(collect(Acl::PORTAL()));
 
         $asset = $clip->assets()->first();
 

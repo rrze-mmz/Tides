@@ -16,7 +16,7 @@ class EnsureLMSTokenIsValid
      */
     public function handle(Request $request, Closure $next): mixed
     {
-        //this should either be a series (course term is for backward compability with old LMS links) or a clip
+        //this should either be a series (course term is for backward compatibility with old LMS links) or a clip
         $objType = ((string) $request->segment('3') === 'course') ? 'series' : (string) $request->segment('3');
         $objID = (int) $request->segment('4');
         $objToken = $request->segment('5');

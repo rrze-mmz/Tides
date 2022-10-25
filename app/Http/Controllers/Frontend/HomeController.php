@@ -20,7 +20,7 @@ class HomeController extends Controller
             'series' => Series::isPublic()
                 ->hasClipsWithAssets()
                 ->orderByDesc('updated_at')
-                ->limit(18)
+                ->limit(16)
                 ->get(),
             'clips' => Clip::public()
                 ->whereHas('assets')

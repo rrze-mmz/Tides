@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Enums\Acl;
 use App\Models\Asset;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
@@ -39,12 +40,12 @@ class UpdateAssetSymbolicLinks extends Command
 
         $assets->each(function ($asset) use ($bar) {
             if (Storage::disk('assetsSymLinks')->exists($asset->guid.'.'.getFileExtension($asset))
-                && (! $asset->clip->is_public || $asset->clip->acls->pluck('id')->doesntContain('1'))) {
+                && (! $asset->clip->is_public || $asset->clip->acls->pluck('id')->doesntContain(Acl::PUBLIC()))) {
                 unlink(Storage::disk('assetsSymLinks')->path($asset->guid.'.'.getFileExtension($asset)));
                 $this->info('Clip Acl changed. Deleting symbolic link...');
                 $this->newLine(2);
                 $bar->advance();
-            } elseif ($asset->clip->is_public && $asset->clip->acls->pluck('id')->contains('1')) {
+            } elseif ($asset->clip->is_public && $asset->clip->acls->pluck('id')->contains(Acl::PUBLIC())) {
                 symlink(
                     Storage::disk('videos')->path($asset->path),
                     Storage::disk('assetsSymLinks')->path($asset->guid.'.'.getFileExtension($asset))

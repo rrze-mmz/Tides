@@ -27,6 +27,7 @@ use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\SearchController;
 use App\Http\Controllers\Frontend\ShowClipsController;
 use App\Http\Controllers\Frontend\ShowSeriesController;
+use App\Http\Controllers\Frontend\UserCommentsController;
 use App\Http\Controllers\Frontend\UserSettingsController;
 use App\Http\Controllers\Frontend\UserSubscriptionsController;
 use App\Models\Activity;
@@ -61,10 +62,12 @@ Route::prefix('/my'.str(config('app.name')))->middleware(['auth'])->group(functi
     Route::middleware(['use.terms'])->group(function () {
         Route::get('/settings', [UserSettingsController::class, 'edit'])
             ->name('frontend.userSettings.edit');
-        Route::get('/subscriptions', UserSubscriptionsController::class)
-            ->name('frontend.user.subscriptions');
         Route::put('/settings', [UserSettingsController::class, 'update'])
             ->name('frontend.userSettings.update');
+        Route::get('/subscriptions', UserSubscriptionsController::class)
+            ->name('frontend.user.subscriptions');
+        Route::get('/comments', UserCommentsController::class)
+            ->name('frontend.user.comments');
     });
 });
 

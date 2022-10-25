@@ -3,7 +3,7 @@
     <div class="overflow-y-auto py-4 px-3 bg-gray-50 rounded dark:bg-gray-800 text-white">
         <ul class="space-y-2">
             <li>
-                <a href="{{route('frontend.userSettings.edit')}}"
+                <a href="{{ route('frontend.userSettings.edit') }}"
                    class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg
                                    dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
                     <x-heroicon-o-adjustments class="flex-shrink-0 w-6 h-6 text-gray-500 transition
@@ -16,7 +16,7 @@
                 </a>
             </li>
             <li>
-                <a href="{{route('frontend.user.subscriptions')}}"
+                <a href="{{ route('frontend.user.subscriptions') }}"
                    class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg
                                    dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
                 >
@@ -28,7 +28,7 @@
                 </a>
             </li>
             <li>
-                <a href="#"
+                <a href="{{ route('frontend.user.comments') }}"
                    class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg
                                    dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
                 >
@@ -42,7 +42,7 @@
                         class="inline-flex justify-center items-center p-3 ml-3 w-3 h-3 text-sm
                                         font-medium text-blue-600 bg-blue-200 rounded-full
                                         dark:bg-blue-900 dark:text-blue-200">
-                                        3
+                                        {{ auth()->user()->comments()->where('type', 'frontend')->count() }}
                         </span>
                 </a>
             </li>

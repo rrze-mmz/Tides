@@ -110,8 +110,8 @@ class SeriesTest extends TestCase
         $firstClip = Clip::find(1);
         $secondClip = Clip::find(2);
 
-        $firstClip->addAcls(collect(['1']));
-        $secondClip->addAcls(collect(['1', '2']));
+        $firstClip->addAcls(collect([\App\Enums\Acl::PUBLIC()]));
+        $secondClip->addAcls(collect([\App\Enums\Acl::PORTAL(), \App\Enums\Acl::PASSWORD()]));
 
         $this->get(route('frontend.series.show', $series))
             ->assertSee(Acl::find(1)->name)->assertSee(Acl::find(2)->name);

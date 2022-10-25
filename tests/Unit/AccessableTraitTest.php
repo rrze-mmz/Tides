@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Enums\Acl;
 use App\Models\Clip;
 use Facades\Tests\Setup\ClipFactory;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
@@ -30,7 +31,7 @@ class AccessableTraitTest extends TestCase
     /** @test */
     public function it_can_add_acls_to_model(): void
     {
-        $this->clip->addAcls(collect(['1', '2']));
+        $this->clip->addAcls(collect([Acl::PUBLIC(), Acl::PORTAL()]));
 
         $this->assertEquals(2, $this->clip->acls()->count());
     }
@@ -42,7 +43,7 @@ class AccessableTraitTest extends TestCase
         $this->assertTrue($this->clip->checkAcls());
 
         //clip is available only for logged-in users
-        $this->clip->addAcls(collect(['2']));
+        $this->clip->addAcls(collect([Acl::PORTAL()]));
 
         $this->clip->refresh();
 
@@ -64,7 +65,7 @@ class AccessableTraitTest extends TestCase
         auth()->logout();
 
         //clip is now only for LMS users available
-        $this->clip->addAcls(collect(['4']));
+        $this->clip->addAcls(collect([Acl::LMS()]));
 
         $this->clip->refresh();
 

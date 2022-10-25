@@ -1,4 +1,4 @@
-<div class="my-2 bg-gray-50">
+<div class=" relative my-2 bg-gray-50">
     <div class="relative  h-30 overflow-hidden">
         <img
             src="{{ ($series->clips()->count() > 0)
@@ -13,18 +13,17 @@
         </div>
     </div>
 
-    <div class="flex-row justify-between p-2 w-full bg-gray-50">
+    <div class="flex-row justify-between p-2 mb-6 w-full bg-gray-50">
         <div class="mb-1">
             <div class="text-md font-bold text-gray-900">
                 <a
                     hover:
                     href="@if(str_contains(url()->current(), 'admin')) {{$series->adminPath()}}
-                    @else {{ $series->path() }} @endif"
-                    class="underline text-md"
+                    @else {{ $series->path() }}
+                    @endif"
+                    class="text-md"
                 >
-                    {{ (request()->routeIs('series.index') || request()->routeIs('frontend.series.index'))
-                        ? $series->title
-                        :  $series->title}}
+                    {{ $series->title }}
                 </a>
 
             </div>
@@ -32,7 +31,9 @@
                 <span class=" text-sm italic">von {{$series->owner?->getFullNameAttribute()}}</span>
             </div>
             <p class="text-base text-gray-700">
-                {{ strip_tags((str_contains(url()->current(),'search'))?$series->description : Str::limit($series->description, 30))  }}
+                {{ strip_tags((str_contains(url()->current(),'search'))
+                    ?$series->description
+                    : Str::limit($series->description, 30))  }}
             </p>
         </div>
 
@@ -90,13 +91,12 @@
         @endif
     </div>
     @can('edit-series',$series)
-        <div class="flex flex-row-reverse">
-            <div class="mb-4">
-                <x-form.button :link="route('series.edit', $series)"
-                               type="submit"
-                               text="Series {{__('common.actions.edit')}}"
-                />
-            </div>
+        <div class="absolute w-full py-2.5 bottom-0 inset-x-0 text-white
+                    text-xs text-right pr-2 pb-2 leading-4">
+            <x-form.button :link="route('series.edit', $series)"
+                           type="submit"
+                           text="Series {{__('common.actions.edit')}}"
+            />
         </div>
     @endcan
 </div>

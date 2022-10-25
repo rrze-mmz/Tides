@@ -7,6 +7,8 @@ use function auth;
 use function generateLMSToken;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Collection;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use function session;
 
 trait Accessable
@@ -42,6 +44,10 @@ trait Accessable
         }
     }
 
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     public function checkAcls(): bool
     {
         $acls = $this->acls;
@@ -56,11 +62,11 @@ trait Accessable
         if (auth()->user()?->isAdmin()) {
             return true;
         }
-        if ($acls->pluck('id')->contains('2') && auth()->check()) {
+        if ($acls->pluck('id')->contains(\App\Enums\Acl::PORTAL()) && auth()->check()) {
             $check = (($this->assets->count() > 0 && $this->is_public)
                 || auth()->user()->can('view-video', $this));
         }
-        if ($acls->pluck('id')->contains('4')) {
+        if ($acls->pluck('id')->contains(\App\Enums\Acl::LMS())) {
             $check = (
                 session()->get($tokenType.'_'.$this->id.'_token') === generateLMSToken($this, $tokenTime)
                 || ((auth()->check() && auth()->user()->can('view-video', $this)))

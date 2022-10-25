@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers\Backend;
 
+use App\Enums\Acl;
 use App\Enums\OpencastWorkflowState;
 use App\Http\Livewire\CommentsSection;
 use App\Models\Clip;
@@ -58,9 +59,9 @@ class ManageSeriesTest extends TestCase
             ->withClips(3)
             ->create();
 
-        Clip::find(1)->addAcls(collect([2])); //assign 'intern' acl
-        Clip::find(2)->addAcls(collect([4])); //assign 'lms' acl
-        Clip::find(3)->addAcls(collect([4])); //assign 'lms' acl
+        Clip::find(1)->addAcls(collect([Acl::PORTAL()])); //assign 'intern' acl
+        Clip::find(2)->addAcls(collect([Acl::LMS()])); //assign 'lms' acl
+        Clip::find(3)->addAcls(collect([Acl::LMS()])); //assign 'lms' acl
 
         $this->get(route('series.index'))
             ->assertSee($series->title)

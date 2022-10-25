@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers\Frontend;
 
+use App\Enums\Acl;
 use App\Models\Clip;
 use App\Models\Presenter;
 use App\Services\WowzaService;
@@ -185,7 +186,7 @@ class ClipTest extends TestCase
     {
         $this->mockHandler->append($this->mockCheckApiConnection(), $this->mockCheckApiConnection());
 
-        $this->clip->addAcls(collect(['4']));
+        $this->clip->addAcls(collect([Acl::LMS()]));
 
         $this->get($this->clip->path())->assertSee(__('clip.frontend.not authorized to view video'));
 
@@ -199,7 +200,7 @@ class ClipTest extends TestCase
     {
         $this->mockHandler->append($this->mockCheckApiConnection());
 
-        $this->clip->addAcls(collect(['4']));
+        $this->clip->addAcls(collect([Acl::LMS()]));
 
         $this->get($this->clip->path())
             ->assertSee(__('clip.frontend.not authorized to view video'));
@@ -220,7 +221,7 @@ class ClipTest extends TestCase
 
         $clip = ClipFactory::withAssets(1)->ownedBy(auth()->user())->create();
 
-        $clip->addAcls(collect([2]));
+        $clip->addAcls(collect([Acl::PORTAL()]));
 
         $this->mockHandler->append($this->mockCheckApiConnection());
 
@@ -320,7 +321,7 @@ class ClipTest extends TestCase
     {
         $this->mockHandler->append(new Response());
 
-        $this->clip->addAcls(collect(['1']));
+        $this->clip->addAcls(collect([Acl::PUBLIC()]));
 
         $this->get($this->clip->path())->assertDontSee('plyr-player');
     }

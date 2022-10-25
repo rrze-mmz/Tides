@@ -7,6 +7,7 @@ use App\Models\Clip;
 use App\Models\Semester;
 use App\Models\Series;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\WithFaker;
 use Ramsey\Uuid\Uuid;
 
@@ -59,28 +60,55 @@ class SeriesFactory
         return $this;
     }
 
-    public function create(): Series
+    public function create($count = 1): Series|Collection
     {
         //use ramsey/uuid because faker shows an error
-        $series = Series::factory()->create([
-            'owner_id' => $user = $this->user ?? User::factory(),
-            'opencast_series_id' => ($this->opencastSeriesID) ? Uuid::uuid1()->toString() : '',
-            'is_public' => $this->isPublic,
-        ]);
 
-        if ($this->clipsCount > 0) {
-            Clip::factory($this->clipsCount)->create([
-                'series_id' => $series->id,
-                'owner_id' => $user,
-                'semester_id' => Semester::current()->get()->first()->id,
+        if ($count > 1) {
+            $series = Series::factory($count)->create([
+                'owner_id' => $user = $this->user ?? User::factory(),
+                'opencast_series_id' => ($this->opencastSeriesID) ? Uuid::uuid1()->toString() : '',
+                'is_public' => $this->isPublic,
             ]);
 
-            if ($this->assetsCount > 0) {
-                $series->clips()->each(function ($clip) {
-                    Asset::factory($this->assetsCount)->create([
-                        'clip_id' => $clip->id,
+            $series->each(function ($series) use ($user) {
+                if ($this->clipsCount > 0) {
+                    Clip::factory($this->clipsCount)->create([
+                        'series_id' => $series->id,
+                        'owner_id' => $user,
+                        'semester_id' => Semester::current()->get()->first()->id,
                     ]);
-                });
+
+                    if ($this->assetsCount > 0) {
+                        $series->clips()->each(function ($clip) {
+                            Asset::factory($this->assetsCount)->create([
+                                'clip_id' => $clip->id,
+                            ]);
+                        });
+                    }
+                }
+            });
+        } else {
+            $series = Series::factory()->create([
+                'owner_id' => $user = $this->user ?? User::factory(),
+                'opencast_series_id' => ($this->opencastSeriesID) ? Uuid::uuid1()->toString() : '',
+                'is_public' => $this->isPublic,
+            ]);
+
+            if ($this->clipsCount > 0) {
+                Clip::factory($this->clipsCount)->create([
+                    'series_id' => $series->id,
+                    'owner_id' => $user,
+                    'semester_id' => Semester::current()->get()->first()->id,
+                ]);
+
+                if ($this->assetsCount > 0) {
+                    $series->clips()->each(function ($clip) {
+                        Asset::factory($this->assetsCount)->create([
+                            'clip_id' => $clip->id,
+                        ]);
+                    });
+                }
             }
         }
 
