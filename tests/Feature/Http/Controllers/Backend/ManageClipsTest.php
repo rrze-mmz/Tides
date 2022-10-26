@@ -7,6 +7,7 @@ use App\Enums\Content;
 use App\Http\Livewire\CommentsSection;
 use App\Models\Clip;
 use App\Models\Presenter;
+use App\Models\Semester;
 use App\Models\Tag;
 use App\Services\OpencastService;
 use Facades\Tests\Setup\ClipFactory;
@@ -556,7 +557,7 @@ class ManageClipsTest extends TestCase
 
         $clip->refresh();
 
-        $this->assertEquals('title-changed', $clip->slug);
+        $this->assertEquals('title-changed-'.Semester::current()->get()->first()->acronym, $clip->slug);
     }
 
     /** @test */
@@ -583,7 +584,7 @@ class ManageClipsTest extends TestCase
 
         $clip->refresh();
 
-        $this->assertEquals('test-clip', $clip->slug);
+        $this->assertEquals('test-clip-w21', $clip->slug);
     }
 
     /** @test */

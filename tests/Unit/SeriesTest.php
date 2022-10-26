@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Models\Clip;
+use App\Models\Semester;
 use App\Models\Series;
 use App\Models\User;
 use Facades\Tests\Setup\SeriesFactory;
@@ -46,7 +47,10 @@ class SeriesTest extends TestCase
     /** @test */
     public function it_has_a_slug_route(): void
     {
-        $this->assertEquals('/series/'.Str::slug($this->series->title), $this->series->path());
+        $this->assertEquals(
+            '/series/'.Str::slug($this->series->title.'-'.Semester::current()->get()->first()->acronym),
+            $this->series->path()
+        );
     }
 
     /** @test */

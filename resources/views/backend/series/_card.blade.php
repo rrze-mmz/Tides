@@ -28,7 +28,9 @@
 
             </div>
             <div>
-                <span class=" text-sm italic">von {{$series->owner?->getFullNameAttribute()}}</span>
+                @if ($series->owner)
+                    <span class=" text-sm italic">von {{$series->owner->getFullNameAttribute()}}</span>
+                @endif
             </div>
             <p class="text-base text-gray-700">
                 {{ strip_tags((str_contains(url()->current(),'search'))
@@ -66,16 +68,24 @@
         </div>
 
         @if($seriesAcls = $series->fetchClipsAcls())
-            <div class="flex items-center justify-content-between">
-                <div class="pr-2">
-                    <x-heroicon-o-lock-closed class="w-4 h-4"/>
+            @if($seriesAcls!== 'public')
+                <div class="flex items-center justify-content-between">
+                    <div class="pr-2">
+                        @if($series->checkClipAcls())
+                            <x-heroicon-o-lock-open class="w-4 h-4 text-green-500"/>
+                            <span class="sr-only">Unlock clip</span>
+                        @else
+                            <x-heroicon-o-lock-closed class="w-4 h-4 text-red-700"/>
+                            <span class="sr-only">Lock clip</span>
+                        @endif
+                    </div>
+                    <div class="text-sm">
+                        <p class="italic text-gray-900">
+                            {{ $seriesAcls}}
+                        </p>
+                    </div>
                 </div>
-                <div class="text-sm">
-                    <p class="italic text-gray-900">
-                        {{ $seriesAcls }}
-                    </p>
-                </div>
-            </div>
+            @endif
         @endif
 
         @if(isset($action) && $action == 'assignClip')

@@ -55,6 +55,7 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('view-clips', [ClipPolicy::class, 'view']);
         Gate::define('view-comments', [ClipPolicy::class, 'viewComments']);
         Gate::define('view-video', [ClipPolicy::class, 'viewVideo']);
+        Gate::define('watch-video', [ClipPolicy::class, 'canWatchVideo']);
         Gate::define('edit-assets', [AssetPolicy::class, 'edit']);
         //user
         Gate::define('show-users', [UserPolicy::class, 'show']);

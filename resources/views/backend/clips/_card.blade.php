@@ -1,3 +1,4 @@
+@php use App\Enums\Acl; @endphp
 <div class="flex my-2 w-full bg-white">
     <div class="flex justify-center justify-items-center  place-items-center mx-2 w-48 h-full">
         <img src="{{ fetchClipPoster($clip) }}" alt="preview image">
@@ -47,25 +48,35 @@
             </div>
         @endif
 
-        <div class="flex items-center pt-2 justify-content-between">
-            <div class="pr-2">
-                <x-heroicon-o-user class="w-4 h-4"/>
+        @if($clip->owner)
+            <div class="flex items-center pt-2 justify-content-between">
+                <div class="pr-2">
+                    <x-heroicon-o-user class="w-4 h-4"/>
+                </div>
+                <div class="text-sm">
+                    <p class="italic text-gray-900">
+                        {{ $clip->owner?->getFullNameAttribute() }}
+                    </p>
+                </div>
             </div>
-            <div class="text-sm">
-                <p class="italic text-gray-900">
-                    {{ $clip->owner?->getFullNameAttribute() }}
-                </p>
-            </div>
-        </div>
+        @endif
 
         @if($clip->acls->isNotEmpty() )
             <div class="flex items-center pt-2 justify-content-between">
                 <div class="pr-2">
-                    <x-heroicon-o-lock-closed class="w-4 h-4"/>
+                    @if(!$clip->acls->contains(\App\Enums\Acl::PUBLIC))
+                        @can('watch-video', $clip)
+                            <x-heroicon-o-lock-open class="w-4 h-4 text-green-500"/>
+                            <span class="sr-only">Unlock clip</span>
+                        @else
+                            <x-heroicon-o-lock-closed class="w-4 h-4 text-red-700"/>
+                            <span class="sr-only">Lock clip</span>
+                        @endcan
+                    @endif
                 </div>
                 <div class="text-sm">
                     <p class="italic text-gray-900">
-                        {{ $clip->acls->pluck('name')->implode(', ') }}
+                        {{ $clip->acls->except(Acl::PUBLIC())->pluck('name')->implode(', ') }}
                     </p>
                 </div>
             </div>

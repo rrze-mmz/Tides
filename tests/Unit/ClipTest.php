@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use App\Enums\Content;
 use App\Models\Asset;
 use App\Models\Clip;
+use App\Models\Semester;
 use App\Models\Series;
 use App\Models\User;
 use Facades\Tests\Setup\FileFactory;
@@ -51,7 +52,10 @@ class ClipTest extends TestCase
     /** @test */
     public function it_has_a_slug_route(): void
     {
-        $this->assertEquals('/clips/'.Str::slug($this->clip->title), $this->clip->path());
+        $this->assertEquals(
+            '/clips/'.Str::slug($this->clip->title.'-'.Semester::current()->get()->first()->acronym),
+            $this->clip->path()
+        );
     }
 
     /** @test */
@@ -61,7 +65,7 @@ class ClipTest extends TestCase
 
         $clip = Clip::factory()->create(['title' => 'A test title', 'slug' => 'A test title']);
 
-        $this->assertSame('a-test-title-2', $clip->slug);
+        $this->assertSame('a-test-title-'.Semester::current()->get()->first()->acronym.'-2', $clip->slug);
     }
 
     /** @test */
@@ -77,7 +81,10 @@ class ClipTest extends TestCase
     /** @test */
     public function it_has_a_set_slug_function(): void
     {
-        $this->assertEquals($this->clip->slug, Str::slug($this->clip->title));
+        $this->assertEquals(
+            $this->clip->slug,
+            Str::slug($this->clip->title.'-'.Semester::current()->get()->first()->acronym)
+        );
     }
 
     /** @test */

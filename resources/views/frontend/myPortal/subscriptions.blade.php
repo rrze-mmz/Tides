@@ -12,7 +12,7 @@
                     'route' => 'admin'
                     ])
         @empty
-            {{ __('homepage.series.no series  subscripions found' )}}
+            {{ __('homepage.series.no series subscriptions found') }}
         @endforelse
     </div>
 @endsection

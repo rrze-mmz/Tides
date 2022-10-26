@@ -86,7 +86,12 @@ class Clip extends BaseModel
      */
     public function resolveRouteBinding($value, $field = null): ?Model
     {
-        return $this->where('slug', $value)->orWhere('id', (int) $value)->firstOrFail();
+        $clip = $this->where('slug', $value)->first();
+        if (is_null($clip)) {
+            $clip = $this->where('id', (int) $value)->firstOrFail();
+        }
+
+        return $clip;
     }
 
     /**

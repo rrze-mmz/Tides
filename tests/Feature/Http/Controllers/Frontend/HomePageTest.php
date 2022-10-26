@@ -2,6 +2,9 @@
 
 namespace Tests\Feature\Http\Controllers\Frontend;
 
+use App\Enums\Acl;
+use App\Models\Clip;
+use App\Models\Series;
 use Facades\Tests\Setup\ClipFactory;
 use Facades\Tests\Setup\SeriesFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -132,5 +135,76 @@ class HomePageTest extends TestCase
         $this->signInRole('assistant');
 
         $this->get(route('home'))->assertSee('Dashboard');
+    }
+
+    /** @test */
+    public function it_show_an_hide_logged_in_user_series_subscriptions(): void
+    {
+        $this->signIn();
+
+        $userSettings = auth()->user()->settings();
+
+        SeriesFactory::withClips(2)->withAssets(2)->create(10);
+
+        $this->assertDatabaseHas('settings', [
+            'name' => auth()->user()->username,
+            'data' => json_encode(config('settings.user')), ]);
+
+        $this->acceptUseTerms();
+
+        $userSettings->refresh();
+
+        $this->get(route('home'))->assertDontSee('Your Series subscriptions');
+
+        $attributes = [
+            'language' => 'en',
+            'show_subscriptions_to_home_page' => 'on',
+        ];
+
+        $this->put(route('frontend.userSettings.update'), $attributes);
+
+        $this->get(route('home'))
+            ->assertSee('Your Series subscriptions')
+            ->assertSee(' You are not subscribed to any series');
+
+        auth()->user()->subscriptions()->attach([
+            Series::find(3)->id, Series::find(4)->id,
+        ]);
+
+        auth()->user()->refresh();
+
+        $this->get(route('home'))
+            ->assertSee('Your Series subscriptions')
+            ->assertDontSee(' You are not subscribed to any series');
+    }
+
+    /** @test */
+    public function it_hide_non_visible_clip_acls_in_series_description(): void
+    {
+        $series = SeriesFactory::withClips(2)->withAssets(1)->create();
+
+        $firstClip = Clip::find(1);
+        $secondClip = Clip::find(2);
+
+        $firstClip->addAcls(collect([Acl::PORTAL()]));
+        $secondClip->addAcls(collect([Acl::PASSWORD()]));
+
+        $this->get(route('home'))->assertSee('portal, password');
+
+        //clip has no assets thus should not be displayed to visitors
+        $thirdClip = Clip::factory()->create(['series_id' => $series]);
+
+        $thirdClip->addAcls(collect([Acl::LMS()]));
+
+        $this->get(route('home'))->assertDontSee('portal, password, lms');
+    }
+
+    /*
+ * Helper functions
+ *
+ */
+    private function acceptUseTerms()
+    {
+        $this->put(route('frontend.acceptUseTerms'), ['accept_use_terms' => 'on']);
     }
 }

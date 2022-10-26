@@ -26,10 +26,9 @@ class DashboardController
                 ->put('failed', $opencastService->getEventsByStatus(OpencastWorkflowState::FAILED));
         }
 
-//        $supervisedSeries = auth()->user
         return view('backend.dashboard.index', [
             'userSeries' => auth()->user()->getAllSeries()
-                ->currentSemester()
+                ->CurrentSemester()
                 ->orderByDesc('updated_at')
                 ->simplePaginate(12),
             'userClips' => auth()->user()->clips()

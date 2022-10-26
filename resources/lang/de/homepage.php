@@ -7,6 +7,7 @@ return [
         'Recently added!' => 'Letzte Videoreihen',
         'more clips' => 'mehr Videoreihen',
         'no series found' => 'Keine Reihen gefunden',
+        'no series subscriptions found' => 'kein Serienabonnement gefunden',
     ],
     'clips' => [
         'Recently added!' => 'Letzte Videoaufnahmen',

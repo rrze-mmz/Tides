@@ -5,6 +5,8 @@ namespace App\Policies;
 use App\Models\Clip;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 class ClipPolicy
 {
@@ -78,5 +80,14 @@ class ClipPolicy
     {
         return (auth()->check() && $clip->acls->pluck('id')->contains('1')) ||
             ($user->is($clip->owner));
+    }
+
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    public function canWatchVideo(?User $user, Clip $clip): bool
+    {
+        return $clip->checkAcls();
     }
 }

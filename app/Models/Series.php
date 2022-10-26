@@ -50,7 +50,12 @@ class Series extends BaseModel
      */
     public function resolveRouteBinding($value, $field = null): ?Model
     {
-        return $this->where('slug', $value)->orWhere('id', (int) $value)->firstOrFail();
+        $series = $this->where('slug', $value)->first();
+        if (is_null($series)) {
+            $series = $this->where('id', (int) $value)->firstOrFail();
+        }
+
+        return $series;
     }
 
     /**
@@ -242,10 +247,24 @@ class Series extends BaseModel
      */
     public function fetchClipsAcls(): string
     {
+        /*
+         * for visitors fetch only clips that containing a video asset
+         */
+        $clips = (auth()->user()?->id === $this->owner_id || auth()->user()?->isAdmin())
+            ? $this->clips
+            : $this->clips->filter(fn ($clip) => $clip->assets()->count() && $clip->is_public);
+
         //iterate every clip and get a unique acl name
-        return $this->clips->map(function ($clip) {
-            return $clip->acls()->pluck('name');
+        return $clips->map(function ($clip) {
+            return $clip->acls->pluck('name');
         })->flatten()->unique()->values()->implode(', ');
+    }
+
+    public function checkClipAcls()
+    {
+        foreach ($this->clips as $clip) {
+            return $clip->checkAcls();
+        }
     }
 
     /**
@@ -276,7 +295,7 @@ class Series extends BaseModel
             $q->whereHas('semester', function ($q) {
                 $q->current();
             });
-        });
+        })->orWhere('owner_id', auth()->user()?->id);
     }
 
     /**

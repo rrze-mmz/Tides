@@ -7,6 +7,7 @@ return [
         'Recently added!' => 'Latest Videoseries',
         'more series' => 'more videoseries',
         'no series found' => 'No videoseries found',
+        'no series subscriptions found' => 'No series subscriptions found',
     ],
     'clips' => [
         'Recently added!' => 'Recently videos added',

@@ -4,12 +4,10 @@ namespace App\Models\Traits;
 
 use App\Models\Acl;
 use function auth;
-use function generateLMSToken;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Collection;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
-use function session;
 
 trait Accessable
 {
@@ -52,11 +50,8 @@ trait Accessable
     {
         $acls = $this->acls;
 
-        $tokenType = lcfirst(class_basename($this::class));
-        $tokenTime = session()->get($tokenType.'_'.$this->id.'_time');
-
         $check = false;
-        if ($acls->isEmpty()) {
+        if ($acls->isEmpty() || $acls->pluck('id')->contains(\App\Enums\Acl::PUBLIC())) {
             return true;
         }
         if (auth()->user()?->isAdmin()) {
@@ -68,7 +63,7 @@ trait Accessable
         }
         if ($acls->pluck('id')->contains(\App\Enums\Acl::LMS())) {
             $check = (
-                session()->get($tokenType.'_'.$this->id.'_token') === generateLMSToken($this, $tokenTime)
+                compareLMSToken($this)
                 || ((auth()->check() && auth()->user()->can('view-video', $this)))
                 || (auth()->check() && auth()->user()->isAdmin())
             );

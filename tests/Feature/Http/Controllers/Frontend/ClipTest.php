@@ -321,7 +321,7 @@ class ClipTest extends TestCase
     {
         $this->mockHandler->append(new Response());
 
-        $this->clip->addAcls(collect([Acl::PUBLIC()]));
+        $this->clip->addAcls(collect([Acl::PORTAL()]));
 
         $this->get($this->clip->path())->assertDontSee('plyr-player');
     }

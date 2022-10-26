@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Enums\Acl;
 use Closure;
 use Illuminate\Http\Request;
 
@@ -26,7 +27,7 @@ class EnsureLMSTokenIsValid
 
         $obj = $model::find($objID);
 
-        if (! $obj->acls()->pluck('id')->contains('4')) {
+        if (! $obj->acls()->pluck('id')->contains(Acl::LMS())) {
             return $next($request);
         }
 

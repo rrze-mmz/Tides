@@ -8,6 +8,8 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 /**
  * Returns poster image relative file path of a clip or default
@@ -161,6 +163,28 @@ function generateLMSToken($obj, $time, bool $withURL = false): string
     $token = md5($type.$obj->id.$obj->password.request()->ip().$time.'studon');
 
     return ($withURL) ? '/protector/link/'.$type.'/'.$obj->id.'/'.$token.'/'.$time.'/studon' : $token;
+}
+
+/**
+ * @param $obj
+ * @return bool
+ *
+ * @throws ContainerExceptionInterface
+ * @throws NotFoundExceptionInterface
+ */
+function compareLMSToken($obj): bool
+{
+    //Type can be either series or clip
+    $tokenType = lcfirst(class_basename($obj::class));
+
+    if (session()->exists($tokenType.'_'.$obj->id.'_token')) {
+        $cookieTokenHash = session()->get($tokenType.'_'.$obj->id.'_token');
+        $cookieTokenTime = session()->get($tokenType.'_'.$obj->id.'_time');
+        //if token exists check if it is valid
+        return $cookieTokenHash === generateLMSToken($obj, $cookieTokenTime);
+    } else {
+        return false;
+    }
 }
 
 function getFileExtension(Asset $asset): string

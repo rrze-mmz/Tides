@@ -57,7 +57,7 @@ abstract class TestCase extends BaseTestCase
 
         Semester::create([
             'name' => 'Wintersemester '.Carbon::now()->year.'/'.Carbon::now()->year + 1,
-            'acronym' => 'W21',
+            'acronym' => 'w21',
             'short_title' => Carbon::now()->year.'/'.Carbon::now()->year + 1,
             'start_date' => Carbon::now()->year.'-10-01 00:00:00',
             'stop_date' => Carbon::now()->year + 1 .'-03-31 23:59:59',

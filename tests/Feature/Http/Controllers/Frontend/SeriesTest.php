@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers\Frontend;
 
-use App\Models\Acl;
+use App\Enums\Acl;
 use App\Models\Clip;
 use Facades\Tests\Setup\SeriesFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -110,11 +110,29 @@ class SeriesTest extends TestCase
         $firstClip = Clip::find(1);
         $secondClip = Clip::find(2);
 
-        $firstClip->addAcls(collect([\App\Enums\Acl::PUBLIC()]));
-        $secondClip->addAcls(collect([\App\Enums\Acl::PORTAL(), \App\Enums\Acl::PASSWORD()]));
+        $firstClip->addAcls(collect([Acl::PORTAL()]));
+        $secondClip->addAcls(collect([Acl::PORTAL(), Acl::PASSWORD()]));
 
         $this->get(route('frontend.series.show', $series))
-            ->assertSee(Acl::find(1)->name)->assertSee(Acl::find(2)->name);
+            ->assertSee(Acl::PORTAL->lower().','.Acl::PASSWORD->lower());
+    }
+
+    /** @test */
+    public function it_shows_for_each_clip_if_is_locked_or_not(): void
+    {
+        $series = SeriesFactory::withClips(2)->withAssets(1)->create();
+
+        $firstClip = Clip::find(1);
+        $secondClip = Clip::find(2);
+
+        $firstClip->addAcls(collect([Acl::PORTAL()]));
+        $secondClip->addAcls(collect([Acl::PORTAL()]));
+
+        $this->get(route('frontend.series.show', $series))->assertSee('Lock clip');
+
+        $this->signIn();
+
+        $this->get(route('frontend.series.show', $series))->assertSee('Unlock clip');
     }
 
     /** @test */

@@ -15,7 +15,7 @@
                 </li>
 
                 @forelse($series->clips->sortBy('episode', SORT_NATURAL) as $clip)
-                    <li class="flex content-center items-center p-5 mb-4 text-lg bg-gray-200 rounded text-center">
+                    <li class="flex content-center items-center p-2 mb-4 text-lg bg-gray-200 rounded text-center">
                         <div class="w-1/12">
                             @if ($reorder)
                                 <label>
@@ -39,20 +39,26 @@
                             </div>
                         </div>
                         <div class="w-3/12"> {{ $clip->title }}</div>
-                        <div
-                            class="w-2/12 flex items-center content-center">
-                            <div>
-                                {{ ($clip->acls->isEmpty())?'open':$clip->acls()->pluck('name')->implode(',') }}
+                        <div class="w-2/12 flex justify-center items-center
+                        ">
+                            <div class="pr-2">
+                                {{ ($clip->acls->isEmpty())?'open':$clip->acls->except(\App\Enums\Acl::PUBLIC())->pluck('name')->implode(',') }}
                             </div>
-                            <div class="pl-4">
-                                @can('view', $clip)
-                                    <x-heroicon-o-lock-open class="w-4 h-4 text-green-500"/>
-                                    <span class="sr-only">Lock clip</span>
-                                @else
-                                    <x-heroicon-o-lock-closed class="w-4 h-4 text-red-700"/>
-                                    <span class="sr-only">Unlock clip</span>
-                                @endcan
+                            @if($clip->acls->except(\App\Enums\Acl::PUBLIC())->isEmpty())
+                                open
+                            @else
+                                <div>
+                                    @can('watch-video', $clip)
+                                        <x-heroicon-o-lock-open class="w-4 h-4 text-green-500"/>
+                                        <span class="sr-only">Unlock clip</span>
+                                    @else
+                                        <x-heroicon-o-lock-closed class="w-4 h-4 text-red-700"/>
+                                        <span class="sr-only">Lock clip</span>
+                                    @endcan
+                                </div>
+                            @endif
 
+                            <div class="pl-4">
                             </div>
                         </div>
                         <div class="w-2/12">{{ $clip->semester->name }}</div>

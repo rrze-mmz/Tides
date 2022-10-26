@@ -2,9 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers\Frontend;
 
-use App\Models\Series;
 use App\Models\Setting;
-use Facades\Tests\Setup\SeriesFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -115,43 +113,6 @@ class UserSettingsControllerTest extends TestCase
         ]);
 
         $this->get(route('home'))->assertSee('Abmelden');
-    }
-
-    /** @test */
-    public function it_shows_subscriptions_on_home_page(): void
-    {
-        SeriesFactory::withClips(2)->withAssets(2)->create(10);
-
-        $this->assertDatabaseHas('settings', [
-            'name' => auth()->user()->username,
-            'data' => json_encode(config('settings.user')), ]);
-
-        $this->acceptUseTerms();
-
-        $this->userSettings->refresh();
-
-        $this->get(route('home'))->assertDontSee('Your Series subscriptions');
-
-        $attributes = [
-            'language' => 'en',
-            'show_subscriptions_to_home_page' => 'on',
-        ];
-
-        $this->put(route('frontend.userSettings.update'), $attributes);
-
-        $this->get(route('home'))
-            ->assertSee('Your Series subscriptions')
-            ->assertSee(' You are not subscribed to any series');
-
-        auth()->user()->subscriptions()->attach([
-            Series::find(3)->id, Series::find(4)->id,
-        ]);
-
-        auth()->user()->refresh();
-
-        $this->get(route('home'))
-            ->assertSee('Your Series subscriptions')
-            ->assertDontSee(' You are not subscribed to any series');
     }
 
     /*

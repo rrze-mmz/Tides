@@ -2,6 +2,7 @@
 
 namespace App\Models\Traits;
 
+use App\Models\Semester;
 use Illuminate\Support\Str;
 
 trait Slugable
@@ -13,10 +14,13 @@ trait Slugable
      */
     public function setSlugAttribute($value)
     {
+        $value = $value.'-'.Semester::current()->get()->first()->acronym;
+
         if (self::whereSlug($slug = Str::of($value)->slug('-'))
             ->Where('id', '!=', self::getKey())->exists()) {
             $slug = $this->incrementSlug($slug);
         }
+
         $this->attributes['slug'] = $slug;
     }
 
