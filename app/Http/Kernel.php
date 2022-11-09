@@ -68,7 +68,7 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'lms.token' => \App\Http\Middleware\EnsureLMSTokenIsValid::class,
+        'access.token' => \App\Http\Middleware\EnsureAccessTokenIsValid::class,
         'user.admin' => \App\Http\Middleware\EnsureUserIsAdmin::class,
         'use.terms' => \App\Http\Middleware\AcceptUseTerms::class,
     ];

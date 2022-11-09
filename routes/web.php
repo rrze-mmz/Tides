@@ -71,17 +71,23 @@ Route::prefix('/my'.str(config('app.name')))->middleware(['auth'])->group(functi
     });
 });
 
-Route::get('/protector/link/clip/{clip:id}/{token}/{time}/{client}', function (Clip $clip, $token, $time, $client) {
-    session()->put([
-        'clip_'.$clip->id.'_token' => $token,
-        'clip_'.$clip->id.'_time' => $time,
-        'clip_'.$clip->id.'_client' => $client,
-    ]);
+Route::get(
+    '/protector/link/{objType}/{objID}/{token}/{time}/{client}',
+    function (string $objType, int $objID, $token, $time, $client) {
+        $objType = getUrlTokenType($objType);
+        $client = getUrlClientType($client);
 
-    return to_route('frontend.clips.show', $clip);
-})
-    ->middleware(['lms.token'])
-    ->name('clip.lms.link');
+        $model = "App\Models\\".ucfirst($objType);
+
+        $obj = $model::findorFail($objID);
+
+        setSessionAccessToken($obj, $token, $time, $client);
+
+        return to_route('frontend.'.str($objType)->plural().'.show', $obj);
+    }
+)
+    ->middleware(['access.token'])
+    ->name('lms.link');
 
 //Routes used for select2 js component
 Route::controller(ApiController::class)->prefix('/api')->group(function () {

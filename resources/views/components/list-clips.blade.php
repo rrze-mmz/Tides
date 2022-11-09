@@ -31,7 +31,10 @@
                         </div>
                         <div class="w-2/12">
                             <div class="flex justify-center justify-items-center place-items-center mx-2 w-48 h-full">
-                                <a href="{{$clip->adminPath()}}">
+                                <a
+                                    href="@if(str_contains(url()->current(), 'admin')) {{$clip->adminPath()}}
+                                    @else {{ $clip->path() }}
+                                    @endif">
                                     <img src="{{ fetchClipPoster($clip) }}"
                                          alt="preview image"
                                     >

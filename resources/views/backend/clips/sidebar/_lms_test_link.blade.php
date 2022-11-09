@@ -3,7 +3,7 @@
         LMS Test Link
     </h2>
     <div class="flex content-center justify-start mb-4">
-        <x-form.button :link="generateLMSToken($clip, dechex(time()), true)"
+        <x-form.button :link="getAccessToken($clip, dechex(time()), 'studon',true)"
                        type='back'
                        text="LMS Test Link"
         />

@@ -1,12 +1,20 @@
+@php use App\Enums\Acl; @endphp
 @extends('layouts.frontend')
 
 @section('content')
     <div class="container mx-auto mt-32 md:mt-32">
         <div class="flex justify-between pb-2 border-b-2 border-black">
             <h2 class="text-2xl font-bold">{{ $series->title }} [ID: {{ $series->id }}]</h2>
+            @cannot('view-assistant-menu-items')
+                @if( str()->contains($series->fetchClipsAcls(),[Acl::PASSWORD->lower()]))
+                    <livewire:unlock-object :model="$series"/>
+                    @livewireScripts
+                @endif
+            @endcannot
             @can('edit-series', $series)
                 <x-form.button :link="$series->adminPath()" type="submit" text="Edit series"/>
             @endcan
+
         </div>
 
         @if($series->description!=='')
@@ -64,9 +72,8 @@
 
             </div>
         @endauth
-        
         @include('backend.clips.list')
 
     </div>
-
 @endsection
+

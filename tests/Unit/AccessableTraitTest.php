@@ -31,18 +31,14 @@ class AccessableTraitTest extends TestCase
     /** @test */
     public function it_can_add_acls_to_model(): void
     {
-        $this->clip->addAcls(collect([Acl::PUBLIC(), Acl::PORTAL()]));
+        $this->clip->addAcls(collect([Acl::PASSWORD(), Acl::PORTAL()]));
 
         $this->assertEquals(2, $this->clip->acls()->count());
     }
 
     /** @test */
-    public function it_can_check_object_acls(): void
+    public function it_check_object_portal_acl(): void
     {
-        //clip is open
-        $this->assertTrue($this->clip->checkAcls());
-
-        //clip is available only for logged-in users
         $this->clip->addAcls(collect([Acl::PORTAL()]));
 
         $this->clip->refresh();
@@ -54,8 +50,13 @@ class AccessableTraitTest extends TestCase
         $this->assertTrue($this->clip->checkAcls());
 
         auth()->logout();
+    }
 
-        //clip is available for admin user
+    /** @test */
+    public function it_check_object_acl_for_admins(): void
+    {
+        $this->clip->addAcls(collect([Acl::PORTAL()]));
+
         $this->assertFalse($this->clip->checkAcls());
 
         $this->signInRole('admin');
@@ -63,8 +64,11 @@ class AccessableTraitTest extends TestCase
         $this->assertTrue(($this->clip->checkAcls()));
 
         auth()->logout();
+    }
 
-        //clip is now only for LMS users available
+    /** @test */
+    public function it_check_object_lms_acl(): void
+    {
         $this->clip->addAcls(collect([Acl::LMS()]));
 
         $this->clip->refresh();
@@ -72,8 +76,27 @@ class AccessableTraitTest extends TestCase
         $this->assertFalse($this->clip->checkAcls());
 
         //generate session token cookie for test to pass
-        $this->get(generateLMSToken($this->clip, dechex(time()), true));
+        $this->get(getAccessToken($this->clip, dechex(time()), Acl::LMS->lower(), true));
 
         $this->assertTrue($this->clip->checkAcls());
+    }
+
+    /** @test */
+    public function it_check_object_password_acl(): void
+    {
+        $this->clip->addAcls(collect([Acl::PASSWORD()]));
+
+        $this->clip->refresh();
+
+        $this->assertFalse($this->clip->checkAcls());
+
+        $this->get(getAccessToken($this->clip, dechex(time()), Acl::PASSWORD->lower(), true));
+
+        $this->assertTrue($this->clip->checkAcls());
+    }
+
+    /** @test */
+    public function it_will_also_check_for_series_token_if_object_is_a_clip(): void
+    {
     }
 }

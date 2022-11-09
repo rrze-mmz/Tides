@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Enums\Acl;
 use App\Models\Asset;
 use App\Models\Clip;
 use App\Services\WowzaService;
@@ -9,6 +10,7 @@ use Facades\Tests\Setup\ClipFactory;
 use Facades\Tests\Setup\FileFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tests\TestCase;
 
 class HelpersTest extends TestCase
@@ -102,28 +104,71 @@ class HelpersTest extends TestCase
     }
 
     /** @test */
-    public function it_has_a_generate_token_function(): void
+    public function it_has_a_get_access_token_function(): void
     {
         $time = dechex(time());
+        $client = Acl::LMS->lower();
+        $token = md5('clip'.'1'.'1234qwER'.'127.0.0.1'.$time.$client);
 
-        $token = md5('clip'.'1'.'1234qwER'.'127.0.0.1'.$time.'studon');
+        $this->assertEquals($token, getAccessToken(ClipFactory::create(['password' => '1234qwER']), $time, $client));
+    }
 
-        $this->assertEquals($token, generateLMSToken(ClipFactory::create(['password' => '1234qwER']), $time));
+    /** @test */
+    public function it_has_a_get_url_token_type_function(): void
+    {
+        $this->assertEquals('series', getUrlTokenType('course'));
+        $this->assertEquals('series', getUrlTokenType('series'));
+        $this->assertEquals('clip', getUrlTokenType('clip'));
+
+        $this->expectException(NotFoundHttpException::class);
+        getUrlTokenType('test');
+    }
+
+    /** @test */
+    public function it_has_a_get_url_client_type_function(): void
+    {
+        $this->assertEquals(Acl::LMS->lower(), getUrlClientType('studon'));
+        $this->assertEquals(Acl::LMS->lower(), getUrlClientType('lms'));
+        $this->assertEquals(Acl::PASSWORD->lower(), getUrlClientType('password'));
+
+        $this->expectException(NotFoundHttpException::class);
+        getUrlClientType('test');
+    }
+
+    /** @test */
+    public function it_has_a_set_session_access_token_function(): void
+    {
+        $time = dechex(time());
+        $client = Acl::LMS->lower();
+        $token = md5('clip'.'1'.'1234qwER'.'127.0.0.1'.$time.$client);
+        $clip = Clip::factory()->create();
+        setSessionAccessToken($clip, $token, $time, $client);
+
+        $this->get(route('frontend.clips.show', $clip))
+            ->assertSessionHas([
+                'clip_'.$clip->id.'_token' => $token,
+                'clip_'.$clip->id.'_time' => $time,
+                'clip_'.$clip->id.'_client' => $client,
+            ]);
+    }
+
+    /** @test */
+    public function it_compares_token(): void
+    {
     }
 
     /** @test */
     public function it_has_a_token_function_with_url_option_as_parameter(): void
     {
         $time = dechex(time());
-
-        $token = md5('clip'.'1'.'1234qwER'.'127.0.0.1'.$time.'studon');
-
+        $client = Acl::LMS->lower();
+        $token = md5('clip'.'1'.'1234qwER'.'127.0.0.1'.$time.$client);
         $clip = ClipFactory::create(['password' => '1234qwER']);
 
-        $url = '/protector/link/clip/1/'.$token.'/'.$time.'/studon';
+        $url = '/protector/link/clip/1/'.$token.'/'.$time.'/'.$client;
 
-        $this->assertNotEquals($url, generateLMSToken($clip, $time));
-        $this->assertEquals($url, generateLMSToken($clip, $time, true));
+        $this->assertNotEquals($url, getAccessToken($clip, $time, $client));
+        $this->assertEquals($url, getAccessToken($clip, $time, $client, true));
     }
 
     /** @test */

@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\Acl;
 use App\Enums\Content;
 use App\Models\Asset;
 use App\Models\Clip;
@@ -153,16 +154,60 @@ function setActiveLink(string $route): string
  *
  * @param $obj
  * @param $time
+ * @param  string  $client
  * @param  false  $withURL
  * @return string
  */
-function generateLMSToken($obj, $time, bool $withURL = false): string
+function getAccessToken($obj, $time, string $client, bool $withURL = false): string
 {
     $type = lcfirst(class_basename($obj::class));
 
-    $token = md5($type.$obj->id.$obj->password.request()->ip().$time.'studon');
+    $token = md5($type.$obj->id.$obj->password.request()->ip().$time.$client);
 
-    return ($withURL) ? '/protector/link/'.$type.'/'.$obj->id.'/'.$token.'/'.$time.'/studon' : $token;
+    return ($withURL) ? '/protector/link/'.$type.'/'.$obj->id.'/'.$token.'/'.$time.'/'.$client : $token;
+}
+
+/**
+ * @param  string  $type
+ * @return string
+ */
+function getUrlTokenType(string $type): string
+{
+    return match ($type) {
+        default => abort(404),
+        'series', 'course' => 'series',
+        'clip' => 'clip',
+    };
+}
+
+/**
+ * @param  string  $client
+ * @return string
+ */
+function getUrlClientType(string $client): string
+{
+    return match ($client) {
+        default => abort(404),
+        'studon', 'lms' => Acl::LMS->lower(),
+        'password' => Acl::PASSWORD->lower(),
+    };
+}
+/**
+ * @param $obj
+ * @param $token
+ * @param $time
+ * @param $client
+ * @return void
+ */
+function setSessionAccessToken($obj, $token, $time, $client): void
+{
+    $objType = str(class_basename($obj))->lcfirst();
+
+    session()->put([
+        $objType.'_'.$obj->id.'_token' => $token,
+        $objType.'_'.$obj->id.'_time' => $time,
+        $objType.'_'.$obj->id.'_client' => $client,
+    ]);
 }
 
 /**
@@ -172,7 +217,7 @@ function generateLMSToken($obj, $time, bool $withURL = false): string
  * @throws ContainerExceptionInterface
  * @throws NotFoundExceptionInterface
  */
-function compareLMSToken($obj): bool
+function checkAccessToken($obj): bool
 {
     //Type can be either series or clip
     $tokenType = lcfirst(class_basename($obj::class));
@@ -180,13 +225,25 @@ function compareLMSToken($obj): bool
     if (session()->exists($tokenType.'_'.$obj->id.'_token')) {
         $cookieTokenHash = session()->get($tokenType.'_'.$obj->id.'_token');
         $cookieTokenTime = session()->get($tokenType.'_'.$obj->id.'_time');
-        //if token exists check if it is valid
-        return $cookieTokenHash === generateLMSToken($obj, $cookieTokenTime);
+        $cookieTokenClient = session()->get($tokenType.'_'.$obj->id.'_client');
+
+        return $cookieTokenHash === getAccessToken($obj, $cookieTokenTime, $cookieTokenClient);
+    } elseif ($tokenType === 'clip' && session()->exists('series_'.$obj->series->id.'_token')) {
+        //check whether a series token for this clip exists
+        $cookieTokenHash = session()->get('series_'.$obj->series->id.'_token');
+        $cookieTokenTime = session()->get('series_'.$obj->series->id.'_time');
+        $cookieTokenClient = session()->get('series_'.$obj->series->id.'_client');
+
+        return $cookieTokenHash === getAccessToken($obj->series, $cookieTokenTime, $cookieTokenClient);
     } else {
         return false;
     }
 }
 
+/**
+ * @param  Asset  $asset
+ * @return string
+ */
 function getFileExtension(Asset $asset): string
 {
     return Str::afterLast($asset->original_file_name, '.');

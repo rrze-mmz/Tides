@@ -61,9 +61,10 @@ trait Accessable
             $check = (($this->assets->count() > 0 && $this->is_public)
                 || auth()->user()->can('view-video', $this));
         }
-        if ($acls->pluck('id')->contains(\App\Enums\Acl::LMS())) {
+        if ($acls->pluck('id')->contains(\App\Enums\Acl::LMS())
+            || $acls->pluck('id')->contains(\App\Enums\Acl::PASSWORD())) {
             $check = (
-                compareLMSToken($this)
+                checkAccessToken($this)
                 || ((auth()->check() && auth()->user()->can('view-video', $this)))
                 || (auth()->check() && auth()->user()->isAdmin())
             );

@@ -84,13 +84,13 @@
         </div>
     </div>
 
-    <div class="flex pt-8 pb-2  font-2xl w-full">
+    <div class="flex pt-8 pb-2  font-2xl w-full ">
         <div x-data="{
             activeTab:1,
             activeClass: 'inline-block px-4 py-2 bg-blue-800  rounded-lg',
             inactiveClass : 'inline-block px-4 py-2 bg-blue-500  rounded-lg'
          }" class="w-full">
-            <ul class="flex space-x-1  pt-8 pb-2 text-white border-b border-black">
+            <ul class="flex space-x-4  pt-8 pb-2 text-white border-b border-black ">
                 <li>
                     <a href="#actions"
                        x-on:click="activeTab = 1"
@@ -124,7 +124,7 @@
                 </li>
             </ul>
             <div class="mt-6 ">
-                <div x-show="activeTab === 1" id="actions" class="w-full">
+                <div x-show="activeTab === 1" id="actions" class="w-full ">
                     @include('backend.series.buttons.actions')
                     @include('backend.clips.list')
                 </div>

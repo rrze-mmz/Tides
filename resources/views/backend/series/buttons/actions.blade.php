@@ -1,4 +1,4 @@
-<div class="flex items-center pt-3 space-x-2">
+<div class="flex items-center pt-3 space-x-4 ">
     <x-form.button :link="route('frontend.series.show',$series)" type="submit"
                    text="Go to public page"/>
 

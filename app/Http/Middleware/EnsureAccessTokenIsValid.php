@@ -6,34 +6,37 @@ use App\Enums\Acl;
 use Closure;
 use Illuminate\Http\Request;
 
-class EnsureLMSTokenIsValid
+class EnsureAccessTokenIsValid
 {
     /**
      * Handle an incoming request.
      *
      * @param  Request  $request
-     * @param  \Closure  $next
+     * @param  Closure  $next
      * @return mixed
+     *
+     * @throws Exception
      */
     public function handle(Request $request, Closure $next): mixed
     {
         //this should either be a series (course term is for backward compatibility with old LMS links) or a clip
-        $objType = ((string) $request->segment('3') === 'course') ? 'series' : (string) $request->segment('3');
+        $objType = getUrlTokenType((string) $request->segment('3'));
         $objID = (int) $request->segment('4');
-        $objToken = $request->segment('5');
-        $objTokenTime = $request->segment('6');
+        $urlToken = $request->segment('5');
+        $tokenTime = $request->segment('6');
+        $tokenClient = getUrlClientType((string) $request->segment('7'));
 
         $model = "App\Models\\".ucfirst($objType);
 
-        $obj = $model::find($objID);
+        $obj = $model::findOrFail($objID);
 
         if (! $obj->acls()->pluck('id')->contains(Acl::LMS())) {
             return $next($request);
         }
 
-        $token = generateLMSToken($obj, $objTokenTime);
+        $objToken = getAccessToken($obj, $tokenTime, $tokenClient, false);
 
-        if ($objToken !== $token) {
+        if ($urlToken !== $objToken) {
             abort(403);
         }
 

@@ -103,10 +103,11 @@
     @can('edit-series',$series)
         <div class="absolute w-full py-2.5 bottom-0 inset-x-0 text-white
                     text-xs text-right pr-2 pb-2 leading-4">
-            <x-form.button :link="route('series.edit', $series)"
-                           type="submit"
-                           text="Series {{__('common.actions.edit')}}"
-            />
+            <a href="{{route('series.edit', $series)}}">
+                <x-button class="bg-blue-500 hover:bg-blue-700">
+                    <x-heroicon-o-pencil class="w-4 h-4"/>
+                </x-button>
+            </a>
         </div>
     @endcan
 </div>

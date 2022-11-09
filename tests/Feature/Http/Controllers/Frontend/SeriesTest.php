@@ -107,11 +107,9 @@ class SeriesTest extends TestCase
     {
         $series = SeriesFactory::withClips(2)->withAssets(1)->create();
 
-        $firstClip = Clip::find(1);
-        $secondClip = Clip::find(2);
-
-        $firstClip->addAcls(collect([Acl::PORTAL()]));
-        $secondClip->addAcls(collect([Acl::PORTAL(), Acl::PASSWORD()]));
+        $series->clips->each(function ($clip) {
+            $clip->addAcls(collect([Acl::PORTAL(), Acl::PASSWORD()]));
+        });
 
         $this->get(route('frontend.series.show', $series))
             ->assertSee(Acl::PORTAL->lower().','.Acl::PASSWORD->lower());
@@ -122,11 +120,9 @@ class SeriesTest extends TestCase
     {
         $series = SeriesFactory::withClips(2)->withAssets(1)->create();
 
-        $firstClip = Clip::find(1);
-        $secondClip = Clip::find(2);
-
-        $firstClip->addAcls(collect([Acl::PORTAL()]));
-        $secondClip->addAcls(collect([Acl::PORTAL()]));
+        $series->clips->each(function ($clip) {
+            $clip->addAcls(collect([Acl::PORTAL()]));
+        });
 
         $this->get(route('frontend.series.show', $series))->assertSee('Lock clip');
 
@@ -177,5 +173,17 @@ class SeriesTest extends TestCase
         $this->signIn();
 
         $this->get(route('frontend.series.show', $series))->assertSee('Subscribe');
+    }
+
+    /** @test */
+    public function it_has_an_unlock_button_if_series_has_a_passwort_protection(): void
+    {
+        $series = SeriesFactory::withClips(2)->withAssets(1)->create();
+
+        $series->clips->each(function ($clip) {
+            $clip->addAcls(collect([Acl::PASSWORD()]));
+        });
+
+        $this->get(route('frontend.series.show', $series))->assertSee('Unlock series');
     }
 }

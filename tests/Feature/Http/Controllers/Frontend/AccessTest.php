@@ -39,19 +39,21 @@ class AccessTest extends TestCase
     {
         $this->clip->addAcls(collect([Acl::LMS()]));
 
+        $client = getUrlClientType(Acl::LMS->lower());
+
         $this->get(route('frontend.clips.show', $this->clip))->assertDontSee('plyr-player');
 
         $time = dechex(time());
 
-        $token = md5('clip'.'1'.$this->clip->password.'0.0.0.0'.$time.'studon');
+        $token = md5('clip'.'1'.$this->clip->password.'0.0.0.0'.$time.$client);
 
-        $link = '/protector/link/clip/1/'.$token.'/'.$time.'/studon';
+        $link = '/protector/link/clip/1/'.$token.'/'.$time.'/'.$client;
 
         $this->get($link)->assertForbidden();
 
-        $token = md5('clip'.'1'.$this->clip->password.'127.0.0.1'.$time.'studon');
+        $token = md5('clip'.'1'.$this->clip->password.'127.0.0.1'.$time.$client);
 
-        $link = '/protector/link/clip/1/'.$token.'/'.$time.'/studon';
+        $link = '/protector/link/clip/1/'.$token.'/'.$time.'/'.$client;
 
         $this->get($link)->assertStatus(302);
 

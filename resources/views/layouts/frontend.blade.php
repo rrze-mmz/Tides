@@ -8,7 +8,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
-    
+
     <!-- Styles -->
     <link rel="icon" href="{{ URL::asset('/css/favicon.ico') }}" type="image/x-icon"/>
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
@@ -20,8 +20,8 @@
         @include('layouts.frontend.top-navigation')
     </header>
 
-    <main class="pt-12 mx-auto lg:flex min-h-screen max-h-full ">
-        <div class=" w-full lg:flex-grow pb-10">
+    <main class="pt-12 mx-auto lg:flex min-h-screen max-h-full">
+        <div class=" w-full lg:flex-grow pb-10 ">
             @yield('content')
         </div>
     </main>

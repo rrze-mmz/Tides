@@ -209,4 +209,16 @@ class SeriesTest extends TestCase
         $this->get(route('frontend.series.show', $this->series->id))->assertStatus(403);
         $this->get('/series/535')->assertStatus(404);
     }
+
+    /** @test */
+    public function it_fetches_clip_acls_as_comma_seperated_string(): void
+    {
+        $this->assertIsString($this->series->fetchClipsAcls());
+    }
+
+    /** @test */
+    public function it_returns_bool_for_clips_acls_check(): void
+    {
+        $this->assertIsBool($this->series->checkAcls());
+    }
 }

@@ -153,18 +153,18 @@
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap text-right text-sm leading-5 font-medium">
                                 @if(auth()->user()->id !== $user->id)
                                     <div class="flex space-x-2">
-                                        <x-form.button :link="route('users.edit',$user)"
-                                                       type="submit"
-                                                       text="Edit"/>
+                                        <a href="{{route('users.edit',$user)}}"
+                                        >
+                                            <x-button class="bg-blue-500 hover:bg-blue-700"
+                                                      wire:click="route('users.destroy', $user)">Edit
+                                            </x-button>
+                                        </a>
+
                                         <form action="{{ route('users.destroy', $user) }}"
                                               method="POST">
                                             @csrf
                                             @method('DELETE')
-                                            <x-form.button :link="$link=false"
-                                                           type="delete"
-                                                           text="Delete"
-                                                           color="red"
-                                            />
+                                            <x-button class="bg-red-500 hover:bg-red-700"> Delete</x-button>
                                         </form>
                                     </div>
                                 @endif

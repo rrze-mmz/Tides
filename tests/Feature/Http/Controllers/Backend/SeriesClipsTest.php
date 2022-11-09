@@ -237,7 +237,6 @@ class SeriesClipsTest extends TestCase
     /** @test */
     public function it_changes_clips_episodes_for_a_series(): void
     {
-        $this->withoutExceptionHandling();
         $series = SeriesFactory::withClips(3)->ownedBy($this->signInRole($this->role))->create();
         $attributes = [
             'episodes' => [

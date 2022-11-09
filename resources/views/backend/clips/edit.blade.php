@@ -1,3 +1,4 @@
+@php use App\Enums\Acl; @endphp
 @extends('layouts.backend')
 
 @section('content')
@@ -161,7 +162,7 @@
                 @include('backend.clips.sidebar._ingest-video')
             @endif
 
-            @if(auth()->user()->isAdmin() && $clip->acls->pluck('id')->contains('4'))
+            @if(auth()->user()->isAdmin() && $clip->acls->pluck('id')->contains(Acl::LMS()))
                 @include('backend.clips.sidebar._lms_test_link')
             @endif
 
