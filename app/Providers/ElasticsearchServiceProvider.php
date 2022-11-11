@@ -3,11 +3,14 @@
 namespace App\Providers;
 
 use App\Http\Clients\ElasticsearchClient;
+use App\Models\Setting;
 use Elasticsearch\ClientBuilder;
 use Illuminate\Support\ServiceProvider;
 
 class ElasticsearchServiceProvider extends ServiceProvider
 {
+    private array $settingsData;
+
     /**
      * Register services.
      *
@@ -16,11 +19,15 @@ class ElasticsearchServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(ClientBuilder::class, function () {
-            $config = $this->app->get('config')['elasticsearch'];
+            $this->settingsData = $this->getConfig();
+
             $builder = new ClientBuilder();
 
             $connectionString =
-                $config['username'].':'.$config['password'].'@'.$config['url'].':'.$config['port'];
+                $this->settingsData['username'].':'.
+                $this->settingsData['password'].'@'.
+                $this->settingsData['url'].':'.
+                $this->settingsData['port'];
 
             $builder->setHosts([$connectionString]);
 
@@ -28,14 +35,14 @@ class ElasticsearchServiceProvider extends ServiceProvider
         });
 
         $this->app->singleton(ElasticsearchClient::class, function () {
-            $config = $this->app->get('config')['elasticsearch'];
+            $this->settingsData = $this->getConfig();
 
             return new ElasticsearchClient([
-                'base_uri' => $config['url'].':'.$config['port'],
+                'base_uri' => $this->settingsData['url'].':'.$this->settingsData['port'],
                 'verify' => config('app.env') === 'production',
                 'auth' => [
-                    $config['username'],
-                    $config['password'],
+                    $this->settingsData['username'],
+                    $this->settingsData['password'],
                 ],
             ]);
         });
@@ -46,8 +53,20 @@ class ElasticsearchServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         //
+    }
+
+    private function getConfig()
+    {
+        $setting = Setting::firstOrCreate(
+            ['name' => 'elasticSearch'],
+            [
+                'data' => config('settings.elasticSearch'),
+            ]
+        );
+
+        return $setting->data;
     }
 }

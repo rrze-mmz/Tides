@@ -68,7 +68,11 @@
                         <div class="w-1/12"> {{ $clip->assets->first()?->durationToHours()  }}</div>
                         <div class="w-1/12">
                             @if($dashboardAction && Request::segment(1) === 'admin')
-                                <x-form.button :link="$clip->adminPath()" type="submit" text="Edit"/>
+                                <a href="{{route('clips.edit', $clip)}}">
+                                    <x-button class="bg-blue-600 hover:bg-blue-700">
+                                        {{__('common.actions.edit')}}
+                                    </x-button>
+                                </a>
                             @else
                                 <form method="GET"
                                       action="{{$clip->Path() }}"

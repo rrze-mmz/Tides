@@ -20,10 +20,15 @@ class SearchController extends Controller
     public function search(SearchRequest $request, ElasticsearchService $elasticsearchService): View
     {
         $searchResults = collect([]);
+        $health = $elasticsearchService->getHealth();
         //check whether elasticsearch server is up and running
-        if ($elasticsearchService->getHealth()->contains('pass')) {
+        if ($health->contains('pass')) {
             $results = $elasticsearchService->searchIndexes($request->term);
-            $searchResults = $searchResults->put('clips', $results);
+            $counter = ((float) $health['releaseId']['version']['number'] < 7)
+                ? $results['hits']['total']
+                : $results['hits']['total']['value'];
+
+            $searchResults = $searchResults->put('clips', $results)->put('counter', $counter);
 
             return view('frontend.search.results.elasticsearch', compact('searchResults'));
         } else { //use slow db search if no elasticsearch node is found

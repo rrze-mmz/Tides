@@ -12,8 +12,8 @@
             @csrf
             @method('PUT')
 
-            <div class="grid grid-cols-6 gap-2 content-center items-center ">
-                <div class=" col-span-2 ">
+            <div class="grid grid-cols-6 gap-2 content-center items-center my-10">
+                <div class=" col-span-2">
                     <label for="language" class="block py-2 mr-6 font-bold text-gray-700 text-md">
                         Portal language
                     </label>
@@ -36,10 +36,9 @@
                                   field-name="show_subscriptions_to_home_page"
             />
 
-
-            <x-form.button :link="$link=false"
-                           type="submit"
-                           text="Update"/>
+            <x-button class="bg-blue-600 hover:bg-blue-700 mt-10">
+                {{str(__('common.actions.update'))->ucfirst()}}
+            </x-button>
         </form>
     </div>
 @endsection

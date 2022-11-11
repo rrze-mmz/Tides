@@ -54,4 +54,9 @@ class Setting extends BaseModel
     {
         return $query->where('name', 'streaming')->firstOrFail();
     }
+
+    public function scopeElasticSearch($query): mixed
+    {
+        return $query->where('name', 'elasticSearch')->firstOrFail();
+    }
 }

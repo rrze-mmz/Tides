@@ -30,4 +30,11 @@ return [
         'secure_token' => 'awsTides12tvv10',
         'token_prefix' => 'tides',
     ],
+    'elasticSearch' => [
+        'url' => 'localhost',
+        'port' => 9200,
+        'username' => 'elastic',
+        'password' => 'changeme',
+        'prefix' => 'tides_',
+    ],
 ];

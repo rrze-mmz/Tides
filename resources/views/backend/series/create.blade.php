@@ -59,7 +59,14 @@
                 <div class="flex content-center items-center mb-6">
                 </div>
                 <div class="col-span-7 w-4/5">
-                    <x-form.button :link="$link=false" type="submit" text="{{ __('common.forms.create series') }}"/>
+                    <x-button class="bg-blue-600 hover:bg-blue-700">
+                        {{ __('common.forms.create series') }}
+                    </x-button>
+                    <a href="{{route('dashboard')}}">
+                        <x-button type="button" class="ml-3 bg-green-600 hover:bg-green-700">
+                            Cancel
+                        </x-button>
+                    </a>
                 </div>
             </div>
 

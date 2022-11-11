@@ -46,6 +46,7 @@ class SettingsIndexTest extends TestCase
             ->assertOk()
             ->assertSee('Portal')
             ->assertSee('Opencast')
-            ->assertSee('Streaming');
+            ->assertSee('Streaming')
+            ->assertSee('Elasticsearch');
     }
 }

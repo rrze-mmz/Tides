@@ -6,7 +6,11 @@
             Devices Index
         </div>
         <div class="flex">
-            <x-form.button :link="route('devices.create')" type="submit" text="Create a new device"/>
+            <a href="{{route('devices.create')}}">
+                <x-button class="bg-blue-700 hover:bg-blue-700">
+                    Create a new device
+                </x-button>
+            </a>
         </div>
     </div>
     <livewire:devices-data-table/>

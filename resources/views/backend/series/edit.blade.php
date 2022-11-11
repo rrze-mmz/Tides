@@ -70,7 +70,9 @@
             </div>
             @can('update-series', $series)
                 <div class="pt-10">
-                    <x-form.button :link="$link=false" type="submit" text="{{__('series.backend.Update Series')}}"/>
+                    <x-button class="bg-blue-600 hover:bg-blue-700">
+                        {{__('series.backend.Update Series')}}
+                    </x-button>
                 </div>
             @endcan
         </form>

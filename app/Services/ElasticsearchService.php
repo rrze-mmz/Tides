@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Http\Clients\ElasticsearchClient;
+use App\Models\Setting;
 use Elasticsearch\ClientBuilder;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
@@ -18,10 +19,14 @@ class ElasticsearchService
 
     private Collection $response;
 
+    private Setting $elasticsearchSettings;
+
     public function __construct(private ClientBuilder $clientBuilder, private ElasticsearchClient $client)
     {
         $this->type = '';
         $this->response = collect([]);
+
+        $this->elasticsearchSettings = Setting::elasticSearch();
     }
 
     /**
@@ -61,7 +66,7 @@ class ElasticsearchService
 
         try {
             $params = [
-                'index' => 'tides_'.$this->type,
+                'index' => $this->elasticsearchSettings->data['prefix'].$this->type,
                 'type' => $this->type,
                 'id' => $this->type.'_'.$model->id,
                 'body' => $model->toJson(),
@@ -85,7 +90,7 @@ class ElasticsearchService
 
         try {
             $params = [
-                'index' => 'tides_'.$this->type,
+                'index' => $this->elasticsearchSettings->data['prefix'].$this->type,
                 'id' => $this->type.'_'.$model->id,
                 'body' => [
                     'doc' => $model->toArray(),
@@ -114,7 +119,7 @@ class ElasticsearchService
 
         try {
             $params = [
-                'index' => 'tides_'.$this->type,
+                'index' => $this->elasticsearchSettings->data['prefix'].$this->type,
                 'type' => $this->type,
                 'id' => $this->type.'_'.$model->id,
             ];
@@ -157,7 +162,8 @@ class ElasticsearchService
     public function deleteIndexes(string $model = ''): Collection
     {
         try {
-            $this->response = collect($this->client->delete('/tides_'.Str::lower($model)));
+            $this->response =
+                collect($this->client->delete($this->elasticsearchSettings->data['prefix'].Str::lower($model)));
         } catch (Exception $exception) {
             Log::error($exception->getMessage());
         }

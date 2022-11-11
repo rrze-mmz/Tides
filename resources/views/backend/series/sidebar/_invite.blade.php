@@ -17,6 +17,8 @@
             >
             </select>
         </div>
-        <x-form.button :link="$link=false" type="submit" text="Add"/>
+        <x-button class="bg-blue-600 hover:bg-blue-700">
+            Add
+        </x-button>
     </form>
 </div>

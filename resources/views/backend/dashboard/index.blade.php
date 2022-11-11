@@ -9,14 +9,21 @@
         <div>
             <p class="pt-2">
                 <span class="mr-2">{{ __('dashboard.start creating new series') }}</span>
-                <x-form.button :link="route('series.create')" type="submit" text="{{ __('dashboard.new series') }}"/>
+                <a href="{{route('series.create')}}">
+                    <x-button class="bg-blue-600 hover:bg-blue-700">
+                        {{ __('dashboard.new series') }}
+                    </x-button>
+                </a>
             </p>
         </div>
         <div>
             <p class="pt-2 mt-4">
                 <span class="mr-2">{{ __('dashboard.start creating a new clip') }}</span>
-                <x-form.button :link="route('clips.create')" type="submit" text="{{ __('dashboard.new clip') }}"/>
-
+                <a href="{{route('clips.create')}}">
+                    <x-button class="bg-blue-600 hover:bg-blue-700">
+                        {{ __('dashboard.new clip') }}
+                    </x-button>
+                </a>
             </p>
         </div>
     </div>

@@ -32,10 +32,9 @@
                             </select>
                         </label>
                     </div>
-                    <x-form.button :link="$link=false"
-                                   type="submit"
-                                   text="Set series owner"
-                    />
+                    <x-button class="bg-blue-600 hover:bg-blue-700">
+                        Set series owner
+                    </x-button>
                 </form>
             </div>
         @endcan

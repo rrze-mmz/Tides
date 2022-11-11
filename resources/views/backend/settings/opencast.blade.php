@@ -74,9 +74,17 @@
                           label="Archive path"
                           :fullCol="true"
                           :required="true"/>
-            <x-form.button :link="$link=false"
-                           type="submit"
-                           text="Update"/>
+            <div class="mt-10">
+                <x-button class="bg-blue-600 hover:bg-blue-700">
+                    Update
+                </x-button>
+                <a href="{{ route('settings.portal.index') }}">
+                    <x-button type="button" class="bg-gray-600 hover:bg-gray-700">
+                        Cancel
+                    </x-button>
+                </a>
+            </div>
+
         </form>
     </div>
 @endsection

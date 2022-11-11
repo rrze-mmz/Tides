@@ -9,6 +9,7 @@ use App\Http\Controllers\Backend\CollectionsController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\DevicesController;
 use App\Http\Controllers\Backend\DocumentController;
+use App\Http\Controllers\Backend\ElasticSearchSettingsController;
 use App\Http\Controllers\Backend\OpencastSettingsController;
 use App\Http\Controllers\Backend\PortalSettingsController;
 use App\Http\Controllers\Backend\PresentersController;
@@ -252,6 +253,10 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
             ->name('settings.streaming.show');
         Route::put('/settings/streaming', [StreamingSettingsController::class, 'update'])
             ->name('settings.streaming.update');
+        Route::get('/settings/elasticSearch', [ElasticSearchSettingsController::class, 'show'])
+            ->name('settings.elasticSearch.show');
+        Route::put('/settings/elasticSearch', [ElasticSearchSettingsController::class, 'update'])
+            ->name('settings.elasticSearch.update');
     });
 });
 

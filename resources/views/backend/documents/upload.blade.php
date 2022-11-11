@@ -26,7 +26,9 @@
             </div>
             @enderror
 
-            <x-form.button :link="$link=false" type="submit" text="Upload file"/>
+            <x-button class="bg-blue-600 hover:bg-blue-700">
+                Upload file
+            </x-button>
         </form>
 
         @if($resource->documents()->count()> 0)

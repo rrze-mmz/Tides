@@ -81,7 +81,7 @@ class ManageDevicesTest extends TestCase
 
         Device::factory()->create(['name' => 'Exon DMP 351']);
 
-        $this->get(route('devices.index'))->assertSee('Edit');
+        $this->get(route('devices.index'))->assertSee(__('common.actions.edit'));
     }
 
     /** @test */
@@ -91,7 +91,7 @@ class ManageDevicesTest extends TestCase
 
         Device::factory()->create(['name' => 'Exon DMP 351']);
 
-        $this->get(route('devices.index'))->assertSee('Delete');
+        $this->get(route('devices.index'))->assertSee(__('common.actions.delete'));
     }
 
     /** @test */

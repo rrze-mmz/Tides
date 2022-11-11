@@ -9,6 +9,8 @@ return [
     'actions' => [
         'save' => 'speichern',
         'edit' => 'editieren',
+        'update' => 'aktualisieren',
+        'delete' => 'löschen',
     ],
     'menu' => [
         'dashboard' => 'Dashboard',

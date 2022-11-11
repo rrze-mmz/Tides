@@ -30,5 +30,10 @@ class SettingsSeeder extends Seeder
             'name' => 'streaming',
             'data' => json_encode([]),
         ]);
+
+        DB::table('settings')->insert([
+            'name' => 'elasticSearch',
+            'data' => json_encode([]),
+        ]);
     }
 }

@@ -240,20 +240,19 @@
                             </td>
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap text-right text-sm leading-5 font-medium">
                                 <div class="flex space-x-2">
-                                    <x-form.button :link="route('devices.edit',$device)"
-                                                   type="submit"
-                                                   text="Edit"
-                                                   color="green"
-                                    />
+                                    <a href="{{route('devices.edit',$device)}}">
+                                        <x-button type="button" class="bg-green-600 hover:bg-green-700">
+                                            {{__('common.actions.edit')}}
+                                        </x-button>
+                                    </a>
                                     <form action="{{ route('devices.destroy', $device) }}"
                                           method="POST">
                                         @csrf
                                         @method('DELETE')
-                                        <x-form.button :link="$link=false"
-                                                       type="delete"
-                                                       text="Delete"
-                                                       color="red"
-                                        />
+                                        <x-button class="bg-red-600 hover:bg-red-700">
+                                            {{__('common.actions.delete')}}
+                                        </x-button>
+
                                     </form>
                                 </div>
                             </td>

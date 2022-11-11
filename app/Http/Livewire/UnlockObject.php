@@ -5,6 +5,8 @@ namespace App\Http\Livewire;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Routing\Redirector;
 use Illuminate\Validation\Rules\Password;
 use Livewire\Component;
 
@@ -38,6 +40,11 @@ class UnlockObject extends Component
         return view('livewire.unlock-object');
     }
 
+    /**
+     * Unlock an object with password
+     *
+     * @return Application|RedirectResponse|Redirector|void
+     */
     public function unlock()
     {
         $this->validate();
@@ -45,7 +52,7 @@ class UnlockObject extends Component
         if ($this->model->password === $this->password) {
             $client = 'password';
 
-            $token = getAccessToken($this->model, $time = dechex(time()), $client, false);
+            $token = getAccessToken($this->model, $time = dechex(time()), $client);
             setSessionAccessToken($this->model, $token, $time, $client);
 
             return redirect(route('frontend.series.show', $this->model));

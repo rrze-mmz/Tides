@@ -6,7 +6,7 @@
             <div class="flex justify-between pb-2 border-b-2 border-black">
                 <h2 class="text-2xl font-bold">
                     {{ __('search.search results header', [
-                                'counter' => $searchResults['clips']['hits']['total']['value']
+                                'counter' => $searchResults['counter']
                                 ]) }}
                 </h2>
             </div>

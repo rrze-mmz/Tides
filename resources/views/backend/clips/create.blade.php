@@ -123,8 +123,11 @@
                                       field-name="is_public"
                 />
 
-                <div class="col-span-7 w-4/5">
-                    <x-form.button :link="$link=false" type="submit" text="Create clip"/>
+
+                <div class="col-span-7 w-4/5 pt-8">
+                    <x-button class="bg-blue-600 hover:bg-blue-700">
+                        Create clip
+                    </x-button>
                 </div>
             </div>
         </form>

@@ -15,24 +15,18 @@ class SettingTest extends TestCase
     /** @test */
     public function it_has_an_opencast_scope(): void
     {
-        Setting::factory()->create(['name' => 'opencast']);
-
         $this->assertInstanceOf(Setting::class, Setting::opencast());
     }
 
     /** @test */
     public function it_has_a_portal_scope(): void
     {
-        Setting::factory()->create(['name' => 'portal']);
-
         $this->assertInstanceOf(Setting::class, Setting::portal());
     }
 
     /** @test */
     public function it_has_a_streaming_scope(): void
     {
-        Setting::factory()->create(['name' => 'streaming']);
-
         $this->assertInstanceOf(Setting::class, Setting::streaming());
     }
 
@@ -40,5 +34,11 @@ class SettingTest extends TestCase
     public function it_has_a_user_scope(): void
     {
         $this->assertInstanceOf(Builder::class, Setting::user(User::factory()->create()));
+    }
+
+    /** @test */
+    public function it_has_an_elasticSearch_scope(): void
+    {
+        $this->assertInstanceOf(Setting::class, Setting::elasticSearch());
     }
 }

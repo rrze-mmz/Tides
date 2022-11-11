@@ -89,6 +89,11 @@ abstract class TestCase extends BaseTestCase
         ]);
 
         Setting::create([
+            'name' => 'elasticSearch',
+            'data' => \config('settings.elasticSearch'),
+        ]);
+
+        Setting::create([
             'name' => 'portal',
             'data' => \config('settings.portal'),
         ]);
