@@ -99,7 +99,16 @@ trait WorksWithElasticsearchClient
             '_seq_no' => 35,
             '_primary_term' => 1,
             'found' => true,
-            '_source' => $model->toArray(),
+            'hits' => [
+                'hits' => [
+                    [
+                        '_source' => $model->toArray(),
+                    ],
+                ],
+                'total' => [
+                    'value' => '1',
+                ],
+            ],
         ];
     }
 

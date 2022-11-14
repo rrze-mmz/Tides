@@ -94,9 +94,4 @@ class AccessableTraitTest extends TestCase
 
         $this->assertTrue($this->clip->checkAcls());
     }
-
-    /** @test */
-    public function it_will_also_check_for_series_token_if_object_is_a_clip(): void
-    {
-    }
 }

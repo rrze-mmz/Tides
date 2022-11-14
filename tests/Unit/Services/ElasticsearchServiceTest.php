@@ -31,7 +31,7 @@ class ElasticsearchServiceTest extends TestCase
 
         $response = $elasticsearchService->fetchDocument('tides_series', 'series_1');
 
-        $this->assertEquals($series->title, $response->get('_source')['title']);
+        $this->assertEquals($series->title, $response->get('hits')['hits'][0]['_source']['title']);
         $this->assertInstanceOf(Collection::class, $response);
     }
 
@@ -46,7 +46,7 @@ class ElasticsearchServiceTest extends TestCase
 
         $response = $elasticsearchService->fetchDocument('tides_clip', 'clip_1');
 
-        $this->assertEquals($clip->title, $response->get('_source')['title']);
+        $this->assertEquals($clip->title, $response->get('hits')['hits'][0]['_source']['title']);
         $this->assertInstanceOf(Collection::class, $response);
     }
 

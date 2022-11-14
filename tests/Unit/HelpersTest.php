@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use App\Enums\Acl;
 use App\Models\Asset;
 use App\Models\Clip;
+use App\Models\Series;
 use App\Services\WowzaService;
 use Facades\Tests\Setup\ClipFactory;
 use Facades\Tests\Setup\FileFactory;
@@ -155,6 +156,48 @@ class HelpersTest extends TestCase
     /** @test */
     public function it_compares_token(): void
     {
+        $time = dechex(time());
+        $client = Acl::LMS->lower();
+        $token = md5('clip'.'1'.'1234qwER'.'127.0.0.1'.$time.$client);
+        $clip = Clip::factory()->create();
+
+        //session token doesn't exist
+        $this->assertFalse(checkAccessToken($clip));
+        session()->put([
+            'clip_'.$clip->id.'_token' => $token,
+            'clip_'.$clip->id.'_time' => $time,
+            'clip_'.$clip->id.'_client' => $client,
+        ]);
+        //session token exists but clip has no password
+        $this->assertFalse(checkAccessToken($clip));
+
+        $clip->password = '1234qwER';
+        $clip->save();
+
+        //session token exists and clip has password
+        $this->assertTrue(checkAccessToken($clip));
+
+        session()->flush();
+
+        //test again clip series token
+        $time = dechex(time());
+        $client = Acl::LMS->lower();
+        $seriesToken = md5('series'.'1'.'1234QWer'.'127.0.0.1'.$time.$client);
+        $series = Series::factory()->create(['password' => '1234QWer']);
+
+        session()->put([
+            'series_'.$series->id.'_token' => $seriesToken,
+            'series_'.$series->id.'_time' => $time,
+            'series_'.$series->id.'_client' => $client,
+        ]);
+
+        $this->assertFalse(checkAccessToken($clip));
+
+        $clip->series_id = $series->id;
+        $clip->save();
+
+        $clip->refresh();
+        $this->assertTrue(checkAccessToken($clip));
     }
 
     /** @test */

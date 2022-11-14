@@ -55,10 +55,18 @@ class SearchTest extends TestCase
     /** @test */
     public function it_uses_elasticsearch_if_it_is_available(): void
     {
-        $this->mockHandler->append($this->mockClusterHealthResponse());
+        $this->mockHandler->append(
+            $this->mockClusterHealthResponse()
+        );
+
+        $this->startStream($this->clip);
+        $this->mockSingleDocument();
 
         $response = $this->searchFor('lorem');
+
         $response->assertOk()->assertSee($this->clip->id);
+
+        $this->closeStream();
     }
 
     /** @test */

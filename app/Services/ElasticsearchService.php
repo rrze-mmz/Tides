@@ -45,6 +45,7 @@ class ElasticsearchService
         ]);
         try {
             $response = $this->client->get('/');
+
             if (! empty(json_encode((string) $response->getBody(), true))) {
                 $this->response->put('releaseId', json_decode((string) $response->getBody(), true))
                     ->put('status', 'pass');
