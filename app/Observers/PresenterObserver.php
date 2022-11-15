@@ -19,7 +19,7 @@ class PresenterObserver
      */
     public function created(Presenter $presenter)
     {
-        session()->flash('flashMessage', $presenter->getFullNameAttribute().' '.__FUNCTION__.' successfully');
+        session()->flash('flashMessage', "{$presenter->getFullNameAttribute()} ".__FUNCTION__.' successfully');
         $this->elasticsearchService->createIndex($presenter);
     }
 
@@ -31,7 +31,7 @@ class PresenterObserver
      */
     public function updated(Presenter $presenter)
     {
-        session()->flash('flashMessage', $presenter->getFullNameAttribute().' '.__FUNCTION__.' successfully');
+        session()->flash('flashMessage', "{$presenter->getFullNameAttribute()} ".__FUNCTION__.' successfully');
         $this->elasticsearchService->updateIndex($presenter);
     }
 
@@ -43,7 +43,7 @@ class PresenterObserver
      */
     public function deleted(Presenter $presenter)
     {
-        session()->flash('flashMessage', $presenter->getFullNameAttribute().' '.__FUNCTION__.' successfully');
+        session()->flash('flashMessage', "{$presenter->getFullNameAttribute()} ".__FUNCTION__.' successfully');
         $this->elasticsearchService->deleteIndex($presenter);
     }
 }

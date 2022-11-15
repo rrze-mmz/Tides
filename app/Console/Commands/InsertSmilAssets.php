@@ -41,7 +41,7 @@ class InsertSmilAssets extends Command
         Clip::lazy()->each(function ($clip) use ($wowzaService) {
             $wowzaService->createSmilFile($clip);
 
-            $this->info('Finish clip ID '.$clip->id);
+            $this->info("Finish clip ID {$clip->id}");
             $this->newLine(2);
         });
 

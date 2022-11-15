@@ -69,7 +69,7 @@ class ElasticsearchService
             $params = [
                 'index' => $this->elasticsearchSettings->data['prefix'].$this->type,
                 'type' => $this->type,
-                'id' => $this->type.'_'.$model->id,
+                'id' => "{$this->type}_$model->id",
                 'body' => $model->toJson(),
             ];
 
@@ -92,7 +92,7 @@ class ElasticsearchService
         try {
             $params = [
                 'index' => $this->elasticsearchSettings->data['prefix'].$this->type,
-                'id' => $this->type.'_'.$model->id,
+                'id' => "{$this->type}_$model->id",
                 'body' => [
                     'doc' => $model->toArray(),
                     'doc_as_upsert' => true,
@@ -192,7 +192,7 @@ class ElasticsearchService
                     ],
                     'query' => [
                         'multi_match' => [
-                            'query' => "'.$term.'",
+                            'query' => "{$term}",
                             'fields' => [
                                 'title',
                                 'description',

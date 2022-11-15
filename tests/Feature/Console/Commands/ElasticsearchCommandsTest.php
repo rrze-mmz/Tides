@@ -17,12 +17,13 @@ class ElasticsearchCommandsTest extends TestCase
     public function it_throws_an_error_for_rebuilding_if_model_does_not_exists(): void
     {
         $this->artisan('elasticsearch:rebuild-indexes Ser')
-            ->expectsOutput('Model doesn\'t exists');
+            ->expectsOutput("Model doesn't exists");
     }
 
     /** @test */
     public function it_shows_a_counter_of_models_that_are_rebuild(): void
     {
+        $this->withoutExceptionHandling();
         $series = Series::factory(10)->create();
 
         $this->mockSingleDocument();
@@ -30,6 +31,6 @@ class ElasticsearchCommandsTest extends TestCase
 
         $this->artisan('elasticsearch:rebuild-indexes Series')
             ->expectsOutput('Series Indexes deleted successfully')
-            ->expectsOutput($series->count().' Series Indexes created successfully');
+            ->expectsOutput("{$series->count()} Series Indexes created successfully");
     }
 }

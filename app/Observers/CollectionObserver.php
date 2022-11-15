@@ -14,7 +14,7 @@ class CollectionObserver
      */
     public function created(Collection $collection)
     {
-        session()->flash('flashMessage', $collection->title.' '.__FUNCTION__.' successfully');
+        session()->flash('flashMessage', "{$collection->title} ".__FUNCTION__.'successfully');
     }
 
     /**
@@ -25,7 +25,7 @@ class CollectionObserver
      */
     public function updated(Collection $collection)
     {
-        session()->flash('flashMessage', $collection->title.' '.__FUNCTION__.' successfully');
+        session()->flash('flashMessage', "{$collection->title} ".__FUNCTION__.'successfully');
     }
 
     /**
@@ -36,7 +36,7 @@ class CollectionObserver
      */
     public function deleted(Collection $collection)
     {
-        session()->flash('flashMessage', $collection->title.' '.__FUNCTION__.' successfully');
+        session()->flash('flashMessage', "{$collection->title} ".__FUNCTION__.'successfully');
     }
 
     /**
@@ -47,7 +47,7 @@ class CollectionObserver
      */
     public function restored(Collection $collection)
     {
-        session()->flash('flashMessage', $collection->title.' '.__FUNCTION__.' successfully');
+        session()->flash('flashMessage', "{$collection->title} ".__FUNCTION__.'successfully');
     }
 
     /**
@@ -58,6 +58,6 @@ class CollectionObserver
      */
     public function forceDeleted(Collection $collection)
     {
-        session()->flash('flashMessage', $collection->title.' '.__FUNCTION__.' successfully');
+        session()->flash('flashMessage', "{$collection->title} ".__FUNCTION__.'successfully');
     }
 }

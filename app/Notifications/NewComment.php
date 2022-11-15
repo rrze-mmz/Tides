@@ -47,9 +47,9 @@ class NewComment extends Notification
                 : $this->comment->commentable->adminPath();
 
         return (new MailMessage)
-            ->greeting('Hi '.$this->comment->commentable->owner?->getFullNameAttribute())
-            ->line('There is a new comment on your
-            '.Str::ucfirst($this->comment->commentable_type).' :'.$this->comment->commentable->title)
+            ->greeting("Hi {$this->comment->commentable->owner?->getFullNameAttribute()}")
+            ->line('There is a new comment on your'
+            .Str::ucfirst($this->comment->commentable_type).":{$this->comment->commentable->title}")
             ->line($this->comment->content)
             ->action('Go to comment', url($url.'#comments-section'))
             ->line('Thanks!');

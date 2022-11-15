@@ -94,7 +94,7 @@ class WowzaService
             $original_file_name = str($type->name)->lower().'.smil';
             //store the generated file to clip path
             Storage::disk('videos')
-                ->put(getClipStoragePath($clip).'/'.$original_file_name, $xmlFile = $result->prettify()->toXml());
+                ->put(getClipStoragePath($clip)."/{$original_file_name}", $xmlFile = $result->prettify()->toXml());
 
             //save or update the smil file in db
             $clip->addAsset([
@@ -197,11 +197,11 @@ class WowzaService
             $tokenEndTime = $tokenPrefix.'endTime='.(time() + 21600);
 
             $userIP = (App::environment(['testing', 'local'])) ? env('FAUTV_USER_IP') : $_SERVER['REMOTE_ADDR'];
-            $hashStr = $contentPath.'?'.$userIP.'&'.$secureToken.'&'.$tokenEndTime.'&'.$tokenStartTime;
+            $hashStr = "{$contentPath}?{$userIP}&{$secureToken}&{$tokenEndTime}&{$tokenStartTime}";
             $hash = hash('sha256', $hashStr, 1);
             $usableHash = strtr(base64_encode($hash), '+/', '-_');
 
-            $url = $contentUrl.'?'.$tokenStartTime.'&'.$tokenEndTime.'&'.$tokenPrefix."hash=$usableHash";
+            $url = "{$contentUrl}?{$tokenStartTime}&{$tokenEndTime}&{$tokenPrefix}hash={$usableHash}";
 
             return $url;
         } else {

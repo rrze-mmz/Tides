@@ -38,8 +38,8 @@ class DeleteClipResources
         //check if clip is public and unlink all symbolic links
         if ($event->clip->acls->pluck('id')->contains('1')) {
             $event->clip->assets->each(function ($asset) {
-                if (Storage::disk('assetsSymLinks')->exists($asset->guid.'.'.getFileExtension($asset))) {
-                    unlink(Storage::disk('assetsSymLinks')->path($asset->guid.'.'.getFileExtension($asset)));
+                if (Storage::disk('assetsSymLinks')->exists("{$asset->guid}.".getFileExtension($asset))) {
+                    unlink(Storage::disk('assetsSymLinks')->path("{$asset->guid}.".getFileExtension($asset)));
                 }
             });
         }

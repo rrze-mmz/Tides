@@ -149,7 +149,7 @@
                            text="Save"/>
         </form>
 
-        <div class="space-y-5 w-1/5 h-full">
+        <div class="space-y-5 w-1/5 h-full pr-4">
             @if(! is_null($clip->series_id) )
                 @include('backend.clips.sidebar._series-options')
             @else

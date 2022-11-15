@@ -22,7 +22,7 @@ function fetchClipPoster(Clip $clip): string
 {
     return (is_null($clip?->posterImage))
         ? '/images/generic_clip_poster_image.png'
-        : '/thumbnails/'.$clip->posterImage;
+        : "/thumbnails/{$clip->posterImage}";
 }
 
 /**
@@ -33,13 +33,10 @@ function fetchClipPoster(Clip $clip): string
  */
 function getClipStoragePath(Clip $clip): string
 {
-    return '/'.Carbon::createFromFormat('Y-m-d', $clip->created_at->format('Y-m-d'))
-            ->year.
-        '/'.str_pad(Carbon::createFromFormat('Y-m-d', $clip->created_at->format('Y-m-d'))
-            ->month, 2, '0', STR_PAD_LEFT).
-        '/'.str_pad(Carbon::createFromFormat('Y-m-d', $clip->created_at->format('Y-m-d'))
-            ->day, 2, '0', STR_PAD_LEFT).'/'
-        .$clip->folder_id.'/';
+    return '/'.Carbon::createFromFormat('Y-m-d', $clip->created_at->format('Y-m-d'))->year.
+        '/'.str_pad(Carbon::createFromFormat('Y-m-d', $clip->created_at->format('Y-m-d'))->month, 2, '0', STR_PAD_LEFT).
+        '/'.str_pad(Carbon::createFromFormat('Y-m-d', $clip->created_at->format('Y-m-d'))->day, 2, '0', STR_PAD_LEFT).
+        "/{$clip->folder_id}/";
 }
 
 function getClipSmilFile(Clip $clip, bool $checkFAUTVLinks = true): string
@@ -129,7 +126,7 @@ function prepareFileForUpload($file, bool $isDropZoneFile, bool $ffmpegCheck = t
             'tag' => $tag,
             'type' => $mime,
             'video' => ($video !== null)
-                ? $video->get('width').'x'.$video->get('height')
+                ? "{$video->get('width')}x{$video->get('height')}"
                 : null,
             'version' => '1',
             'date_modified' => $dateModified,
@@ -164,7 +161,7 @@ function getAccessToken($obj, $time, string $client, bool $withURL = false): str
 
     $token = md5($type.$obj->id.$obj->password.request()->ip().$time.$client);
 
-    return ($withURL) ? '/protector/link/'.$type.'/'.$obj->id.'/'.$token.'/'.$time.'/'.$client : $token;
+    return ($withURL) ? "/protector/link/{$type}/{$obj->id}/{$token}/{$time}/{$client}" : $token;
 }
 
 /**
@@ -204,9 +201,9 @@ function setSessionAccessToken($obj, $token, $time, $client): void
     $objType = str(class_basename($obj))->lcfirst();
 
     session()->put([
-        $objType.'_'.$obj->id.'_token' => $token,
-        $objType.'_'.$obj->id.'_time' => $time,
-        $objType.'_'.$obj->id.'_client' => $client,
+        "{$objType}_{$obj->id}_token" => $token,
+        "{$objType}_{$obj->id}_time" => $time,
+        "{$objType}_{$obj->id}_client" => $client,
     ]);
 }
 
@@ -222,17 +219,17 @@ function checkAccessToken($obj): bool
     //Type can be either series or clip
     $tokenType = lcfirst(class_basename($obj::class));
 
-    if (session()->exists($tokenType.'_'.$obj->id.'_token')) {
-        $cookieTokenHash = session()->get($tokenType.'_'.$obj->id.'_token');
-        $cookieTokenTime = session()->get($tokenType.'_'.$obj->id.'_time');
-        $cookieTokenClient = session()->get($tokenType.'_'.$obj->id.'_client');
+    if (session()->exists("{$tokenType}_{$obj->id}_token")) {
+        $cookieTokenHash = session()->get("{$tokenType}_{$obj->id}_token");
+        $cookieTokenTime = session()->get("{$tokenType}_{$obj->id}_time");
+        $cookieTokenClient = session()->get("{$tokenType}_{$obj->id}_client");
 
         return $cookieTokenHash === getAccessToken($obj, $cookieTokenTime, $cookieTokenClient);
-    } elseif ($tokenType === 'clip' && session()->exists('series_'.$obj->series->id.'_token')) {
+    } elseif ($tokenType === 'clip' && session()->exists("series_{$obj->series->id}_token")) {
         //check whether a series token for this clip exists
-        $cookieTokenHash = session()->get('series_'.$obj->series->id.'_token');
-        $cookieTokenTime = session()->get('series_'.$obj->series->id.'_time');
-        $cookieTokenClient = session()->get('series_'.$obj->series->id.'_client');
+        $cookieTokenHash = session()->get("series_{$obj->series->id}_token");
+        $cookieTokenTime = session()->get("series_{$obj->series->id}_time");
+        $cookieTokenClient = session()->get("series_{$obj->series->id}_client");
 
         return $cookieTokenHash === getAccessToken($obj->series, $cookieTokenTime, $cookieTokenClient);
     } else {

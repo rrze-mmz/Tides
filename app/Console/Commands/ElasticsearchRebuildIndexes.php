@@ -45,10 +45,10 @@ class ElasticsearchRebuildIndexes extends Command
     {
         $modelName = Str::singular($this->argument('model'));
 
-        $modelClass = 'App\\Models\\'.$modelName;
+        $modelClass = "App\\Models\\{$modelName}";
 
         if (! class_exists($modelClass)) {
-            $this->error('Model doesn\'t exists');
+            $this->error("Model doesn't exists");
 
             return Command::FAILURE;
         }
@@ -63,7 +63,7 @@ class ElasticsearchRebuildIndexes extends Command
             $elasticsearchService->createIndex($series);
         });
 
-        $this->info($modelCollection->count().' '.Str::plural($modelName).' Indexes created successfully');
+        $this->info("{$modelCollection->count()} ".Str::plural($modelName).' Indexes created successfully');
 
         return Command::SUCCESS;
     }

@@ -85,7 +85,7 @@ class UpdateAssetSymbolicLinksTest extends TestCase
         $asset = $clip->assets()->first();
 
         $this->artisan('links:update-assets-symbolic-links')
-            ->expectsOutput('Clip:'.$asset->clip->title.' is protected. Moving to the next one');
+            ->expectsOutput("Clip:{$asset->clip->title} is protected. Moving to the next one");
 
         Storage::disk('assetsSymLinks')->assertMissing($asset->guid.'.'.getFileExtension($asset));
     }

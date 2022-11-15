@@ -130,7 +130,7 @@ class OpencastService
     /**
      *  Return opencast events based on status
      *
-     * @param $status
+     * @param  OpencastWorkflowState  $state
      * @return Collection
      */
     public function getEventsByStatus(OpencastWorkflowState $state): Collection
@@ -179,7 +179,7 @@ class OpencastService
     {
         try {
             $this->response = $this->client->post(
-                'ingest/addMediaPackage/'.$this->opencastSettings->data['upload_workflow_id'],
+                "ingest/addMediaPackage/{$this->opencastSettings->data['upload_workflow_id']}",
                 $this->ingestMediaPackageFormData($clip, $videoFile)
             );
         } catch (GuzzleException $exception) {
@@ -205,13 +205,13 @@ class OpencastService
         try {
             $processed = $this->client->get('api/events', [
                 'query' => [
-                    'filter' => 'series:'.$seriesID.',status:'.OpencastWorkflowState::SUCCEEDED(),
+                    'filter' => "series:{$seriesID},status:".OpencastWorkflowState::SUCCEEDED(),
                     'sort' => 'start_date:ASC',
                 ],
             ]);
             $canceled = $this->client->get('api/events', [
                 'query' => [
-                    'filter' => 'series:'.$seriesID.',status:'.OpencastWorkflowState::STOPPED(),
+                    'filter' => "series:{$seriesID},status:".OpencastWorkflowState::STOPPED(),
                     'sort' => 'start_date:ASC',
                 ],
             ]);
@@ -235,7 +235,7 @@ class OpencastService
         try {
             $this->response = $this->client->get('api/events', [
                 'query' => [
-                    'filter' => 'series:'.$series->opencast_series_id.',status:'.OpencastWorkflowState::FAILED(),
+                    'filter' => "series:{$series->opencast_series_id},status:".OpencastWorkflowState::FAILED(),
                     'sort' => 'start_date:ASC',
                 ],
             ]);
@@ -256,7 +256,7 @@ class OpencastService
     public function getEventByEventID($eventID): Collection
     {
         try {
-            $this->response = $this->client->get('api/events/'.$eventID);
+            $this->response = $this->client->get("api/events/{$eventID}");
         } catch (GuzzleException $exception) {
             Log::error($exception);
         }
@@ -275,7 +275,7 @@ class OpencastService
         $version = $this->getEventByEventID($eventID)->get('archive_version');
 
         try {
-            $this->response = $this->client->get('assets/episode/'.$eventID);
+            $this->response = $this->client->get("assets/episode/{$eventID}");
         } catch (GuzzleException $exception) {
             Log::error($exception);
         }

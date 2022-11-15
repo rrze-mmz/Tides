@@ -86,18 +86,16 @@ class FetchOpencastAssetsCommandTest extends TestCase
             ->putFileAs(
                 '',
                 FileFactory::videoFile(),
-                '/archive/mh_default_org/'.
-                $opencastEventID.'/'.$archiveVersion.'/'.$audioUID.'.mp3'
+                "/archive/mh_default_org/{$opencastEventID}/{$archiveVersion}/{$audioUID}.mp3"
             );
         $fakeStorage
             ->putFileAs(
                 '',
                 FileFactory::videoFile(),
-                '/archive/mh_default_org/'.
-                $opencastEventID.'/'.$archiveVersion.'/'.$videoHD_UID.'.m4v'
+                "/archive/mh_default_org/{$opencastEventID}/{$archiveVersion}/{$videoHD_UID}.m4v"
             );
 
         $this->artisan('opencast:finished-events')
-            ->expectsOutput('Videos from Clip '.$seriesWithoutAssets->clips()->first()->title.' is online');
+            ->expectsOutput("Videos from Clip {$seriesWithoutAssets->clips()->first()->title} is online");
     }
 }

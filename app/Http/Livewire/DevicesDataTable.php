@@ -43,7 +43,7 @@ class DevicesDataTable extends Component
 
         $devices = Device::search($search)
             ->orWhereHas('location', function ($q) use ($search) {
-                $q->WhereRaw("lower(name) like ('%".$search."%')");
+                $q->WhereRaw("lower(name) like ('%{$search}%')");
             })->paginate(30);
 
         return view('livewire.devices-data-table', ['devices' => $devices]);

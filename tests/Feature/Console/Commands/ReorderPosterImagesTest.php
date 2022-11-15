@@ -28,8 +28,7 @@ class ReorderPosterImagesTest extends TestCase
     {
         $clip = Clip::factory()->create();
 
-        $this->artisan('images:reorder')
-            ->expectsOutput('Assets not found for Clip ID '.$clip->id.'! Skipping...');
+        $this->artisan('images:reorder')->expectsOutput("Assets not found for Clip ID {$clip->id}! Skipping...");
     }
 
     /** @test */
@@ -51,7 +50,7 @@ class ReorderPosterImagesTest extends TestCase
 
         $this->assertNull($series->clips->first()->posterImage);
 
-        $this->artisan('images:reorder')->expectsOutput('Finish clip ID '.$series->clips->first()->id);
+        $this->artisan('images:reorder')->expectsOutput("Finish clip ID {$series->clips->first()->id}");
 
         $series->refresh();
 

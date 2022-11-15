@@ -168,7 +168,9 @@ class ManageChapterTest extends TestCase
 
         $this->patch(route('series.chapters.removeClips', [
             $this->series,
-            $this->chapter, ]), $attributes)->assertSessionHasErrors('ids');
+            $this->chapter,
+        ]), $attributes)
+            ->assertSessionHasErrors('ids');
     }
 
     /** @test */

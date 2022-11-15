@@ -30,10 +30,10 @@ class HelpersTest extends TestCase
     {
         $clip = Clip::factory()->create();
 
-        $clip->posterImage = 'clip_'.$clip->id.'/2nUGJry2p8uPY9wjctep4PtlY9ABXLdJuCrbfMHS.jpg';
+        $clip->posterImage = "clip_{$clip->id}/2nUGJry2p8uPY9wjctep4PtlY9ABXLdJuCrbfMHS.jpg";
         $clip->save();
 
-        $this->assertEquals('/thumbnails/'.$clip->posterImage, fetchClipPoster($clip));
+        $this->assertEquals("/thumbnails/{$clip->posterImage}", fetchClipPoster($clip));
     }
 
     /** @test */
@@ -147,9 +147,9 @@ class HelpersTest extends TestCase
 
         $this->get(route('frontend.clips.show', $clip))
             ->assertSessionHas([
-                'clip_'.$clip->id.'_token' => $token,
-                'clip_'.$clip->id.'_time' => $time,
-                'clip_'.$clip->id.'_client' => $client,
+                "clip_{$clip->id}_token" => $token,
+                "clip_{$clip->id}_time" => $time,
+                "clip_{$clip->id}_client" => $client,
             ]);
     }
 
@@ -164,9 +164,9 @@ class HelpersTest extends TestCase
         //session token doesn't exist
         $this->assertFalse(checkAccessToken($clip));
         session()->put([
-            'clip_'.$clip->id.'_token' => $token,
-            'clip_'.$clip->id.'_time' => $time,
-            'clip_'.$clip->id.'_client' => $client,
+            "clip_{$clip->id}_token" => $token,
+            "clip_{$clip->id}_time" => $time,
+            "clip_{$clip->id}_client" => $client,
         ]);
         //session token exists but clip has no password
         $this->assertFalse(checkAccessToken($clip));
@@ -186,9 +186,9 @@ class HelpersTest extends TestCase
         $series = Series::factory()->create(['password' => '1234QWer']);
 
         session()->put([
-            'series_'.$series->id.'_token' => $seriesToken,
-            'series_'.$series->id.'_time' => $time,
-            'series_'.$series->id.'_client' => $client,
+            "series_{$series->id}_token" => $seriesToken,
+            "series_{$series->id}_time" => $time,
+            "series_{$series->id}_client" => $client,
         ]);
 
         $this->assertFalse(checkAccessToken($clip));
@@ -208,7 +208,7 @@ class HelpersTest extends TestCase
         $token = md5('clip'.'1'.'1234qwER'.'127.0.0.1'.$time.$client);
         $clip = ClipFactory::create(['password' => '1234qwER']);
 
-        $url = '/protector/link/clip/1/'.$token.'/'.$time.'/'.$client;
+        $url = "/protector/link/clip/1/{$token}/{$time}/{$client}";
 
         $this->assertNotEquals($url, getAccessToken($clip, $time, $client));
         $this->assertEquals($url, getAccessToken($clip, $time, $client, true));

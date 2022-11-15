@@ -19,7 +19,7 @@ class SeriesObserver
      */
     public function created(Series $series)
     {
-        session()->flash('flashMessage', $series->title.' '.__FUNCTION__.' successfully');
+        session()->flash('flashMessage', "{$series->title} ".__FUNCTION__.' successfully');
 
         $this->elasticsearchService->createIndex($series);
     }
@@ -32,7 +32,7 @@ class SeriesObserver
      */
     public function updated(Series $series)
     {
-        session()->flash('flashMessage', $series->title.' '.__FUNCTION__.' successfully');
+        session()->flash('flashMessage', "{$series->title} ".__FUNCTION__.' successfully');
 
         $this->elasticsearchService->updateIndex($series);
     }
@@ -45,7 +45,7 @@ class SeriesObserver
      */
     public function deleted(Series $series)
     {
-        session()->flash('flashMessage', $series->title.' '.__FUNCTION__.' successfully');
+        session()->flash('flashMessage', "{$series->title} ".__FUNCTION__.' successfully');
 
         $this->elasticsearchService->deleteIndex($series);
     }
@@ -58,7 +58,7 @@ class SeriesObserver
      */
     public function restored(Series $series)
     {
-        session()->flash('flashMessage', $series->title.' '.__FUNCTION__.' successfully');
+        session()->flash('flashMessage', "{$series->title} ".__FUNCTION__.' successfully');
     }
 
     /**
@@ -69,6 +69,6 @@ class SeriesObserver
      */
     public function forceDeleted(Series $series)
     {
-        session()->flash('flashMessage', $series->title.' '.__FUNCTION__.' successfully');
+        session()->flash('flashMessage', "{$series->title} ".__FUNCTION__.' successfully');
     }
 }

@@ -45,7 +45,7 @@ class ClipObserver
             $clip->save();
         }
 
-        session()->flash('flashMessage', $clip->title.' '.__FUNCTION__.' successfully');
+        session()->flash('flashMessage', "{$clip->title} ".__FUNCTION__.' successfully');
 
         $this->elasticsearchService->updateIndex($clip);
     }
@@ -58,7 +58,7 @@ class ClipObserver
      */
     public function deleted(Clip $clip): void
     {
-        session()->flash('flashMessage', $clip->title.' '.__FUNCTION__.' successfully');
+        session()->flash('flashMessage', "{$clip->title} ".__FUNCTION__.' successfully');
 
         $this->elasticsearchService->deleteIndex($clip);
     }
@@ -71,7 +71,7 @@ class ClipObserver
      */
     public function restored(Clip $clip): void
     {
-        session()->flash('flashMessage', $clip->title.' '.__FUNCTION__.' successfully');
+        session()->flash('flashMessage', "{$clip->title} ".__FUNCTION__.' successfully');
     }
 
     /**
@@ -82,6 +82,6 @@ class ClipObserver
      */
     public function forceDeleted(Clip $clip): void
     {
-        session()->flash('flashMessage', $clip->title.' '.__FUNCTION__.' successfully');
+        session()->flash('flashMessage', "{$clip->title} ".__FUNCTION__.' successfully');
     }
 }

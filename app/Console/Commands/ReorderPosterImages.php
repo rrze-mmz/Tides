@@ -43,24 +43,24 @@ class ReorderPosterImages extends Command
             if ($assets->count() > 0) {
                 Storage::disk('thumbnails')->makeDirectory('clip_'.$clip->id);
                 $assets->each(function ($asset) use ($clip) {
-                    if (Storage::exists('player_previews/'.$asset->id.'_preview.img')) {
+                    if (Storage::exists("player_previews/{$asset->id}_preview.img")) {
                         $path = Storage::disk('thumbnails')->putFile(
-                            'clip_'.$clip->id,
-                            new File(storage_path('app/player_previews/').$asset->id.'_preview.img')
+                            "clip_{$clip->id}",
+                            new File(storage_path('app/player_previews/')."{$asset->id}_preview.img")
                         );
                         $clip->posterImage = $path;
                         $clip->save();
                     }
                 });
-                Log::info('CLIP POSTER for ID :'.$clip->id.' IS '.$clip->posterImage);
+                Log::info("CLIP POSTER for ID :{$clip->id} IS {$clip->posterImage}");
                 $bar->advance();
             } else {
-                $this->info('Assets not found for Clip ID '.$clip->id.'! Skipping...');
+                $this->info("Assets not found for Clip ID {$clip->id}! Skipping...");
                 $bar->advance();
                 $this->newLine(2);
             }
 
-            $this->info('Finish clip ID '.$clip->id);
+            $this->info("Finish clip ID {$clip->id}");
             $this->newLine(2);
         });
 

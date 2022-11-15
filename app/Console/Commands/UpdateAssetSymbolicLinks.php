@@ -36,25 +36,25 @@ class UpdateAssetSymbolicLinks extends Command
         $bar = $this->output->createProgressBar($count = $assets->count());
         $bar->start();
 
-        $this->info('Processing '.$count.' Audio/Video assets');
+        $this->info("Processing {$count} Audio/Video assets");
 
         $assets->each(function ($asset) use ($bar) {
-            if (Storage::disk('assetsSymLinks')->exists($asset->guid.'.'.getFileExtension($asset))
+            if (Storage::disk('assetsSymLinks')->exists("{$asset->guid}.".getFileExtension($asset))
                 && (! $asset->clip->is_public || $asset->clip->acls->pluck('id')->doesntContain(Acl::PUBLIC()))) {
-                unlink(Storage::disk('assetsSymLinks')->path($asset->guid.'.'.getFileExtension($asset)));
+                unlink(Storage::disk('assetsSymLinks')->path("{$asset->guid}.".getFileExtension($asset)));
                 $this->info('Clip Acl changed. Deleting symbolic link...');
                 $this->newLine(2);
                 $bar->advance();
             } elseif ($asset->clip->is_public && $asset->clip->acls->pluck('id')->contains(Acl::PUBLIC())) {
                 symlink(
                     Storage::disk('videos')->path($asset->path),
-                    Storage::disk('assetsSymLinks')->path($asset->guid.'.'.getFileExtension($asset))
+                    Storage::disk('assetsSymLinks')->path("{$asset->guid}.".getFileExtension($asset))
                 );
-                $this->info('Symbolik link for clip:'.$asset->clip->title.' created successfully');
+                $this->info("Symbolik link for clip:{$asset->clip->title} created successfully");
                 $this->newLine(2);
                 $bar->advance();
             } else {
-                $this->info('Clip:'.$asset->clip->title.' is protected. Moving to the next one');
+                $this->info("Clip:{$asset->clip->title} is protected. Moving to the next one");
                 $this->newLine(2);
                 $bar->advance();
             }

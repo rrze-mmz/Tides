@@ -101,7 +101,7 @@ class ApiController extends Controller
         $names = $users->map(function ($user) {
             return [
                 'id' => $user->id,
-                'name' => $user->getFullNameAttribute().'/'.str()->mask($user->username, '*', 3),
+                'name' => "{$user->getFullNameAttribute()}/".str()->mask($user->username, '*', 3),
             ];
         });
 

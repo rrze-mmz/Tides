@@ -47,8 +47,8 @@ class UserSubscribed extends Notification implements ShouldQueue
 
         if ($notifiable->subscriptions()->where('series_id', $series->id)->exists()) {
             return (new MailMessage())
-                ->subject('You have subscribed to '.$this->series->title.' Series !')
-                ->line('Hi '.$notifiable->getFullNameAttribute())
+                ->subject("You have subscribed to {$this->series->title} Series !")
+                ->line("Hi {$notifiable->getFullNameAttribute()}")
                 ->line('you have subscribed to Series. You will get regular updates for any new content')
                 ->line('You can unsubscribe at any time using the following ')
                 ->action(

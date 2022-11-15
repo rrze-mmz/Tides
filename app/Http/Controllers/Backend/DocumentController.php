@@ -40,7 +40,7 @@ class DocumentController extends Controller
         $document = Document::create([
             'name' => $validated['document']->getClientOriginalName(),
             'save_path' => $validated['document']
-                ->store($validated['type'].'_'.$resource->id, 'documents'),
+                ->store("{$validated['type']}_{$resource->id}", 'documents'),
         ]);
 
         $resource->addDocument($document);

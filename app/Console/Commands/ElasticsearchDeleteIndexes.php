@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Services\ElasticsearchService;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 
@@ -37,6 +38,8 @@ class ElasticsearchDeleteIndexes extends Command
      *
      * @param  ElasticsearchService  $elasticsearchService
      * @return int
+     *
+     * @throws GuzzleException
      */
     public function handle(ElasticsearchService $elasticsearchService): int
     {
@@ -44,7 +47,7 @@ class ElasticsearchDeleteIndexes extends Command
 
         $elasticsearchService->deleteIndexes(Str::plural($this->argument('model')));
 
-        $this->info($modelName.' Indexes deleted successfully');
+        $this->info("{$modelName} Indexes deleted successfully");
 
         return Command::SUCCESS;
     }

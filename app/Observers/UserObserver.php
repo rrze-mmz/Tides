@@ -20,7 +20,7 @@ class UserObserver
     public function created(User $user)
     {
         $user->assignRole('user');
-        session()->flash('flashMessage', $user->getFullNameAttribute().' '.__FUNCTION__.' successfully');
+        session()->flash('flashMessage', "{$user->getFullNameAttribute()} ".__FUNCTION__.' successfully');
 
         $this->elasticsearchService->createIndex($user);
     }
@@ -33,7 +33,7 @@ class UserObserver
      */
     public function updated(User $user)
     {
-        session()->flash('flashMessage', $user->getFullNameAttribute().' '.__FUNCTION__.' successfully');
+        session()->flash('flashMessage', "{$user->getFullNameAttribute()} ".__FUNCTION__.' successfully');
 
         $this->elasticsearchService->updateIndex($user);
     }
@@ -46,7 +46,7 @@ class UserObserver
      */
     public function deleted(User $user)
     {
-        session()->flash('flashMessage', $user->getFullNameAttribute().' '.__FUNCTION__.' successfully');
+        session()->flash('flashMessage', "{$user->getFullNameAttribute()} ".__FUNCTION__.' successfully');
 
         $this->elasticsearchService->deleteIndex($user);
     }

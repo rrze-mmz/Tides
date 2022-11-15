@@ -24,10 +24,8 @@ class ElasticsearchServiceProvider extends ServiceProvider
             $builder = new ClientBuilder();
 
             $connectionString =
-                $this->settingsData['username'].':'.
-                $this->settingsData['password'].'@'.
-                $this->settingsData['url'].':'.
-                $this->settingsData['port'];
+                "{$this->settingsData['username']}:{$this->settingsData['password']}
+                @{$this->settingsData['url']}:{$this->settingsData['port']}";
 
             $builder->setHosts([$connectionString]);
 
@@ -38,7 +36,7 @@ class ElasticsearchServiceProvider extends ServiceProvider
             $this->settingsData = $this->getConfig();
 
             return new ElasticsearchClient([
-                'base_uri' => $this->settingsData['url'].':'.$this->settingsData['port'],
+                'base_uri' => "{$this->settingsData['url']}:{$this->settingsData['port']}",
                 'verify' => config('app.env') === 'production',
                 'auth' => [
                     $this->settingsData['username'],

@@ -77,7 +77,7 @@
             @endcan
         </form>
 
-        <div class="space-y-5 w-1/5 h-full">
+        <div class="space-y-5 w-1/5 h-full pr-4">
             @include('backend.series.sidebar._series-owner')
             @can('delete-series',$series)
                 @include('backend.series.sidebar._invite')

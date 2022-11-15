@@ -26,7 +26,7 @@ class TriggerSmilFilesController extends Controller
 
         $wowzaService->createSmilFile($clip);
 
-        session()->flash('flashMessage', $clip->title.' smil files created successfully ');
+        session()->flash('flashMessage', "{$clip->title} smil files created successfully");
 
         return back();
     }

@@ -54,19 +54,17 @@ class TransferAssetsJob implements ShouldQueue
             $isVideo = (bool) $file['video'];
             $storageDisk = ($this->eventID !== '')
                 ? Storage::disk($this->sourceDisk)->readStream('/'.config('opencast.archive_path').
-                    '/'.$this->eventID.
-                    '/'.$file['version'].
-                    '/'.$file['name'])
+                    "/$this->eventID/{$file['version']}/{$file['name']}")
                 : Storage::disk($this->sourceDisk)->readStream($file['name']);
 
             try {
                 Storage::disk('videos')->makeDirectory($clipStoragePath);
-                Storage::disk('videos')->writeStream($clipStoragePath.'/'.$file['name'], $storageDisk);
+                Storage::disk('videos')->writeStream("{$clipStoragePath}/{$file['name']}", $storageDisk);
             } catch (FileNotFoundException $e) {
                 Log::error($e);
             }
 
-            $storedFile = $clipStoragePath.'/'.$file['name'];
+            $storedFile = "{$clipStoragePath}/{$file['name']}";
             $ffmpeg = FFMpeg::fromDisk('videos')->open($storedFile);
 
             $asset = [
@@ -91,10 +89,10 @@ class TransferAssetsJob implements ShouldQueue
                 $ffmpeg->getFrameFromSeconds(5)
                     ->export()
                     ->toDisk('thumbnails')
-                    ->save($this->clip->id.'_poster.png');
+                    ->save("{$this->clip->id}_poster.png");
                 $this->clip->updatePosterImage();
 
-                Storage::disk('thumbnails')->delete($this->clip->id.'_poster.png');
+                Storage::disk('thumbnails')->delete("{$this->clip->id}_poster.png");
             }
 
             //in case of local upload delete the tmp file

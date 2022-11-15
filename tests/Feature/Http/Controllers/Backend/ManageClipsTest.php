@@ -717,11 +717,11 @@ class ManageClipsTest extends TestCase
 
         $this->artisan('links:update-assets-symbolic-links');
 
-        Storage::disk('assetsSymLinks')->assertExists($asset->guid.'.'.getFileExtension($asset));
+        Storage::disk('assetsSymLinks')->assertExists("{$asset->guid}.".getFileExtension($asset));
 
         $this->delete(route('clips.destroy', $clip));
 
-        Storage::disk('assetsSymLinks')->assertMissing($asset->guid.'.'.getFileExtension($asset));
+        Storage::disk('assetsSymLinks')->assertMissing("{$asset->guid}.".getFileExtension($asset));
     }
 
     /** @test */
