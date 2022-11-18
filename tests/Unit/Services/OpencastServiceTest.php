@@ -114,7 +114,7 @@ class OpencastServiceTest extends TestCase
     }
 
     /** @test */
-    public function it_create_an_opencast_admin_user(): void
+    public function it_creates_an_opencast_admin_user(): void
     {
         $this->mockHandler->append($this->mockCreateAdminUserResponse());
 
