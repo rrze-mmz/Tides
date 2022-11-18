@@ -1,5 +1,5 @@
 <div class=" relative my-2 bg-gray-50">
-    <div class="relative  h-30 overflow-hidden">
+    <div class="relative h-30 overflow-hidden">
         <img
             src="{{ ($series->clips()->count() > 0)
                     ? fetchClipPoster($series->latestClip)
@@ -7,8 +7,8 @@
             alt="preview image"
             class="object-cover w-full h-full"/>
         <div
-            class="absolute w-full py-2.5 bottom-0 inset-x-0 bg-blue-400 text-white
-                    text-xs text-right pr-2 pb-2 leading-4">
+            class="absolute w-full py-2.5 bottom-0 inset-x-0 bg-blue-600  text-white
+                    text-xs text-right pr-2 pb-2 leading-4 ">
             {{ $series->latestClip?->assets->first()?->durationToHours() }}
         </div>
     </div>

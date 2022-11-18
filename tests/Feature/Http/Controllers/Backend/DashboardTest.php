@@ -3,6 +3,7 @@
 namespace Tests\Feature\Http\Controllers\Backend;
 
 use App\Enums\OpencastWorkflowState;
+use App\Enums\Role;
 use App\Services\OpencastService;
 use Facades\Tests\Setup\ClipFactory;
 use Facades\Tests\Setup\SeriesFactory;
@@ -100,7 +101,8 @@ class DashboardTest extends TestCase
     /** @test */
     public function it_display_user_supervised_series(): void
     {
-        $user = $this->signInRole('superadmin');
+        $this->withoutExceptionHandling();
+        $user = $this->signInRole(Role::SUPERADMIN->lower());
 
         $series = SeriesFactory::withClips(1)->withAssets(4)->create();
 

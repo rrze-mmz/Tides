@@ -41,9 +41,9 @@ class SeriesOwnershipAddUser extends Notification
     public function toMail(mixed $notifiable): MailMessage
     {
         return (new MailMessage())
-            ->subject("You have been added to {$this->series->title} Series as owner!")
-            ->line("Hi {$notifiable->getFullNameAttribute()}")
-            ->line('you have been added by {auth()->user()->getFullNameAttribute()} as Series owner')
+            ->subject('You have been added to '.$this->series->title.' Series as owner!')
+            ->line('Hi '.$notifiable->getFullNameAttribute())
+            ->line('you have been added by '.auth()->user()->getFullNameAttribute().' as Series owner')
             ->action('Check you series edit page', route('series.edit', $this->series))
             ->line('Thanks!');
     }

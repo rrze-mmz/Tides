@@ -4,9 +4,11 @@ namespace Tests\Unit\Services;
 
 use App\Enums\OpencastWorkflowState;
 use App\Models\Series;
+use App\Models\User;
 use App\Services\OpencastService;
 use Facades\Tests\Setup\SeriesFactory;
 use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
@@ -92,11 +94,54 @@ class OpencastServiceTest extends TestCase
     {
         $this->mockHandler->append($this->mockCreateSeriesResponse());
 
-        $series = SeriesFactory::create();
-
-        $response = $this->opencastService->createSeries($series);
+        $response = $this->opencastService->createSeries(SeriesFactory::create());
 
         $this->assertEquals(201, $response->getStatusCode());
+    }
+
+    /** @test */
+    public function it_throws_an_exception_if_create_opencast_series_has_no_arguments(): void
+    {
+        $this->expectException(\ArgumentCountError::class);
+        $this->opencastService->createSeries();
+    }
+
+    /** @test */
+    public function create_opencast_series_must_have_a_portal_series_eloquent_model(): void
+    {
+        $this->mockHandler->append($this->mockCreateAdminUserResponse());
+        $this->assertInstanceOf(Response::class, $this->opencastService->createSeries(SeriesFactory::create()));
+    }
+
+    /** @test */
+    public function it_create_an_opencast_admin_user(): void
+    {
+        $this->mockHandler->append($this->mockCreateAdminUserResponse());
+
+        $response = $this->opencastService->createUser(User::factory()->create());
+
+        $this->assertEquals(201, $response->getStatusCode());
+    }
+
+    /** @test */
+    public function it_throws_an_exception_if_create_user_has_no_arguments(): void
+    {
+        $this->expectException(\ArgumentCountError::class);
+        $this->opencastService->createUser();
+    }
+
+    /** @test */
+    public function it_throws_an_exception_if_create_user_argument_is_no_eloquent_model(): void
+    {
+        $this->expectException(\TypeError::class);
+        $this->opencastService->createUser('test');
+    }
+
+    /** @test */
+    public function create_user_must_have_an_user_eloquent_model(): void
+    {
+        $this->mockHandler->append($this->mockCreateAdminUserResponse());
+        $this->assertInstanceOf(Response::class, $this->opencastService->createUser(User::factory()->create()));
     }
 
     /** @test */
@@ -229,6 +274,27 @@ class OpencastServiceTest extends TestCase
         $response = $this->opencastService->getEventByEventID($this->faker->uuid());
 
         $this->assertInstanceOf(Collection::class, $response);
+    }
+
+    /** @test */
+    public function it_formats_data_for_opencast_create_user_post_request(): void
+    {
+        $user = User::factory()->create();
+
+        $data = [
+            'headers' => [
+                'Content-Type' => 'application/x-www-form-urlencoded',
+            ],
+            'form_params' => [
+                'username' => $user->username,
+                'password' => $password = Str::random(10),
+                'name' => $user->getFullNameAttribute(),
+                'email' => $user->email,
+                'roles' => "[{'name': 'ROLE_GROUP_MMZ_HIWIS', 'type': 'INTERNAL'}]",
+            ],
+        ];
+
+        $this->assertEquals($data, $this->opencastService->createAdminUserFormData($user, $password));
     }
 
     /** @test */

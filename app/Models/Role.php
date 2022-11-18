@@ -15,4 +15,9 @@ class Role extends BaseModel
     {
         return $this->belongsToMany(User::class);
     }
+
+    public function scopeName($query, string $role)
+    {
+        return $query->where('name', $role);
+    }
 }

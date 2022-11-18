@@ -7,11 +7,14 @@ use App\Http\Clients\OpencastClient;
 use App\Models\Clip;
 use App\Models\Series;
 use App\Models\Setting;
+use App\Models\User;
+use App\Notifications\NewOpencastUserAccountCreated;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Psr\Http\Message\ResponseInterface;
 
 class OpencastService
@@ -149,6 +152,28 @@ class OpencastService
         }
 
         return $runningWorkflows;
+    }
+
+    /**
+     * @param  User  $user
+     * @return Response|ResponseInterface
+     */
+    public function createUser(User $user): Response|ResponseInterface
+    {
+        try {
+            $opencastUserData = $this->createAdminUserFormData($user, Str::random(10));
+
+            $this->response = $this->client->post('admin-ng/users/', $opencastUserData);
+
+            $user->notify(new NewOpencastUserAccountCreated(
+                collect($opencastUserData['form_params']),
+                $this->opencastSettings->data['url']
+            ));
+        } catch (GuzzleException $exception) {
+            Log::error($exception);
+        }
+
+        return $this->response;
     }
 
     /**
@@ -312,6 +337,22 @@ class OpencastService
         });
     }
 
+    public function createAdminUserFormData(User $user, $opencastUserPassword)
+    {
+        return [
+            'headers' => [
+                'Content-Type' => 'application/x-www-form-urlencoded',
+            ],
+            'form_params' => [
+                'username' => $user->username,
+                'password' => $opencastUserPassword,
+                'name' => $user->getFullNameAttribute(),
+                'email' => $user->email,
+                'roles' => "[{'name': 'ROLE_GROUP_MMZ_HIWIS', 'type': 'INTERNAL'}]",
+            ],
+        ];
+    }
+
     /**
      * forms the data for Opencast post request to series api
      *
@@ -396,7 +437,7 @@ class OpencastService
      * @param  array  $response
      * @return array
      */
-    private function transformRunningWorkflowsResponse(array $response): array
+    public function transformRunningWorkflowsResponse(array $response): array
     {
         if (empty($response)) {
             return [];

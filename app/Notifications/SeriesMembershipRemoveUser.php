@@ -41,9 +41,9 @@ class SeriesMembershipRemoveUser extends Notification
     public function toMail(mixed $notifiable): MailMessage
     {
         return (new MailMessage())
-            ->subject("You have been removed as moderator from {$this->series->title}!")
-            ->line("Hi {$notifiable->getFullNameAttribute()}")
-            ->line('you have been removed by {auth()->user()->getFullNameAttribute()} as Series moderator')
+            ->subject('You have been removed as moderator from '.$this->series->title.' !')
+            ->line('Hi '.$notifiable->getFullNameAttribute())
+            ->line('you have been removed by '.auth()->user()->getFullNameAttribute().' as Series moderator')
             ->line('Thanks!');
     }
 

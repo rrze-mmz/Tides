@@ -45,16 +45,15 @@
                                        :selectedItem="$user->roles->first()?->id"
                 />
 
-                <div class="col-span-7 w-4/5">
-                    <x-form.button :link="$link=false"
-                                   type="submit"
-                                   text="Update user"
-                    />
-                    <x-form.button :link="route('users.index')"
-                                   type="back"
-                                   text="Back to users list"
-                                   color="green"
-                    />
+                <div class="col-span-7 w-4/5 mt-10">
+                    <x-button class="bg-blue-600 hover:bg-blue700">
+                        Update user
+                    </x-button>
+                    <a href="{{route('users.index')}}">
+                        <x-button type="button" class="bg-gray-600 hover:bg-gray:700">
+                            Back to users list
+                        </x-button>
+                    </a>
                 </div>
             </div>
 

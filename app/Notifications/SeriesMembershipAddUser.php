@@ -43,7 +43,7 @@ class SeriesMembershipAddUser extends Notification
         return (new MailMessage())
             ->subject("You have been added to {$this->series->title} Series as moderator!")
             ->line("Hi {$notifiable->getFullNameAttribute()}")
-            ->line('you have been added by {auth()->user()->getFullNameAttribute()} as Series moderator')
+            ->line('you have been added by '.auth()->user()->getFullNameAttribute().' as Series moderator')
             ->action('Check you series edit page', route('series.edit', $this->series))
             ->line('Thanks!');
     }

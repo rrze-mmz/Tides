@@ -103,7 +103,7 @@
                                  label="Description"
                 />
 
-                <x-form.textarea field-name="comment"
+                <x-form.textarea field-name="comment2"
                                  :value="old('comment', $device->comment)"
                                  label="Comment"
                 />
@@ -117,7 +117,9 @@
                 />
 
                 <div class="col-span-7 w-4/5 pt-10">
-                    <x-form.button :link="$link=false" type="submit" text="Update device"/>
+                    <x-button class="bg-blue-600 hover:bg-blue-700">
+                        Update device
+                    </x-button>
                 </div>
             </div>
 

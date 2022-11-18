@@ -66,13 +66,19 @@ class UserDataTable extends Component
                         $query->whereRaw('lower(first_name) like (?)', ["%{$search}%"])
                             ->orwhereRaw('lower(last_name) like (?)', ["%{$search}%"])
                             ->orwhereRaw('lower(username) like (?)', ["%{$search}%"])
-                            ->orwhereRaw('lower(email) like (?)', ["%{$search}%"]);
+                            ->orwhereRaw('lower(email) like (?)', ["%{$search}%"])
+                            ->orWhereHas('roles', function ($q) use ($search) {
+                                $q->whereRaw('lower(name)  like (?)', ["%{$search}%"]);
+                            });
                     })
                     ->when($this->sortField, function ($query) {
                         $query->orderBy($this->sortField, $this->sortAsc ? 'asc' : 'desc');
                     })
                     ->paginate(10)
                 : User::search($search)
+                    ->orWhereHas('roles', function ($q) use ($search) {
+                        $q->whereRaw('lower(name)  like (?)', ["%{$search}%"]);
+                    })
                     ->when($this->sortField, function ($query) {
                         $query->orderBy($this->sortField, $this->sortAsc ? 'asc' : 'desc');
                     })

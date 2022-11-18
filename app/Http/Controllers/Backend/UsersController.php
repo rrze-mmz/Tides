@@ -7,6 +7,7 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\Role;
 use App\Models\User;
+use App\Services\OpencastService;
 use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -15,6 +16,10 @@ use Illuminate\Support\Facades\Password;
 
 class UsersController extends Controller
 {
+    public function __construct(private OpencastService $opencastService)
+    {
+    }
+
     /**
      * Render datatables Livewire component
      *
@@ -77,9 +82,18 @@ class UsersController extends Controller
     {
         $validated = $request->validated();
 
+        $oldRole = $user->roles()->first()->name;
+
         $user->update($validated);
 
         $user->assignRole(Role::find($validated['role_id'])->name);
+
+        $newRole = $user->roles()->first()->name;
+
+        if ($oldRole !== $newRole && $newRole !== \App\Enums\Role::USER->lower()) {
+            $this->opencastService->createUser($user);
+        }
+        session()->flash('flashMessage', "{$user->getFullNameAttribute()} ".__FUNCTION__.'d successfully');
 
         return to_route('users.edit', $user);
     }

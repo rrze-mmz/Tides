@@ -11,12 +11,14 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Notification;
 use Livewire\Livewire;
+use Tests\Setup\WorksWithOpencastClient;
 use Tests\TestCase;
 
 class ManageUsersTest extends TestCase
 {
     use RefreshDatabase;
     use WithFaker;
+    use WorksWithOpencastClient;
 
     protected function setUp(): void
     {
@@ -393,13 +395,13 @@ class ManageUsersTest extends TestCase
     }
 
     /** @test */
-    public function an_admin_can_assign_a_role_to_a_user(): void
+    public function an_admin_can_update_user_role(): void
     {
         $user = User::factory()->create();
 
         $this->signInRole('admin');
         $this->patch((route('users.update', $user)), [
-            'role_id' => Role::where('name', 'moderator')->first()->id,
+            'role_id' => Role::name('moderator')->first()->id,
         ]);
 
         $this->assertTrue($user->isModerator());

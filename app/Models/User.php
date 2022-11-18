@@ -169,7 +169,7 @@ class User extends Authenticatable
      */
     public function isSuperAdmin(): bool
     {
-        return $this->hasRole('superadmin');
+        return $this->hasRole(\App\Enums\Role::SUPERADMIN->lower());
     }
 
     /**
@@ -179,7 +179,7 @@ class User extends Authenticatable
      */
     public function isAdmin(): bool
     {
-        return $this->hasRole('admin') || $this->hasRole('superadmin');
+        return $this->hasRole(\App\Enums\Role::SUPERADMIN->lower()) || $this->hasRole(\App\Enums\Role::ADMIN->lower());
     }
 
     /**
@@ -189,7 +189,7 @@ class User extends Authenticatable
      */
     public function isModerator(): bool
     {
-        return $this->hasRole('moderator');
+        return $this->hasRole(\App\Enums\Role::MODERATOR->lower());
     }
 
     /**
@@ -199,7 +199,7 @@ class User extends Authenticatable
      */
     public function isAssistant(): bool
     {
-        return $this->hasRole('assistant');
+        return $this->hasRole(\App\Enums\Role::ASSISTANT->lower());
     }
 
     /**
@@ -262,17 +262,25 @@ class User extends Authenticatable
         $this->notify(new MailResetPasswordToken($token, $this));
     }
 
+    /**
+     * Scope users with admin roles
+     *
+     * @param $query
+     * @return mixed
+     */
     public function scopeAdmins($query)
     {
         return $query->whereHas('roles', function ($q) {
-            $q->where('name', 'admin')->orWhere('name', 'superadmin');
+            $q->where('name', \App\Enums\Role::SUPERADMIN->lower())
+                ->orWhere('name', \App\Enums\Role::ADMIN->lower())
+                ->orWhere('name', \App\Enums\Role::ASSISTANT->lower());
         });
     }
 
     public function scopeModerators($query)
     {
         return $query->whereHas('roles', function ($q) {
-            $q->where('name', 'moderator');
+            $q->where('name', \App\Enums\Role::MODERATOR->lower());
         });
     }
 

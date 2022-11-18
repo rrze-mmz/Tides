@@ -62,6 +62,11 @@ trait WorksWithOpencastClient
         ]);
     }
 
+    public function mockCreateAdminUserResponse(): Response
+    {
+        return new Response(201, []);
+    }
+
     public function mockIngestMediaPackageResponse(): Response
     {
         return new Response(200, [], json_encode([

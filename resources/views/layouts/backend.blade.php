@@ -18,7 +18,7 @@
 </head>
 <body id="app">
 <div class="flex bg-gray-100">
-    <aside class="relative bg-sidebar h-screen w-64 hidden sm:block shadow-xl ">
+    <aside class="relative bg-sidebar h-screen w-1/12 hidden sm:block shadow-xl">
         <div class="p-6 text-center align-center">
             <a href="{{route('home')}}"
                class="text-white text-3xl font-semibold hover:text-gray-300">

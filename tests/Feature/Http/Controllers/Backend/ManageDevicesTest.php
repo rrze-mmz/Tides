@@ -282,7 +282,11 @@ class ManageDevicesTest extends TestCase
 
         $this->put(route('devices.update', $device), $attributes)->assertSessionHasErrors('name');
 
-        $attributes['name'] = 'test device';
+        $attributes = [
+            'name' => 'test device',
+            'description' => 'This is a test device',
+            'comment' => 'This is a comment for the test device',
+        ];
 
         $this->put(route('devices.update', $device), $attributes)
             ->assertRedirect(route('devices.edit', $device));
