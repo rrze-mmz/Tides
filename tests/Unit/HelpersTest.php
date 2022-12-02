@@ -6,6 +6,7 @@ use App\Enums\Acl;
 use App\Models\Asset;
 use App\Models\Clip;
 use App\Models\Series;
+use App\Models\User;
 use App\Services\WowzaService;
 use Facades\Tests\Setup\ClipFactory;
 use Facades\Tests\Setup\FileFactory;
@@ -227,6 +228,18 @@ class HelpersTest extends TestCase
         $this->assertEquals(
             'mp4',
             getFileExtension(Asset::factory()->create(['original_file_name' => 'test.340.mp4']))
+        );
+    }
+
+    /** @test */
+    public function it_returns_a_users_name_for_an_opencast_role(): void
+    {
+        $user = User::factory()->create();
+        $opencastUserRole = 'ROLE_USER_'.strtoupper($user->username);
+
+        $this->assertEquals(
+            $user->getFullNameAttribute(),
+            findUserByOpencastRole($opencastUserRole)->getFullNameAttribute()
         );
     }
 }

@@ -648,7 +648,7 @@ class ManageClipsTest extends TestCase
             'title' => 'changed',
             'description' => 'changed',
             'organization_id' => '1',
-        ])->assertSessionHas($this->flashMessageName);
+        ])->assertRedirect()->assertSessionHas($this->flashMessageName);
     }
 
     /** @test */

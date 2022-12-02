@@ -63,6 +63,7 @@ class OpencastServiceTest extends TestCase
 
         $this->mockHandler->append(
             $this->mockHealthResponse(),
+            $this->mockSeriesMetadata($series),
             $this->mockSeriesRunningWorkflowsResponse($series),
             $this->mockEventResponse($series, OpencastWorkflowState::RUNNING)
         );
@@ -71,6 +72,7 @@ class OpencastServiceTest extends TestCase
 
         $this->assertTrue($seriesInfo->isNotEmpty());
         $this->assertTrue($seriesInfo['health']);
+        $this->assertArrayHasKey('metadata', $seriesInfo);
         $this->assertArrayHasKey('running', $seriesInfo);
         $this->assertArrayHasKey('failed', $seriesInfo);
     }
@@ -302,6 +304,8 @@ class OpencastServiceTest extends TestCase
     {
         $series = SeriesFactory::create();
 
+        $title = "{$series->title} / tidesSeriesID: {$series->id}";
+
         $data = [
             'headers' => [
                 'Content-Type' => 'application/x-www-form-urlencoded',
@@ -311,7 +315,7 @@ class OpencastServiceTest extends TestCase
                         "fields": [
                         {
                              "id": "title",
-                             "value": "'.$series->title.'",
+                             "value": "'.$title.'",
                          },
                          {
                              "id": "creator",

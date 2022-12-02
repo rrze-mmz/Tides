@@ -4,6 +4,7 @@ use App\Enums\Acl;
 use App\Enums\Content;
 use App\Models\Asset;
 use App\Models\Clip;
+use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
@@ -299,4 +300,19 @@ function opencastWorkflowOperationPercentage(string $operation = ''): int
         'Remove final temporary processing artifacts' => 98,
         default => 0,
     };
+}
+
+/**
+ * @param  string  $opencastRole
+ * @return User|string
+ */
+function findUserByOpencastRole(string $opencastRole): User|string
+{
+    if (Str::of($opencastRole)->contains('ROLE_USER_')) {
+        $username = Str::lower(Str::after($opencastRole, 'ROLE_USER_'));
+
+        return User::search($username)->get()->first();
+    } else {
+        return $opencastRole;
+    }
 }

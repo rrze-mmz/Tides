@@ -16,6 +16,7 @@ use App\Http\Controllers\Backend\PresentersController;
 use App\Http\Controllers\Backend\SeriesClipsController;
 use App\Http\Controllers\Backend\SeriesController;
 use App\Http\Controllers\Backend\SeriesMembershipController;
+use App\Http\Controllers\Backend\SeriesOpencastController;
 use App\Http\Controllers\Backend\SeriesOwnership;
 use App\Http\Controllers\Backend\StreamingSettingsController;
 use App\Http\Controllers\Backend\SystemsCheckController;
@@ -139,6 +140,12 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
     Route::resource('series', SeriesController::class)->except(['show', 'edit']);
     Route::get('/series/{series}', [SeriesController::class, 'edit'])->name('series.edit');
 
+    //Series Opencast routes
+    Route::post('/series/{series}/createOpencastSeries/', [SeriesOpencastController::class, 'createSeries'])
+        ->name('series.opencast.createSeries');
+    Route::post('/series/{series}/updateOpencastSeriesAcl}', [SeriesOpencastController::class, 'updateAcl'])
+        ->name('series.opencast.updateSeriesAcl');
+
     Route::controller(SeriesClipsController::class)->prefix('/series')->group(function () {
         // Create a clip for a certain series.
         Route::get('/{series}/addClip', 'create')->name('series.clips.create');
@@ -239,7 +246,7 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
     });
 
     //Superadmin routes
-    Route::middleware('can:view-superadmin-pages')->group(function () {
+    Route::middleware('can:administrate-superadmin-portal-pages')->group(function () {
         Route::get('/systems', SystemsCheckController::class)->name('systems.status');
         Route::get('/settings/index', function () {
             return view('backend.settings.index');

@@ -157,9 +157,9 @@ class User extends Authenticatable
      * @param  string  $role
      * @return bool
      */
-    public function hasRole(string $role = ''): bool
+    public function hasRole(\App\Enums\Role $role): bool
     {
-        return (bool) $this->roles->contains('name', $role);
+        return $this->roles->contains('name', $role->lower());
     }
 
     /**
@@ -169,7 +169,7 @@ class User extends Authenticatable
      */
     public function isSuperAdmin(): bool
     {
-        return $this->hasRole(\App\Enums\Role::SUPERADMIN->lower());
+        return $this->hasRole(\App\Enums\Role::SUPERADMIN);
     }
 
     /**
@@ -179,7 +179,7 @@ class User extends Authenticatable
      */
     public function isAdmin(): bool
     {
-        return $this->hasRole(\App\Enums\Role::SUPERADMIN->lower()) || $this->hasRole(\App\Enums\Role::ADMIN->lower());
+        return $this->hasRole(\App\Enums\Role::SUPERADMIN) || $this->hasRole(\App\Enums\Role::ADMIN);
     }
 
     /**
@@ -189,7 +189,7 @@ class User extends Authenticatable
      */
     public function isModerator(): bool
     {
-        return $this->hasRole(\App\Enums\Role::MODERATOR->lower());
+        return $this->hasRole(\App\Enums\Role::MODERATOR);
     }
 
     /**
@@ -199,7 +199,7 @@ class User extends Authenticatable
      */
     public function isAssistant(): bool
     {
-        return $this->hasRole(\App\Enums\Role::ASSISTANT->lower());
+        return $this->hasRole(\App\Enums\Role::ASSISTANT);
     }
 
     /**
@@ -281,6 +281,13 @@ class User extends Authenticatable
     {
         return $query->whereHas('roles', function ($q) {
             $q->where('name', \App\Enums\Role::MODERATOR->lower());
+        });
+    }
+
+    public function scopeRole($query, \App\Enums\Role $role)
+    {
+        return $query->whereHas('roles', function ($q) use ($role) {
+            $q->where('name', $role->lower());
         });
     }
 

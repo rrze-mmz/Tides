@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\Role;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -17,7 +18,7 @@ class UserPolicy
      */
     public function view(User $user): bool
     {
-        return $user->hasRole('admin');
+        return $user->hasRole(Role::ADMIN);
     }
 
     /**
@@ -27,19 +28,5 @@ class UserPolicy
     public function dashboard(User $user): bool
     {
         return $user->isAdmin() || $user->isModerator() || $user->isAssistant();
-    }
-
-    /**
-     * @param  User  $user
-     * @return bool
-     */
-    public function opencastWorkflows(User $user): bool
-    {
-        return $user->isAdmin();
-    }
-
-    public function viewSuperadminPages(User $user): bool
-    {
-        return $user->isSuperAdmin();
     }
 }

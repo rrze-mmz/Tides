@@ -11,11 +11,11 @@ use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/register', [RegisteredUserController::class, 'create'])
-    ->middleware('can:view-superadmin-menu-items')
+    ->middleware('can:administrate-superadmin-portal-pages')
     ->name('register');
 
 Route::post('/register', [RegisteredUserController::class, 'store'])
-    ->middleware('can:view-superadmin-menu-items');
+    ->middleware('can:administrate-superadmin-portal-pages');
 
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])
     ->middleware('guest')
@@ -25,19 +25,19 @@ Route::post('/login', [AuthenticatedSessionController::class, 'store'])
     ->middleware('guest');
 
 Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])
-    ->middleware('can:view-superadmin-menu-items')
+    ->middleware('can:administrate-superadmin-portal-pages')
     ->name('password.request');
 
 Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
-    ->middleware('can:view-superadmin-menu-items')
+    ->middleware('can:administrate-superadmin-portal-pages')
     ->name('password.email');
 
 Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])
-    ->middleware('can:view-superadmin-menu-items')
+    ->middleware('can:administrate-superadmin-portal-pages')
     ->name('password.reset');
 
 Route::post('/reset-password', [NewPasswordController::class, 'store'])
-    ->middleware('can:view-superadmin-menu-items')
+    ->middleware('can:administrate-superadmin-portal-pages')
     ->name('password.update');
 
 Route::get('/verify-email', [EmailVerificationPromptController::class, '__invoke'])

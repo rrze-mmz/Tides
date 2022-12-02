@@ -25,6 +25,10 @@ class SeriesFactory
 
     protected User $user;
 
+    /**
+     * @param $count
+     * @return $this
+     */
     public function withClips($count): static
     {
         $this->clipsCount = $count;
@@ -32,6 +36,10 @@ class SeriesFactory
         return $this;
     }
 
+    /**
+     * @param  bool  $opencastSeriesID
+     * @return $this
+     */
     public function withOpencastID(bool $opencastSeriesID = true): static
     {
         $this->opencastSeriesID = $opencastSeriesID;
@@ -39,6 +47,10 @@ class SeriesFactory
         return $this;
     }
 
+    /**
+     * @param  bool  $isPublic
+     * @return $this
+     */
     public function notPublic(bool $isPublic = false): static
     {
         $this->isPublic = $isPublic;
@@ -46,6 +58,10 @@ class SeriesFactory
         return $this;
     }
 
+    /**
+     * @param $count
+     * @return $this
+     */
     public function withAssets($count): static
     {
         $this->assetsCount = $count;
@@ -53,6 +69,10 @@ class SeriesFactory
         return $this;
     }
 
+    /**
+     * @param $user
+     * @return $this
+     */
     public function ownedBy($user): static
     {
         $this->user = $user;
@@ -60,6 +80,10 @@ class SeriesFactory
         return $this;
     }
 
+    /**
+     * @param $count
+     * @return Series|Collection
+     */
     public function create($count = 1): Series|Collection
     {
         //use ramsey/uuid because faker shows an error

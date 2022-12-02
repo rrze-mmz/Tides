@@ -131,10 +131,8 @@
                     @include('backend.clips.list')
                 </div>
                 <div x-show="activeTab === 2" id="opencast">
-                    @if($opencastSeriesInfo->isNotEmpty())
-                        @include('backend.dashboard._opencast-workflows',[
-                                    'opencastWorkflows' => $opencastSeriesInfo])
-                    @endif
+                    @include('backend.series.tabs.opencast.index')
+
                 </div>
                 <div x-show="activeTab === 3" id="moreActions">
                     @include('backend.series.buttons.more-options')

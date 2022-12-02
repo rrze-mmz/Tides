@@ -5,6 +5,7 @@ namespace Tests\Setup;
 use App\Enums\OpencastWorkflowState;
 use App\Http\Clients\OpencastClient;
 use App\Models\Series;
+use App\Models\User;
 use DOMException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Handler\MockHandler;
@@ -67,10 +68,73 @@ trait WorksWithOpencastClient
         return new Response(201, []);
     }
 
+    public function mockNoSeriesFoundResponse(): Response
+    {
+        return new Response(200, []);
+    }
+
     public function mockIngestMediaPackageResponse(): Response
     {
         return new Response(200, [], json_encode([
             new Xml(),
+        ]));
+    }
+
+    /**
+     * @param  Series  $series
+     * @return Response
+     */
+    public function mockSeriesMetadata(Series $series)
+    {
+        $user = User::factory()->create();
+
+        return new Response(201, [], json_encode([
+            'identifier' => $series->opencast_series_id,
+            'creator' => 'Administrator',
+            'opt_out' => false,
+            'created' => '2022-11-21T09:32:34Z',
+            'subjects' => [],
+            'description' => '',
+            'language' => '',
+            'acl' => [
+                0 => [
+                    'allow' => true,
+                    'role' => 'ROLE_ADMIN',
+                    'action' => 'read',
+                ],
+                1 => [
+                    'allow' => true,
+                    'role' => 'ROLE_ADMIN',
+                    'action' => 'write',
+                ],
+                2 => [
+                    'allow' => true,
+                    'role' => 'ROLE_USER_ADMIN',
+                    'action' => 'read',
+                ],
+                3 => [
+                    'allow' => true,
+                    'role' => 'ROLE_USER_ADMIN',
+                    'action' => 'write',
+                ],
+                4 => [
+                    'allow' => true,
+                    'role' => 'ROLE_USER_'.Str::upper($user->username),
+                    'action' => 'read',
+                ],
+                5 => [
+                    'allow' => true,
+                    'role' => 'ROLE_USER_'.Str::upper($user->username),
+                    'action' => 'write',
+                ],
+            ],
+            'title' => $series->title,
+            'license' => '',
+            'organization' => 'mh_default_org',
+            'organizers' => [],
+            'publishers' => [],
+            'contributors' => [],
+            'rightsholder' => '',
         ]));
     }
 

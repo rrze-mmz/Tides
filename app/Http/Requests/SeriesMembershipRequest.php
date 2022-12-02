@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\Role;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
@@ -28,7 +29,7 @@ class SeriesMembershipRequest extends FormRequest
     {
         return [
             'userID' => ['required', 'integer', Rule::exists('users', 'id'), function ($attibute, $id, $fail) {
-                if (! User::find($id)->hasRole('moderator')) {
+                if (! User::find($id)->hasRole(Role::MODERATOR)) {
                     $fail('The given userID does not have a moderator role');
                 }
             }],

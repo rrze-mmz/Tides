@@ -6,4 +6,5 @@ return [
     'digest_pass' => env('OPENCAST_DIGEST_PASS', 'opencast'),
     'archive_path' => env('OPENCAST_ARCHIVE_PATH', 'archive/mh_default_org'),
     'default_theme_id' => env('OPENCAST_DEFAULT_THEME_ID', 551),
+    'assistants_group_name' => env('OPENCAST_ASSISTANT_GROUP', 'ROLE_GROUP_TIDES_ASSISTANTS'),
 ];

@@ -7,6 +7,7 @@ use App\Enums\OpencastWorkflowState;
 use App\Http\Livewire\CommentsSection;
 use App\Models\Clip;
 use App\Models\Series;
+use App\Models\User;
 use App\Services\OpencastService;
 use Facades\Tests\Setup\SeriesFactory;
 use GuzzleHttp\Handler\MockHandler;
@@ -97,7 +98,8 @@ class ManageSeriesTest extends TestCase
 
         $userSeries = Series::factory(3)->create(['owner_id' => $user->id]);
 
-        $this->get(route('series.index'))->assertSee($userSeries->first()->get()->first()->title);
+        $this->get(route('series.index'))
+            ->assertSee($userSeries->first()->get()->first()->title);
     }
 
     /** @test */
@@ -320,6 +322,7 @@ class ManageSeriesTest extends TestCase
 
         $this->mockHandler->append(
             $this->mockHealthResponse(),
+            $this->mockSeriesMetadata($series),
             $this->mockSeriesRunningWorkflowsResponse($series, false),
             $this->mockEventResponse($series, OpencastWorkflowState::STOPPED)
         );
@@ -346,6 +349,7 @@ class ManageSeriesTest extends TestCase
 
         $this->mockHandler->append(
             $this->mockHealthResponse(),
+            $this->mockSeriesMetadata($series),
             $this->mockSeriesRunningWorkflowsResponse($series, false),
             $this->mockEventResponse($series, OpencastWorkflowState::STOPPED)
         );
@@ -372,6 +376,7 @@ class ManageSeriesTest extends TestCase
 
         $this->mockHandler->append(
             $this->mockHealthResponse(),
+            $this->mockSeriesMetadata($series),
             $this->mockSeriesRunningWorkflowsResponse($series, false),
             $this->mockEventResponse($series, OpencastWorkflowState::STOPPED)
         );
@@ -388,6 +393,7 @@ class ManageSeriesTest extends TestCase
 
         $this->mockHandler->append(
             $this->mockHealthResponse(),
+            $this->mockSeriesMetadata($series),
             $this->mockSeriesRunningWorkflowsResponse($series, false),
             $this->mockEventResponse($series, OpencastWorkflowState::STOPPED)
         );
@@ -420,15 +426,31 @@ class ManageSeriesTest extends TestCase
     }
 
     /** @test */
+    public function edit_series_page_should_display_opencast_users_rights(): void
+    {
+        $series = SeriesFactory::ownedBy($this->signInRole($this->role))->create();
+
+        $this->mockHandler->append(
+            $this->mockHealthResponse(),
+            $this->mockSeriesMetadata($series),
+            $this->mockSeriesRunningWorkflowsResponse($series, true),
+            $this->mockEventResponse($series, OpencastWorkflowState::FAILED)
+        );
+
+        $this->get(route('series.edit', $series))
+            ->assertViewHas(['opencastSeriesInfo'])
+            ->assertSee(User::find(1)->first()->getFullNameAttribute());
+    }
+
+    /** @test */
     public function edit_series_should_display_opencast_running_events_if_any(): void
     {
         $series = SeriesFactory::ownedBy($this->signInRole($this->role))->create();
 
-        $runningWorkflow = $this->mockSeriesRunningWorkflowsResponse($series, true);
-
         $this->mockHandler->append(
             $this->mockHealthResponse(),
-            $runningWorkflow,
+            $this->mockSeriesMetadata($series),
+            $runningWorkflow = $this->mockSeriesRunningWorkflowsResponse($series, true),
             $this->mockEventResponse($series, OpencastWorkflowState::FAILED)
         );
 
@@ -446,6 +468,7 @@ class ManageSeriesTest extends TestCase
 
         $this->mockHandler->append(
             $this->mockHealthResponse(),
+            $this->mockSeriesMetadata($series),
             $this->mockSeriesRunningWorkflowsResponse($series, true),
             $failedWorkflow = $this->mockEventResponse(
                 $series,
@@ -529,6 +552,23 @@ class ManageSeriesTest extends TestCase
         $series = $series->refresh();
 
         $this->assertNotNull($series->opencast_series_id);
+    }
+
+    /** @test */
+    public function it_shows_create_oc_series_button_if_no_series_exist_in_opencast(): void
+    {
+        $series = SeriesFactory::ownedBy($this->signInRole($this->role))
+            ->withOpencastID()
+            ->create();
+
+        $this->mockHandler->append(
+            $this->mockHealthResponse(),
+            $this->mockNoSeriesFoundResponse(),
+            $this->mockSeriesRunningWorkflowsResponse($series, true),
+            $this->mockEventResponse($series, OpencastWorkflowState::FAILED)
+        );
+
+        $this->get(route('series.edit', $series))->assertSee('Create Opencast series for this object');
     }
 
     /** @test */

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\Role;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateOpencastSettings extends FormRequest
@@ -13,7 +14,7 @@ class UpdateOpencastSettings extends FormRequest
      */
     public function authorize()
     {
-        return auth()->user()->hasRole('superadmin');
+        return auth()->user()->hasRole(Role::SUPERADMIN);
     }
 
     /**
@@ -34,6 +35,7 @@ class UpdateOpencastSettings extends FormRequest
             'theme_id_top_left' => ['required', 'string'],
             'theme_id_bottom_left' => ['required', 'string'],
             'theme_id_bottom_right' => ['required', 'string'],
+            'assistant_group_name' => ['required', 'string'],
         ];
     }
 }

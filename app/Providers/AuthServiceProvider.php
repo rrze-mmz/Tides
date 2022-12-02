@@ -60,12 +60,11 @@ class AuthServiceProvider extends ServiceProvider
         //user
         Gate::define('show-users', [UserPolicy::class, 'show']);
         Gate::define('access-dashboard', [UserPolicy::class, 'dashboard']);
-        Gate::define('view-opencast-workflows', [UserPolicy::class, 'opencastWorkflows']);
-        Gate::define('view-superadmin-pages', [UserPolicy::class, 'viewSuperadminPages']);
-        Gate::define('view-superadmin-menu-items', [UserPolicy::class, 'viewSuperadminPages']);
-        Gate::define('view-admin-menu-items', fn (User $user) => $user->isAdmin());
-        Gate::define('view-assistant-menu-items', fn (User $user) => $user->isAssistant() || $user->isAdmin());
-        Gate::define('view-moderator-menu-items', fn (User $user) => $user->isModerator());
+        Gate::define('administrate-backend-pages', fn (User $user) => $user->isModerator());
+        Gate::define('administrate-portal-pages', fn (User $user) => $user->isAssistant() || $user->isAdmin());
+        Gate::define('administrate-admin-portal-pages', fn (User $user) => $user->isAdmin());
+        Gate::define('administrate-superadmin-portal-pages', fn (User $user) => $user->isSuperAdmin());
+
         //comments
         Gate::define('create-comment', [CommentPolicy::class, 'create']);
         Gate::define('delete-comment', [CommentPolicy::class, 'delete']);

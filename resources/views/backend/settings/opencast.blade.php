@@ -74,6 +74,12 @@
                           label="Archive path"
                           :fullCol="true"
                           :required="true"/>
+            <x-form.input field-name="assistant_group_name"
+                          input-type="text"
+                          :value="$setting['assistant_group_name']"
+                          label="Opencast assistants group name"
+                          :fullCol="true"
+                          :required="true"/>
             <div class="mt-10">
                 <x-button class="bg-blue-600 hover:bg-blue-700">
                     Update

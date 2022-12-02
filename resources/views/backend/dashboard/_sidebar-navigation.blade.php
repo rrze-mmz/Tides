@@ -18,7 +18,7 @@
 >
     {{ trans_choice('common.menu.clip', 2) }}
 </a>
-@can('view-assistant-menu-items')
+@can('administrate-portal-pages')
     <a
         href="{{ route('presenters.index') }}"
         class="flex items-center text-white opacity-75 hover:opacity-100 py-4
@@ -35,7 +35,7 @@
     </a>
 @endcan
 
-@can('view-admin-menu-items')
+@can('administrate-admin-portal-pages')
     <a
         href="{{ route('devices.index') }}"
         class="flex items-center text-white opacity-75 hover:opacity-100 py-4
@@ -59,7 +59,7 @@
         {{ trans_choice('common.menu.user', 2) }}
     </a>
 @endcan
-@can('view-superadmin-menu-items')
+@can('administrate-superadmin-portal-pages')
     <a
         href="{{route('settings.portal.index')}}"
         class="flex items-center text-white opacity-75 hover:opacity-100 py-4
@@ -75,21 +75,21 @@
         {{ trans_choice('common.menu.system', 2) }}
     </a>
 @endcan
-@can('view-superadmin-menu-items')
-    <div class="pt-10git ">
-        <div class="flex items-center text-black py-4
-        pl-6 nav-item placeholder-black">
+@can('administrate-superadmin-portal-pages')
+    <div class="pt-5 ">
+        <div class="flex items-center text-black font-light py-4 px-2
+          placeholder-black">
             <form action="{{route('goto.series')}}" method="POST">
                 @csrf
-                <input class="rounded w-1/2 mt-2" type="text" name="seriesID" placeholder="Series ID"/>
+                <input class="rounded w-full mt-2" type="text" name="seriesID" placeholder="Series ID"/>
             </form>
         </div>
 
-        <div class="flex items-center text-black py-4
-        pl-6 nav-item ">
+        <div class="flex items-center text-black  font-light py-4 px-2
+          placeholder-black">
             <form action="{{route('goto.clip')}}" method="POST">
                 @csrf
-                <input class="rounded w-1/2 mt-2" type="text" name="clipID" placeholder="Clip ID"/>
+                <input class="rounded w-full mt-2" type="text" name="clipID" placeholder="Clip ID"/>
             </form>
         </div>
     </div>

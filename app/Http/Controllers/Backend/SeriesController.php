@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Enums\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreSeriesRequest;
 use App\Http\Requests\UpdateSeriesRequest;
 use App\Models\Series;
+use App\Models\User;
 use App\Services\OpencastService;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 class SeriesController extends Controller
 {
@@ -76,7 +79,20 @@ class SeriesController extends Controller
 
         $opencastSeriesInfo = $opencastService->getSeriesInfo($series);
 
-        return view('backend.series.edit', compact(['series', 'opencastSeriesInfo']));
+        $assistants = User::role(Role::ASSISTANT)->get();
+        //reject all assistants that are already in opencast series acl
+        $availableAssistants = $assistants->reject(function ($admin) use ($opencastSeriesInfo) {
+            if (isset($opencastSeriesInfo['metadata'])) {
+                foreach ($opencastSeriesInfo['metadata']['acl'] as $acl) {
+                    //Opencast return Roles as ROLE_USER_USERNAME, so filter users based on this string
+                    if (Str::contains($acl['role'], Str::of($admin->username)->upper())) {
+                        return true;
+                    }
+                }
+            }
+        });
+
+        return view('backend.series.edit', compact(['series', 'opencastSeriesInfo', 'availableAssistants']));
     }
 
     /**

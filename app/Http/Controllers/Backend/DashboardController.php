@@ -20,7 +20,7 @@ class DashboardController
     {
         $opencastWorkflows = collect([]);
 
-        if (auth()->user()->can('view-opencast-workflows') && $opencastService->getHealth()->contains('pass')) {
+        if (auth()->user()->can('administrate-portal-pages') && $opencastService->getHealth()->contains('pass')) {
             $opencastWorkflows
                 ->put('running', $opencastService->getAllRunningWorkflows())
                 ->put('failed', $opencastService->getEventsByStatus(OpencastWorkflowState::FAILED));

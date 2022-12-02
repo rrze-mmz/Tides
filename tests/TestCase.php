@@ -99,23 +99,23 @@ abstract class TestCase extends BaseTestCase
         ]);
 
         Role::create([
-            'name' => 'superadmin',
+            'name' => \App\Enums\Role::SUPERADMIN->lower(),
         ]);
 
         Role::create([
-            'name' => 'admin',
+            'name' => \App\Enums\Role::ADMIN->lower(),
         ]);
 
         Role::create([
-            'name' => 'moderator',
+            'name' => \App\Enums\Role::MODERATOR->lower(),
         ]);
 
         Role::create([
-            'name' => 'assistant',
+            'name' => \App\Enums\Role::ASSISTANT->lower(),
         ]);
 
         Role::create([
-            'name' => 'user',
+            'name' => \App\Enums\Role::USER->lower(),
         ]);
     }
 

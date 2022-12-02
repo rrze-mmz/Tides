@@ -32,6 +32,7 @@ class OpencastSettingsController extends Controller
             'theme_id_top_left' => $setting->data['theme_id_top_left'] ?? '501',
             'theme_id_bottom_left' => $setting->data['theme_id_bottom_left'] ?? '502',
             'theme_id_bottom_right' => $setting->data['theme_id_bottom_right'] ?? '503',
+            'assistant_group_name' => $setting->data['assistant_group_name'] ?? 'ROLE_GROUP_TIDES_ASSISTANTS',
         ];
 
         return view('backend.settings.opencast', ['setting' => $setting->data]);

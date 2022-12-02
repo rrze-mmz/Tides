@@ -146,6 +146,7 @@ class ManageOpencastSettingsTest extends TestCase
             'theme_id_top_left' => '501',
             'theme_id_bottom_left' => '502',
             'theme_id_bottom_right' => '503',
+            'assistant_group_name' => 'ROLE_GROUP_TIDES_ASSISTANTS2',
         ];
 
         $this->put(route('settings.opencast.update', $this->setting), $attributes);
@@ -153,5 +154,7 @@ class ManageOpencastSettingsTest extends TestCase
         $this->setting->refresh();
 
         $this->assertEquals($attributes['url'], $this->setting->opencast()->data['url']);
+
+        $this->assertDatabaseHas('settings', ['data' => json_encode($attributes)]);
     }
 }

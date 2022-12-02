@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Enums\Role;
 use App\Models\Series;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
@@ -84,9 +85,9 @@ class UserTest extends TestCase
     {
         $this->user->assignRole('admin');
 
-        $this->assertTrue($this->user->hasRole('admin'));
+        $this->assertTrue($this->user->hasRole(Role::ADMIN));
 
-        $this->assertFalse($this->user->hasRole('user'));
+        $this->assertFalse($this->user->hasRole(Role::USER));
     }
 
     /** @test */

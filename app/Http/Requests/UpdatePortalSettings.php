@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\Role;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdatePortalSettings extends FormRequest
@@ -20,7 +21,7 @@ class UpdatePortalSettings extends FormRequest
      */
     public function authorize(): bool
     {
-        return auth()->user()->hasRole('superadmin');
+        return auth()->user()->hasRole(Role::SUPERADMIN);
     }
 
     /**

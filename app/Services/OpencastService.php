@@ -67,14 +67,30 @@ class OpencastService
     {
         $opencastSeriesInfo = collect([]);
         if ($health = $this->getHealth()->contains('pass')) {
-            $opencastSeriesInfo->prepend($health, 'health');
-            $opencastSeriesInfo
-                ->prepend($this->getSeriesRunningWorkflows($series), OpencastWorkflowState::RUNNING->lower());
-            $opencastSeriesInfo
+            $opencastSeriesInfo->prepend($health, 'health')
+                ->prepend($this->getSeries($series), 'metadata')
+                ->prepend($this->getSeriesRunningWorkflows($series), OpencastWorkflowState::RUNNING->lower())
                 ->prepend($this->getFailedEventsBySeries($series), OpencastWorkflowState::FAILED->lower());
         }
 
         return $opencastSeriesInfo;
+    }
+
+    /**
+     * @param  Series  $series
+     * @return array|mixed
+     */
+    public function getSeries(Series $series)
+    {
+        $opencastSeries = [];
+        try {
+            $this->response = $this->client->get("api/series/{$series->opencast_series_id}/?withacl=true");
+            $opencastSeries = json_decode((string) $this->response->getBody(), true);
+        } catch (GuzzleException $exception) {
+            Log::error($exception);
+        }
+
+        return $opencastSeries;
     }
 
     /**
@@ -186,6 +202,24 @@ class OpencastService
     {
         try {
             $this->response = $this->client->post('api/series', $this->createOpencastSeriesFormData($series));
+        } catch (GuzzleException $exception) {
+            Log::error($exception);
+        }
+
+        return $this->response;
+    }
+
+    public function updateSeriesAcl(
+        Series $series,
+        Collection $opencastSeriesInfo,
+        string $username,
+        string $action
+    ): Response|ResponseInterface {
+        try {
+            $this->response = $this->client->put(
+                "api/series/{$series->opencast_series_id}/acl",
+                $this->updateSeriesAclFormData($opencastSeriesInfo, $username, $action)
+            );
         } catch (GuzzleException $exception) {
             Log::error($exception);
         }
@@ -337,7 +371,14 @@ class OpencastService
         });
     }
 
-    public function createAdminUserFormData(User $user, $opencastUserPassword)
+    /**
+     * forms the data to create a user for admin-ui
+     *
+     * @param  User  $user
+     * @param $opencastUserPassword
+     * @return array
+     */
+    public function createAdminUserFormData(User $user, $opencastUserPassword): array
     {
         return [
             'headers' => [
@@ -354,13 +395,61 @@ class OpencastService
     }
 
     /**
-     * forms the data for Opencast post request to series api
+     * @param  Collection  $opencastSeriesInfo
+     * @param  string  $username
+     * @param  string  $action
+     * @return array
+     */
+    public function updateSeriesAclFormData(Collection $opencastSeriesInfo, string $username, string $action): array
+    {
+        $acls = $opencastSeriesInfo->map(function ($item, $key) {
+            if ($key === 'metadata') {
+                return $item['acl'];
+            }
+        })->get('metadata');
+
+        if ($action === 'addUser') {
+            $read = [
+                'allow' => true,
+                'role' => 'ROLE_USER_'.strtoupper($username),
+                'action' => 'read',
+            ];
+            $write = [
+                'allow' => true,
+                'role' => 'ROLE_USER_'.strtoupper($username),
+                'action' => 'write',
+            ];
+
+            array_push($acls, $read, $write);
+        } else {
+            foreach ($acls as $key => $acl) {
+                if ($acl['role'] === 'ROLE_USER_'.strtoupper($username)) {
+                    unset($acls[$key]);
+                }
+            }
+        }
+
+        return [
+            'headers' => [
+                'Content-Type' => 'application/x-www-form-urlencoded',
+            ],
+            'form_params' => [
+                'acl' => json_encode($acls),
+                'override' => true,
+            ],
+        ];
+    }
+
+    /**
+     * forms the data to to create a new series
      *
      * @param  Series  $series
      * @return array
      */
     public function createOpencastSeriesFormData(Series $series): array
     {
+        $title = "{$series->title} / tidesSeriesID: {$series->id}";
+
         return [
             'headers' => [
                 'Content-Type' => 'application/x-www-form-urlencoded',
@@ -370,11 +459,11 @@ class OpencastService
                         "fields": [
                         {
                              "id": "title",
-                             "value": "'.$series->title.'",
+                             "value": "'.$title.'",
                          },
                          {
                              "id": "creator",
-                             "value": ["'.$series->owner->name.'"],
+                             "value": ["'.$series->owner?->name.'"],
                          },
                          ]
                     }]',
@@ -390,7 +479,7 @@ class OpencastService
     }
 
     /**
-     *  forms the data for Opencast post request to ingest a video file and start a workflow
+     *  forms the data to ingest a video file and start a workflow
      *
      * @param  Clip  $clip
      * @param  string  $file
