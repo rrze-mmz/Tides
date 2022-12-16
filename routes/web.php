@@ -25,6 +25,7 @@ use App\Http\Controllers\Backend\UsersController;
 use App\Http\Controllers\Frontend\AcceptUseTermsController;
 use App\Http\Controllers\Frontend\ApiController;
 use App\Http\Controllers\Frontend\AssetsDownloadController;
+use App\Http\Controllers\Frontend\FeedsController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\SearchController;
 use App\Http\Controllers\Frontend\ShowClipsController;
@@ -47,10 +48,12 @@ Route::redirect('/admin', '/admin/dashboard');
 Route::get('search', [SearchController::class, 'search'])->name('search');
 
 //frontend series routes
+
 Route::controller(ShowSeriesController::class)->prefix('/series')->group(function () {
     Route::get('/index', 'index')->name('frontend.series.index');
     Route::get('/{series}', 'show')->name('frontend.series.show');
 });
+Route::get('/series/{series}/feed', [FeedsController::class, 'series'])->name('frontend.series.feed');
 
 //Frontend clip routes·
 Route::controller(ShowClipsController::class)->prefix('/clips')->group(function () {

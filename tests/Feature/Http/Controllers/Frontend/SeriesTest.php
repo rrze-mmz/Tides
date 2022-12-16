@@ -149,6 +149,13 @@ class SeriesTest extends TestCase
     }
 
     /** @test */
+    public function it_has_a_series_feed_button(): void
+    {
+        $this->get(route('frontend.series.show', SeriesFactory::withClips(2)->withAssets(1)->create()))
+            ->assertSee('Feeds');
+    }
+
+    /** @test */
     public function it_shows_series_multiple_semester_info_if_has_clips_from_multiple_semester(): void
     {
         $series = SeriesFactory::withClips(2)->withAssets(1)->create();

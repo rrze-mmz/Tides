@@ -45,7 +45,9 @@
                         <div class="w-2/12 flex justify-center items-center
                         ">
                             <div class="pr-2">
-                                {{ ($clip->acls->isEmpty())?'open':$clip->acls->except(\App\Enums\Acl::PUBLIC())->pluck('name')->implode(',') }}
+                                {{ ($clip->acls->isEmpty())
+                                ?'open'
+                                :$clip->acls->except(\App\Enums\Acl::PUBLIC())->pluck('name')->implode(',') }}
                             </div>
                             @if($clip->acls->except(\App\Enums\Acl::PUBLIC())->isEmpty())
                                 open

@@ -5,7 +5,6 @@ namespace Database\Factories;
 use App\Models\Clip;
 use App\Models\Context;
 use App\Models\Format;
-use App\Models\Language;
 use App\Models\Organization;
 use App\Models\Semester;
 use App\Models\Type;
@@ -36,7 +35,7 @@ class ClipFactory extends Factory
             'recording_date' => now(),
             'slug' => $title,
             'organization_id' => Organization::factory()->create()->org_id,
-            'language_id' => Language::factory()->create()->id,
+            'language_id' => '1', //1 is de, 2 should be  en
             'context_id' => Context::factory()->create()->id,
             'format_id' => Format::factory()->create()->id,
             'type_id' => Type::factory()->create()->id,

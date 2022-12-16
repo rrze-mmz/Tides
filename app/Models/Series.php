@@ -260,6 +260,18 @@ class Series extends BaseModel
         })->flatten()->unique()->values()->implode(', ');
     }
 
+    /**
+     * Returns a comma seperated language codes for every series clip
+     *
+     * @return mixed
+     */
+    public function clipsLanguageCode(): string
+    {
+        return $this->clips->map(function ($clip) {
+            return $clip->language()->first()->code;
+        })->flatten()->unique()->implode(', ');
+    }
+
     public function checkClipAcls()
     {
         foreach ($this->clips as $clip) {

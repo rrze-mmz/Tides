@@ -9,6 +9,7 @@ use App\Models\Series;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Arr;
 use Ramsey\Uuid\Uuid;
 
 class SeriesFactory
@@ -100,6 +101,7 @@ class SeriesFactory
                     Clip::factory($this->clipsCount)->create([
                         'series_id' => $series->id,
                         'owner_id' => $user,
+                        'language_id' => Arr::random([1, 2]),
                         'semester_id' => Semester::current()->get()->first()->id,
                     ]);
 
@@ -123,6 +125,7 @@ class SeriesFactory
                 Clip::factory($this->clipsCount)->create([
                     'series_id' => $series->id,
                     'owner_id' => $user,
+                    'language_id' => Arr::random([1, 2]),
                     'semester_id' => Semester::current()->get()->first()->id,
                 ]);
 

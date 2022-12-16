@@ -43,7 +43,7 @@ class ReorderPosterImages extends Command
             if ($assets->count() > 0) {
                 Storage::disk('thumbnails')->makeDirectory('clip_'.$clip->id);
                 $assets->each(function ($asset) use ($clip) {
-                    if (Storage::exists("player_previews/{$asset->id}_preview.img")) {
+                    if (Storage::exists("player_previews/{$asset->id}_preview.jpg")) {
                         $path = Storage::disk('thumbnails')->putFile(
                             "clip_{$clip->id}",
                             new File(storage_path('app/player_previews/')."{$asset->id}_preview.img")

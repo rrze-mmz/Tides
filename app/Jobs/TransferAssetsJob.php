@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Enums\Content;
 use App\Models\Clip;
+use App\Models\Setting;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Filesystem\FileExistsException;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
@@ -49,11 +50,13 @@ class TransferAssetsJob implements ShouldQueue
      */
     public function handle(): void
     {
+        $settingData = Setting::opencast()->data;
+
         $clipStoragePath = getClipStoragePath($this->clip);
-        $this->files->each(function ($file, $key) use ($clipStoragePath) {
+        $this->files->each(function ($file, $key) use ($clipStoragePath, $settingData) {
             $isVideo = (bool) $file['video'];
             $storageDisk = ($this->eventID !== '')
-                ? Storage::disk($this->sourceDisk)->readStream('/'.config('opencast.archive_path').
+                ? Storage::disk($this->sourceDisk)->readStream('/'.$settingData['archive_path'].
                     "/$this->eventID/{$file['version']}/{$file['name']}")
                 : Storage::disk($this->sourceDisk)->readStream($file['name']);
 

@@ -26,9 +26,27 @@
             </div>
         @endif
 
-        @auth()
-            <livewire:subscribe-section :series="$series"/>
-        @endauth
+        <div class="flex">
+
+            <div>
+                <div class="flex pt-4 pr-4 w-full">
+                    <a href="{{route('frontend.series.feed',$series)}}"
+                       class="flex px-4 py-2 bg-blue-800 border border-transparent rounded-md
+                    font-semibold text-xs text-white uppercase tracking-widest
+                    hover:bg-blue-700 active:bg-blue-900 focus:outline-none focus:border-blue-900
+                    focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">
+                        Feeds
+                        <x-heroicon-o-rss class="ml-4 w-4 h-4 fill-white"/>
+                    </a>
+                </div>
+            </div>
+            @auth()
+                <div>
+                    <livewire:subscribe-section :series="$series"/>
+                </div>
+            @endauth
+
+        </div>
 
         <div class="flex justify-around pt-8 pb-3 border-b-2 border-gray-500">
 

@@ -39,6 +39,9 @@ class SeriesOpencastController extends Controller
         return to_route('series.edit', $series);
     }
 
+    /**
+     * @throws AuthorizationException
+     */
     public function updateAcl(Series $series, Request $request, OpencastService $opencastService)
     {
         $this->authorize('administrate-admin-portal-pages');

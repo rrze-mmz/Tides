@@ -181,11 +181,11 @@ class Clip extends BaseModel
     /**
      * A clip has one language
      *
-     * @return HasOne
+     * @return BelongsTo
      */
-    public function language(): HasOne
+    public function language(): BelongsTo
     {
-        return $this->hasOne(Language::class);
+        return $this->belongsTo(Language::class);
     }
 
     /**

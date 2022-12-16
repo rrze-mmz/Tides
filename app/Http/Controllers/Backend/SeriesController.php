@@ -26,7 +26,7 @@ class SeriesController extends Controller
     {
         return view('backend.series.index', [
             'series' => (auth()->user()->can('index-all-series'))
-                    ? Series::orderByDesc('updated_at')->paginate(12)
+                    ? Series::orderByDesc('created_at')->paginate(12)
                     : auth()->user()->accessableSeries()->paginate(12),
         ]);
     }
@@ -82,7 +82,7 @@ class SeriesController extends Controller
         $assistants = User::role(Role::ASSISTANT)->get();
         //reject all assistants that are already in opencast series acl
         $availableAssistants = $assistants->reject(function ($admin) use ($opencastSeriesInfo) {
-            if (isset($opencastSeriesInfo['metadata'])) {
+            if (! empty($opencastSeriesInfo->get('metadata'))) {
                 foreach ($opencastSeriesInfo['metadata']['acl'] as $acl) {
                     //Opencast return Roles as ROLE_USER_USERNAME, so filter users based on this string
                     if (Str::contains($acl['role'], Str::of($admin->username)->upper())) {

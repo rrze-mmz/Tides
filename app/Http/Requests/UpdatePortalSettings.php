@@ -11,6 +11,7 @@ class UpdatePortalSettings extends FormRequest
     {
         $this->merge([
             'maintenance_mode' => $this->maintenance_mode === 'on',
+            'allow_user_registration' => $this->allow_user_registration === 'on',
         ]);
     }
 
@@ -33,6 +34,9 @@ class UpdatePortalSettings extends FormRequest
     {
         return [
             'maintenance_mode' => ['required', 'boolean'],
+            'allow_user_registration' => ['required', 'boolean'],
+            'feeds_default_owner_name' => ['required', 'string'],
+            'feeds_default_owner_email' => ['required', 'email'],
         ];
     }
 }

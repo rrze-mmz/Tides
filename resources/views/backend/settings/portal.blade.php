@@ -14,6 +14,22 @@
                                   label="Maintenance mode"
                                   field-name="maintenance_mode"
             />
+            <x-form.toggle-button :value="$setting['allow_user_registration']"
+                                  label="Allow user registration"
+                                  field-name="allow_user_registration"
+            />
+            <x-form.input field-name="feeds_default_owner_name"
+                          input-type="text"
+                          :value="$setting['feeds_default_owner_name']"
+                          label="Default feeds owner name"
+                          :fullCol="true"
+                          :required="true"/>
+            <x-form.input field-name="feeds_default_owner_email"
+                          input-type="email"
+                          :value="$setting['feeds_default_owner_email']"
+                          label="Default feeds email"
+                          :fullCol="true"
+                          :required="true"/>
             <div class="mt-10">
                 <x-button class="bg-blue-600 hover:bg-blue-700">
                     Update

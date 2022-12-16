@@ -3,6 +3,9 @@
 return [
     'portal' => [
         'maintenance_mode' => false,
+        'allow_user_registration' => false,
+        'feeds_default_owner_name' => 'Tides',
+        'feeds_default_owner_email' => 'itunes@tides.com',
     ],
     'user' => [
         'accept_use_terms' => false,
@@ -13,13 +16,14 @@ return [
         'url' => 'localhost:8080',
         'username' => 'admin',
         'password' => 'opencast',
-        'archive_path' => '/archive/mh_default',
+        'archive_path' => 'archive/mh_default_org',
         'default_workflow' => 'fast',
         'upload_workflow_id' => 'fast',
         'theme_id_top_right' => '500',
         'theme_id_top_left' => '501',
         'theme_id_bottom_left' => '502',
         'theme_id_bottom_right' => '503',
+        'assistants_group_name' => 'ROLE_GROUP_TIDES_ASSISTANTS',
     ],
     'streaming' => [
         'engine_url' => 'localhost:1935',

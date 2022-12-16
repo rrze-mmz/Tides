@@ -43,7 +43,7 @@ class ReorderPosterImagesTest extends TestCase
     /** @test */
     public function it_move_player_previews_to_folders(): void
     {
-        UploadedFile::fake()->create('1_preview.img', 100)->storeAs('player_previews', '1_preview.img');
+        UploadedFile::fake()->create('1_preview.jpg', 100)->storeAs('player_previews', '1_preview.jpg');
         Storage::assertExists('player_previews');
 
         $series = SeriesFactory::withClips(4)->withAssets(4)->create();
