@@ -53,13 +53,22 @@ Route::controller(ShowSeriesController::class)->prefix('/series')->group(functio
     Route::get('/index', 'index')->name('frontend.series.index');
     Route::get('/{series}', 'show')->name('frontend.series.show');
 });
-Route::get('/series/{series}/feed', [FeedsController::class, 'series'])->name('frontend.series.feed');
 
+Route::get('/series/{series}/feed/{assetsResolution}', [FeedsController::class, 'series'])
+    ->name('frontend.series.feed');
+
+//keep backwards compatibility
+Route::get('/course/id/{series}', function (Series $series) {
+    return to_route('frontend.series.show', $series);
+});
 //Frontend clip routes·
 Route::controller(ShowClipsController::class)->prefix('/clips')->group(function () {
     Route::get('/', 'index')->name('frontend.clips.index');
     Route::get('/{clip}', 'show')->name('frontend.clips.show');
 });
+
+Route::get('/clips/{clip}/feed/{assetsResolution}', [FeedsController::class, 'clips'])
+    ->name('frontend.clips.feed');
 
 //Frontend myPortal links
 Route::prefix('/my'.str(config('app.name')))->middleware(['auth'])->group(function () {

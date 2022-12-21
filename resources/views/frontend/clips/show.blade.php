@@ -8,11 +8,10 @@
             </div>
             @can('edit-clips', $clip)
                 <div class="flex-none">
-                    <a class="mt-2 py-2 px-8 text-white bg-blue-500 rounded shadow hover:bg-blue-600
-                        focus:shadow-outline focus:outline-none"
-                       href="{{ $clip->adminPath() }}"
-                    >
-                        Back to edit page
+                    <a href="{{ route('clips.edit', $clip)}}">
+                        <x-button class="bg-blue-500 hover:bg-blue-600">
+                            Back to edit page
+                        </x-button>
                     </a>
                 </div>
 
@@ -22,20 +21,22 @@
         @if (!is_null($clip->assets()->first()))
             @include('frontend.clips._player',['asset'=> $clip->assets()])
         @endif
-
+        
         <div class="flex justify-between py-2">
             @if(!is_null($previousNextClipCollection->get('previousClip')))
-                <x-form.button :link="$previousNextClipCollection->get('previousClip')->path()"
-                               type="submit"
-                               text="{{ __('common.previous') }}"
-                />
+                <a href="{{ $previousNextClipCollection->get('previousClip')->path() }}">
+                    <x-button class="bg-blue-600 hover:bg-blue-700">
+                        {{ __('common.previous') }}
+                    </x-button>
+                </a>
             @endif
 
             @if(!is_null($previousNextClipCollection->get('nextClip')))
-                <x-form.button :link="$previousNextClipCollection->get('nextClip')->path()"
-                               type="submit"
-                               text="{{ __('common.next') }}"
-                />
+                <a href="{{ $previousNextClipCollection->get('nextClip')->path() }}">
+                    <x-button class="bg-blue-600 hover:bg-blue-700">
+                        {{ __('common.next') }}
+                    </x-button>
+                </a>
             @endif
         </div>
 

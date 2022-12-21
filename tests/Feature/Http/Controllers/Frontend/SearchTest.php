@@ -97,9 +97,9 @@ class SearchTest extends TestCase
         //disable elasticsearch
         $this->mockHandler->append($this->mockClusterNotAvailable());
 
-        Clip::factory()->create(['title' => 'Clip without video']);
+        $clip = Clip::factory()->create(['title' => 'without assets', 'description' => 'clip without assets']);
 
-        $this->searchFor('video')->assertSee(__('search.no results found'));
+        $this->searchFor('assets')->assertSee(__('search.no results found'));
     }
 
     /** @test */

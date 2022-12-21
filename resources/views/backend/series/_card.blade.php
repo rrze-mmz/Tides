@@ -1,7 +1,7 @@
 <div class=" relative my-2 bg-gray-50">
     <div class="relative h-30 overflow-hidden">
         <img
-            src="{{ ($series->clips()->count() > 0)
+            src="{{ ($series->clips->count() > 0)
                     ? fetchClipPoster($series->latestClip)
                     : "/images/generic_clip_poster_image.png" }}"
             alt="preview image"

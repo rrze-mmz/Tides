@@ -5,6 +5,7 @@ namespace Tests\Feature\Http\Controllers\Frontend;
 use App\Enums\Acl;
 use App\Models\Clip;
 use App\Models\Presenter;
+use App\Models\Series;
 use App\Services\WowzaService;
 use Facades\Tests\Setup\ClipFactory;
 use Facades\Tests\Setup\SeriesFactory;
@@ -268,6 +269,15 @@ class ClipTest extends TestCase
     }
 
     /** @test */
+    public function it_has_a_clip_feed_button(): void
+    {
+        $this->withExceptionHandling();
+        $this->mockHandler->append(new Response());
+
+        $this->get(route('frontend.clips.show', $this->clip))->assertSee('Feeds');
+    }
+
+    /** @test */
     public function it_shows_clip_tags_if_any(): void
     {
         $this->mockHandler->append(new Response());
@@ -279,6 +289,25 @@ class ClipTest extends TestCase
         $this->get(route('frontend.clips.show', $this->clip))
             ->assertSee('Tags')
             ->assertSee('testTags');
+    }
+
+    /** @test */
+    public function it_shows_clip_series_title_and_link_if_any(): void
+    {
+        $series = Series::factory()->create();
+
+        $this->mockHandler->append(new Response(), new Response());
+
+        $this->get(route('frontend.clips.show', $this->clip))->assertDontSee($series->title);
+
+        $this->clip->series_id = $series->id;
+        $this->clip->save();
+
+        $this->get(route('frontend.clips.show', $this->clip))->assertSee($series->title);
+
+        $this->mockHandler->append(new Response(), new Response());
+
+        $this->get(route('frontend.clips.show', $this->clip))->assertSee(route('frontend.series.show', $series));
     }
 
     /** @test */

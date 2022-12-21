@@ -3,7 +3,9 @@
 namespace Tests\Feature\Http\Controllers\Frontend;
 
 use App\Enums\Acl;
+use App\Models\Asset;
 use App\Models\Clip;
+use App\Models\Series;
 use Facades\Tests\Setup\SeriesFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -24,6 +26,14 @@ class SeriesTest extends TestCase
     public function a_visitor_cannot_manage_series(): void
     {
         $this->post(route('series.store'), [])->assertRedirect('login');
+    }
+
+    /** @test */
+    public function it_keeps_backwards_compatibility_for_series_route(): void
+    {
+        $series = Series::factory()->create();
+
+        $this->get('/course/id/'.$series->id)->assertRedirectToRoute('frontend.series.show', $series);
     }
 
     /** @test */
@@ -153,6 +163,18 @@ class SeriesTest extends TestCase
     {
         $this->get(route('frontend.series.show', SeriesFactory::withClips(2)->withAssets(1)->create()))
             ->assertSee('Feeds');
+    }
+
+    /** @test */
+    public function it_shows_feed_links_for_different_formats(): void
+    {
+        $series = SeriesFactory::withClips(2)->withAssets(2)->create();
+
+        $series->clips->first()->assets()->save(Asset::factory()->create(['width' => 640]));
+
+        $this->get(route('frontend.series.show', $series))
+            ->assertSee('QHD')
+            ->assertSee('SD');
     }
 
     /** @test */

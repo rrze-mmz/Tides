@@ -46,7 +46,7 @@ class ReorderPosterImages extends Command
                     if (Storage::exists("player_previews/{$asset->id}_preview.jpg")) {
                         $path = Storage::disk('thumbnails')->putFile(
                             "clip_{$clip->id}",
-                            new File(storage_path('app/player_previews/')."{$asset->id}_preview.img")
+                            new File(storage_path('app/player_previews/')."{$asset->id}_preview.jpg")
                         );
                         $clip->posterImage = $path;
                         $clip->save();
