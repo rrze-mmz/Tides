@@ -171,11 +171,11 @@ class Clip extends BaseModel
     /**
      *  A clip has one organization
      *
-     * @return HasOne
+     * @return BelongsTo
      */
-    public function organisation(): HasOne
+    public function organisation(): BelongsTo
     {
-        return $this->hasOne(Organization::class);
+        return $this->BelongsTo(Organization::class, 'organization_id', 'org_id');
     }
 
     /**
@@ -317,5 +317,10 @@ class Clip extends BaseModel
     public function scopePublic($query): mixed
     {
         return $query->where('is_public', 1);
+    }
+
+    public function scopeSingle($query): mixed
+    {
+        return $query->where('series_id', null);
     }
 }

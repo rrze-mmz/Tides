@@ -3,6 +3,7 @@
 namespace App\Models\Traits;
 
 use App\Models\Activity;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 
 trait RecordsActivity
@@ -72,9 +73,9 @@ trait RecordsActivity
     /**
      * Fetch all activities for a given model
      *
-     * @return mixed
+     * @return Builder
      */
-    public function activities(): mixed
+    public function activities(): Builder
     {
         return Activity::where('object_id', $this->id)->where('content_type', lcfirst(class_basename(static::class)));
     }

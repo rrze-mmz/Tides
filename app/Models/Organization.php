@@ -17,13 +17,23 @@ class Organization extends BaseModel
     protected $primaryKey = 'org_id';
 
     /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
+    /**
      * Get the clip clips for an organization unit
      *
      * @return HasMany
      */
     public function clips(): HasMany
     {
-        return $this->hasMany(Clip::class);
+        return $this->hasMany(Clip::class, 'organization_id');
     }
 
     /**
@@ -33,6 +43,11 @@ class Organization extends BaseModel
      */
     public function series(): HasMany
     {
-        return $this->hasMany(Series::class);
+        return $this->hasMany(Series::class, 'organization_id');
+    }
+
+    public function scopeChairs($query)
+    {
+        return $query->where('parent_org_id', 1)->orWhere('org_id', 1);
     }
 }

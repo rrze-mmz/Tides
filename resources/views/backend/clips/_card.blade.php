@@ -10,7 +10,9 @@
                 <a href="@if (str_contains(url()->current(), 'admin')) {{$clip->adminPath()}}
                 @else {{ $clip->path() }} @endif"
                    class="underline"
-                >{{ (request()->routeIs('clips.index') || request()->routeIs('frontend.clips.index'))
+                >{{ (request()->routeIs('clips.index') ||
+                     request()->routeIs('frontend.clips.index') ||
+                     request()->routeIs('search'))
                     ?$clip->title
                     :Str::limit($clip->title, 20, '...')}}
                 </a>

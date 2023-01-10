@@ -8,6 +8,7 @@ use App\Models\Series;
 use App\Models\User;
 use Facades\Tests\Setup\SeriesFactory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -124,9 +125,9 @@ class SeriesTest extends TestCase
     }
 
     /** @test */
-    public function it_has_one_organization_unit(): void
+    public function it_belongs_to_an_organization_unit(): void
     {
-        $this->assertInstanceOf(HasOne::class, $this->series->organization());
+        $this->assertInstanceOf(BelongsTo::class, $this->series->organization());
     }
 
     /** @test */

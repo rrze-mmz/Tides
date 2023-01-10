@@ -114,9 +114,9 @@ class ClipTest extends TestCase
     }
 
     /** @test */
-    public function it_has_one_organization_unit(): void
+    public function it_belongs_to_an_organization_unit(): void
     {
-        $this->assertInstanceOf(HasOne::class, $this->clip->organisation());
+        $this->assertInstanceOf(BelongsTo::class, $this->clip->organisation());
     }
 
     /** @test */
@@ -238,6 +238,12 @@ class ClipTest extends TestCase
     public function it_has_a_public_scope(): void
     {
         $this->assertInstanceOf(Builder::class, Clip::public());
+    }
+
+    /** @test */
+    public function it_has_a_single_clip_scope(): void
+    {
+        $this->assertInstanceOf(Builder::class, Clip::single());
     }
 
     /** @test */

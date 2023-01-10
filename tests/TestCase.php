@@ -13,6 +13,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
+use Str;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -66,7 +67,7 @@ abstract class TestCase extends BaseTestCase
 
         Semester::create([
             'name' => 'Sommersemester '.Carbon::now()->year,
-            'acronym' => 'S21',
+            'acronym' => 'S'.Carbon::now()->year,
             'short_title' => Carbon::now()->year,
             'start_date' => Carbon::now()->year.'-04-01 00:00:00',
             'stop_date' => Carbon::now()->year.'-09-30 23:59:59',
@@ -74,15 +75,24 @@ abstract class TestCase extends BaseTestCase
 
         Semester::create([
             'name' => 'Wintersemester '.Carbon::now()->year.'/'.Carbon::now()->year + 1,
-            'acronym' => 'w21',
+            'acronym' => 'w'.Carbon::now()->year,
             'short_title' => Carbon::now()->year.'/'.Carbon::now()->year + 1,
             'start_date' => Carbon::now()->year.'-10-01 00:00:00',
             'stop_date' => Carbon::now()->year + 1 .'-03-31 23:59:59',
         ]);
 
+        Semester::create([
+            'name' => 'Wintersemester '.(Carbon::now()->year - 1).'/'.Carbon::now()->year,
+            'acronym' => 'w'.Carbon::now()->year - 1,
+            'short_title' => (Carbon::now()->year - 1).'/'.Carbon::now()->year,
+            'start_date' => (Carbon::now()->year - 1).'-10-01 00:00:00',
+            'stop_date' => Carbon::now()->year.'-03-31 23:59:59',
+        ]);
+
         Organization::create([
             'org_id' => 1,
             'name' => 'Tides organization unit',
+            'slug' => Str::of('Tides organization unit')->slug('-'),
             'parent_org_id' => 1,
             'orgno' => '0000000000',
             'shortname' => 'Main organization unit',

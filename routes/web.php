@@ -29,6 +29,7 @@ use App\Http\Controllers\Frontend\FeedsController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\SearchController;
 use App\Http\Controllers\Frontend\ShowClipsController;
+use App\Http\Controllers\Frontend\ShowOrganizationsController;
 use App\Http\Controllers\Frontend\ShowSeriesController;
 use App\Http\Controllers\Frontend\UserCommentsController;
 use App\Http\Controllers\Frontend\UserSettingsController;
@@ -69,6 +70,11 @@ Route::controller(ShowClipsController::class)->prefix('/clips')->group(function 
 
 Route::get('/clips/{clip}/feed/{assetsResolution}', [FeedsController::class, 'clips'])
     ->name('frontend.clips.feed');
+
+Route::get('/organizations/', [ShowOrganizationsController::class, 'index'])
+    ->name('frontend.organizations.index');
+Route::get('/organizations/{organization:slug}', [ShowOrganizationsController::class, 'show'])
+    ->name('frontend.organizations.show');
 
 //Frontend myPortal links
 Route::prefix('/my'.str(config('app.name')))->middleware(['auth'])->group(function () {

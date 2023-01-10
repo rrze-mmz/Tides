@@ -12,7 +12,7 @@ trait Slugable
      *
      * @param $value
      */
-    public function setSlugAttribute($value)
+    public function setSlugAttribute($value): void
     {
         $value = $value.'-'.Semester::current()->get()->first()->acronym;
 

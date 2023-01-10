@@ -20,13 +20,37 @@ class HomePageTest extends TestCase
     /** @test */
     public function should_show_project_name(): void
     {
-        $this->get(route('home'))->assertSee('Tides');
+        $this->get(route('home'))->assertSee(env('APP_NAME'));
     }
 
     /** @test */
     public function it_has_a_language_switcher(): void
     {
         $this->get(route('home'))->assertSee('EN')->assertSee('DE');
+    }
+
+    /** @test */
+    public function it_has_a_series_top_menu_item(): void
+    {
+        $menuItem = '<a href="'.route('frontend.series.index').'" class="text-white text-lg">';
+
+        $this->get(route('home'))->assertSee($menuItem, false);
+    }
+
+    /** @test */
+    public function it_has_a_clips_top_menu_item(): void
+    {
+        $menuItem = '<a href="'.route('frontend.clips.index').'" class="text-white text-lg">';
+
+        $this->get(route('home'))->assertSee($menuItem, false);
+    }
+
+    /** @test */
+    public function it_has_a_faculties_top_menu_item(): void
+    {
+        $menuItem = '<a href="'.route('frontend.organizations.index').'" class="text-white text-lg">';
+
+        $this->get(route('home'))->assertSee($menuItem, false);
     }
 
     /** @test */

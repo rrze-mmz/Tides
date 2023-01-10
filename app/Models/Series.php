@@ -157,11 +157,11 @@ class Series extends BaseModel
     /**
      * A series has one organization unit
      *
-     * @return HasOne
+     * @return BelongsTo
      */
-    public function organization(): HasOne
+    public function organization(): BelongsTo
     {
-        return $this->hasOne(Organization::class);
+        return $this->BelongsTo(Organization::class, 'organization_id', 'org_id');
     }
 
     /**

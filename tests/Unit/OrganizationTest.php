@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Models\Organization;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -24,5 +25,11 @@ class OrganizationTest extends TestCase
     public function it_has_many_clips(): void
     {
         $this->assertInstanceOf(HasMany::class, $this->organization->clips());
+    }
+
+    /** @test */
+    public function it_has_a_chairs_scope(): void
+    {
+        $this->assertInstanceOf(Builder::class, $this->organization->chairs());
     }
 }

@@ -584,7 +584,8 @@ class ManageClipsTest extends TestCase
 
         $clip->refresh();
 
-        $this->assertEquals('test-clip-w21', $clip->slug);
+        $assertedCliptitle = 'test-clip-'.Semester::current()->get()->first()->acronym;
+        $this->assertEquals($assertedCliptitle, $clip->slug);
     }
 
     /** @test */
