@@ -321,6 +321,6 @@ class Clip extends BaseModel
 
     public function scopeSingle($query): mixed
     {
-        return $query->where('series_id', null);
+        return $query->whereNull('series_id');
     }
 }

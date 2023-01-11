@@ -19,10 +19,14 @@ class HomeController extends Controller
         return view('frontend.homepage.index', [
             'series' => Series::isPublic()
                 ->hasClipsWithAssets()
+                ->with(['clips' => function ($q) {
+                    $q->public()->whereHas('assets');
+                }, 'presenters'])
                 ->orderByDesc('updated_at')
                 ->limit(16)
                 ->get(),
-            'clips' => Clip::public()
+            'clips' => Clip::with(['assets', 'presenters'])
+                ->public()
                 ->whereHas('assets')
                 ->whereNull('series_id')
                 ->orderByDesc('updated_at')

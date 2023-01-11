@@ -219,6 +219,7 @@ class HomePageTest extends TestCase
         $thirdClip = Clip::factory()->create(['series_id' => $series]);
 
         $thirdClip->addAcls(collect([Acl::LMS()]));
+        $this->signInRole('admin');
 
         $this->get(route('home'))->assertDontSee('portal, password, lms');
     }

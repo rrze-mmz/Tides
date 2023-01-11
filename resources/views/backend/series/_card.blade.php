@@ -9,7 +9,7 @@
         <div
             class="absolute w-full py-2.5 bottom-0 inset-x-0 bg-blue-600  text-white
                     text-xs text-right pr-2 pb-2 leading-4 ">
-            {{ $series->latestClip?->assets->first()?->durationToHours() }}
+            {{ $series->clips->last()?->assets->first()?->durationToHours() }}
         </div>
     </div>
 
@@ -39,7 +39,7 @@
             </p>
         </div>
 
-        @if($series->presenters()->count() > 0)
+        @if($series->presenters->count() > 0)
             <div class="flex items-center pt-2 justify-content-between">
                 <div class="pr-2">
                     <x-heroicon-o-user class="h-4 w-4"/>
@@ -67,11 +67,13 @@
             </div>
         </div>
 
-        @if($seriesAcls = $series->fetchClipsAcls())
+        @if($seriesAcls = $series->clips->map(function ($clip) {
+                            return $clip->acls->pluck('name');
+                        })->flatten()->unique()->values()->implode(', '))
             @if($seriesAcls!== 'public')
                 <div class="flex items-center justify-content-between">
                     <div class="pr-2">
-                        @if($series->checkClipAcls())
+                        @if($series->checkClipAcls($series->clips))
                             <x-heroicon-o-lock-open class="w-4 h-4 text-green-500"/>
                             <span class="sr-only">Unlock clip</span>
                         @else

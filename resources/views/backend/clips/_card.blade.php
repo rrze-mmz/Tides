@@ -34,7 +34,7 @@
             </div>
         </div>
 
-        @if($clip->presenters()->count() > 0)
+        @if($clip->presenters->count() > 0)
             <div class="flex items-center pt-2 justify-content-between">
                 <div class="pr-2">
                     <x-heroicon-o-user-group class="w-4 h-4"/>

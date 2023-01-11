@@ -252,7 +252,7 @@ class Series extends BaseModel
          */
         $clips = (auth()->user()?->id === $this->owner_id || auth()->user()?->isAdmin())
             ? $this->clips
-            : $this->clips->filter(fn ($clip) => $clip->assets()->count() && $clip->is_public);
+            : $this->clips->filter(fn ($clip) => $clip->assets->count() && $clip->is_public);
 
         //iterate every clip and get a unique acl name
         return $clips->map(function ($clip) {
@@ -272,9 +272,9 @@ class Series extends BaseModel
         })->flatten()->unique()->implode(', ');
     }
 
-    public function checkClipAcls()
+    public function checkClipAcls(Collection $clips)
     {
-        foreach ($this->clips as $clip) {
+        foreach ($clips as $clip) {
             return $clip->checkAcls();
         }
     }

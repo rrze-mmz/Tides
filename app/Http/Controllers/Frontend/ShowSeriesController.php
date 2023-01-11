@@ -16,7 +16,7 @@ class ShowSeriesController extends Controller
     public function index(): View
     {
         return view('frontend.series.index', [
-            'series' => Series::isPublic()->orderByDesc('updated_at')->paginate(10),
+            'series' => Series::with('clips')->isPublic()->orderByDesc('updated_at')->paginate(10),
         ]);
     }
 
