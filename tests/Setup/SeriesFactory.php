@@ -27,7 +27,6 @@ class SeriesFactory
     protected User $user;
 
     /**
-     * @param $count
      * @return $this
      */
     public function withClips($count): static
@@ -38,7 +37,6 @@ class SeriesFactory
     }
 
     /**
-     * @param  bool  $opencastSeriesID
      * @return $this
      */
     public function withOpencastID(bool $opencastSeriesID = true): static
@@ -49,7 +47,6 @@ class SeriesFactory
     }
 
     /**
-     * @param  bool  $isPublic
      * @return $this
      */
     public function notPublic(bool $isPublic = false): static
@@ -60,7 +57,6 @@ class SeriesFactory
     }
 
     /**
-     * @param $count
      * @return $this
      */
     public function withAssets($count): static
@@ -71,7 +67,6 @@ class SeriesFactory
     }
 
     /**
-     * @param $user
      * @return $this
      */
     public function ownedBy($user): static
@@ -81,10 +76,6 @@ class SeriesFactory
         return $this;
     }
 
-    /**
-     * @param $count
-     * @return Series|Collection
-     */
     public function create($count = 1): Series|Collection
     {
         //use ramsey/uuid because faker shows an error
@@ -103,6 +94,7 @@ class SeriesFactory
                         'owner_id' => $user,
                         'language_id' => Arr::random([1, 2]),
                         'semester_id' => Semester::current()->get()->first()->id,
+                        'image_id' => $series->image_id,
                     ]);
 
                     if ($this->assetsCount > 0) {
@@ -127,6 +119,7 @@ class SeriesFactory
                     'owner_id' => $user,
                     'language_id' => Arr::random([1, 2]),
                     'semester_id' => Semester::current()->get()->first()->id,
+                    'image_id' => $series->image_id,
                 ]);
 
                 if ($this->assetsCount > 0) {

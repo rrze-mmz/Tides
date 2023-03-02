@@ -866,6 +866,14 @@ class ManageClipsTest extends TestCase
     }
 
     /** @test */
+    public function edit_clip_page_should_display_clip_image_information(): void
+    {
+        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
+
+        $this->get(route('clips.edit', $clip))->assertSee($clip->image->description);
+    }
+
+    /** @test */
     public function it_loads_comments_component_at_edit_page(): void
     {
         $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();

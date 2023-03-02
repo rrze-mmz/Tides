@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Image;
 use App\Models\Series;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -30,6 +31,7 @@ class SeriesFactory extends Factory
             'owner_id' => User::factory()->create()->id,
             'opencast_series_id' => null,
             'is_public' => true,
+            'image_id' => Image::factory()->create()->id,
         ];
     }
 }

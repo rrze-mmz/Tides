@@ -83,6 +83,7 @@
                 @include('backend.series.sidebar._invite')
             @endif
             @include('backend.documents.upload',['resource' => $series ])
+            @include('backend.images._card',['model'=> $series, 'type'=> 'series' ])
         </div>
     </div>
 

@@ -17,7 +17,6 @@
         "blade-ui-kit/blade-ui-kit": "^0.3.3",
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
         "elasticsearch/elasticsearch": "^7.0",
-        "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.3",
         "laravel/framework": "^9.0",
         "laravel/pint": "^1.0",

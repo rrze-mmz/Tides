@@ -148,7 +148,54 @@ $(() => {
             },
         }
     });
+
+    $('.select2-tides-images').select2({
+        placeholder: 'Select an image',
+        minimumInputLength: 2,
+        ajax: {
+            url: "/api/images/",
+            delay: 250,
+            dataType: 'json',
+            data: function (params) {
+                return {
+                    query: params.term, // search term
+                    page: params.page
+                };
+            },
+            processResults: function (data, params) {
+                params.page = params.page || 1;
+                return {
+                    results: $.map(data, function (obj) {
+                        return {id: obj.id, text: obj.name};
+                    }),
+                    pagination: {
+                        more: (params.page * 30) < data.total_count
+                    }
+                };
+            },
+        },
+        templateResult: format,
+        templateSelection: formatSelect,
+        escapeMarkup: function (m) {
+            return m;
+        },
+    });
+
+    function format(state) {
+        if (!state.id) return state.text; // optgroup
+        return '<div class="flex items-center"><div>' +
+            '<img src="/images/' + state.text + '" class="pr-2 w-12 h-auto  mx-auto" />' +
+            '</div>' +
+            '<div>' + state.text + '</div>' +
+            '</div>';
+    }
+
+    function formatSelect(state) {
+        if (!state.id) return state.text;
+        return state.text
+    }
 });
+
 
 $('.solution-trix-field-wrapper').find($('trix-editor')).css("min-height", "350px");
 

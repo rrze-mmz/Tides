@@ -27,7 +27,7 @@ class Organization extends BaseModel
     }
 
     /**
-     * Get the clip clips for an organization unit
+     * Get the clips for an organization unit
      *
      * @return HasMany
      */

@@ -100,6 +100,7 @@ return [
         public_path('thumbnails') => storage_path('app/thumbnails'),
         public_path('documents') => storage_path('app/documents'),
         public_path('links') => storage_path('app/assetsSymLinks'),
+        public_path('images') => storage_path('app/images'),
     ],
 
 ];

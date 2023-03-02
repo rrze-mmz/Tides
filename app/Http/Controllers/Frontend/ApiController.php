@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ApiRequest;
 use App\Models\Clip;
+use App\Models\Image;
 use App\Models\Organization;
 use App\Models\Presenter;
 use App\Models\Tag;
@@ -28,9 +29,6 @@ class ApiController extends Controller
 
     /**
      * Tags json response for select2 component
-     *
-     * @param  ApiRequest  $request
-     * @return JsonResponse
      */
     public function tags(ApiRequest $request): JsonResponse
     {
@@ -45,9 +43,6 @@ class ApiController extends Controller
 
     /**
      * Organizations json response for select2 component
-     *
-     * @param  ApiRequest  $request
-     * @return JsonResponse
      */
     public function organizations(ApiRequest $request): JsonResponse
     {
@@ -62,9 +57,6 @@ class ApiController extends Controller
 
     /**
      * Presenters json response for select2 component
-     *
-     * @param  ApiRequest  $request
-     * @return JsonResponse
      */
     public function presenters(ApiRequest $request): JsonResponse
     {
@@ -85,8 +77,6 @@ class ApiController extends Controller
     /**
      * Presenters json response for select2 component
      *
-     * @param  ApiRequest  $request
-     * @return JsonResponse
      *
      * @throws AuthorizationException
      */
@@ -106,5 +96,21 @@ class ApiController extends Controller
         });
 
         return response()->json($names);
+    }
+
+    public function images(ApiRequest $request): JsonResponse
+    {
+        $this->authorize('dashboard', auth()->user());
+
+        $validated = $request->validated();
+
+        $images = Image::search($validated['query'])->get();
+
+        return response()->json($images->map(function ($image) {
+            return [
+                'id' => $image->id,
+                'name' => $image->file_name,
+            ];
+        }));
     }
 }

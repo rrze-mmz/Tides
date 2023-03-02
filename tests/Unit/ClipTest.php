@@ -120,6 +120,12 @@ class ClipTest extends TestCase
     }
 
     /** @test */
+    public function it_belongs_to_an_image(): void
+    {
+        $this->assertInstanceOf(BelongsTo::class, $this->clip->image());
+    }
+
+    /** @test */
     public function it_has_one_language(): void
     {
         $this->assertInstanceOf(BelongsTo::class, $this->clip->language());

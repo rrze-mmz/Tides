@@ -155,13 +155,23 @@ class Series extends BaseModel
     }
 
     /**
-     * A series has one organization unit
+     * A series belongs to an organization unit
      *
      * @return BelongsTo
      */
     public function organization(): BelongsTo
     {
         return $this->BelongsTo(Organization::class, 'organization_id', 'org_id');
+    }
+
+    /**
+     * A series belongs to an image
+     *
+     * @return BelongsTo
+     */
+    public function image(): BelongsTo
+    {
+        return $this->BelongsTo(Image::class);
     }
 
     /**

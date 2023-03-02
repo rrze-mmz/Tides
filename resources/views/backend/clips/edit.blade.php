@@ -167,6 +167,7 @@
             @endif
 
             @include('backend.documents.upload',['resource'=> $clip ])
+            @include('backend.images._card',['model'=> $clip, 'type'=> 'clip' ])
         </div>
     </div>
 

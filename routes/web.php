@@ -21,6 +21,8 @@ use App\Http\Controllers\Backend\SeriesOwnership;
 use App\Http\Controllers\Backend\StreamingSettingsController;
 use App\Http\Controllers\Backend\SystemsCheckController;
 use App\Http\Controllers\Backend\TriggerSmilFilesController;
+use App\Http\Controllers\Backend\UpdateClipImage;
+use App\Http\Controllers\Backend\UpdateSeriesImage;
 use App\Http\Controllers\Backend\UsersController;
 use App\Http\Controllers\Frontend\AcceptUseTermsController;
 use App\Http\Controllers\Frontend\ApiController;
@@ -116,6 +118,7 @@ Route::controller(ApiController::class)->prefix('/api')->group(function () {
     Route::get('/presenters', 'presenters')->name('api.presenters');
     Route::get('/users', 'users')->name('api.users');
     Route::get('/organizations', 'organizations')->name('api.organizations');
+    Route::get('/images', 'images')->name('api.images');
 });
 
 //change portal language
@@ -199,6 +202,9 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
     Route::post('/series/{series}/membership/removeUser', [SeriesMembershipController::class, 'remove'])
         ->name('series.membership.removeUser');
 
+    //Series Images
+    Route::put('/series/{series}/updateImage/', UpdateSeriesImage::class)->name('update.series.image');
+
     //Clip routes
     Route::resource('clips', ClipsController::class)->except(['show', 'edit']);
     Route::get('/clips/{clip}/', [ClipsController::class, 'edit'])->name('clips.edit');
@@ -228,6 +234,9 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
         Route::get('/clips/{clip}/triggerSmilFiles', TriggerSmilFilesController::class)
             ->name('admin.clips.triggerSmilFiles');
     });
+
+    //Clips Images
+    Route::put('/clips/{clip}/updateImage/', UpdateClipImage::class)->name('update.clip.image');
 
     //Assets routes
     Route::delete('assets/{asset}', AssetDestroyController::class)->name('assets.destroy');

@@ -4,6 +4,7 @@ namespace Tests;
 
 use App\Models\AcademicDegree;
 use App\Models\Acl;
+use App\Models\Image;
 use App\Models\Language;
 use App\Models\Organization;
 use App\Models\Role;
@@ -143,6 +144,16 @@ abstract class TestCase extends BaseTestCase
 
         Role::create([
             'name' => \App\Enums\Role::USER->lower(),
+        ]);
+
+        Image::create([
+            'id' => 1,
+            'description' => 'Default image',
+            'file_name' => 'tides.png',
+            'file_path' => '/data/Thumbnails/tides.png',
+            'thumbnail_path' => 'tides_thumb.png',
+            'mime_type' => null,
+            'file_size' => null,
         ]);
     }
 

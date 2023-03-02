@@ -41,6 +41,8 @@ class Clip extends BaseModel
     //hide clip password from elasticsearch index
     protected $hidden = ['password'];
 
+    protected $with = ['assets'];
+
     protected $dispatchesEvents = [
         'deleting' => ClipDeleting::class,
     ];
@@ -62,8 +64,6 @@ class Clip extends BaseModel
 
     /**
      * Clip frontend link
-     *
-     * @return string
      */
     public function path(): string
     {
@@ -72,8 +72,6 @@ class Clip extends BaseModel
 
     /**
      * Clip backend link
-     *
-     * @return string
      */
     public function adminPath(): string
     {
@@ -82,10 +80,6 @@ class Clip extends BaseModel
 
     /**
      * Clip routes should work with slug and with id to ensure backward compatibility
-     *
-     * @param $value
-     * @param $field
-     * @return Model|null
      */
     public function resolveRouteBinding($value, $field = null): ?Model
     {
@@ -99,8 +93,6 @@ class Clip extends BaseModel
 
     /**
      * Route key should be slugged instead of id
-     *
-     * @return string
      */
     public function getRouteKeyName(): string
     {
@@ -109,8 +101,6 @@ class Clip extends BaseModel
 
     /**
      * User relationship
-     *
-     * @return BelongsTo
      */
     public function owner(): BelongsTo
     {
@@ -119,8 +109,6 @@ class Clip extends BaseModel
 
     /**
      * Tags relationship
-     *
-     * @return BelongsToMany
      */
     public function tags(): BelongsToMany
     {
@@ -129,8 +117,6 @@ class Clip extends BaseModel
 
     /**
      * Asset relationship
-     *
-     * @return HasMany
      */
     public function assets(): HasMany
     {
@@ -149,8 +135,6 @@ class Clip extends BaseModel
 
     /**
      * Series relationship
-     *
-     * @return BelongsTo
      */
     public function series(): BelongsTo
     {
@@ -160,8 +144,6 @@ class Clip extends BaseModel
 
     /**
      *  A clip hat one semester
-     *
-     * @return BelongsTo
      */
     public function semester(): BelongsTo
     {
@@ -169,9 +151,7 @@ class Clip extends BaseModel
     }
 
     /**
-     *  A clip has one organization
-     *
-     * @return BelongsTo
+     *  A clip belongs to an organization
      */
     public function organisation(): BelongsTo
     {
@@ -179,9 +159,15 @@ class Clip extends BaseModel
     }
 
     /**
+     * A clip belongs to an image
+     */
+    public function image(): BelongsTo
+    {
+        return $this->BelongsTo(Image::class);
+    }
+
+    /**
      * A clip has one language
-     *
-     * @return BelongsTo
      */
     public function language(): BelongsTo
     {
@@ -190,8 +176,6 @@ class Clip extends BaseModel
 
     /**
      * A clip has one context
-     *
-     * @return HasOne
      */
     public function context(): HasOne
     {
@@ -208,8 +192,6 @@ class Clip extends BaseModel
 
     /**
      * A clip has one format
-     *
-     * @return HasOne
      */
     public function format(): HasOne
     {
@@ -218,8 +200,6 @@ class Clip extends BaseModel
 
     /**
      * A clip has one type
-     *
-     * @return HasOne
      */
     public function type(): HasOne
     {
@@ -228,9 +208,6 @@ class Clip extends BaseModel
 
     /**
      * Adds an asset to clip
-     *
-     * @param  array  $attributes
-     * @return Asset
      */
     public function addAsset(array $attributes = []): Asset
     {
@@ -258,8 +235,6 @@ class Clip extends BaseModel
 
     /**
      * Add tags to clip
-     *
-     * @param  Collection  $tagsCollection
      */
     public function addTags(Collection $tagsCollection): void
     {
@@ -297,9 +272,6 @@ class Clip extends BaseModel
 
     /**
      * Fetch all assets for a clip by type
-     *
-     * @param  Content  $content
-     * @return HasMany
      */
     public function getAssetsByType(Content $content): HasMany
     {
@@ -310,9 +282,6 @@ class Clip extends BaseModel
 
     /**
      *  Scope a query to only include public clips
-     *
-     * @param $query
-     * @return mixed
      */
     public function scopePublic($query): mixed
     {

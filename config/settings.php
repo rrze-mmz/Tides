@@ -6,6 +6,7 @@ return [
         'allow_user_registration' => false,
         'feeds_default_owner_name' => 'Tides',
         'feeds_default_owner_email' => 'itunes@tides.com',
+        'default_image_id' => env('DEFAULT_IMAGE_ID', 1),
     ],
     'user' => [
         'accept_use_terms' => false,

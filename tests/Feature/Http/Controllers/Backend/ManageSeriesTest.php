@@ -6,6 +6,7 @@ use App\Enums\Acl;
 use App\Enums\OpencastWorkflowState;
 use App\Http\Livewire\CommentsSection;
 use App\Models\Clip;
+use App\Models\Image;
 use App\Models\Series;
 use App\Models\User;
 use App\Services\OpencastService;
@@ -423,6 +424,70 @@ class ManageSeriesTest extends TestCase
         $series = SeriesFactory::ownedBy($this->signInRole($this->role))->withClips(2)->create();
 
         $this->get(route('series.edit', $series))->assertSee($series->clips()->first()->title);
+    }
+
+    /** @test */
+    public function edit_series_should_display_series_image_information(): void
+    {
+        $series = SeriesFactory::ownedBy($this->signInRole($this->role))->create();
+        $this->mockHandler->append(
+            $this->mockHealthResponse(),
+            $this->mockSeriesMetadata($series),
+            $this->mockSeriesRunningWorkflowsResponse($series, true),
+            $this->mockEventResponse($series, OpencastWorkflowState::FAILED)
+        );
+
+        $this->get(route('series.edit', $series))
+            ->assertSee($series->image->description);
+    }
+
+    /** @test */
+    public function edit_series_should_allow_user_to_switch_to_default_image_if_one_is_set(): void
+    {
+        $series = SeriesFactory::ownedBy($this->signInRole($this->role))->create();
+        $series->image_id = Image::find(2)->id;
+        $series->save();
+
+        $this->mockHandler->append(
+            $this->mockHealthResponse(),
+            $this->mockSeriesMetadata($series),
+            $this->mockSeriesRunningWorkflowsResponse($series, true),
+            $this->mockEventResponse($series, OpencastWorkflowState::FAILED)
+        );
+
+        $this->get(route('series.edit', $series))
+            ->assertSee('Set Default image');
+
+        $series->image_id = 1;
+        $series->save();
+
+        $this->mockHandler->append(
+            $this->mockHealthResponse(),
+            $this->mockSeriesMetadata($series),
+            $this->mockSeriesRunningWorkflowsResponse($series, true),
+            $this->mockEventResponse($series, OpencastWorkflowState::FAILED)
+        );
+
+        $this->get(route('series.edit', $series))
+            ->assertDontSee('Set Default image');
+    }
+
+    /** @test */
+    public function series_admin_can_select_another_image(): void
+    {
+        $series = SeriesFactory::ownedBy($this->signInRole($this->role))->create();
+        $series->image_id = Image::find(1)->id;
+        $series->save();
+
+        $this->mockHandler->append(
+            $this->mockHealthResponse(),
+            $this->mockSeriesMetadata($series),
+            $this->mockSeriesRunningWorkflowsResponse($series, true),
+            $this->mockEventResponse($series, OpencastWorkflowState::FAILED)
+        );
+
+        $this->get(route('series.edit', $series))
+            ->assertSee('Assign selected image');
     }
 
     /** @test */

@@ -83,8 +83,13 @@ class OpencastService
     public function getSeries(Series $series)
     {
         $opencastSeries = [];
+
+        if (is_null($series->opencast_series_id)) {
+            return $opencastSeries;
+        }
+
         try {
-            $this->response = $this->client->get("api/series/{$series->opencast_series_id}/?withacl=true");
+            $this->response = $this->client->get("api/series/{$series->opencast_series_id}");
             $opencastSeries = json_decode((string) $this->response->getBody(), true);
         } catch (GuzzleException $exception) {
             Log::error($exception);

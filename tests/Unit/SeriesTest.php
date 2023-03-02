@@ -131,6 +131,12 @@ class SeriesTest extends TestCase
     }
 
     /** @test */
+    public function it_belongs_to_an_image(): void
+    {
+        $this->assertInstanceOf(BelongsTo::class, $this->series->image());
+    }
+
+    /** @test */
     public function it_can_add_a_clip(): void
     {
         $this->signIn();

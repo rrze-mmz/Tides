@@ -4,14 +4,7 @@
             @csrf
             @endif
             <ul class="pt-3 w-full">
-                <li class="flex content-center items-center p-5 mb-4 text-lg bg-gray-400 rounded text-center">
-                    <div class="pb-2 w-1/12 border-b border-black">{{ __('series.common.episode') }}</div>
-                    <div class="pb-2 w-2/12 border-b border-black">{{ __('series.common.poster') }}</div>
-                    <div class="pb-2 w-3/12 border-b border-black">{{ __('series.common.title') }}</div>
-                    <div class="pb-2 w-2/12 border-b border-black">{{ __('series.common.access via') }}</div>
-                    <div class="pb-2 w-2/12 border-b border-black">{{ __('series.common.semester') }}</div>
-                    <div class="pb-2 w-1/12 border-b border-black">{{ __('series.common.duration') }}</div>
-                    <div class="pb-2 w-1/12 border-b border-black">{{ __('series.common.actions') }}</div>
+                <li class="flex content-center items-center p-2 mb-2 bg-gray-400 rounded text-center">
                 </li>
 
                 @forelse($series->clips->sortBy('episode', SORT_NATURAL) as $clip)

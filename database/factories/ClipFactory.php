@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Clip;
 use App\Models\Context;
 use App\Models\Format;
+use App\Models\Image;
 use App\Models\Organization;
 use App\Models\Semester;
 use App\Models\Type;
@@ -22,8 +23,6 @@ class ClipFactory extends Factory
 
     /**
      * Define the model's default state
-     *
-     * @return array
      */
     public function definition(): array
     {
@@ -45,6 +44,7 @@ class ClipFactory extends Factory
             'series_id' => null,
             'episode' => $episode++,
             'is_public' => true,
+            'image_id' => Image::factory()->create()->id,
         ];
     }
 }
