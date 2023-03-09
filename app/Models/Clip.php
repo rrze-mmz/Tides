@@ -55,7 +55,7 @@ class Clip extends BaseModel
         parent::boot();
         static::creating(function ($clip) {
             $semester = Semester::find($clip->attributes['semester_id'])->acronym;
-            $clip->setSlugAttribute($clip->episode.'-'.$clip->title.$semester);
+            $clip->setSlugAttribute($clip->episode.'-'.$clip->title.'-'.$semester);
         });
 
         static::updating(function ($clip) {

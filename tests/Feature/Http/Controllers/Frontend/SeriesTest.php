@@ -5,6 +5,7 @@ namespace Tests\Feature\Http\Controllers\Frontend;
 use App\Enums\Acl;
 use App\Models\Asset;
 use App\Models\Clip;
+use App\Models\Semester;
 use App\Models\Series;
 use Facades\Tests\Setup\SeriesFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -184,7 +185,7 @@ class SeriesTest extends TestCase
 
         $firstClip = $series->clips()->first();
 
-        $firstClip->semester_id = 1;
+        $firstClip->semester_id = 2;
 
         $firstClip->save();
 

@@ -15,17 +15,9 @@ trait Slugable
 
     public function setSlugAttribute($value): void
     {
-        if ($this->table) {
-            $value =  ($this->table ==='series')
-                ? "{$value}-{$this->latestClip->semester->acronym}"
-                : $value;
-        }
-
-
         if (self::whereSlug($slug = Str::of($value)->slug('-'))
             ->Where('id', '!=', self::getKey())->exists()) {
             $slug = $this->incrementSlug($slug);
-            dd($slug);
         }
 
         $this->attributes['slug'] = $slug;
@@ -41,7 +33,7 @@ trait Slugable
     {
         $original = $slug;
 
-        $count = 2;
+        $count = 1;
 
         while (self::whereSlug($slug)->exists()) {
             $slug = "{$original}-".$count++;

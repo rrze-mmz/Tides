@@ -53,7 +53,9 @@ class ClipTest extends TestCase
     public function it_has_a_slug_route(): void
     {
         $this->assertEquals(
-            '/clips/'.Str::slug($this->clip->title.'-'.Semester::current()->get()->first()->acronym),
+            '/clips/'.Str::slug(
+                $this->clip->episode.'-'.$this->clip->title.'-'.Semester::current()->get()->first()->acronym
+            ),
             $this->clip->path()
         );
     }
@@ -61,11 +63,9 @@ class ClipTest extends TestCase
     /** @test */
     public function it_has_an_incremental_slug(): void
     {
-        Clip::factory()->create(['title' => 'A test title', 'slug' => 'A test title']);
+        $anotherClip = Clip::factory()->create(['title'=> $this->clip->title, 'episode' => $this->clip->episode]);
 
-        $clip = Clip::factory()->create(['title' => 'A test title', 'slug' => 'A test title']);
-
-        $this->assertSame('a-test-title-'.Semester::current()->get()->first()->acronym.'-2', $clip->slug);
+        $this->assertEquals($this->clip->slug.'-2', $anotherClip->slug);
     }
 
     /** @test */
@@ -83,7 +83,7 @@ class ClipTest extends TestCase
     {
         $this->assertEquals(
             $this->clip->slug,
-            Str::slug($this->clip->title.'-'.Semester::current()->get()->first()->acronym)
+            Str::slug($this->clip->episode.'-'.$this->clip->title.'-'.Semester::current()->get()->first()->acronym)
         );
     }
 

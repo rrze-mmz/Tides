@@ -30,6 +30,15 @@ class Series extends BaseModel
 
     protected $dispatchesEvents = ['deleted' => SeriesDeleted::class];
 
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($series) {
+            $semester  = Semester::current()->get()->first()->acronym;
+            $series->setSlugAttribute($series->title.'-'.$semester);
+        });
+    }
+
     protected function description(): Attribute
     {
         return Attribute::make(

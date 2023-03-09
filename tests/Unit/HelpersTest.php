@@ -29,12 +29,12 @@ class HelpersTest extends TestCase
     /** @test */
     public function it_fetches_a_clip_poster_image_when_poster_file_path_is_not_null(): void
     {
-        $clip = Clip::factory()->create();
+        $clip = ClipFactory::withAssets(2)->create();
 
-        $clip->posterImage = "clip_{$clip->id}/2nUGJry2p8uPY9wjctep4PtlY9ABXLdJuCrbfMHS.jpg";
-        $clip->save();
-
-        $this->assertEquals("/thumbnails/{$clip->posterImage}", fetchClipPoster($clip));
+        $this->assertEquals(
+            "/thumbnails/previews-ng/{$clip->assets()->first()->player_preview}",
+            fetchClipPoster($clip)
+        );
     }
 
     /** @test */
