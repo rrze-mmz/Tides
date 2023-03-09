@@ -91,7 +91,7 @@ class OpencastService
         try {
             $this->response = $this->client->get("api/series/{$series->opencast_series_id}");
             $opencastSeries = json_decode((string) $this->response->getBody(), true);
-        } catch (GuzzleException $exception) {
+        } catch (GuzzleException $exception ) {
             Log::error($exception);
         }
 
@@ -107,10 +107,9 @@ class OpencastService
     {
         $runningWorkflows = collect([]);
         try {
-            $this->response = $this->client->get('workflow/instances.json', [
+            $this->response = $this->client->get('api/events', [
                 'query' => [
-                    'state' => OpencastWorkflowState::RUNNING->lower(),
-                    'sort' => 'DATE_CREATED_DESC',
+                    'filter' => 'status:'.OpencastWorkflowState::RUNNING(),
                 ],
             ]);
             $runningWorkflows = collect(
@@ -133,12 +132,9 @@ class OpencastService
     {
         $runningWorkflows = collect([]);
         try {
-            $this->response = $this->client->get('workflow/instances.json', [
+            $this->response = $this->client->get('api/events', [
                 'query' => [
-                    'state' => OpencastWorkflowState::RUNNING->lower(),
-                    'seriesId' => $series->opencast_series_id,
-                    'count' => 20,
-                    'sort' => 'DATE_CREATED_DESC',
+                    'filter' => 'status:'.OpencastWorkflowState::RUNNING().',is_part_of:'.$series->opencast_series_id,
                 ],
             ]);
             $runningWorkflows = collect(

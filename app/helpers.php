@@ -7,11 +7,13 @@ use App\Models\Clip;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use function GuzzleHttp\describe_type;
 
 /**
  * Returns poster image relative file path of a clip or default
@@ -21,9 +23,10 @@ use Psr\Container\NotFoundExceptionInterface;
  */
 function fetchClipPoster(Clip $clip): string
 {
-    return (is_null($clip?->posterImage))
+    $asset = $clip->assets()->orderBy('width', 'desc')->limit(1)->get()->first();
+    return (is_null($asset))
         ? '/images/generic_clip_poster_image.png'
-        : "/thumbnails/{$clip->posterImage}";
+        : "/thumbnails/previews-ng/{$asset->player_preview}";
 }
 
 /**
@@ -315,4 +318,20 @@ function findUserByOpencastRole(string $opencastRole): User|string
     } else {
         return $opencastRole;
     }
+}
+
+/**
+ * @param string $filePath
+ * @return string
+ */
+function getProtectedUrl(string $filePath): string
+{
+    $filePath = '/'.$filePath;
+    $secret = "emsJue5Rtv7";
+    $cdn = "https://vp-cdn-balance.rrze.de/media_bu/";
+    $hexTime = dechex(time());
+    $userIP = (App::environment(['testing', 'local'])) ? env('FAUTV_USER_IP') : $_SERVER['REMOTE_ADDR'];
+    $token  = md5($secret.$filePath.$hexTime.$userIP);
+
+    return $cdn.$token.'/'.$hexTime.$filePath;
 }

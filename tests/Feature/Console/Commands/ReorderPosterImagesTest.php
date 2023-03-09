@@ -28,20 +28,20 @@ class ReorderPosterImagesTest extends TestCase
     {
         $clip = Clip::factory()->create();
 
-        $this->artisan('images:reorder')->expectsOutput("Assets not found for Clip ID {$clip->id}! Skipping...");
+        $this->artisan('clip:posterImage')->expectsOutput("Assets not found for Clip ID {$clip->id}! Skipping...");
     }
 
     /** @test */
     public function it_skips_folder_creation_if_clip_has_no_assets(): void
     {
         Clip::factory()->create();
-        $this->artisan('images:reorder');
+        $this->artisan('clip:posterImage');
 
         $this->assertEmpty(Storage::disk('thumbnails')->directories());
     }
 
     /** @test */
-    public function it_move_player_previews_to_folders(): void
+    public function it_updated_clip_poster_path(): void
     {
         UploadedFile::fake()->create('1_preview.jpg', 100)->storeAs('player_previews', '1_preview.jpg');
         Storage::assertExists('player_previews');
@@ -50,12 +50,10 @@ class ReorderPosterImagesTest extends TestCase
 
         $this->assertNull($series->clips->first()->posterImage);
 
-        $this->artisan('images:reorder')->expectsOutput("Finish clip ID {$series->clips->first()->id}");
+        $this->artisan('clip:posterImage')->expectsOutput("Finish clip ID {$series->clips->first()->id}");
 
         $series->refresh();
 
         $this->assertNotNull($series->clips->first()->posterImage);
-
-        Storage::disk('thumbnails')->assertExists($series->clips->first()->posterImage);
     }
 }

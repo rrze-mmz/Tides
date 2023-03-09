@@ -37,6 +37,7 @@ class AssetFactory extends Factory
             'clip_id' => Clip::factory(),
             'guid' => Str::uuid(),
             'type' => Content::PRESENTER,
+            'player_preview' => '1_preview.png'
         ];
     }
 }

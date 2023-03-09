@@ -7,11 +7,14 @@
         <source
             src="{{ $wowzaService->vodSecureUrl($clip) }}"
             type="application/x-mpegURL"/>
+
+        @if($captionAsset = $clip->getCaptionAsset())
+            <track kind="captions" label="DE" src="{{getProtectedUrl($captionAsset->path)}}" srclang="de" default/>
+        @endisset
     @else
         <source src="{{ '/videos/'.$clip->assets->first()->path  }}"
                 type="video/mp4"/>
     @endif
-    <!-- Captions are optional -->
 </video>
 
 

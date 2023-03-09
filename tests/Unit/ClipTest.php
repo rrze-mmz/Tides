@@ -79,7 +79,7 @@ class ClipTest extends TestCase
     }
 
     /** @test */
-    public function it_has_a_set_slug_function(): void
+    public function it_has_a_set_slug_method(): void
     {
         $this->assertEquals(
             $this->clip->slug,
@@ -285,5 +285,11 @@ class ClipTest extends TestCase
     {
         //second db update will be done in clip observer class
         $this->assertEquals('TIDES_ClipID_1', $this->clip->folder_id);
+    }
+
+    /** @test */
+    public function it_has_a_method_for_returning_caption_asset(): void
+    {
+        $this->assertNull($this->clip->getCaptionAsset());
     }
 }

@@ -8,14 +8,14 @@ use Illuminate\Http\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
-class ReorderPosterImages extends Command
+class ReAssignClipPosterImage extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'images:reorder';
+    protected $signature = 'clip:posterImage';
 
     /**
      * The console command description.
@@ -38,20 +38,12 @@ class ReorderPosterImages extends Command
         $bar->start();
 
         Clip::lazy()->each(function ($clip) use ($bar) {
-            $assets = $clip->assets;
+            $asset = $clip->assets()->orderBy('width', 'desc')->limit(1)->get()->first();
 
-            if ($assets->count() > 0) {
-                Storage::disk('thumbnails')->makeDirectory('clip_'.$clip->id);
-                $assets->each(function ($asset) use ($clip) {
-                    if (Storage::exists("player_previews/{$asset->id}_preview.jpg")) {
-                        $path = Storage::disk('thumbnails')->putFile(
-                            "clip_{$clip->id}",
-                            new File(storage_path('app/player_previews/')."{$asset->id}_preview.jpg")
-                        );
-                        $clip->posterImage = $path;
-                        $clip->save();
-                    }
-                });
+            if ($asset) {
+                $clip->posterImage = $asset->player_preview;
+                $clip->save();
+
                 Log::info("CLIP POSTER for ID :{$clip->id} IS {$clip->posterImage}");
                 $bar->advance();
             } else {

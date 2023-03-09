@@ -24,6 +24,7 @@ class CreateAssetsTable extends Migration
             $table->foreignId('clip_id')->references('id')->on('clips')->cascadeOnDelete();
             $table->smallInteger('type')->nullable();
             $table->uuid('guid')->unique();
+            $table->string('player_preview')->nullable();
             $table->datetime('converted_for_downloading_at')->nullable();
             $table->datetime('converted_for_streaming_at')->nullable();
             $table->timestamps();

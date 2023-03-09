@@ -39,7 +39,7 @@ class ClipFactory extends Factory
             'format_id' => Format::factory()->create()->id,
             'type_id' => Type::factory()->create()->id,
             'owner_id' => User::factory()->create()->id,
-            'semester_id' => Semester::factory()->create()->id,
+            'semester_id' => Semester::current()->first()->id,
             'posterImage' => null,
             'series_id' => null,
             'episode' => $episode++,

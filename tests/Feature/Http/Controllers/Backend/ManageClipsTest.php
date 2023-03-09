@@ -557,7 +557,7 @@ class ManageClipsTest extends TestCase
 
         $clip->refresh();
 
-        $this->assertEquals('title-changed-'.Semester::current()->get()->first()->acronym, $clip->slug);
+        $this->assertEquals($clip->episode.'-title-changed-'.str(Semester::current()->get()->first()->acronym)->lower(), $clip->slug);
     }
 
     /** @test */
@@ -575,7 +575,7 @@ class ManageClipsTest extends TestCase
             'context_id' => '1',
             'format_id' => '1',
             'type_id' => '1',
-            'semester_id' => '1',
+            'semester_id' => Semester::current()->first()->id,
         ]);
 
         $clip = Clip::find(1);
@@ -584,7 +584,8 @@ class ManageClipsTest extends TestCase
 
         $clip->refresh();
 
-        $assertedCliptitle = 'test-clip-'.Semester::current()->get()->first()->acronym;
+        $semester = str($clip->semester->acronym)->lower();
+        $assertedCliptitle = "{$clip->episode}-test-clip-{$semester}";
         $this->assertEquals($assertedCliptitle, $clip->slug);
     }
 

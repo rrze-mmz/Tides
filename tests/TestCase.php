@@ -67,27 +67,27 @@ abstract class TestCase extends BaseTestCase
         ]);
 
         Semester::create([
-            'name' => 'Sommersemester '.Carbon::now()->year,
-            'acronym' => 'S'.Carbon::now()->year,
+            'name' => 'Wintersemester '.Carbon::now()->year,
+            'acronym' => 'W'.Carbon::now()->format('y')-1,
+            'short_title' => Carbon::now()->year -1 .'/'. Carbon::now()->year -1,
+            'start_date' => Carbon::now()->year-1 .'-10-01 00:00:00',
+            'stop_date' => Carbon::now()->year.'-03-31 23:59:59',
+        ]);
+
+        Semester::create([
+            'name' => 'Sommerstemester '.Carbon::now()->year,
+            'acronym' => 'S'.Carbon::now()->format('y'),
             'short_title' => Carbon::now()->year,
             'start_date' => Carbon::now()->year.'-04-01 00:00:00',
             'stop_date' => Carbon::now()->year.'-09-30 23:59:59',
         ]);
 
         Semester::create([
-            'name' => 'Wintersemester '.Carbon::now()->year.'/'.Carbon::now()->year + 1,
-            'acronym' => 'w'.Carbon::now()->year,
-            'short_title' => Carbon::now()->year.'/'.Carbon::now()->year + 1,
+            'name' => 'Wintersemester '.Carbon::now()->year.'/'.Carbon::now()->year + 1 ,
+            'acronym' => 'W'.Carbon::now()->format('y'),
+            'short_title' => Carbon::now()->year.'/'.Carbon::now()->year + 1 ,
             'start_date' => Carbon::now()->year.'-10-01 00:00:00',
             'stop_date' => Carbon::now()->year + 1 .'-03-31 23:59:59',
-        ]);
-
-        Semester::create([
-            'name' => 'Wintersemester '.(Carbon::now()->year - 1).'/'.Carbon::now()->year,
-            'acronym' => 'w'.Carbon::now()->year - 1,
-            'short_title' => (Carbon::now()->year - 1).'/'.Carbon::now()->year,
-            'start_date' => (Carbon::now()->year - 1).'-10-01 00:00:00',
-            'stop_date' => Carbon::now()->year.'-03-31 23:59:59',
         ]);
 
         Organization::create([

@@ -12,13 +12,20 @@ trait Slugable
      *
      * @param $value
      */
+
     public function setSlugAttribute($value): void
     {
-        $value = $value.'-'.Semester::current()->get()->first()->acronym;
+        if ($this->table) {
+            $value =  ($this->table ==='series')
+                ? "{$value}-{$this->latestClip->semester->acronym}"
+                : $value;
+        }
+
 
         if (self::whereSlug($slug = Str::of($value)->slug('-'))
             ->Where('id', '!=', self::getKey())->exists()) {
             $slug = $this->incrementSlug($slug);
+            dd($slug);
         }
 
         $this->attributes['slug'] = $slug;

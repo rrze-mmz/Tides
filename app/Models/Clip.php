@@ -48,9 +48,21 @@ class Clip extends BaseModel
     ];
 
     protected $attributes = ['episode' => '1'];
-
     protected $casts = ['recording_date' => 'datetime:Y-m-d'];
 
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($clip) {
+            $semester = Semester::find($clip->attributes['semester_id'])->acronym;
+            $clip->setSlugAttribute($clip->episode.'-'.$clip->title.$semester);
+        });
+
+        static::updating(function ($clip) {
+            $semester = Semester::find($clip->attributes['semester_id'])->acronym;
+            $clip->setSlugAttribute($clip->episode.'-'.$clip->title.'-'.$semester);
+        });
+    }
     protected function description(): Attribute
     {
         return Attribute::make(
@@ -278,6 +290,18 @@ class Clip extends BaseModel
         return $this->assets()->where(function ($q) use ($content) {
             $q->where('type', $content());
         });
+    }
+
+    /**
+     * Return caption asset for the clip
+     *
+     * @return Asset|null
+     */
+    public function getCaptionAsset(): Asset|null
+    {
+        return $this->assets->filter(function ($asset) {
+            return $asset->type == Content::CC();
+        })->first();
     }
 
     /**
