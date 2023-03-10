@@ -11,7 +11,13 @@
 |
 */
 
-uses(Tests\TestCase::class)->in('Feature');
+use App\Models\Presenter;
+use App\Models\User;
+use function Pest\Laravel\actingAs;
+
+uses(
+    Tests\TestCase::class,
+)->in('Feature', 'Unit');
 
 /*
 |--------------------------------------------------------------------------
@@ -39,7 +45,28 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+/*
+* Sings in a user
+* @param User|null $user
+* @return User
+*/
+function signIn(User $user = null): User
 {
-    // ..
+    $user = $user ?: User::factory()->create();
+    actingAs($user);
+    return $user;
+}
+
+/*
+* Sings in a user with a specific role
+*
+* @param string $role
+* @return User
+*/
+function signInRole(string $role = ''): User
+{
+    $user = User::factory()->create();
+    $user->assignRole($role);
+    actingAs($user);
+    return $user;
 }
