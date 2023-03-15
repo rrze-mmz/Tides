@@ -10,9 +10,6 @@ use Illuminate\Contracts\View\View;
 
 class ShowSeriesController extends Controller
 {
-    /**
-     * @return View
-     */
     public function index(): View
     {
         return view('frontend.series.index', [
@@ -23,8 +20,6 @@ class ShowSeriesController extends Controller
     /**
      * Series main page
      *
-     * @param  Series  $series
-     * @return View
      *
      * @throws AuthorizationException
      */

@@ -20,18 +20,12 @@ class SubscribeSection extends Component
 
     public $btnText;
 
-    /**
-     * @param $id
-     */
     public function __construct($id = null)
     {
         parent::__construct($id);
         $this->user = auth()->user();
     }
 
-    /**
-     * @return void
-     */
     public function mount(): void
     {
         $this->isUserSubscribed = $this->user->subscriptions()->where('series_id', $this->series->id)->exists();
@@ -41,8 +35,6 @@ class SubscribeSection extends Component
 
     /**
      * Subscribe logged-in user to series
-     *
-     * @return void
      */
     public function subscribe(): void
     {
@@ -57,8 +49,6 @@ class SubscribeSection extends Component
 
     /**
      * Unsubscribe logged-in user from series
-     *
-     * @return void
      */
     public function unsubscribe(): void
     {
@@ -68,9 +58,6 @@ class SubscribeSection extends Component
         $this->btnText = 'Subscribe';
     }
 
-    /**
-     * @return Factory|View|Application
-     */
     public function render(): Factory|View|Application
     {
         return view('livewire.subscribe-section');

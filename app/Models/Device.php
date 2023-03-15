@@ -17,8 +17,6 @@ class Device extends BaseModel
 
     /**
      * Location relationship
-     *
-     * @return BelongsTo
      */
     public function location(): BelongsTo
     {

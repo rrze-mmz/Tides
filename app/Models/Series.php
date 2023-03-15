@@ -34,9 +34,20 @@ class Series extends BaseModel
     {
         parent::boot();
         static::creating(function ($series) {
-            $semester  = Semester::current()->get()->first()->acronym;
+            $semester = Semester::current()->get()->first()->acronym;
             $series->setSlugAttribute($series->title.'-'.$semester);
         });
+    }
+
+    protected function title(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => html_entity_decode(
+                htmlspecialchars_decode(
+                    html_entity_decode(html_entity_decode($value, ENT_NOQUOTES, 'UTF-8'))
+                )
+            )
+        );
     }
 
     protected function description(): Attribute
@@ -52,10 +63,6 @@ class Series extends BaseModel
 
     /**
      * Series routes should work with slug and with id to ensure backward compatibility
-     *
-     * @param $value
-     * @param $field
-     * @return Model|null
      */
     public function resolveRouteBinding($value, $field = null): ?Model
     {
@@ -69,8 +76,6 @@ class Series extends BaseModel
 
     /**
      * Route key should be slug instead of id
-     *
-     * @return string
      */
     public function getRouteKeyName(): string
     {
@@ -79,8 +84,6 @@ class Series extends BaseModel
 
     /**
      * Series public url
-     *
-     * @return string
      */
     public function path(): string
     {
@@ -89,8 +92,6 @@ class Series extends BaseModel
 
     /**
      * Series admin edit url
-     *
-     * @return string
      */
     public function adminPath(): string
     {
@@ -99,8 +100,6 @@ class Series extends BaseModel
 
     /**
      * A series can have many clips
-     *
-     * @return HasMany
      */
     public function clips(): HasMany
     {
@@ -109,8 +108,6 @@ class Series extends BaseModel
 
     /**
      * A series belongs to a user
-     *
-     * @return BelongsTo
      */
     public function owner(): BelongsTo
     {
@@ -119,8 +116,6 @@ class Series extends BaseModel
 
     /**
      * Series members
-     *
-     * @return BelongsToMany
      */
     public function members(): BelongsToMany
     {
@@ -129,8 +124,6 @@ class Series extends BaseModel
 
     /**
      * Series subscribers
-     *
-     * @return BelongsToMany
      */
     public function subscribers(): BelongsToMany
     {
@@ -139,9 +132,6 @@ class Series extends BaseModel
 
     /**
      * Add a user to series
-     *
-     * @param  User  $moderatorUser
-     * @return User
      */
     public function addMember(User $moderatorUser): User
     {
@@ -152,9 +142,6 @@ class Series extends BaseModel
 
     /**
      * Remove a user from series
-     *
-     * @param  User  $moderatorUser
-     * @return User
      */
     public function removeMember(User $moderatorUser): User
     {
@@ -165,8 +152,6 @@ class Series extends BaseModel
 
     /**
      * A series belongs to an organization unit
-     *
-     * @return BelongsTo
      */
     public function organization(): BelongsTo
     {
@@ -175,8 +160,6 @@ class Series extends BaseModel
 
     /**
      * A series belongs to an image
-     *
-     * @return BelongsTo
      */
     public function image(): BelongsTo
     {
@@ -185,8 +168,6 @@ class Series extends BaseModel
 
     /**
      * A series can have many chapters
-     *
-     * @return HasMany
      */
     public function chapters(): HasMany
     {
@@ -203,8 +184,6 @@ class Series extends BaseModel
 
     /**
      * Fetch the latest clip from a series based on episode
-     *
-     * @return HasOne
      */
     public function latestClip(): HasOne
     {
@@ -213,9 +192,6 @@ class Series extends BaseModel
 
     /**
      * Add a clip on a series
-     *
-     * @param  array  $validated
-     * @return Clip
      */
     public function addClip(array $validated = []): Clip
     {
@@ -231,7 +207,6 @@ class Series extends BaseModel
     /**
      * Reorder Series clips based on a collection <id, episode>
      *
-     * @param  Collection  $episodes
      * @return $this
      */
     public function reorderClips(Collection $episodes): static
@@ -247,8 +222,6 @@ class Series extends BaseModel
 
     /**
      * Updates opencast series id in series table
-     *
-     * @param  ResponseInterface  $response
      */
     public function updateOpencastSeriesId(ResponseInterface $response): void
     {
@@ -300,19 +273,12 @@ class Series extends BaseModel
 
     /**
      *  Scope a query to only include public series
-     *
-     * @param $query
-     * @return mixed
      */
     public function scopeIsPublic($query): mixed
     {
         return $query->where('is_public', 1);
     }
 
-    /**
-     * @param $query
-     * @return mixed
-     */
     public function scopeHasClipsWithAssets($query): mixed
     {
         return $query->whereHas('clips', function ($q) {
@@ -329,19 +295,11 @@ class Series extends BaseModel
         })->orWhere('owner_id', auth()->user()?->id);
     }
 
-    /**
-     * @param $query
-     * @return mixed
-     */
     public function scopeHasOpencastSeriesID($query): mixed
     {
         return $query->Where('opencast_series_id', '<>', '');
     }
 
-    /**
-     * @param  Chapter|null  $chapter
-     * @return mixed
-     */
     public function clipsWithoutChapter(Chapter $chapter = null): mixed
     {
         return $this->clips->filter(function ($clip) use ($chapter) {

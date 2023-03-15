@@ -29,9 +29,6 @@ class ElasticsearchService
         $this->elasticsearchSettings = Setting::elasticSearch();
     }
 
-    /**
-     * @return Collection
-     */
     public function getHealth(): Collection
     {
         $this->response = collect([
@@ -57,10 +54,6 @@ class ElasticsearchService
         return $this->response;
     }
 
-    /**
-     * @param  Model  $model
-     * @return Collection
-     */
     public function createIndex(Model $model): Collection
     {
         $this->type = $model->getTable();
@@ -81,10 +74,6 @@ class ElasticsearchService
         return $this->response;
     }
 
-    /**
-     * @param  Model  $model
-     * @return Collection
-     */
     public function updateIndex(Model $model): Collection
     {
         $this->type = $model->getTable();
@@ -110,10 +99,6 @@ class ElasticsearchService
         return $this->response;
     }
 
-    /**
-     * @param  Model  $model
-     * @return Collection
-     */
     public function deleteIndex(Model $model): Collection
     {
         $this->type = $model->getTable();
@@ -133,11 +118,6 @@ class ElasticsearchService
         return $this->response;
     }
 
-    /**
-     * @param $index
-     * @param $id
-     * @return Collection
-     */
     public function fetchDocument($index, $id): Collection
     {
         try {
@@ -155,9 +135,6 @@ class ElasticsearchService
     }
 
     /**
-     * @param  string  $model
-     * @return Collection
-     *
      * @throws GuzzleException
      */
     public function deleteIndexes(string $model = ''): Collection
@@ -172,11 +149,6 @@ class ElasticsearchService
         return $this->response;
     }
 
-    /**
-     * @param $term
-     * @param  string  $index
-     * @return Collection
-     */
     public function searchIndexes($term, string $index = 'tides_clips'): Collection
     {
         try {

@@ -30,8 +30,6 @@ class WowzaService
 
     /**
      * Check whether Wowza Server is online
-     *
-     * @return Collection
      */
     public function getHealth(): Collection
     {
@@ -116,7 +114,6 @@ class WowzaService
     /**
      * Create a smil array to use for spatie component
      *
-     * @param $asset
      * @return array[]
      */
     public function createSmilFileArray($asset): array
@@ -163,9 +160,6 @@ class WowzaService
 
     /**
      * Get Wowza bitrate value based on asset's height
-     *
-     * @param $videoPixelHeight
-     * @return int
      */
     public function findWowzaAssetBitrate($videoPixelHeight): int
     {
@@ -179,9 +173,6 @@ class WowzaService
 
     /**
      * Generates a wowza streaming link with secure token settings
-     *
-     * @param  Clip  $clip
-     * @return bool|string
      */
     public function vodSecureUrl(Clip $clip): bool|string
     {

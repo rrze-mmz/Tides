@@ -16,10 +16,6 @@ class SeriesOpencastController extends Controller
     /**
      * Creates an Openast series for the given tides series
      *
-     * @param  Series  $series
-     * @param  Request  $request
-     * @param  OpencastService  $opencastService
-     * @return RedirectResponse
      *
      * @throws AuthorizationException
      */

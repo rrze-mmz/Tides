@@ -14,11 +14,6 @@ use Illuminate\Support\Str;
 
 trait Transferable
 {
-    /**
-     * @param  Clip  $clip
-     * @param $eventID
-     * @param  OpencastService  $opencastService
-     */
     public function checkOpencastAssetsForClipUpload(Clip $clip, $eventID, OpencastService $opencastService)
     {
         $assets = $opencastService->getAssetsByEventID($eventID);

@@ -324,7 +324,7 @@ class ManageSeriesTest extends TestCase
         $this->mockHandler->append(
             $this->mockHealthResponse(),
             $this->mockSeriesMetadata($series),
-            $this->mockSeriesRunningWorkflowsResponse($series, false),
+            $this->mockSeriesRunningWorkflowsResponse($series),
             $this->mockEventResponse($series, OpencastWorkflowState::STOPPED)
         );
 
@@ -395,7 +395,7 @@ class ManageSeriesTest extends TestCase
         $this->mockHandler->append(
             $this->mockHealthResponse(),
             $this->mockSeriesMetadata($series),
-            $this->mockSeriesRunningWorkflowsResponse($series, false),
+            $this->mockSeriesRunningWorkflowsResponse($series),
             $this->mockEventResponse($series, OpencastWorkflowState::STOPPED)
         );
 
@@ -444,6 +444,7 @@ class ManageSeriesTest extends TestCase
     /** @test */
     public function edit_series_should_allow_user_to_switch_to_default_image_if_one_is_set(): void
     {
+        Image::factory(2)->create();
         $series = SeriesFactory::ownedBy($this->signInRole($this->role))->create();
         $series->image_id = Image::find(2)->id;
         $series->save();
@@ -523,7 +524,7 @@ class ManageSeriesTest extends TestCase
 
         $this->get(route('series.edit', $series))
             ->assertViewHas(['opencastSeriesInfo'])
-            ->assertSee($opencastViewData['workflows']['workflow']['0']['mediapackage']['title']);
+            ->assertSee($opencastViewData[0]['title']);
     }
 
     /** @test */

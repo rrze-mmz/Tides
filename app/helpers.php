@@ -13,17 +13,14 @@ use Illuminate\Support\Str;
 use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
-use function GuzzleHttp\describe_type;
 
 /**
  * Returns poster image relative file path of a clip or default
- *
- * @param  Clip  $clip
- * @return string
  */
 function fetchClipPoster(Clip $clip): string
 {
     $asset = $clip->assets()->orderBy('width', 'desc')->limit(1)->get()->first();
+
     return (is_null($asset))
         ? '/images/generic_clip_poster_image.png'
         : "/thumbnails/previews-ng/{$asset->player_preview}";
@@ -31,9 +28,6 @@ function fetchClipPoster(Clip $clip): string
 
 /**
  * Return file dir for a clip based on created date
- *
- * @param  Clip  $clip
- * @return string
  */
 function getClipStoragePath(Clip $clip): string
 {
@@ -86,9 +80,6 @@ function fetchDropZoneFiles($ffmpegCheck = true): Collection
 }
 
 /**
- * @param $file
- * @param  bool  $isDropZoneFile
- * @param  bool  $ffmpegCheck
  * @return array[]
  */
 function prepareFileForUpload($file, bool $isDropZoneFile, bool $ffmpegCheck = true): array
@@ -141,9 +132,6 @@ function prepareFileForUpload($file, bool $isDropZoneFile, bool $ffmpegCheck = t
 
 /**
  * Returns tailwind menu active link css rule
- *
- * @param  string  $route
- * @return string
  */
 function setActiveLink(string $route): string
 {
@@ -153,11 +141,7 @@ function setActiveLink(string $route): string
 /**
  * Generates an LMS token based on the given object (series|clip)
  *
- * @param $obj
- * @param $time
- * @param  string  $client
  * @param  false  $withURL
- * @return string
  */
 function getAccessToken($obj, $time, string $client, bool $withURL = false): string
 {
@@ -168,10 +152,6 @@ function getAccessToken($obj, $time, string $client, bool $withURL = false): str
     return ($withURL) ? "/protector/link/{$type}/{$obj->id}/{$token}/{$time}/{$client}" : $token;
 }
 
-/**
- * @param  string  $type
- * @return string
- */
 function getUrlTokenType(string $type): string
 {
     return match ($type) {
@@ -181,10 +161,6 @@ function getUrlTokenType(string $type): string
     };
 }
 
-/**
- * @param  string  $client
- * @return string
- */
 function getUrlClientType(string $client): string
 {
     return match ($client) {
@@ -193,13 +169,7 @@ function getUrlClientType(string $client): string
         'password' => Acl::PASSWORD->lower(),
     };
 }
-/**
- * @param $obj
- * @param $token
- * @param $time
- * @param $client
- * @return void
- */
+
 function setSessionAccessToken($obj, $token, $time, $client): void
 {
     $objType = str(class_basename($obj))->lcfirst();
@@ -212,9 +182,6 @@ function setSessionAccessToken($obj, $token, $time, $client): void
 }
 
 /**
- * @param $obj
- * @return bool
- *
  * @throws ContainerExceptionInterface
  * @throws NotFoundExceptionInterface
  */
@@ -241,74 +208,11 @@ function checkAccessToken($obj): bool
     }
 }
 
-/**
- * @param  Asset  $asset
- * @return string
- */
 function getFileExtension(Asset $asset): string
 {
     return Str::afterLast($asset->original_file_name, '.');
 }
 
-/**
- * @param  string  $operation
- * @return int
- */
-function opencastWorkflowOperationPercentage(string $operation = ''): int
-{
-    return match ($operation) {
-        'Ingesting external elements' => 2,
-        'Inspecting audio and video streams' => 4,
-        'Applying access control entries' => 6,
-        'Tagging source material for archival' => 8,
-        'Tagging metadata catalogs for publication' => 10,
-        'Preparing presenter (camera) audio and video work versions' => 12,
-        'Preparing presentation (screen) audio and video work version' => 14,
-        'Analyze tracks in media package an set control variables' => 16,
-        'Normalize audio stream' => 18,
-        'Create single-stream video preview' => 21,
-        'Create dual-stream video preview' => 22,
-        'Generating waveform' => 24,
-        'Detecting silence' => 26,
-        'Preparing silence detection for preview' => 28,
-        'Publish to preview publication channel' => 30,
-        'Archive cutting information' => 32,
-        'Mark the recording for cutting' => 34,
-        'Mark the recording for review' => 36,
-        'Sending email to user before holding for edit' => 38,
-        'Remove temporary processing artifacts' => 40,
-        'Cut the recording according to the edit decision list' => 42,
-        'Tagging cutting information for archival' => 44,
-        'Resolve the cutting flag' => 50,
-        'Resolve the review flag' => 55,
-        'Tagging metadata catalogs for archival and publication' => 58,
-        'Create static coverimage workflow generates 5 different files with dynamic image' => 62,
-        'Create a cover image' => 64,
-        'Apply the theme' => 66,
-        'Inspecting audio and video streams 2nd loop' => 68,
-        'Render watermark into presenter track' => 70,
-        'Render watermark into presentation track' => 72,
-        'Add coverimage to the combined video' => 74,
-        'Concatenate combined track with intro and outro videos' => 76,
-        'Concatenate presenter track with intro and outro videos' => 78,
-        'Concatenate presentation track with intro and outro videos' => 80,
-        'Export audio from trimmed camera file' => 82,
-        'Encode presenter for adaptive stream' => 84,
-        'Encoding presentation 1080p for multistream player' => 86,
-        'Encode combined for adaptive stream' => 88,
-        'Change Quality of Layout Video for Final Cut Pro' => 90,
-        'Detecting slide transitions in presentation track' => 92,
-        'Extracting text from presentation segments' => 94,
-        'Tagging media for archival' => 96,
-        'Remove final temporary processing artifacts' => 98,
-        default => 0,
-    };
-}
-
-/**
- * @param  string  $opencastRole
- * @return User|string
- */
 function findUserByOpencastRole(string $opencastRole): User|string
 {
     if (Str::of($opencastRole)->contains('ROLE_USER_')) {
@@ -320,18 +224,14 @@ function findUserByOpencastRole(string $opencastRole): User|string
     }
 }
 
-/**
- * @param string $filePath
- * @return string
- */
 function getProtectedUrl(string $filePath): string
 {
     $filePath = '/'.$filePath;
-    $secret = "emsJue5Rtv7";
-    $cdn = "https://vp-cdn-balance.rrze.de/media_bu/";
+    $secret = 'emsJue5Rtv7';
+    $cdn = 'https://vp-cdn-balance.rrze.de/media_bu/';
     $hexTime = dechex(time());
     $userIP = (App::environment(['testing', 'local'])) ? env('FAUTV_USER_IP') : $_SERVER['REMOTE_ADDR'];
-    $token  = md5($secret.$filePath.$hexTime.$userIP);
+    $token = md5($secret.$filePath.$hexTime.$userIP);
 
     return $cdn.$token.'/'.$hexTime.$filePath;
 }

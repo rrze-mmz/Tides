@@ -16,8 +16,6 @@ class DeviceLocation extends Model
 
     /**
      * Devices relationship
-     *
-     * @return HasMany
      */
     public function devices(): HasMany
     {

@@ -24,9 +24,6 @@ class Setting extends BaseModel
 
     /**
      * Scope a query to only include opencast settings
-     *
-     * @param $query
-     * @return mixed
      */
     public function scopeOpencast($query): mixed
     {
@@ -35,9 +32,6 @@ class Setting extends BaseModel
 
     /**
      * Scope a query to only include portal settings
-     *
-     * @param $query
-     * @return mixed
      */
     public function scopePortal($query): mixed
     {
@@ -46,9 +40,6 @@ class Setting extends BaseModel
 
     /**
      * Scope a query to only include streaming settings
-     *
-     * @param $query
-     * @return mixed
      */
     public function scopeStreaming($query): mixed
     {
@@ -57,9 +48,6 @@ class Setting extends BaseModel
 
     /**
      * Scope a query to only include elasticsearch settings
-     *
-     * @param $query
-     * @return mixed
      */
     public function scopeElasticSearch($query): mixed
     {

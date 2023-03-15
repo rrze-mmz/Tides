@@ -12,9 +12,6 @@ class DashboardController
 {
     /**
      * Show max 10 of user's series/clips and list dropzone files
-     *
-     * @param  OpencastService  $opencastService
-     * @return Application|Factory|View
      */
     public function __invoke(OpencastService $opencastService): Application|Factory|View
     {

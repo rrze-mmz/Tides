@@ -13,9 +13,6 @@ class SeriesPolicy
 
     /**
      * Check whether the current user can view all series in index
-     *
-     * @param  User  $user
-     * @return bool
      */
     public function index(User $user): bool
     {
@@ -24,20 +21,12 @@ class SeriesPolicy
 
     /**
      * Check whether the current user can create a series.
-     *
-     * @param  User  $user
-     * @return bool
      */
     public function create(User $user): bool
     {
         return auth()->check() && ($user->isModerator() || $user->isAdmin() || $user->isAssistant());
     }
 
-    /**
-     * @param  User|null  $user
-     * @param  Series  $series
-     * @return Response
-     */
     public function view(?User $user, Series $series): Response
     {
         /*
@@ -57,10 +46,6 @@ class SeriesPolicy
 
     /**
      * Check whether the given user can edit the given series
-     *
-     * @param  User  $user
-     * @param  Series  $series
-     * @return Response
      */
     public function edit(User $user, Series $series): Response
     {
@@ -75,10 +60,6 @@ class SeriesPolicy
 
     /**
      * Check whether the current user can create a series.
-     *
-     * @param  User  $user
-     * @param  Series  $series
-     * @return Response
      */
     public function update(User $user, Series $series): Response
     {
@@ -90,10 +71,6 @@ class SeriesPolicy
 
     /**
      * Check whether the given user can delete the given series
-     *
-     * @param  User  $user
-     * @param  Series  $series
-     * @return Response
      */
     public function delete(User $user, Series $series): Response
     {
@@ -102,10 +79,6 @@ class SeriesPolicy
             : Response::deny('You do not own this series');
     }
 
-    /**
-     * @param  User  $user
-     * @return bool
-     */
     public function changeOwner(User $user): bool
     {
         return $user->isAdmin();

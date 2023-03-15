@@ -10,6 +10,7 @@ use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\DevicesController;
 use App\Http\Controllers\Backend\DocumentController;
 use App\Http\Controllers\Backend\ElasticSearchSettingsController;
+use App\Http\Controllers\Backend\ImagesController;
 use App\Http\Controllers\Backend\OpencastSettingsController;
 use App\Http\Controllers\Backend\PortalSettingsController;
 use App\Http\Controllers\Backend\PresentersController;
@@ -260,6 +261,7 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
         ]);
     })->name('activities.index');
 
+    Route::resource('images', ImagesController::class)->except(['show']);
     Route::resource('devices', DevicesController::class)->except(['show']);
 
     // Portal admin resources

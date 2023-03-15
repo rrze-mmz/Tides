@@ -23,8 +23,6 @@ class PresenterDataTable extends Component
 
     /**
      * Sort users by method parameter
-     *
-     * @param $field
      */
     public function sortBy($field): void
     {
@@ -51,8 +49,6 @@ class PresenterDataTable extends Component
 
     /**
      * Render Livewire component
-     *
-     * @return View
      */
     public function render(): View
     {

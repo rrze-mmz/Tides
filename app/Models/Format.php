@@ -12,8 +12,6 @@ class Format extends Model
 
     /**
      * Clips relationship
-     *
-     * @return HasMany
      */
     public function clips(): HasMany
     {

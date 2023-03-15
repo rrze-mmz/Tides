@@ -20,9 +20,6 @@ class Saml2UserSignedOut
 
     /**
      * Handle the event.
-     *
-     * @param  SignedOut  $event
-     * @return void
      */
     public function handle(SignedOut $event): void
     {

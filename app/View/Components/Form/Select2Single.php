@@ -33,8 +33,6 @@ class Select2Single extends Component
 
     /**
      * Get the view / contents that represent the component.
-     *
-     * @return View
      */
     public function render(): View
     {
@@ -64,7 +62,6 @@ class Select2Single extends Component
      * Determine if the given option is the currently selected option.
      *
      * @param  string  $option
-     * @return bool
      */
     public function isSelected($option): bool
     {

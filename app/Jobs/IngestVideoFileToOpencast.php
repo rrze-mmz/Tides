@@ -32,9 +32,6 @@ class IngestVideoFileToOpencast implements ShouldQueue
 
     /**
      * Ingest the given video file to Opencast server
-     *
-     * @param  OpencastService  $opencastService
-     * @return void
      */
     public function handle(OpencastService $opencastService): void
     {

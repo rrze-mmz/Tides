@@ -9,7 +9,6 @@ class CollectionObserver
     /**
      * Handle the Collection "created" event.
      *
-     * @param  Collection  $collection
      * @return void
      */
     public function created(Collection $collection)
@@ -20,7 +19,6 @@ class CollectionObserver
     /**
      * Handle the Collection "updated" event.
      *
-     * @param  Collection  $collection
      * @return void
      */
     public function updated(Collection $collection)
@@ -31,7 +29,6 @@ class CollectionObserver
     /**
      * Handle the Collection "deleted" event.
      *
-     * @param  Collection  $collection
      * @return void
      */
     public function deleted(Collection $collection)
@@ -42,7 +39,6 @@ class CollectionObserver
     /**
      * Handle the Collection "restored" event.
      *
-     * @param  Collection  $collection
      * @return void
      */
     public function restored(Collection $collection)
@@ -53,7 +49,6 @@ class CollectionObserver
     /**
      * Handle the Collection "force deleted" event.
      *
-     * @param  Collection  $collection
      * @return void
      */
     public function forceDeleted(Collection $collection)

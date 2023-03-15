@@ -24,8 +24,6 @@ class UserDataTable extends Component
 
     /**
      * Sort users by method parameter
-     *
-     * @param $field
      */
     public function sortBy($field): void
     {
@@ -52,8 +50,6 @@ class UserDataTable extends Component
 
     /**
      * Render Livewire component
-     *
-     * @return View
      */
     public function render(): View
     {

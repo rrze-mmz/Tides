@@ -13,20 +13,11 @@ use Illuminate\Http\Request;
 
 class ChaptersController extends Controller
 {
-    /**
-     * @param  Series  $series
-     * @return Factory|View|Application
-     */
     public function index(Series $series): Factory|View|Application
     {
         return view('backend.seriesChapters.index', compact('series'));
     }
 
-    /**
-     * @param  Series  $series
-     * @param  Request  $request
-     * @return RedirectResponse
-     */
     public function store(Series $series, Request $request): RedirectResponse
     {
         $validated = $request->validate([
@@ -43,21 +34,11 @@ class ChaptersController extends Controller
         return to_route('series.chapters.index', $series);
     }
 
-    /**
-     * @param  Series  $series
-     * @param  Chapter  $chapter
-     * @return Factory|View|Application
-     */
     public function edit(Series $series, Chapter $chapter): Factory|View|Application
     {
         return view('backend.seriesChapters.edit', compact(['series', 'chapter']));
     }
 
-    /**
-     * @param  Series  $series
-     * @param  Request  $request
-     * @return RedirectResponse
-     */
     public function update(Series $series, Request $request): RedirectResponse
     {
         $validated = $request->validate([
@@ -87,12 +68,6 @@ class ChaptersController extends Controller
         return to_route('series.chapters.index', $series);
     }
 
-    /**
-     * @param  Series  $series
-     * @param  Chapter  $chapter
-     * @param  Request  $request
-     * @return RedirectResponse
-     */
     public function addClips(Series $series, Chapter $chapter, Request $request): RedirectResponse
     {
         $validated = $request->validate([
@@ -105,12 +80,6 @@ class ChaptersController extends Controller
         return to_route('series.chapters.edit', [$series, $chapter]);
     }
 
-    /**
-     * @param  Series  $series
-     * @param  Chapter  $chapter
-     * @param  Request  $request
-     * @return RedirectResponse
-     */
     public function removeClips(Series $series, Chapter $chapter, Request $request): RedirectResponse
     {
         $validated = $request->validate([

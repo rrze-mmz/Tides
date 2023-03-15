@@ -11,7 +11,7 @@ uses(RefreshDatabase::class);
 uses()->group('frontend');
 
 beforeEach(function () {
-    $this->clip = ClipFactory::withAssets(2)->create(['password'=>'1234qwER']);
+    $this->clip = ClipFactory::withAssets(2)->create(['password' => '1234qwER']);
 });
 
 it('a clip with a portal acl can be only be accessable for logged in users', function () {

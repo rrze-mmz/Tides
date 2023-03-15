@@ -216,12 +216,6 @@ class HelpersTest extends TestCase
     }
 
     /** @test */
-    public function it_has_an_opencast_workflow_operation_percentage_step(): void
-    {
-        $this->assertEquals('24', opencastWorkflowOperationPercentage('Generating waveform'));
-    }
-
-    /** @test */
     public function it_has_a_helper_for_returning_an_assets_extension(): void
     {
         $this->assertEquals('mp4', getFileExtension(Asset::factory()->create(['original_file_name' => 'test.mp4'])));

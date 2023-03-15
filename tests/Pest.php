@@ -56,6 +56,7 @@ function signIn(User $user = null): User
 {
     $user = $user ?: User::factory()->create();
     actingAs($user);
+
     return $user;
 }
 
@@ -70,5 +71,6 @@ function signInRole(string $role = ''): User
     $user = User::factory()->create();
     $user->assignRole($role);
     actingAs($user);
+
     return $user;
 }

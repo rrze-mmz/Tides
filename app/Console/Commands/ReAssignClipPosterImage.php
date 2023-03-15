@@ -4,9 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Clip;
 use Illuminate\Console\Command;
-use Illuminate\Http\File;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 
 class ReAssignClipPosterImage extends Command
 {
@@ -26,8 +24,6 @@ class ReAssignClipPosterImage extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
     public function handle(): int
     {

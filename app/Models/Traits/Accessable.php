@@ -13,8 +13,6 @@ trait Accessable
 {
     /**
      * Given model acls relationship
-     *
-     * @return MorphToMany
      */
     public function acls(): MorphToMany
     {
@@ -23,9 +21,6 @@ trait Accessable
 
     /**
      * Assign an acl collection to the give type
-     *
-     * @param  Collection  $aclsCollection
-     * @return void
      */
     public function addAcls(Collection $aclsCollection): void
     {

@@ -22,8 +22,6 @@ class IngestOpencast extends Component
 
     /**
      * Mount Livewire component
-     *
-     * @param  Clip  $clip
      */
     public function mount(Clip $clip)
     {
@@ -47,8 +45,6 @@ class IngestOpencast extends Component
 
     /**
      * Render Livewire component
-     *
-     * @return View
      */
     public function render(): View
     {

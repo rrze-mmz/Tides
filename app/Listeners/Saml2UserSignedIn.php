@@ -23,9 +23,6 @@ class Saml2UserSignedIn
 
     /**
      * Handle the event.
-     *
-     * @param  SignedIn  $event
-     * @return RedirectResponse
      */
     public function handle(SignedIn $event): RedirectResponse
     {

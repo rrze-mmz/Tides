@@ -28,8 +28,6 @@ class Organization extends BaseModel
 
     /**
      * Get the clips for an organization unit
-     *
-     * @return HasMany
      */
     public function clips(): HasMany
     {
@@ -38,8 +36,6 @@ class Organization extends BaseModel
 
     /**
      * Get the series for an organization unit
-     *
-     * @return HasMany
      */
     public function series(): HasMany
     {

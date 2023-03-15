@@ -23,8 +23,6 @@ class ActivitiesDataTable extends Component
 
     /**
      * Sort users by method parameter
-     *
-     * @param $field
      */
     public function sortBy($field): void
     {

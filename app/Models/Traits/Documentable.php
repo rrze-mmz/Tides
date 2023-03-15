@@ -17,9 +17,6 @@ trait Documentable
 
     /**
      * Assigns a document to a give type
-     *
-     * @param  Document  $document
-     * @return void
      */
     public function addDocument(Document $document): void
     {

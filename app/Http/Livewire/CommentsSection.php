@@ -85,7 +85,6 @@ class CommentsSection extends Component
     /**
      * Delete a single comment
      *
-     * @param  Comment  $comment
      *
      * @throws AuthorizationException
      */
@@ -105,8 +104,6 @@ class CommentsSection extends Component
 
     /**
      * Render Livewire component
-     *
-     * @return View
      */
     public function render(): View
     {

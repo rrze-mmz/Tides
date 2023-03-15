@@ -12,10 +12,6 @@ class SearchController extends Controller
 {
     /**
      * Main and basic search using ORM
-     *
-     * @param  SearchRequest  $request
-     * @param  ElasticsearchService  $elasticsearchService
-     * @return View
      */
     public function search(SearchRequest $request, ElasticsearchService $elasticsearchService): View
     {

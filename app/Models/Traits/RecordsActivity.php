@@ -10,8 +10,6 @@ trait RecordsActivity
 {
     /**
      * The models old attributes
-     *
-     * @var array
      */
     public array $oldAttributes = [];
 
@@ -33,18 +31,11 @@ trait RecordsActivity
         }
     }
 
-    /**
-     * @param $description
-     * @return string
-     */
     protected function activityDescription($description): string
     {
         return "{$description} ".strtolower(class_basename($this));
     }
 
-    /**
-     * @return array
-     */
     protected static function recordableEvents(): array
     {
         return (isset(static::$recordableEvents)) ? static::$recordableEvents : ['created', 'updated', 'deleted'];
@@ -52,8 +43,6 @@ trait RecordsActivity
 
     /**
      * Record activity for the given model
-     *
-     * @param $description
      */
     public function recordActivity($description): void
     {
@@ -72,17 +61,12 @@ trait RecordsActivity
 
     /**
      * Fetch all activities for a given model
-     *
-     * @return Builder
      */
     public function activities(): Builder
     {
         return Activity::where('object_id', $this->id)->where('content_type', lcfirst(class_basename(static::class)));
     }
 
-    /**
-     * @return array
-     */
     protected function activityChanges(): array
     {
         return ($this->wasChanged())

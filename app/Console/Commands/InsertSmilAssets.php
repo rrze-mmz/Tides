@@ -26,8 +26,6 @@ class InsertSmilAssets extends Command
     /**
      * Execute the console command.
      *
-     * @param  WowzaService  $wowzaService
-     * @return int
      *
      * @throws DOMException
      */

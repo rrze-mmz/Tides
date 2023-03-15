@@ -23,8 +23,6 @@ class ConvertVideoForStreaming implements ShouldQueue
 
     /**
      * Create a new job instance.
-     *
-     * @param  Asset  $asset
      */
     public function __construct(Asset $asset)
     {
@@ -33,8 +31,6 @@ class ConvertVideoForStreaming implements ShouldQueue
 
     /**
      * Transcode given video file to different resolutions
-     *
-     * @return void
      */
     public function handle(): void
     {

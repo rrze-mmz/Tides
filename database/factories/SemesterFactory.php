@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\Semester;
-use Elasticsearch\Endpoints\Tasks\Cancel;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
@@ -24,7 +23,7 @@ class SemesterFactory extends Factory
     public function definition()
     {
         $startSummerSemester = Carbon::now()->year.'-04-01 00:00:00';
-        $endSummerSemester  = Carbon::now()->year.'-09-30 23:59:59';
+        $endSummerSemester = Carbon::now()->year.'-09-30 23:59:59';
         if (Carbon::now()->between($startSummerSemester, $endSummerSemester)) {
             return [
                 'name' => 'Sommerstemester '.Carbon::now()->year,
@@ -35,17 +34,17 @@ class SemesterFactory extends Factory
             ];
         } elseif (Carbon::now()->isBefore($startSummerSemester)) {
             return [
-                'name' => 'WinterSemester '.Carbon::now()->year -1 ,
-                'acronym' => 'W'.Carbon::now()->format('y') -1 ,
+                'name' => 'WinterSemester '.Carbon::now()->year - 1,
+                'acronym' => 'W'.Carbon::now()->format('y') - 1,
                 'short_title' => Carbon::now()->year,
-                'start_date' => Carbon::now()->year -1 .'-10-01 00:00:00',
+                'start_date' => Carbon::now()->year - 1 .'-10-01 00:00:00',
                 'stop_date' => Carbon::now()->year.'-03-31 23:59:59',
             ];
         } else {
             return [
-                'name' => 'Wintersemester '.Carbon::now()->year.'/'.Carbon::now()->year + 1 ,
+                'name' => 'Wintersemester '.Carbon::now()->year.'/'.Carbon::now()->year + 1,
                 'acronym' => 'W'.Carbon::now()->format('y'),
-                'short_title' => Carbon::now()->year ,
+                'short_title' => Carbon::now()->year,
                 'start_date' => Carbon::now()->year.'-10-01 00:00:00',
                 'stop_date' => Carbon::now()->year + 1 .'-03-31 23:59:59',
             ];

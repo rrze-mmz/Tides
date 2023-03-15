@@ -18,6 +18,15 @@
 >
     {{ trans_choice('common.menu.clip', 2) }}
 </a>
+
+<a
+    href="{{route('images.index')}}"
+    class="flex items-center text-white opacity-75 hover:opacity-100 py-4
+        pl-6 nav-item {{ setActiveLink(route('images.index')) }}"
+>
+    {{ trans_choice('common.menu.image', 2) }}
+</a>
+
 @can('administrate-portal-pages')
     <a
         href="{{ route('presenters.index') }}"

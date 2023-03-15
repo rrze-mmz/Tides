@@ -9,7 +9,6 @@ class SettingObserver
     /**
      * Handle the Setting "saving" event.
      *
-     * @param  Setting  $setting
      * @return void
      */
     public function saved(Setting $setting)

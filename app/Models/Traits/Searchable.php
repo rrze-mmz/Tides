@@ -24,10 +24,6 @@ trait Searchable
         return $query;
     }
 
-    /**
-     * @param $term
-     * @return array|string
-     */
     private function lowerCaseTerm($term): array|string
     {
         $term = str_replace(['-', '+', '<', '>', '(', ')', '~'], '', $term);

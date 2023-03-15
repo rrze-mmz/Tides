@@ -13,28 +13,28 @@ uses()->group('frontend');
 
 it('search for clips', function () {
     $testClip = Clip::factory()->create(['title' => 'test clip']);
-     $tidesClip = Clip::factory()->create(['title' => 'tides clip']);
+    $tidesClip = Clip::factory()->create(['title' => 'tides clip']);
 
-     get(route('api.clips').'?query=test')->assertOk()->assertJson([
-         ['id' => 1, 'name' => $testClip->title],
-     ]);
+    get(route('api.clips').'?query=test')->assertOk()->assertJson([
+        ['id' => 1, 'name' => $testClip->title],
+    ]);
 
     get(route('api.clips').'?query=clip')->assertOk()->assertJson([
-            ['id' => 1, 'name' => $testClip->title],
-            ['id' => 2, 'name' => $tidesClip->title],
-        ]);
+        ['id' => 1, 'name' => $testClip->title],
+        ['id' => 2, 'name' => $tidesClip->title],
+    ]);
 });
 
 it('search for tags', function () {
-    Tag::factory()->create(['name'=> 'algebra']);
+    Tag::factory()->create(['name' => 'algebra']);
 
     get(route('api.tags').'?query=algebra')->assertOk()->assertJson([
-        ['id'=>1, 'name'=>'algebra']
+        ['id' => 1, 'name' => 'algebra'],
     ]);
 });
 
 it('search presenters', function () {
-    Presenter::factory()->create(['first_name'=> 'John','last_name' => 'Doe']);
+    Presenter::factory()->create(['first_name' => 'John', 'last_name' => 'Doe']);
 
     get(route('api.presenters').'?query=john')
         ->assertOk()
@@ -52,17 +52,17 @@ it('can search organizations', function () {
         ['id' => 2, 'name' => 'This is a test'],
     ]);
 })->with([
-    fn()=>  Organization::factory()->create([
-                'org_id' => 2,
-                'name' => 'This is a test',
-                'parent_org_id' => 2,
-                'orgno' => '0000000001',
-                'shortname' => 'Main organization unit',
-                'staff' => null,
-                'startdate' => now(),
-                'operationstartdate' => now(),
-                'operationenddate' => '2999-12-31',
-                'created_at' => now(),
-                'updated_at' => null,
+    fn () => Organization::factory()->create([
+        'org_id' => 2,
+        'name' => 'This is a test',
+        'parent_org_id' => 2,
+        'orgno' => '0000000001',
+        'shortname' => 'Main organization unit',
+        'staff' => null,
+        'startdate' => now(),
+        'operationstartdate' => now(),
+        'operationenddate' => '2999-12-31',
+        'created_at' => now(),
+        'updated_at' => null,
     ]),
 ]);

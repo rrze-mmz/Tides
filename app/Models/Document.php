@@ -15,17 +15,11 @@ class Document extends BaseModel
     //remove document from file disk on delete
     protected $dispatchesEvents = ['deleted' => DocumentDeleted::class];
 
-    /**
-     * @return MorphToMany
-     */
     public function series(): MorphToMany
     {
         return $this->morphedByMany(Series::class, 'documentable');
     }
 
-    /**
-     * @return MorphToMany
-     */
     public function clips(): MorphToMany
     {
         return $this->morphedByMany(Clip::class, 'documentable');

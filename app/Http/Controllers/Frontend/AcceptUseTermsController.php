@@ -10,9 +10,6 @@ class AcceptUseTermsController extends Controller
 {
     /**
      * User accepts the use terms
-     *
-     * @param  Request  $request
-     * @return RedirectResponse
      */
     public function __invoke(Request $request): RedirectResponse
     {

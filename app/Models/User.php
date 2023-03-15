@@ -56,8 +56,6 @@ class User extends Authenticatable
 
     /**
      * Get the user's full name.
-     *
-     * @return string
      */
     public function getFullNameAttribute(): string
     {
@@ -66,8 +64,6 @@ class User extends Authenticatable
 
     /**
      * Series relationship
-     *
-     * @return HasMany
      */
     public function series(): HasMany
     {
@@ -76,8 +72,6 @@ class User extends Authenticatable
 
     /**
      *  Subscriptions relationship
-     *
-     * @return BelongsToMany
      */
     public function subscriptions(): BelongsToMany
     {
@@ -95,8 +89,6 @@ class User extends Authenticatable
 
     /**
      * Clip relationship
-     *
-     * @return HasMany
      */
     public function clips(): HasMany
     {
@@ -110,8 +102,6 @@ class User extends Authenticatable
 
     /**
      * Comments relationship
-     *
-     * @return HasMany
      */
     public function comments(): HasMany
     {
@@ -121,7 +111,6 @@ class User extends Authenticatable
     /**
      * Assign a role to the current use
      *
-     * @param  string  $role
      * @return User
      */
     public function assignRole(string $role = ''): static
@@ -133,8 +122,6 @@ class User extends Authenticatable
 
     /**
      * Roles relationship
-     *
-     * @return BelongsToMany
      */
     public function roles(): BelongsToMany
     {
@@ -143,8 +130,6 @@ class User extends Authenticatable
 
     /**
      * Series Membership relationship
-     *
-     * @return BelongsToMany
      */
     public function memberships(): BelongsToMany
     {
@@ -155,7 +140,6 @@ class User extends Authenticatable
      * Check whether the current user has given role
      *
      * @param  string  $role
-     * @return bool
      */
     public function hasRole(\App\Enums\Role $role): bool
     {
@@ -164,8 +148,6 @@ class User extends Authenticatable
 
     /**
      * Check whether the current user is a superadmin
-     *
-     * @return bool
      */
     public function isSuperAdmin(): bool
     {
@@ -174,8 +156,6 @@ class User extends Authenticatable
 
     /**
      * Check whether the current user is an admin or a superadmin
-     *
-     * @return bool
      */
     public function isAdmin(): bool
     {
@@ -184,8 +164,6 @@ class User extends Authenticatable
 
     /**
      * Check whether the current user is an editor
-     *
-     * @return bool
      */
     public function isModerator(): bool
     {
@@ -194,8 +172,6 @@ class User extends Authenticatable
 
     /**
      * Check whether the current user is an assistant
-     *
-     * @return bool
      */
     public function isAssistant(): bool
     {
@@ -204,18 +180,12 @@ class User extends Authenticatable
 
     /**
      * Check whether the current user is part of a series
-     *
-     * @param  Series  $series
-     * @return bool
      */
     public function isMemberOf(Series $series): bool
     {
         return $this->memberships()->get()->contains($series);
     }
 
-    /**
-     * @return Builder|Series
-     */
     public function getAllSeries(): Builder|Series
     {
         return Series::whereHas('clips', function ($q) {
@@ -225,8 +195,6 @@ class User extends Authenticatable
 
     /**
      * Fetch User settings
-     *
-     * @return BaseModel
      */
     public function settings(): BaseModel
     {
@@ -238,8 +206,6 @@ class User extends Authenticatable
 
     /**
      * Resets user settings to default values
-     *
-     * @return BaseModel
      */
     public function resetSettings(): BaseModel
     {
@@ -265,7 +231,6 @@ class User extends Authenticatable
     /**
      * Scope users with admin roles
      *
-     * @param $query
      * @return mixed
      */
     public function scopeAdmins($query)

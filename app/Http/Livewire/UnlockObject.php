@@ -32,8 +32,6 @@ class UnlockObject extends Component
 
     /**
      * Livewire render function for the component
-     *
-     * @return Factory|View|Application
      */
     public function render(): Factory|View|Application
     {

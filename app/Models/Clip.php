@@ -41,13 +41,12 @@ class Clip extends BaseModel
     //hide clip password from elasticsearch index
     protected $hidden = ['password'];
 
-    protected $with = ['assets'];
-
     protected $dispatchesEvents = [
         'deleting' => ClipDeleting::class,
     ];
 
     protected $attributes = ['episode' => '1'];
+
     protected $casts = ['recording_date' => 'datetime:Y-m-d'];
 
     protected static function boot()
@@ -63,6 +62,18 @@ class Clip extends BaseModel
             $clip->setSlugAttribute($clip->episode.'-'.$clip->title.'-'.$semester);
         });
     }
+
+    protected function title(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => html_entity_decode(
+                htmlspecialchars_decode(
+                    html_entity_decode(html_entity_decode($value, ENT_NOQUOTES, 'UTF-8'))
+                )
+            )
+        );
+    }
+
     protected function description(): Attribute
     {
         return Attribute::make(
@@ -294,8 +305,6 @@ class Clip extends BaseModel
 
     /**
      * Return caption asset for the clip
-     *
-     * @return Asset|null
      */
     public function getCaptionAsset(): Asset|null
     {

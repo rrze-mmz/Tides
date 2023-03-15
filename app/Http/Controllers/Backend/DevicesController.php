@@ -18,7 +18,6 @@ class DevicesController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Application|Factory|View
      *
      * @throws AuthorizationException
      */
@@ -32,7 +31,6 @@ class DevicesController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return Application|Factory|View
      *
      * @throws AuthorizationException
      */
@@ -45,9 +43,6 @@ class DevicesController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  StoreDeviceRequest  $request
-     * @return RedirectResponse
      */
     public function store(StoreDeviceRequest $request): RedirectResponse
     {
@@ -58,9 +53,6 @@ class DevicesController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  Device  $device
-     * @return Application|Factory|View
      */
     public function edit(Device $device): Application|Factory|View
     {
@@ -74,8 +66,6 @@ class DevicesController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  UpdateDeviceRequest  $request
-     * @param  Device  $device
      * @return RedirectResponse
      */
     public function update(UpdateDeviceRequest $request, Device $device)
@@ -87,9 +77,6 @@ class DevicesController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  Device  $device
-     * @return RedirectResponse
      */
     public function destroy(Device $device): RedirectResponse
     {

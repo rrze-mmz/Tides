@@ -16,8 +16,6 @@ class SeriesMembershipController extends Controller
     /**
      * Handle the incoming request.
      *
-     * @param  Series  $series
-     * @param  SeriesMembershipRequest  $request
      * @return RedirectResponse
      */
     public function add(Series $series, SeriesMembershipRequest $request)

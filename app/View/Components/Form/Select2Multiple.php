@@ -26,8 +26,6 @@ class Select2Multiple extends Component
 
     /**
      * Get the view / contents that represent the component.
-     *
-     * @return View
      */
     public function render(): View
     {

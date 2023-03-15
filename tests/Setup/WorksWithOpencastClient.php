@@ -81,7 +81,6 @@ trait WorksWithOpencastClient
     }
 
     /**
-     * @param  Series  $series
      * @return Response
      */
     public function mockSeriesMetadata(Series $series)
@@ -140,12 +139,6 @@ trait WorksWithOpencastClient
 
     /**
      * Opencast single event metadata response
-     *
-     * @param  Series  $series
-     * @param  OpencastWorkflowState  $state
-     * @param  int  $archiveVersion
-     * @param  string  $identifier
-     * @return Response
      */
     public function mockEventResponse(
         Series $series,
@@ -182,12 +175,6 @@ trait WorksWithOpencastClient
 
     /**
      * Opencast single event metadata response
-     *
-     * @param $eventID
-     * @param  OpencastWorkflowState  $state
-     * @param  int  $archiveVersion
-     * @param  string  $seriesID
-     * @return Response
      */
     public function mockEventByEventID(
         $eventID,
@@ -275,96 +262,79 @@ trait WorksWithOpencastClient
     {
         $workflows = ($multiple) ? [
             [
-                'id' => 2006754,
-                'state' => OpencastWorkflowState::RUNNING->name,
-                'title' => 'Transcode after upload',
-                'mediapackage' => [
-                    'duration' => 3048683,
-                    'id' => Str::uuid(),
-                    'start' => Carbon::now()->addMinutes(1)->toIso8601ZuluString(),
-                    'title' => $this->faker->sentence,
-                    'series' => $series->opencast_series_id,
-                    'creators' => [
-                        'creator' => 'Dr. John Doe',
-                    ],
-                ],
-                'operations' => [
-                    'operation' => [
-                        0 => [
-                            'id' => 'ingest-download',
-                            'state' => OpencastWorkflowState::SUCCEEDED->name,
-                        ],
-                        1 => [
-                            'id' => 'encode',
-                            'state' => OpencastWorkflowState::RUNNING->name,
-                            'description' => 'Encode presenter for adaptive stream',
-                        ],
-                    ],
-                ],
+                'identifier' => Str::uuid(),
+                'creator' => 'Administrator',
+                'presenter' => [],
+                'created' => Carbon::now()->addMinutes(1)->toIso8601ZuluString(),
+                'is_part_of' => $series->opencast_series_id,
+                'subjects' => [],
+                'start' => Carbon::now()->addMinutes(1)->toIso8601ZuluString(),
+                'description' => '',
+                'language' => '',
+                'source' => '',
+                'title' => $this->faker->sentence,
+                'processing_state' => OpencastWorkflowState::RUNNING->name,
+                'duration' => 0,
+                'license' => '',
+                'archive_version' => 1,
+                'contributor' => [],
+                'series' => 'Numerik II für Ingenieure / tidesSeriesID: 537',
+                'has_previews' => false,
+                'location' => '',
+                'rightsholder' => '',
+                'publication_status' => [],
+                'status' => OpencastWorkflowState::RUNNING(),
             ],
             [
-                'id' => 2006752,
-                'state' => OpencastWorkflowState::RUNNING->name,
-                'title' => 'Transcode after upload',
-                'mediapackage' => [
-                    'duration' => 3048683,
-                    'id' => Str::uuid(),
-                    'start' => Carbon::now()->addMinutes(1)->toIso8601ZuluString(),
-                    'title' => $this->faker->sentence,
-                    'series' => $series->opencast_series_id,
-                ],
-                'operations' => [
-                    'operation' => [
-                        0 => [
-                            'id' => 'ingest-download',
-                            'state' => OpencastWorkflowState::SUCCEEDED->name,
-                        ],
-                        1 => [
-                            'id' => 'encode',
-                            'state' => OpencastWorkflowState::RUNNING->name,
-                            'description' => 'Encode presenter for adaptive stream',
-                        ],
-                    ],
-                ],
+                'identifier' => Str::uuid(),
+                'creator' => 'Administrator',
+                'presenter' => [],
+                'created' => Carbon::now()->addMinutes(1)->toIso8601ZuluString(),
+                'is_part_of' => $series->opencast_series_id,
+                'subjects' => [],
+                'start' => Carbon::now()->addMinutes(1)->toIso8601ZuluString(),
+                'description' => '',
+                'language' => '',
+                'source' => '',
+                'title' => $this->faker->sentence,
+                'processing_state' => OpencastWorkflowState::RUNNING->name,
+                'duration' => 0,
+                'license' => '',
+                'archive_version' => 1,
+                'contributor' => [],
+                'series' => 'Numerik II für Ingenieure / tidesSeriesID: 537',
+                'has_previews' => false,
+                'location' => '',
+                'rightsholder' => '',
+                'publication_status' => [],
+                'status' => OpencastWorkflowState::RUNNING(),
             ],
         ] :
-            [
-                'id' => 2006754,
-                'state' => OpencastWorkflowState::RUNNING->name,
-                'title' => 'Transcode after upload',
-                'mediapackage' => [
-                    'duration' => 3048683,
-                    'id' => Str::uuid(),
-                    'start' => Carbon::now()->addMinutes(1)->toIso8601ZuluString(),
-                    'title' => $this->faker->sentence,
-                    'series' => $series->opencast_series_id,
-                    'creators' => [
-                        'creator' => 'Dr. John Doe',
-                    ],
-                ],
-                'operations' => [
-                    'operation' => [
-                        0 => [
-                            'id' => 'ingest-download',
-                            'state' => OpencastWorkflowState::SUCCEEDED->name,
-                        ],
-                        1 => [
-                            'id' => 'encode',
-                            'state' => OpencastWorkflowState::RUNNING->name,
-                            'description' => 'Encode presenter for adaptive stream',
-                        ],
-                    ],
-                ],
-            ];
+           [[
+               'identifier' => Str::uuid(),
+               'creator' => 'Administrator',
+               'presenter' => [],
+               'created' => Carbon::now()->addMinutes(1)->toIso8601ZuluString(),
+               'is_part_of' => $series->opencast_series_id,
+               'subjects' => [],
+               'start' => Carbon::now()->addMinutes(1)->toIso8601ZuluString(),
+               'description' => '',
+               'language' => '',
+               'source' => '',
+               'title' => $this->faker->sentence,
+               'processing_state' => OpencastWorkflowState::RUNNING->name,
+               'duration' => 0,
+               'license' => '',
+               'archive_version' => 1,
+               'contributor' => [],
+               'series' => 'Numerik II für Ingenieure / tidesSeriesID: 537',
+               'has_previews' => false,
+               'location' => '',
+               'rightsholder' => '',
+               'publication_status' => [],
+               'status' => OpencastWorkflowState::RUNNING(),
+           ]];
 
-        return new Response(201, [], json_encode([
-            'workflows' => [
-                'startPage' => 0,
-                'count' => 20,
-                'searchTime' => 2,
-                'totalCount' => $multiple ? 2 : 1,
-                'workflow' => $workflows,
-            ],
-        ]));
+        return new Response(201, [], json_encode($workflows));
     }
 }

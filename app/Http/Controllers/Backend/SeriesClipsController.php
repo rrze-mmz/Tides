@@ -18,8 +18,6 @@ class SeriesClipsController extends Controller
     /**
      *  Show create clip form to assign a clip to series
      *
-     * @param  Series  $series
-     * @return View
      *
      * @throws AuthorizationException
      */
@@ -32,10 +30,6 @@ class SeriesClipsController extends Controller
 
     /**
      * Store a clip in a series
-     *
-     * @param  Series  $series
-     * @param  StoreClipRequest  $request
-     * @return RedirectResponse
      */
     public function store(Series $series, StoreClipRequest $request): RedirectResponse
     {
@@ -52,9 +46,6 @@ class SeriesClipsController extends Controller
     }
 
     /**
-     * @param  Clip  $clip
-     * @return View
-     *
      * @throws AuthorizationException
      */
     public function listSeries(Clip $clip): View
@@ -72,9 +63,6 @@ class SeriesClipsController extends Controller
     /**
      * Assign the given series to the given clip
      *
-     * @param  Series  $series
-     * @param  Clip  $clip
-     * @return RedirectResponse
      *
      * @throws AuthorizationException
      */
@@ -90,9 +78,6 @@ class SeriesClipsController extends Controller
     }
 
     /**
-     * @param  Clip  $clip
-     * @return RedirectResponse
-     *
      * @throws AuthorizationException
      */
     public function remove(Clip $clip): RedirectResponse
@@ -106,10 +91,6 @@ class SeriesClipsController extends Controller
         return to_route('clips.edit', $clip);
     }
 
-    /**
-     * @param  Series  $series
-     * @return Factory|View|Application
-     */
     public function listClips(Series $series): Factory|View|Application
     {
         return view('backend.seriesClips.reorder', compact('series'));
@@ -117,10 +98,6 @@ class SeriesClipsController extends Controller
 
     /**
      * Changes clips episodes for a series
-     *
-     * @param  Series  $series
-     * @param  Request  $request
-     * @return RedirectResponse
      */
     public function reorder(Series $series, Request $request): RedirectResponse
     {

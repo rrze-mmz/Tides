@@ -14,8 +14,6 @@ class AssetsTransferred extends Mailable
 
     /**
      * Create a new message instance.
-     *
-     * @param  Clip  $clip
      */
     public function __construct(protected Clip $clip)
     {

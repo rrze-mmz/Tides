@@ -63,7 +63,7 @@ class ClipTest extends TestCase
     /** @test */
     public function it_has_an_incremental_slug(): void
     {
-        $anotherClip = Clip::factory()->create(['title'=> $this->clip->title, 'episode' => $this->clip->episode]);
+        $anotherClip = Clip::factory()->create(['title' => $this->clip->title, 'episode' => $this->clip->episode]);
 
         $this->assertEquals($this->clip->slug.'-2', $anotherClip->slug);
     }

@@ -14,8 +14,6 @@ class Tag extends BaseModel
 
     /**
      * Clip relationship
-     *
-     * @return BelongsToMany
      */
     public function clips(): BelongsToMany
     {

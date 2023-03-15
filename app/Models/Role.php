@@ -8,8 +8,6 @@ class Role extends BaseModel
 {
     /**
      * User relationship
-     *
-     * @return BelongsToMany
      */
     public function users(): BelongsToMany
     {

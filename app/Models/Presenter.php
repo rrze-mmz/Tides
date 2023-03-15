@@ -27,8 +27,6 @@ class Presenter extends BaseModel
 
     /**
      * Series relationship
-     *
-     * @return MorphToMany
      */
     public function series(): MorphToMany
     {
@@ -37,8 +35,6 @@ class Presenter extends BaseModel
 
     /**
      * Clip relationship
-     *
-     * @return MorphToMany
      */
     public function clips(): MorphToMany
     {
@@ -52,8 +48,6 @@ class Presenter extends BaseModel
 
     /**
      * Degree relationship
-     *
-     * @return BelongsTo
      */
     public function academicDegree(): BelongsTo
     {

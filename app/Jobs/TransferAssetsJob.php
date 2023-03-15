@@ -27,11 +27,6 @@ class TransferAssetsJob implements ShouldQueue
 
     /**
      * Create a new job instance.
-     *
-     * @param  Clip  $clip
-     * @param  Collection  $files
-     * @param  string  $eventID
-     * @param  string  $sourceDisk
      */
     public function __construct(
         protected Clip $clip,
@@ -44,7 +39,6 @@ class TransferAssetsJob implements ShouldQueue
     /**
      * Copy a collection of video files to clip path
      *
-     * @return void
      *
      * @throws FileExistsException
      */

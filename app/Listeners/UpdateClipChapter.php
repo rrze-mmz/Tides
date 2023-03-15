@@ -20,7 +20,6 @@ class UpdateClipChapter
     /**
      * Handle the event.
      *
-     * @param  ChapterDeleted  $event
      * @return void
      */
     public function handle(ChapterDeleted $event)

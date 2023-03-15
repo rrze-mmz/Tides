@@ -39,9 +39,6 @@ class FetchOpencastAssets extends Command
 
     /**
      * Execute the console command.
-     *
-     * @param  OpencastService  $opencastService
-     * @return int
      */
     public function handle(OpencastService $opencastService): int
     {

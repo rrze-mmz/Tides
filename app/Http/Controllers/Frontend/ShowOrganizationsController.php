@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Organization;
 use App\Models\Series;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -13,9 +12,6 @@ class ShowOrganizationsController extends Controller
 {
     public function index(): View
     {
-//        $organizations = Organization::chairs()->whereHas('series', function (Builder $query) {
-//            $query->isPublic()->hasClipsWithAssets(); //series must be public accessable and must contain video assets
-//        })->get();
         $organizations = Organization::chairs()->orderBy('org_id')->get();
 
         return view('frontend.organizations.index', compact('organizations'));

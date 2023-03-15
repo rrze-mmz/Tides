@@ -14,9 +14,6 @@ class TriggerSmilFilesController extends Controller
     /**
      * Generates a wowza smil file for a clip
      *
-     * @param  Clip  $clip
-     * @param  WowzaService  $wowzaService
-     * @return RedirectResponse
      *
      * @throws AuthorizationException|DOMException
      */

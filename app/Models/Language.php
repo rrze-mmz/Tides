@@ -11,8 +11,6 @@ class Language extends BaseModel
 
     /**
      * Language can have many clips
-     *
-     * @return HasMany
      */
     public function clips(): HasMany
     {

@@ -15,8 +15,6 @@ class PortalSettingsController extends Controller
 {
     /**
      * Display Portal settings
-     *
-     * @return Application|Factory|View
      */
     public function show(): Application|Factory|View
     {
@@ -46,7 +44,6 @@ class PortalSettingsController extends Controller
     /**
      * Update Portal settings
      *
-     * @param  UpdatePortalSettings  $request
      * @return RedirectResponse
      */
     public function update(UpdatePortalSettings $request)

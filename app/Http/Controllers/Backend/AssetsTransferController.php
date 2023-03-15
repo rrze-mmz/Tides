@@ -17,10 +17,6 @@ class AssetsTransferController extends Controller
 
     /**
      * Upload a single transcoded file from clip edit page
-     *
-     * @param  Clip  $clip
-     * @param  UploadAssetRequest  $request
-     * @return RedirectResponse
      */
     public function transferSingleAsset(Clip $clip, UploadAssetRequest $request): RedirectResponse
     {
@@ -37,9 +33,6 @@ class AssetsTransferController extends Controller
 
     /**
      * List all available files inside the dropzone folder
-     *
-     * @param  Clip  $clip
-     * @return View
      */
     public function listDropzoneFiles(Clip $clip): View
     {
@@ -51,10 +44,6 @@ class AssetsTransferController extends Controller
 
     /**
      * Transfer files from dropzone to clip file path
-     *
-     * @param  Clip  $clip
-     * @param  Request  $request
-     * @return RedirectResponse
      */
     public function transferDropzoneFiles(Clip $clip, Request $request): RedirectResponse
     {
@@ -70,10 +59,6 @@ class AssetsTransferController extends Controller
 
     /**
      * Lists all opencast processed events
-     *
-     * @param  OpencastService  $opencastService
-     * @param  Clip  $clip
-     * @return View
      */
     public function listOpencastEvents(OpencastService $opencastService, Clip $clip): View
     {
@@ -89,12 +74,6 @@ class AssetsTransferController extends Controller
         ]);
     }
 
-    /**
-     * @param  Clip  $clip
-     * @param  Request  $request
-     * @param  OpencastService  $opencastService
-     * @return RedirectResponse
-     */
     public function transferOpencastFiles(
         Clip $clip,
         Request $request,

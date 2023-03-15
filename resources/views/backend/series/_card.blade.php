@@ -61,8 +61,7 @@
             </div>
             <div class="text-sm">
                 <p class="italic text-gray-900">
-                    {{ Illuminate\Support\Carbon::createFromFormat('Y-m-d H:i:s', $series->updated_at)
-                                                            ->format('Y-m-d')  }}
+                    {{ $series->updated_at->diffForHumans()  }}
                 </p>
             </div>
         </div>

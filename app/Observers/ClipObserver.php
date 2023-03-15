@@ -13,9 +13,6 @@ class ClipObserver
 
     /**
      * Handle the Clip "created" event.
-     *
-     * @param  Clip  $clip
-     * @return void
      */
     public function created(Clip $clip): void
     {
@@ -34,9 +31,6 @@ class ClipObserver
 
     /**
      * Handle the Clip "updated" event.
-     *
-     * @param  Clip  $clip
-     * @return void
      */
     public function updated(Clip $clip): void
     {
@@ -52,9 +46,6 @@ class ClipObserver
 
     /**
      * Handle the Clip "deleted" event.
-     *
-     * @param  Clip  $clip
-     * @return void
      */
     public function deleted(Clip $clip): void
     {
@@ -65,9 +56,6 @@ class ClipObserver
 
     /**
      * Handle the Clip "restored" event.
-     *
-     * @param  Clip  $clip
-     * @return void
      */
     public function restored(Clip $clip): void
     {
@@ -76,9 +64,6 @@ class ClipObserver
 
     /**
      * Handle the Clip "force deleted" event.
-     *
-     * @param  Clip  $clip
-     * @return void
      */
     public function forceDeleted(Clip $clip): void
     {

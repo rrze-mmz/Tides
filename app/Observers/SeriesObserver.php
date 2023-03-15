@@ -14,7 +14,6 @@ class SeriesObserver
     /**
      * Handle the Series "created" event.
      *
-     * @param  Series  $series
      * @return void
      */
     public function created(Series $series)
@@ -27,7 +26,6 @@ class SeriesObserver
     /**
      * Handle the Series "updated" event.
      *
-     * @param  Series  $series
      * @return void
      */
     public function updated(Series $series)
@@ -40,7 +38,6 @@ class SeriesObserver
     /**
      * Handle the Series "deleted" event.
      *
-     * @param  Series  $series
      * @return void
      */
     public function deleted(Series $series)
@@ -53,7 +50,6 @@ class SeriesObserver
     /**
      * Handle the Series "restored" event.
      *
-     * @param  Series  $series
      * @return void
      */
     public function restored(Series $series)
@@ -64,7 +60,6 @@ class SeriesObserver
     /**
      * Handle the Series "force deleted" event.
      *
-     * @param  Series  $series
      * @return void
      */
     public function forceDeleted(Series $series)

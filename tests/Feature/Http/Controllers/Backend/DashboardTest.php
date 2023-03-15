@@ -57,7 +57,9 @@ class DashboardTest extends TestCase
     {
         $this->signInRole($this->role);
 
-        $this->get(route('dashboard'))->assertSee(__('dashboard.new series'));
+        $this->get(route('dashboard'))
+            ->assertSee(route('series.create'))
+            ->assertSee(__('dashboard.new series'));
     }
 
     /** @test */
@@ -65,7 +67,9 @@ class DashboardTest extends TestCase
     {
         $this->signInRole($this->role);
 
-        $this->get(route('dashboard'))->assertSee(__('dashboard.new clip'));
+        $this->get(route('dashboard'))
+            ->assertSee(route('clips.create'))
+            ->assertSee(__('dashboard.new clip'));
     }
 
     /** @test */
@@ -145,8 +149,12 @@ class DashboardTest extends TestCase
 
         $this->get(route('dashboard'))
             ->assertSee(trans_choice('common.menu.device', 2))
+            ->assertSee(route('devices.index'))
             ->assertSee(trans_choice('common.menu.collection', 2))
-            ->assertSee(trans_choice('common.menu.user', 2));
+            ->assertSee(route('collections.index'))
+            ->assertSee(trans_choice('common.menu.user', 2))
+            ->assertSee(route('users.index'))
+            ->assertSee(trans_choice('common.menu.image', 2));
     }
 
     /** @test */
@@ -156,7 +164,9 @@ class DashboardTest extends TestCase
 
         $this->get(route('dashboard'))
             ->assertSee(trans_choice('common.menu.system', 2))
-            ->assertSee(__('common.menu.portal settings'));
+            ->assertSee(route('systems.status'))
+            ->assertSee(__('common.menu.portal settings'))
+            ->assertSee(route('settings.portal.index'));
     }
 
     /** @test */
@@ -166,7 +176,9 @@ class DashboardTest extends TestCase
 
         $this->get(route('dashboard'))
             ->assertSee('Series ID')
-            ->assertSee('Clip ID');
+            ->assertSee(route('goto.series'))
+            ->assertSee('Clip ID')
+            ->assertSee(route('goto.clip'));
     }
 
     /** @test */
@@ -176,7 +188,9 @@ class DashboardTest extends TestCase
 
         $this->get(route('dashboard'))
             ->assertDontSee('Go to')
+            ->assertDontSee(route('goto.series'))
             ->assertDontSee('Series ID')
+            ->assertDontSee(route('goto.clip'))
             ->assertDontSee('Clip ID');
     }
 
@@ -198,11 +212,12 @@ class DashboardTest extends TestCase
         $this->signInRole($this->role);
 
         $this->get(route('dashboard'))
-            ->assertSee('Series')
+            ->assertSee(route('series.index'))
             ->assertSee('Clips')
             ->assertDontSee('Activities')
             ->assertDontSee('Opencast')
-            ->assertDontSee('Users');
+            ->assertDontSee('Users')
+            ->assertSee('images');
     }
 
     /** @test */

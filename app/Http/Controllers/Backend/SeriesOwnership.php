@@ -17,9 +17,6 @@ class SeriesOwnership extends Controller
     /**
      * Handle the incoming request.
      *
-     * @param  Series  $series
-     * @param  SeriesMembershipRequest  $request
-     * @return RedirectResponse
      *
      * @throws AuthorizationException
      */

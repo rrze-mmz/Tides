@@ -13,8 +13,6 @@ class UserSettingsController extends Controller
 {
     /**
      * Show user settings
-     *
-     * @return Application|Factory|View
      */
     public function edit(): Application|Factory|View
     {
@@ -23,9 +21,6 @@ class UserSettingsController extends Controller
 
     /**
      * Update user settings
-     *
-     * @param  UpdateUserSettings  $request
-     * @return RedirectResponse
      */
     public function update(UpdateUserSettings $request): RedirectResponse
     {

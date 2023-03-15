@@ -22,8 +22,6 @@ class UsersController extends Controller
 
     /**
      * Render datatables Livewire component
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -34,8 +32,6 @@ class UsersController extends Controller
 
     /**
      * Create form for a user
-     *
-     * @return View
      */
     public function create(): View
     {
@@ -62,9 +58,6 @@ class UsersController extends Controller
 
     /**
      * Edit form for a user
-     *
-     * @param  User  $user
-     * @return View
      */
     public function edit(User $user): View
     {
@@ -73,10 +66,6 @@ class UsersController extends Controller
 
     /**
      * Updates a single user in database
-     *
-     * @param  User  $user
-     * @param  UpdateUserRequest  $request
-     * @return RedirectResponse
      */
     public function update(User $user, UpdateUserRequest $request): RedirectResponse
     {
@@ -100,9 +89,6 @@ class UsersController extends Controller
 
     /**
      * Deletes a single user
-     *
-     * @param  User  $user
-     * @return RedirectResponse
      */
     public function destroy(User $user): RedirectResponse
     {

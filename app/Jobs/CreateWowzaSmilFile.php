@@ -31,8 +31,6 @@ class CreateWowzaSmilFile implements ShouldQueue
     /**
      * Create a wowza smil file based on clip assets
      *
-     * @param  WowzaService  $wowzaService
-     * @return void
      *
      * @throws DOMException
      */

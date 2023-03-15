@@ -11,10 +11,6 @@ class AcceptUseTerms
 {
     /**
      * Handle an incoming request.
-     *
-     * @param  Request  $request
-     * @param  Closure  $next
-     * @return Response|RedirectResponse
      */
     public function handle(Request $request, Closure $next): Response|RedirectResponse
     {

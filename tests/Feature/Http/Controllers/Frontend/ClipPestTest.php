@@ -4,17 +4,17 @@ use App\Enums\Acl;
 use App\Models\Clip;
 use App\Models\Presenter;
 use App\Services\WowzaService;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Facades\Tests\Setup\ClipFactory;
 use Facades\Tests\Setup\SeriesFactory;
-use Tests\Setup\WorksWithOpencastClient;
-use Tests\Setup\WorksWithWowzaClient;
 use GuzzleHttp\Psr7\Response;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use function Pest\Laravel\actingAs;
+use function Pest\Laravel\delete;
 use function Pest\Laravel\get;
 use function Pest\Laravel\patch;
 use function Pest\Laravel\post;
-use function Pest\Laravel\delete;
+use Tests\Setup\WorksWithOpencastClient;
+use Tests\Setup\WorksWithWowzaClient;
 
 uses(
     RefreshDatabase::class,
@@ -84,7 +84,7 @@ it('a portal admin can access frontend clip page if clip has no assets', functio
 
 it('a clip owner can access frontend clip page if clip is not public visible', function () {
     $this->mockHandler->append($this->mockCheckApiConnection());
-    $clip = ClipFactory::ownedBy(signIn())->create(['is_public'=>false]);
+    $clip = ClipFactory::ownedBy(signIn())->create(['is_public' => false]);
     actingAs($clip->owner);
 
     get(route('frontend.clips.show', $clip))->assertOk();
@@ -92,7 +92,7 @@ it('a clip owner can access frontend clip page if clip is not public visible', f
 
 it('a portal admin can access frontend clip page if clip is not public visible', function () {
     $this->mockHandler->append($this->mockCheckApiConnection());
-    $clip = ClipFactory::create(['is_public'=>false]);
+    $clip = ClipFactory::create(['is_public' => false]);
     actingAs(signInRole('admin'));
 
     get(route('frontend.clips.show', $clip))->assertOk();

@@ -29,11 +29,9 @@
     </div>
     <div class="flex">
         <div class="w-2/3">
-            @can('view-opencast-workflows')
-                @if($opencastWorkflows->isNotEmpty())
-                    @include('backend.dashboard._opencast-workflows',['opencastWorkflows' => $opencastWorkflows])
-                @endif
-            @endcan
+            @if($opencastWorkflows->isNotEmpty())
+                @include('backend.dashboard._opencast-workflows',['opencastWorkflows' => $opencastWorkflows])
+            @endif
 
             @include('backend.users.series._layout',['layoutHeader' => __('dashboard.your last series'), 'series'=> $userSeries])
 

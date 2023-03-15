@@ -19,9 +19,6 @@ class DeleteDocumentFile
 
     /**
      * Handle the event.
-     *
-     * @param  DocumentDeleted  $event
-     * @return void
      */
     public function handle(DocumentDeleted $event): void
     {

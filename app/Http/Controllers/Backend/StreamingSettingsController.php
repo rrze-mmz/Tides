@@ -13,8 +13,6 @@ class StreamingSettingsController extends Controller
 {
     /**
      * Display streaming settings
-     *
-     * @return Application|Factory|View
      */
     public function show(): Application|Factory|View
     {

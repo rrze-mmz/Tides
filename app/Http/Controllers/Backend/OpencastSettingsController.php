@@ -14,8 +14,6 @@ class OpencastSettingsController extends Controller
 {
     /**
      * Display Opencast settings
-     *
-     * @return Application|Factory|View
      */
     public function show(): Application|Factory|View
     {
@@ -40,9 +38,6 @@ class OpencastSettingsController extends Controller
 
     /**
      * Update Opencast settings
-     *
-     * @param  UpdateOpencastSettings  $request
-     * @return RedirectResponse
      */
     public function update(UpdateOpencastSettings $request): RedirectResponse
     {

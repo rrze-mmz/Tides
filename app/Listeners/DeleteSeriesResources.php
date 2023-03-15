@@ -18,9 +18,6 @@ class DeleteSeriesResources
 
     /**
      * Handle the event.
-     *
-     * @param  SeriesDeleted  $event
-     * @return void
      */
     public function handle(SeriesDeleted $event): void
     {

@@ -19,8 +19,6 @@ use Spatie\ArrayToXml\ArrayToXml;
 class FeedsController extends Controller
 {
     /**
-     * @param  Series  $series
-     * @param  string  $assetsResolution
      * @return Application|ResponseFactory|Response
      *
      * @throws DOMException

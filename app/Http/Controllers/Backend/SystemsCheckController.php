@@ -12,11 +12,6 @@ class SystemsCheckController extends Controller
 {
     /**
      * Get opencast admin node status
-     *
-     * @param  OpencastService  $opencastService
-     * @param  WowzaService  $wowzaService
-     * @param  ElasticsearchService  $elasticsearchService
-     * @return View
      */
     public function __invoke(
         OpencastService $opencastService,

@@ -19,9 +19,6 @@ class DeleteClipResources
 
     /**
      * Handle the event.
-     *
-     * @param  ClipDeleting  $event
-     * @return void
      */
     public function handle(ClipDeleting $event): void
     {

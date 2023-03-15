@@ -16,9 +16,6 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 class DocumentController extends Controller
 {
     /**
-     * @param  Request  $request
-     * @return RedirectResponse
-     *
      * @throws AuthorizationException
      */
     public function upload(Request $request): RedirectResponse
@@ -51,9 +48,6 @@ class DocumentController extends Controller
     /**
      * View a series document on browser
      *
-     * @param  Series  $series
-     * @param  Document  $document
-     * @return BinaryFileResponse|RedirectResponse
      *
      * @throws AuthorizationException
      */
@@ -74,9 +68,6 @@ class DocumentController extends Controller
     /**
      * View a clip document in browser
      *
-     * @param  Clip  $clip
-     * @param  Document  $document
-     * @return BinaryFileResponse|RedirectResponse
      *
      * @throws AuthorizationException
      */
@@ -97,8 +88,6 @@ class DocumentController extends Controller
     /**
      * Delete a given document
      *
-     * @param  Document  $document
-     * @return RedirectResponse
      *
      * @throws AuthorizationException
      */

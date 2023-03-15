@@ -11,8 +11,6 @@ class AcademicDegree extends BaseModel
 
     /**
      * Presenters relationship
-     *
-     * @return HasMany
      */
     public function presenters(): HasMany
     {

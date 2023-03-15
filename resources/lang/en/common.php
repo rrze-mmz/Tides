@@ -25,6 +25,7 @@ return [
         'system' => 'System|Systems',
         'document' => 'Document|Documents',
         'portal settings' => 'Portal settings',
+        'image' => 'Image|Images',
     ],
 
     'heading' => [

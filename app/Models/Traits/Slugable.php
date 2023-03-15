@@ -2,17 +2,13 @@
 
 namespace App\Models\Traits;
 
-use App\Models\Semester;
 use Illuminate\Support\Str;
 
 trait Slugable
 {
     /**
      * Set the slug to another value if another one with the same value exists
-     *
-     * @param $value
      */
-
     public function setSlugAttribute($value): void
     {
         if (self::whereSlug($slug = Str::of($value)->slug('-'))
@@ -25,9 +21,6 @@ trait Slugable
 
     /**
      * Adds a counter if there are two objects with the same slug
-     *
-     * @param $slug
-     * @return mixed
      */
     protected function incrementSlug($slug): mixed
     {

@@ -43,13 +43,13 @@ return [
 
         'single' => [
             'driver' => 'single',
-            'path'  => env('LOG_PATH', storage_path('logs/laravel.log')),
+            'path' => env('LOG_PATH', storage_path('logs/laravel.log')),
             'level' => env('LOG_LEVEL', 'debug'),
         ],
 
         'daily' => [
             'driver' => 'daily',
-            'path'  => env('LOG_PATH', storage_path('logs/laravel.log')),
+            'path' => env('LOG_PATH', storage_path('logs/laravel.log')),
             'level' => env('LOG_LEVEL', 'debug'),
             'days' => 14,
         ],
@@ -97,7 +97,7 @@ return [
         ],
 
         'emergency' => [
-            'path'  => env('LOG_PATH', storage_path('logs/laravel.log')),
+            'path' => env('LOG_PATH', storage_path('logs/laravel.log')),
         ],
     ],
 

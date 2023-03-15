@@ -31,8 +31,6 @@ class Asset extends BaseModel
 
     /**
      * Return asset duration in hh:mm:ss format
-     *
-     * @return string
      */
     public function durationToHours(): string
     {
@@ -41,8 +39,6 @@ class Asset extends BaseModel
 
     /**
      *  Clip relationship
-     *
-     * @return BelongsTo
      */
     public function clip(): BelongsTo
     {
@@ -51,8 +47,6 @@ class Asset extends BaseModel
 
     /**
      * Asset backend link
-     *
-     * @return string
      */
     public function path(): string
     {
@@ -61,8 +55,6 @@ class Asset extends BaseModel
 
     /**
      * Return assets download path
-     *
-     * @return string
      */
     public function downloadPath(): string
     {
@@ -71,9 +63,6 @@ class Asset extends BaseModel
 
     /**
      * Scope a query to only include video assets
-     *
-     * @param $query
-     * @return mixed
      */
     public function scopeFormatVideo($query): mixed
     {
@@ -84,9 +73,6 @@ class Asset extends BaseModel
 
     /**
      * Scope a query to only include audio assets
-     *
-     * @param $query
-     * @return mixed
      */
     public function scopeFormatAudio($query): mixed
     {

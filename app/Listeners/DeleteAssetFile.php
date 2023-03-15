@@ -19,9 +19,6 @@ class DeleteAssetFile
 
     /**
      * Update clip poster file and delete the given video file
-     *
-     * @param  AssetDeleted  $event
-     * @return void
      */
     public function handle(AssetDeleted $event): void
     {

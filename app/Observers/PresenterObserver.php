@@ -14,7 +14,6 @@ class PresenterObserver
     /**
      * Handle the Presenter "created" event.
      *
-     * @param  Presenter  $presenter
      * @return void
      */
     public function created(Presenter $presenter)
@@ -26,7 +25,6 @@ class PresenterObserver
     /**
      * Handle the Presenter "updated" event.
      *
-     * @param  Presenter  $presenter
      * @return void
      */
     public function updated(Presenter $presenter)
@@ -38,7 +36,6 @@ class PresenterObserver
     /**
      * Handle the Presenter "deleted" event.
      *
-     * @param  Presenter  $presenter
      * @return void
      */
     public function deleted(Presenter $presenter)

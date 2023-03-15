@@ -10,9 +10,6 @@ class AssetsDownloadController extends Controller
 {
     /**
      * Download a given asset
-     *
-     * @param  Asset  $asset
-     * @return BinaryFileResponse
      */
     public function __invoke(Asset $asset): BinaryFileResponse
     {

@@ -17,8 +17,6 @@ class Comment extends BaseModel
 
     /**
      * User relationship
-     *
-     * @return BelongsTo
      */
     public function owner(): BelongsTo
     {

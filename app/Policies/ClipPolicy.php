@@ -14,9 +14,6 @@ class ClipPolicy
 
     /**
      * Check whether the current user can view all clips in index
-     *
-     * @param  User  $user
-     * @return bool
      */
     public function index(User $user): bool
     {
@@ -25,9 +22,6 @@ class ClipPolicy
 
     /**
      * Check whether the current user can create a clip
-     *
-     * @param  User  $user
-     * @return bool
      */
     public function create(User $user): bool
     {
@@ -36,21 +30,12 @@ class ClipPolicy
 
     /**
      * Check whether the given user can edit the given clip
-     *
-     * @param  User  $user
-     * @param  Clip  $clip
-     * @return bool
      */
     public function edit(User $user, Clip $clip): bool
     {
         return $user->is($clip->owner) || ($user->isAdmin() || $user->isAssistant());
     }
 
-    /**
-     * @param  User|null  $user
-     * @param  Clip  $clip
-     * @return bool
-     */
     public function view(?User $user, Clip $clip): bool
     {
         if (optional($user)->is($clip->owner) || optional($user)->isAdmin() || optional($user)->isAssistant()) {
@@ -66,10 +51,6 @@ class ClipPolicy
 
     /**
      * Check whether the current user can view the given clip comments
-     *
-     * @param  User|null  $user
-     * @param  Clip  $clip
-     * @return bool
      */
     public function viewComments(?User $user, Clip $clip): bool
     {

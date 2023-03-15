@@ -10,8 +10,6 @@ trait Presentable
 {
     /**
      * Given model presenters relationship
-     *
-     * @return MorphToMany
      */
     public function presenters(): MorphToMany
     {
@@ -20,9 +18,6 @@ trait Presentable
 
     /**
      * Add presenters to a given model
-     *
-     * @param  Collection  $presentersCollection
-     * @return void
      */
     public function addPresenters(Collection $presentersCollection): void
     {

@@ -4,7 +4,6 @@ namespace Tests;
 
 use App\Models\AcademicDegree;
 use App\Models\Acl;
-use App\Models\Image;
 use App\Models\Language;
 use App\Models\Organization;
 use App\Models\Role;
@@ -68,9 +67,9 @@ abstract class TestCase extends BaseTestCase
 
         Semester::create([
             'name' => 'Wintersemester '.Carbon::now()->year,
-            'acronym' => 'W'.Carbon::now()->format('y')-1,
-            'short_title' => Carbon::now()->year -1 .'/'. Carbon::now()->year -1,
-            'start_date' => Carbon::now()->year-1 .'-10-01 00:00:00',
+            'acronym' => 'W'.Carbon::now()->format('y') - 1,
+            'short_title' => Carbon::now()->year - 1 .'/'.Carbon::now()->year - 1,
+            'start_date' => Carbon::now()->year - 1 .'-10-01 00:00:00',
             'stop_date' => Carbon::now()->year.'-03-31 23:59:59',
         ]);
 
@@ -83,9 +82,9 @@ abstract class TestCase extends BaseTestCase
         ]);
 
         Semester::create([
-            'name' => 'Wintersemester '.Carbon::now()->year.'/'.Carbon::now()->year + 1 ,
+            'name' => 'Wintersemester '.Carbon::now()->year.'/'.Carbon::now()->year + 1,
             'acronym' => 'W'.Carbon::now()->format('y'),
-            'short_title' => Carbon::now()->year.'/'.Carbon::now()->year + 1 ,
+            'short_title' => Carbon::now()->year.'/'.Carbon::now()->year + 1,
             'start_date' => Carbon::now()->year.'-10-01 00:00:00',
             'stop_date' => Carbon::now()->year + 1 .'-03-31 23:59:59',
         ]);
@@ -145,22 +144,8 @@ abstract class TestCase extends BaseTestCase
         Role::create([
             'name' => \App\Enums\Role::USER->lower(),
         ]);
-
-        Image::create([
-            'id' => 1,
-            'description' => 'Default image',
-            'file_name' => 'tides.png',
-            'file_path' => '/data/Thumbnails/tides.png',
-            'thumbnail_path' => 'tides_thumb.png',
-            'mime_type' => null,
-            'file_size' => null,
-        ]);
     }
 
-    /**
-     * @param  User|null  $user
-     * @return User
-     */
     protected function signIn(User $user = null): User
     {
         $user = $user ?: User::factory()->create();
@@ -170,10 +155,6 @@ abstract class TestCase extends BaseTestCase
         return $user;
     }
 
-    /**
-     * @param  string  $role
-     * @return User
-     */
     protected function signInRole(string $role = ''): User
     {
         $user = User::factory()->create();

@@ -36,8 +36,6 @@ class ElasticsearchDeleteIndexes extends Command
     /**
      * Execute the console command.
      *
-     * @param  ElasticsearchService  $elasticsearchService
-     * @return int
      *
      * @throws GuzzleException
      */

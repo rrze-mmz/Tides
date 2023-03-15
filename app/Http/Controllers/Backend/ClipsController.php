@@ -19,8 +19,6 @@ class ClipsController extends Controller
 {
     /**
      * Index all clips in admin portal. In case of simple user list only users clips
-     *
-     * @return Application|Factory|\Illuminate\Contracts\View\View
      */
     public function index(): Application|Factory|\Illuminate\Contracts\View\View
     {
@@ -36,8 +34,6 @@ class ClipsController extends Controller
 
     /**
      * Create form for a single clip
-     *
-     * @return View
      */
     public function create(): View
     {
@@ -46,9 +42,6 @@ class ClipsController extends Controller
 
     /**
      * Store a clip in database
-     *
-     * @param  StoreClipRequest  $request
-     * @return RedirectResponse
      */
     public function store(StoreClipRequest $request): RedirectResponse
     {
@@ -66,9 +59,6 @@ class ClipsController extends Controller
     /**
      * Edit form for a single clip
      *
-     * @param  Clip  $clip
-     * @param  OpencastService  $opencastService
-     * @return View|Application|Factory
      *
      * @throws AuthorizationException
      */
@@ -89,10 +79,6 @@ class ClipsController extends Controller
 
     /**
      * Update a single clip in the database
-     *
-     * @param  Clip  $clip
-     * @param  UpdateClipRequest  $request
-     * @return RedirectResponse
      */
     public function update(Clip $clip, UpdateClipRequest $request): RedirectResponse
     {
@@ -110,8 +96,6 @@ class ClipsController extends Controller
     /**
      * Delete a single clip
      *
-     * @param  Clip  $clip
-     * @return RedirectResponse
      *
      * @throws AuthorizationException
      */

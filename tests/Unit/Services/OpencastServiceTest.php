@@ -183,12 +183,9 @@ class OpencastServiceTest extends TestCase
 
         $response = $this->opencastService->getSeriesRunningWorkflows($series);
 
-        $this->assertEquals('RUNNING', $response['workflows']['workflow']['0']['state']);
+        $this->assertEquals('RUNNING', $response[0]['processing_state']);
 
-        $this->assertEquals(
-            $series->opencast_series_id,
-            $response['workflows']['workflow']['0']['mediapackage']['series']
-        );
+        $this->assertEquals($series->opencast_series_id, $response[0]['is_part_of']);
     }
 
     /** @test */

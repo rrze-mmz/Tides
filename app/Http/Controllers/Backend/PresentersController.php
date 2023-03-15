@@ -27,9 +27,6 @@ class PresentersController extends Controller
         ]);
     }
 
-    /**
-     * @return View
-     */
     public function create(): View
     {
         Gate::allowIf(fn ($user) => $user->isAdmin() || $user->isAssistant());
@@ -39,9 +36,6 @@ class PresentersController extends Controller
 
     /**
      * Store a presenter in database
-     *
-     * @param  StorePresenterRequest  $request
-     * @return RedirectResponse
      */
     public function store(StorePresenterRequest $request): RedirectResponse
     {
@@ -54,9 +48,6 @@ class PresentersController extends Controller
 
     /**
      * Edit form for a presenter
-     *
-     * @param  Presenter  $presenter
-     * @return View
      */
     public function edit(Presenter $presenter): View
     {
@@ -67,10 +58,6 @@ class PresentersController extends Controller
 
     /**
      * Update a single presenter in database
-     *
-     * @param  Presenter  $presenter
-     * @param  Request  $request
-     * @return RedirectResponse
      */
     public function update(Presenter $presenter, Request $request): RedirectResponse
     {
@@ -99,9 +86,6 @@ class PresentersController extends Controller
 
     /**
      * Deletes a single presenter
-     *
-     * @param  Presenter  $presenter
-     * @return RedirectResponse
      */
     public function destroy(Presenter $presenter): RedirectResponse
     {
