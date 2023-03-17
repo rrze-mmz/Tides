@@ -2,11 +2,7 @@
 
 use App\Enums\Acl;
 use Facades\Tests\Setup\ClipFactory;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use function Pest\Laravel\actingAs;
 use function Pest\Laravel\get;
-
-uses(RefreshDatabase::class);
 
 uses()->group('frontend');
 
@@ -18,7 +14,7 @@ it('a clip with a portal acl can be only be accessable for logged in users', fun
     $this->clip->addAcls(collect([Acl::PORTAL()]));
     get(route('frontend.clips.show', $this->clip))->assertDontSee('plyr-player');
 
-    actingAs(signIn());
+    signIn();
     get(route('frontend.clips.show', $this->clip))->assertSee('plyr-player');
 });
 
@@ -42,7 +38,7 @@ it('a clip with lms acl can be accessable for clip admin', function () {
     $this->clip->addAcls(collect([Acl::LMS()]));
     get(route('frontend.clips.show', $this->clip))->assertDontSee('plyr-player');
 
-    actingAs($this->clip->owner);
+    signIn($this->clip->owner);
     get(route('frontend.clips.show', $this->clip))->assertSee('plyr-player');
 });
 

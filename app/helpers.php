@@ -17,13 +17,11 @@ use Psr\Container\NotFoundExceptionInterface;
 /**
  * Returns poster image relative file path of a clip or default
  */
-function fetchClipPoster(Clip $clip): string
+function fetchClipPoster(string|null $player_preview): string
 {
-    $asset = $clip->assets()->orderBy('width', 'desc')->limit(1)->get()->first();
-
-    return (is_null($asset))
+    return (is_null($player_preview))
         ? '/images/generic_clip_poster_image.png'
-        : "/thumbnails/previews-ng/{$asset->player_preview}";
+        : "/thumbnails/previews-ng/{$player_preview}";
 }
 
 /**
@@ -234,4 +232,19 @@ function getProtectedUrl(string $filePath): string
     $token = md5($secret.$filePath.$hexTime.$userIP);
 
     return $cdn.$token.'/'.$hexTime.$filePath;
+}
+
+function humanFileSizeFormat(string $bytes, $dec = 2): string
+{
+    if ($bytes === 'null') {
+        return '0 B';
+    }
+
+    $size = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+    $factor = floor((strlen($bytes) - 1) / 3);
+    if ($factor == 0) {
+        $dec = 0;
+    }
+
+    return sprintf("%.{$dec}f %s", $bytes / (1024 ** $factor), $size[$factor]);
 }

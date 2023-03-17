@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Clip;
 use App\Models\Series;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\View\View;
 
 class HomeController extends Controller
@@ -15,18 +16,17 @@ class HomeController extends Controller
     public function __invoke(): View
     {
         return view('frontend.homepage.index', [
-            'series' => Series::isPublic()
-                ->hasClipsWithAssets()
-                ->with(['clips' => function ($q) {
-                    $q->public()->whereHas('assets');
-                }, 'presenters'])
+            'series' => Series::whereHas('clips', function (Builder $query) {
+                $query->has('assets');
+            })->isPublic()
+                ->withLastPublicClip()
                 ->orderByDesc('updated_at')
                 ->limit(16)
                 ->get(),
             'clips' => Clip::with(['assets', 'presenters'])
                 ->public()
                 ->whereHas('assets')
-                ->whereNull('series_id')
+                ->single()
                 ->orderByDesc('updated_at')
                 ->limit(12)
                 ->get(),

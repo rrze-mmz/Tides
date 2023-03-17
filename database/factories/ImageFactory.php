@@ -21,7 +21,7 @@ class ImageFactory extends Factory
         $uploadedFile = UploadedFile::fake()->create('image.png', '300', 'image/png');
 
         return [
-            'description' => 'just a test image',
+            'description' => $this->faker->sentence(6),
             'file_name' => $uploadedFile->getClientOriginalName(),
             'file_path' => 'images',
             'thumbnail_path' => $uploadedFile->getClientOriginalName().'_thumb.png',

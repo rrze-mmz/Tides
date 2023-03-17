@@ -40,7 +40,6 @@ return [
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
         ],
-
         'videos' => [
             'driver' => 'local',
             'root' => env('NFS_PATH', storage_path('app/videos')),
@@ -79,6 +78,12 @@ return [
             'driver' => 'local',
             'root' => env('PLAYER_THUMBNAILS_PATH', storage_path('app/thumbnails')),
             'url' => env('APP_URL').'/thumbnails',
+            'visibility' => 'public',
+        ],
+        'images' => [
+            'driver' => 'local',
+            'root' => env('IMAGES_PATH', storage_path('app/images')),
+            'url' => env('APP_URL').'/images',
             'visibility' => 'public',
         ],
     ],

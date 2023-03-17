@@ -148,7 +148,7 @@ class Clip extends BaseModel
 
     public function latestAsset(): HasOne
     {
-        return $this->hasOne(Asset::class)->latestOfMany();
+        return $this->hasOne(Asset::class)->ofMany('duration', 'max');
     }
 
     public function collections(): BelongsToMany
@@ -324,5 +324,16 @@ class Clip extends BaseModel
     public function scopeSingle($query): mixed
     {
         return $query->whereNull('series_id');
+    }
+
+    public function scopeWithSemester($query)
+    {
+        return $query->addSelect(
+            [
+                'semester' => Semester::select('name')
+                    ->whereColumn('id', 'clips.semester_id')
+                    ->take(1),
+            ]
+        );
     }
 }

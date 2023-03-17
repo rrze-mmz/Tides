@@ -7,7 +7,7 @@
                 <li class="flex content-center items-center p-2 mb-2 bg-gray-400 rounded text-center">
                 </li>
 
-                @forelse($series->clips->sortBy('episode', SORT_NATURAL) as $clip)
+                @forelse($clips as $clip)
                     <li class="flex content-center items-center p-2 mb-4 text-lg bg-gray-200 rounded text-center">
                         <div class="w-1/12">
                             @if ($reorder)
@@ -28,8 +28,9 @@
                                     href="@if(str_contains(url()->current(), 'admin')) {{$clip->adminPath()}}
                                     @else {{ $clip->path() }}
                                     @endif">
-                                    <img src="{{ fetchClipPoster($clip) }}"
-                                         alt="preview image"
+                                    <img
+                                        src="{{ fetchClipPoster($clip->latestAsset?->player_preview) }}"
+                                        alt="preview image"
                                     >
                                 </a>
                             </div>
@@ -59,8 +60,12 @@
                             <div class="pl-4">
                             </div>
                         </div>
-                        <div class="w-2/12">{{ $clip->semester->name }}</div>
-                        <div class="w-1/12"> {{ $clip->assets->first()?->durationToHours()  }}</div>
+                        <div class="w-2/12">{{ $clip->semester }}</div>
+                        <div class="w-1/12">
+                            {{
+                            (is_null($clip->latestAsset)?'00:00:00':gmdate('H:i:s', $clip->latestAsset->duration))
+                            }}
+                        </div>
                         <div class="w-1/12">
                             @if($dashboardAction && Request::segment(1) === 'admin')
                                 <a href="{{route('clips.edit', $clip)}}">

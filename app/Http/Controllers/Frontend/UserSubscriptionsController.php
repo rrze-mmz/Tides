@@ -17,6 +17,8 @@ class UserSubscriptionsController extends Controller
      */
     public function __invoke(Request $request)
     {
-        return view('frontend.myPortal.subscriptions', ['series' => auth()->user()->subscriptions]);
+        return view('frontend.myPortal.subscriptions', ['series' => auth()->user()
+                                                                ->subscriptions()
+                                                                ->withLastPublicClip()->get()]);
     }
 }

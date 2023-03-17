@@ -2,14 +2,14 @@
     <div class="relative h-30 overflow-hidden">
         <img
             src="{{ ($series->clips->count() > 0)
-                    ? fetchClipPoster($series->latestClip)
+                    ? fetchClipPoster($series->lastPublicClip?->latestAsset?->player_preview)
                     : "/images/generic_clip_poster_image.png" }}"
             alt="preview image"
             class="object-cover w-full h-full"/>
         <div
             class="absolute w-full py-2.5 bottom-0 inset-x-0 bg-blue-600  text-white
                     text-xs text-right pr-2 pb-2 leading-4 ">
-            {{ $series->clips->last()?->assets->first()?->durationToHours() }}
+            {{ $series->latestClip?->latestAsset?->durationToHours() }}
         </div>
     </div>
 
@@ -66,9 +66,14 @@
             </div>
         </div>
 
-        @if($seriesAcls = $series->clips->map(function ($clip) {
+        @if($seriesAcls = $series->clips
+                        ->map(function ($clip) {
                             return $clip->acls->pluck('name');
-                        })->flatten()->unique()->values()->implode(', '))
+                        })
+                        ->flatten()
+                        ->unique()
+                        ->values()
+                        ->implode(', '))
             @if($seriesAcls!== 'public')
                 <div class="flex items-center justify-content-between">
                     <div class="pr-2">

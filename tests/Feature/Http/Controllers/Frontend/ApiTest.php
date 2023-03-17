@@ -4,10 +4,7 @@ use App\Models\Clip;
 use App\Models\Organization;
 use App\Models\Presenter;
 use App\Models\Tag;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use function Pest\Laravel\get;
-
-uses(RefreshDatabase::class);
 
 uses()->group('frontend');
 

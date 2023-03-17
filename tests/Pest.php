@@ -12,11 +12,13 @@
 */
 
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
 use function Pest\Laravel\actingAs;
 
 uses(
     Tests\TestCase::class,
+    RefreshDatabase::class
 )->beforeEach(function () {
     Config::set('logging.channels.single.path', storage_path('logs/laravel.log'));
 })->in('Feature', 'Unit');

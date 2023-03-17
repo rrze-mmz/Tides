@@ -28,9 +28,7 @@ class ReAssignClipPosterImage extends Command
     public function handle(): int
     {
         $this->info('Counting clips...');
-
         $bar = $this->output->createProgressBar(Clip::count());
-
         $bar->start();
 
         Clip::lazy()->each(function ($clip) use ($bar) {

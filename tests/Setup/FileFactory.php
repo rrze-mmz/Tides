@@ -30,6 +30,18 @@ class FileFactory
             );
     }
 
+    public function imageFile(): UploadedFile
+    {
+        return
+            new UploadedFile(
+                storage_path().'/tests/creative-commons.png',
+                'creative-commons.png',
+                'image/x-png',
+                null,
+                true
+            );
+    }
+
     public function simpleFile(): UploadedFile
     {
         return

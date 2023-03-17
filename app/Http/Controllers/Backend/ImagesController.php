@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Image;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -21,10 +22,15 @@ class ImagesController extends Controller
 
     /**
      * Show the form for creating a new resource.
+     *
+     * @throws AuthorizationException
      */
     public function create()
     {
-        //
+        //Only portal admins can create new images.
+        $this->authorize('administrate-admin-portal-pages');
+
+        return view('backend.images.create');
     }
 
     /**
@@ -48,7 +54,7 @@ class ImagesController extends Controller
      */
     public function edit(Image $image)
     {
-        //
+        dd($image);
     }
 
     /**

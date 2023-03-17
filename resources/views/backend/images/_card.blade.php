@@ -4,7 +4,7 @@
     </h2>
 
     <div class="">
-        <img src="{{ asset('images/'.$model->image->file_name) }}" alt="{{ $model->image->description }}">
+        <img src="{{  asset('images/'.$model->image->file_name) }}" alt="{{ $model->image->description }}">
     </div>
 
     <div class="flex pt-4 w-full">

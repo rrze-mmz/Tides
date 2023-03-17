@@ -8,7 +8,6 @@ use Facades\Tests\Setup\ClipFactory;
 use Facades\Tests\Setup\SeriesFactory;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use function Pest\Laravel\actingAs;
 use function Pest\Laravel\delete;
 use function Pest\Laravel\get;
 use function Pest\Laravel\patch;
@@ -62,7 +61,7 @@ it('a guest cannot access frontend clip page if clip has no assets', function ()
 
 it('a logged in user cannot access frontend clip page if clip has no assets', function () {
     $this->mockHandler->append($this->mockCheckApiConnection());
-    actingAs(signIn());
+    signIn();
 
     get(route('frontend.clips.show', ClipFactory::withAssets(0)->create()))->assertForbidden();
 });
@@ -70,14 +69,14 @@ it('a logged in user cannot access frontend clip page if clip has no assets', fu
 it('a clip owner can access frontend clip page if clip has no assets', function () {
     $this->mockHandler->append($this->mockCheckApiConnection());
     $emptyClip = ClipFactory::withAssets(0)->create();
-    actingAs($emptyClip->owner);
+    signIn($emptyClip->owner);
 
     $this->get(route('frontend.clips.show', $emptyClip))->assertOk();
 });
 
 it('a portal admin can access frontend clip page if clip has no assets', function () {
     $this->mockHandler->append($this->mockCheckApiConnection());
-    actingAs(signInRole('admin'));
+    signInRole('admin');
 
     get(route('frontend.clips.show', ClipFactory::withAssets(0)->create()))->assertOk();
 });
@@ -85,7 +84,7 @@ it('a portal admin can access frontend clip page if clip has no assets', functio
 it('a clip owner can access frontend clip page if clip is not public visible', function () {
     $this->mockHandler->append($this->mockCheckApiConnection());
     $clip = ClipFactory::ownedBy(signIn())->create(['is_public' => false]);
-    actingAs($clip->owner);
+    signIn($clip->owner);
 
     get(route('frontend.clips.show', $clip))->assertOk();
 });
@@ -93,7 +92,7 @@ it('a clip owner can access frontend clip page if clip is not public visible', f
 it('a portal admin can access frontend clip page if clip is not public visible', function () {
     $this->mockHandler->append($this->mockCheckApiConnection());
     $clip = ClipFactory::create(['is_public' => false]);
-    actingAs(signInRole('admin'));
+    signInRole('admin');
 
     get(route('frontend.clips.show', $clip))->assertOk();
 });
@@ -131,7 +130,7 @@ it('player tries to load the video file as html5 source dom element', function (
 
 it('clip edit button in clip public page is hidden for guests', function () {
     $this->mockHandler->append(new Response());
-    actingAs(signIn());
+    signIn();
 
     get(route('frontend.clips.show', $this->clip))->assertDontSee('Back to edit page');
 });

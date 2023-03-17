@@ -271,6 +271,22 @@ class Series extends BaseModel
         }
     }
 
+    public function lastPublicClip(): BelongsTo
+    {
+        return $this->belongsTo(Clip::class);
+    }
+
+    public function scopeWithLastPublicClip($query)
+    {
+        return $query->addSelect(['last_public_clip_id' => Clip::select('id')
+                                          ->public()
+                                          ->whereHas('assets')
+                                          ->whereColumn('series_id', 'series.id')
+                                          ->orderByDesc('recording_date')
+            ->take(1),
+        ])->with('lastPublicClip');
+    }
+
     /**
      *  Scope a query to only include public series
      */

@@ -72,7 +72,7 @@ class ManageUsersTest extends TestCase
 
         Livewire::test(UserDataTable::class)
             ->assertSee($admin->username)
-            ->assertSee($moderator->username)
+            ->assertSee($moderator->usernaitme)
             ->set('admin', true)
             ->assertSee($admin->username)
             ->assertSee($superadmin->username)

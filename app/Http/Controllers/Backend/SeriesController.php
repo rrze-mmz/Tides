@@ -6,6 +6,8 @@ use App\Enums\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreSeriesRequest;
 use App\Http\Requests\UpdateSeriesRequest;
+use App\Models\Clip;
+use App\Models\Semester;
 use App\Models\Series;
 use App\Models\User;
 use App\Services\OpencastService;
@@ -80,7 +82,19 @@ class SeriesController extends Controller
             }
         });
 
-        return view('backend.series.edit', compact(['series', 'opencastSeriesInfo', 'availableAssistants']));
+        $clips = Clip::select('id', 'title', 'slug', 'episode')
+            ->where('series_id', $series->id)
+            ->addSelect(
+                [
+                    'semester' => Semester::select('name')
+                        ->whereColumn('id', 'clips.semester_id')
+                        ->take(1),
+                ]
+            )
+            ->with('acls')
+            ->orderBy('episode')->get();
+
+        return view('backend.series.edit', compact(['series', 'clips', 'opencastSeriesInfo', 'availableAssistants']));
     }
 
     /**

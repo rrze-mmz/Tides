@@ -1,19 +1,13 @@
 <?php
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use function Pest\Laravel\actingAs;
 use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\followingRedirects;
 use function Pest\Laravel\put;
 
-uses(
-    RefreshDatabase::class
-);
-
 uses()->group('frontend');
 
 beforeEach(function () {
-    actingAs(signIn());
+    signIn();
     $this->userSettings = auth()->user()->settings();
 });
 

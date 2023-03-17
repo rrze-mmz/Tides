@@ -1,7 +1,7 @@
 @php use App\Enums\Acl; @endphp
 <div class="flex my-2 w-full bg-white">
     <div class="flex justify-center justify-items-center  place-items-center mx-2 w-48 h-full">
-        <img src="{{ fetchClipPoster($clip) }}" alt="preview image">
+        <img src="{{ fetchClipPoster($clip->latestAsset?->player_preview) }}" alt="preview image">
     </div>
 
     <div class="flex flex-col justify-between p-4 w-full bg-white">
