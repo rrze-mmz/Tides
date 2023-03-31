@@ -10,6 +10,7 @@ use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\DevicesController;
 use App\Http\Controllers\Backend\DocumentController;
 use App\Http\Controllers\Backend\ElasticSearchSettingsController;
+use App\Http\Controllers\Backend\FileUploadController;
 use App\Http\Controllers\Backend\ImagesController;
 use App\Http\Controllers\Backend\OpencastSettingsController;
 use App\Http\Controllers\Backend\PortalSettingsController;
@@ -24,6 +25,7 @@ use App\Http\Controllers\Backend\SystemsCheckController;
 use App\Http\Controllers\Backend\TriggerSmilFilesController;
 use App\Http\Controllers\Backend\UpdateClipImage;
 use App\Http\Controllers\Backend\UpdateSeriesImage;
+use App\Http\Controllers\Backend\UploadImageController;
 use App\Http\Controllers\Backend\UsersController;
 use App\Http\Controllers\Frontend\AcceptUseTermsController;
 use App\Http\Controllers\Frontend\ApiController;
@@ -261,8 +263,10 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
         ]);
     })->name('activities.index');
 
-    Route::resource('images', ImagesController::class)->except(['show']);
+    Route::resource('images', ImagesController::class);
     Route::resource('devices', DevicesController::class)->except(['show']);
+    Route::post('images/import/', UploadImageController::class)->name('images.import');
+    Route::post('/uploads/process', [FileUploadController::class, 'process'])->name('uploads.process');
 
     // Portal admin resources
     Route::middleware(['user.admin'])->group(function () {

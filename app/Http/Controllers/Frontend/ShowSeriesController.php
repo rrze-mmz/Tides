@@ -40,14 +40,14 @@ class ShowSeriesController extends Controller
 //
         $clips = (auth()->user()?->id === $series->owner_id || auth()->user()?->isAdmin())
                 ?
-            Clip::select('id', 'title', 'slug', 'episode')
+            Clip::select(['id', 'title', 'slug', 'episode', 'is_public'])
             ->where('series_id', $series->id)
             ->WithSemester()
             ->with('acls')
             ->orderBy('episode')->get()
                 :
                 Clip::has('assets')
-                    ->select('id', 'title', 'slug', 'episode')
+                    ->select(['id', 'title', 'slug', 'episode', 'is_public'])
                     ->where('series_id', $series->id)
                     ->where('is_public', true)
                     ->WithSemester()

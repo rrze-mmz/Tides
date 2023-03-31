@@ -5,15 +5,22 @@
         <div class="flex">
             Images Index
         </div>
-        <div class="flex">
-            <div>
-                <a href="{{ route('images.create') }}">
-                    <x-button class="bg-blue-600 hover:bg-blue-700">
-                        create a new image
-                    </x-button>
-                </a>
+        @can('administrate-portal-pages')
+            <div class="flex">
+                <div>
+                    <a href="{{ route('images.create') }}">
+                        <x-button class="bg-blue-700 hover:bg-blue-700 flex items-center">
+                            <div class="pr-2">
+                                Create a new image
+                            </div>
+                            <div>
+                                <x-heroicon-o-plus-circle class="w-6 h-6"/>
+                            </div>
+                        </x-button>
+                    </a>
+                </div>
             </div>
-        </div>
+        @endcan
     </div>
     <livewire:images-data-table/>
 @endsection

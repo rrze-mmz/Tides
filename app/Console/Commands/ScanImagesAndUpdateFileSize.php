@@ -27,7 +27,7 @@ class ScanImagesAndUpdateFileSize extends Command
      */
     public function handle(): int
     {
-        $images = Image::whereNull('file_size');
+        $images = Image::all();
         $this->info('Starting to update images file size in database');
         $bar = $this->output->createProgressBar($images->count());
         $bar->start();
@@ -35,9 +35,11 @@ class ScanImagesAndUpdateFileSize extends Command
         $images->each(function ($image) use ($bar) {
             if (Storage::disk('images')->exists($image->file_name)) {
                 $size = Storage::disk('images')->size($image->file_name);
-                $this->info("File size for file {$image->description} updated");
+                $mime = Storage::disk('images')->mimeType($image->file_name);
                 $image->file_size = $size;
+                $image->mime_type = $mime;
                 $image->saveQuietly();
+                $this->info("File size for file {$image->description} updated");
             } else {
                 $this->info("File not found for image {$image->description}");
             }

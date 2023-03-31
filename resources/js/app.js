@@ -5,6 +5,9 @@ import Alpine from 'alpinejs';
 import Hls from 'hls.js';
 import $ from 'jquery';
 import Pikaday from 'pikaday';
+import * as FilePond from "filepond";
+import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
+import 'filepond/dist/filepond.min.css';
 
 window.$ = window.jQuery = $;
 window.Alpine = Alpine
@@ -258,3 +261,15 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 Alpine.start();
+FilePond.registerPlugin(FilePondPluginImagePreview);
+
+const inputElement = document.querySelector('input[type="file"].filepond');
+const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+FilePond.create(inputElement).setOptions({
+    server: {
+        process: '/admin/uploads/process',
+        headers: {
+            'X-CSRF-TOKEN': csrfToken,
+        }
+    }
+});

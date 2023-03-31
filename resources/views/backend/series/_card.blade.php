@@ -66,14 +66,7 @@
             </div>
         </div>
 
-        @if($seriesAcls = $series->clips
-                        ->map(function ($clip) {
-                            return $clip->acls->pluck('name');
-                        })
-                        ->flatten()
-                        ->unique()
-                        ->values()
-                        ->implode(', '))
+        @if($seriesAcls = $series->getSeriesACL())
             @if($seriesAcls!== 'public')
                 <div class="flex items-center justify-content-between">
                     <div class="pr-2">

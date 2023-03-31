@@ -11,7 +11,7 @@ it('has a scan and update images command', function () {
     artisan('images:update-file-size')->expectsOutput('Starting to update images file size in database');
 });
 
-it('updated the file side value on database', function () {
+it('updated the file size value on database', function () {
     $disk = Storage::fake('images');
     $disk->putFileAs('', FileFactory::imageFile(), 'avatar.png');
 

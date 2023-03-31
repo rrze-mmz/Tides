@@ -11,6 +11,7 @@ return [
         'edit' => 'edit',
         'update' => 'update',
         'delete' => 'delete',
+        'show' => 'show',
     ],
     'menu' => [
         'dashboard' => 'Dashboard',
@@ -34,11 +35,16 @@ return [
 
     'forms' => [
         'title' => 'title',
+        'file name' => 'File name',
         'description' => 'Description',
         'organization' => 'Organization',
         'create series' => 'Create series',
         'Opencast series ID' => 'Opencast series ID',
         'public' => 'Public',
         'Upload a document' => 'Document upload',
+        'size' => 'size',
+        'width' => 'width',
+        'height' => 'height',
+        'mime type' => 'Mime Type',
     ],
 ];

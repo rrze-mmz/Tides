@@ -41,6 +41,14 @@ class Presenter extends BaseModel
         return $this->morphedByMany(Clip::class, 'presentable')->withTimestamps();
     }
 
+    /*
+     * A presenter has one  image
+     */
+    public function image(): BelongsTo
+    {
+        return $this->BelongsTo(Image::class);
+    }
+
     public function clipsWithoutSeries(): Collection
     {
         return $this->clips->whereNull('series_id');

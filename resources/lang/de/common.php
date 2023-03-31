@@ -11,6 +11,7 @@ return [
         'edit' => 'editieren',
         'update' => 'aktualisieren',
         'delete' => 'löschen',
+        'show' => 'anzeigen',
     ],
     'menu' => [
         'dashboard' => 'Dashboard',
@@ -34,12 +35,17 @@ return [
 
     'forms' => [
         'title' => 'Titel',
+        'file name' => 'Datei-Name',
         'description' => 'Beschreibung',
         'organization' => 'Organization',
         'create series' => 'Serien anlegen',
         'Opencast series ID' => 'Opencast Serien ID',
         'public' => 'Veröffentlicht',
         'Upload a document' => 'Dokument hochladen',
+        'size' => 'Größe',
+        'width' => 'Breite',
+        'height' => 'Höhe',
+        'mime type' => 'Media Type',
 
     ],
 ];

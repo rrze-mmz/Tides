@@ -13,9 +13,9 @@ class ImagesDataTable extends Component
 
     public $search = '';
 
-    public $sortField;
+    public $sortField = 'updated_at';
 
-    public $sortAsc = true;
+    public $sortAsc = false;
 
     protected $queryString = ['search', 'sortAsc'];
 

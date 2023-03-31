@@ -59,6 +59,7 @@ class ManageSeriesTest extends TestCase
     {
         $series = SeriesFactory::ownedBy($this->signInRole($this->role))
             ->withClips(3)
+            ->withAssets(2)
             ->create();
 
         Clip::find(1)->addAcls(collect([Acl::PORTAL()])); //assign 'intern' acl

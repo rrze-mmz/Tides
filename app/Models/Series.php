@@ -322,4 +322,15 @@ class Series extends BaseModel
             return $clip->chapter_id !== $chapter->id || $clip->chapter_id === null;
         });
     }
+
+    public function getSeriesACL(): string
+    {
+        return Clip::select(['id'])
+            ->where('series_id', $this->id)
+            ->has('latestAsset')
+            ->get()
+            ->map(fn ($clip) => $clip->acls->pluck('name'))->flatten()->unique()
+            ->values()
+            ->implode(', ');
+    }
 }

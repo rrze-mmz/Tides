@@ -18,9 +18,21 @@
             {{($disabled)?'disabled':''}}
         >
     </div>
+    @if ($disabled)
+        <div class="col-start-2 col-end-6">
+            <p class="mt-2 w-full text-xs">
+            <div class="flex text-green-500">
+                <x-heroicon-o-exclamation-circle class="w-6"/>
+                <span class="pl-2">
+                        You cannot change this field
+                    </span>
+            </div>
+            </p>
+        </div>
+    @endif
     @error($fieldName)
     <div class="col-start-2 col-end-6">
-        <p class="mt-2 w-full text-xs text-red-500">{{ $message }}</p>
+        <p class="mt-2 w-full text-xs text-red500">{{ $message }}</p>
     </div>
     @enderror
 </div>

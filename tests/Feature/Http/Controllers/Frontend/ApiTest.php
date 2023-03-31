@@ -44,7 +44,7 @@ it('it is not allowed for a guest to use the user api', function () {
     get(route('api.users').'?query=john')->assertForbidden();
 });
 
-it('can search organizations', function () {
+it('can search organizations', function (Organization $organization) {
     get(route('api.organizations').'?query=test')->assertOk()->assertJson([
         ['id' => 2, 'name' => 'This is a test'],
     ]);

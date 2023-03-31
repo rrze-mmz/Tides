@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 
@@ -260,9 +261,15 @@ class User extends Authenticatable
      * Only for test purposes and with use in tinker!
      *
      */
-    public function resetPassword(): void
+    public function resetPassword(): JsonResponse
     {
         $this->password = Hash::make('12341234');
         $this->save();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'User password reset was successfully ',
+            'user' => $this->username,
+        ]);
     }
 }

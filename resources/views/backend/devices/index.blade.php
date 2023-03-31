@@ -7,8 +7,13 @@
         </div>
         <div class="flex">
             <a href="{{route('devices.create')}}">
-                <x-button class="bg-blue-700 hover:bg-blue-700">
-                    Create a new device
+                <x-button class="bg-blue-700 hover:bg-blue-700 flex items-center">
+                    <div class="pr-2">
+                        Create a new device
+                    </div>
+                    <div>
+                        <x-heroicon-o-plus-circle class="w-6 h-6"/>
+                    </div>
                 </x-button>
             </a>
         </div>

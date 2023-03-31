@@ -128,7 +128,6 @@ class SeriesTest extends TestCase
     /** @test */
     public function it_shows_for_each_clip_if_is_locked_or_not(): void
     {
-        $this->markTestSkipped('I need to check this one also.');
         $series = SeriesFactory::withClips(2)->withAssets(1)->create();
 
         $series->clips->each(function ($clip) {
@@ -137,7 +136,7 @@ class SeriesTest extends TestCase
 
         $this->get(route('frontend.series.show', $series))->assertSee('Lock clip');
 
-        $this->signInRole('user');
+        $this->signIn();
         $this->get(route('frontend.series.show', $series))->assertSee('Unlock clip');
     }
 

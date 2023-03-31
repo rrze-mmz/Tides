@@ -234,9 +234,9 @@ function getProtectedUrl(string $filePath): string
     return $cdn.$token.'/'.$hexTime.$filePath;
 }
 
-function humanFileSizeFormat(string $bytes, $dec = 2): string
+function humanFileSizeFormat(string|null $bytes, $dec = 2): string
 {
-    if ($bytes === 'null') {
+    if ($bytes === 'null' || is_null($bytes)) {
         return '0 B';
     }
 

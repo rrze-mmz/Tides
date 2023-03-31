@@ -28,4 +28,9 @@ class Image extends BaseModel
     {
         return $this->hasMany(Clip::class);
     }
+
+    public function presenters(): HasMany
+    {
+        return $this->hasMany(Presenter::class);
+    }
 }

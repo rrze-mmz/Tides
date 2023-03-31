@@ -160,20 +160,28 @@
                             </td>
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap text-right text-sm leading-5 font-medium">
                                 <div class="flex space-x-2">
-                                    <a href="{{route('images.edit', $image)}}">
-                                        <x-button type="button" class="bg-green-600 hover:bg-green-700">
-                                            {{__('common.actions.edit')}}
-                                        </x-button>
-                                    </a>
-                                    <form action="{{ route('images.destroy', $image) }}"
-                                          method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <x-button class="bg-red-600 hover:bg-red-700">
-                                            {{__('common.actions.delete')}}
-                                        </x-button>
+                                    @can('administrate-admin-portal-pages')
 
-                                    </form>
+                                        <a href="{{route('images.edit', $image)}}">
+                                            <x-button type="button" class="bg-green-600 hover:bg-green-700">
+                                                {{__('common.actions.edit')}}
+                                            </x-button>
+                                        </a>
+                                        <form action="{{ route('images.destroy', $image) }}"
+                                              method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <x-button class="bg-red-600 hover:bg-red-700">
+                                                {{__('common.actions.delete')}}
+                                            </x-button>
+                                        </form>
+                                    @else
+                                        <a href="{{route('images.show', $image)}}">
+                                            <x-button type="button" class="bg-green-600 hover:bg-green-700">
+                                                {{__('common.actions.show')}}
+                                            </x-button>
+                                        </a>
+                                    @endcan
                                 </div>
                             </td>
                         </tr>
