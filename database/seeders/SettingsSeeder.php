@@ -16,24 +16,22 @@ class SettingsSeeder extends Seeder
     {
         DB::table('settings')->insert([
             'name' => 'portal',
-            'data' => json_encode([
-                'maintenance_mode' => false,
-            ]),
+            'data' => json_encode(config('settings.portal')),
         ]);
 
         DB::table('settings')->insert([
             'name' => 'opencast',
-            'data' => json_encode([]),
+            'data' => json_encode(config('settings.opencast')),
         ]);
 
         DB::table('settings')->insert([
             'name' => 'streaming',
-            'data' => json_encode([]),
+            'data' => json_encode(config('settings.streaming')),
         ]);
 
         DB::table('settings')->insert([
             'name' => 'elasticSearch',
-            'data' => json_encode([]),
+            'data' => json_encode(config('settings.elasticSearch')),
         ]);
     }
 }

@@ -309,7 +309,7 @@ class Clip extends BaseModel
     public function getCaptionAsset(): Asset|null
     {
         return $this->assets->filter(function ($asset) {
-            return $asset->type == Content::CC();
+            return $asset->type == Content::CC() && ! $asset->is_deleted;
         })->first();
     }
 

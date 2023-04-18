@@ -19,8 +19,6 @@ class PresenterDataTable extends Component
 
     public $sortAsc = true;
 
-    protected $queryString = ['search', 'admin', 'sortAsc'];
-
     /**
      * Sort users by method parameter
      */

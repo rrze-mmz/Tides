@@ -20,8 +20,6 @@ class DevicesDataTable extends Component
 
     public $sortAsc = true;
 
-    protected $queryString = ['search', 'sortAsc'];
-
     public function sortBy($field): void
     {
         $this->sortAsc = ! ($this->sortField === $field) || ! $this->sortAsc;

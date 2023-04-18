@@ -17,8 +17,6 @@ class ImagesDataTable extends Component
 
     public $sortAsc = false;
 
-    protected $queryString = ['search', 'sortAsc'];
-
     public function sortBy($field): void
     {
         $this->sortAsc = ! ($this->sortField === $field) || ! $this->sortAsc;

@@ -48,7 +48,7 @@ class ScanImagesAndUpdateFileSize extends Command
         });
 
         $bar->finish();
-        $this->info('All files copied!');
+        $this->info('All image rows updated!');
 
         return Command::SUCCESS;
     }

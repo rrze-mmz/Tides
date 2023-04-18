@@ -17,9 +17,7 @@ class OpencastServiceProvider extends ServiceProvider
             $setting = Setting::firstOrCreate(
                 ['name' => 'opencast'],
                 [
-                    'data' => [
-                        config('settings.opencast'),
-                    ],
+                    'data' => config('settings.opencast'),
                 ]
             );
             $settingData = $setting->data;

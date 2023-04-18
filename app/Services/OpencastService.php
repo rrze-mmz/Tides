@@ -16,6 +16,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Psr\Http\Message\ResponseInterface;
+use Spatie\ArrayToXml\ArrayToXml;
 
 class OpencastService
 {
@@ -216,11 +217,88 @@ class OpencastService
         } catch (GuzzleException $exception) {
             Log::error($exception);
         }
-
         //TODO
         // Create upload file table, store upload information and re-ingest if failed before deleting
 
         return $this->response;
+    }
+
+    public function createMediaPackage(): string
+    {
+        $mediaPackage = [];
+        try {
+            $this->response = $this->client->get('/ingest/createMediaPackage');
+            $mediaPackage = ((string) $this->response->getBody());
+        } catch (GuzzleException $exception) {
+            Log::error($exception);
+        }
+
+        return $mediaPackage;
+    }
+
+    public function addCatalog(string $mediaPackage, Clip $clip): string
+    {
+        try {
+            $this->response = $this->client->post(
+                'ingest/addDCCatalog/',
+                $this->addDCCatalogFormData($mediaPackage, $clip)
+            );
+            $mediaPackage = ((string) $this->response->getBody());
+        } catch (GuzzleException $exception) {
+            Log::error($exception);
+        }
+
+        return $mediaPackage;
+    }
+
+    public function addTrack(string $mediaPackage, string $flavor, $file): string
+    {
+        $fileName = match ($flavor) {
+            'presenter/source' => 'presenter.mp4',
+            'presentation/source' => 'presentation.mp4',
+            'captions/source+de' => 'source-de.vtt',
+            'captions/source+en' => 'source-en.vtt',
+        };
+        try {
+            $this->response = $this->client->post(
+                'ingest/addTrack',
+                $this->addTrackFormData($mediaPackage, $flavor, $fileName, $file)
+            );
+            $mediaPackage = ((string) $this->response->getBody());
+        } catch (GuzzleException $exception) {
+            Log::error($exception);
+        }
+
+        return $mediaPackage;
+    }
+
+    public function ingest(string $mediaPackage, string $workflowDefinitionID = ''): string
+    {
+        $workflowDefinitionID = (! empty($workflowDefinitionID))
+            ? $workflowDefinitionID :
+            $this->opencastSettings->data['upload_workflow_id'];
+        try {
+            $this->response = $this->client->post(
+                'ingest/ingest/'.$workflowDefinitionID,
+                [
+                    'multipart' => [
+                        [
+                            'name' => 'mediaPackage',
+                            'contents' => $mediaPackage,
+                        ],
+                        [
+                            'name' => 'workflowDefinitionId',
+                            'contents' => $workflowDefinitionID,
+                        ],
+                    ],
+                ]
+            );
+            $mediaPackage = collect((json_decode((string) $this->response->getBody(), true)));
+        } catch (GuzzleException $exception) {
+            Log::error($exception);
+        }
+
+        return $mediaPackage;
     }
 
     /**
@@ -456,6 +534,75 @@ class OpencastService
                     'name' => 'file',
                     'contents' => file_get_contents($file),
                     'filename' => basename($file),
+                ],
+            ],
+        ];
+    }
+
+    public function addDCCatalogFormData(string $mediaPackage, Clip $clip)
+    {
+        $xmlArray = [
+            'dcterms:creator' => $clip->presenter,
+            'dcterms:contributor' => 'MMZ',
+            'dcterms:created' => [
+                '_attributes' => [
+                    'xsi:type' => 'dcterms:W3CDTF',
+                ],
+                '_value' => Carbon::now()->format('Y-m-d\TH:i:s\Z'),
+            ],
+            'dcterms:temporal' => [
+                '_attributes' => [
+                    'xsi:type' => 'dcterms:Period',
+                ],
+                '_value' => 'start=
+                    '.Carbon::now()->subMinute(5)->format('Y-m-d\TH:i:s\Z').
+                    '; end='.Carbon::now()->subMinute(3)->format('Y-m-d\TH:i:s\Z').'; scheme=W3C-DTF;',
+            ],
+            'dcterms:description' => $clip->id,
+            'dcterms:subject' => $clip->semester->acronym,
+            'dcterms:isPartOf' => $clip->series->opencast_series_id,
+            'dcterms:title' => $clip->title,
+        ];
+
+        $result = new ArrayToXml($xmlArray, [
+            'rootElementName' => 'dublincore',
+            '_attributes' => [
+                'xmlns' => 'http://www.opencastproject.org/xsd/1.0/dublincore/',
+                'xmlns:dcterms' => 'http://purl.org/dc/terms/',
+                'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
+            ],
+        ], true, 'UTF-8', '1.0', ['standalone' => false]);
+
+        return [
+            'multipart' => [
+                [
+                    'name' => 'mediaPackage',
+                    'contents' => $mediaPackage,
+                ],
+                [
+                    'name' => 'dublinCore',
+                    'contents' => $result->prettify()->toXml(),
+                ],
+            ],
+        ];
+    }
+
+    public function addTrackFormData(string $mediaPackage, string $flavor, string $fileName, string $file)
+    {
+        return [
+            'multipart' => [
+                [
+                    'name' => 'mediaPackage',
+                    'contents' => $mediaPackage,
+                ],
+                [
+                    'name' => 'flavor',
+                    'contents' => $flavor,
+                ],
+                [
+                    'name' => $fileName,
+                    'contents' => \Storage::disk('videos')->get($file),
+                    'filename' => $fileName,
                 ],
             ],
         ];

@@ -19,8 +19,6 @@ class ActivitiesDataTable extends Component
 
     public $sortAsc = true;
 
-    protected $queryString = ['search', 'series', 'sortAsc'];
-
     /**
      * Sort users by method parameter
      */

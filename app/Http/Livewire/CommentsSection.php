@@ -25,7 +25,7 @@ class CommentsSection extends Component
 
     public $type;
 
-    public $comments;
+    protected $comments;
 
     protected array $rules = [
         'content' => 'required|min:3',
@@ -37,11 +37,6 @@ class CommentsSection extends Component
      * Get all comments for a clip
      */
     public function fetchComments(): void
-    {
-        $this->comments = $this->model->comments()->where('type', $this->type)->get();
-    }
-
-    public function mount()
     {
         $this->comments = $this->model->comments()->where('type', $this->type)->get();
     }
@@ -107,6 +102,8 @@ class CommentsSection extends Component
      */
     public function render(): View
     {
-        return view('livewire.comments-section');
+        $this->comments = $this->model->comments()->where('type', $this->type)->get();
+
+        return view('livewire.comments-section', ['comments' => $this->comments]);
     }
 }

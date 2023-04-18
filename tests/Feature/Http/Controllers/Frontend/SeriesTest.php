@@ -183,7 +183,7 @@ class SeriesTest extends TestCase
 
         $firstClip = $series->clips()->first();
 
-        $firstClip->semester_id = 2;
+        $firstClip->semester_id = 3;
 
         $firstClip->save();
 

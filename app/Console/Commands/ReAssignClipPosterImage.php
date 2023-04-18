@@ -52,7 +52,7 @@ class ReAssignClipPosterImage extends Command
 
         $bar->finish();
 
-        $this->info('All files copied!');
+        $this->info('All rows updated!');
 
         return Command::SUCCESS;
     }

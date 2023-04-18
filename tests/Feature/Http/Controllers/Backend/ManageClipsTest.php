@@ -552,12 +552,15 @@ class ManageClipsTest extends TestCase
             'context_id' => '1',
             'format_id' => '1',
             'type_id' => '1',
-            'semester_id' => '1',
+            'semester_id' => Semester::current()->first()->id,
         ]);
 
         $clip->refresh();
 
-        $this->assertEquals($clip->episode.'-title-changed-'.str(Semester::current()->get()->first()->acronym)->lower(), $clip->slug);
+        $this->assertEquals(
+            $clip->episode.'-title-changed-'.str(Semester::current()->get()->first()->acronym)->lower(),
+            $clip->slug
+        );
     }
 
     /** @test */
@@ -754,7 +757,9 @@ class ManageClipsTest extends TestCase
             'allow_comments' => 'on',
         ]);
 
-        $this->get($clip->path())->assertSee('Comments');
+        $clip->refresh();
+
+        $this->get(route('frontend.clips.show', $clip))->assertOk()->assertSee('Comments');
     }
 
     /** @test */
