@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Livewire\DeleteModalWindow;
 use App\Http\Livewire\ImagesDataTable;
 use App\Models\Image;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -34,4 +35,12 @@ it('can sorts an image by his file name', function () {
     Livewire::test(ImagesDataTable::class)
         ->call('sortBy', 'file_name')
         ->assertSeeInOrder([$alphaImage->file_name, $betaImage->file_name]);
+});
+
+it('has a delete livewire component for deleting images', function () {
+    Image::factory(2)->create();
+
+    Livewire::actingAs(auth()->user());
+
+    get(route('images.index'))->assertSeeLivewire(DeleteModalWindow::class);
 });

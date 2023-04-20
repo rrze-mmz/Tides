@@ -2,7 +2,7 @@
      x-data="{ show: @entangle($attributes->wire('model')) }"
      x-show="show"
      @keydown.escape.window="show = false"
-     @click.outside="show = false"
+     x-on:click.away="show = false"
      style="display:none"
 >
     <div class=" absolute bg-white shadow-md p-4 max-w-lg h-64  m-auto rounded-md  inset-0">

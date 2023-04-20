@@ -125,5 +125,11 @@ class ImagesController extends Controller
     {
         //Only portal admins can delete images.
         $this->authorize('administrate-admin-portal-pages');
+
+        Storage::disk('images')->delete($image->file_name);
+        Storage::disk('images')->delete('Thumbnails/'.$image->file_name);
+        $image->delete();
+
+        return to_route('images.index');
     }
 }

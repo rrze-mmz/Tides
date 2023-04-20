@@ -8,7 +8,6 @@
             @cannot('view-assistant-menu-items')
                 @if( str()->contains($series->fetchClipsAcls(),[Acl::PASSWORD->lower()]))
                     <livewire:unlock-object :model="$series"/>
-                    @livewireScripts
                 @endif
             @endcannot
             @can('edit-series', $series)
@@ -103,8 +102,6 @@
                     {{ __('clip.frontend.comments') }}
                 </h2>
                 <livewire:comments-section :model="$series" :type="'frontend'"/>
-                @livewireScripts
-
             </div>
         @endauth
         @include('backend.clips.list')

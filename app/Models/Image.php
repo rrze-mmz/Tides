@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\RecordsActivity;
 use App\Models\Traits\Searchable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -10,6 +11,7 @@ class Image extends BaseModel
 {
     use HasFactory;
     use Searchable;
+    use RecordsActivity;
 
     protected array $searchable = ['description', 'file_name'];
 

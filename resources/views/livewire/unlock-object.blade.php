@@ -5,7 +5,7 @@
         <x-heroicon-o-lock-open class="ml-2 w-4 h-4"/>
     </x-button>
 
-    <x-unlock-modal wire:model.defer="showModal">
+    <x-modal wire:model.defer="showModal">
         <x-slot name="title">
             Unlock series:{{ str($model->title)->limit(50,'...') }}
         </x-slot>
@@ -28,12 +28,18 @@
             </form>
         </x-slot>
         <x-slot name="footer">
-            <x-button class="bg-blue-400 hover:bg-blue-500 mr-4" wire:click="unlock"> Unlock</x-button>
+            <x-button class="bg-blue-400 hover:bg-blue-500 mr-4"
+                      wire:click="unlock"
+            >
+                Unlock
+            </x-button>
             <a href="#">
-                <x-button wire:click="$set('showModal',false)" class="bg-gray-400 hover:bg-gray-500">
+                <x-button wire:click="$set('showModal',false)"
+                          class="bg-gray-400 hover:bg-gray-500"
+                >
                     Cancel
                 </x-button>
             </a>
         </x-slot>
-    </x-unlock-modal>
+    </x-modal>
 </div>

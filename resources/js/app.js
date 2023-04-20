@@ -261,6 +261,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 Alpine.start();
+
 FilePond.registerPlugin(FilePondPluginImagePreview);
 
 const inputElement = document.querySelector('input[type="file"].filepond');

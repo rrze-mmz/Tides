@@ -167,14 +167,9 @@
                                                 {{__('common.actions.edit')}}
                                             </x-button>
                                         </a>
-                                        <form action="{{ route('images.destroy', $image) }}"
-                                              method="POST">
-                                            @csrf
-                                            @method('DELETE')
-                                            <x-button class="bg-red-600 hover:bg-red-700">
-                                                {{__('common.actions.delete')}}
-                                            </x-button>
-                                        </form>
+                                        <livewire:delete-modal-window :model="$image"
+                                                                      :wire:key="$image->id"
+                                        />
                                     @else
                                         <a href="{{route('images.show', $image)}}">
                                             <x-button type="button" class="bg-green-600 hover:bg-green-700">
