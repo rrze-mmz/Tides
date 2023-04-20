@@ -2,9 +2,14 @@
 
 namespace App\Http\Livewire;
 
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
+use Livewire\Redirector;
 
 class DeleteModalWindow extends Component
 {
@@ -14,12 +19,12 @@ class DeleteModalWindow extends Component
 
     public $showModal = false;
 
-    public function render()
+    public function render(): View|Application|Factory
     {
         return view('livewire.delete-modal-window');
     }
 
-    public function delete()
+    public function delete(): RedirectResponse|Redirector
     {
         //Only portal admins can delete images.
         $this->authorize('administrate-admin-portal-pages');
