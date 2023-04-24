@@ -5,7 +5,7 @@
     <div class="container mx-auto mt-32 md:mt-32">
         <div class="flex justify-between pb-2 border-b-2 border-black">
             <h2 class="text-2xl font-bold">{{ $series->title }} [ID: {{ $series->id }}]</h2>
-            @cannot('view-assistant-menu-items')
+            @cannot('administrate-admin-portal-pages')
                 @if( str()->contains($series->fetchClipsAcls(),[Acl::PASSWORD->lower()]))
                     <livewire:unlock-object :model="$series"/>
                 @endif

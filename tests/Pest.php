@@ -1,9 +1,11 @@
 <?php
 
+use App\Enums\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
 use function Pest\Laravel\actingAs;
+use function Pest\Laravel\put;
 
 uses(
     Tests\TestCase::class,
@@ -35,11 +37,16 @@ function signIn(User $user = null): User
 * @param string $role
 * @return User
 */
-function signInRole(string $role = ''): User
+function signInRole(Role $role): User
 {
     $user = User::factory()->create();
     $user->assignRole($role);
     actingAs($user);
 
     return $user;
+}
+
+function acceptUseTerms()
+{
+    put(route('frontend.acceptUseTerms'), ['accept_use_terms' => 'on']);
 }

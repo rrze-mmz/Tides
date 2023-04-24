@@ -46,6 +46,20 @@
                         </span>
                 </a>
             </li>
+            @if(auth()->user()->saml_role !== 'student')
+                <li>
+                    <a href="{{ route('frontend.admin.portal.use.terms') }}"
+                       class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg
+                                   dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                    >
+                        <x-heroicon-o-exclamation-circle class="w-6 h-6 text-gray-500 transition duration-75
+                                    dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"/>
+                        <span class="ml-3">
+                                        Apply for admin portal
+                                    </span>
+                    </a>
+                </li>
+            @endif
         </ul>
     </div>
 </aside>

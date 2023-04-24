@@ -3,6 +3,7 @@
 namespace Tests\Feature\Http\Controllers\Frontend;
 
 use App\Enums\Acl;
+use App\Enums\Role;
 use App\Models\Asset;
 use App\Models\Clip;
 use App\Models\Series;
@@ -91,7 +92,7 @@ class SeriesTest extends TestCase
     {
         $series = SeriesFactory::withClips(2)->withAssets(1)->notPublic()->create();
 
-        $this->signInRole('admin');
+        $this->signInRole(Role::ADMIN);
 
         $this->get(route('frontend.series.show', $series))->assertOk();
     }
@@ -213,5 +214,19 @@ class SeriesTest extends TestCase
         });
 
         $this->get(route('frontend.series.show', $series))->assertSee('Unlock series');
+    }
+
+    /** @test */
+    public function it_does_not_show_the_unlock_button_to_portal_admins(): void
+    {
+        $series = SeriesFactory::withClips(2)->withAssets(1)->create();
+
+        $series->clips->each(function ($clip) {
+            $clip->addAcls(collect([Acl::PASSWORD()]));
+        });
+
+        $this->signInRole(Role::ADMIN);
+
+        $this->get(route('frontend.series.show', $series))->assertDontSee('Unlock series');
     }
 }

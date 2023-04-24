@@ -187,9 +187,9 @@ $(() => {
     function format(state) {
         if (!state.id) return state.text; // optgroup
         return '<div class="flex items-center"><div>' +
-            '<img src="/images/' + state.text + '" class="pr-2 w-12 h-auto  mx-auto" />' +
+            '<img src="/images/' + state.text + '" class="pr-2 w-20 h-auto  mx-auto" />' +
             '</div>' +
-            '<div>' + state.text + '</div>' +
+            '<div>' + state.text.slice(0, 15) + '</div>' +
             '</div>';
     }
 

@@ -3,6 +3,7 @@
 namespace Tests\Feature\Http\Controllers\Frontend;
 
 use App\Enums\Acl;
+use App\Enums\Role;
 use App\Models\Clip;
 use App\Models\Series;
 use Facades\Tests\Setup\ClipFactory;
@@ -140,7 +141,7 @@ class HomePageTest extends TestCase
     /** @test */
     public function it_shows_dashboard_menu_item_for_admins(): void
     {
-        $this->signInRole('admin');
+        $this->signInRole(Role::ADMIN);
 
         $this->get(route('home'))->assertSee('Dashboard');
     }
@@ -148,7 +149,7 @@ class HomePageTest extends TestCase
     /** @test */
     public function it_shows_dashboard_menu_item_for_moderators(): void
     {
-        $this->signInRole('moderator');
+        $this->signInRole(Role::MODERATOR);
 
         $this->get(route('home'))->assertSee('Dashboard');
     }
@@ -156,7 +157,7 @@ class HomePageTest extends TestCase
     /** @test */
     public function it_shows_dashboard_menu_item_for_assistants(): void
     {
-        $this->signInRole('assistant');
+        $this->signInRole(Role::ASSISTANT);
 
         $this->get(route('home'))->assertSee('Dashboard');
     }

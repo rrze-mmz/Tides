@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Notifications;
 
+use App\Enums\Role;
 use App\Models\User;
 use App\Notifications\NewOpencastUserAccountCreated;
 use App\Services\OpencastService;
@@ -31,12 +32,12 @@ class NewOpencastUserAccountCreatedTest extends TestCase
     /** @test */
     public function it_notifies_user_to_opencast_account_creation_if_role_changes(): void
     {
-        $this->signInRole('admin');
+        $this->signInRole(Role::ADMIN);
 
         $this->mockHandler->append($this->mockCreateAdminUserResponse());
 
         $this->patch((route('users.update', $user = User::factory()->create())), [
-            'role_id' => \App\Enums\Role::ASSISTANT(),
+            'role_id' => Role::ASSISTANT(),
         ])->assertRedirect();
 
         \Notification::assertSentTo([$user], NewOpencastUserAccountCreated::class);

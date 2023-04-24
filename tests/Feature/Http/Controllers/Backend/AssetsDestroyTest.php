@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers\Backend;
 
+use App\Enums\Role;
 use App\Models\Asset;
 use Facades\Tests\Setup\ClipFactory;
 use Facades\Tests\Setup\FileFactory;
@@ -15,7 +16,7 @@ class AssetsDestroyTest extends TestCase
     use RefreshDatabase;
     use WithFaker;
 
-    private string $role = '';
+    private Role $role;
 
     protected function setUp(): void
     {
@@ -24,7 +25,7 @@ class AssetsDestroyTest extends TestCase
         Storage::fake('videos');
         Storage::fake('thumbnails');
 
-        $this->role = 'moderator';
+        $this->role = Role::MODERATOR;
     }
 
     /** @test */
@@ -77,7 +78,7 @@ class AssetsDestroyTest extends TestCase
     {
         $asset = Asset::factory()->create();
 
-        $this->signInRole('admin');
+        $this->signInRole(Role::ADMIN);
 
         $this->delete($asset->path());
 

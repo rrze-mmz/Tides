@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers\Backend;
 
+use App\Enums\Role;
 use App\Http\Livewire\IngestOpencast;
 use App\Jobs\IngestVideoFileToOpencast;
 use App\Models\Clip;
@@ -29,7 +30,7 @@ class IngestOpencastTest extends TestCase
 
         app()->setLocale('en');
 
-        $this->clip = ClipFactory::ownedBy($this->signInRole('moderator'))->create();
+        $this->clip = ClipFactory::ownedBy($this->signInRole(Role::MODERATOR))->create();
 
         $mockHandler = $this->swapOpencastClient();
 

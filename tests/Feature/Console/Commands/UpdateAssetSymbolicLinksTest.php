@@ -3,6 +3,7 @@
 namespace Tests\Feature\Console\Commands;
 
 use App\Enums\Acl;
+use App\Enums\Role;
 use App\Models\Asset;
 use Facades\Tests\Setup\ClipFactory;
 use Facades\Tests\Setup\FileFactory;
@@ -38,7 +39,7 @@ class UpdateAssetSymbolicLinksTest extends TestCase
     /** @test */
     public function it_creates_a_symbolic_link_if_clip_is_open(): void
     {
-        $clip = ClipFactory::ownedBy($this->signInRole('admin'))->create();
+        $clip = ClipFactory::ownedBy($this->signInRole(Role::ADMIN))->create();
 
         $this->post(route('admin.clips.asset.transferSingle', $clip), ['asset' => FileFactory::videoFile()]);
 
@@ -54,7 +55,7 @@ class UpdateAssetSymbolicLinksTest extends TestCase
     /** @test */
     public function it_deletes_a_symbolic_link_if_clip_acl_is_no_longer_open(): void
     {
-        $clip = ClipFactory::ownedBy($this->signInRole('admin'))->create();
+        $clip = ClipFactory::ownedBy($this->signInRole(Role::ADMIN))->create();
 
         $this->post(route('admin.clips.asset.transferSingle', $clip), ['asset' => FileFactory::videoFile()]);
 
@@ -76,7 +77,7 @@ class UpdateAssetSymbolicLinksTest extends TestCase
     /** @test */
     public function it_does_nothing_if_clip_is_protected(): void
     {
-        $clip = ClipFactory::ownedBy($this->signInRole('admin'))->create();
+        $clip = ClipFactory::ownedBy($this->signInRole(Role::ADMIN))->create();
 
         $this->post(route('admin.clips.asset.transferSingle', $clip), ['asset' => FileFactory::videoFile()]);
 

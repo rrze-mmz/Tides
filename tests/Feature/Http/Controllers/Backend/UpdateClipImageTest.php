@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers\Backend;
 
+use App\Enums\Role;
 use App\Models\Clip;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -13,7 +14,7 @@ class UpdateClipImageTest extends TestCase
     /** @test */
     public function it_can_update_clip_image(): void
     {
-        $this->signInRole('moderator');
+        $this->signInRole(Role::MODERATOR);
         $clip = Clip::factory()->create();
 
         $this->put(route('update.clip.image', $clip), ['imageID' => 1])

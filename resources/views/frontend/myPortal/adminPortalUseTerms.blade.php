@@ -3,7 +3,7 @@
 @section('content')
     <main class="container mx-auto mt-6 md:mt-12">
         <div class="flex flex-col justify-center content-center items-center place-content-center">
-            <h2 class="text-2xl font-bold">MyPortal</h2>
+            <h2 class="text-2xl font-bold">Access to admin Portal</h2>
         </div>
 
         <form action="{{ route('frontend.acceptUseTerms') }}" method="POST">
@@ -11,7 +11,7 @@
             @method('PUT')
             <div class="flex flex-col pt-10 ">
                 <div class="italic text-2xl">
-                    {{{ trans('dashboard.user.use terms') }}}
+                    {{{ trans('dashboard.user.admin portal use terms') }}}
                 </div>
 
                 <div class="pt-10 flex items-center">

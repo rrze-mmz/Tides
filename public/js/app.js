@@ -4236,7 +4236,7 @@ jquery__WEBPACK_IMPORTED_MODULE_3___default()(function () {
   });
   function format(state) {
     if (!state.id) return state.text; // optgroup
-    return '<div class="flex items-center"><div>' + '<img src="/images/' + state.text + '" class="pr-2 w-12 h-auto  mx-auto" />' + '</div>' + '<div>' + state.text + '</div>' + '</div>';
+    return '<div class="flex items-center"><div>' + '<img src="/images/' + state.text + '" class="pr-2 w-20 h-auto  mx-auto" />' + '</div>' + '<div>' + state.text.slice(0, 15) + '</div>' + '</div>';
   }
   function formatSelect(state) {
     if (!state.id) return state.text;

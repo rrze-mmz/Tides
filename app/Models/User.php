@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Role;
 use App\Models\Traits\RecordsActivity;
 use App\Models\Traits\Searchable;
 use App\Notifications\MailResetPasswordToken;
@@ -114,9 +115,9 @@ class User extends Authenticatable
      *
      * @return User
      */
-    public function assignRole(string $role = ''): static
+    public function assignRole(Role $role): static
     {
-        $this->roles()->sync([Role::where('name', $role)->first()->id]);
+        $this->roles()->sync([$role()]);
 
         return $this;
     }
@@ -126,7 +127,7 @@ class User extends Authenticatable
      */
     public function roles(): BelongsToMany
     {
-        return $this->belongsToMany(Role::class, 'role_user');
+        return $this->belongsToMany(\App\Models\Role::class, 'role_user');
     }
 
     /**
@@ -142,7 +143,7 @@ class User extends Authenticatable
      *
      * @param  string  $role
      */
-    public function hasRole(\App\Enums\Role $role): bool
+    public function hasRole(Role $role): bool
     {
         return $this->roles->contains('name', $role->lower());
     }
@@ -152,7 +153,7 @@ class User extends Authenticatable
      */
     public function isSuperAdmin(): bool
     {
-        return $this->hasRole(\App\Enums\Role::SUPERADMIN);
+        return $this->hasRole(Role::SUPERADMIN);
     }
 
     /**
@@ -160,7 +161,7 @@ class User extends Authenticatable
      */
     public function isAdmin(): bool
     {
-        return $this->hasRole(\App\Enums\Role::SUPERADMIN) || $this->hasRole(\App\Enums\Role::ADMIN);
+        return $this->hasRole(Role::SUPERADMIN) || $this->hasRole(Role::ADMIN);
     }
 
     /**
@@ -168,7 +169,7 @@ class User extends Authenticatable
      */
     public function isModerator(): bool
     {
-        return $this->hasRole(\App\Enums\Role::MODERATOR);
+        return $this->hasRole(Role::MODERATOR);
     }
 
     /**
@@ -176,7 +177,7 @@ class User extends Authenticatable
      */
     public function isAssistant(): bool
     {
-        return $this->hasRole(\App\Enums\Role::ASSISTANT);
+        return $this->hasRole(Role::ASSISTANT);
     }
 
     /**
@@ -237,20 +238,20 @@ class User extends Authenticatable
     public function scopeAdmins($query)
     {
         return $query->whereHas('roles', function ($q) {
-            $q->where('name', \App\Enums\Role::SUPERADMIN->lower())
-                ->orWhere('name', \App\Enums\Role::ADMIN->lower())
-                ->orWhere('name', \App\Enums\Role::ASSISTANT->lower());
+            $q->where('name', Role::SUPERADMIN->lower())
+                ->orWhere('name', Role::ADMIN->lower())
+                ->orWhere('name', Role::ASSISTANT->lower());
         });
     }
 
     public function scopeModerators($query)
     {
         return $query->whereHas('roles', function ($q) {
-            $q->where('name', \App\Enums\Role::MODERATOR->lower());
+            $q->where('name', Role::MODERATOR->lower());
         });
     }
 
-    public function scopeRole($query, \App\Enums\Role $role)
+    public function scopeRole($query, Role $role)
     {
         return $query->whereHas('roles', function ($q) use ($role) {
             $q->where('name', $role->lower());

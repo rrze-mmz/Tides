@@ -99,7 +99,7 @@
                         <th
                             class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium
                                         text-gray-500 uppercase tracking-wider">
-                            Role
+                            Roles
                         </th>
                         <th class="px-6 py-3 bg-gray-50"></th>
                     </tr>
@@ -139,16 +139,14 @@
                                 </div>
                             </td>
                             <td class="w-2/12  px-6 py-4 whitespace-no-wrap">
-                                <div class="text-sm leading-5 text-gray-900">{{ $user->email }}</div>
+                                <div class="text-sm leading-5  font-medium text-gray-900">{{ $user->email }}</div>
                             </td>
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
-                                @foreach($user->roles as $role)
                                     <span
                                         class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
                                                     bg-green-100 text-green-800 ">
-                                    {{ $role->name }}
+                                    {{ $user->roles->implode('name',', ') }}
                                     </span>
-                                @endforeach
                             </td>
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap text-right text-sm leading-5 font-medium">
                                 @if(auth()->user()->id !== $user->id)

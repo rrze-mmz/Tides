@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers\Backend;
 
+use App\Enums\Role;
 use App\Http\Livewire\DevicesDataTable;
 use App\Models\Device;
 use App\Models\DeviceLocation;
@@ -19,7 +20,7 @@ class ManageDevicesTest extends TestCase
     {
         $this->get(route('devices.index'))->assertRedirect(route('login'));
 
-        $this->signInRole('user');
+        $this->signInRole(Role::USER);
 
         $this->get(route('devices.index'))->assertForbidden();
     }
@@ -27,7 +28,7 @@ class ManageDevicesTest extends TestCase
     /** @test */
     public function a_moderator_is_not_allowed_to_manage_devices(): void
     {
-        $this->signInRole('moderator');
+        $this->signInRole(Role::MODERATOR);
 
         $device = Device::factory()->create();
 
@@ -43,7 +44,7 @@ class ManageDevicesTest extends TestCase
     /** @test */
     public function an_assistant_is_allowed_to_manage_devices(): void
     {
-        $this->signInRole('assistant');
+        $this->signInRole(Role::ASSISTANT);
 
         $this->get(route('devices.index'))->assertOk();
     }
@@ -51,7 +52,7 @@ class ManageDevicesTest extends TestCase
     /** @test */
     public function an_admin_is_allowed_to_manage_devices(): void
     {
-        $this->signInRole('admin');
+        $this->signInRole(Role::ADMIN);
 
         $this->get(route('devices.index'))
             ->assertOk()
@@ -62,7 +63,7 @@ class ManageDevicesTest extends TestCase
     /** @test */
     public function it_shows_a_devices_datatable_on_index_page(): void
     {
-        $this->signInRole('assistant');
+        $this->signInRole(Role::ASSISTANT);
 
         $this->get(route('devices.index'))->assertSeeLivewire('devices-data-table');
     }
@@ -70,7 +71,7 @@ class ManageDevicesTest extends TestCase
     /** @test */
     public function it_shows_a_create_device_button_on_index_page(): void
     {
-        $this->signInRole('assistant');
+        $this->signInRole(Role::ASSISTANT);
 
         $this->get(route('devices.index'))->assertSee('Create a new device');
     }
@@ -78,7 +79,7 @@ class ManageDevicesTest extends TestCase
     /** @test */
     public function it_shows_an_edit_device_button_on_index_page(): void
     {
-        $this->signInRole('assistant');
+        $this->signInRole(Role::ASSISTANT);
 
         Device::factory()->create(['name' => 'Exon DMP 351']);
 
@@ -88,7 +89,7 @@ class ManageDevicesTest extends TestCase
     /** @test */
     public function it_shows_a_delete_device_button_on_index_page(): void
     {
-        $this->signInRole('assistant');
+        $this->signInRole(Role::ASSISTANT);
 
         Device::factory()->create(['name' => 'Exon DMP 351']);
 
@@ -131,7 +132,7 @@ class ManageDevicesTest extends TestCase
     /** @test */
     public function an_assistant_can_view_device_create_form(): void
     {
-        $this->signInRole('assistant');
+        $this->signInRole(Role::ASSISTANT);
 
         $this->get(route('devices.create'))
             ->assertOk()
@@ -155,7 +156,7 @@ class ManageDevicesTest extends TestCase
     /** @test */
     public function it_requires_a_name_when_creating_a_device(): void
     {
-        $this->signInRole('assistant');
+        $this->signInRole(Role::ASSISTANT);
 
         $this->post(route('devices.store'), Device::factory()->raw(['name' => '']))
             ->assertSessionHasErrors('name');
@@ -164,7 +165,7 @@ class ManageDevicesTest extends TestCase
     /** @test */
     public function it_requires_an_existing_location_id_when_creating_a_device(): void
     {
-        $this->signInRole('assistant');
+        $this->signInRole(Role::ASSISTANT);
 
         $this->post(route('devices.store'), Device::factory()->raw(['location_id' => 100]))
             ->assertSessionHasErrors('location_id');
@@ -173,7 +174,7 @@ class ManageDevicesTest extends TestCase
     /** @test */
     public function it_requires_an_existing_organization_id_when_creating_a_device(): void
     {
-        $this->signInRole('assistant');
+        $this->signInRole(Role::ASSISTANT);
 
         $this->post(route('devices.store'), Device::factory()->raw(['organization_id' => 100]))
             ->assertSessionHasErrors('organization_id');
@@ -182,7 +183,7 @@ class ManageDevicesTest extends TestCase
     /** @test */
     public function check_for_all_urls_on_device_create(): void
     {
-        $this->signInRole('assistant');
+        $this->signInRole(Role::ASSISTANT);
 
         $this->post(route('devices.store'), Device::factory()->raw(['url' => 100]))
             ->assertSessionHasErrors('url');
@@ -197,7 +198,7 @@ class ManageDevicesTest extends TestCase
     /** @test */
     public function check_for_device_ip_when_creating_a_device(): void
     {
-        $this->signInRole('assistant');
+        $this->signInRole(Role::ASSISTANT);
 
         $this->post(route('devices.store'), Device::factory()->raw(['ip_address' => 100]))
             ->assertSessionHasErrors('ip_address');
@@ -208,7 +209,7 @@ class ManageDevicesTest extends TestCase
     {
         Device::factory()->create();
 
-        $this->signInRole('assistant');
+        $this->signInRole(Role::ASSISTANT);
 
         $attributes = [
             'name' => 'test device',
@@ -237,7 +238,7 @@ class ManageDevicesTest extends TestCase
     /** @test */
     public function an_assistant_can_view_edit_device_page(): void
     {
-        $this->signInRole('assistant');
+        $this->signInRole(Role::ASSISTANT);
 
         $this->get(route('devices.edit', Device::factory()->create()))->assertOk();
     }
@@ -245,7 +246,7 @@ class ManageDevicesTest extends TestCase
     /** @test */
     public function an_admin_is_allowed_to_edit_a_device(): void
     {
-        $this->signInRole('admin');
+        $this->signInRole(Role::ADMIN);
 
         $this->get(route('devices.edit', $device = Device::factory()->create()))
             ->assertOk()
@@ -256,7 +257,7 @@ class ManageDevicesTest extends TestCase
     /** @test */
     public function an_assistant_can_update_a_device(): void
     {
-        $this->signInRole('assistant');
+        $this->signInRole(Role::ASSISTANT);
 
         $device = Device::factory()->create();
         $attributes = [
@@ -272,7 +273,7 @@ class ManageDevicesTest extends TestCase
     /** @test */
     public function an_admin_can_update_a_device(): void
     {
-        $this->signInRole('admin');
+        $this->signInRole(Role::ADMIN);
 
         $device = Device::factory()->create();
 
@@ -298,7 +299,7 @@ class ManageDevicesTest extends TestCase
     /** @test */
     public function an_assistant_can_delete_a_device(): void
     {
-        $this->signInRole('assistant');
+        $this->signInRole(Role::ASSISTANT);
 
         $device = Device::factory()->create();
 
@@ -310,7 +311,7 @@ class ManageDevicesTest extends TestCase
     /** @test */
     public function an_admin_can_delete_a_device(): void
     {
-        $this->signInRole('admin');
+        $this->signInRole(Role::ADMIN);
 
         $device = Device::factory()->create();
 

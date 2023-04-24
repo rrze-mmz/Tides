@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers\Backend;
 
+use App\Enums\Role;
 use App\Models\Clip;
 use App\Models\Document;
 use App\Models\Series;
@@ -19,7 +20,7 @@ class ManageDocumentsTest extends TestCase
     /** @test */
     public function it_shows_an_upload_document_box_in_series_edit_page(): void
     {
-        $this->signInRole('admin');
+        $this->signInRole(Role::ADMIN);
 
         $this->get(route('series.edit', Series::factory()->create()))
             ->assertSee(__('common.forms.Upload a document'));
@@ -28,7 +29,7 @@ class ManageDocumentsTest extends TestCase
     /** @test */
     public function it_shows_an_upload_document_box_in_clip_edit_page(): void
     {
-        $this->signInRole('admin');
+        $this->signInRole(Role::ADMIN);
 
         $this->get(route('clips.edit', Clip::factory()->create()))
             ->assertSee(__('common.forms.Upload a document'));
@@ -37,7 +38,7 @@ class ManageDocumentsTest extends TestCase
     /** @test */
     public function it_requires_a_file_for_uploading_a_document(): void
     {
-        $this->signInRole('admin');
+        $this->signInRole(Role::ADMIN);
 
         $attributes = [
             'document' => '',
@@ -61,7 +62,7 @@ class ManageDocumentsTest extends TestCase
 
         $file = UploadedFile::fake()->create('document.pdf', '100', 'application/pdf');
 
-        $this->signInRole('admin');
+        $this->signInRole(Role::ADMIN);
 
         $attributes = [
             'document' => $file,
@@ -98,7 +99,7 @@ class ManageDocumentsTest extends TestCase
 
         $file = UploadedFile::fake()->create('document.pdf', '100', 'application/pdf');
 
-        $this->signInRole('admin');
+        $this->signInRole(Role::ADMIN);
 
         $attributes = [
             'document' => $file,
@@ -118,7 +119,7 @@ class ManageDocumentsTest extends TestCase
 
         $series = SeriesFactory::create();
 
-        $this->signInRole('moderator');
+        $this->signInRole(Role::MODERATOR);
 
         $this->post(route('documents.upload'), [
             'document' => $file,
@@ -134,7 +135,7 @@ class ManageDocumentsTest extends TestCase
 
         $file = UploadedFile::fake()->create('document.pdf', '100', 'application/pdf');
 
-        $series = SeriesFactory::ownedBy($this->signInRole('moderator'))->create();
+        $series = SeriesFactory::ownedBy($this->signInRole(Role::MODERATOR))->create();
 
         $this->post(route('documents.upload'), [
             'document' => $file,
@@ -155,7 +156,7 @@ class ManageDocumentsTest extends TestCase
 
         $file = UploadedFile::fake()->create('document.pdf', '100', 'application/pdf');
 
-        $series = SeriesFactory::ownedBy($this->signInRole('moderator'))->create();
+        $series = SeriesFactory::ownedBy($this->signInRole(Role::MODERATOR))->create();
 
         $this->post(route('documents.upload'), [
             'document' => $file,
@@ -178,7 +179,7 @@ class ManageDocumentsTest extends TestCase
 
         $clip = ClipFactory::create();
 
-        $this->signInRole('moderator');
+        $this->signInRole(Role::MODERATOR);
 
         $this->post(route('documents.upload'), [
             'document' => $file,
@@ -194,7 +195,7 @@ class ManageDocumentsTest extends TestCase
 
         $file = UploadedFile::fake()->create('document.pdf', '100', 'application/pdf');
 
-        $clip = ClipFactory::ownedBy($this->signInRole('moderator'))->create();
+        $clip = ClipFactory::ownedBy($this->signInRole(Role::MODERATOR))->create();
 
         $this->post(route('documents.upload'), [
             'document' => $file,
@@ -215,7 +216,7 @@ class ManageDocumentsTest extends TestCase
 
         $file = UploadedFile::fake()->create('document.pdf', '100', 'application/pdf');
 
-        $clip = ClipFactory::ownedBy($this->signInRole('moderator'))->create();
+        $clip = ClipFactory::ownedBy($this->signInRole(Role::MODERATOR))->create();
 
         $this->post(route('documents.upload'), [
             'document' => $file,
@@ -233,7 +234,7 @@ class ManageDocumentsTest extends TestCase
 
         $file = UploadedFile::fake()->create('testingDocument.pdf', '100', 'application/pdf');
 
-        $series = SeriesFactory::ownedBy($this->signInRole('moderator'))->create();
+        $series = SeriesFactory::ownedBy($this->signInRole(Role::MODERATOR))->create();
 
         $this->post(route('documents.upload'), [
             'document' => $file,
@@ -257,7 +258,7 @@ class ManageDocumentsTest extends TestCase
 
         $file = UploadedFile::fake()->create('testingDocument.pdf', '100', 'application/pdf');
 
-        $clip = ClipFactory::ownedBy($this->signInRole('moderator'))->create();
+        $clip = ClipFactory::ownedBy($this->signInRole(Role::MODERATOR))->create();
 
         $this->post(route('documents.upload'), [
             'document' => $file,
@@ -282,7 +283,7 @@ class ManageDocumentsTest extends TestCase
 
         $series->addDocument($document);
 
-        $this->signInRole('moderator');
+        $this->signInRole(Role::MODERATOR);
 
         $this->get(route('document.series.view', [$series, $document]))->assertForbidden();
     }
@@ -295,7 +296,7 @@ class ManageDocumentsTest extends TestCase
 
         $clip->addDocument($document);
 
-        $this->signInRole('moderator');
+        $this->signInRole(Role::MODERATOR);
 
         $this->get(route('document.clip.view', [$clip, $document]))->assertForbidden();
     }
@@ -307,7 +308,7 @@ class ManageDocumentsTest extends TestCase
 
         $file = UploadedFile::fake()->create('document.pdf', '100', 'application/pdf');
 
-        $series = SeriesFactory::ownedBy($this->signInRole('moderator'))->create();
+        $series = SeriesFactory::ownedBy($this->signInRole(Role::MODERATOR))->create();
 
         $this->post(route('documents.upload'), [
             'document' => $file,
@@ -332,7 +333,7 @@ class ManageDocumentsTest extends TestCase
 
         $series->addDocument($document);
 
-        $this->signInRole('moderator');
+        $this->signInRole(Role::MODERATOR);
 
         $this->delete(route('documents.destroy', $document))->assertForbidden();
     }
@@ -344,7 +345,7 @@ class ManageDocumentsTest extends TestCase
 
         $file = UploadedFile::fake()->create('document.pdf', '100', 'application/pdf');
 
-        $series = SeriesFactory::ownedBy($this->signInRole('moderator'))->create();
+        $series = SeriesFactory::ownedBy($this->signInRole(Role::MODERATOR))->create();
 
         $this->post(route('documents.upload'), [
             'document' => $file,
@@ -374,7 +375,7 @@ class ManageDocumentsTest extends TestCase
 
         $file = UploadedFile::fake()->create('document.pdf', '100', 'application/pdf');
 
-        $clip = ClipFactory::ownedBy($this->signInRole('moderator'))->create();
+        $clip = ClipFactory::ownedBy($this->signInRole(Role::MODERATOR))->create();
 
         $this->post(route('documents.upload'), [
             'document' => $file,

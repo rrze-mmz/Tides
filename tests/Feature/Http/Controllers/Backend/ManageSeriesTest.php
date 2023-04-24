@@ -4,6 +4,7 @@ namespace Tests\Feature\Http\Controllers\Backend;
 
 use App\Enums\Acl;
 use App\Enums\OpencastWorkflowState;
+use App\Enums\Role;
 use App\Http\Livewire\CommentsSection;
 use App\Models\Clip;
 use App\Models\Image;
@@ -31,7 +32,7 @@ class ManageSeriesTest extends TestCase
 
     private string $flashMessageName;
 
-    private string $role = '';
+    private Role $role;
 
     protected function setUp(): void
     {
@@ -43,13 +44,13 @@ class ManageSeriesTest extends TestCase
 
         $this->flashMessageName = 'flashMessage';
 
-        $this->role = 'moderator';
+        $this->role = Role::MODERATOR;
     }
 
     /** @test */
     public function it_shows_a_create_series_button_if_moderator_has_no_series(): void
     {
-        $this->signInRole('moderator');
+        $this->signInRole($this->role);
 
         $this->get(route('series.index'))->assertSee('Create new series');
     }
@@ -176,7 +177,7 @@ class ManageSeriesTest extends TestCase
     /** @test */
     public function an_assistant_is_not_allowed_to_create_new_series(): void
     {
-        $this->signInRole('assistant');
+        $this->signInRole(Role::ASSISTANT);
         $this->mockHandler->append($this->mockCreateSeriesResponse());
 
         $this->post(
@@ -209,7 +210,7 @@ class ManageSeriesTest extends TestCase
     /** @test */
     public function an_admin_can_create_a_series(): void
     {
-        $this->signInRole('admin');
+        $this->signInRole(Role::ADMIN);
 
         $this->post(
             route('series.store'),
@@ -309,7 +310,7 @@ class ManageSeriesTest extends TestCase
         $series = SeriesFactory::ownedBy($this->signInRole($this->role))->create();
         auth()->logout();
 
-        $user2 = $this->signInRole('moderator');
+        $user2 = $this->signInRole(Role::MODERATOR);
 
         $this->get(route('series.edit', $series))->assertForbidden();
 
@@ -349,7 +350,7 @@ class ManageSeriesTest extends TestCase
             $this->mockEventResponse($series, OpencastWorkflowState::STOPPED)
         );
 
-        $this->signInRole('admin');
+        $this->signInRole(Role::ADMIN);
 
         $this->get(route('series.edit', $series))->assertOk();
     }
@@ -366,7 +367,7 @@ class ManageSeriesTest extends TestCase
             $this->mockEventResponse($series, OpencastWorkflowState::STOPPED)
         );
 
-        $this->signInRole('superadmin');
+        $this->signInRole(Role::SUPERADMIN);
 
         $this->get(route('series.edit', $series))->assertOk();
     }
@@ -625,7 +626,7 @@ class ManageSeriesTest extends TestCase
     {
         $series = SeriesFactory::create();
 
-        $this->signInRole('admin');
+        $this->signInRole(Role::ADMIN);
 
         //pass an empty opencast respons
         $this->mockHandler->append($this->mockSeriesRunningWorkflowsResponse($series, false));
@@ -668,7 +669,7 @@ class ManageSeriesTest extends TestCase
     {
         $series = SeriesFactory::create();
 
-        $this->signInRole('assistant');
+        $this->signInRole(Role::ASSISTANT);
 
         $this->delete(route('series.edit', $series))->assertForbidden();
 
@@ -680,7 +681,7 @@ class ManageSeriesTest extends TestCase
     {
         $series = SeriesFactory::create();
 
-        $this->signInRole('admin');
+        $this->signInRole(Role::ADMIN);
 
         $this->followingRedirects()->delete(route('series.edit', $series))->assertOk();
 
@@ -710,7 +711,7 @@ class ManageSeriesTest extends TestCase
     {
         $series = Series::factory()->create();
 
-        $this->signInRole('admin');
+        $this->signInRole(Role::ADMIN);
 
         $this->get(route('series.edit', $series))->assertSee($series->owner->first_name);
     }

@@ -4,6 +4,7 @@ namespace Tests\Feature\Http\Controllers\Backend;
 
 use App\Enums\Acl;
 use App\Enums\Content;
+use App\Enums\Role;
 use App\Http\Livewire\CommentsSection;
 use App\Models\Clip;
 use App\Models\Presenter;
@@ -32,7 +33,7 @@ class ManageClipsTest extends TestCase
 
     private string $flashMessageName;
 
-    private string $role = '';
+    private Role $role;
 
     protected function setUp(): void
     {
@@ -40,13 +41,13 @@ class ManageClipsTest extends TestCase
 
         $this->flashMessageName = 'flashMessage';
 
-        $this->role = 'moderator';
+        $this->role = Role::MODERATOR;
     }
 
     /** @test */
     public function it_shows_a_create_clip_button_if_moderator_has_no_series(): void
     {
-        $this->signInRole('moderator');
+        $this->signInRole(Role::MODERATOR);
 
         $this->get(route('clips.index'))->assertSee('Create new clip');
     }
@@ -54,7 +55,7 @@ class ManageClipsTest extends TestCase
     /** @test */
     public function it_load_the_editor_on_clip_form_textarea(): void
     {
-        $this->signInRole('admin');
+        $this->signInRole(Role::ADMIN);
 
         $this->get(route('clips.create'))->assertSee('trix-editor');
         $this->get(route('clips.edit', ClipFactory::create()))->assertSee('trix-editor');
@@ -65,7 +66,7 @@ class ManageClipsTest extends TestCase
     {
         Clip::factory(10)->create();
 
-        $this->signInRole('assistant');
+        $this->signInRole(Role::ASSISTANT);
 
         $this->get(route('clips.index'))
             ->assertOk()
@@ -79,7 +80,7 @@ class ManageClipsTest extends TestCase
     {
         Clip::factory(10)->create();
 
-        $this->signInRole('admin');
+        $this->signInRole(Role::ADMIN);
 
         $this->get(route('clips.index'))
             ->assertOk()
@@ -101,7 +102,7 @@ class ManageClipsTest extends TestCase
     {
         Clip::factory(20)->create();
 
-        $this->signInRole('admin');
+        $this->signInRole(Role::ADMIN);
 
         $this->get(route('clips.index').'?page=2')->assertDontSee('You have no series yet');
     }
@@ -171,7 +172,7 @@ class ManageClipsTest extends TestCase
     /** @test */
     public function an_assistant_can_load_create_clip_view(): void
     {
-        $this->signInRole('assistant');
+        $this->signInRole(Role::ASSISTANT);
 
         $this->get(route('clips.create'))->assertOk()->assertViewIs('backend.clips.create');
     }
@@ -179,7 +180,7 @@ class ManageClipsTest extends TestCase
     /** @test */
     public function an_admin_can_load_create_clip_view(): void
     {
-        $this->signInRole('admin');
+        $this->signInRole(Role::ADMIN);
 
         $this->get(route('clips.create'))->assertOk()->assertViewIs('backend.clips.create');
     }
@@ -197,7 +198,7 @@ class ManageClipsTest extends TestCase
     /** @test */
     public function an_admin_can_create_a_clip(): void
     {
-        $this->signInRole('admin');
+        $this->signInRole(Role::ADMIN);
 
         $this->followingRedirects()
             ->post(route('clips.store'), $attributes = Clip::factory()->raw())
@@ -294,7 +295,7 @@ class ManageClipsTest extends TestCase
     {
         $clip = ClipFactory::create();
 
-        $this->signInRole('admin');
+        $this->signInRole(Role::ADMIN);
 
         $this->get(route('clips.edit', $clip))->assertOk();
     }
@@ -307,7 +308,7 @@ class ManageClipsTest extends TestCase
         $clip->owner_id = null;
         $clip->save();
 
-        $this->signInRole('admin');
+        $this->signInRole(Role::ADMIN);
 
         $this->get(route('clips.edit', $clip))->assertOk()->assertDontSee('created by');
     }
@@ -317,7 +318,7 @@ class ManageClipsTest extends TestCase
     {
         $clip = ClipFactory::create();
 
-        $this->signInRole('superadmin');
+        $this->signInRole(Role::SUPERADMIN);
 
         $this->get(route('clips.edit', $clip))->assertOk();
     }
@@ -514,7 +515,7 @@ class ManageClipsTest extends TestCase
     {
         $clip = ClipFactory::create();
 
-        $this->signInRole('admin');
+        $this->signInRole(Role::ADMIN);
 
         $attributes = [
             'episode' => '1',
@@ -603,7 +604,7 @@ class ManageClipsTest extends TestCase
 
         $this->get(route('clips.edit', $userClip))->assertDontSee('LMS Test Link');
 
-        $adminClip = ClipFactory::ownedBy($this->signInRole('admin'))->create();
+        $adminClip = ClipFactory::ownedBy($this->signInRole(Role::ADMIN))->create();
 
         $this->get(route('clips.edit', $adminClip))->assertDontSee('LMS Test Link');
 
@@ -669,7 +670,7 @@ class ManageClipsTest extends TestCase
     {
         $clip = ClipFactory::create();
 
-        $this->signInRole('admin');
+        $this->signInRole(Role::ADMIN);
 
         $this->followingRedirects()->delete(route('clips.edit', $clip))->assertOk();
 
@@ -761,7 +762,7 @@ class ManageClipsTest extends TestCase
     /** @test */
     public function it_displays_previous_next_clip_id_links(): void
     {
-        $this->signInRole('admin');
+        $this->signInRole(Role::ADMIN);
 
         SeriesFactory::withClips(3)->create();
 
@@ -779,7 +780,7 @@ class ManageClipsTest extends TestCase
     /** @test */
     public function it_hides_previous_clip_id_links_if_clip_is_the_first_on_a_series(): void
     {
-        $this->signInRole('admin');
+        $this->signInRole(Role::ADMIN);
 
         SeriesFactory::withClips(3)->create();
 
@@ -795,7 +796,7 @@ class ManageClipsTest extends TestCase
     /** @test */
     public function it_hides_next_clip_id_links_if_clip_is_the_last_on_a_series(): void
     {
-        $this->signInRole('admin');
+        $this->signInRole(Role::ADMIN);
 
         SeriesFactory::withClips(4)->create();
 

@@ -125,25 +125,12 @@ abstract class TestCase extends BaseTestCase
             'data' => \config('settings.portal'),
         ]);
 
-        Role::create([
-            'name' => \App\Enums\Role::SUPERADMIN->lower(),
-        ]);
-
-        Role::create([
-            'name' => \App\Enums\Role::ADMIN->lower(),
-        ]);
-
-        Role::create([
-            'name' => \App\Enums\Role::MODERATOR->lower(),
-        ]);
-
-        Role::create([
-            'name' => \App\Enums\Role::ASSISTANT->lower(),
-        ]);
-
-        Role::create([
-            'name' => \App\Enums\Role::USER->lower(),
-        ]);
+        foreach (\App\Enums\Role::cases() as $role) {
+            Role::create([
+                'id' => $role->value,
+                'name' => $role->lower(),
+            ]);
+        }
     }
 
     protected function signIn(User $user = null): User
@@ -155,7 +142,7 @@ abstract class TestCase extends BaseTestCase
         return $user;
     }
 
-    protected function signInRole(string $role = ''): User
+    protected function signInRole(\App\Enums\Role $role): User
     {
         $user = User::factory()->create();
 

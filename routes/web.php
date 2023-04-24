@@ -28,6 +28,7 @@ use App\Http\Controllers\Backend\UpdateSeriesImage;
 use App\Http\Controllers\Backend\UploadImageController;
 use App\Http\Controllers\Backend\UsersController;
 use App\Http\Controllers\Frontend\AcceptUseTermsController;
+use App\Http\Controllers\Frontend\AdminPortalUseTermsController;
 use App\Http\Controllers\Frontend\ApiController;
 use App\Http\Controllers\Frontend\AssetsDownloadController;
 use App\Http\Controllers\Frontend\FeedsController;
@@ -93,6 +94,8 @@ Route::prefix('/my'.str(config('app.name')))->middleware(['auth'])->group(functi
             ->name('frontend.user.subscriptions');
         Route::get('/comments', UserCommentsController::class)
             ->name('frontend.user.comments');
+        Route::get('/adminPortal/useTerms', [AdminPortalUseTermsController::class, 'terms'])
+            ->name('frontend.admin.portal.use.terms');
     });
 });
 

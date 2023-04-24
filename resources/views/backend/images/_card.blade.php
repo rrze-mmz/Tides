@@ -39,7 +39,7 @@
                     @enderror
                 </div>
                 @if($type === 'series')
-                    <div class="flex items-center pt-2">
+                    <div class="flex items-center py-6">
                         <div class="pr-2">
                             <label for="assignClips">
                                 Overwrite image in clips

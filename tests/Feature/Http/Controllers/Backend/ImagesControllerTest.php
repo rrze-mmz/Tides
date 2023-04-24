@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\Role;
 use App\Http\Livewire\ImagesDataTable;
 use App\Models\Image;
 use App\Models\Presenter;
@@ -31,26 +32,26 @@ it('denies access to images index page for guests', function () {
 });
 
 it('denies access to images index page for logged in users', function () {
-    signInRole('user');
+    signInRole(Role::USER);
 
     get(route('images.index'))->assertForbidden();
 });
 
 it('allows access to images index page for moderators', function () {
-    signInRole('moderator');
+    signInRole(Role::MODERATOR);
 
     get(route('images.index'))->assertOk();
 });
 
 it('doesn\'t show an create button for moderators', function () {
-    signInRole('moderator');
+    signInRole(Role::MODERATOR);
 
     get(route('images.index'))->assertDontSee(route('images.create'));
 });
 
 it('doesn\'t show an edit or delete image button for moderators', function () {
     Image::factory(10)->create();
-    signInRole('moderator');
+    signInRole(Role::MODERATOR);
 
     get(route('images.index'))
         ->assertDontSee('/images/1/edit')
@@ -58,21 +59,21 @@ it('doesn\'t show an edit or delete image button for moderators', function () {
 });
 
 it('it allows access to images index for assistants, admins and superadmins', function () {
-    signInRole('assistant');
+    signInRole(Role::ASSISTANT);
     get(route('images.index'))->assertOk();
     auth()->logout();
 
-    signInRole('admin');
+    signInRole(Role::ADMIN);
     get(route('images.index'))->assertOk();
     auth()->logout();
 
-    signInRole('superadmin');
+    signInRole(Role::SUPERADMIN);
     get(route('images.index'))->assertOk();
     auth()->logout();
 });
 
 it('has a button to create new images and a text for info if database has no images', function () {
-    signInRole('admin');
+    signInRole(Role::ADMIN);
 
     Image::find(1)->delete();
 
@@ -84,14 +85,14 @@ it('has a button to create new images and a text for info if database has no ima
 
 it('shows a list of all images', function () {
     Image::factory(10)->create();
-    signInRole('moderator');
+    signInRole(Role::MODERATOR);
 
     get(route('images.index'))
         ->assertSee(Image::all()->first()->file_name);
 });
 
 it('has edit and delete links for every image', function (Image $image) {
-    signInRole('admin');
+    signInRole(Role::ADMIN);
 
     get(route('images.index'))
         ->assertSee(route('images.edit', $image))
@@ -99,32 +100,32 @@ it('has edit and delete links for every image', function (Image $image) {
 })->with([fn () => Image::factory()->create()]);
 
 it('denies access to image create form for portal users', function () {
-    signInRole('user');
+    signInRole(Role::USER);
 
     get(route('images.create'))->assertForbidden();
 });
 
 it('denies access to image create form for portal moderators', function () {
-    signInRole('moderator');
+    signInRole(Role::MODERATOR);
 
     get(route('images.create'))->assertForbidden();
 });
 
 it('paginates the results', function () {
     Image::factory(50)->create();
-    signInRole('moderator');
+    signInRole(Role::MODERATOR);
 
     get(route('images.index'))->assertDontSee(route('images.edit', Image::all()->last()));
 });
 
 it('denies access to image create form for portal assistants', function () {
-    signInRole('assistant');
+    signInRole(Role::ASSISTANT);
 
     get(route('images.create'))->assertForbidden();
 });
 
 it('allows access to image create for a minimum role of portal admin', function () {
-    signInRole('admin');
+    signInRole(Role::ADMIN);
 
     get(route('images.create'))
         ->assertOk()
@@ -132,7 +133,7 @@ it('allows access to image create for a minimum role of portal admin', function 
 });
 
 it('hasa show page for an image with information about it', function () {
-    signInRole('moderator');
+    signInRole(Role::MODERATOR);
 
     get(route('images.show', $this->image))
         ->assertViewIs('backend.images.show')
@@ -141,7 +142,7 @@ it('hasa show page for an image with information about it', function () {
 });
 
 it('lists all presenters using this image', function () {
-    signInRole('moderator');
+    signInRole(Role::MODERATOR);
     $presenterA = Presenter::factory()->create();
     $presenterB = Presenter::factory()->create(['image_id' => $this->image->id]);
 
@@ -151,7 +152,7 @@ it('lists all presenters using this image', function () {
 });
 
 it('has an edit page for change image metadata', function () {
-    signInRole('admin');
+    signInRole(Role::ADMIN);
 
     get(route('images.edit', $this->image))
         ->assertOk()
@@ -162,7 +163,7 @@ it('has an edit page for change image metadata', function () {
 });
 
 it('lists the last 5 presenters using an image in an image edit page', function () {
-    signInRole('admin');
+    signInRole(Role::ADMIN);
 
     Presenter::factory(6)->create(['image_id' => $this->image->id]);
     $presenter = Presenter::first();
@@ -175,7 +176,7 @@ it('lists the last 5 presenters using an image in an image edit page', function 
 });
 
 it('can update an image filename or description', function () {
-    signInRole('admin');
+    signInRole(Role::ADMIN);
 
     $formData = [
         'description' => 'an updated description',

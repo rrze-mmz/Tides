@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Enums\Role;
 use App\Models\User;
 use App\Services\ElasticsearchService;
 
@@ -18,7 +19,7 @@ class UserObserver
      */
     public function created(User $user)
     {
-        $user->assignRole('user');
+        $user->assignRole(Role::USER);
         session()->flash('flashMessage', "{$user->getFullNameAttribute()} ".__FUNCTION__.' successfully');
 
         $this->elasticsearchService->createIndex($user);

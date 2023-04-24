@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\Acl;
+use App\Enums\Role;
 use Facades\Tests\Setup\ClipFactory;
 use function Pest\Laravel\get;
 
@@ -46,7 +47,7 @@ it('a clip with lms acl can be accessable for portal admin ', function () {
     $this->clip->addAcls(collect([Acl::LMS()]));
     get(route('frontend.clips.show', $this->clip))->assertDontSee('plyr-player');
 
-    signInRole('admin');
+    signInRole(Role::ADMIN);
     get(route('frontend.clips.show', $this->clip))->assertSee('plyr-player');
 });
 
@@ -54,6 +55,6 @@ it('a clip with lms acl can be accessable for portal superadmin ', function () {
     $this->clip->addAcls(collect([Acl::LMS()]));
     get(route('frontend.clips.show', $this->clip))->assertDontSee('plyr-player');
 
-    signInRole('superadmin');
+    signInRole(Role::SUPERADMIN);
     get(route('frontend.clips.show', $this->clip))->assertSee('plyr-player');
 });

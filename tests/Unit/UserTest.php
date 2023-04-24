@@ -75,7 +75,7 @@ class UserTest extends TestCase
     /** @test */
     public function it_can_assign_a_role(): void
     {
-        $this->assertInstanceOf(User::class, $this->user->assignRole('admin'));
+        $this->assertInstanceOf(User::class, $this->user->assignRole(Role::ADMIN));
 
         $this->assertEquals('admin', $this->user->roles()->first()->name);
     }
@@ -83,7 +83,7 @@ class UserTest extends TestCase
     /** @test */
     public function it_can_check_for_a_role(): void
     {
-        $this->user->assignRole('admin');
+        $this->user->assignRole(Role::ADMIN);
 
         $this->assertTrue($this->user->hasRole(Role::ADMIN));
 
@@ -93,7 +93,7 @@ class UserTest extends TestCase
     /** @test */
     public function it_check_for_superadmin_role(): void
     {
-        $this->signInRole('superadmin');
+        $this->signInRole(Role::SUPERADMIN);
 
         $this->assertTrue(auth()->user()->isSuperAdmin());
     }
@@ -101,7 +101,7 @@ class UserTest extends TestCase
     /** @test */
     public function it_check_for_admin_role(): void
     {
-        $this->signInRole('admin');
+        $this->signInRole(Role::ADMIN);
 
         $this->assertTrue(auth()->user()->isAdmin());
     }
@@ -109,7 +109,7 @@ class UserTest extends TestCase
     /** @test */
     public function it_check_for_moderator_role(): void
     {
-        $this->signInRole('moderator');
+        $this->signInRole(Role::MODERATOR);
 
         $this->assertTrue(auth()->user()->isModerator());
     }
@@ -117,7 +117,7 @@ class UserTest extends TestCase
     /** @test */
     public function it_check_for_assistant_role(): void
     {
-        $this->signInRole('assistant');
+        $this->signInRole(Role::ASSISTANT);
 
         $this->assertTrue(auth()->user()->isAssistant());
     }

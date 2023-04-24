@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\Role;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -14,40 +15,15 @@ class RoleSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('roles')->insert(
-            [
-                'name' => 'superadmin',
-                'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s'),
-            ],
-        );
-        DB::table('roles')->insert(
-            [
-                'name' => 'admin',
-                'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s'),
-            ],
-        );
-        DB::table('roles')->insert(
-            [
-                'name' => 'moderator',
-                'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s'),
-            ],
-        );
-        DB::table('roles')->insert(
-            [
-                'name' => 'assistant',
-                'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s'),
-            ],
-        );
-        DB::table('roles')->insert(
-            [
-                'name' => 'user',
-                'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s'),
-            ],
-        );
+        foreach (Role::cases() as $role) {
+            DB::table('roles')->insert(
+                [
+                    'id' => $role->value,
+                    'name' => $role->lower(),
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s'),
+                ],
+            );
+        }
     }
 }

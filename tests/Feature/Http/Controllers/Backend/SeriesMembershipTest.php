@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers\Backend;
 
+use App\Enums\Role;
 use App\Models\Series;
 use App\Models\User;
 use App\Notifications\SeriesMembershipAddUser;
@@ -30,7 +31,7 @@ class SeriesMembershipTest extends TestCase
     {
         $series = SeriesFactory::create();
 
-        $this->signInRole('moderator');
+        $this->signInRole(Role::MODERATOR);
 
         $this->post(route('series.membership.addUser', $series), ['userID' => auth()->user()->id])->assertForbidden();
     }
@@ -38,7 +39,7 @@ class SeriesMembershipTest extends TestCase
     /** @test */
     public function a_series_owner_cannot_add_simple_users(): void
     {
-        $series = SeriesFactory::ownedBy($this->signInRole('moderator'))->create();
+        $series = SeriesFactory::ownedBy($this->signInRole(Role::MODERATOR))->create();
 
         $user = User::factory()->create();
 
@@ -49,11 +50,11 @@ class SeriesMembershipTest extends TestCase
     /** @test */
     public function a_series_owner_can_add_a_user_with_moderator_role(): void
     {
-        $series = SeriesFactory::ownedBy($this->signInRole('moderator'))->create();
+        $series = SeriesFactory::ownedBy($this->signInRole(Role::MODERATOR))->create();
 
         $user = User::factory()->create();
 
-        $user->assignRole('moderator');
+        $user->assignRole(Role::MODERATOR);
 
         $this->post(route('series.membership.addUser', $series), ['userID' => $user->id])
             ->assertRedirect(route('series.edit', $series));
@@ -66,7 +67,7 @@ class SeriesMembershipTest extends TestCase
     {
         $series = SeriesFactory::create();
 
-        $user = $series->addMember(User::factory()->create()->assignRole('moderator'));
+        $user = $series->addMember(User::factory()->create()->assignRole(Role::MODERATOR));
 
         $this->signIn($user);
 
@@ -78,11 +79,11 @@ class SeriesMembershipTest extends TestCase
     {
         Notification::fake();
 
-        $series = SeriesFactory::ownedBy($this->signInRole('moderator'))->create();
+        $series = SeriesFactory::ownedBy($this->signInRole(Role::MODERATOR))->create();
 
         $user = User::factory()->create();
 
-        $user->assignRole('moderator');
+        $user->assignRole(Role::MODERATOR);
 
         $this->post(route('series.membership.addUser', $series), ['userID' => $user->id]);
 
@@ -95,10 +96,10 @@ class SeriesMembershipTest extends TestCase
     /** @test */
     public function a_series_owner_can_remove_a_member_from_series(): void
     {
-        $series = SeriesFactory::ownedBy($this->signInRole('moderator'))->create();
+        $series = SeriesFactory::ownedBy($this->signInRole(Role::MODERATOR))->create();
         $this->assertEquals(0, $series->members()->count());
 
-        $user = $series->addMember(User::factory()->create()->assignRole('moderator'));
+        $user = $series->addMember(User::factory()->create()->assignRole(Role::MODERATOR));
 
         $this->assertEquals(1, $series->members()->count());
 
@@ -112,7 +113,7 @@ class SeriesMembershipTest extends TestCase
     {
         $series = Series::factory()->create(['owner_id' => null]);
 
-        $this->signInRole('assistant');
+        $this->signInRole(Role::ASSISTANT);
 
         $this->get(route('series.edit', $series))->assertDontSee('Set series owner');
     }
@@ -122,7 +123,7 @@ class SeriesMembershipTest extends TestCase
     {
         $series = Series::factory()->create(['owner_id' => null]);
 
-        $this->signInRole('admin');
+        $this->signInRole(Role::ADMIN);
 
         $this->get(route('series.edit', $series))->assertSee('Set series owner');
     }
@@ -132,7 +133,7 @@ class SeriesMembershipTest extends TestCase
     {
         $series = Series::factory()->create(['owner_id' => null]);
 
-        $this->signInRole('assistant');
+        $this->signInRole(Role::ASSISTANT);
 
         $this->post(route('series.ownership.change', $series))->assertForbidden();
     }
@@ -142,11 +143,11 @@ class SeriesMembershipTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $user->assignRole('moderator');
+        $user->assignRole(Role::MODERATOR);
 
         $series = Series::factory()->create(['owner_id' => null]);
 
-        $this->signInRole('assistant');
+        $this->signInRole(Role::ASSISTANT);
 
         $this->post(route('series.ownership.change', $series), ['userID' => $user->id])->assertForbidden();
     }
@@ -156,11 +157,11 @@ class SeriesMembershipTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $user->assignRole('moderator');
+        $user->assignRole(Role::MODERATOR);
 
         $series = Series::factory()->create(['owner_id' => null]);
 
-        $this->signInRole('admin');
+        $this->signInRole(Role::ADMIN);
 
         $this->post(route('series.ownership.change', $series), ['userID' => $user->id]);
 
@@ -177,9 +178,9 @@ class SeriesMembershipTest extends TestCase
         $series = Series::factory()->create(['owner_id' => null]);
 
         $user = User::factory()->create();
-        $user->assignRole('moderator');
+        $user->assignRole(Role::MODERATOR);
 
-        $this->signInRole('admin');
+        $this->signInRole(Role::ADMIN);
 
         $this->post(route('series.ownership.change', $series), ['userID' => $user->id]);
 
@@ -198,9 +199,9 @@ class SeriesMembershipTest extends TestCase
         $series = Series::factory()->create(['owner_id' => $firstOwner->id]);
 
         $user = User::factory()->create();
-        $user->assignRole('moderator');
+        $user->assignRole(Role::MODERATOR);
 
-        $this->signInRole('admin');
+        $this->signInRole(Role::ADMIN);
 
         $this->post(route('series.ownership.change', $series), ['userID' => $user->id]);
 

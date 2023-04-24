@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Http\Livewire;
 
+use App\Enums\Role;
 use App\Http\Livewire\CommentsSection;
 use App\Models\Clip;
 use App\Models\Comment;
@@ -144,7 +145,7 @@ class CommentsSectionTest extends TestCase
     {
         $this->clip->comments()->save(Comment::factory()->create(['type' => 'frontend']));
 
-        $this->signInRole('admin');
+        $this->signInRole(Role::ADMIN);
 
         Livewire::test(CommentsSection::class, [
             'model' => $this->clip,
@@ -203,7 +204,7 @@ class CommentsSectionTest extends TestCase
         ]);
 
         $this->clip->comments()->save($comment);
-        $this->signInRole('admin');
+        $this->signInRole(Role::ADMIN);
 
         Livewire::test(CommentsSection::class, [
             'model' => $this->clip,
@@ -233,7 +234,7 @@ class CommentsSectionTest extends TestCase
     /** @test */
     public function it_notifies_portal_admins_if_model_has_no_admin(): void
     {
-        $this->signInRole('superadmin');
+        $this->signInRole(Role::SUPERADMIN);
         auth()->logout();
         $this->signIn();
 

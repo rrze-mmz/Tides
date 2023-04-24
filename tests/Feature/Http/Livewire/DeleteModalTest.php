@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\Role;
 use App\Http\Livewire\DeleteModalWindow;
 use App\Models\Image;
 use Facades\Tests\Setup\FileFactory;
@@ -23,7 +24,7 @@ beforeEach(function () {
         'created_at' => '2023-03-02T12:20:01.000000Z',
         'updated_at' => '2023-03-02T12:20:01.000000Z',
     ]);
-    signInRole('admin');
+    signInRole(Role::ADMIN);
 });
 
 it('loads a delete modal livewire component in images index', function () {

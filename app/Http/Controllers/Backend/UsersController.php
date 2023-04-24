@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Enums\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
-use App\Models\Role;
 use App\Models\User;
 use App\Services\OpencastService;
 use Exception;
@@ -75,11 +75,11 @@ class UsersController extends Controller
 
         $user->update($validated);
 
-        $user->assignRole(Role::find($validated['role_id'])->name);
+        $user->assignRole(Role::tryFrom($validated['role_id']));
 
         $newRole = $user->roles()->first()->name;
 
-        if ($oldRole !== $newRole && $newRole !== \App\Enums\Role::USER->lower()) {
+        if ($oldRole !== $newRole && $newRole !== Role::USER->lower()) {
             $this->opencastService->createUser($user);
         }
         session()->flash('flashMessage', "{$user->getFullNameAttribute()} ".__FUNCTION__.'d successfully');

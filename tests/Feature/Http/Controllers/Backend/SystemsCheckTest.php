@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers\Backend;
 
+use App\Enums\Role;
 use App\Services\ElasticsearchService;
 use App\Services\OpencastService;
 use App\Services\WowzaService;
@@ -49,7 +50,7 @@ class SystemsCheckTest extends TestCase
     /** @test */
     public function a_moderator_is_now_allowed_to_view_system_cheks_page(): void
     {
-        $this->signInRole('moderator');
+        $this->signInRole(Role::MODERATOR);
 
         $this->mockOpencastHandler->append($this->mockServerNotAvailable());
         $this->mockWowzaHandler->append($this->mockServerNotAvailable());
@@ -61,7 +62,7 @@ class SystemsCheckTest extends TestCase
     /** @test */
     public function it_should_check_for_opencast_server(): void
     {
-        $this->signInRole('superadmin');
+        $this->signInRole(Role::SUPERADMIN);
 
         $this->mockOpencastHandler->append($this->mockServerNotAvailable());
         $this->mockWowzaHandler->append($this->mockServerNotAvailable());
@@ -73,7 +74,7 @@ class SystemsCheckTest extends TestCase
     /** @test */
     public function it_shows_an_info_message_if_opencast_server_is_not_available(): void
     {
-        $this->signInRole('superadmin');
+        $this->signInRole(Role::SUPERADMIN);
 
         $this->mockOpencastHandler->append($this->mockServerNotAvailable());
         $this->mockWowzaHandler->append($this->mockCheckApiConnection());
@@ -87,7 +88,7 @@ class SystemsCheckTest extends TestCase
     /** @test */
     public function it_should_check_for_opencast_status(): void
     {
-        $this->signInRole('superadmin');
+        $this->signInRole(Role::SUPERADMIN);
 
         $this->mockOpencastHandler->append($this->mockHealthResponse());
         $this->mockWowzaHandler->append($this->mockCheckApiConnection());
@@ -99,7 +100,7 @@ class SystemsCheckTest extends TestCase
     /** @test */
     public function it_should_check_for_wowza_server(): void
     {
-        $this->signInRole('superadmin');
+        $this->signInRole(Role::SUPERADMIN);
 
         $this->mockOpencastHandler->append($this->mockServerNotAvailable());
         $this->mockWowzaHandler->append($this->mockServerNotAvailable());
@@ -111,7 +112,7 @@ class SystemsCheckTest extends TestCase
     /** @test */
     public function it_shows_an_info_message_if_wowza_server_is_not_available(): void
     {
-        $this->signInRole('superadmin');
+        $this->signInRole(Role::SUPERADMIN);
 
         $this->mockOpencastHandler->append($this->mockServerNotAvailable());
         $this->mockWowzaHandler->append($this->mockServerNotAvailable());
@@ -125,7 +126,7 @@ class SystemsCheckTest extends TestCase
     /** @test */
     public function it_should_check_for_wowza_status(): void
     {
-        $this->signInRole('superadmin');
+        $this->signInRole(Role::SUPERADMIN);
 
         $this->mockOpencastHandler->append($this->mockHealthResponse());
         $this->mockWowzaHandler->append($this->mockCheckApiConnection());
@@ -139,7 +140,7 @@ class SystemsCheckTest extends TestCase
     /** @test */
     public function it_should_check_for_elasticsearch_server(): void
     {
-        $this->signInRole('superadmin');
+        $this->signInRole(Role::SUPERADMIN);
 
         $this->mockOpencastHandler->append($this->mockServerNotAvailable());
         $this->mockWowzaHandler->append($this->mockServerNotAvailable());

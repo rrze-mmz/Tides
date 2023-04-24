@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Enums\Acl;
+use App\Enums\Role;
 use App\Models\Clip;
 use Facades\Tests\Setup\ClipFactory;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
@@ -59,7 +60,7 @@ class AccessableTraitTest extends TestCase
 
         $this->assertFalse($this->clip->checkAcls());
 
-        $this->signInRole('admin');
+        $this->signInRole(Role::ADMIN);
 
         $this->assertTrue(($this->clip->checkAcls()));
 

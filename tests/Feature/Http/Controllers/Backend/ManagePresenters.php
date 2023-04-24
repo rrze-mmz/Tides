@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers\Backend;
 
+use App\Enums\Role;
 use App\Http\Livewire\PresenterDataTable;
 use App\Models\Clip;
 use App\Models\Presenter;
@@ -21,7 +22,7 @@ class ManagePresenters extends TestCase
     {
         parent::setUp();
 
-        $this->signInRole('admin');
+        $this->signInRole(Role::ADMIN);
     }
 
     /** @test */
@@ -29,7 +30,7 @@ class ManagePresenters extends TestCase
     {
         auth()->logout();
 
-        $this->signInRole('moderator');
+        $this->signInRole(Role::MODERATOR);
 
         $presenter = Presenter::factory()->create();
 
@@ -271,7 +272,7 @@ class ManagePresenters extends TestCase
         $this->get(route('presenters.edit', $presenter = Presenter::factory()->create()))
             ->assertRedirect(route('login'));
 
-        $this->signInRole('moderator');
+        $this->signInRole(Role::MODERATOR);
 
         $this->get(route('presenters.edit', $presenter))->assertStatus(403);
     }
@@ -380,7 +381,7 @@ class ManagePresenters extends TestCase
 
         $this->delete(route('presenters.destroy', $presenter))->assertRedirect(route('login'));
 
-        $this->signInRole('moderator');
+        $this->signInRole(Role::MODERATOR);
 
         $this->delete(route('presenters.destroy', $presenter))->assertStatus(403);
     }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\Role;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
 use function Pest\Laravel\freezeTime;
@@ -20,7 +21,7 @@ test('file can be temporarily uploaded to tmp for a single file upload', functio
     $file = UploadedFile::fake()->image('avatar.png');
     $expectedFilePath = 'tmp/'.now()->timestamp.'-random-string';
 
-    signInRole('admin');
+    signInRole(Role::ADMIN);
     post(route('uploads.process'), [
         'image' => $file,
     ])->assertOk()->assertSee($expectedFilePath);
@@ -29,6 +30,6 @@ test('file can be temporarily uploaded to tmp for a single file upload', functio
 });
 
 it('returns an error if no file is provided', function () {
-    signInRole('admin');
+    signInRole(Role::ADMIN);
     post(route('uploads.process'))->assertStatus(422);
 });

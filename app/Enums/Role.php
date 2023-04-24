@@ -13,7 +13,10 @@ enum Role: int
     case ADMIN = 2;
     case MODERATOR = 3;
     case ASSISTANT = 4;
-    case USER = 5;
+    case MEMBER = 5;
+    case AFFILIATE = 6;
+    case STUDENT = 7;
+    case USER = 8; //treated as local user
 
     public function lower(): string
     {

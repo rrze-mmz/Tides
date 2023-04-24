@@ -46,19 +46,19 @@ class SeriesOpencastControllerTest extends TestCase
 
         $this->post(route('series.opencast.createSeries', $this->series))->assertRedirectToRoute('login');
 
-        $this->signInRole(Role::MODERATOR->lower());
+        $this->signInRole(Role::MODERATOR);
 
         $this->post(route('series.opencast.createSeries', $this->series))->assertForbidden();
 
         auth()->logout();
 
-        $ownedSeries = SeriesFactory::ownedBy($this->signInRole(Role::MODERATOR->lower()))->create();
+        $ownedSeries = SeriesFactory::ownedBy($this->signInRole(Role::MODERATOR))->create();
 
         $this->post(route('series.opencast.createSeries', $ownedSeries))->assertForbidden();
 
         auth()->logout();
 
-        $this->signInRole(Role::ADMIN->lower());
+        $this->signInRole(Role::ADMIN);
 
         $this->post(route('series.opencast.createSeries', $ownedSeries))->assertRedirect();
     }
@@ -68,7 +68,7 @@ class SeriesOpencastControllerTest extends TestCase
     {
         $oldSeriesId = $this->series->opencast_series_id;
 
-        $this->signInRole(Role::ADMIN->lower());
+        $this->signInRole(Role::ADMIN);
 
         $this->post(route('series.opencast.createSeries', $this->series));
 
@@ -82,13 +82,13 @@ class SeriesOpencastControllerTest extends TestCase
     {
         auth()->logout();
 
-        $this->signInRole(Role::MODERATOR->lower());
+        $this->signInRole(Role::MODERATOR);
 
         $this->post(route('series.opencast.updateSeriesAcl', $this->series))->assertForbidden();
 
         auth()->logout();
 
-        $this->signInRole(Role::ADMIN->lower());
+        $this->signInRole(Role::ADMIN);
 
         $this->post(route('series.opencast.updateSeriesAcl', $this->series))->assertRedirect();
     }

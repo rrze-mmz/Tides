@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\Role;
 use App\Http\Livewire\DeleteModalWindow;
 use App\Http\Livewire\ImagesDataTable;
 use App\Models\Image;
@@ -10,7 +11,7 @@ uses(WithFaker::class);
 uses()->group('backend');
 
 beforeEach(function () {
-    signInRole('admin');
+    signInRole(Role::ADMIN);
 });
 
 it('loads a images livewire component on images index page', function () {

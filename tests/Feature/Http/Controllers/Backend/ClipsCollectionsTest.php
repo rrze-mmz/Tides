@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers\Backend;
 
+use App\Enums\Role;
 use App\Models\Clip;
 use App\Models\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -14,7 +15,7 @@ class ClipsCollectionsTest extends TestCase
     /** @test */
     public function it_can_toggle_clips_to_a_collection(): void
     {
-        $this->signInRole('admin');
+        $this->signInRole(Role::ADMIN);
 
         $attributes = [
             'ids' => Clip::factory(2)->create()->pluck('id')->flatten()->all(),

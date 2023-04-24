@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Auth;
 
+use App\Enums\Role;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -11,7 +12,7 @@ class RegistrationTest extends TestCase
 
     public function test_registration_screen_can_be_rendered_only_for_superadmin()
     {
-        $this->signInRole('superadmin');
+        $this->signInRole(Role::SUPERADMIN);
 
         $response = $this->get('/register');
 
@@ -20,7 +21,7 @@ class RegistrationTest extends TestCase
 
     public function test_new_users_can_register_only_for_superadmins()
     {
-        $this->signInRole('superadmin');
+        $this->signInRole(Role::SUPERADMIN);
 
         $response = $this->post('/register', [
             'first_name' => 'Test User',

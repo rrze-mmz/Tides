@@ -4,6 +4,7 @@ namespace Tests\Feature\Http\Controllers\Backend;
 
 use App\Enums\Content;
 use App\Enums\OpencastWorkflowState;
+use App\Enums\Role;
 use App\Jobs\CreateWowzaSmilFile;
 use App\Jobs\TransferAssetsJob;
 use App\Mail\AssetsTransferred;
@@ -29,7 +30,7 @@ class AssetsTransferTest extends TestCase
 
     private OpencastService $opencastService;
 
-    private string $role = '';
+    private Role $role;
 
     protected function setUp(): void
     {
@@ -39,7 +40,7 @@ class AssetsTransferTest extends TestCase
         Storage::fake('local');
         Storage::fake('thumbnails');
 
-        $this->role = 'moderator';
+        $this->role = Role::MODERATOR;
     }
 
     /** @test */
