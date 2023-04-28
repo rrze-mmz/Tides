@@ -29,18 +29,18 @@ class SearchController extends Controller
             return view('frontend.search.results.elasticsearch', compact('searchResults'));
         } else { //use slow db search if no elasticsearch node is found
             $clips = Clip::with('presenters')
-                            ->with('assets')
-                            ->search($request->term)
-                            ->whereHas('assets')
-                            ->orWhereHas('presenters', function ($q) use ($request) {
-                                $q->whereRaw('lower(first_name)  like (?)', ["%{$request->term}%"])
-                                    ->orWhereRaw('lower(last_name)  like (?)', ["%{$request->term}%"]);
-                            }) //search for clip presenter
-                            ->orWhereHas('owner', function ($q) use ($request) {
-                                $q->whereRaw('lower(first_name)  like (?)', ["%{$request->term}%"])
-                                    ->orWhereRaw('lower(last_name)  like (?)', ["%{$request->term}%"]);
-                            }) //search for clip presenter
-                            ->paginate(10)->withQueryString();
+                ->with('assets')
+                ->search($request->term)
+                ->whereHas('assets')
+                ->orWhereHas('presenters', function ($q) use ($request) {
+                    $q->whereRaw('lower(first_name)  like (?)', ["%{$request->term}%"])
+                        ->orWhereRaw('lower(last_name)  like (?)', ["%{$request->term}%"]);
+                }) //search for clip presenter
+                ->orWhereHas('owner', function ($q) use ($request) {
+                    $q->whereRaw('lower(first_name)  like (?)', ["%{$request->term}%"])
+                        ->orWhereRaw('lower(last_name)  like (?)', ["%{$request->term}%"]);
+                }) //search for clip presenter
+                ->paginate(10)->withQueryString();
             $searchResults->put('clips', $clips);
 
             return view('frontend.search.results.dbsearch', compact('searchResults'));

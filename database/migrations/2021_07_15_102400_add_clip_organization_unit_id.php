@@ -15,10 +15,10 @@ class AddClipOrganizationUnitId extends Migration
     {
         Schema::table('clips', function (Blueprint $table) {
             $table->foreignId('organization_id')
-               ->default(1)
-               ->references('org_id')
-               ->on('organizations')
-               ->cascadeOnDelete();
+                ->default(1)
+                ->references('org_id')
+                ->on('organizations')
+                ->cascadeOnDelete();
         });
     }
 

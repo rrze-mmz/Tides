@@ -11,7 +11,7 @@
             @method('PUT')
             <div class="flex flex-col pt-10 ">
                 <div class="italic text-2xl">
-                    {{{ trans('dashboard.user.use terms') }}}
+                    {{ trans('dashboard.user.use terms') }}
                 </div>
 
                 <div class="pt-10 flex items-center">

@@ -15,7 +15,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 
 trait WorksWithElasticsearchClient
 {
-    use  WithFaker;
+    use WithFaker;
 
     private $stream;
 

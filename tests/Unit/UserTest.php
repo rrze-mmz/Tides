@@ -75,6 +75,9 @@ class UserTest extends TestCase
     /** @test */
     public function it_can_assign_a_role(): void
     {
+        $this->user->assignRole(Role::MEMBER);
+        $this->assertFalse($this->user->hasRole(Role::USER));
+
         $this->assertInstanceOf(User::class, $this->user->assignRole(Role::ADMIN));
 
         $this->assertEquals('admin', $this->user->roles()->first()->name);
@@ -87,7 +90,7 @@ class UserTest extends TestCase
 
         $this->assertTrue($this->user->hasRole(Role::ADMIN));
 
-        $this->assertFalse($this->user->hasRole(Role::USER));
+        $this->assertFalse($this->user->hasRole(Role::STUDENT));
     }
 
     /** @test */

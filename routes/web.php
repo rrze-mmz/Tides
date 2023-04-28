@@ -37,6 +37,7 @@ use App\Http\Controllers\Frontend\SearchController;
 use App\Http\Controllers\Frontend\ShowClipsController;
 use App\Http\Controllers\Frontend\ShowOrganizationsController;
 use App\Http\Controllers\Frontend\ShowSeriesController;
+use App\Http\Controllers\Frontend\UserApplicationsController;
 use App\Http\Controllers\Frontend\UserCommentsController;
 use App\Http\Controllers\Frontend\UserSettingsController;
 use App\Http\Controllers\Frontend\UserSubscriptionsController;
@@ -96,6 +97,10 @@ Route::prefix('/my'.str(config('app.name')))->middleware(['auth'])->group(functi
             ->name('frontend.user.comments');
         Route::get('/adminPortal/useTerms', [AdminPortalUseTermsController::class, 'terms'])
             ->name('frontend.admin.portal.use.terms');
+        Route::put('/adminPortal/useTerms', [AdminPortalUseTermsController::class, 'accept'])
+            ->name('frontend.admin.portal.accept.use.terms');
+        Route::get('/applications', UserApplicationsController::class)
+            ->name('frontend.user.applications');
     });
 });
 

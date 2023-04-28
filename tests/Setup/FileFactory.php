@@ -44,7 +44,6 @@ class FileFactory
 
     public function simpleFile(): UploadedFile
     {
-        return
-            UploadedFile::fake()->create('.DS_Store', '10', 'application/octet-stream');
+        return UploadedFile::fake()->create('.DS_Store', '10', 'application/octet-stream');
     }
 }

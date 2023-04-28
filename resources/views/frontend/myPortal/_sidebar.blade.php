@@ -1,3 +1,4 @@
+@php use App\Enums\Role; @endphp
 <aside class="w-64"
        aria-label="Sidebar">
     <div class="overflow-y-auto py-4 px-3 bg-gray-50 rounded dark:bg-gray-800 text-white">
@@ -46,19 +47,36 @@
                         </span>
                 </a>
             </li>
-            @if(auth()->user()->saml_role !== 'student')
-                <li>
-                    <a href="{{ route('frontend.admin.portal.use.terms') }}"
-                       class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg
+
+            @if(auth()->user()->hasRole(Role::MEMBER) && auth()->user()->roles->containsOneItem())
+                @if(isset($settings['admin_portal_application_status']))
+                    <li>
+                        <a href="{{ route('frontend.user.applications') }}"
+                           class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg
                                    dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-                    >
-                        <x-heroicon-o-exclamation-circle class="w-6 h-6 text-gray-500 transition duration-75
+                        >
+                            <x-heroicon-o-exclamation-circle class="w-6 h-6 text-gray-500 transition duration-75
                                     dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"/>
-                        <span class="ml-3">
+                            <span class="ml-3">
+                                        Application status
+                                    </span>
+                        </a>
+                    </li>
+                @else
+                    <li>
+                        <a href="{{ route('frontend.admin.portal.use.terms') }}"
+                           class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg
+                                   dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                        >
+                            <x-heroicon-o-exclamation-circle class="w-6 h-6 text-gray-500 transition duration-75
+                                    dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"/>
+                            <span class="ml-3">
                                         Apply for admin portal
                                     </span>
-                    </a>
-                </li>
+                        </a>
+                    </li>
+                @endif
+
             @endif
         </ul>
     </div>

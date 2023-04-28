@@ -117,7 +117,13 @@ class User extends Authenticatable
      */
     public function assignRole(Role $role): static
     {
-        $this->roles()->sync([$role()]);
+        //a member cannot be a user or student
+        if ($role == Role::MEMBER) {
+            //therefore remove the existing user role
+            $this->roles()->sync([$role->value]);
+        } else {
+            $this->roles()->toggle([$role->value]);
+        }
 
         return $this;
     }
@@ -140,8 +146,6 @@ class User extends Authenticatable
 
     /**
      * Check whether the current user has given role
-     *
-     * @param  string  $role
      */
     public function hasRole(Role $role): bool
     {
@@ -207,20 +211,6 @@ class User extends Authenticatable
     }
 
     /**
-     * Resets user settings to default values
-     */
-    public function resetSettings(): BaseModel
-    {
-        $setting = Setting::where('name', $this->username)->firstOrFail();
-
-        //set user settings to default
-        $setting->data = config('settings.user');
-        $setting->save();
-
-        return $this->settings();
-    }
-
-    /**
      * Override the default mail template
      * and send a custom password reset email
      * to the user
@@ -259,7 +249,7 @@ class User extends Authenticatable
     }
 
     /*
-     * Only for test purposes and with use in tinker!
+     * Only for test purpose!
      *
      */
     public function resetPassword(): JsonResponse
@@ -272,5 +262,19 @@ class User extends Authenticatable
             'message' => 'User password reset was successfully ',
             'user' => $this->username,
         ]);
+    }
+
+    /**
+     * Resets user settings to default values
+     */
+    public function resetSettings(): BaseModel
+    {
+        $setting = $this->settings();
+
+        //set user settings to default
+        $setting->data = config('settings.user');
+        $setting->save();
+
+        return $this->settings();
     }
 }

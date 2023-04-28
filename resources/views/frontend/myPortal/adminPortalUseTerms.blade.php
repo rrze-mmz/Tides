@@ -6,7 +6,7 @@
             <h2 class="text-2xl font-bold">Access to admin Portal</h2>
         </div>
 
-        <form action="{{ route('frontend.acceptUseTerms') }}" method="POST">
+        <form action="{{ route('frontend.admin.portal.accept.use.terms') }}" method="POST">
             @csrf
             @method('PUT')
             <div class="flex flex-col pt-10 ">

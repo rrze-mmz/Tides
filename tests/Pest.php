@@ -39,8 +39,10 @@ function signIn(User $user = null): User
 */
 function signInRole(Role $role): User
 {
+
     $user = User::factory()->create();
     $user->assignRole($role);
+
     actingAs($user);
 
     return $user;
@@ -49,4 +51,9 @@ function signInRole(Role $role): User
 function acceptUseTerms()
 {
     put(route('frontend.acceptUseTerms'), ['accept_use_terms' => 'on']);
+}
+
+function acceptAdminPortalUseTerms()
+{
+    put(route('frontend.admin.portal.accept.use.terms'), ['accept_use_terms' => 'on']);
 }

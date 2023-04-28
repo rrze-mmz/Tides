@@ -11,8 +11,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-           $table->string('saml_role')->default('affiliate');
-           $table->smallInteger('saml_entitlement')->default(0);
+            $table->string('saml_role')->default('affiliate');
+            $table->smallInteger('saml_entitlement')->default(0);
         });
     }
 

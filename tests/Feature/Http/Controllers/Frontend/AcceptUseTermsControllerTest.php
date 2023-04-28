@@ -22,7 +22,7 @@ it('shows myPortal index page if use terms are accepted', function () {
         ->assertSee('Portal Settings');
 });
 
-it('updates user settings if use accept the use terms', function () {
+it('updates user settings when user accepts the use terms', function () {
     assertDatabaseHas('settings', [
         'name' => auth()->user()->username,
         'data' => json_encode(config('settings.user')), ]);

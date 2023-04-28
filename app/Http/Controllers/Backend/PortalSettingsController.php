@@ -53,11 +53,11 @@ class PortalSettingsController extends Controller
         $validated = $request->validated();
 
         //user updated setting
-//        if ($setting->data['maintenance_mode'] !== $validated['maintenance_mode']) {
-//            //temporary disabled because not working as expected
-//            $call = $validated['maintenance_mode'] ? 'down' : 'up';
-//            Artisan::call($call);
-//        }
+        //        if ($setting->data['maintenance_mode'] !== $validated['maintenance_mode']) {
+        //            //temporary disabled because not working as expected
+        //            $call = $validated['maintenance_mode'] ? 'down' : 'up';
+        //            Artisan::call($call);
+        //        }
 
         $setting->data = $validated;
         $setting->save();

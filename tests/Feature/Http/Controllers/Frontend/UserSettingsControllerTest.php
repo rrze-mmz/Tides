@@ -1,8 +1,8 @@
 <?php
 
+use App\Enums\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\WithFaker;
-use function Pest\Laravel\actingAs;
 use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\get;
 use function Pest\Laravel\put;
@@ -95,17 +95,25 @@ it('updates user lang preferences', function () {
     get(route('home'))->assertSee('Abmelden');
 });
 
-it('shows an application menu for admin portal if use has a saml role of employee', function () {
+it('shows an application menu for admin portal if use has a member or affiliate role', function () {
     //current user is a student
     acceptUseTerms();
     get(route('frontend.userSettings.edit'))->assertDontSee('Apply for admin portal');
     auth()->logout();
 
     //current user has a saml role employee
-    actingAs(User::factory()->create([
-        'saml_role' => 'employee',
-    ]));
-
+    signInRole(Role::MEMBER);
     acceptUseTerms();
     get(route('frontend.userSettings.edit'))->assertSee('Apply for admin portal');
+});
+
+it('shows an application status menu item if member applied for admin portal', function () {
+    signInRole(Role::MEMBER);
+    acceptUseTerms();
+    acceptAdminPortalUseTerms();
+
+    get(route('frontend.userSettings.edit'))
+        ->assertDontSee('Apply for admin portal')
+        ->assertSee('Application status')
+        ->assertSee(route('frontend.user.applications'));
 });
