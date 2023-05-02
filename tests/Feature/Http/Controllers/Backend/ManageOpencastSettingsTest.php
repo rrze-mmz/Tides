@@ -19,12 +19,7 @@ class ManageOpencastSettingsTest extends TestCase
 
         $this->signInRole(Role::SUPERADMIN);
 
-        $this->setting = Setting::create([
-            'name' => 'opencast',
-            'data' => [
-                config('settings.opencast'),
-            ],
-        ]);
+        $this->setting = Setting::opencast();
     }
 
     /** @test */

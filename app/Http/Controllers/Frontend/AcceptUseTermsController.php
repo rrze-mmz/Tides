@@ -18,7 +18,7 @@ class AcceptUseTermsController extends Controller
         ]);
 
         if ($validated['accept_use_terms'] === 'on') {
-            $settings = auth()->user()->settings();
+            $settings = auth()->user()->settings;
             $data = $settings->data;
             $data['accept_use_terms'] = true;
             $settings->data = $data;

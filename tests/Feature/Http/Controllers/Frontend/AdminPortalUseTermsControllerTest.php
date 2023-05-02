@@ -53,13 +53,13 @@ it('updated user settings when user accepts admin portal use terms', function ()
 
     assertDatabaseHas('settings', [
         'name' => $user->username,
-        'data' => json_encode($user->settings()->data), ]);
+        'data' => json_encode($user->settings->data), ]);
 
     put(route('frontend.admin.portal.accept.use.terms'), ['accept_use_terms' => 'on'])
         ->assertSessionDoesntHaveErrors('accept_use_terms');
 
-    assertEquals(ApplicationStatus::IN_PROGRESS->value, $user->settings()->data['admin_portal_application_status']);
-    assertTrue($user->settings()->data['accept_admin_portal_use_terms']);
+    assertEquals(ApplicationStatus::IN_PROGRESS->value, $user->settings->data['admin_portal_application_status']);
+    assertTrue($user->settings->data['accept_admin_portal_use_terms']);
 });
 
 it('redirects to user applications page if a user already accepted admin portal use terms', function () {

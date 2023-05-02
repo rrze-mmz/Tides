@@ -8,7 +8,7 @@ uses()->group('frontend');
 
 beforeEach(function () {
     signIn();
-    $this->userSettings = auth()->user()->settings();
+    $this->userSettings = auth()->user()->settings;
 });
 
 it('shows an error if checkbox is not checked', function () {

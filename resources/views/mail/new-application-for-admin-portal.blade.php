@@ -1,12 +1,17 @@
 <x-mail::message>
-# Introduction
 
-The body of your message.
+## New Application for Tides Admin Portal
 
-<x-mail::button :url="''">
-Button Text
-</x-mail::button>
+Member name : {{ $user->getFullNameAttribute() }}
+
+Member username : {{ $user->username }}
+
+Email : {{ $user->email }}
+
+## Accepted Use Terms ##
+
+> {{ __('dashboard.user.admin portal use terms') }}
 
 Thanks,<br>
-{{ config('app.name') }}
+    {{ config('app.name') }}
 </x-mail::message>

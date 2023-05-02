@@ -28,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
         Relation::enforceMorphMap([
             'series' => 'App\Models\Series',
             'clip' => 'App\Models\Clip',
+            'user' => 'App\Models\User',
         ]);
     }
 }

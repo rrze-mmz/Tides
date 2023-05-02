@@ -1,7 +1,17 @@
 <?php
 
-test('example', function () {
-    $response = $this->get('/');
+use App\Enums\Role;
+use App\Mail\NewApplicationForAdminPortal;
+use Illuminate\Support\Facades\Mail;
 
-    $response->assertStatus(200);
+uses()->group('frontend');
+
+it('send an email to tides support mail address if a member apply for admin portal', function () {
+    Mail::fake();
+
+    signInRole(Role::MEMBER);
+    acceptUseTerms();
+    acceptAdminPortalUseTerms();
+
+    Mail::assertSent(NewApplicationForAdminPortal::class);
 });

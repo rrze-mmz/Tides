@@ -38,7 +38,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        $lang = auth()->user()->settings()->data['language'];
+        $lang = auth()->user()->settings->data['language'];
 
         $request->session()->put('locale', $lang);
 

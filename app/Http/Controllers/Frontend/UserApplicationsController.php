@@ -12,7 +12,7 @@ class UserApplicationsController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $settings = auth()->user()->settings()->data;
+        $settings = auth()->user()->settings->data;
 
         return view('frontend.myPortal.applications', [
             'settings' => $settings,

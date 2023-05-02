@@ -2,8 +2,10 @@
 
 namespace App\Mail;
 
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
@@ -15,7 +17,7 @@ class NewApplicationForAdminPortal extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct(private readonly User $user)
     {
         //
     }
@@ -37,13 +39,16 @@ class NewApplicationForAdminPortal extends Mailable
     {
         return new Content(
             markdown: 'mail.new-application-for-admin-portal',
+            with: [
+                'user' => $this->user,
+            ]
         );
     }
 
     /**
      * Get the attachments for the message.
      *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
+     * @return array<int, Attachment>
      */
     public function attachments(): array
     {

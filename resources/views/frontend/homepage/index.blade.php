@@ -11,7 +11,7 @@
         @include('frontend.search._searchbar')
 
         @auth()
-            @if(auth()->user()->settings()->data['show_subscriptions_to_home_page'])
+            @if(auth()->user()->settings->data['show_subscriptions_to_home_page'])
                 <div class="flex items-end w-full border-b justify-content-between">
                     <div class="flex justify-between items-end pb-2 w-full">
                         <div class="text-2xl"> Your Series subscriptions</div>

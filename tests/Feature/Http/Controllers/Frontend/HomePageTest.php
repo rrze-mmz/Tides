@@ -167,7 +167,7 @@ class HomePageTest extends TestCase
     {
         $this->signIn();
 
-        $userSettings = auth()->user()->settings();
+        $userSettings = auth()->user()->settings;
 
         SeriesFactory::withClips(2)->withAssets(2)->create(10);
 

@@ -8,6 +8,7 @@ use App\Models\Traits\Searchable;
 use App\Notifications\MailResetPasswordToken;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -100,6 +101,11 @@ class User extends Authenticatable
     public function supervisedClips(): HasMany
     {
         return $this->hasMany(Clip::class, 'supervisor_id');
+    }
+
+    public function settings(): BelongsTo
+    {
+        return $this->belongsTo(Setting::class, 'username', 'name');
     }
 
     /**
@@ -199,10 +205,10 @@ class User extends Authenticatable
         })->orWhere('owner_id', $this->id);
     }
 
-    /**
+    /*
      * Fetch User settings
      */
-    public function settings(): BaseModel
+    public function getSetting(): BaseModel
     {
         return Setting::where('name', $this->username)->firstOrCreate(
             ['name' => $this->username],
@@ -269,12 +275,12 @@ class User extends Authenticatable
      */
     public function resetSettings(): BaseModel
     {
-        $setting = $this->settings();
+        $settings = $this->settings;
 
         //set user settings to default
-        $setting->data = config('settings.user');
-        $setting->save();
+        $settings->data = config('settings.user');
+        $settings->save();
 
-        return $this->settings();
+        return $this->settings;
     }
 }

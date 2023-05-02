@@ -20,6 +20,10 @@ class UserObserver
     public function created(User $user)
     {
         $user->assignRole(Role::USER);
+        $user->settings()->create([
+            'name' => $user->username,
+            'data' => config('settings.user'), ]);
+
         session()->flash('flashMessage', "{$user->getFullNameAttribute()} ".__FUNCTION__.' successfully');
 
         $this->elasticsearchService->createIndex($user);

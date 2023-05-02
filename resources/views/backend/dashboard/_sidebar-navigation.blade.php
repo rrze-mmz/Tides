@@ -83,6 +83,19 @@
     >
         {{ trans_choice('common.menu.system', 2) }}
     </a>
+    <a
+        href="{{route('user.notifications')}}"
+        class="flex items-center text-white opacity-75 hover:opacity-100 py-4
+        pl-6 nav-item  {{ setActiveLink(route('settings.portal.index')) }}"
+    >
+        <div class="flex items-center">
+            Notifications
+            @if ($counter = auth()->user()->unreadNotifications->count() > 0)
+                <span class="rounded-full  p-1.5 ml-1 bg-white text-green-700 text-sm"> {{ $counter }}</span>
+            @endif
+        </div>
+
+    </a>
 @endcan
 @can('administrate-superadmin-portal-pages')
     <div class="pt-5 ">

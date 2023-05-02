@@ -16,7 +16,7 @@ class UserSettingsController extends Controller
      */
     public function edit(): Application|Factory|View
     {
-        return view('frontend.myPortal.userSettings.edit', ['settings' => auth()->user()->settings()->data]);
+        return view('frontend.myPortal.userSettings.edit', ['settings' => auth()->user()->settings->data]);
     }
 
     /**
@@ -24,7 +24,7 @@ class UserSettingsController extends Controller
      */
     public function update(UpdateUserSettings $request): RedirectResponse
     {
-        $settings = auth()->user()->settings();
+        $settings = auth()->user()->settings;
 
         $validated = $request->validated();
 

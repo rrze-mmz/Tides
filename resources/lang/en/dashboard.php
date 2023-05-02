@@ -25,7 +25,6 @@ return [
          geschieht. Durch das Hochladen und die Wahl des Zugangsschutzes, versichere ich, dass die Medien auf den
          gewählten Vertriebswegen unentgeltlich genutzt werden dürfen. Durch die Veröffentlichung der Medien werden
           keine Rechte Dritter verletzt.
-
           Mir ist bekannt, dass ich keinen Anspruch auf eine bestimmte Dauer der Verfügbarhaltung habe.
           Die FAU ist berechtigt, die Aufzeichnung zu löschen oder den Zugang zu sperren, wenn dies
           sachgerecht erscheint. ',

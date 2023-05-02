@@ -26,6 +26,7 @@ use App\Http\Controllers\Backend\TriggerSmilFilesController;
 use App\Http\Controllers\Backend\UpdateClipImage;
 use App\Http\Controllers\Backend\UpdateSeriesImage;
 use App\Http\Controllers\Backend\UploadImageController;
+use App\Http\Controllers\Backend\UserNotificationsController;
 use App\Http\Controllers\Backend\UsersController;
 use App\Http\Controllers\Frontend\AcceptUseTermsController;
 use App\Http\Controllers\Frontend\AdminPortalUseTermsController;
@@ -167,6 +168,8 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
         return (is_null($clip)) ? to_route('dashboard')->with('flashMessage', 'Clip not found')
             : to_route('clips.edit', $clip);
     })->name('goto.clip');
+
+    Route::get('/notifications', UserNotificationsController::class)->name('user.notifications');
 
     //Series routes
     Route::resource('series', SeriesController::class)->except(['show', 'edit']);

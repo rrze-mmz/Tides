@@ -14,7 +14,7 @@ uses()->group('frontend');
 
 beforeEach(function () {
     signIn();
-    $this->userSettings = auth()->user()->settings();
+    $this->userSettings = auth()->user()->settings;
 });
 
 it('shows sidebar user menu for my portal', function () {

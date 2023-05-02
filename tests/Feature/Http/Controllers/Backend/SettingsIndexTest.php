@@ -19,15 +19,7 @@ class SettingsIndexTest extends TestCase
 
         $this->signInRole(Role::SUPERADMIN);
 
-        $this->setting = Setting::create(
-            ['name' => 'opencast',
-                'data' => [
-                    'url' => 'localhost:8080',
-                    'username' => 'admin',
-                    'password' => 'opencast',
-                ],
-            ]
-        );
+        $this->setting = Setting::opencast();
     }
 
     /** @test */

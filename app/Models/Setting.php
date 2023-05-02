@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Enums\ApplicationStatus;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\DB;
 
 class Setting extends BaseModel
 {
@@ -15,6 +17,14 @@ class Setting extends BaseModel
             get: fn ($value) => json_decode($value, true),
             set: fn ($value) => json_encode($value),
         );
+    }
+
+    public function scopeOpenAdminPortalApplications()
+    {
+        return DB::table('settings')
+            ->select('name')
+            ->whereJsonContains('data->admin_portal_application_status', ApplicationStatus::IN_PROGRESS->value)
+            ->get();
     }
 
     public function scopeUser($query, User $user)
