@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Backend\AdminPortalApplicationController;
 use App\Http\Controllers\Backend\AssetDestroyController;
 use App\Http\Controllers\Backend\AssetsTransferController;
 use App\Http\Controllers\Backend\ChaptersController;
@@ -308,6 +309,8 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
             ->name('settings.elasticSearch.show');
         Route::put('/settings/elasticSearch', [ElasticSearchSettingsController::class, 'update'])
             ->name('settings.elasticSearch.update');
+        Route::post('/adminPortal/application', AdminPortalApplicationController::class)
+            ->name('admin.portal.application.grant');
     });
 });
 

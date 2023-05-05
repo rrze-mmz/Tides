@@ -90,7 +90,7 @@
     >
         <div class="flex items-center">
             Notifications
-            @if ($counter = auth()->user()->unreadNotifications->count() > 0)
+            @if (($counter = auth()->user()->unreadNotifications->count()) > 0)
                 <span class="rounded-full  p-1.5 ml-1 bg-white text-green-700 text-sm"> {{ $counter }}</span>
             @endif
         </div>
