@@ -32,7 +32,7 @@
     @endif
     @error($fieldName)
     <div class="col-start-2 col-end-6">
-        <p class="mt-2 w-full text-xs text-red500">{{ $message }}</p>
+        <p class="mt-2 w-full text-xs text-red-500">{{ $message }}</p>
     </div>
     @enderror
 </div>

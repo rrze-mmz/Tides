@@ -170,7 +170,10 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
             : to_route('clips.edit', $clip);
     })->name('goto.clip');
 
-    Route::get('/notifications', UserNotificationsController::class)->name('user.notifications');
+    Route::get('/notifications', [UserNotificationsController::class, 'index'])
+        ->name('user.notifications');
+    Route::delete('/notifications', [UserNotificationsController::class, 'destroy'])
+        ->name('user.notifications.delete');
 
     //Series routes
     Route::resource('series', SeriesController::class)->except(['show', 'edit']);

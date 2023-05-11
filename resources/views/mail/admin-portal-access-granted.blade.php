@@ -1,16 +1,18 @@
 <x-mail::message>
-    Guten Tag {{ $user->getFullNameAttribute() }}
 
-    # Introduction
-    Your application for admin portal has be proccessed
+Guten Tag {{ $user->getFullNameAttribute() }},
 
-    You can now access Admin port
+# Introduction
 
+Your application for admin portal has been approved
 
-    <x-mail::button :url="route('dashboard')">
-        Go to admin portal Dashboard
-    </x-mail::button>
+You can start right away
 
-    Thanks,<br>
-    {{ config('app.name') }}
+<x-mail::button :url="route('dashboard')">
+Go to admin portal Dashboard
+</x-mail::button>
+
+Thanks,<br>
+{{ config('app.name') }}
+
 </x-mail::message>

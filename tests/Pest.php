@@ -48,12 +48,12 @@ function signInRole(Role $role): User
     return $user;
 }
 
-function acceptUseTerms()
+function acceptUseTerms(): void
 {
     put(route('frontend.acceptUseTerms'), ['accept_use_terms' => 'on']);
 }
 
-function acceptAdminPortalUseTerms()
+function acceptAdminPortalUseTerms(): void
 {
     put(route('frontend.admin.portal.accept.use.terms'), ['accept_use_terms' => 'on']);
 }

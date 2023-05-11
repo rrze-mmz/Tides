@@ -1,4 +1,4 @@
-@php use App\Enums\ApplicationStatus; @endphp
+@php use App\Enums\ApplicationStatus;use App\Models\User; @endphp
 @extends('layouts.backend')
 
 @section('content')
@@ -6,81 +6,129 @@
         Notifications
     </div>
 
-    <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg mt-4">
-        <table class="min-w-full divide-y divide-gray-200">
-            <thead>
-            <tr>
-                <th class="px-6 py-3 text-left ">
-                    <div class="flex items-center">
-                        Notification type
-                    </div>
-                </th>
-                <th class="px-6 py-3 text-left ">
-                    <div class="flex items-center">
-                        Information
-                    </div>
-                </th>
-                <th class="px-6 py-3 text-left ">
-                    <div class="flex items-center">
-                        Status
-                    </div>
-                </th>
-                <th class="px-6 py-3 text-left ">
-                    <div class="flex items-center">
-                        Actions
-                    </div>
-                </th>
-            </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-            @forelse(auth()->user()->notifications as $notification)
-                <tr class="@if(is_null($notification->read_at)) font-bold @endif">
-                    <td class="w-3/12 px-6 py-4 whitespace-no-wrap">
-                        @if($notification->type === 'App\Notifications\NewAdminPortalNotification')
-                            Application
-                        @else
-                            {{ $notification->type }}
-                        @endif
-                    </td>
-                    <td class="w-3/12 px-6 py-4 whitespace-no-wrap">
-                        Requested from <span
-                            class="font-bold">{{ $notification->data['username_applied_for_admin_portal'] }}</span>
-                    </td>
-                    <td class="w-3/12 px-6 py-4 whitespace-no-wrap">
-                        {{ $notification->data['application_status'] }}
-                    </td>
-                    <td class="w-3/12 px-6 py-4 whitespace-no-wrap">
-                        @if ($notification->data['application_status'] === ApplicationStatus::IN_PROGRESS())
-                            <form action="{{route('admin.portal.application.grant')}}"
-                                  method="POST">
-                                @csrf
-                                <input type="text"
-                                       name="username"
-                                       value="{{ $notification->data['username_applied_for_admin_portal']}}"
-                                       hidden
-                                />
+    @if(auth()->user()->notifications->count() > 0)
+        <form action="{{ route('user.notifications.delete') }}" method="POST">
+            @csrf
+            @method('DELETE')
+            <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg mt-4">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead>
+                    <tr>
+                        <th class="px-6 py-3 text-left ">
+                            <div class="flex items-center">
+                                <x-heroicon-o-trash class="w-6 h-6"/>
+                            </div>
+                        </th>
+                        <th class="px-6 py-3 text-left ">
+                            <div class="flex items-center">
+                                Notification type
+                            </div>
+                        </th>
+                        <th class="px-6 py-3 text-left ">
+                            <div class="flex items-center">
+                                Description
+                            </div>
+                        </th>
+                        <th class="px-6 py-3 text-left ">
+                            <div class="flex items-center">
+                                Status
+                            </div>
+                        </th>
+                        <th class="px-6 py-3 text-left ">
+                            <div class="flex items-center">
+                                Actions
+                            </div>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y  divide-gray-200">
+                    @forelse(auth()->user()->notifications as $notification)
+                        <tr class="@if(is_null($notification->read_at)) font-bold @endif ">
+                            <td class="w-1/12 px-6 py-4 whitespace-no-wrap">
+                                <input type="checkbox" name="selected_notifications[]" value="{{ $notification->id }}"/>
+                            </td>
+                            <td class="w-2/12 px-6 whitespace-no-wrap">
+                                @if($notification->type === 'App\Notifications\NewAdminPortalNotification')
+                                    User application
+                                @else
+                                    {{ $notification->type }}
+                                @endif
+                            </td>
+                            <td class="w-3/12 px-6 py-4 whitespace-no-wrap">
+                                Requested from {{ $notification->data['username_applied_for_admin_portal'] }}
+                            </td>
+                            <td class="w-3/12 px-6 py-4 whitespace-no-wrap">
+                                <div class="flex flex-col items-left py-1">
+                                    @if($notification->data['application_status'] === ApplicationStatus::COMPLETED())
+                                        <div
+                                            class="text-green-500">{{ $notification->data['application_status'] }}</div>
+                                        <div class="pl-2 pt-2">[Application processed by {{
+                                            User::search($notification->data['application_status_processed_by'])
+                                                ->first()
+                                                ->getFullNameAttribute()
+                                                }}]
+                                        </div>
+                                    @else
+                                        {{ $notification->data['application_status'] }}
+                                    @endif
+                                </div>
+                            </td>
+                            <td class="w-3/12 px-6 py-4 whitespace-no-wrap">
+                                @if($notification->type === 'App\Notifications\NewAdminPortalNotification')
+                                    <a href="{{ route('users.edit',
+                                User::search($notification->data['username_applied_for_admin_portal'])->first()) }}"
+                                       target="_blank"
+                                    >
+                                        <x-button type="button" class="bg-blue-600 hover:bg-blue-700">
+                                            View Moderator
+                                        </x-button>
+                                    </a>
+                                    <button type="submit"
+                                            class="inline-flex items-center px-4 py-2  border bg-red-500
+                                                    hover:bg-red-700 border-transparent rounded-md font-medium text-base
+                                                     text-white tracking-wider active:bg-white-900 focus:outline-none
+                                                    focus:border-white-900 focus:ring ring-gray-300 disabled:opacity-25
+                                                    transition ease-in-out duration-150"
+                                            formaction="{{ route('user.notifications.delete', [
+                                                'selected_notifications' => [$notification->id]]) }}">
+                                        Delete notification
+                                    </button>
+                                @endif
 
-                                <x-button class="bg-green-700 hover:bg-green-700">
-                                    Assign moderator role
-                                </x-button>
-                            </form>
-                        @else
-                            <x-button class="bg-blue-600 hover:bg-blue-700">
-                                View Moderator
-                            </x-button>
-                        @endif
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="w-full px-6 py-4 whitespace-no-wrap">
+                                You have no notifications
+                            </td>
+                        </tr>
+                    @endforelse
+                    </tbody>
+                </table>
+            </div>
+            @if(auth()->user()->notifications->count() > 0)
+                <div class="flex flex-col pt-10">
+                    <div>
+                        <x-button type="submit" class="bg-red-500 hover:bg-red-700">
+                            Delete all selected notifications
+                        </x-button>
+                    </div>
+                    @error('selected_notifications')
+                    <div class="flex">
+                        <p class="mt-2 w-full text-xs text-red-500 font-xl">
+                            {{ $message }}</p>
+                    </div>
+                    @enderror
+                </div>
 
-                    </td>
-                </tr>
-            @empty
-                <tr>
-                    <td class="w-full px-6 py-4 whitespace-no-wrap">
-                        You have no notifications
-                    </td>
-                </tr>
-            @endforelse
-            </tbody>
-        </table>
-    </div>
-
+            @endif
+        </form>
+    @else
+        <div class="flex justify-center text-center">
+            <div class="w-full shadow overflow-hidden border-b border-gray-200 sm:rounded-lg mt-4 text-xl p-4">
+                You have no notifications
+            </div>
+        </div>
+    @endif
 @endsection

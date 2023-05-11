@@ -1,3 +1,4 @@
+@php use App\Enums\ApplicationStatus;use Carbon\Carbon; @endphp
 @extends('layouts.backend')
 
 @section('content')
@@ -59,4 +60,45 @@
 
         </form>
     </div>
+
+    <div class="flex pt-10 py-2 font-semibold border-b border-black font-2xl">
+        Applications
+    </div>
+
+    @if(isset($user->settings->data['admin_portal_application_status']))
+        @if($user->settings->data['admin_portal_application_status'] === ApplicationStatus::IN_PROGRESS())
+            <div class="flex flex-row pt-5 items-center">
+                <div class="pr-10 text-lg font-bold">
+                    User requested access to admin portal
+                </div>
+                <div>
+                    <form action="{{route('admin.portal.application.grant')}}"
+                          method="POST">
+                        @csrf
+                        <input type="text"
+                               name="username"
+                               value="{{ $user->username}}"
+                               hidden
+                        />
+
+                        <x-button class="bg-green-700 hover:bg-green-700">
+                            Grant user access to admin portal
+                        </x-button>
+                    </form>
+                </div>
+            </div>
+        @else
+            <div class="flex flex-row pt-5 items-center">
+                <div class="pr-10 text-lg ">
+                    User admin portal application processed by
+                    <span class="italic"> {{ $user->settings->data['admin_portal_application_processed_by'] }} </span>
+                    <span class="text-sm">
+                    {{ Carbon::createFromFormat(
+                    'Y-m-d H-i-s',$user->settings->data['admin_portal_application_processed_at']
+                    )->diffForHumans()  }}
+                </span>
+                </div>
+            </div>
+        @endif
+    @endif
 @endsection

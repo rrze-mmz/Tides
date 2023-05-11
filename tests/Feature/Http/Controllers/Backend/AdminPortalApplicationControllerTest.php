@@ -10,7 +10,8 @@ uses()->group('backend');
 
 beforeEach(function () {
     //sign in a user, apply for admin portal and logout
-    $this->superadmin = User::factory()->create()->assignRole(Role::SUPERADMIN);
+    $this->superadminA = User::factory()->create()->assignRole(Role::SUPERADMIN);
+    $this->superadminB = User::factory()->create()->assignRole(Role::SUPERADMIN);
     $this->appliedUser = signInRole(Role::MEMBER);
     acceptUseTerms();
     acceptAdminPortalUseTerms();
@@ -43,33 +44,33 @@ it('allows post requests only to superadmin users', function () {
         ->assertForbidden();
     auth()->logout();
 
-    signIn($this->superadmin);
+    signIn($this->superadminA);
     post(route('admin.portal.application.grant', ['username' => $this->appliedUser->username]))
         ->assertRedirect();
     auth()->logout();
 });
 
 test('a username is required for grant a user access to admin portal', function () {
-    signIn($this->superadmin);
+    signIn($this->superadminA);
 
     post(route('admin.portal.application.grant', ['username' => '']))->assertSessionHasErrors('username');
 });
 
 it('shows a username validation error if a user has not applied for admin portal', function () {
     $user = User::factory()->create();
-    signIn($this->superadmin);
+    signIn($this->superadminA);
     post(route('admin.portal.application.grant', ['username' => $user->username]))
         ->assertSessionHasErrors('username');
 });
 
 it('shows no errors if user applied for admin portal', function () {
-    signIn($this->superadmin);
+    signIn($this->superadminA);
     post(route('admin.portal.application.grant', ['username' => $this->appliedUser->username]))
         ->assertSessionDoesntHaveErrors();
 });
 
 it('creates a presenter with the same name as the user', function () {
-    signIn($this->superadmin);
+    signIn($this->superadminA);
     post(route('admin.portal.application.grant', ['username' => $this->appliedUser->username]));
 
     assertDatabaseHas('presenters', [
@@ -78,7 +79,7 @@ it('creates a presenter with the same name as the user', function () {
 });
 
 it('applied user get\'s a moderator role if application is accepted ', function () {
-    signIn($this->superadmin);
+    signIn($this->superadminA);
     post(route('admin.portal.application.grant', ['username' => $this->appliedUser->username]));
     $this->appliedUser->refresh();
 
@@ -86,7 +87,7 @@ it('applied user get\'s a moderator role if application is accepted ', function 
 });
 
 it('updates applied user application status', function () {
-    signIn($this->superadmin);
+    signIn($this->superadminA);
     post(route('admin.portal.application.grant', ['username' => $this->appliedUser->username]));
     $this->appliedUser->refresh();
 
@@ -95,9 +96,27 @@ it('updates applied user application status', function () {
 });
 
 it('updates user notification and mark it as read', function () {
+    signIn($this->superadminA);
+    post(route('admin.portal.application.grant', ['username' => $this->appliedUser->username]));
 
-})->todo();
+    $this->superadminA->refresh();
+
+    expect($this->superadminA->unreadNotifications->count())->toBe(0);
+
+});
 
 it('updates all notifications related to the application user when application is processed', function () {
+    signIn($this->superadminA);
+    post(route('admin.portal.application.grant', ['username' => $this->appliedUser->username]));
 
-})->todo();
+    $this->superadminA->refresh();
+    $this->superadminB->refresh();
+
+    expect($this->superadminA->notifications->filter(function ($notification) {
+        return $notification->data['username_applied_for_admin_portal'] === $this->appliedUser->username;
+    })->first()->data['application_status'])->toBe(ApplicationStatus::COMPLETED());
+
+    expect($this->superadminB->notifications->filter(function ($notification) {
+        return $notification->data['username_applied_for_admin_portal'] === $this->appliedUser->username;
+    })->first()->data['application_status'])->toBe(ApplicationStatus::COMPLETED());
+});

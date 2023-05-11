@@ -8,8 +8,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminPortalGrantAccessRequest;
 use App\Mail\AdminPortalAccessGranted;
 use App\Models\Notification;
-use App\Models\Presenter;
+use App\Models\Presenter; //
 use App\Models\User;
+use Carbon\Carbon;
 
 class AdminPortalApplicationController extends Controller
 {
@@ -45,6 +46,8 @@ class AdminPortalApplicationController extends Controller
         $appliedUserSettings = $appliedUser->settings;
         $data = $appliedUserSettings->data;
         $data['admin_portal_application_status'] = ApplicationStatus::COMPLETED;
+        $data['admin_portal_application_processed_at'] = Carbon::now()->format('Y-m-d H-i-s');
+        $data['admin_portal_application_processed_by'] = auth()->user()->username;
 
         $appliedUserSettings->data = $data;
         $appliedUserSettings->save();
@@ -70,6 +73,6 @@ class AdminPortalApplicationController extends Controller
             $notification->save();
         });
         //redirect to notifications page
-        return to_route('user.notifications', auth()->user());
+        return to_route('users.edit', $appliedUser);
     }
 }

@@ -8,7 +8,7 @@
     <div class=" absolute bg-white shadow-md p-4 max-w-lg h-64  m-auto rounded-md  inset-0">
         <div class="flex flex-col h-full justify-between">
             <header class="flex justify-center">
-                <h3 class="font-bold text-lg">
+                <h3 class="font-bold text-lg text-center">
                     {{ $title }}
                 </h3>
             </header>

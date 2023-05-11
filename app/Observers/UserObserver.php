@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Enums\Role;
+use App\Models\Setting;
 use App\Models\User;
 use App\Services\ElasticsearchService;
 
@@ -48,6 +49,7 @@ class UserObserver
      */
     public function deleted(User $user)
     {
+        Setting::where('name', $user->username)->delete();
         session()->flash('flashMessage', "{$user->getFullNameAttribute()} ".__FUNCTION__.' successfully');
 
         $this->elasticsearchService->deleteIndex($user);
