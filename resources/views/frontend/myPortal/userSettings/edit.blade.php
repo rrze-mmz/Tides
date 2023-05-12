@@ -1,7 +1,7 @@
 @extends('layouts.myPortal')
 
 @section('myPortalHeader')
-    myPortal Settings
+    {{ __('myPortal.myPortal Settings') }}
 @endsection
 
 @section('myPortalContent')
@@ -15,7 +15,7 @@
             <div class="grid grid-cols-6 gap-2 content-center items-center my-10">
                 <div class=" col-span-2">
                     <label for="language" class="block py-2 mr-6 font-bold text-gray-700 text-md">
-                        Portal language
+                        {{ __('myPortal.Portal language') }}
                     </label>
                 </div>
                 <div class="w-full">
@@ -25,8 +25,13 @@
                     focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700
                     dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
                     dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        <option @selected($settings['language']==='en') value="en">English</option>
-                        <option @selected($settings['language']==='de') value="de">Deutsch</option>
+                        <option
+                            @selected($settings['language']==='en') value="en">
+                            {{__('common.language.English')}}
+                        </option>
+                        <option @selected($settings['language']==='de') value="de">
+                            {{ __('common.language.German') }}
+                        </option>
                     </select>
                 </div>
             </div>

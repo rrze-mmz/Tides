@@ -14,7 +14,7 @@
             @if(auth()->user()->settings->data['show_subscriptions_to_home_page'])
                 <div class="flex items-end w-full border-b justify-content-between">
                     <div class="flex justify-between items-end pb-2 w-full">
-                        <div class="text-2xl"> Your Series subscriptions</div>
+                        <div class="text-2xl"> {{ __('homepage.series.Your series subscriptions') }}</div>
                         <a href="{{ route('frontend.series.index') }}"
                            class="text-sm underline">{{__('homepage.series.more series') }}</a>
                     </div>
@@ -26,7 +26,7 @@
                                 'route' => 'admin'
                                 ])
                     @empty
-                        You are not subscribed to any series
+                        {{ __('homepage.series.You are not subscribed to any series') }}
                     @endforelse
                 </div>
             @endif

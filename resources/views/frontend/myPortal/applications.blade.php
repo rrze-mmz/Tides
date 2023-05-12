@@ -2,7 +2,7 @@
 @extends('layouts.myPortal')
 
 @section('myPortalHeader')
-    myPortal Applications
+    {{ __('myPortal.applications.myPortal applications') }}
 @endsection
 
 @section('myPortalContent')
@@ -10,7 +10,7 @@
         @if($settings['accept_admin_portal_use_terms'])
             <div class="flex w-full bg-gray-100 p-4 mt-5 rounded-3xl">
                 <h4 class=" font-extrabold ">
-                    Application status:
+                    {{ __('myPortal.applications.Application status') }} :
                     <span class=" pl-4 text-sky-600">
                     {{ ApplicationStatus::tryFrom($settings['admin_portal_application_status']) }}
                 </span>
@@ -29,7 +29,7 @@
                                 @click="selected !== 1 ? selected = 1 : selected = null">
                             <div class="flex items-center justify-between">
 					<span>
-						Admin Portal Use Terms
+						{{__('myPortal.applications.Accepted Admin Portal Use Terms')}}
                     </span>
                                 <x-heroicon-o-plus-circle class="w-6 h-6"/>
                             </div>
@@ -39,7 +39,7 @@
                              x-ref="container1"
                              x-bind:style="selected == 1 ? 'max-height: ' + $refs.container1.scrollHeight + 'px' : ''">
                             <div class="p-6">
-                                {{{ trans('dashboard.user.admin portal use terms') }}}
+                                {{{ __('myPortal.adminPortalUseTerms.Admin portal use terms') }}}
                             </div>
                         </div>
 
@@ -52,7 +52,7 @@
                                 @click="selected !== 2 ? selected = 2 : selected = null">
                             <div class="flex items-center justify-between">
 					<span>
-                        Portal Use Terms
+                        {{ __('myPortal.applications.Accepted Portal Use Terms') }}
                     </span>
                                 <x-heroicon-o-plus-circle class="w-6 h-6"/>
                             </div>
@@ -62,7 +62,7 @@
                              x-ref="container2"
                              x-bind:style="selected == 2 ? 'max-height: ' + $refs.container2.scrollHeight + 'px' : ''">
                             <div class="p-6">
-                                {{ trans('dashboard.user.use terms') }}
+                                {{ __('myPortal.useTerms.use terms')  }}
                             </div>
                         </div>
 

@@ -22,8 +22,8 @@ it('shows sidebar user menu for my portal', function () {
 
     get(route('frontend.userSettings.edit'))
         ->assertViewIs('frontend.myPortal.userSettings.edit')
-        ->assertSee('Portal settings')
-        ->assertSee('Series subscriptions');
+        ->assertSee(__('myPortal.myPortal Settings'))
+        ->assertSee(__('myPortal._sidebar_menu.Series subscriptions'));
 });
 
 it('shows user settings', function () {
@@ -32,7 +32,7 @@ it('shows user settings', function () {
     get(route('frontend.userSettings.edit'))
         ->assertViewIs('frontend.myPortal.userSettings.edit')
         ->assertViewHas(['settings'])
-        ->assertSee('Portal language')
+        ->assertSee(__('myPortal.Portal language'))
         ->assertSee('Show subscriptions on homepage');
 });
 
@@ -104,7 +104,7 @@ it('shows an application menu for admin portal if use has a member or affiliate 
     //current user has a saml role employee
     signInRole(Role::MEMBER);
     acceptUseTerms();
-    get(route('frontend.userSettings.edit'))->assertSee('Apply for admin portal');
+    get(route('frontend.userSettings.edit'))->assertSee(__('myPortal._sidebar_menu.Apply for admin portal'));
 });
 
 it('shows an application status menu item if member applied for admin portal', function () {
@@ -113,7 +113,7 @@ it('shows an application status menu item if member applied for admin portal', f
     acceptAdminPortalUseTerms();
 
     get(route('frontend.userSettings.edit'))
-        ->assertDontSee('Apply for admin portal')
-        ->assertSee('Application status')
+        ->assertDontSee(__('myPortal._sidebar_menu.Apply for admin portal'))
+        ->assertSee(__('myPortal._sidebar_menu.Application status'))
         ->assertSee(route('frontend.user.applications'));
 });

@@ -11,13 +11,13 @@
             @method('PUT')
             <div class="flex flex-col pt-10 ">
                 <div class="italic text-2xl">
-                    {{ trans('dashboard.user.use terms') }}
+                    {{ __('myPortal.useTerms.use terms') }}
                 </div>
 
                 <div class="pt-10 flex items-center">
                     <input name="accept_use_terms" type="checkbox" class="appearance-none checked:bg-blue-500 "/>
                     <label for="accept_use_terms" class="pl-4 font-bold">
-                        {{ trans('dashboard.user.accept checkbox') }}
+                        {{ __('myPortal.useTerms.accept checkbox') }}
                     </label>
 
                 </div>
@@ -30,7 +30,7 @@
 
                 <div class="pt-10">
                     <x-button class="bg-green-600 hover:bg-green-700">
-                        Accept use terms
+                        {{ __('myPortal.useTerms.button.Accept use terms') }}
                     </x-button>
                 </div>
             </div>

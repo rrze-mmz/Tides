@@ -1,4 +1,8 @@
-@php use App\Enums\ApplicationStatus;use Carbon\Carbon; @endphp
+@php
+    use App\Enums\ApplicationStatus;
+    use Carbon\Carbon;
+@endphp
+
 @extends('layouts.backend')
 
 @section('content')

@@ -1,5 +1,5 @@
 @php use App\Enums\Acl; @endphp
-<div class="flex my-2 w-full bg-white">
+<div class="flex my-2 w-full bg-white rounded-2xl">
     <div class="flex justify-center justify-items-center  place-items-center mx-2 w-48 h-full">
         <img src="{{ fetchClipPoster($clip->latestAsset?->player_preview) }}" alt="preview image">
     </div>
@@ -66,7 +66,7 @@
         @if($clip->acls->isNotEmpty() )
             <div class="flex items-center pt-2 justify-content-between">
                 <div class="pr-2">
-                    @if(!$clip->acls->contains(\App\Enums\Acl::PUBLIC))
+                    @if(!$clip->acls->contains(Acl::PUBLIC))
                         @can('watch-video', $clip)
                             <x-heroicon-o-lock-open class="w-4 h-4 text-green-500"/>
                             <span class="sr-only">Unlock clip</span>

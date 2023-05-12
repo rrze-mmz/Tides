@@ -46,6 +46,9 @@ return [
         'width' => 'Breite',
         'height' => 'Höhe',
         'mime type' => 'Media Type',
-
+    ],
+    'language' => [
+        'English' => 'Englisch',
+        'German' => 'Deutsch',
     ],
 ];

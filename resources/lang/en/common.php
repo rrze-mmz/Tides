@@ -28,11 +28,9 @@ return [
         'portal settings' => 'Portal settings',
         'image' => 'Image|Images',
     ],
-
     'heading' => [
         'create new series' => 'Create new series',
     ],
-
     'forms' => [
         'title' => 'title',
         'file name' => 'File name',
@@ -46,5 +44,9 @@ return [
         'width' => 'width',
         'height' => 'height',
         'mime type' => 'Mime Type',
+    ],
+    'language' => [
+        'English' => 'English',
+        'German' => 'German',
     ],
 ];

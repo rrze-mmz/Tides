@@ -10,7 +10,7 @@
                 <div class="flex-none">
                     <a href="{{ route('clips.edit', $clip)}}">
                         <x-button class="bg-blue-500 hover:bg-blue-600">
-                            Back to edit page
+                            {{ __('clip.frontend.show.Back to clip edit page') }}
                         </x-button>
                     </a>
                 </div>
@@ -21,7 +21,7 @@
         @if (!is_null($clip->assets()->first()))
             @include('frontend.clips._player',['asset'=> $clip->assets()])
         @endif
-        
+
         <div class="flex justify-between py-2">
             @if(!is_null($previousNextClipCollection->get('previousClip')))
                 <a href="{{ $previousNextClipCollection->get('previousClip')->path() }}">

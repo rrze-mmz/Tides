@@ -26,7 +26,7 @@ class UserSubscriptionsControllerTest extends TestCase
         $this->get(route('frontend.user.subscriptions'))
             ->assertOk()
             ->assertViewIs('frontend.myPortal.subscriptions')
-            ->assertSee('Your are subscribed to 0 Series');
+            ->assertSee(__('myPortal.subscriptions.Your are subscribed to X Series', ['counter' => 0]));
     }
 
     /** @test */

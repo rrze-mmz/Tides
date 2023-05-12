@@ -3,7 +3,9 @@
 @section('content')
     <main class="container mx-auto mt-32 h-auto md:mt-32">
         <div class="flex flex-col justify-center content-center items-center place-content-center">
-            <h2 class="text-2xl font-bold">{{ $organization->name }} Series index</h2>
+            <h2 class="text-2xl font-bold">
+                {{ __('organization.show.Organization no series found', ['orgName' => $organization->name]) }}
+            </h2>
         </div>
         <ul class="flex-row">
             <div class="grid grid-cols-4 gap-4">
@@ -13,7 +15,7 @@
                     </li>
                 @empty
                     <li class="w-full p-4 bg-white my-2 rounded">
-                        Portal has no series yet!
+                        {{ __('organization.show.Organization no series found', ['orgName' => $organization->name]) }}
                     </li>
                 @endforelse
             </div>

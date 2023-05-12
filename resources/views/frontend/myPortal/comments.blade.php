@@ -1,7 +1,7 @@
 @extends('layouts.myPortal')
 
 @section('myPortalHeader')
-    Your have {{ $comments->count()  }} Comments
+    {{ __('myPortal.comments.You have X comments', ['counter' => $comments->count() ]) }}
 @endsection
 
 @section('myPortalContent')

@@ -20,7 +20,7 @@
                     </a>
                 @empty
                     <li class="w-full p-4 bg-white my-2 rounded">
-                        Portal has no faculties yet!
+                        {{ __('organization.index.No organizations found') }}
                     </li>
                 @endforelse
             </div>

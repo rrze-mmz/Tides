@@ -1,7 +1,7 @@
 @extends('layouts.myPortal')
 
 @section('myPortalHeader')
-    Your are subscribed to {{ count($series) }} Series
+    {{ __('myPortal.subscriptions.Your are subscribed to X Series', ['counter' => count($series)]) }}
 @endsection
 
 @section('myPortalContent')

@@ -12,7 +12,13 @@ return [
         'actions' => 'Actions',
     ],
     'frontend' => [
-        'views' => ':counter views',
+        'show' => [
+            'views' => ':counter views',
+        ],
+        'index' => [
+            'Series index' => 'Series index',
+            'no series' => 'Portal has no series yet',
+        ],
     ],
     'backend' => [
         'Series administrator' => 'Series administrator',

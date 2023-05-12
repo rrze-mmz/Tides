@@ -19,7 +19,7 @@ it('shows an error if checkbox is not checked', function () {
 it('shows myPortal index page if use terms are accepted', function () {
     followingRedirects()
         ->put(route('frontend.acceptUseTerms'), ['accept_use_terms' => 'on'])
-        ->assertSee('Portal Settings');
+        ->assertSee(__('myPortal.myPortal Settings'));
 });
 
 it('updates user settings when user accepts the use terms', function () {

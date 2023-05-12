@@ -44,6 +44,6 @@ class AcceptUseTermsTest extends TestCase
     public function it_shows_use_terms_before_activating_my_portal_dashboard(): void
     {
         $this->get(route('frontend.userSettings.edit'))->assertOk()
-            ->assertSee(trans('dashboard.user.use terms'));
+            ->assertSee(trans('myPortal.useTerms.use terms'));
     }
 }

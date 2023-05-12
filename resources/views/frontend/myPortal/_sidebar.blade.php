@@ -12,7 +12,7 @@
                                     group-hover:text-gray-900 dark:group-hover:text-white"
                     />
                     <span class="flex-1 ml-3 whitespace-nowrap">
-                                        Portal settings
+                                        {{ __('myPortal._sidebar_menu.Portal settings') }}
                                     </span>
                 </a>
             </li>
@@ -24,7 +24,7 @@
                     <x-heroicon-o-book-open class="w-6 h-6 text-gray-500 transition duration-75
                                     dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"/>
                     <span class="ml-3">
-                                        Series subscriptions
+                                        {{ __('myPortal._sidebar_menu.Series subscriptions') }}
                                     </span>
                 </a>
             </li>
@@ -37,7 +37,7 @@
                                     duration-75 dark:text-gray-400 group-hover:text-gray-900
                                     dark:group-hover:text-white"/>
                     <span class="flex-1 ml-3 whitespace-nowrap">
-                                        Comments
+                            {{ __('myPortal._sidebar_menu.Comments') }}
                         </span>
                     <span
                         class="inline-flex justify-center items-center p-3 ml-3 w-3 h-3 text-sm
@@ -58,7 +58,7 @@
                             <x-heroicon-o-exclamation-circle class="w-6 h-6 text-gray-500 transition duration-75
                                     dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"/>
                             <span class="ml-3">
-                                        Application status
+                                        {{ __('myPortal._sidebar_menu.Application status') }}
                                     </span>
                         </a>
                     </li>
@@ -71,7 +71,7 @@
                             <x-heroicon-o-exclamation-circle class="w-6 h-6 text-gray-500 transition duration-75
                                     dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"/>
                             <span class="ml-3">
-                                        Apply for admin portal
+                                        {{ __('myPortal._sidebar_menu.Apply for admin portal') }}
                                     </span>
                         </a>
                     </li>

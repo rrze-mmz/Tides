@@ -3,7 +3,7 @@
 @section('content')
     <main class="container mx-auto mt-32 h-screen md:mt-32">
         <div class="flex flex-col justify-center content-center items-center place-content-center">
-            <h2 class="text-2xl font-bold">Clips index</h2>
+            <h2 class="text-2xl font-bold">{{ __('clip.frontend.index.Clips index') }}</h2>
         </div>
 
         <ul class="flex-row">
@@ -14,7 +14,7 @@
                     </li>
                 @empty
                     <li class="w-full p-4 bg-white my-2 rounded">
-                        Portal has no clips yet!
+                        {{ __('clip.frontend.index.Portal has no clips yet!') }}
                     </li>
                 @endforelse
             </div>

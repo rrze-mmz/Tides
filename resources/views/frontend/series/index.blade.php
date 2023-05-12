@@ -3,7 +3,7 @@
 @section('content')
     <main class="container mx-auto mt-32 h-auto md:mt-32">
         <div class="flex flex-col justify-center content-center items-center place-content-center">
-            <h2 class="text-2xl font-bold">Series index</h2>
+            <h2 class="text-2xl font-bold">{{ __('series.frontend.index.Series index') }}</h2>
         </div>
         <ul class="flex-row">
             <div class="grid grid-cols-4 gap-4">
@@ -13,7 +13,7 @@
                     </li>
                 @empty
                     <li class="w-full p-4 bg-white my-2 rounded">
-                        Portal has no series yet!
+                        {{ __('series.frontend.index.no series') }}
                     </li>
                 @endforelse
             </div>

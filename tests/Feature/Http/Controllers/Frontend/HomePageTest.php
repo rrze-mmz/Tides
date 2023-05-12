@@ -189,8 +189,8 @@ class HomePageTest extends TestCase
         $this->put(route('frontend.userSettings.update'), $attributes);
 
         $this->get(route('home'))
-            ->assertSee('Your Series subscriptions')
-            ->assertSee(' You are not subscribed to any series');
+            ->assertSee(__('homepage.series.Your series subscriptions'))
+            ->assertSee(__('homepage.series.You are not subscribed to any series'));
 
         auth()->user()->subscriptions()->attach([
             Series::find(3)->id, Series::find(4)->id,
@@ -199,8 +199,8 @@ class HomePageTest extends TestCase
         auth()->user()->refresh();
 
         $this->get(route('home'))
-            ->assertSee('Your Series subscriptions')
-            ->assertDontSee(' You are not subscribed to any series');
+            ->assertSee(__('homepage.series.Your series subscriptions'))
+            ->assertDontSee(__('homepage.series.You are not subscribed to any series'));
     }
 
     /** @test */
