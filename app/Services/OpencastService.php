@@ -10,6 +10,7 @@ use App\Models\Setting;
 use App\Models\User;
 use App\Notifications\NewOpencastUserAccountCreated;
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -61,7 +62,7 @@ class OpencastService
      */
     public function getSeriesInfo(Series $series): Collection
     {
-        $opencastSeriesInfo = collect([]);
+        $opencastSeriesInfo = collect();
         if ($health = $this->getHealth()->contains('pass')) {
             $opencastSeriesInfo->prepend($health, 'health')
                 ->prepend($this->getSeries($series), 'metadata')
@@ -84,7 +85,7 @@ class OpencastService
         }
 
         try {
-            $this->response = $this->client->get("api/series/{$series->opencast_series_id}");
+            $this->response = $this->client->get("api/series/{$series->opencast_series_id}?withacl=true");
             $opencastSeries = json_decode((string) $this->response->getBody(), true);
         } catch (GuzzleException $exception) {
             Log::error($exception);
@@ -98,7 +99,7 @@ class OpencastService
      */
     public function getAllRunningWorkflows(): Collection
     {
-        $runningWorkflows = collect([]);
+        $runningWorkflows = collect();
         try {
             $this->response = $this->client->get('api/events', [
                 'query' => [
@@ -118,7 +119,7 @@ class OpencastService
      */
     public function getSeriesRunningWorkflows(Series $series): Collection
     {
-        $runningWorkflows = collect([]);
+        $runningWorkflows = collect();
         try {
             $this->response = $this->client->get('api/events', [
                 'query' => [
@@ -138,20 +139,79 @@ class OpencastService
      */
     public function getEventsByStatus(OpencastWorkflowState $state): Collection
     {
-        $runningWorkflows = collect([]);
+        $runningWorkflows = collect();
 
         try {
             $this->response = $this->client->get('api/events', [
                 'query' => [
                     'filter' => 'status:'.$state->value,
+                    'sort' => 'start_date:ASC',
                 ],
             ]);
             $runningWorkflows = collect((json_decode((string) $this->response->getBody(), true)));
+        } catch (RequestException $e) {
+            if ($e->hasResponse()) {
+                $status = $e->getResponse()->getStatusCode();
+                $body = $e->getResponse()->getBody();
+                Log::error("status {$status}");
+                Log::error("Error response body {$body}");
+            } else {
+                Log::error("error {$e->getMessage()}");
+            }
+        }
+
+        return $runningWorkflows;
+    }
+
+    public function getEventsByStatusAndByDate(OpencastWorkflowState $state, Carbon $day): Collection
+    {
+        $events = collect();
+
+        $startDate = $day->startOfDay()->isoFormat('YYYY-MM-DD[T]HH:mm:ss[Z]');
+        $endDate = $day->endOfDay()->isoFormat('YYYY-MM-DD[T]HH:mm:ss[Z]');
+        try {
+            $this->response = $this->client->get('api/events', [
+                'query' => [
+                    'filter' => 'textFilter:,start:'.$startDate.'/'.$endDate.',status:'.$state->value,
+                    'sort' => 'start_date:asc',
+                    'limit' => '100',
+                ],
+            ]);
+            $events = collect((json_decode((string) $this->response->getBody(), true)));
+        } catch (RequestException $e) {
+            if ($e->hasResponse()) {
+                $status = $e->getResponse()->getStatusCode();
+                $body = $e->getResponse()->getBody();
+                Log::error("status {$status}");
+                Log::error("Error response body {$body}");
+            } else {
+                Log::error("error {$e->getMessage()}");
+            }
+        }
+
+        return $events;
+    }
+
+    public function getEventsWaitingForTrimming(Series|null $series = null)
+    {
+        $series = (is_null($series)) ? '' : $series->opencast_series_id;
+        //     /admin-ng/event/events.json?filter=comments:OPEN,status:EVENTS.EVENTS.STATUS.PROCESSED&limit=10&offset=0&sort=start_date:ASC
+        $trimmingEvents = collect();
+
+        try {
+            $this->response = $this->client->get('admin-ng/event/events.json', [
+                'query' => [
+                    'filter' => 'status:'.OpencastWorkflowState::SUCCEEDED->value.',comments:OPEN', 'series:'.$series,
+                    'offset' => 0,
+                    'sort' => 'start_date:ASC',
+                ],
+            ]);
+            $trimmingEvents = collect((json_decode((string) $this->response->getBody(), true)));
         } catch (GuzzleException $exception) {
             Log::error($exception);
         }
 
-        return $runningWorkflows;
+        return collect($trimmingEvents['results']);
     }
 
     public function createUser(User $user): Response|ResponseInterface
@@ -306,7 +366,7 @@ class OpencastService
      */
     public function getProcessedEventsBySeriesID($seriesID): Collection
     {
-        $processedEvents = collect([]);
+        $processedEvents = collect();
 
         try {
             $processed = $this->client->get('api/events', [
@@ -333,7 +393,7 @@ class OpencastService
 
     public function getFailedEventsBySeries(Series $series): Collection
     {
-        $failedEvents = collect([]);
+        $failedEvents = collect();
         try {
             $this->response = $this->client->get('api/events', [
                 'query' => [

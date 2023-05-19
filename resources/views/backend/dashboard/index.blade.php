@@ -28,9 +28,9 @@
         </div>
     </div>
     <div class="flex">
-        <div class="w-2/3">
-            @if($opencastWorkflows->isNotEmpty())
-                @include('backend.dashboard._opencast-workflows',['opencastWorkflows' => $opencastWorkflows])
+        <div class="@if(count($files) > 0)) w-2/3 @else w-full @endif">
+            @if($opencastEvents->isNotEmpty())
+                @include('backend.dashboard._opencast-workflows',['opencastEvents' => $opencastEvents])
             @endif
 
             @include('backend.users.series._layout',['layoutHeader' => __('dashboard.your last series'), 'series'=> $userSeries])
@@ -38,8 +38,10 @@
             @include('backend.users.clips._layout',['layoutHeader' => __('dashboard.your last clips'), 'clips'=> $userClips])
         </div>
 
-        <div class="pl-2 w-1/3">
-            @include('backend.dashboard._dropzone-files')
-        </div>
+        @if(count($files) > 0 )
+            <div class="pl-2 w-1/3">
+                @include('backend.dashboard._dropzone-files')
+            </div>
+        @endif
     </div>
 @endsection

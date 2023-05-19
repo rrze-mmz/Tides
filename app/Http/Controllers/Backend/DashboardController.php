@@ -6,6 +6,7 @@ use App\Enums\OpencastWorkflowState;
 use App\Services\OpencastService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Support\Carbon;
 use Illuminate\View\View;
 
 class DashboardController
@@ -15,12 +16,18 @@ class DashboardController
      */
     public function __invoke(OpencastService $opencastService): Application|Factory|View
     {
-        $opencastWorkflows = collect([]);
+        $opencastEvents = collect([]);
 
         if (auth()->user()->can('administrate-portal-pages') && $opencastService->getHealth()->contains('pass')) {
-            $opencastWorkflows
-                ->put('running', $opencastService->getAllRunningWorkflows())
-                ->put('failed', $opencastService->getEventsByStatus(OpencastWorkflowState::FAILED));
+            $opencastEvents
+                ->put('recording', $opencastService->getEventsByStatus(OpencastWorkflowState::RECORDING))
+                ->put('running', $opencastService->getEventsByStatus(OpencastWorkflowState::RUNNING))
+                ->put(
+                    'scheduled',
+                    $opencastService->getEventsByStatusAndByDate(OpencastWorkflowState::SCHEDULED, Carbon::now())
+                )
+                ->put('failed', $opencastService->getEventsByStatus(OpencastWorkflowState::FAILED))
+                ->put('trimming', $opencastService->getEventsWaitingForTrimming());
         }
 
         return view('backend.dashboard.index', [
@@ -35,7 +42,7 @@ class DashboardController
                 ->limit(12)
                 ->get(),
             'files' => fetchDropZoneFiles(false),
-            'opencastWorkflows' => $opencastWorkflows,
+            'opencastEvents' => $opencastEvents,
         ]);
     }
 }

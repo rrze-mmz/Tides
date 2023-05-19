@@ -248,3 +248,11 @@ function humanFileSizeFormat(string|null $bytes, $dec = 2): string
 
     return sprintf("%.{$dec}f %s", $bytes / (1024 ** $factor), $size[$factor]);
 }
+
+function zuluToCEST($zuluTime): string
+{
+    $carbon = Carbon::createFromFormat('Y-m-d\TH:i:s\Z', $zuluTime)
+        ->add('2 hours');
+
+    return $carbon->format('Y-m-d H:i:s');
+}

@@ -15,6 +15,8 @@ enum OpencastWorkflowState: string
     case PAUSED = 'EVENTS.EVENTS.STATUS.PAUSED';
     case SUCCEEDED = 'EVENTS.EVENTS.STATUS.PROCESSED';
     case FAILED = 'EVENTS.EVENTS.STATUS.PROCESSING_FAILURE';
+    case SCHEDULED = 'EVENTS.EVENTS.STATUS.SCHEDULED';
+    case RECORDING = 'EVENTS.EVENTS.STATUS.RECORDING';
 
     //lowercase state's name
     public function lower(): string

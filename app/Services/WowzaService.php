@@ -193,6 +193,7 @@ class WowzaService
             $usableHash = strtr(base64_encode($hash), '+/', '-_');
 
             $url = "{$contentUrl}?{$tokenStartTime}&{$tokenEndTime}&{$tokenPrefix}hash={$usableHash}";
+            \Debugbar::info($url);
 
             return $url;
         } else {

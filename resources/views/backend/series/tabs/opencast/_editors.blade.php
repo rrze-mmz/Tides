@@ -21,7 +21,9 @@
             </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200 ">
-            @forelse(collect($opencastSeriesInfo['metadata']['acl'])->groupBy('role')->except(['ROLE_USER_ADMIN','ROLE_ADMIN']) as $key=>$role)
+            @forelse(collect($opencastSeriesInfo['metadata']['acl'])
+                    ->groupBy('role')
+                    ->except(['ROLE_USER_ADMIN','ROLE_ADMIN','ROLE_STUDIO','ROLE_USER_STUDIO']) as $key=>$role)
                 <tr>
                     <td class="px-4">
                         @php
