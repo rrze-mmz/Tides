@@ -1,9 +1,17 @@
 <div class="grid grid-cols-8 items-center">
     <div class="content-center">
-        <label class="block py-4 mr-2 font-bold text-gray-700 text-md"
+        <label class="flex block py-4 mr-2 font-bold text-gray-700 text-md"
                for="{{ $fieldName }}"
         >
-            {{$label}}
+            <span>
+                {{$label}}
+            </span>
+            @if($disabled)
+                <span class="pl-2 text-green-500">
+                     <x-heroicon-o-exclamation-circle class="w-4"/>
+                 </span>
+
+            @endif
         </label>
     </div>
     <div class="{{($fullCol)?'col-start-2 col-end-8':'w-full'}}">
@@ -22,7 +30,7 @@
         <div class="col-start-2 col-end-6">
             <p class="mt-2 w-full text-xs">
             <div class="flex text-green-500">
-                <x-heroicon-o-exclamation-circle class="w-6"/>
+                <x-heroicon-o-exclamation-circle class="w-4"/>
                 <span class="pl-2">
                         You cannot change this field
                     </span>

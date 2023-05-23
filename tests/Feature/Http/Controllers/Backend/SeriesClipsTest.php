@@ -102,6 +102,8 @@ class SeriesClipsTest extends TestCase
 
         $this->post(route('series.clips.store', $series), Clip::factory()->raw());
 
+        $this->get(route('clips.edit', $series->clips()->first()))->assertOk();
+
         $this->assertEquals(1, $series->clips()->count());
     }
 

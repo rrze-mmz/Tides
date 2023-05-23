@@ -7,6 +7,7 @@ use App\Enums\Content;
 use App\Enums\Role;
 use App\Http\Livewire\CommentsSection;
 use App\Models\Clip;
+use App\Models\Image;
 use App\Models\Presenter;
 use App\Models\Semester;
 use App\Models\Tag;
@@ -557,6 +558,7 @@ class ManageClipsTest extends TestCase
             'context_id' => '1',
             'format_id' => '1',
             'type_id' => '1',
+            'image_id' => Image::factory()->create()->id,
             'semester_id' => Semester::current()->first()->id,
         ]);
 

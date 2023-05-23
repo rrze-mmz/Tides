@@ -15,7 +15,7 @@ class StoreClipRequest extends FormRequest
             'slug' => Str::slug($this->title),
             'tags' => $this->tags = $this->tags ?? [], //set empty array if select2 tags is empty
             'acls' => $this->acls = $this->acls ?? [], //set empty array if select2 acls is empty
-            'presenters' => $this->presenters = $this->presenters ?? [], //set empty array if select2 presenters is empty
+            'presenters' => $this->presenters = $this->presenters ?? [], //set empty array if presenters array is empty
             'allow_comments' => $this->allow_comments === 'on',
             'is_public' => $this->is_public === 'on',
         ]);
@@ -55,7 +55,7 @@ class StoreClipRequest extends FormRequest
             'allow_comments' => ['boolean'],
             'password' => ['nullable', Password::min(8)->mixedCase()],
             'is_public' => ['boolean'],
-
+            'image_id' => ['required', 'exists:App\Models\Image,id'],
         ];
     }
 }
