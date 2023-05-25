@@ -87,24 +87,25 @@
         </div>
     </div>
 
-    <div class="flex pt-8 pb-2  font-2xl w-full ">
+    <div class="flex pt-8 pb-2  font-2xl w-full">
         <div x-data="{
             activeTab:1,
-            activeClass: 'inline-block px-4 py-2 bg-blue-800  rounded-lg',
+            activeClass: 'inline-block px-4 py-2 bg-blue-800  rounded-lg font-bold',
             inactiveClass : 'inline-block px-4 py-2 bg-blue-500  rounded-lg'
          }" class="w-full">
             <ul class="flex space-x-4  pt-8 pb-2 text-white border-b border-black ">
                 <li>
-                    <a href="#actions"
+                    <a href="#clips"
                        x-on:click="activeTab = 1"
                        :class="activeTab === 1 ? activeClass : inactiveClass"
                     >
-                        {{ __('series.common.actions') }}
+                        Clips
                     </a>
                 </li>
                 @if(isset($opencastSeriesInfo['health']) && $opencastSeriesInfo['health'])
                     <li>
-                        <a href="#opencast" x-on:click="activeTab = 2"
+                        <a href="#opencast"
+                           x-on:click="activeTab = 2"
                            :class="activeTab === 2 ? activeClass : inactiveClass"
                         >
                             Opencast
@@ -112,22 +113,32 @@
                     </li>
                 @endif
                 <li>
-                    <a href="#moreActions" x-on:click="activeTab = 3"
+                    <a href="#actions"
+                       x-on:click="activeTab = 3"
                        :class="activeTab === 3 ? activeClass : inactiveClass"
                     >
-                        More actions
+                        {{ __('series.common.actions') }}
                     </a>
                 </li>
                 <li>
-                    <a href="#comments-section" x-on:click="activeTab = 4"
+                    <a href="#comments-section"
+                       x-on:click="activeTab = 4"
                        :class="activeTab === 4 ? activeClass : inactiveClass"
                     >
                         Comments
                     </a>
                 </li>
+                <li>
+                    <a href="#logs"
+                       x-on:click="activeTab = 5"
+                       :class="activeTab === 5 ? activeClass : inactiveClass"
+                    >
+                        Activities
+                    </a>
+                </li>
             </ul>
-            <div class="mt-6 ">
-                <div x-show="activeTab === 1" id="actions" class="w-full ">
+            <div class="mt-6">
+                <div x-show="activeTab === 1" id="clips" class="w-full ">
                     @include('backend.series.buttons.actions')
                     @include('backend.clips.list')
                 </div>
@@ -135,7 +146,7 @@
                     @include('backend.series.tabs.opencast.index')
 
                 </div>
-                <div x-show="activeTab === 3" id="moreActions">
+                <div x-show="activeTab === 3" id="actions">
                     @include('backend.series.buttons.more-options')
                 </div>
                 <div x-show="activeTab === 4" id="comments-section">
@@ -144,10 +155,17 @@
                             Backend {{ __('clip.frontend.comments') }}
                         </h2>
                         <livewire:comments-section :model="$series" :type="'backend'"/>
-                        @livewireScripts
-
+                    </div>
+                </div>
+                <div x-show="activeTab === 5" id="logs">
+                    <div class="flex flex-col pt-10">
+                        <h2 class="text-2xl font-semibold pb-2 border-b-2 border-black">
+                            {{ $series->title }} Activities
+                        </h2>
+                    </div>
+                    <div class="flex flex-col pt-10">
+                        <livewire:activities-data-table :model="'series'" :object-i-d="$series->id"/>
                     </div>
                 </div>
             </div>
-        </div>
 @endsection

@@ -4,11 +4,11 @@
     </h2>
 
     <div class="">
-        <img src="{{  asset('images/'.$model->image->file_name) }}" alt="{{ $model->image->description }}">
+        <img src="{{  asset('images/'.$model->image?->file_name) }}" alt="{{ $model->image?->description }}">
     </div>
 
     <div class="flex pt-4 w-full">
-        @if ($model->image->id != (int)config('settings.portal.default_image_id'))
+        @if ($model->image?->id != (int)config('settings.portal.default_image_id'))
             <div>
                 <x-button class="bg-blue-600 hover:bg-blue-700">
                     Set Default image

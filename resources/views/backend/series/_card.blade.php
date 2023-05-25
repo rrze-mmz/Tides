@@ -1,5 +1,5 @@
-<div class=" relative my-2 bg-gray-50">
-    <div class="relative h-30 overflow-hidden">
+<div class=" relative my-2 bg-gray-50 rounded-md">
+    <div class="relative h-15 overflow-hidden">
         <img
             src="{{ ($series->clips->count() > 0)
                     ? fetchClipPoster($series->lastPublicClip?->latestAsset?->player_preview)

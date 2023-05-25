@@ -3,7 +3,6 @@
 namespace Tests\Feature\Http\Controllers\Backend;
 
 use App\Enums\Role;
-use App\Models\Image;
 use App\Models\Series;
 use Facades\Tests\Setup\SeriesFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -27,7 +26,6 @@ class UpdateSeriesImageTest extends TestCase
     /** @test */
     public function it_can_update_images_for_series_and_for_all_series_clips(): void
     {
-        Image::factory()->create();
         $series = SeriesFactory::ownedBy($this->signInRole(Role::MODERATOR))
             ->withClips(3)
             ->create();

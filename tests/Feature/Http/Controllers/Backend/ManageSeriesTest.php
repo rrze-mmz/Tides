@@ -5,6 +5,7 @@ namespace Tests\Feature\Http\Controllers\Backend;
 use App\Enums\Acl;
 use App\Enums\OpencastWorkflowState;
 use App\Enums\Role;
+use App\Http\Livewire\ActivitiesDataTable;
 use App\Http\Livewire\CommentsSection;
 use App\Models\Clip;
 use App\Models\Image;
@@ -186,6 +187,7 @@ class ManageSeriesTest extends TestCase
                 'title' => 'Test title',
                 'description' => 'Test description',
                 'organization_id' => '1',
+                'image_id' => config('settings.portal.default_image_id'),
             ]
         )->assertForbidden();
     }
@@ -201,6 +203,7 @@ class ManageSeriesTest extends TestCase
                 'title' => 'Test title',
                 'description' => 'Test description',
                 'organization_id' => '1',
+                'image_id' => config('settings.portal.default_image_id'),
             ]
         );
 
@@ -218,6 +221,7 @@ class ManageSeriesTest extends TestCase
                 'title' => 'Test title',
                 'description' => 'Test description',
                 'organization_id' => '1',
+                'image_id' => config('settings.portal.default_image_id'),
             ]
         );
 
@@ -250,6 +254,7 @@ class ManageSeriesTest extends TestCase
             'title' => 'Series title',
             'description' => 'test',
             'organization_id' => '1',
+            'image_id' => config('settings.portal.default_image_id'),
         ]);
 
         $series = Series::all()->first();
@@ -543,6 +548,18 @@ class ManageSeriesTest extends TestCase
             ->call('postComment')
             ->assertSee('Comment posted successfully')
             ->assertSee('Admin series comment');
+    }
+
+    /** @test */
+    public function edit_series_should_display_series_activities(): void
+    {
+        $this->mockHandler->append(new Response());
+        $series = SeriesFactory::ownedBy($this->signInRole($this->role))->create();
+
+        $this->get(route('series.edit', $series))->assertSee('Activities');
+
+        Livewire::test(ActivitiesDataTable::class)
+            ->assertSee('created series');
     }
 
     /** @test */

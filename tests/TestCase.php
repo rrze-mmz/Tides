@@ -4,6 +4,7 @@ namespace Tests;
 
 use App\Models\AcademicDegree;
 use App\Models\Acl;
+use App\Models\Image;
 use App\Models\Language;
 use App\Models\Organization;
 use App\Models\Role;
@@ -11,6 +12,7 @@ use App\Models\Semester;
 use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Str;
@@ -125,6 +127,14 @@ abstract class TestCase extends BaseTestCase
             'data' => \config('settings.portal'),
         ]);
 
+        Image::create([
+            'description' => 'Default image description',
+            'file_name' => UploadedFile::fake()->create('avatar.png', '300', 'image/png')->getClientOriginalName(),
+            'file_path' => 'images',
+            'thumbnail_path' => UploadedFile::fake()->create('avatar.png', '300', 'image/png')->getClientOriginalName().'_thumb.png',
+            'mime_type' => 'image/png',
+            'file_size' => '300',
+        ]);
         foreach (\App\Enums\Role::cases() as $role) {
             Role::create([
                 'id' => $role->value,

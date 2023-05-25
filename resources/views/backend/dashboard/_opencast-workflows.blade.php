@@ -57,7 +57,7 @@
                                 <td class="px-6 py-4 text-sm font-light text-gray-900">
                                     {{ $event['location'] }}
                                 </td>
-                                <td class="px-6 py-4 text-sm font-light text-green-700">
+                                <td class="px-6 py-4 text-sm font-light text-red-700">
                                     {{ OpencastWorkflowState::tryFrom($event['status'])->lower() }}
                                 </td>
                             </tr>

@@ -2,7 +2,7 @@
     <div class="overflow-x-auto -my-2 sm:-mx-6 lg:-mx-8">
         <div class="inline-block py-2 min-w-full align-middle sm:px-6 lg:px-8">
             <div class="flex justify-between items-center">
-                <div class="w-full max-w-lg lg:max-w-xs">
+                <div class="w-full max-w-lg lg:max-w-xs">`
                     <label for="search" class="sr-only">Search</label>
                     <div class="relative">
                         <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
@@ -17,15 +17,17 @@
                                placeholder="Search" type="search">
                     </div>
                 </div>
-                <div class="flex relative items-start">
-                    <div class="flex items-center h-5">
-                        <input wire:model="series" id="series" type="checkbox"
-                               class="w-4 h-4 text-indigo-600 transition duration-150 ease-in-out form-checkbox">
+                @if ($model === '')
+                    <div class="flex relative items-start">
+                        <div class="flex items-center h-5">
+                            <input wire:model="series" id="series" type="checkbox"
+                                   class="w-4 h-4 text-indigo-600 transition duration-150 ease-in-out form-checkbox">
+                        </div>
+                        <div class="ml-3 text-sm leading-5">
+                            <label for="series" class="font-medium text-gray-700">Series</label>
+                        </div>
                     </div>
-                    <div class="ml-3 text-sm leading-5">
-                        <label for="series" class="font-medium text-gray-700">Series</label>
-                    </div>
-                </div>
+                @endif
             </div>
 
             <div class="overflow-hidden mt-4 border-b border-gray-200 shadow sm:rounded-lg">

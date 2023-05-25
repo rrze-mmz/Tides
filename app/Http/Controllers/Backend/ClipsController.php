@@ -26,7 +26,7 @@ class ClipsController extends Controller
             'backend.clips.index',
             [
                 'clips' => (auth()->user()->can('index-all-clips'))
-                    ? Clip::orderBy('title')->paginate(12)
+                    ? Clip::orderBy('title')->paginate(24)
                     : auth()->user()->clips()->orderBy('updated_at')->paginate(12),
             ]
         );

@@ -1,19 +1,19 @@
 <a
     href="{{route('dashboard')}}"
-    class="flex items-center text-white {{ setActiveLink(route('dashboard')) }} py-4 pl-6 nav-item "
+    class="flex items-left text-white {{ setActiveLink(route('dashboard')) }} py-4 pl-6 nav-item "
 >
     {{ __('common.menu.dashboard') }}
 </a>
 <a
     href="{{route('series.index')}}"
-    class="flex items-center text-white opacity-75 hover:opacity-100 py-4
+    class="flex items-left text-white hover:opacity-100 py-4
         pl-6 nav-item {{ setActiveLink(route('series.index')) }}"
 >
     {{ __('common.menu.series') }}
 </a>
 <a
     href="{{route('clips.index')}}"
-    class="flex items-center text-white opacity-75 hover:opacity-100 py-4
+    class="flex items-left text-white hover:opacity-100 py-4
         pl-6 nav-item {{ setActiveLink(route('clips.index')) }}"
 >
     {{ trans_choice('common.menu.clip', 2) }}
@@ -21,7 +21,7 @@
 
 <a
     href="{{route('images.index')}}"
-    class="flex items-center text-white opacity-75 hover:opacity-100 py-4
+    class="flex items-left text-white hover:opacity-100 py-4
         pl-6 nav-item {{ setActiveLink(route('images.index')) }}"
 >
     {{ trans_choice('common.menu.image', 2) }}
@@ -30,14 +30,14 @@
 @can('administrate-portal-pages')
     <a
         href="{{ route('presenters.index') }}"
-        class="flex items-center text-white opacity-75 hover:opacity-100 py-4
+        class="flex items-left text-white hover:opacity-100 py-4
         pl-6 nav-item  {{ setActiveLink(route('presenters.index')) }}"
     >
         {{ trans_choice('common.menu.presenter', 2) }}
     </a>
     <a
         href="{{ route('activities.index') }}"
-        class="flex items-center text-white opacity-75 hover:opacity-100 py-4
+        class="flex items-left text-white hover:opacity-100 py-4
         pl-6 nav-item {{ setActiveLink(route('activities.index')) }}"
     >
         {{ trans_choice('common.menu.activity', 2)  }}
@@ -47,22 +47,22 @@
 @can('administrate-admin-portal-pages')
     <a
         href="{{ route('devices.index') }}"
-        class="flex items-center text-white opacity-75 hover:opacity-100 py-4
-        pl-6 nav-item  {{ setActiveLink(route('devices.index')) }} font-bold"
+        class="flex items-left text-white hover:opacity-100 py-4
+        pl-6 nav-item  {{ setActiveLink(route('devices.index')) }}"
     >
         {{ trans_choice('common.menu.device', 2) }}
     </a>
 
     <a
         href="{{ route('collections.index') }}"
-        class="flex items-center text-white opacity-75 hover:opacity-100 py-4
+        class="flex items-left text-white hover:opacity-100 py-4
         pl-6 nav-item {{ setActiveLink(route('collections.index')) }}"
     >
         {{ trans_choice('common.menu.collection', 2) }}
     </a>
     <a
         href="{{ route('users.index') }}"
-        class="flex items-center text-white opacity-75 hover:opacity-100 py-4
+        class="flex items-left text-white hover:opacity-100 py-4
         pl-6 nav-item {{ setActiveLink(route('users.index')) }}"
     >
         {{ trans_choice('common.menu.user', 2) }}
@@ -71,24 +71,24 @@
 @can('administrate-superadmin-portal-pages')
     <a
         href="{{route('settings.portal.index')}}"
-        class="flex items-center text-white opacity-75 hover:opacity-100 py-4
+        class="flex items-left text-white hover:opacity-100 py-4
         pl-6 nav-item  {{ setActiveLink(route('settings.portal.index')) }}"
     >
         {{ __('common.menu.portal settings') }}
     </a>
     <a
         href="{{route('systems.status')}}"
-        class="flex items-center text-white opacity-75 hover:opacity-100 py-4
+        class="flex items-left text-white hover:opacity-100 py-4
         pl-6 nav-item  {{ setActiveLink(route('systems.status')) }}"
     >
         {{ trans_choice('common.menu.system', 2) }}
     </a>
     <a
         href="{{route('user.notifications')}}"
-        class="flex items-center text-white opacity-75 hover:opacity-100 py-4
+        class="flex items-left text-white hover:opacity-100 py-4
         pl-6 nav-item  {{ setActiveLink(route('settings.portal.index')) }}"
     >
-        <div class="flex items-center">
+        <div class="flex items-left">
             Notifications
             @if (($counter = auth()->user()->unreadNotifications->count()) > 0)
                 <span class="rounded-full  p-1.5 ml-1 bg-white text-green-700 text-sm"> {{ $counter }}</span>
@@ -99,7 +99,7 @@
 @endcan
 @can('administrate-superadmin-portal-pages')
     <div class="pt-5 ">
-        <div class="flex items-center text-black font-light py-4 px-2
+        <div class="flex items-left text-black font-light py-4 px-2
           placeholder-black">
             <form action="{{route('goto.series')}}" method="POST">
                 @csrf
@@ -107,7 +107,7 @@
             </form>
         </div>
 
-        <div class="flex items-center text-black  font-light py-4 px-2
+        <div class="flex items-left text-black  font-light py-4 px-2
           placeholder-black">
             <form action="{{route('goto.clip')}}" method="POST">
                 @csrf

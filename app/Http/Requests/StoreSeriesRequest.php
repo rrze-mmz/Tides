@@ -8,12 +8,13 @@ use Illuminate\Validation\Rules\Password;
 
 class StoreSeriesRequest extends FormRequest
 {
-    protected function prepareForValidation()
+    protected function prepareForValidation(): void
     {
         $this->merge([
             'slug' => Str::slug($this->title),
             'is_public' => $this->is_public === 'on',
-            'presenters' => $this->presenters = $this->presenters ?? [], //set empty array if select2 presenters is empty
+            'presenters' => $this->presenters = $this->presenters ?? [], //set empty array if presenters array is empty
+            'image_id' => (isset($this->image_id)) ? $this->image_id : config('settings.portal.default_image_id'),
         ]);
     }
 
@@ -41,6 +42,7 @@ class StoreSeriesRequest extends FormRequest
             'slug' => ['required'],
             'password' => ['nullable', Password::min(8)->mixedCase()],
             'is_public' => ['boolean'],
+            'image_id' => ['required', 'exists:App\Models\Image,id'],
         ];
     }
 }

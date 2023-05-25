@@ -228,7 +228,8 @@ class Series extends BaseModel
         if (! empty($response->getHeaders())) {
             $this->opencast_series_id = Str::afterLast($response->getHeaders()['Location'][0], 'api/series/');
 
-            $this->update();
+            //do not record this activity
+            $this->updateQuietly();
         }
     }
 

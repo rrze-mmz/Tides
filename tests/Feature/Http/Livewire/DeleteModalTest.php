@@ -14,16 +14,7 @@ beforeEach(function () {
     $disk = Storage::fake('images');
     $disk->putFileAs('', FileFactory::imageFile(), 'avatar.png');
 
-    $this->image = Image::factory()->create([
-        'description' => 'Image of an avatar',
-        'file_name' => 'avatar.png',
-        'file_path' => '/data/Thumbnails/avatar.jpg.png',
-        'thumbnail_path' => 'avatar.png',
-        'mime_type' => null,
-        'file_size' => $disk->size('avatar.png'),
-        'created_at' => '2023-03-02T12:20:01.000000Z',
-        'updated_at' => '2023-03-02T12:20:01.000000Z',
-    ]);
+    $this->image = Image::find(1);
     signInRole(Role::ADMIN);
 });
 

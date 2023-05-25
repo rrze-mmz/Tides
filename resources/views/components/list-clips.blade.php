@@ -1,11 +1,9 @@
-<div class="flex">
+<div class="flex border-t border-t-2 mt-5">
     @if($reorder)
         <form class="w-full" action="{{route('series.clips.reorder', $series)}}" method="POST">
             @csrf
             @endif
             <ul class="pt-3 w-full">
-                <li class="flex content-center items-center p-2 mb-2 bg-gray-400 rounded text-center">
-                </li>
 
                 @forelse($clips as $clip)
                     <li class="flex content-center items-center p-2 mb-4 text-lg bg-gray-200 rounded text-center">

@@ -7,16 +7,15 @@ use App\Services\ElasticsearchService;
 
 class SeriesObserver
 {
-    public function __construct(private ElasticsearchService $elasticsearchService)
-    {
+    public function __construct(
+        readonly private ElasticsearchService $elasticsearchService,
+    ) {
     }
 
     /**
      * Handle the Series "created" event.
-     *
-     * @return void
      */
-    public function created(Series $series)
+    public function created(Series $series): void
     {
         session()->flash('flashMessage', "{$series->title} ".__FUNCTION__.' successfully');
 
@@ -25,10 +24,8 @@ class SeriesObserver
 
     /**
      * Handle the Series "updated" event.
-     *
-     * @return void
      */
-    public function updated(Series $series)
+    public function updated(Series $series): void
     {
         session()->flash('flashMessage', "{$series->title} ".__FUNCTION__.' successfully');
 
@@ -37,10 +34,8 @@ class SeriesObserver
 
     /**
      * Handle the Series "deleted" event.
-     *
-     * @return void
      */
-    public function deleted(Series $series)
+    public function deleted(Series $series): void
     {
         session()->flash('flashMessage', "{$series->title} ".__FUNCTION__.' successfully');
 
@@ -49,20 +44,16 @@ class SeriesObserver
 
     /**
      * Handle the Series "restored" event.
-     *
-     * @return void
      */
-    public function restored(Series $series)
+    public function restored(Series $series): void
     {
         session()->flash('flashMessage', "{$series->title} ".__FUNCTION__.' successfully');
     }
 
     /**
      * Handle the Series "force deleted" event.
-     *
-     * @return void
      */
-    public function forceDeleted(Series $series)
+    public function forceDeleted(Series $series): void
     {
         session()->flash('flashMessage', "{$series->title} ".__FUNCTION__.' successfully');
     }

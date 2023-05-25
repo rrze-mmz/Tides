@@ -13,6 +13,10 @@ class ActivitiesDataTable extends Component
 
     public $series = false;
 
+    public $model = '';
+
+    public $objectID = 1;
+
     public $search = '';
 
     public $sortField;
@@ -47,22 +51,50 @@ class ActivitiesDataTable extends Component
 
     public function render(): View
     {
-        return view('livewire.activities-data-table', [
-            'activities' => ($this->series)
-                ? Activity::where('content_type', 'series')
+        $activities = match ($this->model) {
+            'series' => call_user_func(function () {
+                return Activity::where('content_type', 'series')
+                    ->where('object_id', $this->objectID)
                     ->where(function ($query) {
                         $query->search($this->search);
                     })->when($this->sortField, function ($query) {
                         $query->orderBy($this->sortField, $this->sortAsc ? 'asc' : 'desc');
                     })
                     ->orderBy('id', 'desc')
-                    ->paginate(20)
-                : Activity::search($this->search)
-                    ->when($this->sortField, function ($query) {
+                    ->paginate(20);
+            }),
+            'clip' => call_user_func(function () {
+                return Activity::where('content_type', 'clip')
+                    ->where('object_id', $this->objectID)
+                    ->where(function ($query) {
+                        $query->search($this->search);
+                    })->when($this->sortField, function ($query) {
                         $query->orderBy($this->sortField, $this->sortAsc ? 'asc' : 'desc');
                     })
                     ->orderBy('id', 'desc')
-                    ->paginate(20),
+                    ->paginate(20);
+            }),
+            default => call_user_func(function () {
+                return ($this->series)
+                     ? Activity::where('content_type', 'series')
+                         ->where(function ($query) {
+                             $query->search($this->search);
+                         })->when($this->sortField, function ($query) {
+                             $query->orderBy($this->sortField, $this->sortAsc ? 'asc' : 'desc');
+                         })
+                         ->orderBy('id', 'desc')
+                         ->paginate(20)
+                     : Activity::search($this->search)
+                         ->when($this->sortField, function ($query) {
+                             $query->orderBy($this->sortField, $this->sortAsc ? 'asc' : 'desc');
+                         })
+                         ->orderBy('id', 'desc')
+                         ->paginate(20);
+            })
+        };
+
+        return view('livewire.activities-data-table', [
+            'activities' => $activities,
         ]);
     }
 }
