@@ -143,7 +143,7 @@
 
 @if(isset($opencastEvents['trimming']) && $opencastEvents['trimming']->isNotEmpty())
     <div class="pt-10 pb-2 mb-3 font-semibold border-b border-black font-2xl">
-        {{ $opencastEvents['trimming']->count() }} Opencast events waiting for trimm
+        {{ $opencastEvents['trimming']->count() }} Opencast events waiting for trim
     </div>
     <div class="flex flex-col">
         <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">

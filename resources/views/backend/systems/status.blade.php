@@ -8,7 +8,40 @@
         </div>
     </div>
 
-    <div class="grid grid-cols-3 gap-4 pt-4">
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-4 pt-4">
+        <div class="m-2 p-2 border-black border-solid rounded-lg border-2">
+            <div class="flex  justify-between place-content-around">
+                <div>
+                    <h3 class="pb-6 font-semibold text-fuchsia-800">Portal
+                    </h3>
+                </div>
+                <div>
+                    <x-heroicon-o-check-circle class="w-6 h-6 rounded text-green-600"/>
+                </div>
+            </div>
+
+            <div>
+                <div>
+                    Tides Portal version:<span class=" font-bold"> 0.1 </span>
+                </div>
+                <div>
+                    Description : just another videoportal </span>
+                </div>
+            </div>
+            <div class="pt-5">
+                <a href="{{ route('settings.portal.show') }}" class=" flex flex-row ">
+                    <x-button type="button"
+                              class="flex justify-between bg-blue-600 hover:bg-blue-700 basis-1/2 justify-center content-center">
+                        <div>
+                            Settings
+                        </div>
+                        <div>
+                            <x-heroicon-o-arrow-circle-right class=" w-6 w-6 "/>
+                        </div>
+                    </x-button>
+                </a>
+            </div>
+        </div>
         <div class="m-2 p-2 border-black border-solid rounded-lg border-2">
             <div class="flex  justify-between place-content-around">
                 <div>
@@ -32,6 +65,19 @@
                     Description : <span class=" font-bold"> {{$opencastStatus['description']}} </span>
                 </div>
             </div>
+            <div class="pt-5">
+                <a href="{{ route('settings.opencast.show') }}" class=" flex flex-row ">
+                    <x-button type="button"
+                              class="flex justify-between bg-blue-600 hover:bg-blue-700 basis-1/2 justify-center content-center">
+                        <div>
+                            Settings
+                        </div>
+                        <div>
+                            <x-heroicon-o-arrow-circle-right class=" w-6 w-6 "/>
+                        </div>
+                    </x-button>
+                </a>
+            </div>
         </div>
         <div class="m-2 p-2 border-black border-solid rounded-lg border-2">
             <div class="flex  justify-between place-content-around">
@@ -52,6 +98,19 @@
                 <div>
                     Wowza description:<span class=" font-bold"> {{str($wowzaStatus['releaseId'])->remove('"')}} </span>
                 </div>
+            </div>
+            <div class="pt-5">
+                <a href="{{ route('settings.streaming.show') }}" class=" flex flex-row ">
+                    <x-button type="button"
+                              class="flex justify-between bg-blue-600 hover:bg-blue-700 basis-1/2 justify-center content-center">
+                        <div>
+                            Settings
+                        </div>
+                        <div>
+                            <x-heroicon-o-arrow-circle-right class=" w-6 w-6 "/>
+                        </div>
+                    </x-button>
+                </a>
             </div>
         </div>
 
@@ -80,6 +139,19 @@
                         class=" font-bold">{{ $elasticsearchStatus->get('releaseId')['version']['build_type'] }}
                     </span>
                 </div>
+            </div>
+            <div class="pt-5">
+                <a href="{{ route('settings.elasticSearch.show') }}" class=" flex flex-row ">
+                    <x-button type="button"
+                              class="flex justify-between bg-blue-600 hover:bg-blue-700 basis-1/2 justify-center content-center">
+                        <div>
+                            Settings
+                        </div>
+                        <div>
+                            <x-heroicon-o-arrow-circle-right class=" w-6 w-6 "/>
+                        </div>
+                    </x-button>
+                </a>
             </div>
         </div>
     </div>

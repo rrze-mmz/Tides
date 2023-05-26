@@ -5,7 +5,7 @@
         Series index
     </div>
     <ul class="flex-row">
-        <div class="grid grid-cols-6 gap-6">
+        <div class="grid 2xl:grid-cols-4  xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-1 gap-6">
             @forelse($series as $singleSeries)
                 @include('backend.series._card',['series'=> $singleSeries])
             @empty
@@ -20,7 +20,7 @@
         <div class="pt-10 py-10">
             <x-form.button :link="route('series.create')" type="submit" text="Create new series"/>
         </div>
-        
+
         <div class="flex py-10">
             {{ $series->links() }}
         </div>

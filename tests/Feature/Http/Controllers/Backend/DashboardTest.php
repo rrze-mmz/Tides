@@ -163,10 +163,8 @@ class DashboardTest extends TestCase
         $this->signInRole(Role::SUPERADMIN);
 
         $this->get(route('dashboard'))
-            ->assertSee(trans_choice('common.menu.system', 2))
             ->assertSee(route('systems.status'))
-            ->assertSee(__('common.menu.portal settings'))
-            ->assertSee(route('settings.portal.index'));
+            ->assertSee(__('common.menu.portal settings'));
     }
 
     /** @test */

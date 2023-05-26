@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Backend;
+namespace App\Http\Controllers\Backend\Traits;
 
 use App\Jobs\CreateWowzaSmilFile;
 use App\Jobs\TransferAssetsJob;

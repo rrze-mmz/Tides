@@ -70,31 +70,11 @@
 @endcan
 @can('administrate-superadmin-portal-pages')
     <a
-        href="{{route('settings.portal.index')}}"
-        class="flex items-left text-white hover:opacity-100 py-4
-        pl-6 nav-item  {{ setActiveLink(route('settings.portal.index')) }}"
-    >
-        {{ __('common.menu.portal settings') }}
-    </a>
-    <a
         href="{{route('systems.status')}}"
         class="flex items-left text-white hover:opacity-100 py-4
         pl-6 nav-item  {{ setActiveLink(route('systems.status')) }}"
     >
-        {{ trans_choice('common.menu.system', 2) }}
-    </a>
-    <a
-        href="{{route('user.notifications')}}"
-        class="flex items-left text-white hover:opacity-100 py-4
-        pl-6 nav-item  {{ setActiveLink(route('settings.portal.index')) }}"
-    >
-        <div class="flex items-left">
-            Notifications
-            @if (($counter = auth()->user()->unreadNotifications->count()) > 0)
-                <span class="rounded-full  p-1.5 ml-1 bg-white text-green-700 text-sm"> {{ $counter }}</span>
-            @endif
-        </div>
-
+        {{ __('common.menu.portal settings') }}
     </a>
 @endcan
 @can('administrate-superadmin-portal-pages')

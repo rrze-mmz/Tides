@@ -18,6 +18,8 @@ class StoreClipRequest extends FormRequest
             'presenters' => $this->presenters = $this->presenters ?? [], //set empty array if presenters array is empty
             'allow_comments' => $this->allow_comments === 'on',
             'is_public' => $this->is_public === 'on',
+            'image_id' => (isset($this->image_id)) ? $this->image_id : config('settings.portal.default_image_id'),
+
         ]);
     }
 

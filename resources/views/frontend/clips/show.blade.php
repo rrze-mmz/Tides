@@ -18,23 +18,38 @@
             @endcan
         </div>
 
-        @if (!is_null($clip->assets()->first()))
-            @include('frontend.clips._player',['asset'=> $clip->assets()])
-        @endif
+        <div class="flex flex-col align-center">
+            @if (!is_null($clip->assets()->first()))
+                @include('frontend.clips._player',['asset'=> $clip->assets()])
+            @endif
+        </div>
+
 
         <div class="flex justify-between py-2">
             @if(!is_null($previousNextClipCollection->get('previousClip')))
-                <a href="{{ $previousNextClipCollection->get('previousClip')->path() }}">
+                <a class=" flex flex-row justify-between items-center"
+                   href="{{ $previousNextClipCollection->get('previousClip')->path() }}">
                     <x-button class="bg-blue-600 hover:bg-blue-700">
-                        {{ __('common.previous') }}
+                        <div class="mr-4">
+                            <x-heroicon-o-arrow-circle-left class=" w-6 w-6 "/>
+                        </div>
+                        <div>
+                            {{ __('common.previous').'-'.$previousNextClipCollection->get('previousClip')->title }}
+                        </div>
                     </x-button>
                 </a>
             @endif
 
             @if(!is_null($previousNextClipCollection->get('nextClip')))
-                <a href="{{ $previousNextClipCollection->get('nextClip')->path() }}">
+                <a class=" flex flex-row justify-between items-center"
+                   href="{{ $previousNextClipCollection->get('nextClip')->path() }}">
                     <x-button class="bg-blue-600 hover:bg-blue-700">
-                        {{ __('common.next') }}
+                        <div>
+                            {{ __('common.next').'-'.$previousNextClipCollection->get('nextClip')->title }}
+                        </div>
+                        <div class="ml-4">
+                            <x-heroicon-o-arrow-circle-right class=" w-6 w-6 "/>
+                        </div>
                     </x-button>
                 </a>
             @endif

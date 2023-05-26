@@ -60,7 +60,7 @@
                 <x-button class="bg-blue-600 hover:bg-blue-700">
                     Update
                 </x-button>
-                <a href="{{ route('settings.portal.index') }}">
+                <a href="{{ route('systems.status') }}">
                     <x-button type="button" class="bg-gray-600 hover:bg-gray-700">
                         Cancel
                     </x-button>

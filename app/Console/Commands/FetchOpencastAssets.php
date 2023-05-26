@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Http\Controllers\Backend\Transferable;
+use App\Http\Controllers\Backend\Traits\Transferable;
 use App\Models\Clip;
 use App\Services\OpencastService;
 use Carbon\Carbon;

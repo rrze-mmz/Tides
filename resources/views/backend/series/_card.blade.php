@@ -1,4 +1,4 @@
-<div class=" relative my-2 bg-gray-50 rounded-md">
+<div class="relative my-2 bg-gray-50 rounded-md">
     <div class="relative h-15 overflow-hidden">
         <img
             src="{{ ($series->clips->count() > 0)
@@ -17,15 +17,11 @@
         <div class="mb-1">
             <div class="text-md font-bold text-gray-900">
                 <a
-                    hover:
-                    href="@if(str_contains(url()->current(), 'admin')) {{$series->adminPath()}}
-                    @else {{ $series->path() }}
-                    @endif"
+                    href="@if(str_contains(url()->current(), 'admin')) {{$series->adminPath()}}@else {{ $series->path() }}@endif"
                     class="text-md"
                 >
                     {{ $series->title }}
                 </a>
-
             </div>
             <div>
                 @if ($series->owner)

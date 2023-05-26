@@ -1,7 +1,7 @@
-<div class="pt-10 pb-2 font-semibold border-b border-black font-2xl">
+<div class="pt-5 pb-2 font-semibold border-b border-black font-2xl">
     {{ $layoutHeader }}
 </div>
-<div class="grid grid-cols-3 gap-4 pt-8 h48">
+<div class="grid grid-cols-3 gap-4 pt-4">
     @forelse($clips as $clip)
         @include('backend.clips._card',['clip'=> $clip])
     @empty

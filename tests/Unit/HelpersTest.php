@@ -61,7 +61,7 @@ it('ignores hidden files in collection result for dropzone files ', function () 
 it('has an active link function', function () {
     get(route('dashboard'));
 
-    expect(setActiveLink(route('dashboard')))->toBe('active-nav-link opacity-100');
+    expect(setActiveLink(route('dashboard')))->toBe('active-nav-link opacity-100 font-bold');
 });
 
 it('has a getAccessToken function for url tokens', function () {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Http\Controllers\Backend\Traits\Transferable;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UploadAssetRequest;
 use App\Models\Clip;

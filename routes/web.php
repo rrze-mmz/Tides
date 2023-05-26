@@ -296,9 +296,6 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
     //Superadmin routes
     Route::middleware('can:administrate-superadmin-portal-pages')->group(function () {
         Route::get('/systems', SystemsCheckController::class)->name('systems.status');
-        Route::get('/settings/index', function () {
-            return view('backend.settings.index');
-        })->name('settings.portal.index');
         Route::get('/settings/portal', [PortalSettingsController::class, 'show'])->name('settings.portal.show');
         Route::put('/settings/portal', [PortalSettingsController::class, 'update'])->name('settings.portal.update');
         Route::get('/settings/opencast', [OpencastSettingsController::class, 'show'])->name('settings.opencast.show');

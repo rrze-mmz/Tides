@@ -1,18 +1,19 @@
 <div class="grid grid-cols-8 items-center">
     <div class="content-center">
-        <label class="flex block py-4 mr-2 font-bold text-gray-700 text-md"
-               for="{{ $fieldName }}"
-        >
+        <div class="flex flex-col">
+            <label class="flex block py-2 mr-2 font-bold text-gray-700 text-md"
+                   for="{{ $fieldName }}"
+            >
             <span>
                 {{$label}}
             </span>
-            @if($disabled)
-                <span class="pl-2 text-green-500">
-                     <x-heroicon-o-exclamation-circle class="w-4"/>
-                 </span>
-
+            </label>
+            @if ($disabled)
+                <div class="flex text-green-500 text-sm">
+                    (You cannot change this field)
+                </div>
             @endif
-        </label>
+        </div>
     </div>
     <div class="{{($fullCol)?'col-start-2 col-end-8':'w-full'}}">
         <input class="py-2 px-4 w-full leading-tight text-gray-700 bg-white rounded border-2
@@ -26,18 +27,6 @@
             {{($disabled)?'disabled':''}}
         >
     </div>
-    @if ($disabled)
-        <div class="col-start-2 col-end-6">
-            <p class="mt-2 w-full text-xs">
-            <div class="flex text-green-500">
-                <x-heroicon-o-exclamation-circle class="w-4"/>
-                <span class="pl-2">
-                        You cannot change this field
-                    </span>
-            </div>
-            </p>
-        </div>
-    @endif
     @error($fieldName)
     <div class="col-start-2 col-end-6">
         <p class="mt-2 w-full text-xs text-red-500">{{ $message }}</p>

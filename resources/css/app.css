@@ -61,6 +61,13 @@
     background: #1947ee;
 }
 
-.account-link:hover {
-    background: #3d68ff;
+.plyr-tides {
+    max-height: 640px;
+    max-height: 480px;
+
 }
+
+
+/*.account-link:hover {*/
+/*    background: #3d68ff;*/
+/*}*/

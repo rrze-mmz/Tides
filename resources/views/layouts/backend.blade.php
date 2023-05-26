@@ -50,11 +50,17 @@
                         class="h-full w-full fixed inset-0 cursor-default">
                 </button>
                 <div x-show="isOpen"
-                     class="absolute w-48 bg-white px-10 items-center align-middle rounded-lg shadow-lg py-2 mt-16">
-                    <a href="#" class="block px-4 py-2 account-link hover:text-white">Settings</a>
-                    <a href="#" class="block px-4 py-2 account-link hover:text-white">Notifications</a>
+                     class="absolute w-48 bg-white  items-center align-middle rounded-lg shadow-lg py-2 mt-16">
+                    <a href="#" class="block px-4 py-2  hover:text-gray-400">Settings</a>
+                    <a href="{{ route('user.notifications') }}" class="block px-4 py-2  hover:text-gray-400">
+                        Notifications
+                        @if (($counter = auth()->user()->unreadNotifications->count()) > 0)
+                            <span
+                                class="rounded-full  p-1.5 ml-1 bg-white text-green-700 text-sm"> {{ $counter }}</span>
+                        @endif
+                    </a>
                     <a href="{{ route('logout') }}"
-                       class="block px-4 py-2 account-link hover:text-white"
+                       class="block px-4 py-2  hover:text-gray-400"
                        onclick="event.preventDefault();
                     document.getElementById('logout-form').submit();">{{ __('auth.Logout') }}</a>
                     <form id="logout-form"
