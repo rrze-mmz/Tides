@@ -614,7 +614,7 @@ class ManageSeriesTest extends TestCase
 
         $this->mockHandler->append(
             $this->mockHealthResponse(),
-            $this->mockNoSeriesFoundResponse(),
+            $this->mockNoResultsResponse(),
             $this->mockSeriesRunningWorkflowsResponse($series, true),
             $this->mockEventResponse($series, OpencastWorkflowState::FAILED)
         );

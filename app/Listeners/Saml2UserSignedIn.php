@@ -52,9 +52,9 @@ class Saml2UserSignedIn
                 'first_name' => str($samlUser['attributes']['urn:mace:dir:attribute-def:displayName'][0])->before(' '),
                 'last_name' => str($samlUser['attributes']['urn:mace:dir:attribute-def:displayName'][0])->after(' '),
             ]
-        )->saveQuietly();
+        );
         // Login a user
-        $lang = $user->settings()->data['language'];
+        $lang = $user->settings->data['language'];
         Auth::login($user);
         session()->put('locale', $lang);
 

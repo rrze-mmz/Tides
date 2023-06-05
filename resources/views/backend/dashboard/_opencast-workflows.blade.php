@@ -71,7 +71,7 @@
 @endif
 @if(isset($opencastEvents['scheduled']) && $opencastEvents['scheduled']->isNotEmpty())
     <div class="pt-10 pb-2 mb-3 font-semibold border-b border-black font-2xl">
-        {{ $opencastEvents['scheduled']->count() }} Opencast scheduled workflows
+        {{ $opencastEvents['scheduled']->count() }} Opencast scheduled events for today
     </div>
     <div class="flex flex-col">
         <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -139,7 +139,6 @@
         </div>
     </div>
 @endif
-
 
 @if(isset($opencastEvents['trimming']) && $opencastEvents['trimming']->isNotEmpty())
     <div class="pt-10 pb-2 mb-3 font-semibold border-b border-black font-2xl">
@@ -314,6 +313,77 @@
                             </tr>
                         @endforeach
 
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+@endif
+
+@if(isset($opencastEvents['upcoming']) && $opencastEvents['upcoming']->isNotEmpty())
+    <div class="pt-10 pb-2 mb-3 font-semibold border-b border-black font-2xl">
+        {{ $opencastEvents['upcoming']->count() }} upcoming Opencast events
+    </div>
+    <div class="flex flex-col">
+        <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
+            <div class="inline-block py-2 min-w-full sm:px-6 lg:px-8">
+                <div class="overflow-hidden">
+                    <table class="min-w-full">
+                        <thead class="border-b">
+                        <tr>
+                            <th scope="col" class="px-6 py-4 text-sm font-medium text-left text-gray-900">
+                                Title
+                            </th>
+                            <th scope="col" class="px-6 py-4 text-sm font-medium text-left text-gray-900">
+                                Series
+                            </th>
+                            <th scope="col" class="px-6 py-4 text-sm font-medium text-left text-gray-900">
+                                Presenter
+                            </th>
+
+                            <th scope="col" class="px-6 py-4 text-sm font-medium text-left text-gray-900">
+                                Start time
+                            </th>
+                            <th scope="col" class="px-6 py-4 text-sm font-medium text-left text-gray-900">
+                                Location
+                            </th>
+                            <th scope="col" class="px-6 py-4 text-sm font-medium text-left text-gray-900">
+                                Status
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($opencastEvents['upcoming'] as $event)
+                            <tr class="bg-white border-b">
+                                <td class="px-6 py-4 text-sm font-light text-gray-900">
+                                    {{ $event['title'] }}
+                                </td>
+                                <td class="px-6 py-4 text-sm font-light text-gray-900">
+                                    @if(!empty($event['series']))
+                                        {{ $event['series']  }}
+                                    @else
+                                        {{ 'EVENTS_WITHOUT_SERIES' }}
+                                    @endif
+                                </td>
+                                <td class="px-6 py-4 text-sm font-light text-gray-900">
+                                    @if (isset($event['presenter'][0]))
+                                        {{ $event['presenter'][0]  }}
+                                    @else
+                                        {{ 'No presenter' }}
+                                    @endif
+                                </td>
+                                <td class="px-6 py-4 text-sm font-light text-gray-900">
+                                    {{ zuluToCEST($event['start']) }}
+                                </td>
+                                <td class="px-6 py-4 text-sm font-light text-gray-900">
+                                    {{ $event['location'] }}
+                                </td>
+                                <td class="px-6 py-4 text-sm font-light text-green-700">
+                                    {{ OpencastWorkflowState::tryFrom($event['status'])->lower() }}
+                                </td>
+                            </tr>
+                        @endforeach
                         </tbody>
                     </table>
                 </div>

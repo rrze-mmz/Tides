@@ -137,19 +137,36 @@ class OpencastService
     /**
      *  Return opencast events based on status
      */
-    public function getEventsByStatus(OpencastWorkflowState $state): Collection
-    {
+    public function getEventsByStatus(
+        OpencastWorkflowState $state,
+        Series|null $series = null,
+        int $limit = 20
+    ): Collection {
         $runningWorkflows = collect();
+
+        $filter = (is_null($series))
+            ? 'status:'.$state->value
+            : 'status:'.$state->value.',is_part_of:'.$series->opencast_series_id;
 
         try {
             $this->response = $this->client->get('api/events', [
                 'query' => [
-                    'filter' => 'status:'.$state->value,
+                    'filter' => $filter,
                     'sort' => 'start_date:ASC',
+                    'limit' => $limit,
                 ],
             ]);
             $runningWorkflows = collect((json_decode((string) $this->response->getBody(), true)));
         } catch (RequestException $e) {
+            if ($e->hasResponse()) {
+                $status = $e->getResponse()->getStatusCode();
+                $body = $e->getResponse()->getBody();
+                Log::error("status {$status}");
+                Log::error("Error response body {$body}");
+            } else {
+                Log::error("error {$e->getMessage()}");
+            }
+        } catch (GuzzleException $e) {
             if ($e->hasResponse()) {
                 $status = $e->getResponse()->getStatusCode();
                 $body = $e->getResponse()->getBody();
@@ -187,6 +204,15 @@ class OpencastService
             } else {
                 Log::error("error {$e->getMessage()}");
             }
+        } catch (GuzzleException $e) {
+            if ($e->hasResponse()) {
+                $status = $e->getResponse()->getStatusCode();
+                $body = $e->getResponse()->getBody();
+                Log::error("status {$status}");
+                Log::error("Error response body {$body}");
+            } else {
+                Log::error("error {$e->getMessage()}");
+            }
         }
 
         return $events;
@@ -201,7 +227,7 @@ class OpencastService
         try {
             $this->response = $this->client->get('admin-ng/event/events.json', [
                 'query' => [
-                    'filter' => 'status:'.OpencastWorkflowState::SUCCEEDED->value.',comments:OPEN', 'series:'.$series,
+                    'filter' => 'status:'.OpencastWorkflowState::SUCCEEDED->value.',comments:OPEN,series:'.$series,
                     'offset' => 0,
                     'sort' => 'start_date:ASC',
                 ],

@@ -12,22 +12,67 @@ use Illuminate\View\View;
 class DashboardController
 {
     /**
-     * Show max 10 of user's series/clips and list dropzone files
+     * Show max 10 of user's series/clips, list dropzone files and opencast events
      */
     public function __invoke(OpencastService $opencastService): Application|Factory|View
     {
         $opencastEvents = collect([]);
 
-        if (auth()->user()->can('administrate-portal-pages') && $opencastService->getHealth()->contains('pass')) {
+        //fetch all available opencast events
+        if ($opencastService->getHealth()->contains('pass')) {
             $opencastEvents
-                ->put('recording', $opencastService->getEventsByStatus(OpencastWorkflowState::RECORDING))
-                ->put('running', $opencastService->getEventsByStatus(OpencastWorkflowState::RUNNING))
                 ->put(
-                    'scheduled',
+                    OpencastWorkflowState::RECORDING->lower(),
+                    $opencastService->getEventsByStatus(OpencastWorkflowState::RECORDING)
+                )
+                ->put(
+                    OpencastWorkflowState::RUNNING->lower(),
+                    $opencastService->getEventsByStatus(OpencastWorkflowState::RUNNING)
+                )
+                ->put(
+                    OpencastWorkflowState::SCHEDULED->lower(),
                     $opencastService->getEventsByStatusAndByDate(OpencastWorkflowState::SCHEDULED, Carbon::now())
                 )
-                ->put('failed', $opencastService->getEventsByStatus(OpencastWorkflowState::FAILED))
-                ->put('trimming', $opencastService->getEventsWaitingForTrimming());
+                ->put(
+                    OpencastWorkflowState::FAILED->lower(),
+                    $opencastService->getEventsByStatus(OpencastWorkflowState::FAILED)
+                )
+                ->put(OpencastWorkflowState::TRIMMING->lower(), $opencastService->getEventsWaitingForTrimming());
+
+            //if the logged-in user is a moderator then filter all opencast events
+            if (auth()->user()->cannot('administrate-admin-portal-pages')) {
+                //a collection for all user series opencast ids
+                $series = auth()->user()->accessableSeries();
+                $userOpencastSeriesIDs = $series->get()->pluck('opencast_series_id');
+
+                //create a new collection with filtered events
+                $opencastEvents = $opencastEvents->map(function ($events, $key) use ($userOpencastSeriesIDs) {
+                    if ($events->isNotEmpty()) {
+                        return $events->filter(function ($event) use ($key, $userOpencastSeriesIDs) {
+                            //trimming endpoint results are different from all others
+                            if ($key === OpencastWorkflowState::TRIMMING->lower()) {
+                                return isset($event['series']['id'])
+                                    && $userOpencastSeriesIDs->contains($event['series']['id']);
+                            } elseif (isset($event['is_part_of'])) {
+                                return $userOpencastSeriesIDs->contains($event['is_part_of']);
+                            }
+
+                            return false;
+                        });
+                    }
+
+                    return $events;
+                });
+
+                $upcomingEvents = collect();
+                $series->each(function ($series) use ($upcomingEvents, $opencastService) {
+                    $opencastService->getEventsByStatus(OpencastWorkflowState::SCHEDULED, $series, 3)
+                        ->each(function ($event) use ($upcomingEvents) {
+                            $upcomingEvents->push($event);
+                        });
+                });
+                $opencastEvents->put('upcoming', $upcomingEvents);
+            }
         }
 
         return view('backend.dashboard.index', [

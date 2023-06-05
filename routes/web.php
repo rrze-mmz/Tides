@@ -35,9 +35,9 @@ use App\Http\Controllers\Frontend\ApiController;
 use App\Http\Controllers\Frontend\AssetsDownloadController;
 use App\Http\Controllers\Frontend\FeedsController;
 use App\Http\Controllers\Frontend\HomeController;
-use App\Http\Controllers\Frontend\SearchController;
 use App\Http\Controllers\Frontend\ShowClipsController;
 use App\Http\Controllers\Frontend\ShowOrganizationsController;
+use App\Http\Controllers\Frontend\ShowSearchResultsController;
 use App\Http\Controllers\Frontend\ShowSeriesController;
 use App\Http\Controllers\Frontend\UserApplicationsController;
 use App\Http\Controllers\Frontend\UserCommentsController;
@@ -54,8 +54,8 @@ Route::get('/', HomeController::class)->name('home');
 Route::redirect('/home', '/');
 Route::redirect('/admin', '/admin/dashboard');
 
-//Quick search
-Route::get('search', [SearchController::class, 'search'])->name('search');
+//Quick __invoke
+Route::get('search', ShowSearchResultsController::class)->name('search');
 
 //frontend series routes
 

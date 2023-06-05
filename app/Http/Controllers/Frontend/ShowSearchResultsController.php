@@ -8,12 +8,12 @@ use App\Models\Clip;
 use App\Services\ElasticsearchService;
 use Illuminate\View\View;
 
-class SearchController extends Controller
+class ShowSearchResultsController extends Controller
 {
     /**
-     * Main and basic search using ORM
+     * Main and basic __invoke using ORM
      */
-    public function search(SearchRequest $request, ElasticsearchService $elasticsearchService): View
+    public function __invoke(SearchRequest $request, ElasticsearchService $elasticsearchService): View
     {
         $searchResults = collect([]);
         $health = $elasticsearchService->getHealth();
@@ -27,7 +27,7 @@ class SearchController extends Controller
             $searchResults = $searchResults->put('clips', $results)->put('counter', $counter);
 
             return view('frontend.search.results.elasticsearch', compact('searchResults'));
-        } else { //use slow db search if no elasticsearch node is found
+        } else { //use slow db __invoke if no elasticsearch node is found
             $clips = Clip::with('presenters')
                 ->with('assets')
                 ->search($request->term)
@@ -35,11 +35,11 @@ class SearchController extends Controller
                 ->orWhereHas('presenters', function ($q) use ($request) {
                     $q->whereRaw('lower(first_name)  like (?)', ["%{$request->term}%"])
                         ->orWhereRaw('lower(last_name)  like (?)', ["%{$request->term}%"]);
-                }) //search for clip presenter
+                }) //__invoke for clip presenter
                 ->orWhereHas('owner', function ($q) use ($request) {
                     $q->whereRaw('lower(first_name)  like (?)', ["%{$request->term}%"])
                         ->orWhereRaw('lower(last_name)  like (?)', ["%{$request->term}%"]);
-                }) //search for clip presenter
+                }) //__invoke for clip presenter
                 ->paginate(10)->withQueryString();
             $searchResults->put('clips', $clips);
 

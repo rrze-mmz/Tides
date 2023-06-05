@@ -68,9 +68,20 @@ trait WorksWithOpencastClient
         return new Response(201, []);
     }
 
-    public function mockNoSeriesFoundResponse(): Response
+    public function mockNoResultsResponse(): Response
     {
         return new Response(200, []);
+    }
+
+    public function mockNoTrimmingResultsResponse(): Response
+    {
+        return new Response(201, [], json_encode([
+            'total' => 0,
+            'offset' => 0,
+            'count' => 0,
+            'limit' => 10,
+            'results' => [],
+        ]));
     }
 
     public function mockIngestMediaPackageResponse(): Response
@@ -256,6 +267,48 @@ trait WorksWithOpencastClient
         return new Response(200, [], (
             $output->toXml()
         ));
+    }
+
+    public function mockTrimmingEventsResponse(Series $series): Response
+    {
+        $workflows = [
+            'total' => 1,
+            'offset' => 0,
+            'count' => 1,
+            'limit' => 10,
+            'results' => [
+                0 => [
+                    'end_date' => '2023-05-31T07:05:00Z',
+                    'agent_id' => 'SMP_Ulmenweg ',
+                    'displayable_status' => 'EVENTS.EVENTS.STATUS.PROCESSED',
+                    'needs_cutting' => true,
+                    'source' => 'ARCHIVE',
+                    'title' => 'Neuroanatomie V-V14 24',
+                    'has_open_comments' => true,
+                    'has_preview' => true,
+                    'technical_presenters' => [],
+                    'has_comments' => true,
+                    'technical_end' => '2023-05-31T07:05:00Z',
+                    'series' => [
+                        'id' => $series->opencast_series_id,
+                        'title' => $series->title,
+                    ],
+                    'presenters' => [
+                        'Prof. Dr. med. Jürgen Wörl',
+                    ],
+                    'technical_start' => '2023-05-31T05:55:00Z',
+                    'location' => 'SMP_Ulmenweg',
+                    'managedAcl' => '',
+                    'workflow_state' => 'SUCCEEDED',
+                    'id' => 'c06d9e3e-99a9-4a5b-b245-6685be068d03',
+                    'start_date' => '2023-05-31T05:55:00Z',
+                    'event_status' => 'EVENTS.EVENTS.STATUS.PROCESSED',
+                    'publications' => [],
+                ],
+            ],
+        ];
+
+        return new Response(201, [], json_encode($workflows));
     }
 
     public function mockSeriesRunningWorkflowsResponse(Series $series, bool $multiple = false): Response
