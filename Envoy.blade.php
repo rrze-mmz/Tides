@@ -74,7 +74,7 @@ npm install --silent --no-progress > /dev/null
 
 cd {{ $currentReleaseDir }}
 
-npm run prod --silent --no-progress > /dev/null
+npm run build --silent --no-progress > /dev/null
 
 {{ logMessage("Deleting node_modules folder") }}
 rm -rf node_modules
