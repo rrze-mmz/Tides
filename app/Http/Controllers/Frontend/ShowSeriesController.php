@@ -17,6 +17,7 @@ class ShowSeriesController extends Controller
         $series = Series::whereHas('clips', function (Builder $query) {
             $query->has('assets');
         })->isPublic()
+            ->with('presenters')
             ->withLastPublicClip()
             ->orderByDesc('updated_at')
             ->paginate(12);

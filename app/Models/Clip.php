@@ -35,6 +35,8 @@ class Clip extends BaseModel
     use Slugable;
     use RecordsActivity;
 
+    protected $with = ['acls'];
+
     //search columns for searchable trait
     protected array $searchable = ['title', 'description'];
 

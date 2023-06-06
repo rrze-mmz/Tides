@@ -19,6 +19,7 @@ class HomeController extends Controller
             'series' => Series::whereHas('clips', function (Builder $query) {
                 $query->has('assets');
             })->isPublic()
+                ->with(['owner', 'presenters', 'clips'])
                 ->withLastPublicClip()
                 ->orderByDesc('updated_at')
                 ->limit(16)

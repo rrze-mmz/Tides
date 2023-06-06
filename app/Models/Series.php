@@ -324,6 +324,13 @@ class Series extends BaseModel
         });
     }
 
+    public function getSeriesACLSUpdated(Series $series)
+    {
+        return $series->clips
+            ->map(fn ($clip) => $clip->acls->pluck('name'))->flatten()->unique()->values()
+            ->implode(', ');
+    }
+
     public function getSeriesACL(): string
     {
         return Clip::select(['id'])

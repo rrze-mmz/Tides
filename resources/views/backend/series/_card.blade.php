@@ -1,11 +1,22 @@
+@if(str_contains(url()->current(), 'admin'))
+    @php
+        $url = route('series.edit', $series)
+    @endphp
+@else
+    @php
+        $url = route('frontend.series.show', $series)
+    @endphp
+@endif
 <div class="relative my-2 bg-gray-50 rounded-md">
     <div class="relative h-15 overflow-hidden">
-        <img
-            src="{{ ($series->clips->count() > 0)
+        <a href="{{ $url }}">
+            <img
+                src="{{ ($series->lastPublicClip)
                     ? fetchClipPoster($series->lastPublicClip?->latestAsset?->player_preview)
                     : "/images/generic_clip_poster_image.png" }}"
-            alt="preview image"
-            class="object-cover w-full h-full"/>
+                alt="preview image"
+                class="object-cover w-full h-full"/>
+        </a>
         <div
             class="absolute w-full py-2.5 bottom-0 inset-x-0 bg-blue-600  text-white
                     text-xs text-right pr-2 pb-2 leading-4 ">
@@ -13,11 +24,11 @@
         </div>
     </div>
 
-    <div class="flex-row justify-between p-2 mb-6 w-full bg-gray-50">
+    <div class="flex-row justify-between p-2 mb-6 w-full bg-gray-50 pb-7">
         <div class="mb-1">
             <div class="text-md font-bold text-gray-900">
                 <a
-                    href="@if(str_contains(url()->current(), 'admin')) {{$series->adminPath()}}@else {{ $series->path() }}@endif"
+                    href="{{ $url }}"
                     class="text-md"
                 >
                     {{ $series->title }}
@@ -35,7 +46,7 @@
             </p>
         </div>
 
-        @if($series->presenters->count() > 0)
+        @if($series->presenters->isNotEmpty())
             <div class="flex items-center pt-2 justify-content-between">
                 <div class="pr-2">
                     <x-heroicon-o-user class="h-4 w-4"/>
@@ -62,7 +73,7 @@
             </div>
         </div>
 
-        @if($seriesAcls = $series->getSeriesACL())
+        @if($seriesAcls = $series->getSeriesACLSUpdated($series))
             @if($seriesAcls!== 'public')
                 <div class="flex items-center justify-content-between">
                     <div class="pr-2">
@@ -97,10 +108,18 @@
     </div>
     @can('edit-series',$series)
         <div class="absolute w-full py-2.5 bottom-0 inset-x-0 text-white
-                    text-xs text-right pr-2 pb-2 leading-4">
+                    text-xs text-right pr-2 pb-2 leading-4 min-pt-10">
             <a href="{{route('series.edit', $series)}}">
                 <x-button class="bg-blue-500 hover:bg-blue-700">
-                    <x-heroicon-o-pencil class="w-4 h-4"/>
+                    <div class="flex items-center">
+                        <div class="pr-5">
+                            {{ __('common.actions.edit') }}
+                        </div>
+                        <div>
+                            <x-heroicon-o-pencil class="w-4 h-4"/>
+                        </div>
+                    </div>
+
                 </x-button>
             </a>
         </div>

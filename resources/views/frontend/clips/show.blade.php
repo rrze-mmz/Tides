@@ -27,7 +27,7 @@
 
         <div class="flex justify-between py-2">
             @if(!is_null($previousNextClipCollection->get('previousClip')))
-                <a class=" flex flex-row justify-between items-center"
+                <a class=" flex flex-row justify-between items-center max-w-lg"
                    href="{{ $previousNextClipCollection->get('previousClip')->path() }}">
                     <x-button class="bg-blue-600 hover:bg-blue-700">
                         <div class="mr-4">
@@ -41,7 +41,7 @@
             @endif
 
             @if(!is_null($previousNextClipCollection->get('nextClip')))
-                <a class=" flex flex-row justify-between items-center"
+                <a class=" flex flex-row justify-between items-center max-w-lg"
                    href="{{ $previousNextClipCollection->get('nextClip')->path() }}">
                     <x-button class="bg-blue-600 hover:bg-blue-700">
                         <div>
