@@ -64,10 +64,27 @@ class OpencastService
     {
         $opencastSeriesInfo = collect();
         if ($health = $this->getHealth()->contains('pass')) {
-            $opencastSeriesInfo->prepend($health, 'health')
-                ->prepend($this->getSeries($series), 'metadata')
-                ->prepend($this->getSeriesRunningWorkflows($series), OpencastWorkflowState::RUNNING->lower())
-                ->prepend($this->getFailedEventsBySeries($series), OpencastWorkflowState::FAILED->lower());
+            $opencastSeriesInfo->put('health', $health)
+                ->put('metadata', $this->getSeries($series))
+                ->put(
+                    OpencastWorkflowState::RECORDING->lower(),
+                    $this->getEventsByStatus(OpencastWorkflowState::RECORDING, $series)
+                )
+                ->put(
+                    OpencastWorkflowState::RUNNING->lower(),
+                    $this->getEventsByStatus(OpencastWorkflowState::RUNNING, $series)
+                )
+                ->put(
+                    OpencastWorkflowState::SCHEDULED->lower(),
+                    $this->getEventsByStatusAndByDate(OpencastWorkflowState::SCHEDULED, Carbon::now())
+                )
+                ->put(
+                    OpencastWorkflowState::FAILED->lower(),
+                    $this->getEventsByStatus(OpencastWorkflowState::FAILED, $series)
+                )
+                ->put(OpencastWorkflowState::TRIMMING->lower(), $this->getEventsWaitingForTrimming($series))
+                ->put('upcoming', $this->getEventsByStatus(OpencastWorkflowState::SCHEDULED, $series, 30));
+
         }
 
         return $opencastSeriesInfo;

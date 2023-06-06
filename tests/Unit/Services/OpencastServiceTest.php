@@ -62,10 +62,14 @@ class OpencastServiceTest extends TestCase
         $series = SeriesFactory::create();
 
         $this->mockHandler->append(
-            $this->mockHealthResponse(),
-            $this->mockSeriesMetadata($series),
-            $this->mockSeriesRunningWorkflowsResponse($series),
-            $this->mockEventResponse($series, OpencastWorkflowState::RUNNING)
+            $this->mockHealthResponse(), //health
+            $this->mockSeriesMetadata($series), // seriesInfo
+            $this->mockNoResultsResponse(), //recording
+            $this->mockNoResultsResponse(), //running
+            $this->mockNoResultsResponse(), //scheduled
+            $this->mockNoResultsResponse(), //failed
+            $this->mockNoTrimmingResultsResponse(), //trimming
+            $this->mockNoResultsResponse(), //upcoming
         );
 
         $seriesInfo = $this->opencastService->getSeriesInfo($series);
@@ -73,8 +77,12 @@ class OpencastServiceTest extends TestCase
         $this->assertTrue($seriesInfo->isNotEmpty());
         $this->assertTrue($seriesInfo['health']);
         $this->assertArrayHasKey('metadata', $seriesInfo);
-        $this->assertArrayHasKey('running', $seriesInfo);
-        $this->assertArrayHasKey('failed', $seriesInfo);
+        $this->assertArrayHasKey(OpencastWorkflowState::RECORDING->lower(), $seriesInfo);
+        $this->assertArrayHasKey(OpencastWorkflowState::RUNNING->lower(), $seriesInfo);
+        $this->assertArrayHasKey(OpencastWorkflowState::SCHEDULED->lower(), $seriesInfo);
+        $this->assertArrayHasKey(OpencastWorkflowState::FAILED->lower(), $seriesInfo);
+        $this->assertArrayHasKey(OpencastWorkflowState::TRIMMING->lower(), $seriesInfo);
+        $this->assertArrayHasKey('upcoming', $seriesInfo);
     }
 
     /** @test */

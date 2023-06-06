@@ -295,10 +295,14 @@ class ManageSeriesTest extends TestCase
         $series = SeriesFactory::ownedBy($this->signInRole($this->role))->create();
 
         $this->mockHandler->append(
-            $this->mockHealthResponse(),
-            $this->mockSeriesMetadata($series),
-            $this->mockSeriesRunningWorkflowsResponse($series),
-            $this->mockEventResponse($series, OpencastWorkflowState::STOPPED)
+            $this->mockHealthResponse(), //health
+            $this->mockSeriesMetadata($series), // seriesInfo
+            $this->mockNoResultsResponse(), //recording
+            $this->mockNoResultsResponse(), //running
+            $this->mockNoResultsResponse(), //scheduled
+            $this->mockNoResultsResponse(), //failed
+            $this->mockNoTrimmingResultsResponse(), //trimming
+            $this->mockNoResultsResponse(), //upcoming
         );
 
         $this->get(route('series.edit', $series))
@@ -322,10 +326,14 @@ class ManageSeriesTest extends TestCase
         $series->addMember($user2);
 
         $this->mockHandler->append(
-            $this->mockHealthResponse(),
-            $this->mockSeriesMetadata($series),
-            $this->mockSeriesRunningWorkflowsResponse($series, false),
-            $this->mockEventResponse($series, OpencastWorkflowState::STOPPED)
+            $this->mockHealthResponse(), //health
+            $this->mockSeriesMetadata($series), // seriesInfo
+            $this->mockNoResultsResponse(), //recording
+            $this->mockNoResultsResponse(), //running
+            $this->mockNoResultsResponse(), //scheduled
+            $this->mockNoResultsResponse(), //failed
+            $this->mockNoTrimmingResultsResponse(), //trimming
+            $this->mockNoResultsResponse(), //upcoming
         );
 
         $this->get(route('series.edit', $series))
@@ -349,10 +357,14 @@ class ManageSeriesTest extends TestCase
         $series = SeriesFactory::create();
 
         $this->mockHandler->append(
-            $this->mockHealthResponse(),
-            $this->mockSeriesMetadata($series),
-            $this->mockSeriesRunningWorkflowsResponse($series, false),
-            $this->mockEventResponse($series, OpencastWorkflowState::STOPPED)
+            $this->mockHealthResponse(), //health
+            $this->mockSeriesMetadata($series), // seriesInfo
+            $this->mockNoResultsResponse(), //recording
+            $this->mockNoResultsResponse(), //running
+            $this->mockNoResultsResponse(), //scheduled
+            $this->mockNoResultsResponse(), //failed
+            $this->mockNoTrimmingResultsResponse(), //trimming
+            $this->mockNoResultsResponse(), //upcoming
         );
 
         $this->signInRole(Role::ADMIN);
@@ -366,10 +378,14 @@ class ManageSeriesTest extends TestCase
         $series = SeriesFactory::create();
 
         $this->mockHandler->append(
-            $this->mockHealthResponse(),
-            $this->mockSeriesMetadata($series),
-            $this->mockSeriesRunningWorkflowsResponse($series),
-            $this->mockEventResponse($series, OpencastWorkflowState::STOPPED)
+            $this->mockHealthResponse(), //health
+            $this->mockSeriesMetadata($series), // seriesInfo
+            $this->mockNoResultsResponse(), //recording
+            $this->mockNoResultsResponse(), //running
+            $this->mockNoResultsResponse(), //scheduled
+            $this->mockNoResultsResponse(), //failed
+            $this->mockNoTrimmingResultsResponse(), //trimming
+            $this->mockNoResultsResponse(), //upcoming
         );
 
         $this->signInRole(Role::SUPERADMIN);
@@ -402,12 +418,17 @@ class ManageSeriesTest extends TestCase
     /** @test */
     public function edit_series_should_display_series_image_information(): void
     {
+
         $series = SeriesFactory::ownedBy($this->signInRole($this->role))->create();
         $this->mockHandler->append(
-            $this->mockHealthResponse(),
-            $this->mockSeriesMetadata($series),
-            $this->mockSeriesRunningWorkflowsResponse($series, true),
-            $this->mockEventResponse($series, OpencastWorkflowState::FAILED)
+            $this->mockHealthResponse(), //health
+            $this->mockSeriesMetadata($series), // seriesInfo
+            $this->mockNoResultsResponse(), //recording
+            $this->mockNoResultsResponse(), //running
+            $this->mockNoResultsResponse(), //scheduled
+            $this->mockNoResultsResponse(), //failed
+            $this->mockNoTrimmingResultsResponse(), //trimming
+            $this->mockNoResultsResponse(), //upcoming
         );
 
         $this->get(route('series.edit', $series))
@@ -423,10 +444,14 @@ class ManageSeriesTest extends TestCase
         $series->save();
 
         $this->mockHandler->append(
-            $this->mockHealthResponse(),
-            $this->mockSeriesMetadata($series),
-            $this->mockSeriesRunningWorkflowsResponse($series, true),
-            $this->mockEventResponse($series, OpencastWorkflowState::FAILED)
+            $this->mockHealthResponse(), //health
+            $this->mockSeriesMetadata($series), // seriesInfo
+            $this->mockNoResultsResponse(), //recording
+            $this->mockNoResultsResponse(), //running
+            $this->mockNoResultsResponse(), //scheduled
+            $this->mockNoResultsResponse(), //failed
+            $this->mockNoTrimmingResultsResponse(), //trimming
+            $this->mockNoResultsResponse(), //upcoming
         );
 
         $this->get(route('series.edit', $series))
@@ -436,10 +461,14 @@ class ManageSeriesTest extends TestCase
         $series->save();
 
         $this->mockHandler->append(
-            $this->mockHealthResponse(),
-            $this->mockSeriesMetadata($series),
-            $this->mockSeriesRunningWorkflowsResponse($series, true),
-            $this->mockEventResponse($series, OpencastWorkflowState::FAILED)
+            $this->mockHealthResponse(), //health
+            $this->mockSeriesMetadata($series), // seriesInfo
+            $this->mockNoResultsResponse(), //recording
+            $this->mockNoResultsResponse(), //running
+            $this->mockNoResultsResponse(), //scheduled
+            $this->mockNoResultsResponse(), //failed
+            $this->mockNoTrimmingResultsResponse(), //trimming
+            $this->mockNoResultsResponse(), //upcoming
         );
 
         $this->get(route('series.edit', $series))
@@ -454,10 +483,14 @@ class ManageSeriesTest extends TestCase
         $series->save();
 
         $this->mockHandler->append(
-            $this->mockHealthResponse(),
-            $this->mockSeriesMetadata($series),
-            $this->mockSeriesRunningWorkflowsResponse($series, true),
-            $this->mockEventResponse($series, OpencastWorkflowState::FAILED)
+            $this->mockHealthResponse(), //health
+            $this->mockSeriesMetadata($series), // seriesInfo
+            $this->mockNoResultsResponse(), //recording
+            $this->mockNoResultsResponse(), //running
+            $this->mockNoResultsResponse(), //scheduled
+            $this->mockNoResultsResponse(), //failed
+            $this->mockNoTrimmingResultsResponse(), //trimming
+            $this->mockNoResultsResponse(), //upcoming
         );
 
         $this->get(route('series.edit', $series))
@@ -470,12 +503,15 @@ class ManageSeriesTest extends TestCase
         $series = SeriesFactory::ownedBy($this->signInRole($this->role))->create();
 
         $this->mockHandler->append(
-            $this->mockHealthResponse(),
-            $this->mockSeriesMetadata($series),
-            $this->mockSeriesRunningWorkflowsResponse($series, true),
-            $this->mockEventResponse($series, OpencastWorkflowState::FAILED)
+            $this->mockHealthResponse(), //health
+            $this->mockSeriesMetadata($series), // seriesInfo
+            $this->mockNoResultsResponse(), //recording
+            $this->mockNoResultsResponse(), //running
+            $this->mockNoResultsResponse(), //scheduled
+            $this->mockNoResultsResponse(), //failed
+            $this->mockNoTrimmingResultsResponse(), //trimming
+            $this->mockNoResultsResponse(), //upcoming
         );
-
         $this->get(route('series.edit', $series))
             ->assertViewHas(['opencastSeriesInfo'])
             ->assertSee(User::find(1)->first()->getFullNameAttribute());
@@ -484,13 +520,17 @@ class ManageSeriesTest extends TestCase
     /** @test */
     public function edit_series_should_display_opencast_running_events_if_any(): void
     {
-        $series = SeriesFactory::ownedBy($this->signInRole($this->role))->create();
+        $series = SeriesFactory::ownedBy($this->signInRole($this->role))->withOpencastID()->create();
 
         $this->mockHandler->append(
-            $this->mockHealthResponse(),
-            $this->mockSeriesMetadata($series),
-            $runningWorkflow = $this->mockSeriesRunningWorkflowsResponse($series, true),
-            $this->mockEventResponse($series, OpencastWorkflowState::FAILED)
+            $this->mockHealthResponse(), //health
+            $this->mockSeriesMetadata($series), // seriesInfo
+            $this->mockNoResultsResponse(), //recording
+            $runningWorkflow = $this->mockEventResponse($series, OpencastWorkflowState::RUNNING), //running
+            $this->mockNoResultsResponse(), //scheduled
+            $this->mockNoResultsResponse(), //failed
+            $this->mockNoTrimmingResultsResponse(), //trimming
+            $this->mockNoResultsResponse(), //upcoming
         );
 
         $opencastViewData = collect(json_decode($runningWorkflow->getBody(), true));
@@ -503,24 +543,23 @@ class ManageSeriesTest extends TestCase
     /** @test */
     public function edit_series_should_display_opencast_failed_events_if_any(): void
     {
-        $series = SeriesFactory::ownedBy($this->signInRole($this->role))->create(); //pass an empty opencast response
+        $series = SeriesFactory::ownedBy($this->signInRole($this->role))
+            ->withOpencastID()
+            ->create(); //pass an empty opencast response
 
         $this->mockHandler->append(
-            $this->mockHealthResponse(),
-            $this->mockSeriesMetadata($series),
-            $this->mockSeriesRunningWorkflowsResponse($series, true),
-            $failedWorkflow = $this->mockEventResponse(
-                $series,
-                OpencastWorkflowState::FAILED
-            ),
+            $this->mockHealthResponse(), //health
+            $this->mockSeriesMetadata($series), // seriesInfo
+            $this->mockNoResultsResponse(), //recording
+            $this->mockNoResultsResponse(), //running
+            $this->mockNoResultsResponse(), //scheduled
+            $this->mockEventResponse($series, OpencastWorkflowState::FAILED), //failed
+            $this->mockNoTrimmingResultsResponse(), //trimming
+            $this->mockNoResultsResponse(), //upcoming
         );
-        $this->mockHandler->append($failedWorkflow);
-
-        $failedWorkflowResponse = collect(json_decode($failedWorkflow->getBody(), true));
-
         $this->get(route('series.edit', $series))
             ->assertViewHas(['opencastSeriesInfo'])
-            ->assertSee($failedWorkflowResponse->pluck('title')->first());
+            ->assertSee('Opencast failed events');
     }
 
     /** @test */
@@ -609,14 +648,17 @@ class ManageSeriesTest extends TestCase
     public function it_shows_create_oc_series_button_if_no_series_exist_in_opencast(): void
     {
         $series = SeriesFactory::ownedBy($this->signInRole($this->role))
-            ->withOpencastID()
             ->create();
 
         $this->mockHandler->append(
-            $this->mockHealthResponse(),
-            $this->mockNoResultsResponse(),
-            $this->mockSeriesRunningWorkflowsResponse($series, true),
-            $this->mockEventResponse($series, OpencastWorkflowState::FAILED)
+            $this->mockHealthResponse(), //health
+            $this->mockNoResultsResponse(), // seriesInfo
+            $this->mockNoResultsResponse(), //recording
+            $this->mockNoResultsResponse(), //running
+            $this->mockNoResultsResponse(), //scheduled
+            $this->mockNoResultsResponse(), //failed
+            $this->mockNoTrimmingResultsResponse(), //trimming
+            $this->mockNoResultsResponse(), //upcoming
         );
 
         $this->get(route('series.edit', $series))->assertSee('Create Opencast series for this object');

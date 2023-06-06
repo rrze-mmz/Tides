@@ -42,6 +42,8 @@ class SeriesOpencastControllerTest extends TestCase
     /** @test */
     public function it_allows_create_opencast_series_only_for_portal_admins(): void
     {
+        $mockHandler = $this->swapOpencastClient();
+        $this->opencastService = app(OpencastService::class);
         auth()->logout();
 
         $this->post(route('series.opencast.createSeries', $this->series))->assertRedirectToRoute('login');
@@ -60,16 +62,41 @@ class SeriesOpencastControllerTest extends TestCase
 
         $this->signInRole(Role::ADMIN);
 
+        $mockHandler->append(
+            $this->mockHealthResponse(), //health
+            $this->mockNoResultsResponse(), // seriesInfo
+            $this->mockNoResultsResponse(), //recording
+            $this->mockNoResultsResponse(), //running
+            $this->mockNoResultsResponse(), //scheduled
+            $this->mockNoResultsResponse(), //failed
+            $this->mockNoTrimmingResultsResponse(), //trimming
+            $this->mockNoResultsResponse(), //upcoming
+            $this->mockCreateSeriesResponse(),
+        );
+
         $this->post(route('series.opencast.createSeries', $ownedSeries))->assertRedirect();
     }
 
     /** @test */
     public function it_updates_opencast_series_id_for_the_given_series(): void
     {
+        $mockHandler = $this->swapOpencastClient();
+        $this->opencastService = app(OpencastService::class);
         $oldSeriesId = $this->series->opencast_series_id;
 
         $this->signInRole(Role::ADMIN);
 
+        $mockHandler->append(
+            $this->mockHealthResponse(), //health
+            $this->mockNoResultsResponse(), // seriesInfo
+            $this->mockNoResultsResponse(), //recording
+            $this->mockNoResultsResponse(), //running
+            $this->mockNoResultsResponse(), //scheduled
+            $this->mockNoResultsResponse(), //failed
+            $this->mockNoTrimmingResultsResponse(), //trimming
+            $this->mockNoResultsResponse(), //upcoming
+            $this->mockCreateSeriesResponse(),
+        );
         $this->post(route('series.opencast.createSeries', $this->series));
 
         $this->series->refresh();
@@ -80,6 +107,8 @@ class SeriesOpencastControllerTest extends TestCase
     /** @test */
     public function an_admin_can_update_opencast_acl_for_a_series(): void
     {
+        $mockHandler = $this->swapOpencastClient();
+        $this->opencastService = app(OpencastService::class);
         auth()->logout();
 
         $this->signInRole(Role::MODERATOR);
@@ -88,6 +117,17 @@ class SeriesOpencastControllerTest extends TestCase
 
         auth()->logout();
 
+        $mockHandler->append(
+            $this->mockHealthResponse(), //health
+            $this->mockNoResultsResponse(), // seriesInfo
+            $this->mockNoResultsResponse(), //recording
+            $this->mockNoResultsResponse(), //running
+            $this->mockNoResultsResponse(), //scheduled
+            $this->mockNoResultsResponse(), //failed
+            $this->mockNoTrimmingResultsResponse(), //trimming
+            $this->mockNoResultsResponse(), //upcoming
+            $this->mockCreateSeriesResponse(),
+        );
         $this->signInRole(Role::ADMIN);
 
         $this->post(route('series.opencast.updateSeriesAcl', $this->series))->assertRedirect();
