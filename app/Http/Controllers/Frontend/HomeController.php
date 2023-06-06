@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Clip;
 use App\Models\Series;
+use Illuminate\Contracts\Database\Eloquent\Builder as ContractsBuilder;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\View\View;
 
@@ -19,7 +20,9 @@ class HomeController extends Controller
             'series' => Series::whereHas('clips', function (Builder $query) {
                 $query->has('assets');
             })->isPublic()
-                ->with(['owner', 'presenters', 'clips'])
+                ->with(['owner', 'presenters', 'clips' => function (ContractsBuilder $query) {
+                    $query->whereHas('assets');
+                }])
                 ->withLastPublicClip()
                 ->orderByDesc('updated_at')
                 ->limit(16)

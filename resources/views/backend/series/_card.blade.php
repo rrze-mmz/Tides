@@ -73,7 +73,7 @@
             </div>
         </div>
 
-        @if($seriesAcls = $series->getSeriesACLSUpdated($series))
+        @if($seriesAcls = $series->getSeriesACLSUpdated())
             @if($seriesAcls!== 'public')
                 <div class="flex items-center justify-content-between">
                     <div class="pr-2">
