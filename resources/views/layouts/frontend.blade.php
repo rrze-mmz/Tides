@@ -11,7 +11,7 @@
 
     <!-- Styles -->
     <link rel="icon" href="{{ URL::asset('/css/favicon.ico') }}" type="image/x-icon"/>
-    <link href="{{ mix('css/app.css') }}" rel="stylesheet">
+    @vite('resources/css/app.css')
     @livewireStyles
 </head>
 <body class="h-screen font-sans antialiased leading-none bg-gray-100 ">
@@ -32,7 +32,7 @@
         </div>
     </footer>
 </div>
-<script src="{{ mix('js/app.js') }}" defer></script>
+@vite('resources/js/app.js')
 @livewireScripts
 </body>
 </html>

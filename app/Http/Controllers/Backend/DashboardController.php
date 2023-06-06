@@ -16,7 +16,7 @@ class DashboardController
      */
     public function __invoke(OpencastService $opencastService): Application|Factory|View
     {
-        $opencastEvents = collect([]);
+        $opencastEvents = collect();
 
         //fetch all available opencast events
         if ($opencastService->getHealth()->contains('pass')) {

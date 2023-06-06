@@ -2,6 +2,7 @@
 /laradock
 /public/hot
 /public/storage
+/public/build
 /public/videos
 /public/streamable_videos
 /public/thumbnails

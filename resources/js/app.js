@@ -1,20 +1,22 @@
-require('./bootstrap');
+import 'boot';
 
-import 'select2';
+import jQuery from 'jquery';
 import Alpine from 'alpinejs';
 import Hls from 'hls.js';
-import $ from 'jquery';
 import Pikaday from 'pikaday';
 import * as FilePond from "filepond";
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import 'filepond/dist/filepond.min.css';
+import select2 from 'select2';
 
-window.$ = window.jQuery = $;
-window.Alpine = Alpine
+window.jQuery = window.$ = jQuery;
+window.Alpine = Alpine;
 window.Pikaday = Pikaday;
+window.select2 = select2()
 
-$(() => {
+$('.solution-trix-field-wrapper').find($('trix-editor')).css("min-height", "350px");
 
+document.addEventListener("DOMContentLoaded", function () {
     $('.select2-tides').select2();
 
     $('.select2-tides-clips').select2({
@@ -197,70 +199,76 @@ $(() => {
         if (!state.id) return state.text;
         return state.text
     }
-});
 
-
-$('.solution-trix-field-wrapper').find($('trix-editor')).css("min-height", "350px");
-
-document.addEventListener("DOMContentLoaded", () => {
     const video = document.querySelector("video");
-    const source = video.getElementsByTagName("source")[0].src;
 
-    // For more options see: https://github.com/sampotts/plyr/#options
-    // captions.update is required for captions to work with hls.js
-    const defaultOptions = {};
-
-    if (Hls.isSupported()) {
-        // For more Hls.js options, see https://github.com/dailymotion/hls.js
-        const hls = new Hls();
-        hls.loadSource(source);
-
-        // From the m3u8 playlist, hls parses the manifest and returns
-        // all available video qualities. This is important, in this approach,
-        // we will have one source on the Plyr player.
-        hls.on(Hls.Events.MANIFEST_PARSED, function (event, data) {
-
-            // Transform available levels into an array of integers (height values).
-            const availableQualities = hls.levels.map((l) => l.height)
-            defaultOptions.language = 'de';
-            defaultOptions.iconUrl = '/css/plyr.svg';
-            defaultOptions.loadSripte = false;
-
-            // Add new qualities to option
-            defaultOptions.quality = {
-                default: availableQualities[0],
-                options: availableQualities,
-                // this ensures Plyr to use Hls to update quality level
-                forced: true,
-                onChange: (e) => updateQuality(e),
-            }
-
-
-            // Initialize here
-            const player = new Plyr(video, defaultOptions);
-        });
-        hls.attachMedia(video);
-        window.hls = hls;
+    if (video === null) {
+        console.log("Video element not found");
     } else {
-        // default options with no quality update in case Hls is not supported
-        const player = new Plyr(video, {
-            language: 'de',
-            iconUrl: '/css/plyr.svg',
-            loadSprite: false,
-        });
-    }
+        const source = video.getElementsByTagName("source")[0].src;
 
-    function updateQuality(newQuality) {
-        window.hls.levels.forEach((level, levelIndex) => {
-            if (level.height === newQuality) {
-                console.log("Found quality match with " + newQuality);
-                window.hls.currentLevel = levelIndex;
-            }
-        });
-    }
-});
+        // For more options see: https://github.com/sampotts/plyr/#options
+        // captions.update is required for captions to work with hls.js
+        const defaultOptions = {};
 
-Alpine.start();
+        if (Hls.isSupported()) {
+            // For more Hls.js options, see https://github.com/dailymotion/hls.js
+            const hls = new Hls();
+            hls.loadSource(source);
+
+            // From the m3u8 playlist, hls parses the manifest and returns
+            // all available video qualities. This is important, in this approach,
+            // we will have one source on the Plyr player.
+            hls.on(Hls.Events.MANIFEST_PARSED, function (event, data) {
+
+                // Transform available levels into an array of integers (height values).
+                const availableQualities = hls.levels.map((l) => l.height)
+                defaultOptions.language = 'de';
+                defaultOptions.iconUrl = '/css/plyr.svg';
+                defaultOptions.loadSripte = false;
+
+                // Add new qualities to option
+                defaultOptions.quality = {
+                    default: availableQualities[0],
+                    options: availableQualities,
+                    // this ensures Plyr to use Hls to update quality level
+                    forced: true,
+                    onChange: (e) => updateQuality(e),
+                }
+
+
+                // Initialize here
+                const player = new Plyr(video, defaultOptions);
+            });
+            hls.attachMedia(video);
+            window.hls = hls;
+        } else {
+            // default options with no quality update in case Hls is not supported
+            const player = new Plyr(video, {
+                language: 'de',
+                iconUrl: '/css/plyr.svg',
+                loadSprite: false,
+            });
+        }
+
+        function updateQuality(newQuality) {
+            window.hls.levels.forEach((level, levelIndex) => {
+                if (level.height === newQuality) {
+                    console.log("Found quality match with " + newQuality);
+                    window.hls.currentLevel = levelIndex;
+                }
+            });
+        }
+    }
+}, false);
+
+if (window.deferLoadingAlpine) {
+    window.deferLoadingAlpine(function () {
+        window.Alpine.start()
+    })
+} else {
+    window.Alpine.start()
+}
 
 FilePond.registerPlugin(FilePondPluginImagePreview);
 

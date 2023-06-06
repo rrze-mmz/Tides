@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Enums\OpencastWorkflowState;
 use App\Enums\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreSeriesRequest;
@@ -15,6 +16,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
 class SeriesController extends Controller
@@ -68,19 +70,46 @@ class SeriesController extends Controller
     {
         $this->authorize('edit', $series);
 
-        $opencastSeriesInfo = $opencastService->getSeriesInfo($series);
-        $assistants = User::role(Role::ASSISTANT)->get();
-        //reject all assistants that are already in opencast series acl
-        $availableAssistants = $assistants->reject(function ($admin) use ($opencastSeriesInfo) {
-            if (! empty($opencastSeriesInfo->get('metadata'))) {
-                foreach ($opencastSeriesInfo['metadata']['acl'] as $acl) {
-                    //Opencast return Roles as ROLE_USER_USERNAME, so filter users based on this string
-                    if (Str::contains($acl['role'], Str::of($admin->username)->upper())) {
-                        return true;
+        $opencastSeriesInfo = collect();
+        $opencastEvents = collect();
+        $availableAssistants = collect();
+
+        if ($opencastService->getHealth()->contains('pass')) {
+            $opencastSeriesInfo = $opencastService->getSeriesInfo($series);
+            $opencastEvents = collect();
+            $assistants = User::role(Role::ASSISTANT)->get();
+            //reject all assistants that are already in opencast series acl
+            $availableAssistants = $assistants->reject(function ($admin) use ($opencastSeriesInfo) {
+                if (! empty($opencastSeriesInfo->get('metadata'))) {
+                    foreach ($opencastSeriesInfo['metadata']['acl'] as $acl) {
+                        //Opencast return Roles as ROLE_USER_USERNAME, so filter users based on this string
+                        if (Str::contains($acl['role'], Str::of($admin->username)->upper())) {
+                            return true;
+                        }
                     }
                 }
-            }
-        });
+            });
+            $opencastEvents
+                ->put(
+                    OpencastWorkflowState::RECORDING->lower(),
+                    $opencastService->getEventsByStatus(OpencastWorkflowState::RECORDING, $series)
+                )
+                ->put(
+                    OpencastWorkflowState::RUNNING->lower(),
+                    $opencastService->getEventsByStatus(OpencastWorkflowState::RUNNING, $series)
+                )
+                ->put(
+                    OpencastWorkflowState::SCHEDULED->lower(),
+                    $opencastService->getEventsByStatusAndByDate(OpencastWorkflowState::SCHEDULED, Carbon::now())
+                )
+                ->put(
+                    OpencastWorkflowState::FAILED->lower(),
+                    $opencastService->getEventsByStatus(OpencastWorkflowState::FAILED, $series)
+                )
+                ->put(OpencastWorkflowState::TRIMMING->lower(), $opencastService->getEventsWaitingForTrimming($series))
+                ->put('upcoming', $opencastService->getEventsByStatus(OpencastWorkflowState::SCHEDULED, $series, 30));
+
+        }
 
         $clips = Clip::select('id', 'title', 'slug', 'episode')
             ->where('series_id', $series->id)
@@ -94,7 +123,9 @@ class SeriesController extends Controller
             ->with('acls')
             ->orderBy('episode')->get();
 
-        return view('backend.series.edit', compact(['series', 'clips', 'opencastSeriesInfo', 'availableAssistants']));
+        return view('backend.series.edit', compact([
+            'series', 'clips', 'opencastSeriesInfo', 'opencastEvents', 'availableAssistants',
+        ]));
     }
 
     /**
