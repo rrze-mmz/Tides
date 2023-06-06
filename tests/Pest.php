@@ -6,11 +6,13 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\put;
+use function Pest\Laravel\withoutVite;
 
 uses(
     Tests\TestCase::class,
     RefreshDatabase::class
 )->beforeEach(function () {
+    withoutVite();
     Config::set('logging.channels.single.path', storage_path('logs/laravel.log'));
 })->in('Feature', 'Unit');
 
