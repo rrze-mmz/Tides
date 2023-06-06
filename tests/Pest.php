@@ -16,7 +16,7 @@ uses(
     Config::set('logging.channels.single.path', storage_path('logs/laravel.log'));
 })->in('Feature', 'Unit');
 
-expect()->extend('toBeOne', function () {
+expect()->extend('toBeOn1e', function () {
     return $this->toBe(1);
 });
 
