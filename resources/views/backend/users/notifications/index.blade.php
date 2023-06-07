@@ -2,7 +2,7 @@
 @extends('layouts.backend')
 
 @section('content')
-    <div class="flex pb-2 font-semibold border-b border-black text-2xl">
+    <div class="flex border-b border-black pb-2 text-2xl font-semibold">
         Notifications
     </div>
 
@@ -10,38 +10,38 @@
         <form action="{{ route('user.notifications.delete') }}" method="POST">
             @csrf
             @method('DELETE')
-            <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg mt-4">
+            <div class="mt-4 overflow-hidden border-b border-gray-200 shadow sm:rounded-lg">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead>
                     <tr>
-                        <th class="px-6 py-3 text-left ">
+                        <th class="px-6 py-3 text-left">
                             <div class="flex items-center">
-                                <x-heroicon-o-trash class="w-6 h-6"/>
+                                <x-heroicon-o-trash class="h-6 w-6"/>
                             </div>
                         </th>
-                        <th class="px-6 py-3 text-left ">
+                        <th class="px-6 py-3 text-left">
                             <div class="flex items-center">
                                 Notification type
                             </div>
                         </th>
-                        <th class="px-6 py-3 text-left ">
+                        <th class="px-6 py-3 text-left">
                             <div class="flex items-center">
                                 Description
                             </div>
                         </th>
-                        <th class="px-6 py-3 text-left ">
+                        <th class="px-6 py-3 text-left">
                             <div class="flex items-center">
                                 Status
                             </div>
                         </th>
-                        <th class="px-6 py-3 text-left ">
+                        <th class="px-6 py-3 text-left">
                             <div class="flex items-center">
                                 Actions
                             </div>
                         </th>
                     </tr>
                     </thead>
-                    <tbody class="bg-white divide-y  divide-gray-200">
+                    <tbody class="bg-white divide-y divide-gray-200">
                     @forelse(auth()->user()->notifications as $notification)
                         <tr class="@if(is_null($notification->read_at)) font-bold @endif ">
                             <td class="w-1/12 px-6 py-4 whitespace-no-wrap">
@@ -58,11 +58,11 @@
                                 Requested from {{ $notification->data['username_applied_for_admin_portal'] }}
                             </td>
                             <td class="w-3/12 px-6 py-4 whitespace-no-wrap">
-                                <div class="flex flex-col items-left py-1">
+                                <div class="flex flex-col py-1 items-left">
                                     @if($notification->data['application_status'] === ApplicationStatus::COMPLETED())
                                         <div
                                             class="text-green-500">{{ $notification->data['application_status'] }}</div>
-                                        <div class="pl-2 pt-2">[Application processed by {{
+                                        <div class="pt-2 pl-2">[Application processed by {{
                                             User::search($notification->data['application_status_processed_by'])
                                                 ->first()
                                                 ->getFullNameAttribute()
@@ -126,7 +126,7 @@
         </form>
     @else
         <div class="flex justify-center text-center">
-            <div class="w-full shadow overflow-hidden border-b border-gray-200 sm:rounded-lg mt-4 text-xl p-4">
+            <div class="mt-4 w-full overflow-hidden border-b border-gray-200 p-4 text-xl shadow sm:rounded-lg">
                 You have no notifications
             </div>
         </div>

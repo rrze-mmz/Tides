@@ -1,7 +1,7 @@
 @extends('layouts.backend')
 
 @section('content')
-    <div class="flex pb-2 font-semibold border-b border-black font-2xl">
+    <div class="flex border-b border-black pb-2 font-semibold font-2xl">
         {{ __('dashboard.welcome to personal dashboard', ['fullName' => auth()->user()->getFullNameAttribute() ]) }}
         !
     </div>
@@ -17,7 +17,7 @@
             </p>
         </div>
         <div>
-            <p class="pt-2 mt-4">
+            <p class="mt-4 pt-2">
                 <span class="mr-2">{{ __('dashboard.start creating a new clip') }}</span>
                 <a href="{{route('clips.create')}}">
                     <x-button class="bg-blue-600 hover:bg-blue-700">
@@ -39,7 +39,7 @@
         </div>
 
         @if(count($files) > 0 )
-            <div class="pl-2 w-1/3">
+            <div class="w-1/3 pl-2">
                 @include('backend.dashboard._dropzone-files')
             </div>
         @endif

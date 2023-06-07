@@ -5,14 +5,14 @@
      x-on:click.away="show = false"
      style="display:none"
 >
-    <div class=" absolute bg-white shadow-md p-4 max-w-lg h-64  m-auto rounded-md  inset-0">
-        <div class="flex flex-col h-full justify-between">
+    <div class="absolute inset-0 m-auto h-64 max-w-lg rounded-md bg-white p-4 shadow-md">
+        <div class="flex h-full flex-col justify-between">
             <header class="flex justify-center">
-                <h3 class="font-bold text-lg text-center">
+                <h3 class="text-center text-lg font-bold">
                     {{ $title }}
                 </h3>
             </header>
-            <main class=" flex justify-center mb-4 ">
+            <main class="mb-4 flex justify-center">
                 {{ $body }}
             </main>
             <footer class="flex justify-center">

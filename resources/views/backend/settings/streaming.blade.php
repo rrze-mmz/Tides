@@ -1,13 +1,13 @@
 @extends('layouts.backend')
 
 @section('content')
-    <div class="flex pb-2 font-semibold border-b border-black text-2xl">
+    <div class="flex border-b border-black pb-2 text-2xl font-semibold">
         Streaming settings
     </div>
-    <div class="flex py-2 px-2">
+    <div class="flex px-2 py-2">
         <form action="{{ route('settings.streaming.update') }}"
               method="POST"
-              class="w-4/5 ">
+              class="w-4/5">
             @csrf
             @method('PUT')
 
@@ -35,7 +35,7 @@
                           label="Digest password"
                           :fullCol="true"
                           :required="true"/>
-            <div class="py-4 pb-2 border-b-2 border-black text-xl mb-5">
+            <div class="mb-5 border-b-2 border-black py-4 pb-2 text-xl">
                 App Settings
             </div>
             <x-form.input field-name="content_path"

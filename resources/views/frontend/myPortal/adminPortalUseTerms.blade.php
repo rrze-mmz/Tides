@@ -2,20 +2,20 @@
 
 @section('content')
     <main class="container mx-auto mt-6 md:mt-12">
-        <div class="flex flex-col justify-center content-center items-center place-content-center">
+        <div class="flex flex-col place-content-center content-center items-center justify-center">
             <h2 class="text-2xl font-bold">{{__('myPortal.adminPortalUseTerms.Access to admin Portal')}}</h2>
         </div>
 
         <form action="{{ route('frontend.admin.portal.accept.use.terms') }}" method="POST">
             @csrf
             @method('PUT')
-            <div class="flex flex-col pt-10 ">
-                <div class="italic text-2xl">
+            <div class="flex flex-col pt-10">
+                <div class="text-2xl italic">
                     {{{ __('myPortal.adminPortalUseTerms.Admin portal use terms') }}}
                 </div>
 
-                <div class="pt-10 flex items-center">
-                    <input name="accept_use_terms" type="checkbox" class="appearance-none checked:bg-blue-500 "/>
+                <div class="flex items-center pt-10">
+                    <input name="accept_use_terms" type="checkbox" class="appearance-none checked:bg-blue-500"/>
                     <label for="accept_use_terms" class="pl-4 font-bold">
                         {{ __('myPortal.adminPortalUseTerms.accept checkbox') }}
                     </label>

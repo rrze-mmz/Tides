@@ -2,8 +2,8 @@
 @extends('layouts.backend')
 
 @section('content')
-    <div class="flex-row  w-full pb-2 border-b border-black font-2xl">
-        <div class="flex justify-between items-center  w-full">
+    <div class="w-full flex-row border-b border-black pb-2 font-2xl">
+        <div class="flex w-full items-center justify-between">
             <div class="">
                 <span class="text-2xl"> [ ID: {{ $clip->id }} ] {{ $clip->title }}</span>
             </div>
@@ -23,7 +23,7 @@
                 @endif
             </div>
         </div>
-        <div class="flex font-light text-sm italic pt-2">
+        <div class="flex pt-2 text-sm font-light italic">
             <span
                 class="pl-2"> created
                 @if(!is_null($clip->owner_id))
@@ -32,7 +32,7 @@
                 at {{$clip->created_at}}</span>
         </div>
     </div>
-    <div class="flex py-2 px-2">
+    <div class="flex px-2 py-2">
         <form action="{{ route('clips.update', $clip) }}"
               method="POST"
               class="w-4/5"
@@ -79,7 +79,7 @@
                                        :selectedItem="$clip->lanugage_id"
                 />
 
-                <div class="border-solid   border-b-black border-b mb-2 pb-2 font-bold text-left text-xl">
+                <div class="mb-2 border-b border-solid border-b-black pb-2 text-left text-xl font-bold">
                     Metadata
                 </div>
 
@@ -149,7 +149,7 @@
                            text="Save"/>
         </form>
 
-        <div class="space-y-5 w-1/5 h-full pr-4">
+        <div class="h-full w-1/5 pr-4 space-y-5">
             @if(! is_null($clip->series_id) )
                 @include('backend.clips.sidebar._series-options')
             @else
@@ -171,7 +171,7 @@
         </div>
     </div>
 
-    <div class="flex pt-8 pb-2 font-semibold border-b border-black font-2xl">
+    <div class="flex border-b border-black pt-8 pb-2 font-semibold font-2xl">
         More actions
     </div>
     <div class="flex items-center pt-3 space-x-6">
@@ -216,7 +216,7 @@
 
     <div x-show="activeTab === 4" id="comments">
         <div class="flex flex-col pt-10">
-            <h2 class="text-2xl font-semibold pb-2 border-b-2 border-black">
+            <h2 class="border-b-2 border-black pb-2 text-2xl font-semibold">
                 Backend {{ __('clip.frontend.comments') }}
             </h2>
             <livewire:comments-section :model="$clip" :type="'backend'"/>

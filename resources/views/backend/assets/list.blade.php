@@ -1,25 +1,25 @@
-<div class="flex pt-8 pb-2 font-semibold border-b border-black text-lg">
+<div class="flex border-b border-black pt-8 pb-2 text-lg font-semibold">
     Assets
 </div>
 <div class="flex">
-    <ul class="pt-3 w-full">
-        <li class="flex content-center items-center text-center p-5 mb-4 bg-gray-400 rounded">
-            <div class="pb-2 w-4/12 border-b border-black w-full ">Saved path</div>
-            <div class="pb-2 w-2/12 border-b border-black w-full ">File Name</div>
-            <div class="pb-2 w-2/12 border-b border-black w-full">Duration</div>
-            <div class="pb-2 w-2/12 border-b border-black w-full">Resolution</div>
-            <div class="pb-2 w-2/12 border-b border-black w-full">Actions</div>
+    <ul class="w-full pt-3">
+        <li class="mb-4 flex content-center items-center rounded bg-gray-400 p-5 text-center">
+            <div class="w-4/12 w-full border-b border-black pb-2">Saved path</div>
+            <div class="w-2/12 w-full border-b border-black pb-2">File Name</div>
+            <div class="w-2/12 w-full border-b border-black pb-2">Duration</div>
+            <div class="w-2/12 w-full border-b border-black pb-2">Resolution</div>
+            <div class="w-2/12 w-full border-b border-black pb-2">Actions</div>
         </li>
 
         @forelse($assets->sortByDesc('height') as $asset)
-            <li class="flex content-center text-sm items-center text-center p-2 mb-4 bg-gray-200 rounded">
-                <div class="w-4/12 w-full ">
+            <li class="mb-4 flex content-center items-center rounded bg-gray-200 p-2 text-center text-sm">
+                <div class="w-4/12 w-full">
                     <div class="whitespace-normal">{{ $asset->path }}</div>
                 </div>
-                <div class="w-2/12 w-full "> {{ $asset->original_file_name }}</div>
+                <div class="w-2/12 w-full"> {{ $asset->original_file_name }}</div>
                 <div class="w-2/12 w-full"> {{ $asset->durationToHours() }}</div>
                 <div class="w-2/12 w-full"> {{ $asset->width }} x {{ $asset->height }}</div>
-                <div class="w-2/12 w-full flex items-center align-items-center space-x-1">
+                <div class="flex w-2/12 w-full items-center align-items-center space-x-1">
                     <x-form.button :link="route('assets.download',$asset)" type="submit" text="Download"/>
                     <form method="POST"
                           action="{{$asset->path() }}"

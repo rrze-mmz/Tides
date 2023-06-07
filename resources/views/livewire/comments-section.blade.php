@@ -3,7 +3,7 @@
         :messageText="$messageText"
         :messageType="$messageType"/>
 
-    <form wire:submit.prevent="postComment" action="#" method="POST" class="w-1/2 my-12">
+    <form wire:submit.prevent="postComment" action="#" method="POST" class="my-12 w-1/2">
         @csrf
         <div class="flex">
             <img class="h-10 w-10 rounded-full" src="{{ URL::asset('/images/none.jpg') }}" alt="avatar">
@@ -13,11 +13,11 @@
                           id="content"
                           rows="4"
                           placeholder="Type your comment here..."
-                          class="border rounded-md shadow w-full px-4 py-2"
+                          class="w-full rounded-md border px-4 py-2 shadow"
                 ></textarea>
 
                 @error('content')
-                <p class="text-red-500 mt-1">{{ $message }}</p>
+                <p class="mt-1 text-red-500">{{ $message }}</p>
                 @enderror
 
                 <button type="submit"
@@ -26,7 +26,7 @@
                                 focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition
                                  ease-in-out duration-150 mt-2 disabled:opacity-50">
                     <svg wire:loading wire:target="postComment"
-                         class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                         class="mr-3 -ml-1 h-5 w-5 animate-spin text-white"
                          xmlns="http://www.w3.org/2000/svg"
                          fill="none"
                          viewBox="0 0 24 24"
@@ -54,21 +54,21 @@
     <div wire:poll.30s="fetchComments">
         @if($comments->count() > 0)
             @foreach ($comments->sortDesc() as $comment)
-                <div class="flex justify-between my-10">
-                    <img class="flex-none h-10 w-10 rounded-full"
+                <div class="my-10 flex justify-between">
+                    <img class="h-10 w-10 flex-none rounded-full"
                          src="{{ URL::asset('/images/none.jpg') }}"
                          alt="avatar">
                     <div class="ml-4 flex-grow">
                         <div class="flex items-center">
                             <div class="font-semibold">{{ $comment->owner->getFullNameAttribute() }}</div>
-                            <div class="text-gray-500 ml-2">{{ $comment->created_at->diffForHumans() }}</div>
+                            <div class="ml-2 text-gray-500">{{ $comment->created_at->diffForHumans() }}</div>
                         </div>
                         <div class="flex flex-col">
-                            <div class="text-gray-700 mt-2 w-full ">{{ $comment->content }}</div>
+                            <div class="mt-2 w-full text-gray-700">{{ $comment->content }}</div>
                             @can('delete-comment', $comment)
                                 <div class="flex">
                                     <a href="#comments-section"
-                                       class="pt-2 underline text-red-800 hover:text-red-700"
+                                       class="pt-2 text-red-800 underline hover:text-red-700"
                                        wire:click="deleteComment({{ $comment }})">
                                         <span>Delete</span>
                                     </a>

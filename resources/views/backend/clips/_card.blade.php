@@ -1,10 +1,10 @@
 @php use App\Enums\Acl; @endphp
-<div class="flex my-2 w-full bg-white rounded-2xl">
-    <div class="flex justify-center justify-items-center  place-items-center mx-2 w-48 h-full">
+<div class="my-2 flex w-full rounded-2xl bg-white">
+    <div class="mx-2 flex h-full w-48 place-items-center justify-center justify-items-center">
         <img src="{{ fetchClipPoster($clip->latestAsset?->player_preview) }}" alt="preview image">
     </div>
 
-    <div class="flex flex-col justify-between p-4 w-full bg-white">
+    <div class="flex w-full flex-col justify-between bg-white p-4">
         <div class="mb-1">
             <div class="text-sm font-bold text-gray-900">
                 <a href="@if (str_contains(url()->current(), 'admin')) {{$clip->adminPath()}}
@@ -25,7 +25,7 @@
         </div>
         <div class="flex items-center justify-content-between">
             <div class="pr-2">
-                <x-heroicon-o-clock class="w-4 h-4"/>
+                <x-heroicon-o-clock class="h-4 w-4"/>
             </div>
             <div class="text-sm">
                 <p class="italic text-gray-900">
@@ -37,7 +37,7 @@
         @if($clip->presenters->count() > 0)
             <div class="flex items-center pt-2 justify-content-between">
                 <div class="pr-2">
-                    <x-heroicon-o-user-group class="w-4 h-4"/>
+                    <x-heroicon-o-user-group class="h-4 w-4"/>
                 </div>
                 <div class="text-sm">
                     <p class="italic text-gray-900">
@@ -53,7 +53,7 @@
         @if($clip->owner)
             <div class="flex items-center pt-2 justify-content-between">
                 <div class="pr-2">
-                    <x-heroicon-o-user class="w-4 h-4"/>
+                    <x-heroicon-o-user class="h-4 w-4"/>
                 </div>
                 <div class="text-sm">
                     <p class="italic text-gray-900">
@@ -68,10 +68,10 @@
                 <div class="pr-2">
                     @if(!$clip->acls->contains(Acl::PUBLIC))
                         @can('watch-video', $clip)
-                            <x-heroicon-o-lock-open class="w-4 h-4 text-green-500"/>
+                            <x-heroicon-o-lock-open class="h-4 w-4 text-green-500"/>
                             <span class="sr-only">Unlock clip</span>
                         @else
-                            <x-heroicon-o-lock-closed class="w-4 h-4 text-red-700"/>
+                            <x-heroicon-o-lock-closed class="h-4 w-4 text-red-700"/>
                             <span class="sr-only">Lock clip</span>
                         @endcan
                     @endif

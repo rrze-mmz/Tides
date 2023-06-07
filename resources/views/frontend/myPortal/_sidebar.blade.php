@@ -1,7 +1,7 @@
 @php use App\Enums\Role; @endphp
 <aside class="w-64"
        aria-label="Sidebar">
-    <div class="overflow-y-auto py-4 px-3 bg-gray-50 rounded dark:bg-gray-800 text-white">
+    <div class="overflow-y-auto rounded bg-gray-50 px-3 py-4 text-white dark:bg-gray-800">
         <ul class="space-y-2">
             <li>
                 <a href="{{ route('frontend.userSettings.edit') }}"
@@ -11,7 +11,7 @@
                                     duration-75 dark:text-gray-400
                                     group-hover:text-gray-900 dark:group-hover:text-white"
                     />
-                    <span class="flex-1 ml-3 whitespace-nowrap">
+                    <span class="ml-3 flex-1 whitespace-nowrap">
                                         {{ __('myPortal._sidebar_menu.Portal settings') }}
                                     </span>
                 </a>
@@ -36,7 +36,7 @@
                     <x-heroicon-o-chat class="flex-shrink-0 w-6 h-6 text-gray-500 transition
                                     duration-75 dark:text-gray-400 group-hover:text-gray-900
                                     dark:group-hover:text-white"/>
-                    <span class="flex-1 ml-3 whitespace-nowrap">
+                    <span class="ml-3 flex-1 whitespace-nowrap">
                             {{ __('myPortal._sidebar_menu.Comments') }}
                         </span>
                     <span

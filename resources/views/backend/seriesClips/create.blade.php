@@ -1,10 +1,10 @@
 @extends('layouts.backend')
 
 @section('content')
-    <div class="flex pb-2 font-semibold border-b border-black text-2xl">
+    <div class="flex border-b border-black pb-2 text-2xl font-semibold">
         Add clip to {{ $series->title }}
     </div>
-    <div class="flex py-4 px-2 ">
+    <div class="flex px-2 py-4">
         <form action="{{route('series.clips.store', $series)}}"
               method="POST"
               class="w-4/5">
@@ -53,7 +53,7 @@
                                        :selectedItem="1"
                 />
 
-                <div class="border-solid   border-b-black border-b mb-2 pb-2 font-bold text-left text-xl">
+                <div class="mb-2 border-b border-solid border-b-black pb-2 text-left text-xl font-bold">
                     Metadata
                 </div>
 
@@ -99,7 +99,7 @@
                                          :items="[]"
                 />
 
-                <div class="border-solid   border-b-black border-b mb-2 pb-2 font-bold text-left text-xl">
+                <div class="mb-2 border-b border-solid border-b-black pb-2 text-left text-xl font-bold">
                     Access
                 </div>
 
@@ -126,7 +126,7 @@
                 />
 
             </div>
-            <div class="pt-10 ">
+            <div class="pt-10">
                 <x-form.button :link="$link=false" type="submit" text="Add a Clip to Series"/>
             </div>
         </form>

@@ -5,7 +5,7 @@
 @endsection
 
 @section('myPortalContent')
-    <div class="grid grid-cols-3 gap-4 mr-6">
+    <div class="mr-6 grid grid-cols-3 gap-4">
         @forelse($series as $single)
             @include('backend.series._card',[
                     'series'=> $single,

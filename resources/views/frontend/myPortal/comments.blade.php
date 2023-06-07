@@ -6,23 +6,23 @@
 
 @section('myPortalContent')
     @foreach ($comments->sortDesc() as $comment)
-        <div class="font-extrabold border-b-2 border-black">
+        <div class="border-b-2 border-black font-extrabold">
             For {{ str($comment->commentable_type)->ucfirst() }} : {{ $comment->commentable->title }}
         </div>
-        <div class="flex justify-between my-10">
-            <img class="flex-none h-10 w-10 rounded-full"
+        <div class="my-10 flex justify-between">
+            <img class="h-10 w-10 flex-none rounded-full"
                  src="{{ URL::asset('/images/none.jpg') }}"
                  alt="avatar">
             <div class="ml-4 flex-grow">
                 <div class="flex items-center">
                     <div class="font-semibold"> You</div>
-                    <div class="text-gray-500 ml-2">{{ $comment->created_at->diffForHumans() }}</div>
+                    <div class="ml-2 text-gray-500">{{ $comment->created_at->diffForHumans() }}</div>
                 </div>
                 <div class="flex flex-col">
-                    <div class="text-gray-700 mt-2 w-full ">{{ $comment->content }}</div>
+                    <div class="mt-2 w-full text-gray-700">{{ $comment->content }}</div>
                     <div class="flex">
                         <a href="{{ route('frontend.'.str($comment->commentable_type)->plural().'.show',$comment->commentable) }}"
-                           class="pt-2 underline text-red-800 hover:text-red-700">
+                           class="pt-2 text-red-800 underline hover:text-red-700">
                             <span>Go to {{ $comment->commentable_type }} </span>
                         </a>
                     </div>

@@ -16,25 +16,25 @@
 </head>
 <body id="app">
 <div class="flex bg-gray-100">
-    <aside class="relative bg-sidebar h-screen w-1/12 hidden sm:block shadow-xl">
+    <aside class="relative hidden h-screen w-1/12 shadow-xl bg-sidebar sm:block">
         <div class="p-6 text-center align-center">
             <a href="{{route('home')}}"
-               class="text-white text-3xl font-semibold hover:text-gray-300">
+               class="text-3xl font-semibold text-white hover:text-gray-300">
                 {{ config('app.name', 'Laravel') }}
             </a>
         </div>
-        <nav class="text-white text-base font-semibold pt-3">
+        <nav class="pt-3 text-base font-semibold text-white">
             @include('backend.dashboard._sidebar-navigation')
         </nav>
         <a href="#"
-           class="absolute w-full upgrade-btn bottom-0 active-nav-link text-white flex items-center justify-center py-4">
-            <x-heroicon-o-chevron-double-left class="w-6 h-6"/>
+           class="absolute bottom-0 flex w-full items-center justify-center py-4 text-white upgrade-btn active-nav-link">
+            <x-heroicon-o-chevron-double-left class="h-6 w-6"/>
         </a>
     </aside>
 
-    <div class="relative w-full flex flex-col h-screen overflow-y-hidden">
+    <div class="relative flex h-screen w-full flex-col overflow-y-hidden">
         <!-- Desktop Header -->
-        <header class="flex w-full justify-end items-center bg-white px-6 hidden sm:flex">
+        <header class="flex hidden w-full items-center justify-end bg-white px-6 sm:flex">
             <div class="w-1/2">
                 @include('backend.search._searchbar')
             </div>
@@ -45,20 +45,20 @@
                 </button>
                 <button x-show="isOpen"
                         @click="isOpen = false"
-                        class="h-full w-full fixed inset-0 cursor-default">
+                        class="fixed inset-0 h-full w-full cursor-default">
                 </button>
                 <div x-show="isOpen"
-                     class="absolute w-48 bg-white  items-center align-middle rounded-lg shadow-lg py-2 mt-16">
-                    <a href="#" class="block px-4 py-2  hover:text-gray-400">Settings</a>
-                    <a href="{{ route('user.notifications') }}" class="block px-4 py-2  hover:text-gray-400">
+                     class="absolute mt-16 w-48 items-center rounded-lg bg-white py-2 align-middle shadow-lg">
+                    <a href="#" class="block px-4 py-2 hover:text-gray-400">Settings</a>
+                    <a href="{{ route('user.notifications') }}" class="block px-4 py-2 hover:text-gray-400">
                         Notifications
                         @if (($counter = auth()->user()->unreadNotifications->count()) > 0)
                             <span
-                                class="rounded-full  p-1.5 ml-1 bg-white text-green-700 text-sm"> {{ $counter }}</span>
+                                class="ml-1 rounded-full bg-white text-sm text-green-700 p-1.5"> {{ $counter }}</span>
                         @endif
                     </a>
                     <a href="{{ route('logout') }}"
-                       class="block px-4 py-2  hover:text-gray-400"
+                       class="block px-4 py-2 hover:text-gray-400"
                        onclick="event.preventDefault();
                     document.getElementById('logout-form').submit();">{{ __('auth.Logout') }}</a>
                     <form id="logout-form"
@@ -72,16 +72,16 @@
         </header>
 
         <!-- Mobile Header & Nav -->
-        <header x-data="{ isOpen: false }" class="w-full bg-sidebar py-5 px-6 sm:hidden">
+        <header x-data="{ isOpen: false }" class="w-full px-6 py-5 bg-sidebar sm:hidden">
             {{--            <div class="flex items-center justify-between">--}}
-            {{--                <a href="index.html" class="text-white text-3xl font-semibold uppercase hover:text-gray-300">Admin</a>--}}
-            {{--                <button @click="isOpen = !isOpen" class="text-white text-3xl focus:outline-none">--}}
+            {{--                <a href="index.html" class="text-3xl font-semibold uppercase text-white hover:text-gray-300">Admin</a>--}}
+            {{--                <button @click="isOpen = !isOpen" class="text-3xl text-white focus:outline-none">--}}
             {{--                    <svg xmlns="http://www.w3.org/2000/svg"--}}
             {{--                         fill="none"--}}
             {{--                         viewBox="0 0 24 24"--}}
             {{--                         stroke-width="1.5"--}}
             {{--                         stroke="currentColor"--}}
-            {{--                         class="w-6 h-6"--}}
+            {{--                         class="h-6 w-6"--}}
             {{--                         x-show="!isOpen">--}}
             {{--                        <path stroke-linecap="round" stroke-linejoin="round"--}}
             {{--                              d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>--}}
@@ -92,60 +92,60 @@
 
             {{--            <!-- Dropdown Nav -->--}}
             {{--            <nav :class="isOpen ? 'flex': 'hidden'" class="flex flex-col pt-4">--}}
-            {{--                <a href="index.html" class="flex items-center active-nav-link text-white py-2 pl-4 nav-item">--}}
-            {{--                    <i class="fas fa-tachometer-alt mr-3"></i>--}}
+            {{--                <a href="index.html" class="flex items-center py-2 pl-4 text-white active-nav-link nav-item">--}}
+            {{--                    <i class="mr-3 fas fa-tachometer-alt"></i>--}}
             {{--                    Dashboard--}}
             {{--                </a>--}}
             {{--                <a href="blank.html"--}}
-            {{--                   class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">--}}
-            {{--                    <i class="fas fa-sticky-note mr-3"></i>--}}
+            {{--                   class="flex items-center py-2 pl-4 text-white opacity-75 nav-item hover:opacity-100">--}}
+            {{--                    <i class="mr-3 fas fa-sticky-note"></i>--}}
             {{--                    Blank Page--}}
             {{--                </a>--}}
             {{--                <a href="tables.html"--}}
-            {{--                   class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">--}}
-            {{--                    <i class="fas fa-table mr-3"></i>--}}
+            {{--                   class="flex items-center py-2 pl-4 text-white opacity-75 nav-item hover:opacity-100">--}}
+            {{--                    <i class="mr-3 fas fa-table"></i>--}}
             {{--                    Tables--}}
             {{--                </a>--}}
             {{--                <a href="forms.html"--}}
-            {{--                   class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">--}}
-            {{--                    <i class="fas fa-align-left mr-3"></i>--}}
+            {{--                   class="flex items-center py-2 pl-4 text-white opacity-75 nav-item hover:opacity-100">--}}
+            {{--                    <i class="mr-3 fas fa-align-left"></i>--}}
             {{--                    Forms--}}
             {{--                </a>--}}
             {{--                <a href="tabs.html"--}}
-            {{--                   class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">--}}
-            {{--                    <i class="fas fa-tablet-alt mr-3"></i>--}}
+            {{--                   class="flex items-center py-2 pl-4 text-white opacity-75 nav-item hover:opacity-100">--}}
+            {{--                    <i class="mr-3 fas fa-tablet-alt"></i>--}}
             {{--                    Tabbed Content--}}
             {{--                </a>--}}
             {{--                <a href="calendar.html"--}}
-            {{--                   class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">--}}
-            {{--                    <i class="fas fa-calendar mr-3"></i>--}}
+            {{--                   class="flex items-center py-2 pl-4 text-white opacity-75 nav-item hover:opacity-100">--}}
+            {{--                    <i class="mr-3 fas fa-calendar"></i>--}}
             {{--                    Calendar--}}
             {{--                </a>--}}
-            {{--                <a href="#" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">--}}
-            {{--                    <i class="fas fa-cogs mr-3"></i>--}}
+            {{--                <a href="#" class="flex items-center py-2 pl-4 text-white opacity-75 nav-item hover:opacity-100">--}}
+            {{--                    <i class="mr-3 fas fa-cogs"></i>--}}
             {{--                    Support--}}
             {{--                </a>--}}
-            {{--                <a href="#" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">--}}
-            {{--                    <i class="fas fa-user mr-3"></i>--}}
+            {{--                <a href="#" class="flex items-center py-2 pl-4 text-white opacity-75 nav-item hover:opacity-100">--}}
+            {{--                    <i class="mr-3 fas fa-user"></i>--}}
             {{--                    My Account--}}
             {{--                </a>--}}
-            {{--                <a href="#" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">--}}
-            {{--                    <i class="fas fa-sign-out-alt mr-3"></i>--}}
+            {{--                <a href="#" class="flex items-center py-2 pl-4 text-white opacity-75 nav-item hover:opacity-100">--}}
+            {{--                    <i class="mr-3 fas fa-sign-out-alt"></i>--}}
             {{--                    Sign Out--}}
             {{--                </a>--}}
             {{--                <button--}}
-            {{--                    class="w-full bg-white cta-btn font-semibold py-2 mt-3 rounded-lg shadow-lg hover:shadow-xl hover:bg-gray-300 flex items-center justify-center">--}}
-            {{--                    <i class="fas fa-arrow-circle-up mr-3"></i> Upgrade to Pro!--}}
+            {{--                    class="mt-3 flex w-full items-center justify-center rounded-lg bg-white py-2 font-semibold shadow-lg cta-btn hover:bg-gray-300 hover:shadow-xl">--}}
+            {{--                    <i class="mr-3 fas fa-arrow-circle-up"></i> Upgrade to Pro!--}}
             {{--                </button>--}}
             {{--            </nav>--}}
-            <!-- <button class="w-full bg-white cta-btn font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-300 flex items-center justify-center">
-                <i class="fas fa-plus mr-3"></i> New Report
+            <!-- <button class="mt-5 flex w-full items-center justify-center rounded-tr-lg rounded-br-lg rounded-bl-lg bg-white py-2 font-semibold shadow-lg cta-btn hover:bg-gray-300 hover:shadow-xl">
+                <i class="mr-3 fas fa-plus"></i> New Report
             </button> -->
         </header>
 
-        <div class="w-full h-screen overflow-x-hidden border-t flex flex-col">
-            <main class="w-full flex-grow py-2 px-3 font-light">
-                <div class="text-3xl text-black pb-6">
+        <div class="flex h-screen w-full flex-col overflow-x-hidden border-t">
+            <main class="w-full flex-grow px-3 py-2 font-light">
+                <div class="pb-6 text-3xl text-black">
                     @if(Session::has('flashMessage'))
                         <x-alerts.flash-alert :message="Session::get('flashMessage', 'default')"/>
                     @endif
@@ -154,7 +154,7 @@
                     @yield('content')
                 </div>
             </main>
-            <footer class="w-full bg-white text-center p-4">
+            <footer class="w-full bg-white p-4 text-center">
                 Copyright @ {{ Illuminate\Support\Carbon::now()->year }} MIT Licence
             </footer>
         </div>

@@ -189,7 +189,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function format(state) {
         if (!state.id) return state.text; // optgroup
         return '<div class="flex items-center"><div>' +
-            '<img src="/images/' + state.text + '" class="pr-2 w-20 h-auto  mx-auto" />' +
+            '<img src="/images/' + state.text + '" class="mx-auto h-auto w-20 pr-2" />' +
             '</div>' +
             '<div>' + state.text.slice(0, 15) + '</div>' +
             '</div>';

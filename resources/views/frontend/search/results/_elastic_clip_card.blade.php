@@ -1,10 +1,10 @@
-<div class="flex my-2 w-full bg-white">
-    <div class="flex justify-center justify-items-center  place-items-center mx-2 w-48 h-full">
+<div class="my-2 flex w-full bg-white">
+    <div class="mx-2 flex h-full w-48 place-items-center justify-center justify-items-center">
         <img src="{{ 'thumbnails/'.$clip->get('posterImage') }}"
              alt="preview image">
     </div>
 
-    <div class="flex flex-col justify-between p-4 w-full bg-white">
+    <div class="flex w-full flex-col justify-between bg-white p-4">
         <div class="mb-1">
             <div class="text-sm font-bold text-gray-900">
                 <a href="/clips/{{$clip->get('slug')}}"
@@ -17,7 +17,7 @@
         </div>
         <div class="flex items-center justify-content-between">
             <div class="pr-2">
-                <svg class="w-4 h-4"
+                <svg class="h-4 w-4"
                      fill="none"
                      stroke="currentColor"
                      viewBox="0 0 24 24"
@@ -39,7 +39,7 @@
 
         <div class="flex items-center pt-2 justify-content-between">
             <div class="pr-2">
-                <svg class="w-4 h-4"
+                <svg class="h-4 w-4"
                      fill="none"
                      stroke="currentColor"
                      viewBox="0 0 24 24"

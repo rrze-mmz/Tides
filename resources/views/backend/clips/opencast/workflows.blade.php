@@ -1,4 +1,4 @@
-<div class="flex pt-2 pb-2 font-semibold border-b border-black font-2xl">
+<div class="flex border-b border-black pt-2 pb-2 font-semibold font-2xl">
     Opencast running events
 </div>
 @if($opencastSeriesInfo['running']->isNotEmpty() && $opencastSeriesInfo['running']['workflows']['totalCount']>0)

@@ -1,14 +1,14 @@
-<div class="grid grid-cols-12 gap-4 content-center items-center">
+<div class="grid grid-cols-12 content-center items-center gap-4">
     <div class=" {{ $labelClass }} ">
         <label for="{{ $fieldName }}"
-               class="block py-2 mr-6 font-bold text-gray-700 text-md"
+               class="mr-6 block py-2 font-bold text-gray-700 text-md"
         >
             {{ $label }}
         </label>
     </div>
     <div class="">
-        <div class="  w-full bg-none" x-data="{ checked: {{ ($value ? 'true' : 'false') }} }">
-            <div class="relative  w-12 h-6 transition duration-200 ease-in select-none bg-none">
+        <div class="w-full bg-none" x-data="{ checked: {{ ($value ? 'true' : 'false') }} }">
+            <div class="relative h-6 w-12 select-none bg-none transition duration-200 ease-in">
                 <label for="{{ $fieldName }}"
                        class="absolute left-0  border-2 mb-2 w-6 h-6
                                rounded-full transition transform  bg-blue-500
@@ -18,7 +18,7 @@
                 <input type="checkbox"
                        id="{{ $fieldName }}"
                        name="{{ $fieldName }}"
-                       class=" rounded-full w-full h-full active:outline-none focus:outline-none bg-none mb-1"
+                       class="mb-1 h-full w-full rounded-full bg-none focus:outline-none active:outline-none"
                        x-model="checked"
                 >
             </div>

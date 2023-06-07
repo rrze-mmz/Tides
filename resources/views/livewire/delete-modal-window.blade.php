@@ -1,8 +1,8 @@
 <div>
-    <x-button class="static bg-red-600 hover:bg-red-700 "
+    <x-button class="static bg-red-600 hover:bg-red-700"
               wire:click="$set('showModal',true)">
         Delete
-        <x-heroicon-o-document-remove class="ml-2 w-4 h-4"/>
+        <x-heroicon-o-document-remove class="ml-2 h-4 w-4"/>
     </x-button>
 
     <x-modal wire:model.defer="showModal">
@@ -16,8 +16,8 @@
                 method="POST">
                 @csrf
                 <div>
-                    <figure class="flex flex-wrap  rounded-xl p-2 md:p-0">
-                        <img class="w-24 h-24 md: rounded-[0.25rem] mr-10 "
+                    <figure class="flex flex-wrap rounded-xl p-2 md:p-0">
+                        <img class="mr-10 h-24 w-24 rounded-[0.25rem] md:"
                              src="{{ URL::asset('/images/'.$model->file_name) }}"
                              alt="{{ $model->description }}"
                              width="384" height="512">
@@ -26,7 +26,7 @@
             </form>
         </x-slot>
         <x-slot name="footer">
-            <x-button class="bg-red-600 hover:bg-red-700 mr-4"
+            <x-button class="mr-4 bg-red-600 hover:bg-red-700"
                       wire:click="delete">
                 Delete
             </x-button>

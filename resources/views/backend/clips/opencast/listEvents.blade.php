@@ -1,7 +1,7 @@
 @extends('layouts.backend')
 
 @section('content')
-    <div class="flex pb-2 font-semibold border-b border-black font-2xl">
+    <div class="flex border-b border-black pb-2 font-semibold font-2xl">
         Opencast processed events
     </div>
 
@@ -12,13 +12,13 @@
           class="w-3/5">
         @csrf
         <div class="mb-6">
-            <label class="block mb-2 uppercase pt-4 font-bold text-xs text-gray-700"
+            <label class="mb-2 block pt-4 text-xs font-bold uppercase text-gray-700"
                    for="eventID"
             >
                 Please select video files
             </label>
 
-            <select class="border border-gray-400 p-2 w-full"
+            <select class="w-full border border-gray-400 p-2"
                     type="text"
                     name="eventID"
                     id="listOpencastEvents"
@@ -32,7 +32,7 @@
                 @endforelse
             </select>
             @error('eventID')
-            <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
+            <p class="mt-2 text-xs text-red-500">{{ $message }}</p>
             @enderror
         </div>
 
@@ -41,7 +41,7 @@
                        text="Transfer the selected Event assets"
         />
         <a href="{{$clip->adminPath()}}">
-            <span class="py-2 px-8 text-white rounded-md bg-green-700 focus:outline-noe hover:shadow-lg">
+            <span class="rounded-md bg-green-700 px-8 py-2 text-white hover:shadow-lg focus:outline-noe">
                 Back to clip
             </span>
         </a>

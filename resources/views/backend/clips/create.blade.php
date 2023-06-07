@@ -1,10 +1,10 @@
 @extends('layouts.backend')
 
 @section('content')
-    <div class="flex pb-2 font-semibold border-b border-black font-2xl">
+    <div class="flex border-b border-black pb-2 font-semibold font-2xl">
         Creates new clip
     </div>
-    <div class="flex py-2 px-2">
+    <div class="flex px-2 py-2">
         <form action="{{ route('clips.store')}}"
               method="POST"
               class="w-4/5">
@@ -51,7 +51,7 @@
                                        :selectedItem="1"
                 />
 
-                <div class="border-solid   border-b-black border-b mb-2 pb-2 font-bold text-left text-xl">
+                <div class="mb-2 border-b border-solid border-b-black pb-2 text-left text-xl font-bold">
                     Metadata
                 </div>
 
@@ -97,7 +97,7 @@
                                          :items="[]"
                 />
 
-                <div class="border-solid   border-b-black border-b mb-2 pb-2 font-bold text-left text-xl">
+                <div class="mb-2 border-b border-solid border-b-black pb-2 text-left text-xl font-bold">
                     Access
                 </div>
 

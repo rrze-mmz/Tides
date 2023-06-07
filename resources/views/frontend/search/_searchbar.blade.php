@@ -1,11 +1,11 @@
-<div class="flex justify-center content-center">
+<div class="flex content-center justify-center">
     <form method="GET"
           action="search"
           class="w-3/5">
 
         <div class="p-2">
-            <div class="flex items-center flex-col  bg-white rounded-full shadow-xl">
-                <div class="flex items-center rounded-full w-full">
+            <div class="flex flex-col items-center rounded-full bg-white shadow-xl">
+                <div class="flex w-full items-center rounded-full">
                     <input class="ml-2 py-2 px-4 w-full leading-tight text-gray-700
                                         rounded-l-full focus:outline-none"
                            id="term"
@@ -18,7 +18,7 @@
                                             rounded-full hover:bg-gray-500 focus:outline-none"
                                 type="search"
                         >
-                            <svg class="w-6 h-6"
+                            <svg class="h-6 w-6"
                                  fill="none"
                                  stroke="currentColor"
                                  viewBox="0 0 24 24"
@@ -33,8 +33,8 @@
                     </div>
                 </div>
                 @error('term')
-                <div class="pb-2 items-center justify-content-center ">
-                    <p class="text-red-500 text-xs">{{ $message }}</p>
+                <div class="items-center pb-2 justify-content-center">
+                    <p class="text-xs text-red-500">{{ $message }}</p>
                 </div>
                 @enderror
             </div>

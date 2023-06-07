@@ -1,4 +1,4 @@
-<div class="flex items-center pt-3 space-x-4 ">
+<div class="flex items-center pt-3 space-x-4">
     <a href="{{ route('frontend.series.show', $series) }}">
         <x-button class="bg-blue-600 hover:bg-blue-700">
             Go to public page

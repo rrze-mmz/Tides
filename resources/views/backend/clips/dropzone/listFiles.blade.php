@@ -1,7 +1,7 @@
 @extends('layouts.backend')
 
 @section('content')
-    <div class="flex pb-2 font-semibold border-b border-black font-2xl">
+    <div class="flex border-b border-black pb-2 font-semibold font-2xl">
         Video file in drop zone
     </div>
 
@@ -16,13 +16,13 @@
           class="w-3/5">
         @csrf
         <div class="mb-6">
-            <label class="block mb-2 uppercase font-bold text-xs text-gray-700"
+            <label class="mb-2 block text-xs font-bold uppercase text-gray-700"
                    for="files[]"
             >
                 Please select video files
             </label>
 
-            <select class="border border-gray-400 p-2 w-full"
+            <select class="w-full border border-gray-400 p-2"
                     type="text"
                     name="files[]"
                     multiple
@@ -35,7 +35,7 @@
                     no videos
                 @endforelse
                 @error('files')
-                <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
+                <p class="mt-2 text-xs text-red-500">{{ $message }}</p>
             @enderror
         </div>
 

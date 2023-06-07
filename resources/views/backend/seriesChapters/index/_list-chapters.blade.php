@@ -17,10 +17,11 @@
                            value="{{$chapter->position}}">
                     <input type="text" name="chapters[{{$chapter->id}}][title]" class="grow w-1/2"
                            value="{{$chapter->title}}">
-                    <div class="mt-1">
-                        <x-form.button :link="route('series.chapters.edit',[$series,$chapter])" type="back"
-                                       text="Edit chapter"/>
-                    </div>
+                    <a href="{{ route('series.chapters.edit',[$series,$chapter]) }}">
+                        <x-button class="bg-blue-600 hover:bg-blue-700 " type="button">
+                            Edit chapter
+                        </x-button>
+                    </a>
                 </div>
                 @if ($errors->any())
                     <div class="alert alert-danger">
@@ -35,16 +36,14 @@
 
             @endforelse
             <div class="py-4">
-                <x-form.button :link="$link=false"
-                               type="submit"
-                               text="Update chapters"
-                />
-                <x-form.button :link="route('series.edit',$series)"
-                               color="green"
-                               type="back"
-                               text="Back to series"
-
-                />
+                <x-button class="bg-blue-600 hover:bg-blue-700" type="submit">
+                    Update chapters
+                </x-button>
+                <a href="{{ route('series.edit',$series) }}">
+                    <x-button class="bg-green-600 hover:bg-green-700" type="button">
+                        Back to series
+                    </x-button>
+                </a>
             </div>
         </form>
     @else

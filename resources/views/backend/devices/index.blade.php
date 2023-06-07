@@ -1,18 +1,18 @@
 @extends('layouts.backend')
 
 @section('content')
-    <div class="flex justify-between  pb-2 mb-5 font-semibold border-b border-black font-2xl items-center">
+    <div class="mb-5 flex items-center justify-between border-b border-black pb-2 font-semibold font-2xl">
         <div class="flex">
             Devices Index
         </div>
         <div class="flex">
             <a href="{{route('devices.create')}}">
-                <x-button class="bg-blue-700 hover:bg-blue-700 flex items-center">
+                <x-button class="flex items-center bg-blue-700 hover:bg-blue-700">
                     <div class="pr-2">
                         Create a new device
                     </div>
                     <div>
-                        <x-heroicon-o-plus-circle class="w-6 h-6"/>
+                        <x-heroicon-o-plus-circle class="h-6 w-6"/>
                     </div>
                 </x-button>
             </a>

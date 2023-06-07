@@ -2,7 +2,7 @@
 
 @section('content')
     <div
-        class="flex justify-center justify-items-center place-content-center place-items-center w-full h-72 bg-gray-900">
+        class="flex h-72 w-full place-content-center place-items-center justify-center justify-items-center bg-gray-900">
         <div class="text-6xl font-bold text-white">
             <h2>{{__('homepage.Start by creating something new')}}</h2>
         </div>
@@ -12,8 +12,8 @@
 
         @auth()
             @if(auth()->user()->settings->data['show_subscriptions_to_home_page'])
-                <div class="flex items-end w-full border-b justify-content-between">
-                    <div class="flex justify-between items-end pb-2 w-full">
+                <div class="flex w-full items-end border-b justify-content-between">
+                    <div class="flex w-full items-end justify-between pb-2">
                         <div class="text-2xl"> {{ __('homepage.series.Your series subscriptions') }}</div>
                         <a href="{{ route('frontend.series.index') }}"
                            class="text-sm underline">{{__('homepage.series.more series') }}</a>
@@ -32,8 +32,8 @@
             @endif
         @endauth
 
-        <div class="flex items-end w-full border-b justify-content-between">
-            <div class="flex justify-between items-end pb-2 w-full">
+        <div class="flex w-full items-end border-b justify-content-between">
+            <div class="flex w-full items-end justify-between pb-2">
                 <div class="text-2xl">  {{  __('homepage.series.Recently added!') }} </div>
                 <a href="{{ route('frontend.series.index') }}"
                    class="text-sm underline">{{__('homepage.series.more series') }}</a>
@@ -51,8 +51,8 @@
             @endforelse
         </div>
 
-        <div class="flex items-end w-full border-b justify-content-between">
-            <div class="flex justify-between items-end pb-2 w-full">
+        <div class="flex w-full items-end border-b justify-content-between">
+            <div class="flex w-full items-end justify-between pb-2">
                 <div class="text-2xl"> {{  __('homepage.clips.Recently added!') }}</div>
                 <a href="{{ route('frontend.clips.index') }}"
                    class="text-sm underline">{{__('homepage.clips.more clips')}}</a>

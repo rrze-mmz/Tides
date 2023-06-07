@@ -1,13 +1,13 @@
 @extends('layouts.backend')
 
 @section('content')
-    <div class="flex pb-2 font-semibold border-b border-black text-2xl">
+    <div class="flex border-b border-black pb-2 text-2xl font-semibold">
         Elasticsearch settings
     </div>
-    <div class="flex p-2 ">
+    <div class="flex p-2">
         <form action="{{ route('settings.elasticSearch.update') }}"
               method="POST"
-              class="w-4/5 ">
+              class="w-4/5">
             @csrf
             @method('PUT')
             <x-form.input field-name="url"
@@ -34,7 +34,7 @@
                           label="Admin password"
                           :fullCol="true"
                           :required="true"/>
-            <div class="py-4 pb-2 border-b-2 border-black text-xl mb-5">
+            <div class="mb-5 border-b-2 border-black py-4 pb-2 text-xl">
                 Index Settings
             </div>
             <x-form.input field-name="prefix"

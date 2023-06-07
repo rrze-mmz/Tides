@@ -12,12 +12,12 @@
             x-transition:leave="transition ease-in duration-300"
             x-transition:leave-start="opacity-100 transform scale-100"
             x-transition:leave-end="opacity-0 transform scale-90"
-            class="flex rounded-md bg-green-200 p-2 mb-2">
+            class="mb-2 flex rounded-md bg-green-200 p-2">
             <div class="flex-shrink-0">
-                <x-heroicon-o-check-circle class="w-5 h-5 text-green-400"/>
+                <x-heroicon-o-check-circle class="h-5 w-5 text-green-400"/>
             </div>
             <div class="ml-3">
-                <p class="text-sm leading-5 font-medium text-green-800">
+                <p class="text-sm font-medium leading-5 text-green-800">
                     {{ $message }}
                 </p>
             </div>

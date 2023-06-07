@@ -1,6 +1,6 @@
 <div class="grid grid-cols-8">
-    <div class="flex content-center items-center mb-6">
-        <label class="block py-2 mr-6 font-bold text-gray-700 text-md"
+    <div class="mb-6 flex content-center items-center">
+        <label class="mr-6 block py-2 font-bold text-gray-700 text-md"
                for="{{ $fieldName}}"
         >
             {{$label}}
@@ -16,7 +16,9 @@
             @if($fieldName== 'acls')
                 @forelse($items as $item)
                     <option value="{{ $item->id }}"
-                    @if($model?->acls->contains($item->id)) {{'selected'}} @endif
+                    @if($model?->acls->contains($item->id))
+                        {{'selected'}}
+                        @endif
                     >{{ $item->name }}</option>
                 @empty
                     <option value="1"></option>
@@ -24,7 +26,7 @@
             @elseif($fieldName=='presenters')
                 @foreach($items as $item)
                     <option value="{{$item->id }}" selected="selected"
-                            class="p-4 h-4">{{$item->getFullNameAttribute() }}</option>
+                            class="h-4 p-4">{{$item->getFullNameAttribute() }}</option>
                 @endforeach
             @else
                 @foreach($items as $item)

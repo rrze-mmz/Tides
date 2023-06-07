@@ -78,12 +78,12 @@
     </a>
 @endcan
 @can('administrate-superadmin-portal-pages')
-    <div class="pt-5 ">
+    <div class="pt-5">
         <div class="flex items-left text-black font-light py-4 px-2
           placeholder-black">
             <form action="{{route('goto.series')}}" method="POST">
                 @csrf
-                <input class="rounded w-full mt-2" type="text" name="seriesID" placeholder="Series ID"/>
+                <input class="mt-2 w-full rounded" type="text" name="seriesID" placeholder="Series ID"/>
             </form>
         </div>
 
@@ -91,7 +91,7 @@
           placeholder-black">
             <form action="{{route('goto.clip')}}" method="POST">
                 @csrf
-                <input class="rounded w-full mt-2" type="text" name="clipID" placeholder="Clip ID"/>
+                <input class="mt-2 w-full rounded" type="text" name="clipID" placeholder="Clip ID"/>
             </form>
         </div>
     </div>

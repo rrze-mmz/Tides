@@ -1,6 +1,6 @@
 <div class="grid grid-cols-8">
-    <div class="flex content-center items-center mb-6">
-        <label class="block py-2 mr-6 font-bold text-gray-700 text-md"
+    <div class="mb-6 flex content-center items-center">
+        <label class="mr-6 block py-2 font-bold text-gray-700 text-md"
                for="{{ $fieldName}}"
         >
             {{$label}}
@@ -13,13 +13,13 @@
                 style="width: 100%"
         >
 
-                @forelse($items as $item)
-                    <option value="{{$item->id }}" {{ $isSelected($item->id) ? 'selected="selected"' : '' }}>
-                        {{$item->name }}
-                    </option>
-                @empty
-                    <option value="1" ></option>
-                @endforelse
+            @forelse($items as $item)
+                <option value="{{$item->id }}" {{ $isSelected($item->id) ? 'selected="selected"' : '' }}>
+                    {{$item->name }}
+                </option>
+            @empty
+                <option value="1"></option>
+            @endforelse
         </select>
     </div>
 

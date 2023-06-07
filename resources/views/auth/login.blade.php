@@ -21,7 +21,7 @@
             <div>
                 <x-label for="username" :value="__('Username')"/>
 
-                <x-input id="username" class="block mt-1 w-full" type="text" name="username" :value="old('username')"
+                <x-input id="username" class="mt-1 block w-full" type="text" name="username" :value="old('username')"
                          required
                          autofocus/>
             </div>
@@ -30,14 +30,14 @@
             <div class="mt-4">
                 <x-label for="password" :value="__('Password')"/>
 
-                <x-input id="password" class="block mt-1 w-full"
+                <x-input id="password" class="mt-1 block w-full"
                          type="password"
                          name="password"
                          required autocomplete="current-password"/>
             </div>
 
             <!-- Remember Me -->
-            <div class="block mt-4">
+            <div class="mt-4 block">
                 <label for="remember_me" class="inline-flex items-center">
                     <input id="remember_me" type="checkbox"
                            class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
@@ -46,7 +46,7 @@
                 </label>
             </div>
 
-            <div class="flex items-center justify-end mt-4">
+            <div class="mt-4 flex items-center justify-end">
 
                 <x-button class="ml-3">
                     {{ __('Log in') }}

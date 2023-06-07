@@ -5,16 +5,16 @@
 @endsection
 
 @section('myPortalContent')
-    <div class="flex py-2 px-2">
+    <div class="flex px-2 py-2">
         <form action="{{ route('frontend.userSettings.update') }}"
               method="POST"
-              class="w-full ">
+              class="w-full">
             @csrf
             @method('PUT')
 
-            <div class="grid grid-cols-6 gap-2 content-center items-center my-10">
-                <div class=" col-span-2">
-                    <label for="language" class="block py-2 mr-6 font-bold text-gray-700 text-md">
+            <div class="my-10 grid grid-cols-6 content-center items-center gap-2">
+                <div class="col-span-2">
+                    <label for="language" class="mr-6 block py-2 font-bold text-gray-700 text-md">
                         {{ __('myPortal.Portal language') }}
                     </label>
                 </div>
@@ -41,7 +41,7 @@
                                   field-name="show_subscriptions_to_home_page"
             />
 
-            <x-button class="bg-blue-600 hover:bg-blue-700 mt-10">
+            <x-button class="mt-10 bg-blue-600 hover:bg-blue-700">
                 {{str(__('common.actions.update'))->ucfirst()}}
             </x-button>
         </form>

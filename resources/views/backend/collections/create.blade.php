@@ -1,10 +1,10 @@
 @extends('layouts.backend')
 
 @section('content')
-    <div class="flex pb-2 font-semibold border-b border-black text-2xl">
+    <div class="flex border-b border-black pb-2 text-2xl font-semibold">
         Create new collection
     </div>
-    <div class="flex py-4 px-2 ">
+    <div class="flex px-2 py-4">
         <form action="{{route('collections.store')}}"
               method="POST"
               class="w-4/5"
@@ -40,7 +40,7 @@
                 />
 
             </div>
-            <div class="pt-10 ">
+            <div class="pt-10">
                 <x-form.button :link="$link=false" type="submit" text="Create collection"/>
             </div>
         </form>

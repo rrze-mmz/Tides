@@ -1,11 +1,11 @@
 <div class="flex flex-col">
     <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-        <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+        <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
             <div class="flex items-center justify-between">
-                <div class="max-w-lg w-full lg:max-w-xs">
+                <div class="w-full max-w-lg lg:max-w-xs">
                     <label for="search" class="sr-only">Search</label>
                     <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                             <svg class="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd"
                                       d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1
@@ -24,9 +24,9 @@
                     </div>
                 </div>
                 <div class="relative flex items-start">
-                    <div class="flex items-center h-5">
+                    <div class="flex h-5 items-center">
                         <input wire:model="admin" id="admin" type="checkbox"
-                               class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
+                               class="h-4 w-4 text-indigo-600 transition duration-150 ease-in-out form-checkbox">
                     </div>
                     <div class="ml-3 text-sm leading-5">
                         <label for="admin" class="font-medium text-gray-700">Admins</label>
@@ -34,13 +34,13 @@
                 </div>
             </div>
 
-            <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg mt-4">
+            <div class="mt-4 overflow-hidden border-b border-gray-200 shadow sm:rounded-lg">
 
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead>
                     <tr>
                         <th
-                            class="px-6 py-3 text-left ">
+                            class="px-6 py-3 text-left">
                             <div class="flex items-center">
                                 <button wire:click="sortBy('first_name')" class="bg-gray-50 text-xs leading-4 font-medium
                                                     text-gray-500 uppercase tracking-wider"
@@ -54,7 +54,7 @@
                             </div>
                         </th>
                         <th
-                            class="px-6 py-3 text-left ">
+                            class="px-6 py-3 text-left">
                             <div class="flex items-center">
                                 <button wire:click="sortBy('last_name')" class="bg-gray-50 text-xs leading-4 font-medium
                                                     text-gray-500 uppercase tracking-wider"
@@ -68,7 +68,7 @@
                             </div>
                         </th>
                         <th
-                            class="px-6 py-3 text-left ">
+                            class="px-6 py-3 text-left">
                             <div class="flex items-center">
                                 <button wire:click="sortBy('username')" class="bg-gray-50 text-xs leading-4 font-medium
                                                     text-gray-500 uppercase tracking-wider"
@@ -82,7 +82,7 @@
                             </div>
                         </th>
                         <th
-                            class="px-6 py-3 text-left ">
+                            class="px-6 py-3 text-left">
                             <div class="flex items-center">
                                 <button wire:click="sortBy('email')"
                                         class="bg-gray-50 text-xs leading-4 font-medium
@@ -101,7 +101,7 @@
                                         text-gray-500 uppercase tracking-wider">
                             Roles
                         </th>
-                        <th class="px-6 py-3 bg-gray-50"></th>
+                        <th class="bg-gray-50 px-6 py-3"></th>
                     </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
@@ -109,12 +109,12 @@
                         <tr>
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
                                 <div class="flex items-center">
-                                    <div class="flex-shrink-0 h-10 w-10">
+                                    <div class="h-10 w-10 flex-shrink-0">
                                         <img class="h-10 w-10 rounded-full"
                                              src="https://www.gravatar.com/avatar/?d=mp&f=y" alt="">
                                     </div>
                                     <div class="ml-4">
-                                        <div class="text-sm leading-5 font-medium text-gray-900">
+                                        <div class="text-sm font-medium leading-5 text-gray-900">
                                             {{ $user->first_name }}
                                         </div>
                                     </div>
@@ -123,7 +123,7 @@
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
                                 <div class="flex items-center">
                                     <div class="ml-4">
-                                        <div class="text-sm leading-5 font-medium text-gray-900">
+                                        <div class="text-sm font-medium leading-5 text-gray-900">
                                             {{ $user->last_name }}
                                         </div>
                                     </div>
@@ -132,14 +132,14 @@
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
                                 <div class="flex items-center">
                                     <div class="ml-4">
-                                        <div class="text-sm leading-5 font-medium text-gray-900">
+                                        <div class="text-sm font-medium leading-5 text-gray-900">
                                             {{ $user->username }}
                                         </div>
                                     </div>
                                 </div>
                             </td>
-                            <td class="w-2/12  px-6 py-4 whitespace-no-wrap">
-                                <div class="text-sm leading-5  font-medium text-gray-900">{{ $user->email }}</div>
+                            <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
+                                <div class="text-sm font-medium leading-5 text-gray-900">{{ $user->email }}</div>
                             </td>
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
                                 @foreach($user->roles as $role)
@@ -151,7 +151,7 @@
                                 @endforeach
 
                             </td>
-                            <td class="w-2/12 px-6 py-4 whitespace-no-wrap text-right text-sm leading-5 font-medium">
+                            <td class="w-2/12 px-6 py-4 text-right text-sm font-medium leading-5 whitespace-no-wrap">
                                 @if(auth()->user()->id !== $user->id)
                                     <div class="flex space-x-2">
                                         <a href="{{route('users.edit',$user)}}"

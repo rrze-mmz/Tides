@@ -1,7 +1,7 @@
 <div class="grid grid-cols-8 items-center">
     <div class="content-center">
         <div class="flex flex-col">
-            <label class="flex block py-2 mr-2 font-bold text-gray-700 text-md"
+            <label class="mr-2 block flex py-2 font-bold text-gray-700 text-md"
                    for="{{ $fieldName }}"
             >
             <span>
@@ -9,7 +9,7 @@
             </span>
             </label>
             @if ($disabled)
-                <div class="flex text-green-500 text-sm">
+                <div class="flex text-sm text-green-500">
                     (You cannot change this field)
                 </div>
             @endif

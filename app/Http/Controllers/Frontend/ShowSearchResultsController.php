@@ -15,7 +15,7 @@ class ShowSearchResultsController extends Controller
      */
     public function __invoke(SearchRequest $request, ElasticsearchService $elasticsearchService): View
     {
-        $searchResults = collect([]);
+        $searchResults = collect();
         $health = $elasticsearchService->getHealth();
         //check whether elasticsearch server is up and running
         if ($health->contains('pass')) {
@@ -40,7 +40,10 @@ class ShowSearchResultsController extends Controller
                     $q->whereRaw('lower(first_name)  like (?)', ["%{$request->term}%"])
                         ->orWhereRaw('lower(last_name)  like (?)', ["%{$request->term}%"]);
                 }) //__invoke for clip presenter
-                ->paginate(10)->withQueryString();
+                ->orderByDesc('updated_at')
+                ->paginate(10)
+                ->withQueryString();
+
             $searchResults->put('clips', $clips);
 
             return view('frontend.search.results.dbsearch', compact('searchResults'));

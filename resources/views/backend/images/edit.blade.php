@@ -1,15 +1,15 @@
 @extends('layouts.backend')
 
 @section('content')
-    <div class="flex justify-between pb-2 mb-5 font-semibold border-b border-black font-2xl items-center">
+    <div class="mb-5 flex items-center justify-between border-b border-black pb-2 font-semibold font-2xl">
         <div class="flex">
             Edit Image ID : {{ $image->id }} / {{ $image->description }}
         </div>
         <div class="flex">
             <a href="{{ route('images.index') }}">
-                <x-button class="bg-blue-700 hover:bg-blue-700 flex items-center">
+                <x-button class="flex items-center bg-blue-700 hover:bg-blue-700">
                     <div class="pr-2">
-                        <x-heroicon-o-arrow-circle-left class="w-6 h-6"/>
+                        <x-heroicon-o-arrow-circle-left class="h-6 w-6"/>
                     </div>
                     <div>
                         Back to images list
@@ -19,8 +19,8 @@
         </div>
     </div>
     <div class="flex">
-        <figure class="flex bg-slate-100 rounded-xl md:p-0 w-full">
-            <div class="grow justify-center content-center content-between py-2 px-2">
+        <figure class="flex w-full rounded-xl bg-slate-100 md:p-0">
+            <div class="grow content-center content-between justify-center px-2 py-2">
                 <form action="{{ route('images.update', $image) }}"
                       method="POST"
                       class="w-full"
@@ -91,14 +91,14 @@
                     </div>
                 </form>
             </div>
-            <div class="flex-none flex-col mr-10">
+            <div class="mr-10 flex-none flex-col">
                 <div>
-                    <img class="object-contain h-96 w-48 w-auto md: rounded-[0.25rem]"
+                    <img class="h-96 w-48 w-auto object-contain rounded-[0.25rem] md:"
                          src="{{ URL::asset('/images/'.$image->file_name) }}"
                          alt="{{ $image->description }}">
                 </div>
                 <div class="flex">
-                    <div class="pt-4 w-full">
+                    <div class="w-full pt-4">
                         <form action="{{ route('images.import', $image) }}"
                               method="POST"
                               class="w-full"
@@ -107,7 +107,7 @@
 
                             <input type="file"
                                    name="image"
-                                   class="filepond "
+                                   class="filepond"
                                    data-max-file-size="10MB"
                             />
                             @error('image')
@@ -127,25 +127,25 @@
     </div>
 
     @if($image->presenters()->count() > 0)
-        <div class="flex items-center pt-10 border-b-2 border-black">
+        <div class="flex items-center border-b-2 border-black pt-10">
             <div class="pr-2">
-                <x-heroicon-o-user-group class="w-6 h-6"/>
+                <x-heroicon-o-user-group class="h-6 w-6"/>
             </div>
             <h3 class="font-bold">Used in {{$image->presenters()->count()}} lecturers
             </h3>
         </div>
         <div class="flex">
-            <div class="w-full mt-3 py-3">
+            <div class="mt-3 w-full py-3">
                 <ul>
                     @foreach($image->presenters as $presenter)
-                        <li class="w-full mt-2 mb-2 p-2">
+                        <li class="mt-2 mb-2 w-full p-2">
                             <div class="flex items-center align-middle">
                                 <div>
                                     {{  $presenter->getFullNameAttribute() }}
                                 </div>
                                 <div class="pl-2">
                                     <a href="{{ route('presenters.edit', $presenter) }}">
-                                        <x-heroicon-o-eye class="w-5 h-5"/>
+                                        <x-heroicon-o-eye class="h-5 w-5"/>
                                     </a>
                                 </div>
                             </div>
@@ -156,25 +156,25 @@
         </div>
     @endif
     @if($image->series()->count() > 0)
-        <div class="flex items-center pt-10 border-b-2 border-black">
+        <div class="flex items-center border-b-2 border-black pt-10">
             <div class="pr-2">
-                <x-heroicon-o-user-group class="w-6 h-6"/>
+                <x-heroicon-o-user-group class="h-6 w-6"/>
             </div>
             <h3 class="font-bold">Used in {{$image->series()->count()}} series
             </h3>
         </div>
         <div class="flex">
-            <div class="w-full mt-3 py-3">
+            <div class="mt-3 w-full py-3">
                 <ul>
                     @foreach($image->series->take(5) as $clip)
-                        <li class="w-full mt-2 mb-2 p-2">
+                        <li class="mt-2 mb-2 w-full p-2">
                             <div class="flex items-center align-middle">
                                 <div>
                                     {{  $clip->title }}
                                 </div>
                                 <div class="pl-2">
                                     <a href="{{ route('series.edit', $clip) }}">
-                                        <x-heroicon-o-eye class="w-5 h-5"/>
+                                        <x-heroicon-o-eye class="h-5 w-5"/>
                                     </a>
                                 </div>
                             </div>
@@ -185,25 +185,25 @@
         </div>
     @endif
     @if($image->clips()->count() > 0)
-        <div class="flex items-center pt-10 border-b-2 border-black">
+        <div class="flex items-center border-b-2 border-black pt-10">
             <div class="pr-2">
-                <x-heroicon-o-user-group class="w-6 h-6"/>
+                <x-heroicon-o-user-group class="h-6 w-6"/>
             </div>
             <h3 class="font-bold">Used in {{$image->clips()->count()}} clips
             </h3>
         </div>
         <div class="flex">
-            <div class="w-full mt-3 py-3">
+            <div class="mt-3 w-full py-3">
                 <ul>
                     @foreach($image->clips->take(5) as $clip)
-                        <li class="w-full mt-2 mb-2 p-2">
+                        <li class="mt-2 mb-2 w-full p-2">
                             <div class="flex items-center align-middle">
                                 <div>
                                     {{  $clip->title }}
                                 </div>
                                 <div class="pl-2">
                                     <a href="{{ route('clips.edit', $clip) }}">
-                                        <x-heroicon-o-eye class="w-5 h-5"/>
+                                        <x-heroicon-o-eye class="h-5 w-5"/>
                                     </a>
                                 </div>
                             </div>

@@ -1,34 +1,34 @@
 <x-guest-layout>
     <div x-data="setup()" x-init="$refs.loading.classList.add('hidden'); setColors(color);" :class="{ 'dark': isDark}">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-            <div class="w-full max-w-sm px-4 py-6 space-y-6 bg-white rounded-md dark:bg-darker">
-                <h1 class="text-xl font-semibold text-center">Login</h1>
+        <div class="flex min-h-screen flex-col items-center bg-gray-100 pt-6 sm:justify-center sm:pt-0">
+            <div class="w-full max-w-sm rounded-md bg-white px-4 py-6 space-y-6 dark:bg-darker">
+                <h1 class="text-center text-xl font-semibold">Login</h1>
                 @if(!is_null($saml2TenantUUID))
                     <a
                         href="{{route('saml.login', $saml2TenantUUID)}}"
-                        class="flex items-center justify-center px-4 py-2 space-x-2 text-white transition-all duration-200 bg-black rounded-md hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-1 dark:focus:ring-offset-darker"
+                        class="flex items-center justify-center rounded-md bg-black px-4 py-2 text-white transition-all duration-200 space-x-2 hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-1 dark:focus:ring-offset-darker"
                     >
                         <span> Login with WebSSO </span>
                     </a>
 
                     <!-- Or -->
-                    <div class="flex items-center justify-center space-x-2 flex-nowrap">
-                        <span class="w-20 h-px bg-gray-300"></span>
+                    <div class="flex flex-nowrap items-center justify-center space-x-2">
+                        <span class="h-px w-20 bg-gray-300"></span>
                         <span>OR</span>
-                        <span class="w-20 h-px bg-gray-300"></span>
+                        <span class="h-px w-20 bg-gray-300"></span>
                     </div>
                 @endif
                 <form method="POST" action="{{ route('login') }}" class="space-y-6">
                     @csrf
                     <input
-                        class="w-full px-4 py-2 border rounded-md dark:bg-darker dark:border-gray-700 focus:outline-none focus:ring focus:ring-primary-100 dark:focus:ring-primary-darker"
+                        class="w-full rounded-md border px-4 py-2 focus:ring-primary-100 focus:outline-none focus:ring dark:bg-darker dark:border-gray-700 dark:focus:ring-primary-darker"
                         type="username"
                         name="username"
                         placeholder="Username"
                         required
                     />
                     <input
-                        class="w-full px-4 py-2 border rounded-md dark:bg-darker dark:border-gray-700 focus:outline-none focus:ring focus:ring-primary-100 dark:focus:ring-primary-darker"
+                        class="w-full rounded-md border px-4 py-2 focus:ring-primary-100 focus:outline-none focus:ring dark:bg-darker dark:border-gray-700 dark:focus:ring-primary-darker"
                         type="password"
                         name="password"
                         placeholder="Password"
@@ -59,11 +59,11 @@
             <button
                 aria-hidden="true"
                 @click="toggleTheme"
-                class="p-2 transition-colors duration-200 rounded-full shadow-md bg-primary hover:bg-primary-darker focus:outline-none focus:ring focus:ring-primary"
+                class="rounded-full p-2 shadow-md transition-colors duration-200 bg-primary hover:bg-primary-darker focus:ring-primary focus:outline-none focus:ring"
             >
                 <svg
                     x-show="isDark"
-                    class="w-8 h-8 text-white"
+                    class="h-8 w-8 text-white"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -78,7 +78,7 @@
                 </svg>
                 <svg
                     x-show="!isDark"
-                    class="w-8 h-8 text-white"
+                    class="h-8 w-8 text-white"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"

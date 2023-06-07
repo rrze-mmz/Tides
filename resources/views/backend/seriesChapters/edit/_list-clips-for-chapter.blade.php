@@ -9,7 +9,7 @@
     @forelse($chapter->clips as $clip)
         <div class="flex-row">
             <div class="py-4">
-                <div class="flex align-content-center align-middle">
+                <div class="flex align-content-center align-middle items-center">
                     <x-checkbox multiple
                                 name="ids[]"
                                 value="{{$clip->id}}"
@@ -27,10 +27,11 @@
                 </p>
             @endforelse
             <div class="pt-8">
-                <x-form.button :link="$link=false"
-                               type="submit"
-                               text="Remove selected clips from chapter"
-                />
+                <x-button class="bg-blue-600 hover:bg-blue-700"
+                          type="submit"
+                >
+                    Remove selected clips from chapter
+                </x-button>
             </div>
         </div>
 </form>

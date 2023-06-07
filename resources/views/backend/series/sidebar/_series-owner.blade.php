@@ -1,5 +1,5 @@
-<div class="w-full py-4 px-4 mx-4 h-full bg-white rounded-md border">
-    <h2 class="text-xl font-normal py-4 -ml-5 mb-3 border-l-4 border-blue-600 pl-4 ">
+<div class="mx-4 h-full w-full rounded-md border bg-white px-4 py-4">
+    <h2 class="mb-3 -ml-5 border-l-4 border-blue-600 py-4 pl-4 text-xl font-normal">
         {{__('series.backend.Series administrator')}}
     </h2>
     <div class="flex-row">
@@ -41,13 +41,13 @@
     </div>
 
     @if($series->members()->count() > 0)
-        <h4 class="pt-6 border-b-2 pb-2">
+        <h4 class="border-b-2 pt-6 pb-2">
             {{ trans_choice('common.menu.member', 2) }}
         </h4>
         <div class="pt-4">
             <ul class="list-disc">
                 @foreach($series->members as $member)
-                    <li class="p-2 mx-4 flex ">
+                    <li class="mx-4 flex p-2">
                         <div>
                             {{ $member->getFullNameAttribute().'/'.$member->username }}
                         </div>
@@ -62,7 +62,7 @@
                                                name="userID"/>
                                     </label>
                                     <button type="submit">
-                                        <x-heroicon-o-x-circle class="w-6 h-6 text-red-500"/>
+                                        <x-heroicon-o-x-circle class="h-6 w-6 text-red-500"/>
                                     </button>
                                     @error('userID')
                                     <div>{{$message}}</div>

@@ -14,20 +14,20 @@
     @vite('resources/css/app.css')
     @livewireStyles
 </head>
-<body class="h-screen font-sans antialiased leading-none bg-gray-100 ">
+<body class="h-screen bg-gray-100 font-sans leading-none antialiased">
 <div id="app">
-    <header class="fixed top-0 z-10 p-2 py-4 mt-0 w-full bg-gray-800 ">
+    <header class="fixed top-0 z-10 mt-0 w-full bg-gray-800 p-2 py-4">
         @include('layouts.frontend.top-navigation')
     </header>
 
-    <main class="pt-12 mx-auto lg:flex min-h-screen max-h-full">
-        <div class=" w-full lg:flex-grow pb-10 ">
+    <main class="mx-auto max-h-full min-h-screen pt-12 lg:flex">
+        <div class="w-full pb-10 lg:flex-grow">
             @yield('content')
         </div>
     </main>
 
-    <footer class="flex bg-gray-800 h-10 justify-center items-center">
-        <div class="space-x-4 text-sm text-gray-300 sm:text-base">
+    <footer class="flex h-10 items-center justify-center bg-gray-800">
+        <div class="text-sm text-gray-300 space-x-4 sm:text-base">
             Copyright @ {{ Illuminate\Support\Carbon::now()->year }} MIT Licence
         </div>
     </footer>

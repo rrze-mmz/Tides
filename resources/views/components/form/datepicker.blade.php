@@ -1,6 +1,6 @@
 <div class="grid grid-cols-8">
     <div class="content-center items-center">
-        <label class="block py-2 mr-6 font-bold text-gray-700 text-md"
+        <label class="mr-6 block py-2 font-bold text-gray-700 text-md"
                for="{{ $fieldName }}"
         >
             {{$label}}

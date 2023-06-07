@@ -33,7 +33,7 @@ class HomePageTest extends TestCase
     /** @test */
     public function it_has_a_series_top_menu_item(): void
     {
-        $menuItem = '<a href="'.route('frontend.series.index').'" class="text-white text-lg">';
+        $menuItem = '<a href="'.route('frontend.series.index').'" class="text-lg text-white">';
 
         $this->get(route('home'))->assertSee($menuItem, false);
     }
@@ -41,7 +41,7 @@ class HomePageTest extends TestCase
     /** @test */
     public function it_has_a_clips_top_menu_item(): void
     {
-        $menuItem = '<a href="'.route('frontend.clips.index').'" class="text-white text-lg">';
+        $menuItem = '<a href="'.route('frontend.clips.index').'" class="text-lg text-white">';
 
         $this->get(route('home'))->assertSee($menuItem, false);
     }
@@ -49,7 +49,7 @@ class HomePageTest extends TestCase
     /** @test */
     public function it_has_a_faculties_top_menu_item(): void
     {
-        $menuItem = '<a href="'.route('frontend.organizations.index').'" class="text-white text-lg">';
+        $menuItem = '<a href="'.route('frontend.organizations.index').'" class="text-lg text-white">';
 
         $this->get(route('home'))->assertSee($menuItem, false);
     }

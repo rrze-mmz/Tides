@@ -1,7 +1,7 @@
 @extends('layouts.backend')
 
 @section('content')
-    <div class="flex justify-between  pb-2 mb-5 font-semibold border-b border-black font-2xl items-center">
+    <div class="mb-5 flex items-center justify-between border-b border-black pb-2 font-semibold font-2xl">
         <div class="flex">
             Users Index
         </div>

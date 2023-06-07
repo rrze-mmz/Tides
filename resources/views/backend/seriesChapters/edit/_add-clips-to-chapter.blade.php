@@ -28,10 +28,11 @@
             @enderror
         </div>
         <div class="pt-8">
-            <x-form.button :link="$link=false"
-                           type="submit"
-                           text="Add selected clips to chapter"
-            />
+            <x-button class="bg-blue-600 hover:bg-blue-700"
+                      type="submit"
+            >
+                Add selected clips to chapter
+            </x-button>
         </div>
     </div>
 </form>

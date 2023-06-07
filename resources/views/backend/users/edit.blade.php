@@ -6,11 +6,11 @@
 @extends('layouts.backend')
 
 @section('content')
-    <div class="flex pb-2 font-semibold border-b border-black font-2xl">
+    <div class="flex border-b border-black pb-2 font-semibold font-2xl">
         Edit user
     </div>
 
-    <div class="flex py-2 px-2">
+    <div class="flex px-2 py-2">
         <form action="{{ route('users.update',$user) }}"
               method="POST"
               class="w-4/5">
@@ -50,7 +50,7 @@
                                        :selectedItem="$user->roles->first()?->id"
                 />
 
-                <div class="col-span-7 w-4/5 mt-10">
+                <div class="col-span-7 mt-10 w-4/5">
                     <x-button class="bg-blue-600 hover:bg-blue700">
                         Update user
                     </x-button>
@@ -65,13 +65,13 @@
         </form>
     </div>
 
-    <div class="flex pt-10 py-2 font-semibold border-b border-black font-2xl">
+    <div class="flex border-b border-black py-2 pt-10 font-semibold font-2xl">
         Applications
     </div>
 
     @if(isset($user->settings->data['admin_portal_application_status']))
         @if($user->settings->data['admin_portal_application_status'] === ApplicationStatus::IN_PROGRESS())
-            <div class="flex flex-row pt-5 items-center">
+            <div class="flex flex-row items-center pt-5">
                 <div class="pr-10 text-lg font-bold">
                     User requested access to admin portal
                 </div>
@@ -92,8 +92,8 @@
                 </div>
             </div>
         @else
-            <div class="flex flex-row pt-5 items-center">
-                <div class="pr-10 text-lg ">
+            <div class="flex flex-row items-center pt-5">
+                <div class="pr-10 text-lg">
                     User admin portal application processed by
                     <span class="italic"> {{ $user->settings->data['admin_portal_application_processed_by'] }} </span>
                     <span class="text-sm">

@@ -21,16 +21,15 @@
                    class="grow w-1/2"
             >
             <div class="mt-1">
-                <x-form.button :link="$link=false"
-                               type="submit"
-                               text="Create chapter"
-                />
+                <x-button type="submit" class="bg-blue-600 hover:bg-blue-700">
+                    Create chapter
+                </x-button>
             </div>
         </div>
     </form>
     @error('title')
     <div class="col-start-2 col-end-6">
-        <p class="mt-2 w-full text-xs text-red-500">
+        <p class="mt-2 w-full text-sm text-red-500">
             {{ $message }}
         </p>
     </div>

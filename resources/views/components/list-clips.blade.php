@@ -1,12 +1,12 @@
-<div class="flex border-t border-t-2 mt-5">
+<div class="mt-5 flex border-t-2 border-t">
     @if($reorder)
         <form class="w-full" action="{{route('series.clips.reorder', $series)}}" method="POST">
             @csrf
             @endif
-            <ul class="pt-3 w-full">
+            <ul class="w-full pt-3">
 
                 @forelse($clips as $clip)
-                    <li class="flex content-center items-center p-2 mb-4 text-lg bg-gray-200 rounded text-center">
+                    <li class="mb-4 flex content-center items-center rounded bg-gray-200 p-2 text-center text-lg">
                         <div class="w-1/12">
                             @if ($reorder)
                                 <label>
@@ -21,7 +21,7 @@
                             @endif
                         </div>
                         <div class="w-2/12">
-                            <div class="flex justify-center justify-items-center place-items-center mx-2 w-48 h-full">
+                            <div class="mx-2 flex h-full w-48 place-items-center justify-center justify-items-center">
                                 <a
                                     href="@if(str_contains(url()->current(), 'admin')) {{$clip->adminPath()}}
                                     @else {{ $clip->path() }}
@@ -46,10 +46,10 @@
                             @else
                                 <div>
                                     @can('watch-video', $clip)
-                                        <x-heroicon-o-lock-open class="w-4 h-4 text-green-500"/>
+                                        <x-heroicon-o-lock-open class="h-4 w-4 text-green-500"/>
                                         <span class="sr-only">Unlock clip</span>
                                     @else
-                                        <x-heroicon-o-lock-closed class="w-4 h-4 text-red-700"/>
+                                        <x-heroicon-o-lock-closed class="h-4 w-4 text-red-700"/>
                                         <span class="sr-only">Lock clip</span>
                                     @endcan
                                 </div>
@@ -79,7 +79,7 @@
                                             class="focus:outline-none text-white text-sm py-1.5 px-5 rounded-md bg-blue-700
                                             hover:bg-blue-500 hover:shadow-lg"
                                     >
-                                        <x-heroicon-o-play class="w-6 h-6"/>
+                                        <x-heroicon-o-play class="h-6 w-6"/>
                                     </button>
                                 </form>
                             @endif
@@ -88,7 +88,7 @@
 
                 @empty
                     <div class="grid place-items-center">
-                        <div class=" w-full p-5 mb-4 text-2xl bg-gray-200 rounded text-center">
+                        <div class="mb-4 w-full rounded bg-gray-200 p-5 text-center text-2xl">
                             {{ __('series.common.no clips') }}
                         </div>
                     </div>

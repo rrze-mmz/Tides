@@ -1,5 +1,5 @@
-<div class="w-full py-4 px-4 mx-4 h-full bg-white rounded border">
-    <h2 class="text-xl font-normal py-4 -ml-5 mb-3 border-l-4 border-blue-600 pl-4 ">
+<div class="mx-4 h-full w-full rounded border bg-white px-4 py-4">
+    <h2 class="mb-3 -ml-5 border-l-4 border-blue-600 py-4 pl-4 text-xl font-normal">
         Ingest to Opencast*
     </h2>
 

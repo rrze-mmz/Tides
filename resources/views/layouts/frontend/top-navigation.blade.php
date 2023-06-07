@@ -1,32 +1,32 @@
-<nav class="container flex justify-between items-center px-6 mx-auto">
+<nav class="container mx-auto flex items-center justify-between px-6">
     <div>
         <a href="{{ url('/') }}" class="text-lg font-semibold text-gray-100 no-underline">
             {{ config('app.name', 'Laravel') }}
         </a>
     </div>
-    <nav class="space-x-4 font-semibold text-gray-300 sm:text-base">
+    <nav class="font-semibold text-gray-300 space-x-4 sm:text-base">
         <span class="no-underline hover:underline">
-            <a href="{{ route('frontend.series.index') }}" class="text-white text-lg">
+            <a href="{{ route('frontend.series.index') }}" class="text-lg text-white">
                 Series
             </a>
         </span>
         <span class="no-underline hover:underline">
-            <a href="{{ route('frontend.clips.index') }}" class="text-white text-lg">
+            <a href="{{ route('frontend.clips.index') }}" class="text-lg text-white">
                 Clips
             </a>
         </span>
         <span class="no-underline hover:underline">
-            <a href="{{ route('frontend.organizations.index') }}" class="text-white text-lg">
+            <a href="{{ route('frontend.organizations.index') }}" class="text-lg text-white">
                 Organizations
             </a>
         </span>
-        <span class="no-underline hover:underline pr-10">
-            <a href="{{ route('frontend.series.index') }}" class="text-white text-lg">
+        <span class="pr-10 no-underline hover:underline">
+            <a href="{{ route('frontend.series.index') }}" class="text-lg text-white">
                 Live now!
             </a>
         </span>
     </nav>
-    <nav class="space-x-4 text-sm font-semibold text-gray-300 sm:text-base">
+    <nav class="text-sm font-semibold text-gray-300 space-x-4 sm:text-base">
 
         @guest
             <a class="no-underline hover:underline"
@@ -55,7 +55,7 @@
                 {{ csrf_field() }}
             </form>
         @endguest
-        <span class="no-underline mr-10">
+        <span class="mr-10 no-underline">
             <a href="/set_lang/en" class="{{ (session('locale') === 'en')?'underline':'' }}">EN</a> |
             <a href="/set_lang/de" class="{{ (session('locale') === 'de')?'underline':'' }}">DE</a>
         </span>
