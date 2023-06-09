@@ -1,4 +1,4 @@
-@if($series->chapters()->count() > 0)
+@if(method_exists($series, 'chapters') && $series->chapters()->count() > 0)
     <div class="mt-5 flex border-t-1 border-t" x-data="{selected: 0 }">
         <ul class="shadow-box mb-4 flex flex-col w-full   text-center text-lg">
             @foreach($series->chapters()->orderBy('position')->get() as $chapter)

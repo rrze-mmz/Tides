@@ -9,9 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use function Pest\Laravel\get;
 use function Pest\Laravel\patch;
 
-uses()->group('backend');
-
-beforeEach(function () {
+uses()->group('backend')->beforeEach(function () {
     $disk = Storage::fake('images');
     $disk->putFileAs('', FileFactory::imageFile(), 'avatar.png');
 
