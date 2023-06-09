@@ -48,6 +48,11 @@ class ManageSeriesTest extends TestCase
         $this->role = Role::MODERATOR;
     }
 
+    public function a_visitor_cannot_manage_series(): void
+    {
+        $this->post(route('series.store'), [])->assertRedirect('login');
+    }
+
     /** @test */
     public function it_shows_a_create_series_button_if_moderator_has_no_series(): void
     {
