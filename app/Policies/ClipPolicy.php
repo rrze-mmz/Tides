@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\Acl;
 use App\Models\Clip;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -59,7 +60,7 @@ class ClipPolicy
 
     public function viewVideo(User $user, Clip $clip): bool
     {
-        return (auth()->check() && $clip->acls->pluck('id')->contains('1')) ||
+        return (auth()->check() && $clip->acls->pluck('id')->contains(Acl::PUBLIC())) ||
             ($user->is($clip->owner));
     }
 

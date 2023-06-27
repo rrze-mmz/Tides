@@ -168,6 +168,15 @@ it('has a findUserByOpencastRole function', function () {
     $opencastUserRole = 'ROLE_USER_'.strtoupper($user->username);
 
     expect(findUserByOpencastRole($opencastUserRole)->getFullNameAttribute())->toBe($user->getFullNameAttribute());
+
+    $opencastUserRole = 'ROLE_ADMIN';
+
+    expect(findUserByOpencastRole($opencastUserRole))->toBe($opencastUserRole);
+
+    $opencastUserRole = 'ROLE_USER_NOTEXISTINGUSER';
+
+    expect(findUserByOpencastRole($opencastUserRole))->toBe($opencastUserRole);
+
 });
 
 it('has a humanFileSizeFormat function ', function () {

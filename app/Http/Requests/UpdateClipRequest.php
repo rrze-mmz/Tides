@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Closure;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
@@ -9,18 +10,6 @@ use Illuminate\Validation\Rules\Password;
 
 class UpdateClipRequest extends FormRequest
 {
-    protected function prepareForValidation()
-    {
-        $this->merge([
-            'slug' => Str::slug($this->title),
-            'tags' => $this->tags = $this->tags ?? [], //set empty array if select2 tags is empty
-            'acls' => $this->acls = $this->acls ?? [], //set empty array if select2 acls is empty
-            'presenters' => $this->presenters = $this->presenters ?? [], //set empty array if select2 presenters is empty
-            'allow_comments' => $this->allow_comments === 'on',
-            'is_public' => $this->is_public === 'on',
-        ]);
-    }
-
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -34,6 +23,7 @@ class UpdateClipRequest extends FormRequest
      */
     public function rules(): array
     {
+
         return [
             'title' => ['required'],
             'description' => ['string', 'nullable'],
@@ -45,6 +35,11 @@ class UpdateClipRequest extends FormRequest
             'context_id' => ['required', 'integer'],
             'format_id' => ['required', 'integer'],
             'type_id' => ['required', 'integer'],
+            'chapter_id' => ['integer', 'nullable', function (string $attribute, mixed $value, Closure $fail) {
+                if ($this->route('clip')->series->chapters->pluck('id')->doesntContain($value)) {
+                    $fail("The {$attribute} id doesn't belong to the series.");
+                }
+            }, ], //check whether the chapter id belongs to user series chapters
             'presenters' => ['array'],
             'presenters.*' => ['integer', 'nullable'],
             'tags' => ['array'],
@@ -56,5 +51,17 @@ class UpdateClipRequest extends FormRequest
             'password' => ['nullable', Password::min(8)->mixedCase()],
             'is_public' => ['boolean'],
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'slug' => Str::slug($this->title),
+            'tags' => $this->tags = $this->tags ?? [], //set empty array if select2 tags is empty
+            'acls' => $this->acls = $this->acls ?? [], //set empty array if select2 acls is empty
+            'presenters' => $this->presenters = $this->presenters ?? [], //set empty array if select2 is empty
+            'allow_comments' => $this->allow_comments === 'on',
+            'is_public' => $this->is_public === 'on',
+        ]);
     }
 }

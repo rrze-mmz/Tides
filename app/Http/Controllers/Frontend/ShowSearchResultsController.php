@@ -28,8 +28,7 @@ class ShowSearchResultsController extends Controller
 
             return view('frontend.search.results.elasticsearch', compact('searchResults'));
         } else { //use slow db __invoke if no elasticsearch node is found
-            $clips = Clip::with('presenters')
-                ->with('assets')
+            $clips = Clip::with('presenters', 'assets')
                 ->search($request->term)
                 ->whereHas('assets')
                 ->orWhereHas('presenters', function ($q) use ($request) {

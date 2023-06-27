@@ -3,6 +3,7 @@
 namespace App\View\Components\Form;
 
 use App\Models\AcademicDegree;
+use App\Models\Chapter;
 use App\Models\Context;
 use App\Models\DeviceLocation;
 use App\Models\Format;
@@ -26,7 +27,8 @@ class Select2Single extends Component
         public string $label,
         public string $fieldName,
         public $selectClass,
-        public $selectedItem
+        public $selectedItem,
+        public $whereID = null,
     ) {
         //
     }
@@ -53,6 +55,8 @@ class Select2Single extends Component
                 'organization' => Organization::select(['org_id as id', 'name'])
                     ->where('org_id', '=', $this->selectedItem)
                     ->get(),//make an api call. Therefore display only the selected option
+                'chapter' => Chapter::select(['id', 'title as name'])
+                    ->where('series_id', $this->whereID)->orderBy('position')->get(),
                 'default' => []
             },
         ]);

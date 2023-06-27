@@ -1,1 +1,1 @@
-<x-list-clips :series="$series" :clips="$clips" dashboardAction="@can('menu-dashboard-admin')"/>
+<x-list-clips :series="$series" :clips="$clips" :chapters="$chapters" dashboardAction="@can('menu-dashboard-admin')" />

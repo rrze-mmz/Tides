@@ -12,14 +12,6 @@ use Psr\Container\NotFoundExceptionInterface;
 trait Accessable
 {
     /**
-     * Given model acls relationship
-     */
-    public function acls(): MorphToMany
-    {
-        return $this->morphToMany(Acl::class, 'accessable')->withTimestamps();
-    }
-
-    /**
      * Assign an acl collection to the give type
      */
     public function addAcls(Collection $aclsCollection): void
@@ -38,6 +30,14 @@ trait Accessable
     }
 
     /**
+     * Given model acls relationship
+     */
+    public function acls(): MorphToMany
+    {
+        return $this->morphToMany(Acl::class, 'accessable')->withTimestamps();
+    }
+
+    /**
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
@@ -45,26 +45,25 @@ trait Accessable
     {
         $acls = $this->acls;
 
-        $check = false;
         if ($acls->isEmpty() || $acls->pluck('id')->contains(\App\Enums\Acl::PUBLIC())) {
             return true;
         }
+
         if (auth()->user()?->isAdmin()) {
             return true;
         }
         if ($acls->pluck('id')->contains(\App\Enums\Acl::PORTAL()) && auth()->check()) {
-            $check = (($this->assets->count() > 0 && $this->is_public)
-                || auth()->user()->can('view-video', $this));
+            return ($this->assets()->count() > 0 && $this->is_public)
+                || auth()->user()->can('view-video', $this);
         }
         if ($acls->pluck('id')->contains(\App\Enums\Acl::LMS())
             || $acls->pluck('id')->contains(\App\Enums\Acl::PASSWORD())) {
-            $check = (
-                checkAccessToken($this)
-                || ((auth()->check() && auth()->user()->can('view-video', $this)))
-                || (auth()->check() && auth()->user()->isAdmin())
-            );
+            return
+                 checkAccessToken($this)
+                 || ((auth()->check() && auth()->user()->can('view-video', $this)))
+                 || (auth()->check() && auth()->user()->isAdmin());
         }
 
-        return $check;
+        return false;
     }
 }

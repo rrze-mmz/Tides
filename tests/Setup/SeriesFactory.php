@@ -3,6 +3,7 @@
 namespace Tests\Setup;
 
 use App\Models\Asset;
+use App\Models\Chapter;
 use App\Models\Clip;
 use App\Models\Semester;
 use App\Models\Series;
@@ -19,6 +20,8 @@ class SeriesFactory
     protected int $clipsCount = 0;
 
     protected int $assetsCount = 0;
+
+    protected int $chaptersCount = 0;
 
     protected bool $opencastSeriesID = false;
 
@@ -62,6 +65,13 @@ class SeriesFactory
     public function withAssets($count): static
     {
         $this->assetsCount = $count;
+
+        return $this;
+    }
+
+    public function withChapters($count): static
+    {
+        $this->chaptersCount = $count;
 
         return $this;
     }
@@ -113,6 +123,9 @@ class SeriesFactory
                 'is_public' => $this->isPublic,
             ]);
 
+            if ($this->chaptersCount > 0) {
+                Chapter::factory($this->chaptersCount)->create(['series_id' => $series->id]);
+            }
             if ($this->clipsCount > 0) {
                 Clip::factory($this->clipsCount)->create([
                     'series_id' => $series->id,
@@ -120,6 +133,7 @@ class SeriesFactory
                     'language_id' => Arr::random([1, 2]),
                     'semester_id' => Semester::current()->get()->first()->id,
                     'image_id' => $series->image_id,
+                    'chapter_id' => $series->chapters()->first(),
                 ]);
 
                 if ($this->assetsCount > 0) {

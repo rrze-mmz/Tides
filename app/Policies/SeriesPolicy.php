@@ -37,7 +37,10 @@ class SeriesPolicy
          */
 
         return (
-            ($series->is_public && $series->clips->filter(fn ($clip) => $clip->assets()->count())->count() > 0)
+            ($series->is_public && $series->clips->filter(
+                fn ($clip) => $clip->assets()->count() || $clip->is_livestream
+            )->count() > 0
+            )
             || (optional($user)->is($series->owner) || optional($user)->isAdmin() || optional($user)->isAssistant())
         )
             ? Response::allow()

@@ -32,14 +32,6 @@ class SeriesController extends Controller
     }
 
     /**
-     * Create form for a series
-     */
-    public function create(): View
-    {
-        return view('backend.series.create');
-    }
-
-    /**
      * Store a series in database
      */
     public function store(StoreSeriesRequest $request, OpencastService $opencastService): RedirectResponse
@@ -59,6 +51,14 @@ class SeriesController extends Controller
     }
 
     /**
+     * Create form for a series
+     */
+    public function create(): View
+    {
+        return view('backend.series.create');
+    }
+
+    /**
      * Edit form for a series
      *
      *
@@ -71,6 +71,7 @@ class SeriesController extends Controller
         $availableAssistants = collect();
         $opencastSeriesInfo = $opencastService->getSeriesInfo($series);
 
+        $chapters = $series->chapters()->orderBy('position')->get();
         if ($opencastSeriesInfo->get('health')) {
             $assistants = User::role(Role::ASSISTANT)->get();
             //reject all assistants that are already in opencast series acl
@@ -86,7 +87,7 @@ class SeriesController extends Controller
             });
         }
 
-        $clips = Clip::select('id', 'title', 'slug', 'episode')
+        $clips = Clip::select(['id', 'title', 'slug', 'episode', 'is_public'])
             ->where('series_id', $series->id)
             ->addSelect(
                 [
@@ -95,11 +96,11 @@ class SeriesController extends Controller
                         ->take(1),
                 ]
             )
-            ->with('acls')
-            ->orderBy('episode')->get();
+            ->orderBy('episode')
+            ->get();
 
         return view('backend.series.edit', compact([
-            'series', 'clips', 'opencastSeriesInfo', 'availableAssistants',
+            'series', 'clips', 'chapters', 'opencastSeriesInfo', 'availableAssistants',
         ]));
     }
 

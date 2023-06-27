@@ -11,14 +11,18 @@ use Illuminate\Database\Eloquent\Builder;
 
 trait Searchable
 {
-    protected function scopeSearch(Builder $query, string $term): Builder
+    protected function scopeSearch(Builder $query, string $terms): Builder
     {
-        $term = $this->lowerCaseTerm($term);
-
+        $terms = $this->lowerCaseTerm($terms);
         $columns = collect($this->searchable);
 
-        $columns->each(function ($column) use ($term, $query) {
-            $query->orWhereRaw('lower('.$column.") like ('%".$term."%')");
+        collect(explode(' ', $terms))->filter()->each(function ($term) use ($query, $columns) {
+            $term = '%'.$term.'%';
+            $query->where(function ($query) use ($term, $columns) {
+                $columns->each(function ($column) use ($term, $query) {
+                    $query->orWhere($column, 'like', $term);
+                });
+            });
         });
 
         return $query;

@@ -47,23 +47,32 @@
                               :value="$clip->episode"
                               label="Episode"
                               :full-col="false"
-                              :required="true"/>
+                              :required="true" />
 
                 <x-form.datepicker field-name="recording_date"
                                    label="Recording Date"
                                    :full-col="false"
-                                   :value="$clip->recording_date"/>
+                                   :value="$clip->recording_date" />
 
                 <x-form.input field-name="title"
                               input-type="text"
                               :value="$clip->title"
                               label="Title"
                               :fullCol="true"
-                              :required="true"/>
+                              :required="true" />
 
+                @if($clip->series->chapters()->count() > 0)
+                    <x-form.select2-single field-name="chapter_id"
+                                           label="Chapter"
+                                           select-class="select2-tides"
+                                           model="chapter"
+                                           :where-i-d="$clip->series->id"
+                                           :selectedItem="$clip->chapter_id"
+                    />
+                @endif
                 <x-form.textarea field-name="description"
                                  :value="$clip->description"
-                                 label="Description"/>
+                                 label="Description" />
 
                 <x-form.select2-single field-name="organization_id"
                                        label="Organization"
@@ -113,18 +122,18 @@
                                          :model="$clip"
                                          label="Presenters"
                                          select-class="select2-tides"
-                                         :items="$clip->presenters"/>
+                                         :items="$clip->presenters" />
 
                 <x-form.select2-multiple field-name="tags"
                                          :model="$clip"
                                          label="Tags"
                                          select-class="select2-tides-tags"
-                                         :items="$clip->tags"/>
+                                         :items="$clip->tags" />
 
                 <x-form.select2-multiple field-name="acls"
                                          :model="$clip"
                                          label="Accessible via"
-                                         select-class="select2-tides"/>
+                                         select-class="select2-tides" />
 
                 <x-form.password field-name="password"
                                  :value="$clip->password"
@@ -146,7 +155,7 @@
 
             <x-form.button :link="$link=false"
                            type="submit"
-                           text="Save"/>
+                           text="Save" />
         </form>
 
         <div class="h-full w-1/5 pr-4 space-y-5">
@@ -219,7 +228,7 @@
             <h2 class="border-b-2 border-black pb-2 text-2xl font-semibold">
                 Backend {{ __('clip.frontend.comments') }}
             </h2>
-            <livewire:comments-section :model="$clip" :type="'backend'"/>
+            <livewire:comments-section :model="$clip" :type="'backend'" />
             @livewireScripts
 
         </div>

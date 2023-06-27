@@ -16,7 +16,8 @@ class ListClips extends Component
      */
     public function __construct(
         public Model $series,
-        public Collection $clips,
+        public Collection|array $clips,
+        public Collection $chapters,
         public bool $dashboardAction,
         public bool $reorder = false
     ) {

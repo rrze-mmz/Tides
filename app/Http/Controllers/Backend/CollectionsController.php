@@ -21,19 +21,19 @@ class CollectionsController extends Controller
     }
 
     /**
-     * Render a create form for new collection
-     */
-    public function create(): Factory|View|Application
-    {
-        return view('backend.collections.create');
-    }
-
-    /**
      * Persists a collection to database
      */
     public function store(StoreCollectionRequest $request): RedirectResponse
     {
         return to_route('collections.edit', Collection::create($request->validated()));
+    }
+
+    /**
+     * Render a create form for new collection
+     */
+    public function create(): Factory|View|Application
+    {
+        return view('backend.collections.create');
     }
 
     /**
@@ -44,15 +44,15 @@ class CollectionsController extends Controller
         return view('backend.collections.edit')->withCollection($collection);
     }
 
-    /**
-     * Updates a collection record on database
-     */
-    public function update(Collection $collection, StoreCollectionRequest $request): RedirectResponse
-    {
-        $collection->update($request->validated());
+        /**
+         * Updates a collection record on database
+         */
+        public function update(Collection $collection, StoreCollectionRequest $request): RedirectResponse
+        {
+            $collection->update($request->validated());
 
-        return to_route('collections.edit', $collection);
-    }
+            return to_route('collections.edit', $collection);
+        }
 
     /**
      * Deletes a single collection

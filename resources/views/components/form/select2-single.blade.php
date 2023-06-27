@@ -14,7 +14,7 @@
         >
 
             @forelse($items as $item)
-                <option value="{{$item->id }}" {{ $isSelected($item->id) ? 'selected="selected"' : '' }}>
+                <option value="{{$item->id }}" {{ $isSelected($item->id) ? 'selected' : '' }}>
                     {{$item->name }}
                 </option>
             @empty
@@ -25,7 +25,7 @@
 
     @error($fieldName)
     <div class="col-span-8">
-        <p class="mt-2 w-full text-xs text-red-500">{{ $message }}</p>
+        <p class="mt-2 w-full text-xs text-red-500">{{ $mssage }}</p>
     </div>
     @enderror
 </div>

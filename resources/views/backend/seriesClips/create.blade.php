@@ -1,3 +1,6 @@
+@php
+    use App\Models\Semester;
+@endphp
 @extends('layouts.backend')
 
 @section('content')
@@ -14,7 +17,7 @@
 
                 <x-form.input field-name="episode"
                               input-type="number"
-                              :value="$series->clips()->count()+1"
+                              :value="$series->latestClip?->episode + 1"
                               label="Episode"
                               :full-col="false"
                               :required="false"
@@ -23,17 +26,26 @@
                 <x-form.datepicker field-name="recording_date"
                                    label="Recording Date"
                                    :full-col="false"
-                                   :value="now()"/>
+                                   :value="now()" />
 
 
                 <x-form.input field-name="title"
                               input-type="text"
-                              :value="old('title')"
+                              :value="$series->latestClip?->title"
                               label="Title"
                               :full-col="true"
                               :required="true"
                 />
 
+                @if($series->chapters()->count()> 0)
+                    <x-form.select2-single field-name="chapter_id"
+                                           label="Chapter"
+                                           select-class="select2-tides"
+                                           model="chapter"
+                                           :where-i-d="$series->id"
+                                           :selectedItem="$series->latestClip->chapter_id"
+                    />
+                @endif
                 <x-form.textarea field-name="description"
                                  :value="old('description')"
                                  label="Description"
@@ -43,14 +55,14 @@
                                        label="Organization"
                                        select-class="select2-tides-organization"
                                        model="organization"
-                                       :selectedItem="1"
+                                       :selectedItem="($series->latestClip?->organization_id) ?? $series->organization_id"
                 />
 
                 <x-form.select2-single field-name="language_id"
                                        label="Language"
                                        select-class="select2-tides"
                                        model="language"
-                                       :selectedItem="1"
+                                       :selectedItem="$series->latestClip?->language_id"
                 />
 
                 <div class="mb-2 border-b border-solid border-b-black pb-2 text-left text-xl font-bold">
@@ -61,35 +73,35 @@
                                        label="Context"
                                        select-class="select2-tides"
                                        model="context"
-                                       :selectedItem="1"
+                                       :selectedItem="($series->latestClip?->context_id) ?? 22"
                 />
 
                 <x-form.select2-single field-name="format_id"
                                        label="Format"
                                        select-class="select2-tides"
                                        model="format"
-                                       :selectedItem="1"
+                                       :selectedItem="($series->latestClip?->format_id) ?? 11"
                 />
 
                 <x-form.select2-single field-name="type_id"
                                        label="Type"
                                        select-class="select2-tides"
                                        model="type"
-                                       :selectedItem="1"
+                                       :selectedItem="($series->latestClip?->type_id) ?? 11"
                 />
 
                 <x-form.select2-multiple field-name="presenters"
                                          label="Presenters"
                                          select-class="select2-tides-presenters"
-                                         :model="null"
-                                         :items="[]"
+                                         :model="$series->latestClip"
+                                         :items="$series->presenters"
                 />
 
                 <x-form.select2-single field-name="semester_id"
                                        label="Semester"
                                        select-class="select2-tides"
                                        model="semester"
-                                       :selectedItem="$series->latestClip?->semeseter_id"
+                                       :selectedItem="$series->latestClip?->semeseter_id ?? Semester::current()->first()->id"
                 />
 
                 <x-form.select2-multiple field-name="tags"
@@ -105,7 +117,7 @@
 
                 <x-form.select2-multiple field-name="acls"
                                          label="Accessible via"
-                                         :model="null"
+                                         :model="$series->latestClip"
                                          select-class="select2-tides"
                 />
 
@@ -127,7 +139,7 @@
 
             </div>
             <div class="pt-10">
-                <x-form.button :link="$link=false" type="submit" text="Add a Clip to Series"/>
+                <x-form.button :link="$link=false" type="submit" text="Add a Clip to Series" />
             </div>
         </form>
     </div>

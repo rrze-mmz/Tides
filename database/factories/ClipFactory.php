@@ -31,7 +31,7 @@ class ClipFactory extends Factory
         return [
             'title' => $title = $this->faker->sentence(),
             'description' => $this->faker->paragraph(),
-            'recording_date' => now(),
+            'recording_date' => $this->faker->dateTime()->format('d-m-Y H:i:s'),
             'slug' => $title,
             'organization_id' => Organization::factory()->create()->org_id,
             'language_id' => '1', //1 is de, 2 should be  en

@@ -216,7 +216,7 @@ function findUserByOpencastRole(string $opencastRole): User|string
     if (Str::of($opencastRole)->contains('ROLE_USER_')) {
         $username = Str::lower(Str::after($opencastRole, 'ROLE_USER_'));
 
-        return User::search($username)->get()->first();
+        return User::search($username)->get()->first() ?? $opencastRole;
     } else {
         return $opencastRole;
     }

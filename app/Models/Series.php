@@ -39,28 +39,6 @@ class Series extends BaseModel
         });
     }
 
-    protected function title(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => html_entity_decode(
-                htmlspecialchars_decode(
-                    html_entity_decode(html_entity_decode($value, ENT_NOQUOTES, 'UTF-8'))
-                )
-            )
-        );
-    }
-
-    protected function description(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => html_entity_decode(
-                htmlspecialchars_decode(
-                    html_entity_decode(html_entity_decode($value, ENT_NOQUOTES, 'UTF-8'))
-                )
-            )
-        );
-    }
-
     /**
      * Series routes should work with slug and with id to ensure backward compatibility
      */
@@ -99,27 +77,11 @@ class Series extends BaseModel
     }
 
     /**
-     * A series can have many clips
-     */
-    public function clips(): HasMany
-    {
-        return $this->hasMany(Clip::class);
-    }
-
-    /**
      * A series belongs to a user
      */
     public function owner(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-    /**
-     * Series members
-     */
-    public function members(): BelongsToMany
-    {
-        return $this->belongsToMany(User::class, 'series_members')->withTimestamps();
     }
 
     /**
@@ -138,6 +100,14 @@ class Series extends BaseModel
         $this->members()->attach($moderatorUser);
 
         return $moderatorUser;
+    }
+
+    /**
+     * Series members
+     */
+    public function members(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'series_members')->withTimestamps();
     }
 
     /**
@@ -202,6 +172,14 @@ class Series extends BaseModel
         $clip->addTags(collect($validated['tags']));
 
         return $clip;
+    }
+
+    /**
+     * A series can have many clips
+     */
+    public function clips(): HasMany
+    {
+        return $this->hasMany(Clip::class);
     }
 
     /**
@@ -320,7 +298,7 @@ class Series extends BaseModel
     public function clipsWithoutChapter(Chapter $chapter = null): mixed
     {
         return $this->clips->filter(function ($clip) use ($chapter) {
-            return $clip->chapter_id !== $chapter->id || $clip->chapter_id === null;
+            return ($chapter) ? $clip->chapter_id !== $chapter->id : $clip->chapter_id === null;
         });
     }
 
@@ -329,5 +307,27 @@ class Series extends BaseModel
         return $this->clips
             ->map(fn ($clip) => $clip->acls->pluck('name'))->flatten()->unique()->values()
             ->implode(', ');
+    }
+
+    protected function title(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => html_entity_decode(
+                htmlspecialchars_decode(
+                    html_entity_decode(html_entity_decode($value, ENT_NOQUOTES, 'UTF-8'))
+                )
+            )
+        );
+    }
+
+    protected function description(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => html_entity_decode(
+                htmlspecialchars_decode(
+                    html_entity_decode(html_entity_decode($value, ENT_NOQUOTES, 'UTF-8'))
+                )
+            )
+        );
     }
 }

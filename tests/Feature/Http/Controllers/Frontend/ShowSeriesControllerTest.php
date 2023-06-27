@@ -3,7 +3,9 @@
 use App\Enums\Acl;
 use App\Enums\Role;
 use App\Models\Asset;
+use App\Models\Chapter;
 use App\Models\Clip;
+use App\Models\Presenter;
 use App\Models\Series;
 use Facades\Tests\Setup\SeriesFactory;
 use function Pest\Laravel\get;
@@ -17,6 +19,17 @@ test(' series route working also with course urls keeping backwards compatibilit
     $series = Series::factory()->create();
 
     $this->get('/course/id/'.$series->id)->assertRedirectToRoute('frontend.series.show', $series);
+});
+
+it('lists a livestream clip to visitors', function () {
+    $series = SeriesFactory::withClips(1)->create();
+    $clip = $series->clips()->first();
+
+    $clip->is_livestream = true;
+    $clip->save();
+
+    $series->refresh();
+    get(route('frontend.series.show', $series))->assertSee($clip->title);
 });
 
 it('lists all clips with media assets to visitors', function () {
@@ -116,7 +129,7 @@ it('shows feed links for different formats', function () {
         ->assertSee('SD');
 });
 
-it('shows series mutliple semester info if has clips from multiple semesters', function () {
+it('shows series multiple semester info if has clips from multiple semesters', function () {
     $series = SeriesFactory::withClips(2)->withAssets(1)->create();
     $firstClip = $series->clips()->first();
     $firstClip->semester_id = 3;
@@ -124,6 +137,15 @@ it('shows series mutliple semester info if has clips from multiple semesters', f
 
     get(route('frontend.series.show', $series))
         ->assertSee($series->clips()->first()->semester->name.', '.$series->latestClip->semester->name);
+});
+
+it('shows series presenters', function () {
+    $series = SeriesFactory::withClips(2)->withAssets(1)->create();
+    $presenter = Presenter::factory()->create();
+
+    $series->addPresenters(collect($presenter->id));
+
+    get(route('frontend.series.show', $series))->assertSee($presenter->getFullNameAttribute());
 });
 
 it('shows a subscribe button for logged in users', function () {
@@ -152,4 +174,31 @@ it('hides unlock button to portal admins', function () {
     signInRole(Role::ADMIN);
 
     get(route('frontend.series.show', $series))->assertDontSee('Unlock series');
+});
+
+it('displays series chapters', function () {
+    $series = SeriesFactory::withClips(2)->withAssets(1)->withChapters(1)->create();
+
+    get(route('frontend.series.show', $series))->assertSee($series->chapters()->first()->title);
+});
+
+it('will display chapters with clips that have assets and are public', function () {
+    $series = SeriesFactory::withClips(2)->withAssets(1)->withChapters(1)->create();
+    Clip::factory()->create([
+        'series_id' => $series,
+        'chapter_id' => $newChapter = Chapter::factory()->create(['series_id' => $series])]);
+
+    get(route('frontend.series.show', $series))
+        ->assertSee($series->chapters()->first()->title)
+        ->assertDontSee($newChapter->title);
+});
+
+it('will display chapters with livestream clips', function () {
+    $series = SeriesFactory::withClips(1)->withChapters(1)->create();
+
+    $clip = $series->clips()->first();
+    $clip->is_livestream = true;
+    $clip->save();
+
+    get(route('frontend.series.show', $series))->assertSee($clip->title);
 });

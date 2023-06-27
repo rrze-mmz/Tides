@@ -83,5 +83,5 @@
     <div class="flex border-b border-black pt-8 pb-2 font-semibold font-2xl">
         Collection Clips
     </div>
-    <x-list-clips :series="$collection" dashboardAction="@can('menu-dashboard-admin')"/>
+    <x-list-clips :series="$collection" :clips="$collection->clips" dashboardAction="@can('menu-dashboard-admin')" />
 @endsection

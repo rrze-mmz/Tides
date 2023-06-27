@@ -2,20 +2,19 @@
 @extends('layouts.frontend')
 
 @section('content')
-    <div class="container mx-auto mt-32 md:mt-32">
+    <div class="container mx-auto mt-16 md:mt-16">
         <div class="flex justify-between border-b-2 border-black pb-2">
             <h2 class="text-2xl font-bold">{{ $series->title }} [ID: {{ $series->id }}]</h2>
             @cannot('administrate-admin-portal-pages')
                 @if( str()->contains($series->fetchClipsAcls(),[Acl::PASSWORD->lower()]))
-                    <livewire:unlock-object :model="$series"/>
+                    <livewire:unlock-object :model="$series" />
                 @endif
             @endcannot
             @can('edit-series', $series)
-                <x-form.button :link="$series->adminPath()" type="submit" text="Edit series"/>
+                <x-form.button :link="$series->adminPath()" type="submit" text="Edit series" />
             @endcan
 
         </div>
-
         @if($series->description!=='')
             <div class="flex flex-col pt-4">
                 <h2 class="text-2xl font-semibold">{{ __('common.description') }}</h2>
@@ -36,7 +35,7 @@
                     hover:bg-blue-700 active:bg-blue-900 focus:outline-none focus:border-blue-900
                     focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">
                         Feeds
-                        <x-heroicon-o-rss class="ml-4 h-4 w-4 fill-white"/>
+                        <x-heroicon-o-rss class="ml-4 h-4 w-4 fill-white" />
                     </a>
                 </div>
                 <div x-show="open" @click.outside="open = false" x-transition:enter="transition ease-out duration-300"
@@ -59,15 +58,14 @@
             </div>
             @auth()
                 <div>
-                    <livewire:subscribe-section :series="$series"/>
+                    <livewire:subscribe-section :series="$series" />
                 </div>
             @endauth
         </div>
-
         <div class="flex justify-around border-b-2 border-gray-500 pt-8 pb-3">
 
             <div class="flex w-1/4 items-center">
-                <x-heroicon-o-clock class="h-6 w-6"/>
+                <x-heroicon-o-clock class="h-6 w-6" />
                 <span class="pl-3">
                     {{
                     $series->clips
@@ -81,17 +79,23 @@
             </div>
 
             <div class="flex w-1/4 items-center">
-                <x-heroicon-o-calendar class="h-6 w-6"/>
-                <span class="pl-3"></span>
+                <x-heroicon-o-user class="h-6 w-6" />
+                <span class="pl-3">
+                    {{
+                    $series->presenters->map(function ($presenter) {
+                        return $presenter->getFullNameAttribute();
+                        })->implode(', ')
+                        }}
+                </span>
             </div>
 
             <div class="flex w-1/4 items-center">
-                <x-heroicon-o-upload class="h-6 w-6"/>
+                <x-heroicon-o-upload class="h-6 w-6" />
                 <span class="pl-3"> {{ $series->latestClip?->updated_at }} </span>
             </div>
 
             <div class="flex w-1/4 items-center">
-                <x-heroicon-o-eye class='h-6 w-6'/>
+                <x-heroicon-o-eye class='h-6 w-6' />
                 <span class="pl-3"> {{ __('series.frontend.show.views', ['counter' => 10]) }} </span>
             </div>
 
@@ -101,7 +105,7 @@
                 <h2 class="border-b-2 border-black pb-2 text-2xl font-semibold">
                     {{ __('clip.frontend.comments') }}
                 </h2>
-                <livewire:comments-section :model="$series" :type="'frontend'"/>
+                <livewire:comments-section :model="$series" :type="'frontend'" />
             </div>
         @endauth
         @include('backend.clips.list')
