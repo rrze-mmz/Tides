@@ -1,7 +1,6 @@
 <?php
 
 use App\Enums\Role;
-use App\Models\User;
 use Illuminate\Foundation\Testing\WithFaker;
 use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\get;

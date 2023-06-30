@@ -1,36 +1,66 @@
-## About Tides
+# Tides - Open Source Video Platform
+
 [![Laravel](https://github.com/stefanosgeo/tides/actions/workflows/build.yml/badge.svg?branch=develop)](https://github.com/stefanosgeo/tides/actions/workflows/build.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Tides is an open source video platform based on <a  href="https://laravel.com" target="_blank"> laravel framework </a>. 
+Tides is an open source video platform based on the Laravel framework. It provides a flexible and customizable
+solution for managing and streaming videos. This README provides instructions on setting up the development environment
+and installing Tides on your local machine.
 
-## Following Components is used
+## Features and Components
 
-- <a href="https://tailwindcss.com/" target="_blank"> Tailwindcss </a> 
-- <a href="https://plyr.io/" target="_blank"> Plyr Player </a>
-- <a href="https://github.com/protonemedia/laravel-ffmpeg" target="_blank"> Laravel FFmpeg </a>
+Tides utilizes the following components:
 
+- **Tailwind CSS**: A utility-first CSS framework for building responsive and modern user interfaces.
+- **Plyr Player**: A lightweight and customizable HTML5 video player with a sleek design and robust features.
+- **Laravel FFmpeg**: A PHP package for working with FFmpeg, allowing for video manipulation and processing.
 
-# Quick start
+## Quick Start
 
-## Set up development environment
+To get started with Tides, follow these steps to set up your development environment:
 
-For local development is recommended to use 
-<a href="https://laravel.com/docs/8.x/valet/" target="_blank">Valet</a>
+### Setting up Development Environment
 
-* <a href="https://laravel.com/docs/8.x/valet">For MacOS</a>
-* <a href="https://cpriego.github.io/valet-linux/">Valet fork for Linux</a>
-* <a href="https://github.com/cretueusebiu/valet-windows">Valet fork for Windows</a>
+For local development, we recommend using Valet. Choose the appropriate Valet fork for your operating system:
 
-## Tides install
+- [Valet for macOS](https://github.com/laravel/valet)
+- [Valet for Linux](https://github.com/cpriego/valet-linux)
+- [Valet for Windows](https://github.com/cretueusebiu/valet-windows)
 
-* First clone repo
-* ``` cd /repo/path ```
-* ``` composer install ```
-* ``` cp .env.example .env ```
-* ``` artisan key:generate ```
-* ``` touch /tmp/tides.sqlite ```
-* ``` artisan migrate ```
+### Tides Installation
+
+1. Clone the Tides repository to your desired location:
+
+   ```
+   git clone https://github.com/your-username/tides.git
+      ```
+2. Install the required dependencies using Composer:
+   ```
+   composer install
+      ```
+
+3. Create a copy of the .env.example file and name it .env:
+   ```
+   cp .env.example .env
+      ```
+4. Generate a new application key:
+   ```
+   php artisan key:generate
+      ```
+
+5. Create an SQLite database file for Tides:
+   ```
+   touch /tmp/tides.sqlite
+      ```
+6. Run the database migrations:
+   ```
+   php artisan migrate
+      ```
+
 ## License
 
-This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Tides is open-source software licensed under the MIT license. See the LICENSE file for more details.
+
+Thank you for your interest in Tides! If you encounter any issues or have any questions, please don't hesitate to reach
+out or create a GitHub issue. We appreciate your support and contributions in making Tides a powerful video platform.
+

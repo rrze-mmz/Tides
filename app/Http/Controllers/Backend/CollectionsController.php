@@ -44,15 +44,15 @@ class CollectionsController extends Controller
         return view('backend.collections.edit')->withCollection($collection);
     }
 
-        /**
-         * Updates a collection record on database
-         */
-        public function update(Collection $collection, StoreCollectionRequest $request): RedirectResponse
-        {
-            $collection->update($request->validated());
+    /**
+     * Updates a collection record on database
+     */
+    public function update(Collection $collection, StoreCollectionRequest $request): RedirectResponse
+    {
+        $collection->update($request->validated());
 
-            return to_route('collections.edit', $collection);
-        }
+        return to_route('collections.edit', $collection);
+    }
 
     /**
      * Deletes a single collection
