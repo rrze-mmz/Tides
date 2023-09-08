@@ -20,7 +20,7 @@ trait Searchable
             $term = '%'.$term.'%';
             $query->where(function ($query) use ($term, $columns) {
                 $columns->each(function ($column) use ($term, $query) {
-                    $query->orWhere($column, 'like', $term);
+                    $query->orWhereRaw('lower('.$column.') like (?)', [$term]);
                 });
             });
         });

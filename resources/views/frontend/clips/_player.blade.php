@@ -3,7 +3,7 @@
     <div class="flex content-center justify-center pt-6">
 
         @if($clip->checkAcls())
-            <x-player :clip="$clip" :wowzaStatus="$wowzaStatus"/>
+            <x-player :clip="$clip" :wowzaStatus="$wowzaStatus" />
         @else
             <p>{{ __('clip.frontend.not authorized to view video') }}</p>
         @endif
@@ -19,7 +19,7 @@
                     hover:bg-blue-700 active:bg-blue-900 focus:outline-none focus:border-blue-900
                     focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">
                     Feeds
-                    <x-heroicon-o-rss class="ml-4 h-4 w-4 fill-white"/>
+                    <x-heroicon-o-rss class="ml-4 h-4 w-4 fill-white" />
                 </a>
             </div>
             <div x-show="open" @click.outside="open = false" x-transition:enter="transition ease-out duration-300"
@@ -45,7 +45,7 @@
 
         @if ($clip->series_id)
             <div class="flex items-center">
-                <x-heroicon-o-academic-cap class="h-6 w-6"/>
+                <x-heroicon-o-academic-cap class="h-6 w-6" />
                 <a href="{{ route('frontend.series.show', $clip->series) }}">
                     <span class="pl-3 underline"> {{ $clip->series->title }}</span>
                 </a>
@@ -53,28 +53,36 @@
             </div>
         @endif
         <div class="flex items-center">
-            <x-heroicon-o-user-group class="h-6 w-6"/>
+            <x-heroicon-o-user-group class="h-6 w-6" />
             <span class="pl-3"> {{ $clip->presenters->pluck(['full_name'])->implode(', ') }} </span>
         </div>
 
+        @if($clip->is_livestream)
+            <div class="flex items-center">
+                <x-heroicon-o-clock class="h-6 w-6" />
+                <span class="pl-3"></span>
+                LIVESTREAM
+            </div>
+        @else
+            <div class="flex items-center">
+                <x-heroicon-o-clock class="h-6 w-6" />
+                <span class="pl-3"></span> {{ $clip->assets()->first()->durationToHours() }} Min
+            </div>
+        @endif
+
 
         <div class="flex items-center">
-            <x-heroicon-o-clock class="h-6 w-6"/>
-            <span class="pl-3"></span> {{ $clip->assets()->first()->durationToHours() }} Min
-        </div>
-
-        <div class="flex items-center">
-            <x-heroicon-o-calendar class="h-6 w-6"/>
+            <x-heroicon-o-calendar class="h-6 w-6" />
             <span class="pl-3">{{ $clip->created_at->format('Y-m-d') }}</span>
         </div>
 
         <div class="flex items-center">
-            <x-heroicon-o-upload class="h-6 w-6"/>
-            <span class="pl-3"> {{ $clip->assets->first()->updated_at }}</span>
+            <x-heroicon-o-upload class="h-6 w-6" />
+            <span class="pl-3"> {{ $clip->assets->first()?->updated_at }}</span>
         </div>
 
         <div class="flex items-center">
-            <x-heroicon-o-eye class="h-6 w-6"/>
+            <x-heroicon-o-eye class="h-6 w-6" />
             <span class="pl-3"> 0 Views </span>
         </div>
 

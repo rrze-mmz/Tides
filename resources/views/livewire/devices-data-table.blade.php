@@ -6,7 +6,7 @@
                     <label for="search" class="sr-only">Search</label>
                     <div class="relative">
                         <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                            <x-heroicon-o-search class="h-5 w-5 text-gray-400"/>
+                            <x-heroicon-o-search class="h-5 w-5 text-gray-400" />
                         </div>
                         <input wire:model="search"
                                id="search"
@@ -34,7 +34,7 @@
                                 <x-sort-icon
                                     field="name"
                                     :sortField="$sortField"
-                                    :sortAsc="$sortAsc"/>
+                                    :sortAsc="$sortAsc" />
                             </div>
                         </th>
                         <th
@@ -48,7 +48,7 @@
                                 <x-sort-icon
                                     field="location"
                                     :sortField="$sortField"
-                                    :sortAsc="$sortAsc"/>
+                                    :sortAsc="$sortAsc" />
                             </div>
                         </th>
                         <th
@@ -62,7 +62,7 @@
                                 <x-sort-icon
                                     field="faculty"
                                     :sortField="$sortField"
-                                    :sortAsc="$sortAsc"/>
+                                    :sortAsc="$sortAsc" />
                             </div>
                         </th>
                         <th
@@ -77,7 +77,7 @@
                                 <x-sort-icon
                                     field="camera"
                                     :sortField="$sortField"
-                                    :sortAsc="$sortAsc"/>
+                                    :sortAsc="$sortAsc" />
                             </div>
                         </th>
                         <th
@@ -92,7 +92,7 @@
                                 <x-sort-icon
                                     field="power_plug"
                                     :sortField="$sortField"
-                                    :sortAsc="$sortAsc"/>
+                                    :sortAsc="$sortAsc" />
                             </div>
                         </th>
                         <th
@@ -205,36 +205,36 @@
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
                                 <div class="text-sm leading-5 text-gray-900">
                                     @if ($device->has_recording_func)
-                                        <x-heroicon-o-badge-check class="h-6 w-6"/>
+                                        <x-heroicon-o-badge-check class="h-6 w-6" />
                                     @else
-                                        <x-heroicon-o-x-circle class="h-6 w-6"/>
+                                        <x-heroicon-o-x-circle class="h-6 w-6" />
                                     @endif
                                 </div>
                             </td>
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
                                 <div class="text-sm leading-5 text-gray-900">
                                     @if ($device->has_livestream_func)
-                                        <x-heroicon-o-badge-check class="h-6 w-6"/>
+                                        <x-heroicon-o-badge-check class="h-6 w-6" />
                                     @else
-                                        <x-heroicon-o-x-circle class="h-6 w-6"/>
+                                        <x-heroicon-o-x-circle class="h-6 w-6" />
                                     @endif
                                 </div>
                             </td>
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
                                 <div class="text-sm leading-5 text-gray-900">
                                     @if ($device->operational)
-                                        <x-heroicon-o-badge-check class="h-6 w-6"/>
+                                        <x-heroicon-o-badge-check class="h-6 w-6" />
                                     @else
-                                        <x-heroicon-o-x-circle class="h-6 w-6"/>
+                                        <x-heroicon-o-x-circle class="h-6 w-6" />
                                     @endif
                                 </div>
                             </td>
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
                                 <div class="text-sm leading-5 text-gray-900">
                                     @if ($device->is_hybrid)
-                                        <x-heroicon-o-badge-check class="h-6 w-6"/>
+                                        <x-heroicon-o-badge-check class="h-6 w-6" />
                                     @else
-                                        <x-heroicon-o-x-circle class="h-6 w-6"/>
+                                        <x-heroicon-o-x-circle class="h-6 w-6" />
                                     @endif
                                 </div>
                             </td>

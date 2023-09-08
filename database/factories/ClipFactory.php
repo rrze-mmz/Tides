@@ -44,6 +44,7 @@ class ClipFactory extends Factory
             'series_id' => null,
             'episode' => $episode++,
             'is_public' => true,
+            'is_livestream' => false,
             'image_id' => Image::factory()->create()->id,
         ];
     }

@@ -72,6 +72,7 @@ class AdminPortalApplicationController extends Controller
             $notification->data = $notificationData;
             $notification->save();
         });
+
         //redirect to notifications page
         return to_route('users.edit', $appliedUser);
     }

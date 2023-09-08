@@ -151,11 +151,18 @@
                                       field-name="is_public"
                 />
 
+                <x-form.toggle-button :value="$clip->is_livestream"
+                                      label="Livestream clip"
+                                      field-name="is_livestream"
+                />
+
             </div>
 
-            <x-form.button :link="$link=false"
-                           type="submit"
-                           text="Save" />
+            <div class="pt-10">
+                <x-button type="submit" class="bg-blue-600 hover:bg-blue-700">
+                    Save
+                </x-button>
+            </div>
         </form>
 
         <div class="h-full w-1/5 pr-4 space-y-5">
@@ -165,9 +172,12 @@
                 @include('backend.clips.sidebar._assign-series')
             @endif
 
-            @include('backend.clips.sidebar._upload-video')
+            @if(!$clip->is_livestream)
+                @include('backend.clips.sidebar._upload-video')
+            @endif
 
-            @if ($opencastConnectionCollection['status']==='pass')
+            @if ($opencastConnectionCollection['status']==='pass' && !$clip->is_livestream)
+                )
                 @include('backend.clips.sidebar._ingest-video')
             @endif
 
@@ -184,28 +194,34 @@
         More actions
     </div>
     <div class="flex items-center pt-3 space-x-6">
-        <x-form.button :link="route('frontend.clips.show',$clip)"
-                       type="submit"
-                       text="Go to public page"
-        />
+        <a href="{{route('frontend.clips.show', $clip)}}">
+            <x-button type='button' class="bg-blue-600 hover:bg-blue-700">
+                Go to public page
+            </x-button>
+        </a>
 
         @if ($clip->assets()->count())
-            <x-form.button :link="route('admin.clips.triggerSmilFiles', $clip)"
-                           type="submit"
-                           text="Trigger smil files"
-            />
+            <a href="{{route('admin.clips.triggerSmilFiles', $clip)}}">
+                <x-button type='button' class="bg-blue-600 hover:bg-blue-700">
+                    Trigger smil files
+                </x-button>
+            </a>
         @endif
 
-        <x-form.button :link="route('admin.clips.dropzone.listFiles', $clip)"
-                       type="submit"
-                       text=" Transfer files from drop zone"
-        />
+        @if(!$clip->is_livestream)
+            <a href="{{route('admin.clips.dropzone.listFiles', $clip)}}">
+                <x-button type='button' class="bg-blue-600 hover:bg-blue-700">
+                    Transfer files from drop zone
+                </x-button>
+            </a>
+        @endif
 
-        @if($opencastConnectionCollection['status']==='pass')
-            <x-form.button :link="route('admin.clips.opencast.listEvents', $clip)"
-                           type="submit"
-                           text=" Transfer files from Opencast"
-            />
+        @if($opencastConnectionCollection['status']==='pass' && !$clip->is_livestream)
+            <a href="{{route('admin.clips.opencast.listEvents', $clip)}}">
+                <x-button type='button' class="bg-blue-600 hover:bg-blue-700">
+                    Transfer files from Opencast
+                </x-button>
+            </a>
         @endif
 
         <form action="{{ route('clips.destroy',$clip) }}"
@@ -213,13 +229,9 @@
         >
             @csrf
             @method('DELETE')
-
-            <button type="delete" class="inline-flex items-center px-4 py-1 border border-transparent text-base leading-6
-                                font-medium rounded-md text-white
-                        bg-red-600  focus:shadow-outline-indigo hover:bg-red-700
-                        hover:shadow-lg ">
+            <x-button type='submit' class="bg-red-600 hover:bg-red-700">
                 Delete Clip
-            </button>
+            </x-button>
         </form>
     </div>
 

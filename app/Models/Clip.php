@@ -28,19 +28,22 @@ use Illuminate\Support\Facades\Storage;
  */
 class Clip extends BaseModel
 {
-    use Searchable;
     use Accessable;
     use Documentable;
     use Presentable;
-    use Slugable;
     use RecordsActivity;
+    use Searchable;
+    use Slugable;
 
     protected $with = ['acls'];
 
-    //search columns for searchable trait
+    // Update series timestamps on clip update
+    protected $touches = ['series'];
+
+    // search columns for searchable trait
     protected array $searchable = ['title', 'description'];
 
-    //hide clip password from elasticsearch index
+    // hide clip password from elasticsearch index
     protected $hidden = ['password'];
 
     protected $dispatchesEvents = [
@@ -63,36 +66,6 @@ class Clip extends BaseModel
             $semester = Semester::find($clip->attributes['semester_id'])->acronym;
             $clip->setSlugAttribute($clip->episode.'-'.$clip->title.'-'.$semester);
         });
-    }
-
-    protected function title(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => html_entity_decode(
-                htmlspecialchars_decode(
-                    html_entity_decode(html_entity_decode($value, ENT_NOQUOTES, 'UTF-8'))
-                )
-            )
-        );
-    }
-
-    protected function description(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => html_entity_decode(
-                htmlspecialchars_decode(
-                    html_entity_decode(html_entity_decode($value, ENT_NOQUOTES, 'UTF-8'))
-                )
-            )
-        );
-    }
-
-    /**
-     * Clip frontend link
-     */
-    public function path(): string
-    {
-        return "/clips/{$this->slug}";
     }
 
     /**
@@ -130,22 +103,6 @@ class Clip extends BaseModel
     public function owner(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-    /**
-     * Tags relationship
-     */
-    public function tags(): BelongsToMany
-    {
-        return $this->belongsToMany(Tag::class, 'clip_tag')->withTimestamps();
-    }
-
-    /**
-     * Asset relationship
-     */
-    public function assets(): HasMany
-    {
-        return $this->hasMany(Asset::class);
     }
 
     public function latestAsset(): HasOne
@@ -240,6 +197,14 @@ class Clip extends BaseModel
     }
 
     /**
+     * Asset relationship
+     */
+    public function assets(): HasMany
+    {
+        return $this->hasMany(Asset::class);
+    }
+
+    /**
      * Updates clip poster image on asset upload
      */
     public function updatePosterImage(): void
@@ -256,6 +221,14 @@ class Clip extends BaseModel
             $this->posterImage = null;
         }
         $this->save();
+    }
+
+    /**
+     * Clip frontend link
+     */
+    public function path(): string
+    {
+        return "/clips/{$this->slug}";
     }
 
     /**
@@ -278,9 +251,19 @@ class Clip extends BaseModel
         }
     }
 
-    /*
-     * Return next and previous Models based on current Model episode attribute
+    /**
+     * Tags relationship
      */
+    public function tags(): BelongsToMany
+    {
+        return $this->belongsToMany(Tag::class, 'clip_tag')->withTimestamps();
+    }
+
+    public function livestream(): HasOne
+    {
+        return $this->hasOne(Livestream::class);
+    }
+
     public function previousNextClipCollection(): Collection
     {
         $clipsCollection = $this->series->clips()->orderBy('episode')->get();
@@ -305,10 +288,14 @@ class Clip extends BaseModel
         });
     }
 
+    /*
+     * Return next and previous Models based on current Model episode attribute
+     */
+
     /**
      * Return caption asset for the clip
      */
-    public function getCaptionAsset(): Asset|null
+    public function getCaptionAsset(): ?Asset
     {
         return $this->assets->filter(function ($asset) {
             return $asset->type == Content::CC() && ! $asset->is_deleted;
@@ -336,6 +323,28 @@ class Clip extends BaseModel
                     ->whereColumn('id', 'clips.semester_id')
                     ->take(1),
             ]
+        );
+    }
+
+    protected function title(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => html_entity_decode(
+                htmlspecialchars_decode(
+                    html_entity_decode(html_entity_decode($value, ENT_NOQUOTES, 'UTF-8'))
+                )
+            )
+        );
+    }
+
+    protected function description(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => html_entity_decode(
+                htmlspecialchars_decode(
+                    html_entity_decode(html_entity_decode($value, ENT_NOQUOTES, 'UTF-8'))
+                )
+            )
         );
     }
 }

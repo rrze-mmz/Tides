@@ -50,6 +50,7 @@ class UpdateClipRequest extends FormRequest
             'allow_comments' => ['boolean'],
             'password' => ['nullable', Password::min(8)->mixedCase()],
             'is_public' => ['boolean'],
+            'is_livestream' => ['boolean'],
         ];
     }
 
@@ -62,6 +63,7 @@ class UpdateClipRequest extends FormRequest
             'presenters' => $this->presenters = $this->presenters ?? [], //set empty array if select2 is empty
             'allow_comments' => $this->allow_comments === 'on',
             'is_public' => $this->is_public === 'on',
+            'is_livestream' => $this->is_livestream === 'on',
         ]);
     }
 }

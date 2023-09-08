@@ -324,7 +324,7 @@ class ManageClipsTest extends TestCase
 
         $asset = $clip->assets()->first();
 
-        $this->artisan('links:update-assets-symbolic-links');
+        $this->artisan('app:update-assets-symbolic-links');
 
         Storage::disk('assetsSymLinks')->assertExists("{$asset->guid}.".getFileExtension($asset));
 

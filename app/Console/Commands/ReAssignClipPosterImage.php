@@ -36,7 +36,7 @@ class ReAssignClipPosterImage extends Command
 
             if ($asset) {
                 $clip->posterImage = $asset->player_preview;
-                $clip->save();
+                $clip->saveQuietly();
 
                 Log::info("CLIP POSTER for ID :{$clip->id} IS {$clip->posterImage}");
                 $bar->advance();

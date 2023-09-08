@@ -39,7 +39,19 @@
                                 </td>
                                 <td class="px-6 py-4 text-sm font-light text-gray-900">
                                     @if(!empty($event['series']))
-                                        {{ $event['series']  }}
+                                        <div class="flex items-center">
+                                            <div>
+                                                {{ $event['series']  }}
+                                            </div>
+                                            @if ( Request::segment(1) === 'admin')
+                                                <div class="pl-2">
+                                                    <a href="{{ route('series.edit', str($event['series'])->after('courseID:'))}}">
+                                                        <x-heroicon-o-arrow-circle-right class="h-6" />
+                                                    </a>
+                                                </div>
+                                            @endif
+                                        </div>
+
                                     @else
                                         {{ 'EVENTS_WITHOUT_SERIES' }}
                                     @endif

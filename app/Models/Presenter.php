@@ -11,9 +11,9 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class Presenter extends BaseModel
 {
-    use Searchable;
     use HasFactory;
     use RecordsActivity;
+    use Searchable;
 
     //search columns for searchable trait
     protected array $searchable = ['first_name', 'last_name', 'email', 'username'];

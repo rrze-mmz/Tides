@@ -14,7 +14,7 @@ class UpdateAssetSymbolicLinks extends Command
      *
      * @var string
      */
-    protected $signature = 'links:update-assets-symbolic-links';
+    protected $signature = 'app:update-assets-symbolic-links';
 
     /**
      * The console command description.

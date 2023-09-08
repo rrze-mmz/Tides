@@ -5,6 +5,7 @@ use App\Http\Livewire\DeleteModalWindow;
 use App\Http\Livewire\ImagesDataTable;
 use App\Models\Image;
 use Illuminate\Foundation\Testing\WithFaker;
+
 use function Pest\Laravel\get;
 
 uses(WithFaker::class);

@@ -6,6 +6,7 @@ use App\Enums\OpencastWorkflowState;
 use App\Models\Series;
 use App\Models\User;
 use App\Services\OpencastService;
+use ArgumentCountError;
 use Facades\Tests\Setup\SeriesFactory;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
@@ -17,6 +18,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Tests\Setup\WorksWithOpencastClient;
 use Tests\TestCase;
+use TypeError;
 
 class OpencastServiceTest extends TestCase
 {
@@ -27,15 +29,6 @@ class OpencastServiceTest extends TestCase
     private OpencastService $opencastService;
 
     private MockHandler $mockHandler;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->mockHandler = $this->swapOpencastClient();
-
-        $this->opencastService = app(OpencastService::class);
-    }
 
     /** @test */
     public function it_returns_default_values_if_guzzle_response_is_empty(): void
@@ -112,7 +105,7 @@ class OpencastServiceTest extends TestCase
     /** @test */
     public function it_throws_an_exception_if_create_opencast_series_has_no_arguments(): void
     {
-        $this->expectException(\ArgumentCountError::class);
+        $this->expectException(ArgumentCountError::class);
         $this->opencastService->createSeries();
     }
 
@@ -136,14 +129,14 @@ class OpencastServiceTest extends TestCase
     /** @test */
     public function it_throws_an_exception_if_create_user_has_no_arguments(): void
     {
-        $this->expectException(\ArgumentCountError::class);
+        $this->expectException(ArgumentCountError::class);
         $this->opencastService->createUser();
     }
 
     /** @test */
     public function it_throws_an_exception_if_create_user_argument_is_no_eloquent_model(): void
     {
-        $this->expectException(\TypeError::class);
+        $this->expectException(TypeError::class);
         $this->opencastService->createUser('test');
     }
 
@@ -189,7 +182,7 @@ class OpencastServiceTest extends TestCase
 
         $this->mockHandler->append($this->mockSeriesRunningWorkflowsResponse($series, true));
 
-        $response = $this->opencastService->getSeriesRunningWorkflows($series);
+        $response = $this->opencastService->getEventsByStatus(OpencastWorkflowState::RUNNING, $series);
 
         $this->assertEquals('RUNNING', $response[0]['processing_state']);
 
@@ -203,7 +196,7 @@ class OpencastServiceTest extends TestCase
 
         $this->mockHandler->append($this->mockServerNotAvailable());
 
-        $seriesInfo = $this->opencastService->getSeriesRunningWorkflows($series);
+        $seriesInfo = $this->opencastService->getEventsByStatus(OpencastWorkflowState::RUNNING);
 
         $this->assertTrue($seriesInfo->isEmpty());
     }
@@ -382,5 +375,14 @@ class OpencastServiceTest extends TestCase
 
         $this->assertEquals($data, $this->opencastService
             ->ingestMediaPackageFormData($series->clips()->first(), $file));
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->mockHandler = $this->swapOpencastClient();
+
+        $this->opencastService = app(OpencastService::class);
     }
 }

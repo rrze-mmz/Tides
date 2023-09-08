@@ -25,8 +25,8 @@ class Series extends BaseModel
     use Accessable;
     use Documentable;
     use Presentable;
-    use Slugable;
     use RecordsActivity;
+    use Slugable;
 
     protected $dispatchesEvents = ['deleted' => SeriesDeleted::class];
 
@@ -300,6 +300,11 @@ class Series extends BaseModel
         return $this->clips->filter(function ($clip) use ($chapter) {
             return ($chapter) ? $clip->chapter_id !== $chapter->id : $clip->chapter_id === null;
         });
+    }
+
+    public function fetchLivestreamClip(): ?Clip
+    {
+        return $this->clips()->where('is_livestream', true)->first();
     }
 
     public function getSeriesACLSUpdated()

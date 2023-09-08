@@ -51,6 +51,25 @@ class WowzaService
         return $response;
     }
 
+    public function getAllApplications(): Collection
+    {
+        $response = collect([
+            'releaseId' => 'Wowza server not available',
+            'status' => 'failed',
+        ]);
+
+        try {
+            $this->response = $this->client->get('/v2/servers/_defaultServer_/vhosts/_defaultVHost_/applications');
+            if (! empty((string) $this->response->getBody())) {
+                $response->put('applications', json_encode(simplexml_load_string((string) $this->response->getBody())));
+            }
+        } catch (GuzzleException $e) {
+            Log::error($e);
+        }
+
+        return $response;
+    }
+
     /**
      * Generates smil files for wowza streaming
      *

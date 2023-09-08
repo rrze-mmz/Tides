@@ -24,7 +24,7 @@ class UserCommentsControllerTest extends TestCase
     {
         $this->acceptUseTerms();
 
-        [$comment1, $comment2 ] = Comment::factory(2)->create(['owner_id' => auth()->user()->id]);
+        [$comment1, $comment2] = Comment::factory(2)->create(['owner_id' => auth()->user()->id]);
 
         $this->get(route('frontend.user.comments'))
             ->assertViewHas(['comments' => auth()->user()->comments()->where('type', 'frontend')->get()])

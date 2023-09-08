@@ -18,8 +18,8 @@ use Tests\TestCase;
 class WowzaServiceTest extends TestCase
 {
     use RefreshDatabase;
-    use WorksWithWowzaClient;
     use WorksWithOpencastClient;
+    use WorksWithWowzaClient;
 
     private WowzaService $wowzaService;
 

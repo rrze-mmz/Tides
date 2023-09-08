@@ -15,7 +15,7 @@
                     ? fetchClipPoster($series->lastPublicClip?->latestAsset?->player_preview)
                     : "/images/generic_clip_poster_image.png" }}"
                 alt="preview image"
-                class="object-cover w-full h-full"/>
+                class="object-cover w-full h-full" />
         </a>
         <div
             class="absolute w-full py-2.5 bottom-0 inset-x-0 bg-blue-600  text-white
@@ -49,7 +49,7 @@
         @if($series->presenters->isNotEmpty())
             <div class="flex items-center pt-2 justify-content-between">
                 <div class="pr-2">
-                    <x-heroicon-o-user class="h-4 w-4"/>
+                    <x-heroicon-o-user class="h-4 w-4" />
                 </div>
                 <div class="text-sm">
                     <p class="italic text-gray-900">
@@ -64,11 +64,16 @@
         <div class="flex items-center justify-content-between">
 
             <div class="pr-2">
-                <x-heroicon-o-clock class="w-4 h-4"/>
+                <x-heroicon-o-clock class="w-4 h-4" />
             </div>
             <div class="text-sm">
                 <p class="italic text-gray-900">
-                    {{ $series->updated_at->diffForHumans()  }}
+                    @if(is_null($series->latestClip))
+                        {{ $series->updated_at->diffForHumans() }}
+                    @else
+                        {{ $series->latestClip->recording_date->diffForHumans()  }}
+                    @endif
+
                 </p>
             </div>
         </div>
@@ -78,10 +83,10 @@
                 <div class="flex items-center justify-content-between">
                     <div class="pr-2">
                         @if($series->checkClipAcls($series->clips))
-                            <x-heroicon-o-lock-open class="w-4 h-4 text-green-500"/>
+                            <x-heroicon-o-lock-open class="w-4 h-4 text-green-500" />
                             <span class="sr-only">Unlock clip</span>
                         @else
-                            <x-heroicon-o-lock-closed class="w-4 h-4 text-red-700"/>
+                            <x-heroicon-o-lock-closed class="w-4 h-4 text-red-700" />
                             <span class="sr-only">Lock clip</span>
                         @endif
                     </div>
@@ -102,7 +107,7 @@
                 @csrf
                 <x-form.button :link="$link=false"
                                type="submit"
-                               text="Select this series"/>
+                               text="Select this series" />
             </form>
         @endif
     </div>
@@ -116,7 +121,7 @@
                             {{ __('common.actions.edit') }}
                         </div>
                         <div>
-                            <x-heroicon-o-pencil class="w-4 h-4"/>
+                            <x-heroicon-o-pencil class="w-4 h-4" />
                         </div>
                     </div>
 

@@ -3,6 +3,7 @@
 use App\Enums\ApplicationStatus;
 use App\Enums\Role;
 use App\Models\User;
+
 use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\post;
 

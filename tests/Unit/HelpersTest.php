@@ -9,8 +9,9 @@ use App\Services\WowzaService;
 use Facades\Tests\Setup\ClipFactory;
 use Facades\Tests\Setup\FileFactory;
 use Illuminate\Support\Facades\Storage;
-use function Pest\Laravel\get;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
+use function Pest\Laravel\get;
 
 uses()->group('unit');
 

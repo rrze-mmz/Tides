@@ -3,11 +3,12 @@
 namespace App\Models\Traits;
 
 use App\Models\Acl;
-use function auth;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Collection;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
+
+use function auth;
 
 trait Accessable
 {

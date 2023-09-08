@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Psr\Http\Message\ResponseInterface;
 use Spatie\ArrayToXml\ArrayToXml;
+use Storage;
 
 class OpencastService
 {
@@ -30,6 +31,48 @@ class OpencastService
         //initialize an empty response
         $this->response = new Response(200, [], json_encode([]));
         $this->opencastSettings = Setting::opencast();
+    }
+
+    /**
+     * Fetch all relevant info for a given series like running, failed workflows, etc.
+     */
+    public function getSeriesInfo(Series $series): Collection
+    {
+        $opencastSeriesInfo = collect();
+        if ($health = $this->getHealth()->contains('pass')) {
+            $opencastSeriesInfo->put('health', $health)
+                ->put('metadata', $this->getSeries($series))
+                ->put(
+                    OpencastWorkflowState::RECORDING->lower(),
+                    $this->getEventsByStatus(OpencastWorkflowState::RECORDING, $series)
+                )
+                ->put(
+                    OpencastWorkflowState::RUNNING->lower(),
+                    $this->getEventsByStatus(OpencastWorkflowState::RUNNING, $series)
+                )
+                ->put(
+                    OpencastWorkflowState::SCHEDULED->lower(),
+                    $this->getEventsByStatusAndByDate(
+                        OpencastWorkflowState::SCHEDULED,
+                        $series,
+                        Carbon::now()->startOfDay(),
+                        Carbon::now()->endOfDay()
+                    )
+                )
+                ->put(
+                    OpencastWorkflowState::FAILED->lower(),
+                    $this->getEventsByStatus(OpencastWorkflowState::FAILED, $series)
+                )
+                ->put(OpencastWorkflowState::TRIMMING->lower(), $this->getEventsWaitingForTrimming($series))
+                ->put('upcoming', $this->getEventsByStatusAndByDate(
+                    OpencastWorkflowState::SCHEDULED,
+                    $series,
+                    Carbon::now()->add('1 day')->startOfDay(),
+                    Carbon::now()->add('6 months')->endOfDay()
+                ));
+        }
+
+        return $opencastSeriesInfo;
     }
 
     /**
@@ -58,39 +101,6 @@ class OpencastService
     }
 
     /**
-     * Fetch all relevant info for a given series like running, failed workflows, etc.
-     */
-    public function getSeriesInfo(Series $series): Collection
-    {
-        $opencastSeriesInfo = collect();
-        if ($health = $this->getHealth()->contains('pass')) {
-            $opencastSeriesInfo->put('health', $health)
-                ->put('metadata', $this->getSeries($series))
-                ->put(
-                    OpencastWorkflowState::RECORDING->lower(),
-                    $this->getEventsByStatus(OpencastWorkflowState::RECORDING, $series)
-                )
-                ->put(
-                    OpencastWorkflowState::RUNNING->lower(),
-                    $this->getEventsByStatus(OpencastWorkflowState::RUNNING, $series)
-                )
-                ->put(
-                    OpencastWorkflowState::SCHEDULED->lower(),
-                    $this->getEventsByStatusAndByDate(OpencastWorkflowState::SCHEDULED, Carbon::now())
-                )
-                ->put(
-                    OpencastWorkflowState::FAILED->lower(),
-                    $this->getEventsByStatus(OpencastWorkflowState::FAILED, $series)
-                )
-                ->put(OpencastWorkflowState::TRIMMING->lower(), $this->getEventsWaitingForTrimming($series))
-                ->put('upcoming', $this->getEventsByStatus(OpencastWorkflowState::SCHEDULED, $series, 30));
-
-        }
-
-        return $opencastSeriesInfo;
-    }
-
-    /**
      * @return array|mixed
      */
     public function getSeries(Series $series)
@@ -112,62 +122,22 @@ class OpencastService
     }
 
     /**
-     *  Return opencast running workflows for a series
-     */
-    public function getAllRunningWorkflows(): Collection
-    {
-        $runningWorkflows = collect();
-        try {
-            $this->response = $this->client->get('api/events', [
-                'query' => [
-                    'filter' => 'status:'.OpencastWorkflowState::RUNNING(),
-                ],
-            ]);
-            $runningWorkflows = collect(json_decode((string) $this->response->getBody(), true));
-        } catch (GuzzleException $exception) {
-            Log::error($exception);
-        }
-
-        return $runningWorkflows;
-    }
-
-    /**
-     *  Return opencast running workflows for a series
-     */
-    public function getSeriesRunningWorkflows(Series $series): Collection
-    {
-        $runningWorkflows = collect();
-        try {
-            $this->response = $this->client->get('api/events', [
-                'query' => [
-                    'filter' => 'status:'.OpencastWorkflowState::RUNNING().',is_part_of:'.$series->opencast_series_id,
-                ],
-            ]);
-            $runningWorkflows = collect(json_decode((string) $this->response->getBody(), true));
-        } catch (GuzzleException $exception) {
-            Log::error($exception);
-        }
-
-        return $runningWorkflows;
-    }
-
-    /**
      *  Return opencast events based on status
      */
     public function getEventsByStatus(
         OpencastWorkflowState $state,
-        Series|null $series = null,
-        int $limit = 20
+        Series $series = null,
+        int $limit = 20,
     ): Collection {
         $runningWorkflows = collect();
 
         $filter = (is_null($series))
             ? 'status:'.$state->value
             : 'status:'.$state->value.',is_part_of:'.$series->opencast_series_id;
-
         try {
             $this->response = $this->client->get('api/events', [
                 'query' => [
+
                     'filter' => $filter,
                     'sort' => 'start_date:ASC',
                     'limit' => $limit,
@@ -197,16 +167,24 @@ class OpencastService
         return $runningWorkflows;
     }
 
-    public function getEventsByStatusAndByDate(OpencastWorkflowState $state, Carbon $day): Collection
-    {
+    public function getEventsByStatusAndByDate(
+        OpencastWorkflowState $state,
+        ?Series $series,
+        Carbon $startDate,
+        Carbon $endDate,
+    ): Collection {
         $events = collect();
 
-        $startDate = $day->startOfDay()->isoFormat('YYYY-MM-DD[T]HH:mm:ss[Z]');
-        $endDate = $day->endOfDay()->isoFormat('YYYY-MM-DD[T]HH:mm:ss[Z]');
+        $filter = (is_null($series))
+            ? 'status:'.$state->value
+            : 'status:'.$state->value.',is_part_of:'.$series->opencast_series_id;
+
         try {
             $this->response = $this->client->get('api/events', [
                 'query' => [
-                    'filter' => 'textFilter:,start:'.$startDate.'/'.$endDate.',status:'.$state->value,
+                    'withscheduling' => 'true',
+                    'filter' => 'start:'.$startDate->isoFormat('YYYY-MM-DD[T]HH:mm:ss[Z]').'/'.
+                        $endDate->isoFormat('YYYY-MM-DD[T]HH:mm:ss[Z]').','.$filter,
                     'sort' => 'start_date:asc',
                     'limit' => '100',
                 ],
@@ -235,7 +213,7 @@ class OpencastService
         return $events;
     }
 
-    public function getEventsWaitingForTrimming(Series|null $series = null)
+    public function getEventsWaitingForTrimming(Series $series = null)
     {
         $series = (is_null($series)) ? '' : $series->opencast_series_id;
         //     /admin-ng/event/events.json?filter=comments:OPEN,status:EVENTS.EVENTS.STATUS.PROCESSED&limit=10&offset=0&sort=start_date:ASC
@@ -276,6 +254,25 @@ class OpencastService
     }
 
     /**
+     * forms the data to create a user for admin-ui
+     */
+    public function createAdminUserFormData(User $user, $opencastUserPassword): array
+    {
+        return [
+            'headers' => [
+                'Content-Type' => 'application/x-www-form-urlencoded',
+            ],
+            'form_params' => [
+                'username' => $user->username,
+                'password' => $opencastUserPassword,
+                'name' => $user->getFullNameAttribute(),
+                'email' => $user->email,
+                'roles' => "[{'name': 'ROLE_GROUP_MMZ_HIWIS', 'type': 'INTERNAL'}]",
+            ],
+        ];
+    }
+
+    /**
      * A post request to create a series in Opencast Admin node
      */
     public function createSeries(Series $series): Response|ResponseInterface
@@ -287,6 +284,41 @@ class OpencastService
         }
 
         return $this->response;
+    }
+
+    /**
+     * forms the data to to create a new series
+     */
+    public function createOpencastSeriesFormData(Series $series): array
+    {
+        $title = "{$series->title} / tidesSeriesID: {$series->id}";
+
+        return [
+            'headers' => [
+                'Content-Type' => 'application/x-www-form-urlencoded',
+            ],
+            'form_params' => [
+                'metadata' => '[{"flavor": "dublincore/series","title": "EVENTS.EVENTS.DETAILS.CATALOG.EPISODE",
+                        "fields": [
+                        {
+                             "id": "title",
+                             "value": "'.$title.'",
+                         },
+                         {
+                             "id": "creator",
+                             "value": ["'.$series->owner?->name.'"],
+                         },
+                         ]
+                    }]',
+                'acl' => '[
+					{"allow": true,"role": "ROLE_ADMIN","action": "read"},
+				    {"allow": true,"role": "ROLE_ADMIN","action": "write"},
+				    {"allow": true,"role": "ROLE_USER_ADMIN","action": "read"},
+				    {"allow": true,"role": "ROLE_USER_ADMIN","action": "write"},
+			    ]',
+                'theme' => config('opencast.default_theme_id'),
+            ],
+        ];
     }
 
     public function updateSeriesAcl(
@@ -307,6 +339,46 @@ class OpencastService
         return $this->response;
     }
 
+    public function updateSeriesAclFormData(Collection $opencastSeriesInfo, string $username, string $action): array
+    {
+        $acls = $opencastSeriesInfo->map(function ($item, $key) {
+            if ($key === 'metadata') {
+                return $item['acl'];
+            }
+        })->get('metadata');
+
+        if ($action === 'addUser') {
+            $read = [
+                'allow' => true,
+                'role' => 'ROLE_USER_'.strtoupper($username),
+                'action' => 'read',
+            ];
+            $write = [
+                'allow' => true,
+                'role' => 'ROLE_USER_'.strtoupper($username),
+                'action' => 'write',
+            ];
+
+            array_push($acls, $read, $write);
+        } else {
+            foreach ($acls as $key => $acl) {
+                if ($acl['role'] === 'ROLE_USER_'.strtoupper($username)) {
+                    unset($acls[$key]);
+                }
+            }
+        }
+
+        return [
+            'headers' => [
+                'Content-Type' => 'application/x-www-form-urlencoded',
+            ],
+            'form_params' => [
+                'acl' => json_encode($acls),
+                'override' => true,
+            ],
+        ];
+    }
+
     /**
      * A post request to ingest a video file and start a workflow in Opencast Admin node
      */
@@ -324,6 +396,43 @@ class OpencastService
         // Create upload file table, store upload information and re-ingest if failed before deleting
 
         return $this->response;
+    }
+
+    /**
+     *  forms the data to ingest a video file and start a workflow
+     */
+    public function ingestMediaPackageFormData(Clip $clip, string $file): array
+    {
+        return [
+
+            'multipart' => [
+                [
+                    'name' => 'flavor',
+                    'contents' => 'presenter/source',
+                ],
+                [
+                    'name' => 'title',
+                    'contents' => $clip->title,
+                ],
+                [
+                    'name' => 'description',
+                    'contents' => $clip->id,
+                ],
+                [
+                    'name' => 'publisher',
+                    'contents' => $clip->owner->email,
+                ],
+                [
+                    'name' => 'isPartOf',
+                    'contents' => $clip->series->opencast_series_id,
+                ],
+                [
+                    'name' => 'file',
+                    'contents' => file_get_contents($file),
+                    'filename' => basename($file),
+                ],
+            ],
+        ];
     }
 
     public function createMediaPackage(): string
@@ -354,6 +463,54 @@ class OpencastService
         return $mediaPackage;
     }
 
+    public function addDCCatalogFormData(string $mediaPackage, Clip $clip)
+    {
+        $xmlArray = [
+            'dcterms:creator' => $clip->presenter,
+            'dcterms:contributor' => 'MMZ',
+            'dcterms:created' => [
+                '_attributes' => [
+                    'xsi:type' => 'dcterms:W3CDTF',
+                ],
+                '_value' => Carbon::now()->format('Y-m-d\TH:i:s\Z'),
+            ],
+            'dcterms:temporal' => [
+                '_attributes' => [
+                    'xsi:type' => 'dcterms:Period',
+                ],
+                '_value' => 'start=
+                    '.Carbon::now()->subMinute(5)->format('Y-m-d\TH:i:s\Z').
+                    '; end='.Carbon::now()->subMinute(3)->format('Y-m-d\TH:i:s\Z').'; scheme=W3C-DTF;',
+            ],
+            'dcterms:description' => $clip->id,
+            'dcterms:subject' => $clip->semester->acronym,
+            'dcterms:isPartOf' => $clip->series->opencast_series_id,
+            'dcterms:title' => $clip->title,
+        ];
+
+        $result = new ArrayToXml($xmlArray, [
+            'rootElementName' => 'dublincore',
+            '_attributes' => [
+                'xmlns' => 'http://www.opencastproject.org/xsd/1.0/dublincore/',
+                'xmlns:dcterms' => 'http://purl.org/dc/terms/',
+                'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
+            ],
+        ], true, 'UTF-8', '1.0', ['standalone' => false]);
+
+        return [
+            'multipart' => [
+                [
+                    'name' => 'mediaPackage',
+                    'contents' => $mediaPackage,
+                ],
+                [
+                    'name' => 'dublinCore',
+                    'contents' => $result->prettify()->toXml(),
+                ],
+            ],
+        ];
+    }
+
     public function addTrack(string $mediaPackage, string $flavor, $file): string
     {
         $fileName = match ($flavor) {
@@ -373,6 +530,27 @@ class OpencastService
         }
 
         return $mediaPackage;
+    }
+
+    public function addTrackFormData(string $mediaPackage, string $flavor, string $fileName, string $file)
+    {
+        return [
+            'multipart' => [
+                [
+                    'name' => 'mediaPackage',
+                    'contents' => $mediaPackage,
+                ],
+                [
+                    'name' => 'flavor',
+                    'contents' => $flavor,
+                ],
+                [
+                    'name' => $fileName,
+                    'contents' => Storage::disk('videos')->get($file),
+                    'filename' => $fileName,
+                ],
+            ],
+        ];
     }
 
     public function ingest(string $mediaPackage, string $workflowDefinitionID = ''): string
@@ -453,20 +631,6 @@ class OpencastService
     }
 
     /**
-     * Fetch event metadata information as a collection
-     */
-    public function getEventByEventID($eventID): Collection
-    {
-        try {
-            $this->response = $this->client->get("api/events/{$eventID}");
-        } catch (GuzzleException $exception) {
-            Log::error($exception);
-        }
-
-        return collect(json_decode((string) $this->response->getBody(), true));
-    }
-
-    /**
      * Fetch all assets for a given event ID as collection
      */
     public function getAssetsByEventID($eventID): Collection
@@ -512,202 +676,16 @@ class OpencastService
     }
 
     /**
-     * forms the data to create a user for admin-ui
+     * Fetch event metadata information as a collection
      */
-    public function createAdminUserFormData(User $user, $opencastUserPassword): array
+    public function getEventByEventID($eventID): Collection
     {
-        return [
-            'headers' => [
-                'Content-Type' => 'application/x-www-form-urlencoded',
-            ],
-            'form_params' => [
-                'username' => $user->username,
-                'password' => $opencastUserPassword,
-                'name' => $user->getFullNameAttribute(),
-                'email' => $user->email,
-                'roles' => "[{'name': 'ROLE_GROUP_MMZ_HIWIS', 'type': 'INTERNAL'}]",
-            ],
-        ];
-    }
-
-    public function updateSeriesAclFormData(Collection $opencastSeriesInfo, string $username, string $action): array
-    {
-        $acls = $opencastSeriesInfo->map(function ($item, $key) {
-            if ($key === 'metadata') {
-                return $item['acl'];
-            }
-        })->get('metadata');
-
-        if ($action === 'addUser') {
-            $read = [
-                'allow' => true,
-                'role' => 'ROLE_USER_'.strtoupper($username),
-                'action' => 'read',
-            ];
-            $write = [
-                'allow' => true,
-                'role' => 'ROLE_USER_'.strtoupper($username),
-                'action' => 'write',
-            ];
-
-            array_push($acls, $read, $write);
-        } else {
-            foreach ($acls as $key => $acl) {
-                if ($acl['role'] === 'ROLE_USER_'.strtoupper($username)) {
-                    unset($acls[$key]);
-                }
-            }
+        try {
+            $this->response = $this->client->get("api/events/{$eventID}");
+        } catch (GuzzleException $exception) {
+            Log::error($exception);
         }
 
-        return [
-            'headers' => [
-                'Content-Type' => 'application/x-www-form-urlencoded',
-            ],
-            'form_params' => [
-                'acl' => json_encode($acls),
-                'override' => true,
-            ],
-        ];
-    }
-
-    /**
-     * forms the data to to create a new series
-     */
-    public function createOpencastSeriesFormData(Series $series): array
-    {
-        $title = "{$series->title} / tidesSeriesID: {$series->id}";
-
-        return [
-            'headers' => [
-                'Content-Type' => 'application/x-www-form-urlencoded',
-            ],
-            'form_params' => [
-                'metadata' => '[{"flavor": "dublincore/series","title": "EVENTS.EVENTS.DETAILS.CATALOG.EPISODE",
-                        "fields": [
-                        {
-                             "id": "title",
-                             "value": "'.$title.'",
-                         },
-                         {
-                             "id": "creator",
-                             "value": ["'.$series->owner?->name.'"],
-                         },
-                         ]
-                    }]',
-                'acl' => '[
-					{"allow": true,"role": "ROLE_ADMIN","action": "read"},
-				    {"allow": true,"role": "ROLE_ADMIN","action": "write"},
-				    {"allow": true,"role": "ROLE_USER_ADMIN","action": "read"},
-				    {"allow": true,"role": "ROLE_USER_ADMIN","action": "write"},
-			    ]',
-                'theme' => config('opencast.default_theme_id'),
-            ],
-        ];
-    }
-
-    /**
-     *  forms the data to ingest a video file and start a workflow
-     */
-    public function ingestMediaPackageFormData(Clip $clip, string $file): array
-    {
-        return [
-
-            'multipart' => [
-                [
-                    'name' => 'flavor',
-                    'contents' => 'presenter/source',
-                ],
-                [
-                    'name' => 'title',
-                    'contents' => $clip->title,
-                ],
-                [
-                    'name' => 'description',
-                    'contents' => $clip->id,
-                ],
-                [
-                    'name' => 'publisher',
-                    'contents' => $clip->owner->email,
-                ],
-                [
-                    'name' => 'isPartOf',
-                    'contents' => $clip->series->opencast_series_id,
-                ],
-                [
-                    'name' => 'file',
-                    'contents' => file_get_contents($file),
-                    'filename' => basename($file),
-                ],
-            ],
-        ];
-    }
-
-    public function addDCCatalogFormData(string $mediaPackage, Clip $clip)
-    {
-        $xmlArray = [
-            'dcterms:creator' => $clip->presenter,
-            'dcterms:contributor' => 'MMZ',
-            'dcterms:created' => [
-                '_attributes' => [
-                    'xsi:type' => 'dcterms:W3CDTF',
-                ],
-                '_value' => Carbon::now()->format('Y-m-d\TH:i:s\Z'),
-            ],
-            'dcterms:temporal' => [
-                '_attributes' => [
-                    'xsi:type' => 'dcterms:Period',
-                ],
-                '_value' => 'start=
-                    '.Carbon::now()->subMinute(5)->format('Y-m-d\TH:i:s\Z').
-                    '; end='.Carbon::now()->subMinute(3)->format('Y-m-d\TH:i:s\Z').'; scheme=W3C-DTF;',
-            ],
-            'dcterms:description' => $clip->id,
-            'dcterms:subject' => $clip->semester->acronym,
-            'dcterms:isPartOf' => $clip->series->opencast_series_id,
-            'dcterms:title' => $clip->title,
-        ];
-
-        $result = new ArrayToXml($xmlArray, [
-            'rootElementName' => 'dublincore',
-            '_attributes' => [
-                'xmlns' => 'http://www.opencastproject.org/xsd/1.0/dublincore/',
-                'xmlns:dcterms' => 'http://purl.org/dc/terms/',
-                'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
-            ],
-        ], true, 'UTF-8', '1.0', ['standalone' => false]);
-
-        return [
-            'multipart' => [
-                [
-                    'name' => 'mediaPackage',
-                    'contents' => $mediaPackage,
-                ],
-                [
-                    'name' => 'dublinCore',
-                    'contents' => $result->prettify()->toXml(),
-                ],
-            ],
-        ];
-    }
-
-    public function addTrackFormData(string $mediaPackage, string $flavor, string $fileName, string $file)
-    {
-        return [
-            'multipart' => [
-                [
-                    'name' => 'mediaPackage',
-                    'contents' => $mediaPackage,
-                ],
-                [
-                    'name' => 'flavor',
-                    'contents' => $flavor,
-                ],
-                [
-                    'name' => $fileName,
-                    'contents' => \Storage::disk('videos')->get($file),
-                    'filename' => $fileName,
-                ],
-            ],
-        ];
+        return collect(json_decode((string) $this->response->getBody(), true));
     }
 }

@@ -35,6 +35,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $schedule->command('opencast:finished-events')->everyFiveMinutes()->withoutOverlapping();
+        $schedule->command('app:update-assets-symbolic-links')->everyFiveMinutes();
         $schedule->command(DeleteTempUploadedFiles::class)->hourly();
     }
 }

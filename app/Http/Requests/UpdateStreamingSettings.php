@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\Role;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateStreamingSettings extends FormRequest
@@ -14,7 +13,7 @@ class UpdateStreamingSettings extends FormRequest
      */
     public function authorize()
     {
-        return auth()->user()->hasRole(Role::SUPERADMIN);
+        return auth()->user()->can('administrate-superadmin-portal-pages');
     }
 
     /**

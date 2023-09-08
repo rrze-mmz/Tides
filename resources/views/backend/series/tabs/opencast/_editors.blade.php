@@ -29,20 +29,25 @@
                         @php
                             $user = findUserByOpencastRole($key);
                         @endphp
+                        {{-- Opencast can return deleted
+                        users in this case the user doesn't exist as assistant anymore. So skip current iteration--}}
+                        @if(is_string($user))
+                            @break
+                        @endif
                         {{ $user->getFullNameAttribute() }}
                     </td>
                     <td class="pr-4">
                         @if($role[0]['allow'] && $role[0]['action'] ==='read')
-                            <x-heroicon-o-check-circle class="h-6 w-6 text-green-700"/>
+                            <x-heroicon-o-check-circle class="h-6 w-6 text-green-700" />
                         @else
-                            <x-heroicon-o-x-circle class="h-6 w-6 text-red-700"/>
+                            <x-heroicon-o-x-circle class="h-6 w-6 text-red-700" />
                         @endif
                     </td>
                     <td class="pr-4">
                         @if($role[1]['allow'] && $role[1]['action'] ==='write')
-                            <x-heroicon-o-check-circle class="h-6 w-6 text-green-700"/>
+                            <x-heroicon-o-check-circle class="h-6 w-6 text-green-700" />
                         @else
-                            <x-heroicon-o-x-circle class="h-6 w-6 text-red-700"/>
+                            <x-heroicon-o-x-circle class="h-6 w-6 text-red-700" />
                         @endif
                     </td>
                     <td class="pr-4">
@@ -59,7 +64,7 @@
                                 @enderror
                                 <div class="my-4">
                                     <x-button>
-                                        <x-heroicon-o-x-circle class="h-6 w-6 text-red-700"/>
+                                        <x-heroicon-o-x-circle class="h-6 w-6 text-red-700" />
                                     </x-button>
                                 </div>
                             </form>
@@ -101,7 +106,7 @@
         <div class="alert alert-danger">{{ $message }}</div>
         @enderror
         <x-button>
-            <x-heroicon-o-plus-circle class="h-6 w-6 text-green-700"/>
+            <x-heroicon-o-plus-circle class="h-6 w-6 text-green-700" />
         </x-button>
     </form>
 

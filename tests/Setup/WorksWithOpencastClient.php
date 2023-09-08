@@ -313,7 +313,7 @@ trait WorksWithOpencastClient
 
     public function mockSeriesRunningWorkflowsResponse(Series $series, bool $multiple = false): Response
     {
-        $workflows = ($multiple) ? [
+        $events = ($multiple) ? [
             [
                 'identifier' => Str::uuid(),
                 'creator' => 'Administrator',
@@ -388,6 +388,54 @@ trait WorksWithOpencastClient
                'status' => OpencastWorkflowState::RUNNING(),
            ]];
 
-        return new Response(201, [], json_encode($workflows));
+        return new Response(201, [], json_encode($events));
+    }
+
+    public function mockScheduledEvents(?Series $series, $count, ?Carbon $startDate, ?Carbon $endDate): Response
+    {
+        $events = [];
+        for ($i = 1; $i <= $count; $i++) {
+            array_push($events, [
+                'identifier' => Str::uuid(),
+                'creator' => 'Administrator',
+                'presenter' => [],
+                'created' => Carbon::now()->addMinutes(1)->toIso8601ZuluString(),
+                'is_part_of' => ($series) ? $series->opencast_series_id : Str::uuid(),
+                'subjects' => [],
+                'start' => ($startDate)
+                    ? $startDate->toIso8601ZuluString()
+                    : Carbon::now()->addMinutes(10)->toIso8601ZuluString(),
+                'description' => '',
+                'language' => '',
+                'source' => '',
+                'title' => $this->faker->sentence,
+                'processing_state' => OpencastWorkflowState::SCHEDULED->name,
+                'duration' => 0,
+                'license' => '',
+                'archive_version' => 1,
+                'contributor' => [],
+                'series' => ($series) ? $series->title : $this->faker->sentence,
+                'scheduling' => [
+                    'agent_id' => 'test-lecture-hall',
+                    'inputs' => [
+                        'Channel A',
+                        'Channel B',
+                    ],
+                    'start' => ($startDate)
+                        ? $startDate->toIso8601ZuluString()
+                        : Carbon::now()->addMinutes(10)->toIso8601ZuluString(),
+                    'end' => ($endDate)
+                        ? $endDate->toIso8601ZuluString()
+                        : Carbon::now()->addMinutes(20)->toIso8601ZuluString(),
+                ],
+                'has_previews' => false,
+                'location' => 'test-lecturer-hall',
+                'rightsholder' => '',
+                'publication_status' => [],
+                'status' => OpencastWorkflowState::SCHEDULED(),
+            ]);
+        }
+
+        return new Response(201, [], json_encode($events));
     }
 }

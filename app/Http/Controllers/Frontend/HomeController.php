@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Clip;
 use App\Models\Series;
 use Illuminate\Contracts\Database\Eloquent\Builder as ContractsBuilder;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\View\View;
 
 class HomeController extends Controller
@@ -17,14 +16,16 @@ class HomeController extends Controller
     public function __invoke(): View
     {
         return view('frontend.homepage.index', [
-            'series' => Series::whereHas('clips', function (Builder $query) {
-                $query->has('assets');
-            })->isPublic()
+            'series' => Series::whereHas('clips.assets')->isPublic()
                 ->with(['owner', 'presenters', 'clips' => function (ContractsBuilder $query) {
                     $query->whereHas('assets');
-                }])
+                }, 'clips.assets'])
                 ->withLastPublicClip()
-                ->orderByDesc('updated_at')
+                ->orderByDesc(Clip::select('recording_date')
+                    ->whereColumn('series_id', 'series.id')
+                    ->has('assets')
+                    ->limit(1)
+                    ->orderByDesc('recording_date'))
                 ->limit(16)
                 ->get(),
             'clips' => Clip::with(['assets', 'presenters'])

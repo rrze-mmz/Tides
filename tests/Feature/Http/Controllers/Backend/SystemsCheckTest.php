@@ -18,9 +18,9 @@ class SystemsCheckTest extends TestCase
 {
     use RefreshDatabase;
     use WithFaker;
+    use WorksWithElasticsearchClient;
     use WorksWithOpencastClient;
     use WorksWithWowzaClient;
-    use WorksWithElasticsearchClient;
 
     private OpencastService $opencastService;
 

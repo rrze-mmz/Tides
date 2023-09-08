@@ -22,7 +22,7 @@
                 <x-form.datepicker field-name="recording_date"
                                    label="Recording Date"
                                    :full-col="false"
-                                   :value="now()"/>
+                                   :value="now()" />
 
                 <x-form.input field-name="title"
                               input-type="text"
@@ -123,6 +123,11 @@
                                       field-name="is_public"
                 />
 
+                <x-form.toggle-button :value="false"
+                                      label="Livestream clip"
+                                      field-name="is_livestream"
+                />
+
 
                 <div class="col-span-7 w-4/5 pt-8">
                     <x-button class="bg-blue-600 hover:bg-blue-700">
@@ -133,9 +138,9 @@
         </form>
     </div>
     <script>
-        const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        const MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-        const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 
         function app() {
@@ -144,18 +149,18 @@
 
                 showDatepicker: false,
 
-                datepickerValue: '',
+                datepickerValue: "",
 
 
-                month: '',
+                month: "",
 
-                year: '',
+                year: "",
 
                 no_of_days: [],
 
                 blankdays: [],
 
-                days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+                days: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
 
 
                 initDate() {
@@ -187,7 +192,7 @@
 
                     this.datepickerValue = selectedDate.toDateString();
 
-                    this.$refs.date.value = selectedDate.getFullYear() + "-" + ('0' + selectedDate.getMonth()).slice(-2) + "-" + ('0' + selectedDate.getDate()).slice(-2);
+                    this.$refs.date.value = selectedDate.getFullYear() + "-" + ("0" + selectedDate.getMonth()).slice(-2) + "-" + ("0" + selectedDate.getDate()).slice(-2);
 
                     console.log(this.$refs.date.value);
 
@@ -230,7 +235,7 @@
 
                 }
 
-            }
+            };
 
         }
     </script>

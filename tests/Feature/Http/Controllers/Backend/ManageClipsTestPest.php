@@ -8,6 +8,7 @@ use App\Models\Presenter;
 use App\Models\Tag;
 use Facades\Tests\Setup\ClipFactory;
 use Facades\Tests\Setup\SeriesFactory;
+
 use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\assertDatabaseMissing;
 use function Pest\Laravel\followingRedirects;
@@ -142,7 +143,8 @@ it('shows all available form fields for create a new clip', function () {
         ->assertSee('tags')
         ->assertSee('acls')
         ->assertSee('semester')
-        ->assertSee('is_public');
+        ->assertSee('is_public')
+        ->assertSee('is_livestream');
 
     get(route('clips.create'))->assertOk()
         ->assertViewIs('backend.clips.create');
@@ -211,6 +213,7 @@ test('a moderator can view the edit clip form and all form fields', function () 
         ->assertSee('presenters')
         ->assertSee('semester')
         ->assertSee('is_public')
+        ->assertSee('is_livestream')
         ->assertSee('acls');
 });
 
@@ -326,4 +329,36 @@ test('clip tags can be updated', function () {
     ]);
 
     expect($clip->tags()->count())->toBe(2);
+});
+
+test('clip can updated to be a livestream clip', function () {
+    $clip = ClipFactory::ownedBy(signInRole(Role::MODERATOR))->create();
+
+    patch(route('clips.edit', $clip), [
+        'episode' => '1',
+        'title' => 'changed',
+        'description' => 'changed',
+        'recording_date' => now(),
+        'organization_id' => '1',
+        'language_id' => '1',
+        'context_id' => '1',
+        'format_id' => '1',
+        'type_id' => '1',
+        'is_livestream' => 'on',
+        'semester_id' => '1',
+    ]);
+
+    $clip->refresh();
+
+    expect($clip->is_livestream)->toBe(1);
+});
+
+it('hides all asset options if a clip is tagged as a livestream clip', function () {
+    signInRole(Role::MODERATOR);
+    $clip = ClipFactory::create(['owner_id' => auth()->user(), 'is_livestream' => true]);
+
+    get(route('clips.edit', $clip))
+        ->assertOk()
+        ->assertDontSee(route('admin.clips.asset.transferSingle', $clip))
+        ->assertDontSee(route('admin.clips.dropzone.listFiles', $clip));
 });

@@ -2,6 +2,7 @@
 
 use App\Enums\ApplicationStatus;
 use App\Enums\Role;
+
 use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\get;
 use function Pest\Laravel\put;

@@ -9,6 +9,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+
 use function PHPUnit\Framework\isEmpty;
 
 class SeriesOpencastController extends Controller

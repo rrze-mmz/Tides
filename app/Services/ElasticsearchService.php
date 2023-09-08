@@ -41,7 +41,11 @@ class ElasticsearchService
             'status' => 'failed',
         ]);
         try {
-            $response = $this->client->get('/');
+            $response = $this->client->get('/', [
+                'headers' => [
+                    'Authorization' => 'Bearer '.config('elasticsearch.api_key'),
+                ],
+            ]);
 
             if (! empty(json_encode((string) $response->getBody(), true))) {
                 $this->response->put('releaseId', json_decode((string) $response->getBody(), true))
@@ -66,7 +70,13 @@ class ElasticsearchService
                 'body' => $model->toJson(),
             ];
 
-            $this->response = collect($this->clientBuilder->build()->index($params));
+            $this->response = collect($this->clientBuilder
+                ->setBasicAuthentication(
+                    $this->elasticsearchSettings->data['username'],
+                    $this->elasticsearchSettings->data['password']
+                )
+                ->build()
+                ->index($params));
         } catch (Exception $exception) {
             Log::error($exception->getMessage());
         }
@@ -110,7 +120,12 @@ class ElasticsearchService
                 'id' => $this->type.'_'.$model->id,
             ];
 
-            $this->response = collect($this->clientBuilder->build()->delete($params));
+            $this->response = collect($this->clientBuilder
+                ->setBasicAuthentication(
+                    $this->elasticsearchSettings->data['username'],
+                    $this->elasticsearchSettings->data['password']
+                )
+                ->build()->delete($params));
         } catch (Exception $exception) {
             Log::error($exception->getMessage());
         }

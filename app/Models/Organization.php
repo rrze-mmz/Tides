@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Organization extends BaseModel
 {
-    use Searchable;
     use HasFactory;
+    use Searchable;
 
     //search columns for searchable trait
     protected array $searchable = ['name'];

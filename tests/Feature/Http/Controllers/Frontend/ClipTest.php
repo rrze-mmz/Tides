@@ -8,12 +8,13 @@ use App\Services\WowzaService;
 use Facades\Tests\Setup\ClipFactory;
 use Facades\Tests\Setup\SeriesFactory;
 use GuzzleHttp\Psr7\Response;
+use Tests\Setup\WorksWithOpencastClient;
+use Tests\Setup\WorksWithWowzaClient;
+
 use function Pest\Laravel\delete;
 use function Pest\Laravel\get;
 use function Pest\Laravel\patch;
 use function Pest\Laravel\post;
-use Tests\Setup\WorksWithOpencastClient;
-use Tests\Setup\WorksWithWowzaClient;
 
 uses(
     WorksWithWowzaClient::class,

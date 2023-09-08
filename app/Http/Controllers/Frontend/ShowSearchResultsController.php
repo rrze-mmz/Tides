@@ -39,7 +39,7 @@ class ShowSearchResultsController extends Controller
                     $q->whereRaw('lower(first_name)  like (?)', ["%{$request->term}%"])
                         ->orWhereRaw('lower(last_name)  like (?)', ["%{$request->term}%"]);
                 }) //__invoke for clip presenter
-                ->orderByDesc('updated_at')
+                ->orderByDesc('recording_date')
                 ->paginate(10)
                 ->withQueryString();
 

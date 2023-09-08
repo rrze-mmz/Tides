@@ -43,12 +43,11 @@
                         ">
                                                 <div class="pr-2">
                                                     {{ ($clip->acls->isEmpty())
-                                                    ?'open'
-                                                    :$clip->acls->except(Acl::PUBLIC())->pluck('name')->implode(',') }}
+                                                      ? Acl::PUBLIC->lower()
+                                                      :$clip->acls->pluck('name')->implode(',')
+                                                    }}
                                                 </div>
-                                                @if($clip->acls->except(Acl::PUBLIC())->isEmpty())
-                                                    open
-                                                @else
+                                                @if($clip->acls->doesntContain(Acl::PUBLIC()) && $clip->acls->isNotEmpty())
                                                     <div>
                                                         @can('watch-video', $clip)
                                                             <x-heroicon-o-lock-open class="h-4 w-4 text-green-500" />
@@ -146,12 +145,11 @@
                         ">
                                                 <div class="pr-2">
                                                     {{ ($clip->acls->isEmpty())
-                                                    ?'open'
-                                                    :$clip->acls->except(Acl::PUBLIC())->pluck('name')->implode(',') }}
+                                                      ? Acl::PUBLIC->lower()
+                                                      :$clip->acls->pluck('name')->implode(',')
+                                                    }}
                                                 </div>
-                                                @if($clip->acls->except(Acl::PUBLIC())->isEmpty())
-                                                    open
-                                                @else
+                                                @if($clip->acls->doesntContain(Acl::PUBLIC()) && $clip->acls->isNotEmpty())
                                                     <div>
                                                         @can('watch-video', $clip)
                                                             <x-heroicon-o-lock-open class="h-4 w-4 text-green-500" />
@@ -162,7 +160,6 @@
                                                         @endcan
                                                     </div>
                                                 @endif
-
                                                 <div class="pl-4">
                                                 </div>
                                             </div>
@@ -254,12 +251,11 @@
                         ">
                                 <div class="pr-2">
                                     {{ ($clip->acls->isEmpty())
-                                    ?'open'
-                                    :$clip->acls->except(Acl::PUBLIC())->pluck('name')->implode(',') }}
+                                      ? Acl::PUBLIC->lower()
+                                      :$clip->acls->pluck('name')->implode(',')
+                                    }}
                                 </div>
-                                @if($clip->acls->except(Acl::PUBLIC())->isEmpty())
-                                    open
-                                @else
+                                @if($clip->acls->doesntContain(Acl::PUBLIC()) && $clip->acls->isNotEmpty())
                                     <div>
                                         @can('watch-video', $clip)
                                             <x-heroicon-o-lock-open class="h-4 w-4 text-green-500" />

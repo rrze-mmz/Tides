@@ -17,7 +17,7 @@ use Psr\Container\NotFoundExceptionInterface;
 /**
  * Returns poster image relative file path of a clip or default
  */
-function fetchClipPoster(string|null $player_preview): string
+function fetchClipPoster(?string $player_preview): string
 {
     return (is_null($player_preview))
         ? '/images/generic_clip_poster_image.png'
@@ -234,7 +234,7 @@ function getProtectedUrl(string $filePath): string
     return $cdn.$token.'/'.$hexTime.$filePath;
 }
 
-function humanFileSizeFormat(string|null $bytes, $dec = 2): string
+function humanFileSizeFormat(?string $bytes, $dec = 2): string
 {
     if ($bytes === 'null' || is_null($bytes)) {
         return '0 B';

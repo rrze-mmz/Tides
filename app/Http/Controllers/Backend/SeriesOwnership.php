@@ -10,6 +10,7 @@ use App\Notifications\SeriesOwnershipAddUser;
 use App\Notifications\SeriesOwnershipRemoveUser;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
+
 use function to_route;
 
 class SeriesOwnership extends Controller

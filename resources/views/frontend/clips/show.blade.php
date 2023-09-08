@@ -19,7 +19,7 @@
         </div>
 
         <div class="flex flex-col align-center">
-            @if (!is_null($clip->assets()->first()))
+            @if (!is_null($clip->assets()->first()) || $clip->is_livestream)
                 @include('frontend.clips._player',['asset'=> $clip->assets()])
             @endif
         </div>
@@ -31,7 +31,7 @@
                    href="{{ $previousNextClipCollection->get('previousClip')->path() }}">
                     <x-button class="bg-blue-600 hover:bg-blue-700">
                         <div class="mr-4">
-                            <x-heroicon-o-arrow-circle-left class="w-6"/>
+                            <x-heroicon-o-arrow-circle-left class="w-6" />
                         </div>
                         <div>
                             {{ __('common.previous').'-'.$previousNextClipCollection->get('previousClip')->title }}
@@ -48,7 +48,7 @@
                             {{ __('common.next').'-'.$previousNextClipCollection->get('nextClip')->title }}
                         </div>
                         <div class="ml-4">
-                            <x-heroicon-o-arrow-circle-right class="w-6"/>
+                            <x-heroicon-o-arrow-circle-right class="w-6" />
                         </div>
                     </x-button>
                 </a>
@@ -89,7 +89,7 @@
                 <h2 class="border-b-2 border-black pb-2 text-2xl font-semibold">
                     {{ __('clip.frontend.comments') }}
                 </h2>
-                <livewire:comments-section :model="$clip" :type="'frontend'"/>
+                <livewire:comments-section :model="$clip" :type="'frontend'" />
                 @livewireScripts
 
             </div>

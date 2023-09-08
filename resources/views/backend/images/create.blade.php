@@ -9,7 +9,7 @@
             <a href="{{ route('images.index') }}">
                 <x-button class="flex items-center bg-blue-700 hover:bg-blue-700">
                     <div class="pr-2">
-                        <x-heroicon-o-arrow-circle-left class="h-6 w-6"/>
+                        <x-heroicon-o-arrow-circle-left class="h-6 w-6" />
                     </div>
                     <div>
                         Back to images list
@@ -37,6 +37,7 @@
                    class="filepond"
                    data-max-file-size="10MB"
             />
+
             @error('image')
             <div class="col-start-2 col-end-6">
                 <p class="mt-2 w-full text-xs text-red-500">{{ $message }}</p>
@@ -44,7 +45,7 @@
             @enderror
             <x-button class="bg-blue-600 hover:bg-blue-700">
                 <div class="flex">
-                    <x-heroicon-o-upload class="h-6 w-6"/>
+                    <x-heroicon-o-upload class="h-6 w-6" />
                     <span class="pl-4">
                         Upload file
                     </span>

@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class DeviceLocation extends Model
 {
-    use Searchable;
     use HasFactory;
+    use Searchable;
 
     protected array $searchable = ['name'];
 

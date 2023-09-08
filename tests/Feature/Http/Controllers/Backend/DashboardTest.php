@@ -6,9 +6,10 @@ use App\Services\OpencastService;
 use Facades\Tests\Setup\ClipFactory;
 use Facades\Tests\Setup\SeriesFactory;
 use Illuminate\Support\Facades\Storage;
+use Tests\Setup\WorksWithOpencastClient;
+
 use function Pest\Laravel\get;
 use function Pest\Laravel\post;
-use Tests\Setup\WorksWithOpencastClient;
 
 uses()->group('backend');
 uses(WorksWithOpencastClient::class);

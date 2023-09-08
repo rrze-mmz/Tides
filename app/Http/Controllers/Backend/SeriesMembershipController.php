@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Notifications\SeriesMembershipAddUser;
 use App\Notifications\SeriesMembershipRemoveUser;
 use Illuminate\Http\RedirectResponse;
+
 use function to_route;
 
 class SeriesMembershipController extends Controller

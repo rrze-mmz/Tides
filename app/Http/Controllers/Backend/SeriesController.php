@@ -26,7 +26,9 @@ class SeriesController extends Controller
     {
         return view('backend.series.index', [
             'series' => (auth()->user()->can('index-all-series'))
-                    ? Series::orderByDesc('created_at')->paginate(12)
+                    ? Series::with('presenters')
+                        ->withLastPublicClip()
+                        ->orderByDesc('updated_at')->paginate(12)
                     : auth()->user()->accessableSeries()->paginate(12),
         ]);
     }

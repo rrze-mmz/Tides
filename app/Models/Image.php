@@ -10,8 +10,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Image extends BaseModel
 {
     use HasFactory;
-    use Searchable;
     use RecordsActivity;
+    use Searchable;
 
     protected array $searchable = ['description', 'file_name'];
 

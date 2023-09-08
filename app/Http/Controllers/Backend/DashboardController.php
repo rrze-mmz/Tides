@@ -31,7 +31,12 @@ class DashboardController
                 )
                 ->put(
                     OpencastWorkflowState::SCHEDULED->lower(),
-                    $opencastService->getEventsByStatusAndByDate(OpencastWorkflowState::SCHEDULED, Carbon::now())
+                    $opencastService->getEventsByStatusAndByDate(
+                        OpencastWorkflowState::SCHEDULED,
+                        null,
+                        Carbon::now()->startOfDay(),
+                        Carbon::now()->endOfDay(),
+                    )
                 )
                 ->put(
                     OpencastWorkflowState::FAILED->lower(),

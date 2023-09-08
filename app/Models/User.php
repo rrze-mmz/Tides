@@ -18,10 +18,10 @@ use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable
 {
-    use Searchable;
     use HasFactory;
     use Notifiable;
     use RecordsActivity;
+    use Searchable;
 
     protected array $searchable = ['first_name', 'last_name', 'username', 'email'];
 
