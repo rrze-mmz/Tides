@@ -155,6 +155,11 @@
                                       label="Livestream clip"
                                       field-name="is_livestream"
                 />
+                <x-form.toggle-button :value="$clip->has_time_availability"
+                                      label="Time availability"
+                                      field-name="has_time_availability"
+                />
+
 
             </div>
 

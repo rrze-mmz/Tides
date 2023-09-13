@@ -1,525 +1,520 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Backend;
-
 use App\Enums\Acl;
-use App\Enums\Content;
 use App\Enums\Role;
-use App\Http\Livewire\CommentsSection;
+use App\Models\Chapter;
 use App\Models\Clip;
 use App\Models\Image;
+use App\Models\Presenter;
 use App\Models\Semester;
-use App\Services\OpencastService;
+use App\Models\Tag;
+use Carbon\Carbon;
 use Facades\Tests\Setup\ClipFactory;
-use Facades\Tests\Setup\FileFactory;
 use Facades\Tests\Setup\SeriesFactory;
-use GuzzleHttp\Psr7\Response;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
-use Livewire\Livewire;
-use Tests\Setup\WorksWithOpencastClient;
-use Tests\TestCase;
-
-class ManageClipsTest extends TestCase
-{
-    use RefreshDatabase;
-    use WithFaker;
-    use WorksWithOpencastClient;
-
-    private OpencastService $opencastService;
-
-    private string $flashMessageName;
-
-    private Role $role;
-
-    /** @test */
-    public function create_clip_form_should_remember_old_values_on_validation_error(): void
-    {
-        $this->signInRole($this->role);
-
-        $attributes = [
-            'title' => 'Clip title',
-            'description' => $this->faker->sentence(500),
-            'recording_date' => now()->toDateString(),
-            'organization_id' => '1',
-            'language_id' => '1',
-            'context_id' => '1',
-            'format_id' => '1',
-            'type_id' => '1',
-            'semester_id' => '1',
-        ];
-
-        $this->post(route('clips.store'), $attributes);
-
-        $this->followingRedirects();
-
-        $this->get(route('clips.create'))->assertSee($attributes);
-    }
-
-    /** @test */
-    public function a_moderator_can_update_his_clip(): void
-    {
-        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
-
-        $this->get($clip->path())->assertSee($clip->title);
-
-        $this->patch(route('clips.edit', $clip), [
-            'episode' => '1',
-            'title' => 'changed',
-            'description' => 'changed',
-            'recording_date' => now(),
-            'organization_id' => '1',
-            'language_id' => '1',
-            'context_id' => '1',
-            'format_id' => '1',
-            'type_id' => '1',
-            'semester_id' => '1',
-        ]);
-
-        $clip = $clip->refresh();
-
-        $this->assertDatabaseHas('clips', [
-            'episode' => '1',
-            'title' => 'changed',
-            'description' => 'changed',
-            'organization_id' => '1',
-            'semester_id' => '1',
-        ]);
-
-        $this->get(route('clips.edit', $clip))->assertSee('changed');
-    }
-
-    /** @test */
-    public function a_moderator_cannot_update_a_not_owned_clip(): void
-    {
-        $clip = ClipFactory::create();
-
-        $this->signInRole($this->role);
-
-        $attributes = [
-            'episode' => '1',
-            'title' => 'changed',
-            'description' => 'changed',
-            'recording_date' => now(),
-            'organization_id' => '1',
-            'language_id' => '1',
-            'context_id' => '1',
-            'format_id' => '1',
-            'type_id' => '1',
-            'semester_id' => '1',
-        ];
-
-        $this->patch(route('clips.edit', $clip), $attributes)->assertForbidden();
-
-        $this->assertDatabaseMissing('clips', $attributes);
-    }
-
-    /** @test */
-    public function an_admin_user_can_update_a_not_owned_clip(): void
-    {
-        $clip = ClipFactory::create();
-
-        $this->signInRole(Role::ADMIN);
-
-        $attributes = [
-            'episode' => '1',
-            'title' => 'changed',
-            'description' => 'changed',
-            'recording_date' => now(),
-            'organization_id' => '1',
-            'language_id' => '1',
-            'context_id' => '1',
-            'format_id' => '1',
-            'type_id' => '1',
-            'semester_id' => '1',
-        ];
-
-        $this->followingRedirects()->patch(route('clips.edit', $clip), $attributes)->assertOk();
-
-        $this->assertDatabaseHas('clips', $attributes);
-    }
-
-    /** @test */
-    public function it_updates_clip_slug_if_title_is_changed(): void
-    {
-        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
-
-        $this->patch(route('clips.edit', $clip), [
-            'episode' => '1',
-            'title' => 'Title changed',
-            'recording_date' => now(),
-            'organization_id' => '1',
-            'language_id' => '1',
-            'context_id' => '1',
-            'format_id' => '1',
-            'type_id' => '1',
-            'semester_id' => Semester::current()->first()->id,
-        ]);
-
-        $clip->refresh();
-
-        $this->assertEquals(
-            $clip->episode.'-title-changed-'.str(Semester::current()->get()->first()->acronym)->lower(),
-            $clip->slug
-        );
-    }
-
-    /** @test */
-    public function it_does_not_update_clip_slug_if_title_is_not_changed()
-    {
-        $this->signInRole($this->role);
-
-        $this->post(route('clips.store'), [
-            'episode' => '1',
-            'title' => 'Test clip',
-            'recording_date' => now(),
-            'description' => 'test',
-            'organization_id' => '1',
-            'language_id' => '1',
-            'context_id' => '1',
-            'format_id' => '1',
-            'type_id' => '1',
-            'image_id' => Image::factory()->create()->id,
-            'semester_id' => Semester::current()->first()->id,
-        ]);
-
-        $clip = Clip::find(1);
-
-        $this->patch(route('clips.edit', $clip), ['episode' => '2', 'title' => 'Test clip', 'description' => 'test']);
-
-        $clip->refresh();
-
-        $semester = str($clip->semester->acronym)->lower();
-        $assertedCliptitle = "{$clip->episode}-test-clip-{$semester}";
-        $this->assertEquals($assertedCliptitle, $clip->slug);
-    }
-
-    /** @test */
-    public function it_has_an_upload_button_in_edit_form(): void
-    {
-        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
-
-        $this->get(route('clips.edit', $clip))->assertSee('Upload');
-    }
 
-    /** @test */
-    public function it_shows_an_lms_test_link_if_clip_has_an_lms_acl_and_user_is_admin(): void
-    {
-        $userClip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
+use function Pest\Faker\fake;
+use function Pest\Laravel\assertDatabaseCount;
+use function Pest\Laravel\assertDatabaseHas;
+use function Pest\Laravel\assertDatabaseMissing;
+use function Pest\Laravel\delete;
+use function Pest\Laravel\followingRedirects;
+use function Pest\Laravel\get;
+use function Pest\Laravel\patch;
+use function Pest\Laravel\post;
 
-        $this->get(route('clips.edit', $userClip))->assertDontSee('LMS Test Link');
+uses()->group('backend');
 
-        $adminClip = ClipFactory::ownedBy($this->signInRole(Role::ADMIN))->create();
+it('shows all portal clips in index page for assistants', function () {
+    Clip::factory(10)->create();
 
-        $this->get(route('clips.edit', $adminClip))->assertDontSee('LMS Test Link');
+    signInRole(Role::ASSISTANT);
 
-        $adminClip->addAcls(collect([Acl::LMS()]));
+    get(route('clips.index'))
+        ->assertOk()
+        ->assertViewIs('backend.clips.index')->assertViewHas('clips')
+        ->assertSee(Clip::all()->first()->title);
+});
 
-        $this->get(route('clips.edit', $adminClip))->assertSee('LMS Test Link');
-    }
+it('requires a title when creating a new clip', function () {
+    signInRole(Role::MODERATOR);
 
-    /** @test */
-    public function it_has_opencast_action_buttons_if_opencast_server_exists(): void
-    {
-        $mockHandler = $this->swapOpencastClient();
+    post(route('clips.store', Clip::factory()->raw(['title' => ''])))->assertSessionHasErrors('title');
+});
 
-        $this->opencastService = app(OpencastService::class);
+it('requires a recording date when creating a new clip', function () {
+    signInRole(Role::MODERATOR);
 
-        $mockHandler->append($this->mockHealthResponse());
+    post(route('clips.store', Clip::factory()->raw(['recording_date' => ''])))
+        ->assertSessionHasErrors('recording_date');
+});
 
-        $this->get(route('clips.edit', ClipFactory::ownedBy($this->signInRole($this->role))->create()))
-            ->assertSee('Ingest to Opencast')
-            ->assertSee('Transfer files from Opencast');
-    }
+it('requires a semester when creating a new clip', function () {
+    signInRole(Role::MODERATOR);
 
-    /** @test */
-    public function it_hides_opencast_action_buttons_if_opencast_server_does_not_exists(): void
-    {
-        $mockHandler = $this->swapOpencastClient();
+    post(route('clips.store', Clip::factory()->raw(['semester_id' => ''])))->assertSessionHasErrors('semester_id');
+});
 
-        $this->opencastService = app(OpencastService::class);
+it('must have a strong password when creating a new clip', function () {
+    signInRole(Role::MODERATOR);
 
-        $mockHandler->append(new Response());
+    post(route('clips.store', Clip::factory()->raw([
+        'title' => 'This is a test',
+        'password' => '1234',
+    ])))->assertSessionHasErrors('password');
 
-        $this->get(route('clips.edit', ClipFactory::ownedBy($this->signInRole($this->role))->create()))
-            ->assertDontSee('Ingest to Opencast')
-            ->assertDontSee('Transfer files from Opencast');
-    }
+    post(route('clips.store', Clip::factory()->raw([
+        'password' => '1234qwER',
+    ])))->assertSessionDoesntHaveErrors();
+});
+
+it('not allowed for an authenticated user to create a clip', function () {
+    signIn();
+
+    post(route('clips.store'), Clip::factory()->raw())->assertForbidden();
+});
+
+it('not allowed for a student role to create a clip', function () {
+    signInRole(Role::STUDENT);
+
+    post(route('clips.store'), Clip::factory()->raw())->assertForbidden();
+});
+
+it('allows a user with role moderator to view create clip form', function () {
+    signInRole(Role::MODERATOR);
+
+    get(route('clips.create'))->assertOk()->assertViewIs('backend.clips.create');
+});
+
+it('allows a user with role assistant to view create clip form', function () {
+    signInRole(Role::ASSISTANT);
 
-    /** @test */
-    public function it_shows_a_flash_message_when_a_clip_is_updated()
-    {
-        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
+    get(route('clips.create'))->assertOk()->assertViewIs('backend.clips.create');
+});
 
-        $this->patch(route('clips.edit', $clip), [
-            'title' => 'changed',
-            'description' => 'changed',
-            'organization_id' => '1',
-        ])->assertRedirect()->assertSessionHas($this->flashMessageName);
-    }
+it('allows a user with role admin to view create clip form', function () {
+    signInRole(Role::ADMIN);
 
-    /** @test */
-    public function a_moderator_cannot_delete_a_not_owned_clip(): void
-    {
-        $clip = ClipFactory::create();
-
-        $this->signInRole($this->role);
-
-        $this->delete(route('clips.edit', $clip))->assertForbidden();
-
-        $this->assertDatabaseHas('clips', $clip->only('id'));
-    }
-
-    /** @test */
-    public function an_admin_user_can_delete_a_not_owned_clip(): void
-    {
-        $clip = ClipFactory::create();
-
-        $this->signInRole(Role::ADMIN);
-
-        $this->followingRedirects()->delete(route('clips.edit', $clip))->assertOk();
-
-        $this->assertDatabaseMissing('clips', $clip->only('id'));
-    }
-
-    /** @test */
-    public function a_moderator_can_delete_owned_clip(): void
-    {
-        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
-
-        $this->delete(route('clips.destroy', $clip))->assertRedirect(route('clips.index'));
-
-        $this->assertDatabaseMissing('clips', $clip->only('id'));
-    }
-
-    /** @test */
-    public function it_delete_all_clip_assets_on_clip_delete(): void
-    {
-        Storage::fake('videos');
-
-        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
-
-        $this->post(route('admin.clips.asset.transferSingle', $clip), ['asset' => FileFactory::videoFile()]);
-
-        Storage::disk('videos')->assertExists($clip->assets->first()->path);
-
-        $this->delete(route('clips.destroy', $clip));
-
-        Storage::disk('videos')->assertMissing($clip->assets->first()->path);
-    }
-
-    /** @test */
-    public function it_deletes_symbolic_link_if_clip_is_deleted(): void
-    {
-        Storage::fake('videos');
-        Storage::fake('assetsSymLinks');
-
-        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
-
-        $this->post(route('admin.clips.asset.transferSingle', $clip), ['asset' => FileFactory::videoFile()]);
-
-        $clip->addAcls(collect(Acl::PUBLIC()));
-
-        $asset = $clip->assets()->first();
-
-        $this->artisan('app:update-assets-symbolic-links');
-
-        Storage::disk('assetsSymLinks')->assertExists("{$asset->guid}.".getFileExtension($asset));
-
-        $this->delete(route('clips.destroy', $clip));
-
-        Storage::disk('assetsSymLinks')->assertMissing("{$asset->guid}.".getFileExtension($asset));
-    }
-
-    /** @test */
-    public function it_shows_a_flash_message_when_a_clip_is_deleted(): void
-    {
-        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
-
-        $this->delete(route('clips.edit', $clip))->assertSessionHas($this->flashMessageName);
-    }
-
-    /** @test */
-    public function it_can_toggle_comments(): void
-    {
-        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
-
-        $this->get($clip->path())->assertDontSee('Comments');
-
-        $this->patch(route('clips.update', $clip), [
-            'title' => $clip->title,
-            'episode' => $clip->episode,
-            'recording_date' => now(),
-            'organization_id' => '1',
-            'language_id' => '1',
-            'context_id' => '1',
-            'format_id' => '1',
-            'type_id' => '1',
-            'semester_id' => '1',
-            'allow_comments' => 'on',
-        ]);
-
-        $clip->refresh();
-
-        $this->get(route('frontend.clips.show', $clip))->assertOk()->assertSee('Comments');
-    }
-
-    /** @test */
-    public function it_displays_previous_next_clip_id_links(): void
-    {
-        $this->signInRole(Role::ADMIN);
-
-        SeriesFactory::withClips(3)->create();
-
-        $clip = Clip::find(2);
-        $previousClip = Clip::find(1);
-        $nextClip = Clip::find(3);
-
-        $this->get(route('clips.edit', $clip))
-            ->assertSee('Previous')
-            ->assertSee('Next')
-            ->assertSee($previousClip->adminPath())
-            ->assertSee($nextClip->adminPath());
-    }
-
-    /** @test */
-    public function it_hides_previous_clip_id_links_if_clip_is_the_first_on_a_series(): void
-    {
-        $this->signInRole(Role::ADMIN);
-
-        SeriesFactory::withClips(3)->create();
-
-        $clip = Clip::find(1);
-        $nextClip = Clip::find(2);
-
-        $this->get(route('clips.edit', $clip))
-            ->assertDontSee('Previous')
-            ->assertSee('Next')
-            ->assertSee($nextClip->adminPath());
-    }
-
-    /** @test */
-    public function it_hides_next_clip_id_links_if_clip_is_the_last_on_a_series(): void
-    {
-        $this->signInRole(Role::ADMIN);
-
-        SeriesFactory::withClips(4)->create();
-
-        $clip = Clip::find(4);
-
-        $previousClip = Clip::find(3);
-
-        $this->get(route('clips.edit', $clip))
-            ->assertSee('Previous')
-            ->assertDontSee('Next')
-            ->assertSee($previousClip->adminPath());
-    }
-
-    /** @test */
-    public function it_has_a_trigger_smil_file_button_if_clip_has_assets(): void
-    {
-        $clip = ClipFactory::withAssets(2)->ownedBy($this->signInRole($this->role))->create();
-
-        $this->get(route('clips.edit', $clip))->assertSee('Trigger smil files');
-    }
-
-    /** @test */
-    public function it_list_smil_files_if_any(): void
-    {
-        $clip = ClipFactory::withAssets(2)->ownedBy($this->signInRole($this->role))->create();
-
-        $clip->addAsset([
-            'disk' => 'videos',
-            'original_file_name' => 'camera.smil',
-            'type' => Content::SMIL(),
-            'path' => '/videos/camera.smil',
-            'guid' => Str::uuid(),
-            'duration' => '0',
-            'width' => '0',
-            'height' => '0',
-        ]);
-
-        $this->get(route('clips.edit', $clip))->assertSee('camera.smil');
-    }
-
-    /** @test */
-    public function it_list_audio_files_if_any(): void
-    {
-        $clip = ClipFactory::withAssets(2)->ownedBy($this->signInRole($this->role))->create();
-
-        $clip->addAsset([
-            'disk' => 'videos',
-            'original_file_name' => 'audio.mp3',
-            'type' => Content::AUDIO(),
-            'path' => '/videos/'.$clip->folder_id.'/audio.mp3',
-            'guid' => Str::uuid(),
-            'duration' => '120',
-            'width' => '0',
-            'height' => '0',
-        ]);
-
-        $this->get(route('clips.edit', $clip))->assertSee('audio.mp3');
-    }
-
-    /** @test */
-    public function clip_edit_page_has_a_assign_series_option_if_clip_has_no_series(): void
-    {
-        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create(['series_id' => 1]);
-
-        $this->get(route('clips.edit', $clip))->assertDontSee('Assign series');
-
-        $clip = ClipFactory::create();
-
-        $this->get(route('clips.edit', $clip))->assertSee('Assign series');
-    }
-
-    /** @test */
-    public function edit_clip_page_should_display_clip_image_information(): void
-    {
-        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
-
-        $this->get(route('clips.edit', $clip))->assertSee($clip->image->description);
-    }
-
-    /** @test */
-    public function it_loads_comments_component_at_edit_page(): void
-    {
-        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
-
-        $this->get(route('clips.edit', $clip))->assertSeeLivewire('comments-section');
-    }
-
-    /** @test */
-    public function it_shows_clip_comments_on_edit_page(): void
-    {
-        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
-
-        $this->get(route('clips.edit', $clip))
-            ->assertSee(__('clip.frontend.comments'));
-
-        Livewire::test(CommentsSection::class, [
-            'model' => $clip,
-            'type' => 'backend',
-        ])
-            ->set('content', 'Admin clip comment')
-            ->call('postComment')
-            ->assertSee('Comment posted successfully')
-            ->assertSee('Admin clip comment');
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->flashMessageName = 'flashMessage';
-
-        $this->role = Role::MODERATOR;
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown(); // TODO: Change the autogenerated stub
-    }
-}
+    get(route('clips.create'))->assertOk()->assertViewIs('backend.clips.create');
+});
+
+it('allows a moderator to create a clip', function () {
+    signInRole(Role::MODERATOR);
+
+    followingRedirects()
+        ->post(route('clips.store'), $attributes = Clip::factory()->raw())
+        ->assertSee($attributes['title']);
+});
+
+it('allows an admin to create a clip', function () {
+    signInRole(Role::ADMIN);
+
+    followingRedirects()
+        ->post(route('clips.store'), $attributes = Clip::factory()->raw())
+        ->assertSee($attributes['title']);
+});
+
+it('shows a validation error if presenters array has no integer values', function () {
+    signInRole(Role::MODERATOR);
+
+    post(route('clips.store', Clip::factory()->raw(['presenters' => ['1.3', 'test']])))
+        ->assertSessionHasErrors('presenters.*');
+});
+
+it('shows all available form fields for create a new clip', function () {
+    signInRole(Role::MODERATOR);
+
+    get(route('clips.create'))
+        ->assertSee('title')
+        ->assertSee('description')
+        ->assertSee('recording_date')
+        ->assertSee('presenters')
+        ->assertSee('organization')
+        ->assertSee('language')
+        ->assertSee('context')
+        ->assertSee('format')
+        ->assertSee('type')
+        ->assertSee('tags')
+        ->assertSee('acls')
+        ->assertSee('semester')
+        ->assertSee('is_public')
+        ->assertSee('is_livestream');
+
+    get(route('clips.create'))->assertOk()
+        ->assertViewIs('backend.clips.create');
+});
+
+it('shows all portal clips in index page for admins', function () {
+    Clip::factory(10)->create();
+
+    signInRole(Role::ADMIN);
+
+    get(route('clips.index'))
+        ->assertOk()
+        ->assertViewIs('backend.clips.index')->assertViewHas('clips')
+        ->assertSee(Clip::all()->first()->title);
+});
+
+it('it validates a chapter id to assure that belongs to the series when updating a clip', function () {
+    $series = SeriesFactory::ownedBy(signInRole(Role::MODERATOR))->withClips(2)->withChapters(1)->create();
+    $anotherChapter = Chapter::factory()->create();
+
+    $attributes = [
+        'episode' => '1',
+        'title' => 'changed',
+        'description' => 'changed',
+        'recording_date' => now(),
+        'chapter_id' => $anotherChapter->id,
+        'organization_id' => '1',
+        'language_id' => '1',
+        'context_id' => '1',
+        'format_id' => '1',
+        'type_id' => '1',
+        'series_id' => $series->id,
+        'semester_id' => '1',
+    ];
+
+    patch(route('clips.edit', $series->latestClip), $attributes)->assertSessionHasErrors(['chapter_id']);
+    assertDatabaseMissing('clips', $attributes);
+
+    $attributes['chapter_id'] = $series->chapters()->first();
+
+    patch(route('clips.edit', $series->latestClip), $attributes)->assertSessionDoesntHaveErrors();
+});
+
+it('shows a flash message when a clip is created', function () {
+    signInRole(Role::MODERATOR);
+
+    post(route('clips.store'), Clip::factory()->raw())->assertSessionHas('flashMessage');
+});
+
+test('a moderator can view the edit clip form and all form fields', function () {
+    $clip = ClipFactory::ownedBy($this->signInRole(Role::MODERATOR))->create();
+
+    get(route('clips.edit', $clip))->assertOk();
+
+    get(route('clips.edit', $clip))
+        ->assertSee('by '.auth()->user()->getFullNameAttribute())
+        ->assertSee('title')
+        ->assertSee('description')
+        ->assertSee('tags')
+        ->assertSee('organization')
+        ->assertSee('recording_date')
+        ->assertSee('language')
+        ->assertSee('context')
+        ->assertSee('format')
+        ->assertSee('type')
+        ->assertSee('tags')
+        ->assertSee('presenters')
+        ->assertSee('semester')
+        ->assertSee('is_public')
+        ->assertSee('is_livestream')
+        ->assertSee('acls')
+        ->assertSee('time availability');
+});
+
+it('denies access to moderators for editing a not owned clip', function () {
+    $clip = ClipFactory::create();
+    signInRole(Role::MODERATOR);
+
+    get(route('clips.edit', $clip))->assertForbidden();
+});
+
+it('allows access to admins for editing a not owned clip', function () {
+    $clip = ClipFactory::create();
+    signInRole(Role::ADMIN);
+
+    get(route('clips.edit', $clip))->assertOK();
+});
+
+test('a superadmin can edit a not owned clip', function () {
+    $clip = ClipFactory::create();
+    signInRole(Role::SUPERADMIN);
+
+    get(route('clips.edit', $clip))->assertOk();
+});
+
+test('a clip with multiple tags can be created', function () {
+    signInRole(Role::MODERATOR);
+    $attributes = Clip::factory()->raw([
+        'tags' => ['php', 'pest', 'phpunit'],
+    ]);
+
+    followingRedirects()->post(route('clips.store', $attributes))->assertSee($attributes['tags']);
+
+    $clip = Clip::first();
+    assertDatabaseCount('tags', 3);
+
+    expect($clip->tags()->count())->toBe(3);
+});
+
+test('a clip with multiple presenters can be created', function () {
+    Presenter::factory(2)->create();
+    $presenter1 = Presenter::find(1);
+    $presenter2 = Presenter::find(2);
+    signInRole(Role::MODERATOR);
+    post(route('clips.store'), Clip::factory()->raw([
+        'presenters' => [$presenter1->id, $presenter2->id],
+    ]));
+    $clip = Clip::first();
+
+    assertDatabaseCount('presentables', 2);
+    expect($clip->presenters()->count())->toBe(2);
+});
+
+test('a clip with acls can be created', function () {
+    signInRole(Role::MODERATOR);
+    post(route('clips.store'), Clip::factory()->raw([
+        'acls' => [Acl::PASSWORD(), Acl::LMS()],
+    ]));
+
+    expect(Clip::first()->acls()->count())->toBe(2);
+});
+
+test('clip tags can be removed', function () {
+    $clip = ClipFactory::ownedBy(signInRole(Role::MODERATOR))->create();
+    $clip->tags()->sync(Tag::factory()->create());
+    patch(route('clips.edit', $clip), [
+        'episode' => '1',
+        'title' => 'changed',
+        'description' => 'changed',
+        'recording_date' => now(),
+        'organization_id' => '1',
+        'language_id' => '1',
+        'context_id' => '1',
+        'format_id' => '1',
+        'type_id' => '1',
+        'tags' => [],
+        'semester_id' => '1',
+    ]);
+
+    expect($clip->tags()->count())->toBe(0);
+});
+
+test('clip tags can be updated', function () {
+    $clip = ClipFactory::ownedBy(signInRole(Role::MODERATOR))->create();
+    $tag = Tag::factory()->create();
+    $clip->tags()->sync(Tag::factory()->create());
+    patch(route('clips.edit', $clip), [
+        'episode' => '1',
+        'title' => 'changed',
+        'description' => 'changed',
+        'recording_date' => now(),
+        'organization_id' => '1',
+        'language_id' => '1',
+        'context_id' => '1',
+        'format_id' => '1',
+        'type_id' => '1',
+        'tags' => [$tag->name, 'another tag'],
+        'semester_id' => '1',
+    ]);
+
+    expect($clip->tags()->count())->toBe(2);
+});
+
+test('clip can updated to be a livestream clip', function () {
+    $clip = ClipFactory::ownedBy(signInRole(Role::MODERATOR))->create();
+
+    patch(route('clips.edit', $clip), [
+        'episode' => '1',
+        'title' => 'changed',
+        'description' => 'changed',
+        'recording_date' => now(),
+        'organization_id' => '1',
+        'language_id' => '1',
+        'context_id' => '1',
+        'format_id' => '1',
+        'type_id' => '1',
+        'is_livestream' => 'on',
+        'semester_id' => '1',
+    ]);
+
+    $clip->refresh();
+
+    expect($clip->is_livestream)->toBe(1);
+});
+
+test('create clip form should remember old values on validation errors', function () {
+    signInRole(Role::MODERATOR);
+
+    $attributes = [
+        'title' => 'Clip title',
+        'description' => fake()->sentence(500),
+        'recording_date' => now()->toDateString(),
+        'organization_id' => '1',
+        'language_id' => '1',
+        'context_id' => '1',
+        'format_id' => '1',
+        'type_id' => '1',
+        'semester_id' => '1',
+    ];
+
+    post(route('clips.store'), $attributes);
+
+    followingRedirects();
+
+    get(route('clips.create'))->assertSee($attributes);
+});
+
+test('a moderator can update his clip', function () {
+    $clip = ClipFactory::ownedBy($this->signInRole(Role::MODERATOR))->create();
+
+    get(route('clips.edit', $clip))->assertSee($clip->title);
+
+    patch(route('clips.edit', $clip), $attributes = [
+        'episode' => '1',
+        'title' => 'changed',
+        'description' => 'changed',
+        'recording_date' => now(),
+        'organization_id' => '1',
+        'language_id' => '1',
+        'context_id' => '1',
+        'format_id' => '1',
+        'type_id' => '1',
+        'semester_id' => '1',
+    ]);
+
+    $clip->refresh();
+
+    assertDatabaseHas('clips', [
+        'episode' => '1',
+        'title' => 'changed',
+        'description' => 'changed',
+        'organization_id' => '1',
+        'semester_id' => '1',
+    ]);
+
+    get(route('clips.edit', $clip))->assertSee($attributes['description']);
+});
+
+it('denies access to a moderator when updating a not owned clip', function () {
+    $clip = ClipFactory::create();
+    signInRole(Role::MODERATOR);
+    $attributes = [
+        'episode' => '1',
+        'title' => 'changed',
+        'description' => 'changed',
+        'recording_date' => now(),
+        'organization_id' => '1',
+        'language_id' => '1',
+        'context_id' => '1',
+        'format_id' => '1',
+        'type_id' => '1',
+        'semester_id' => '1',
+    ];
+    patch(route('clips.edit', $clip), $attributes)->assertForbidden();
+    $clip->refresh();
+
+    assertDatabaseMissing('clips', $attributes);
+});
+
+it('allows updating a not owned clip for admin users', function () {
+    $clip = ClipFactory::create();
+    signInRole(Role::ADMIN);
+    $attributes = [
+        'episode' => '1',
+        'title' => 'changed',
+        'description' => 'changed',
+        'recording_date' => now(),
+        'organization_id' => '1',
+        'language_id' => '1',
+        'context_id' => '1',
+        'format_id' => '1',
+        'type_id' => '1',
+        'semester_id' => '1',
+    ];
+    followingRedirects()->patch(route('clips.edit', $clip), $attributes)->assertOk();
+    $clip->refresh();
+
+    assertDatabaseHas('clips', $attributes);
+});
+
+it('updates clip slug if title is changed', function () {
+    $clip = ClipFactory::ownedBy($this->signInRole(Role::MODERATOR))->create();
+    patch(route('clips.edit', $clip), [
+        'episode' => '1',
+        'title' => 'Title changed',
+        'recording_date' => now(),
+        'organization_id' => '1',
+        'language_id' => '1',
+        'context_id' => '1',
+        'format_id' => '1',
+        'type_id' => '1',
+        'semester_id' => Semester::current()->first()->id,
+    ]);
+
+    $clip->refresh();
+
+    expect($clip->slug)
+        ->toBe($clip->episode.'-title-changed-'.str(Semester::current()->get()->first()->acronym)->lower());
+
+});
+
+it('keeps the same slug if title is not changed', function () {
+
+    signInRole(Role::MODERATOR);
+
+    post(route('clips.store'), [
+        'episode' => '1',
+        'title' => 'Test clip',
+        'recording_date' => now(),
+        'description' => 'test',
+        'organization_id' => '1',
+        'language_id' => '1',
+        'context_id' => '1',
+        'format_id' => '1',
+        'type_id' => '1',
+        'image_id' => Image::factory()->create()->id,
+        'semester_id' => Semester::current()->first()->id,
+    ]);
+
+    $clip = Clip::find(1);
+    patch(route('clips.edit', $clip), ['episode' => '2', 'title' => 'Test clip', 'description' => 'test']);
+    $clip->refresh();
+    $semester = str($clip->semester->acronym)->lower();
+    $assertedClipTitle = "{$clip->episode}-test-clip-{$semester}";
+
+    expect($clip->slug)->toBe($assertedClipTitle);
+
+});
+
+it('shows a flash message when a clip is updated', function () {
+    $clip = ClipFactory::ownedBy(signInRole(Role::MODERATOR))->create();
+
+    patch(route('clips.edit', $clip), [
+        'episode' => '1',
+        'title' => 'changed',
+        'recording_date' => Carbon::now(),
+        'description' => 'changed',
+        'semester_id' => 1,
+        'language_id' => 1,
+        'organization_id' => '1',
+        'context_id' => 1,
+        'context_id' => '1',
+        'format_id' => '1',
+        'type_id' => '1',
+        'image_id' => Image::factory()->create()->id,
+    ])->assertRedirect()->assertSessionHas('flashMessage');
+});
+
+test('a moderator cannot delete an not owned clip', function () {
+    $clip = ClipFactory::create();
+    signInRole(Role::MODERATOR);
+
+    delete(route('clips.edit', $clip))->assertForbidden();
+    assertDatabaseHas('clips', $clip->only('id'));
+});
+
+test('an admin user can delete a not owned clip', function () {
+    $clip = ClipFactory::create();
+    signInRole(Role::ADMIN);
+
+    followingRedirects()->delete(route('clips.edit', $clip))->assertOk();
+    assertDatabaseMissing('clips', $clip->only('id'));
+});
+
+test('a moderator can delete owned clips', function () {
+    $clip = ClipFactory::ownedBy(signInRole(Role::MODERATOR))->create();
+
+    delete(route('clips.destroy', $clip))->assertRedirect(route('clips.index'));
+    assertDatabaseMissing('clips', $clip->only('id'));
+});
