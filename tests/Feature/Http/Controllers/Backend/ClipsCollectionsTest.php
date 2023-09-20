@@ -1,40 +1,34 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Backend;
-
 use App\Enums\Role;
 use App\Models\Clip;
 use App\Models\Collection;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
-class ClipsCollectionsTest extends TestCase
-{
-    use RefreshDatabase;
+use function Pest\Laravel\assertDatabaseHas;
+use function Pest\Laravel\assertDatabaseMissing;
+use function Pest\Laravel\post;
 
-    /** @test */
-    public function it_can_toggle_clips_to_a_collection(): void
-    {
-        $this->signInRole(Role::ADMIN);
+uses()->group('backend');
 
-        $attributes = [
-            'ids' => Clip::factory(2)->create()->pluck('id')->flatten()->all(),
-        ];
+it('can toggle clips to a collection', function () {
+    signInRole(Role::ADMIN);
 
-        $this->post(route('collections.toggleClips', $collection = Collection::factory()->create()), $attributes)
-            ->assertRedirect();
+    $attributes = [
+        'ids' => Clip::factory(2)->create()->pluck('id')->flatten()->all(),
+    ];
 
-        $this->assertDatabaseHas('clip_collection', [
-            'clip_id' => Clip::all()->first()->id,
-            'collection_id' => $collection->id,
-        ]);
+    post(route('collections.toggleClips', $collection = Collection::factory()->create()), $attributes)
+        ->assertRedirect();
 
-        $this->post(route('collections.toggleClips', $collection), $attributes)
-            ->assertRedirect();
+    assertDatabaseHas('clip_collection', [
+        'clip_id' => Clip::all()->first()->id,
+        'collection_id' => $collection->id,
+    ]);
+    post(route('collections.toggleClips', $collection), $attributes)
+        ->assertRedirect();
 
-        $this->assertDatabaseMissing('clip_collection', [
-            'clip_id' => Clip::all()->first()->id,
-            'collection_id' => $collection->id,
-        ]);
-    }
-}
+    assertDatabaseMissing('clip_collection', [
+        'clip_id' => Clip::all()->first()->id,
+        'collection_id' => $collection->id,
+    ]);
+});
