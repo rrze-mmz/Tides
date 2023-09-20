@@ -41,7 +41,7 @@ it('publish a clip if commands current time is equal or after time availability 
     $clip = ClipFactory::create(Clip::factory()->raw([
         'is_public' => false,
         'has_time_availability' => true,
-        'time_availability_start' => Carbon::now(),
+        'time_availability_start' => Carbon::now()->subMinutes(5),
         'time_availability_end' => Carbon::now()->addHours(12),
     ]));
     artisan('app:check-time-availability-clips');
