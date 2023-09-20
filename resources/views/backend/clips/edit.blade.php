@@ -1,4 +1,4 @@
-@php use App\Enums\Acl; @endphp
+@php use App\Enums\Acl; use Carbon\Carbon; @endphp
 @extends('layouts.backend')
 
 @section('content')
@@ -44,7 +44,7 @@
 
                 <x-form.input field-name="episode"
                               input-type="number"
-                              :value="$clip->episode"
+                              :value="old('episode', $clip->episode)"
                               label="Episode"
                               :full-col="false"
                               :required="true" />
@@ -52,11 +52,11 @@
                 <x-form.datepicker field-name="recording_date"
                                    label="Recording Date"
                                    :full-col="false"
-                                   :value="$clip->recording_date" />
+                                   :value="old('recording_date', $clip->recording_date)" />
 
                 <x-form.input field-name="title"
                               input-type="text"
-                              :value="$clip->title"
+                              :value="old('title', $clip->title)"
                               label="Title"
                               :fullCol="true"
                               :required="true" />
@@ -66,26 +66,26 @@
                                            label="Chapter"
                                            select-class="select2-tides"
                                            model="chapter"
-                                           :where-i-d="$clip->series->id"
-                                           :selectedItem="$clip->chapter_id"
+                                           :where-i-d="old('series_id', $clip->series->id)"
+                                           :selectedItem="old('chapter_id', $clip->chapter_id)"
                     />
                 @endif
                 <x-form.textarea field-name="description"
-                                 :value="$clip->description"
+                                 :value="old('description', $clip->description)"
                                  label="Description" />
 
                 <x-form.select2-single field-name="organization_id"
                                        label="Organization"
                                        select-class="select2-tides-organization"
                                        model="organization"
-                                       :selectedItem="$clip->organization_id"
+                                       :selectedItem="old('organization_id', $clip->organization_id)"
                 />
 
                 <x-form.select2-single field-name="language_id"
                                        label="Language"
                                        select-class="select2-tides"
                                        model="language"
-                                       :selectedItem="$clip->lanugage_id"
+                                       :selectedItem="old('language_id', $clip->lanugage_id)"
                 />
 
                 <div class="mb-2 border-b border-solid border-b-black pb-2 text-left text-xl font-bold">
@@ -96,26 +96,26 @@
                                        label="Context"
                                        select-class="select2-tides"
                                        model="context"
-                                       :selectedItem="$clip->context_id"
+                                       :selectedItem="old('context_id', $clip->context_id)"
                 />
                 <x-form.select2-single field-name="format_id"
                                        label="Format"
                                        select-class="select2-tides"
                                        model="format"
-                                       :selectedItem="$clip->format_id"
+                                       :selectedItem="old('format_id', $clip->format_id)"
                 />
                 <x-form.select2-single field-name="type_id"
                                        label="Type"
                                        select-class="select2-tides"
                                        model="type"
-                                       :selectedItem="$clip->type_id"
+                                       :selectedItem="old('clip_id', $clip->type_id)"
                 />
 
                 <x-form.select2-single field-name="semester_id"
                                        label="Semester"
                                        select-class="select2-tides"
                                        model="semester"
-                                       :selectedItem="$clip->semester_id"
+                                       :selectedItem="old('semester_id', $clip->semester_id)"
                 />
 
                 <x-form.select2-multiple field-name="presenters"
@@ -136,30 +136,33 @@
                                          select-class="select2-tides" />
 
                 <x-form.password field-name="password"
-                                 :value="$clip->password"
+                                 :value="old('password', $clip->password)"
                                  label="Password"
                                  :full-col="true"
                 />
 
-                <x-form.toggle-button :value="$clip->allow_comments"
+                <x-form.toggle-button :value="old('allow_comments', $clip->allow_comments)"
                                       label="Allow comments"
                                       field-name="allow_comments"
                 />
 
-                <x-form.toggle-button :value="$clip->is_public"
+                <x-form.toggle-button :value="old('is_public', $clip->is_public)"
                                       label="Public available"
                                       field-name="is_public"
                 />
 
-                <x-form.toggle-button :value="$clip->is_livestream"
+                <x-form.toggle-button :value="old('is_livestream', $clip->is_livestream)"
                                       label="Livestream clip"
                                       field-name="is_livestream"
                 />
-                <x-form.toggle-button :value="$clip->has_time_availability"
-                                      label="Time availability"
-                                      field-name="has_time_availability"
-                />
 
+                <x-date-time-picker
+                    :has-time-availability="old('has_time_availability', $clip->has_time_availability)"
+                    :time-availability-start="old('time_availability_start', $clip->time_availability_start)"
+                    :time-availability-end="old('time_availability_end', $clip->time_availability_end)"
+                    name="time_availability"
+                    label="Time availability">
+                </x-date-time-picker>
 
             </div>
 
@@ -246,7 +249,6 @@
                 Backend {{ __('clip.frontend.comments') }}
             </h2>
             <livewire:comments-section :model="$clip" :type="'backend'" />
-            @livewireScripts
 
         </div>
 

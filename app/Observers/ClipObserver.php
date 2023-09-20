@@ -11,6 +11,23 @@ class ClipObserver
     {
     }
 
+    public function creating(Clip $clip): void
+    {
+        if ($clip->time_availability_start !== null) {
+            $this->setTimestampsToNearest5thMinute($clip);
+        }
+    }
+
+    private function setTimestampsToNearest5thMinute(Clip $clip): void
+    {
+        $time_availability_start_rounded = $clip->time_availability_start->roundMinute(5);
+        $time_availability_end_rounded =
+            ($clip->time_availability_end) ? $clip->time_availability_end->roundMinute(5) : null;
+
+        $clip->time_availability_start = $time_availability_start_rounded;
+        $clip->time_availability_end = $time_availability_end_rounded;
+    }
+
     /**
      * Handle the Clip "created" event.
      */
@@ -23,10 +40,16 @@ class ClipObserver
             $clip->supervisor_id = auth()->user()->id;
         }
         $clip->save();
-
         session()->flash('flashMessage', $clip->title.' '.__FUNCTION__.' successfully');
 
         $this->elasticsearchService->createIndex($clip);
+    }
+
+    public function updating(Clip $clip): void
+    {
+        if ($clip->time_availability_start !== null) {
+            $this->setTimestampsToNearest5thMinute($clip);
+        }
     }
 
     /**

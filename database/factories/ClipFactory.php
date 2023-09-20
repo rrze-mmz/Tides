@@ -10,6 +10,7 @@ use App\Models\Organization;
 use App\Models\Semester;
 use App\Models\Type;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ClipFactory extends Factory
@@ -46,6 +47,9 @@ class ClipFactory extends Factory
             'is_public' => true,
             'is_livestream' => false,
             'image_id' => Image::factory()->create()->id,
+            'has_time_availability' => false,
+            'time_availability_start' => Carbon::now(),
+            'time_availability_end' => Carbon::now(),
         ];
     }
 }

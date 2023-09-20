@@ -209,7 +209,32 @@ test('a moderator can view the edit clip form and all form fields', function () 
         ->assertSee('is_public')
         ->assertSee('is_livestream')
         ->assertSee('acls')
-        ->assertSee('time availability');
+        ->assertSee('has_time_availability');
+});
+
+it('updates clip supervisor id if logged in user is admin and not the same as the existing supervisor', function () {
+    $clip = ClipFactory::ownedBy(signInRole(Role::MODERATOR))->create();
+
+    auth()->logout();
+    $admin = signInRole(Role::ADMIN);
+
+    patch(route('clips.edit', $clip), [
+        'episode' => '1',
+        'title' => 'changed',
+        'description' => 'changed',
+        'recording_date' => now(),
+        'organization_id' => '1',
+        'language_id' => '1',
+        'context_id' => '1',
+        'format_id' => '1',
+        'type_id' => '1',
+        'is_livestream' => '',
+        'semester_id' => '1',
+    ]);
+    $clip->refresh();
+
+    expect($clip->supervisor_id)->toBe($admin->id);
+
 });
 
 it('denies access to moderators for editing a not owned clip', function () {
@@ -259,6 +284,38 @@ test('a clip with multiple presenters can be created', function () {
 
     assertDatabaseCount('presentables', 2);
     expect($clip->presenters()->count())->toBe(2);
+});
+
+test('a clip with time availability can be created', function () {
+    signInRole(Role::MODERATOR);
+
+    post(route('clips.store'), Clip::factory()->raw([
+        'has_time_availability' => 'on',
+        'time_availability_start' => Carbon::now(),
+    ]));
+
+    assertDatabaseHas('clips', ['id' => 1, 'has_time_availability' => true]);
+});
+
+it('displays a create clip form error if time availability end time is earlier than start time', function () {
+    signInRole(Role::MODERATOR);
+    post(route('clips.store'), Clip::factory()->raw([
+        'has_time_availability' => 'on',
+        'time_availability_start' => Carbon::now(),
+        'time_availability_end' => Carbon::now()->subHour(),
+    ]))->assertSessionHasErrors(['time_availability_end']);
+});
+
+it('set is_public to false on clip store if time availability is set and the start time is in the future', function () {
+    signInRole(Role::MODERATOR);
+    post(route('clips.store'), Clip::factory()->raw([
+        'is_public' => 'on',
+        'has_time_availability' => 'on',
+        'time_availability_start' => Carbon::now()->addDay(),
+        'time_availability_end' => Carbon::now()->addDays(3),
+    ]));
+    $clip = Clip::all()->first();
+    expect($clip->is_public)->toBe(0);
 });
 
 test('a clip with acls can be created', function () {
@@ -331,6 +388,74 @@ test('clip can updated to be a livestream clip', function () {
     $clip->refresh();
 
     expect($clip->is_livestream)->toBe(1);
+});
+
+test('clip can updated to be a clip with time availability', function () {
+    $clip = ClipFactory::ownedBy(signInRole(Role::MODERATOR))->create();
+
+    patch(route('clips.edit', $clip), [
+        'episode' => '1',
+        'title' => 'changed',
+        'description' => 'changed',
+        'recording_date' => now(),
+        'organization_id' => '1',
+        'language_id' => '1',
+        'context_id' => '1',
+        'format_id' => '1',
+        'type_id' => '1',
+        'is_livestream' => 'on',
+        'semester_id' => '1',
+        'has_time_availability' => 'on',
+        'time_availability_start' => Carbon::now()->addDay(),
+        'time_availability_end' => Carbon::now()->addDays(4),
+    ]);
+
+    $clip->refresh();
+
+    expect($clip->has_time_availability)->toBe(1);
+});
+
+it('displays an update clip form error if time availability end time is earlier than start time', function () {
+    $clip = ClipFactory::ownedBy(signInRole(Role::MODERATOR))->create();
+    patch(route('clips.update', $clip), [
+        'episode' => '1',
+        'title' => 'changed',
+        'description' => 'changed',
+        'recording_date' => now(),
+        'organization_id' => '1',
+        'language_id' => '1',
+        'context_id' => '1',
+        'format_id' => '1',
+        'type_id' => '1',
+        'is_livestream' => 'on',
+        'semester_id' => '1',
+        'has_time_availability' => 'on',
+        'time_availability_start' => Carbon::now()->addDay(),
+        'time_availability_end' => Carbon::now()->subDays(4),
+    ])->assertSessionHasErrors(['time_availability_end']);
+});
+
+it('set is_public to false on clip update if time availability is set and the start time is in the future', function () {
+    $clip = ClipFactory::ownedBy(signInRole(Role::MODERATOR))->create();
+    patch(route('clips.update', $clip), [
+        'episode' => '1',
+        'title' => 'changed',
+        'description' => 'changed',
+        'recording_date' => now(),
+        'organization_id' => '1',
+        'language_id' => '1',
+        'context_id' => '1',
+        'format_id' => '1',
+        'type_id' => '1',
+        'is_livestream' => 'on',
+        'semester_id' => '1',
+        'has_time_availability' => 'on',
+        'time_availability_start' => Carbon::now()->addDay(),
+        'time_availability_end' => Carbon::now()->addDays(4),
+    ]);
+    $clip->refresh();
+
+    expect($clip->is_public)->toBe(0);
 });
 
 test('create clip form should remember old values on validation errors', function () {
