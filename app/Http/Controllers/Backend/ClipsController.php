@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateClipRequest;
 use App\Models\Acl;
 use App\Models\Clip;
 use App\Services\OpencastService;
+use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -33,20 +34,15 @@ class ClipsController extends Controller
     }
 
     /**
-     * Create form for a single clip
-     */
-    public function create(): View
-    {
-        return view('backend.clips.create');
-    }
-
-    /**
      * Store a clip in database
      */
     public function store(StoreClipRequest $request): RedirectResponse
     {
         $validated = $request->validated();
 
+        if ($validated['has_time_availability'] && $validated['time_availability_start']->isFuture()) {
+            $validated['is_public'] = false;
+        }
         $clip = auth()->user()->clips()->create(Arr::except($validated, ['tags', 'acls', 'presenters']));
 
         $clip->addTags(collect($validated['tags']));
@@ -54,6 +50,14 @@ class ClipsController extends Controller
         $clip->addAcls(collect($validated['acls']));
 
         return to_route('clips.edit', $clip);
+    }
+
+    /**
+     * Create form for a single clip
+     */
+    public function create(): View
+    {
+        return view('backend.clips.create');
     }
 
     /**
@@ -84,6 +88,9 @@ class ClipsController extends Controller
     {
         $validated = $request->validated();
 
+        if ($validated['has_time_availability'] && Carbon::parse($validated['time_availability_start'])->isFuture()) {
+            $validated['is_public'] = false;
+        }
         $clip->update(Arr::except($validated, ['tags', 'acls', 'presenters']));
 
         $clip->addTags(collect($validated['tags']));

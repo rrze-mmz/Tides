@@ -9,20 +9,6 @@ use Illuminate\Validation\Rules\Password;
 
 class StoreClipRequest extends FormRequest
 {
-    protected function prepareForValidation(): void
-    {
-        $this->merge([
-            'slug' => Str::slug($this->title),
-            'tags' => $this->tags = $this->tags ?? [], //set empty array if select2 tags is empty
-            'acls' => $this->acls = $this->acls ?? [], //set empty array if select2 acls is empty
-            'presenters' => $this->presenters = $this->presenters ?? [], //set empty array if presenters array is empty
-            'allow_comments' => $this->allow_comments === 'on',
-            'is_public' => $this->is_public === 'on',
-            'image_id' => (isset($this->image_id)) ? $this->image_id : config('settings.portal.default_image_id'),
-
-        ]);
-    }
-
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -58,6 +44,27 @@ class StoreClipRequest extends FormRequest
             'password' => ['nullable', Password::min(8)->mixedCase()],
             'is_public' => ['boolean'],
             'image_id' => ['required', 'exists:App\Models\Image,id'],
+            'has_time_availability' => ['boolean'],
+            'time_availability_start' => ['exclude_if:has_time_availability,false', 'date'],
+            'time_availability_end' => [
+                'exclude_if:has_time_availability,false',
+                'after_or_equal:time_availability_start',
+                'date',
+            ],
         ];
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'slug' => Str::slug($this->title),
+            'tags' => $this->tags = $this->tags ?? [], //set empty array if select2 tags is empty
+            'acls' => $this->acls = $this->acls ?? [], //set empty array if select2 acls is empty
+            'presenters' => $this->presenters = $this->presenters ?? [], //set empty array if presenters array is empty
+            'allow_comments' => $this->allow_comments === 'on',
+            'is_public' => $this->is_public === 'on',
+            'image_id' => (isset($this->image_id)) ? $this->image_id : config('settings.portal.default_image_id'),
+            'has_time_availability' => $this->has_time_availability === 'on',
+        ]);
     }
 }

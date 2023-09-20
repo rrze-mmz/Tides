@@ -51,10 +51,18 @@ class UpdateClipRequest extends FormRequest
             'password' => ['nullable', Password::min(8)->mixedCase()],
             'is_public' => ['boolean'],
             'is_livestream' => ['boolean'],
+            'has_time_availability' => ['boolean'],
+            'time_availability_start' => ['exclude_if:has_time_availability,false', 'date'],
+            'time_availability_end' => [
+                'exclude_if:has_time_availability,false',
+                'nullable',
+                'after_or_equal:time_availability_start',
+                'date',
+            ],
         ];
     }
 
-    protected function prepareForValidation()
+    protected function prepareForValidation(): void
     {
         $this->merge([
             'slug' => Str::slug($this->title),
@@ -64,6 +72,7 @@ class UpdateClipRequest extends FormRequest
             'allow_comments' => $this->allow_comments === 'on',
             'is_public' => $this->is_public === 'on',
             'is_livestream' => $this->is_livestream === 'on',
+            'has_time_availability' => $this->has_time_availability === 'on',
         ]);
     }
 }

@@ -52,7 +52,11 @@ class Clip extends BaseModel
 
     protected $attributes = ['episode' => '1'];
 
-    protected $casts = ['recording_date' => 'datetime:Y-m-d'];
+    protected $casts = [
+        'recording_date' => 'datetime:Y-m-d',
+        'time_availability_start' => 'datetime',
+        'time_availability_end' => 'datetime',
+    ];
 
     protected static function boot()
     {

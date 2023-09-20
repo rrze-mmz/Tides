@@ -48,7 +48,7 @@
                                        label="Language"
                                        select-class="select2-tides"
                                        model="language"
-                                       :selectedItem="1"
+                                       :selectedItem="old('language_id')"
                 />
 
                 <div class="mb-2 border-b border-solid border-b-black pb-2 text-left text-xl font-bold">
@@ -59,21 +59,21 @@
                                        label="Context"
                                        select-class="select2-tides"
                                        model="context"
-                                       :selectedItem="1"
+                                       :selectedItem="old('context_id')"
                 />
 
                 <x-form.select2-single field-name="format_id"
                                        label="Format"
                                        select-class="select2-tides"
                                        model="format"
-                                       :selectedItem="1"
+                                       :selectedItem="old('format_id')"
                 />
 
                 <x-form.select2-single field-name="type_id"
                                        label="Type"
                                        select-class="select2-tides"
                                        model="type"
-                                       :selectedItem="1"
+                                       :selectedItem="old('type_id')"
                 />
 
                 <x-form.select2-multiple field-name="presenters"
@@ -113,21 +113,28 @@
                                  :full-col="true"
                 />
 
-                <x-form.toggle-button :value="true"
+                <x-form.toggle-button :value="old('allow_comments', false)"
                                       label="Allow comments"
                                       field-name="allow_comments"
                 />
 
-                <x-form.toggle-button :value="true"
+                <x-form.toggle-button :value="old('is_public', true)"
                                       label="Public available"
                                       field-name="is_public"
                 />
 
-                <x-form.toggle-button :value="false"
+                <x-form.toggle-button :value="old('is_livestream', false)"
                                       label="Livestream clip"
                                       field-name="is_livestream"
                 />
 
+                <x-date-time-picker
+                    :has-time-availability="old('has_time_availability', false)"
+                    :time-availability-start="old('time_availability_start',now()->format('Y-m-d H:i'))"
+                    :time-availability-end="old('time_availability_end',now()->format('Y-m-d H:i'))"
+                    name="time_availability"
+                    label="Time availability">
+                </x-date-time-picker>
 
                 <div class="col-span-7 w-4/5 pt-8">
                     <x-button class="bg-blue-600 hover:bg-blue-700">
@@ -135,7 +142,17 @@
                     </x-button>
                 </div>
             </div>
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
         </form>
+
     </div>
     <script>
         const MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];

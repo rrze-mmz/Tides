@@ -1,122 +1,72 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Backend;
-
 use App\Enums\Role;
 use App\Models\Asset;
 use Facades\Tests\Setup\ClipFactory;
 use Facades\Tests\Setup\FileFactory;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Storage;
-use Tests\TestCase;
 
-class AssetsDestroyTest extends TestCase
-{
-    use RefreshDatabase;
-    use WithFaker;
+use function Pest\Laravel\assertDatabaseHas;
+use function Pest\Laravel\assertModelMissing;
+use function Pest\Laravel\delete;
+use function Pest\Laravel\post;
 
-    private Role $role;
+uses()->beforeEach(function () {
+    Storage::fake('videos');
+    Storage::fake('thumbnails');
+});
 
-    protected function setUp(): void
-    {
-        parent::setUp();
+test('a moderator cannot delete an asset they do not own', function () {
+    $asset = Asset::factory()->create();
+    signInRole(Role::MODERATOR);
 
-        Storage::fake('videos');
-        Storage::fake('thumbnails');
+    delete(route('assets.destroy', $asset))->assertForbidden();
+});
 
-        $this->role = Role::MODERATOR;
-    }
+test('a moderator can delete an owned clip asset', function () {
+    $clip = ClipFactory::withAssets(1)->ownedBy(signInRole(Role::MODERATOR))->create();
+    expect($clip->assets->count())->toBe(1);
 
-    /** @test */
-    public function a_moderator_cannot_delete_a_not_owned_clip_asset(): void
-    {
-        $asset = Asset::factory()->create();
+    delete(route('assets.destroy', $clip->assets()->first()))->assertRedirect(route('clips.edit', $clip));
+    expect($clip->assets()->count())->toBe(0);
+});
 
-        $this->signInRole($this->role);
+test('deleting an asset should also delete the file from storage', function () {
+    $clip = ClipFactory::ownedBy(signInRole(Role::MODERATOR))->create();
+    post(route('admin.clips.asset.transferSingle', $clip), ['asset' => FileFactory::videoFile()]);
+    $asset = $clip->assets()->first();
 
-        $this->delete($asset->path())->assertForbidden();
-    }
+    assertDatabaseHas('assets', ['path' => $asset->path]);
+    Storage::disk('videos')->assertExists($asset->path);
 
-    /** @test */
-    public function a_moderator_can_delete_an_owned_clip_asset(): void
-    {
-        $clip = ClipFactory::withAssets(1)
-            ->ownedBy($this->signInRole($this->role))
-            ->create();
+    $asset->delete();
+    assertModelMissing($asset);
+    Storage::disk('videos')->assertMissing($asset->path);
+});
 
-        $this->assertEquals(1, $clip->assets()->count());
+test('an admin can delete a not owned clip asset', function () {
+    $asset = Asset::factory()->create();
+    signInRole(Role::ADMIN);
+    delete(route('assets.destroy', $asset));
 
-        $this->delete(route('assets.destroy', $clip->assets->first()))
-            ->assertRedirect($clip->adminPath());
+    assertModelMissing($asset);
+});
 
-        $this->assertEquals(0, $clip->assets()->count());
-    }
+test('deleting an asset should also delete a clip poster', function () {
+    $clip = ClipFactory::ownedBy(signInRole(Role::MODERATOR))->create();
+    post(route('admin.clips.asset.transferSingle', $clip), ['asset' => FileFactory::videoFile()]);
+    $clip->refresh();
+    $image = $clip->posterImage;
 
-    /** @test */
-    public function deleting_an_asset_should_also_delete_the_file_from_storage(): void
-    {
-        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
+    delete(route('assets.destroy', $clip->assets()->first()));
+    Storage::disk('thumbnails')->assertMissing($image);
+});
 
-        $this->post(route('admin.clips.asset.transferSingle', $clip), ['asset' => FileFactory::videoFile()]);
+test('deleting an asset should update clip poster image column', function () {
+    $clip = ClipFactory::ownedBy(signInRole(Role::MODERATOR))->create();
+    post(route('admin.clips.asset.transferSingle', $clip), ['asset' => FileFactory::videoFile()]);
+    delete(route('assets.destroy', $clip->assets()->first()));
+    $clip->refresh();
 
-        $asset = $clip->assets()->first();
-
-        $this->assertDatabaseHas('assets', ['path' => $asset->path]);
-
-        Storage::disk('videos')->assertExists($asset->path);
-
-        $asset->delete();
-
-        $this->assertModelMissing($asset);
-
-        Storage::disk('videos')->assertMissing($asset->path);
-    }
-
-    /** @test */
-    public function an_admin_can_delete_a_not_owned_clip_asset(): void
-    {
-        $asset = Asset::factory()->create();
-
-        $this->signInRole(Role::ADMIN);
-
-        $this->delete($asset->path());
-
-        $this->assertModelMissing($asset);
-    }
-
-    /** @test */
-    public function deleting_an_asset_should_delete_a_clip_poster(): void
-    {
-        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
-
-        $this->post(route('admin.clips.asset.transferSingle', $clip), ['asset' => FileFactory::videoFile()]);
-
-        $clip->refresh();
-
-        $image = $clip->posterImage;
-
-        $this->delete($clip->assets()->first()->path());
-
-        Storage::disk('thumbnails')->assertMissing($image);
-    }
-
-    /** @test */
-    public function deleting_an_asset_should_update_clip_poster_image_column(): void
-    {
-        $clip = ClipFactory::ownedBy($this->signInRole($this->role))->create();
-
-        $this->post(route('admin.clips.asset.transferSingle', $clip), ['asset' => FileFactory::videoFile()]);
-
-        $this->delete($clip->assets()->first()->path());
-
-        $clip->refresh();
-
-        $this->assertNull($clip->posterImage);
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown(); // TODO: Change the autogenerated stub
-    }
-}
+    expect($clip->posterImage)->toBeNull();
+});
