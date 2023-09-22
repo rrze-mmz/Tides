@@ -1,58 +1,33 @@
 <?php
 
-namespace Tests\Unit;
-
 use App\Models\Presenter;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
-class PresenterTest extends TestCase
-{
-    use RefreshDatabase;
+uses()->group('unit');
 
-    private Presenter $presenter;
+beforeEach(function () {
+    $this->presenter = Presenter::factory()->create();
+});
 
-    public function setUp(): void
-    {
-        parent::setUp();
+it('belongs to many series', function () {
+    expect($this->presenter->series())->toBeInstanceOf(BelongsToMany::class);
+});
 
-        $this->presenter = Presenter::factory()->create();
-    }
+it('belongs to many clips', function () {
+    expect($this->presenter->clips())->toBeInstanceOf(BelongsToMany::class);
+});
 
-    /** @test */
-    public function it_belongs_to_many_series(): void
-    {
-        $this->assertInstanceOf(BelongsToMany::class, $this->presenter->series());
-    }
+it('has one or none degree title', function () {
+    expect($this->presenter->academicDegree())->toBeInstanceOf(BelongsTo::class);
+});
 
-    /** @test */
-    public function it_belongs_to_many_clips(): void
-    {
-        $this->assertInstanceOf(BelongsToMany::class, $this->presenter->clips());
-    }
+it('can return presenter full name', function () {
+    expect($this->presenter->academicDegree->title.' '.$this->presenter->first_name.
+    ' '.$this->presenter->last_name)->toEqual($this->presenter->getFullNameAttribute());
+});
 
-    /** @test */
-    public function it_has_one_or_none_degree_title(): void
-    {
-        $this->assertInstanceOf(BelongsTo::class, $this->presenter->academicDegree());
-    }
-
-    /** @test */
-    public function it_can_return_presenter_full_name(): void
-    {
-        $this->assertEquals(
-            $this->presenter->getFullNameAttribute(),
-            $this->presenter->academicDegree->title.' '.$this->presenter->first_name.
-            ' '.$this->presenter->last_name
-        );
-    }
-
-    /** @test */
-    public function it_return_presenters_clips_without_series(): void
-    {
-        $this->assertInstanceOf(Collection::class, $this->presenter->clips);
-    }
-}
+it('return presenters clips without series', function () {
+    expect($this->presenter->clips)->toBeInstanceOf(Collection::class);
+});

@@ -1,30 +1,22 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Frontend;
-
 use Facades\Tests\Setup\ClipFactory;
 use Facades\Tests\Setup\FileFactory;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
-class AssetTest extends TestCase
-{
-    use RefreshDatabase;
+use function Pest\Laravel\get;
+use function Pest\Laravel\post;
 
-    /** @test */
-    public function a_visitor_cannot_upload_a_video_file(): void
-    {
-        $clip = ClipFactory::create();
+uses()->group('frontend');
 
-        $this->post(route('admin.clips.asset.transferSingle', $clip), ['asset' => FileFactory::videoFile()])
-            ->assertRedirect('login');
-    }
+test('a visitor cannot upload a video file', function () {
+    $clip = ClipFactory::create();
 
-    /** @test */
-    public function a_visitor_cannot_view_dropzone_files_for_a_clip(): void
-    {
-        $clip = ClipFactory::create();
+    post(route('admin.clips.asset.transferSingle', $clip), ['asset' => FileFactory::videoFile()])
+        ->assertRedirect('login');
+});
 
-        $this->get(route('admin.clips.dropzone.listFiles', $clip))->assertRedirect('login');
-    }
-}
+test('a visitor cannot view dropzone files for a clip', function () {
+    $clip = ClipFactory::create();
+
+    get(route('admin.clips.dropzone.listFiles', $clip))->assertRedirect('login');
+});

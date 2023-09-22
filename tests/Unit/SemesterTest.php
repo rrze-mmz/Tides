@@ -1,26 +1,15 @@
 <?php
 
-namespace Tests\Unit;
-
 use App\Models\Semester;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
-class SemesterTest extends TestCase
-{
-    use RefreshDatabase;
+uses()->group('unit');
 
-    /** @test */
-    public function it_has_many_clips(): void
-    {
-        $this->assertInstanceOf(HasMany::class, Semester::find(1)->clips());
-    }
+it('has many clips', function () {
+    expect(Semester::find(1)->clips())->toBeInstanceOf(HasMany::class);
+});
 
-    /** @test */
-    public function it_has_a_current_semester_scope(): void
-    {
-        $this->assertInstanceOf(Builder::class, Semester::current());
-    }
-}
+it('has a current semester scope', function () {
+    expect(Semester::current())->toBeInstanceOf(Builder::class);
+});

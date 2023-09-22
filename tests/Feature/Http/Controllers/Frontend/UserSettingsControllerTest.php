@@ -38,7 +38,6 @@ it('shows user settings', function () {
 
 it('shows an error if lang code is other than en or de', function () {
     acceptUseTerms();
-
     $attributes = [
         'language' => 'fr',
         'show_subscriptions_to_home_page' => 'on',
@@ -51,11 +50,8 @@ it('update user settings', function () {
     assertDatabaseHas('settings', [
         'name' => auth()->user()->username,
         'data' => json_encode(config('settings.user')), ]);
-
     acceptUseTerms();
-
     $this->userSettings->refresh();
-
     put(route('frontend.userSettings.update'), [
         'language' => 'en',
         'show_subscriptions_to_home_page' => 'on',
@@ -75,11 +71,8 @@ it('updates user lang preferences', function () {
     assertDatabaseHas('settings', [
         'name' => auth()->user()->username,
         'data' => json_encode(config('settings.user')), ]);
-
     acceptUseTerms();
-
     $this->userSettings->refresh();
-
     put(route('frontend.userSettings.update'), [
         'language' => 'en',
         'show_subscriptions_to_home_page' => 'on',

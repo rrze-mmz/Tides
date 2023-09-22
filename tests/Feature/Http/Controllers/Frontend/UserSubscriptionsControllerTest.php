@@ -1,43 +1,30 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Frontend;
-
 use App\Models\Series;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
-class UserSubscriptionsControllerTest extends TestCase
-{
-    use RefreshDatabase;
+use function Pest\Laravel\get;
+use function Pest\Laravel\put;
 
-    /** @test */
-    public function user_subscriptions_is_not_for_visitors_available(): void
-    {
-        $this->get(route('frontend.user.subscriptions'))->assertRedirect();
-    }
+uses()->group('frontend');
 
-    /** @test */
-    public function it_shows_series_subscriptions_page_for_logged_in_user(): void
-    {
-        $this->signIn();
+test('user subscriptions is not for visitors available', function () {
+    get(route('frontend.user.subscriptions'))->assertRedirect();
+});
 
-        $this->put(route('frontend.acceptUseTerms'), ['accept_use_terms' => 'on']);
+it('shows series subscriptions page for logged in user', function () {
+    signIn();
+    put(route('frontend.acceptUseTerms'), ['accept_use_terms' => 'on']);
 
-        $this->get(route('frontend.user.subscriptions'))
-            ->assertOk()
-            ->assertViewIs('frontend.myPortal.subscriptions')
-            ->assertSee(__('myPortal.subscriptions.Your are subscribed to X Series', ['counter' => 0]));
-    }
+    get(route('frontend.user.subscriptions'))
+        ->assertOk()
+        ->assertViewIs('frontend.myPortal.subscriptions')
+        ->assertSee(__('myPortal.subscriptions.Your are subscribed to X Series', ['counter' => 0]));
+});
 
-    /** @test */
-    public function it_lists_user_subscriptions(): void
-    {
-        $this->signIn();
+it('lists user subscriptions', function () {
+    signIn();
+    put(route('frontend.acceptUseTerms'), ['accept_use_terms' => 'on']);
+    auth()->user()->subscriptions()->attach(Series::factory(3)->create());
 
-        $this->put(route('frontend.acceptUseTerms'), ['accept_use_terms' => 'on']);
-
-        auth()->user()->subscriptions()->attach(Series::factory(3)->create());
-
-        $this->get(route('frontend.user.subscriptions'))->assertSee(auth()->user()->subscriptions->first()->title);
-    }
-}
+    get(route('frontend.user.subscriptions'))->assertSee(auth()->user()->subscriptions->first()->title);
+});

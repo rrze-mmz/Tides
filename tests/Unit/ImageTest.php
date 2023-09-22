@@ -10,13 +10,13 @@ beforeEach(function () {
 });
 
 it('has many series', function () {
-    $this->assertInstanceOf(HasMany::class, $this->image->series());
+    expect($this->image->series())->toBeInstanceOf(HasMany::class);
 });
 
 it('has many clips', function () {
-    $this->assertInstanceOf(HasMany::class, $this->image->clips());
+    expect($this->image->clips())->toBeInstanceOf(HasMany::class);
 });
 
 it('has many presenters', function () {
-    $this->assertInstanceOf(HasMany::class, $this->image->presenters());
+    expect($this->image->presenters())->toBeInstanceOf(HasMany::class);
 });

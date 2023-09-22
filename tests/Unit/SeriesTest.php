@@ -1,7 +1,5 @@
 <?php
 
-namespace Tests\Unit;
-
 use App\Models\Clip;
 use App\Models\Semester;
 use App\Models\Series;
@@ -14,218 +12,148 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Tests\Setup\WorksWithOpencastClient;
-use Tests\TestCase;
 
-class SeriesTest extends TestCase
-{
-    use RefreshDatabase;
-    use WorksWithOpencastClient;
+use function Pest\Laravel\get;
 
-    protected Series $series;
+uses(WorksWithOpencastClient::class);
+uses()->group('unit');
 
-    protected function setUp(): void
-    {
-        parent::setUp();
+beforeEach(function () {
+    $this->series = Series::factory()->create();
+});
 
-        $this->series = Series::factory()->create();
-    }
+it('has a path', function () {
+    expect($this->series->path())->toEqual('/series/'.$this->series->slug);
+});
 
-    /** @test */
-    public function it_has_a_path(): void
-    {
-        $this->assertEquals('/series/'.$this->series->slug, $this->series->path());
-    }
+it('has an admin path', function () {
+    expect($this->series->adminPath())->toEqual('/admin/series/'.$this->series->slug);
+});
 
-    /** @test */
-    public function it_has_an_admin_path(): void
-    {
-        $this->assertEquals('/admin/series/'.$this->series->slug, $this->series->adminPath());
-    }
+it('has a slug route', function () {
+    expect($this->series->path())->toEqual('/series/'.Str::slug($this->series->title.'-'.Semester::current()->get()->first()->acronym));
+});
 
-    /** @test */
-    public function it_has_a_slug_route(): void
-    {
-        $this->assertEquals(
-            '/series/'.Str::slug($this->series->title.'-'.Semester::current()->get()->first()->acronym),
-            $this->series->path()
-        );
-    }
+it('has a unique slug', function () {
+    $seriesA = Series::factory()->create(['title' => 'A test title', 'slug' => 'A test title']);
+    $seriesB = Series::factory()->create(['title' => 'A test title', 'slug' => 'A test title']);
 
-    /** @test */
-    public function it_has_a_unique_slug(): void
-    {
-        $seriesA = Series::factory()->create(['title' => 'A test title', 'slug' => 'A test title']);
+    expect($seriesA->slug)->not->toEqual($seriesB->slug);
+});
 
-        $seriesB = Series::factory()->create(['title' => 'A test title', 'slug' => 'A test title']);
+it('has many clips', function () {
+    expect($this->series->clips())->toBeInstanceOf(HasMany::class);
+});
 
-        $this->assertNotEquals($seriesA->slug, $seriesB->slug);
-    }
+it('has many chapters', function () {
+    expect($this->series->chapters())->toBeInstanceOf(HasMany::class);
+});
 
-    /** @test */
-    public function it_has_many_clips(): void
-    {
-        $this->assertInstanceOf(HasMany::class, $this->series->clips());
-    }
+it('has many members', function () {
+    expect($this->series->members())->toBeInstanceOf(BelongsToMany::class);
+});
 
-    /** @test */
-    public function it_has_many_chapters(): void
-    {
-        $this->assertInstanceOf(HasMany::class, $this->series->chapters());
-    }
+it('has many subscribers', function () {
+    expect($this->series->subscribers())->toBeInstanceOf(BelongsToMany::class);
+});
 
-    /** @test */
-    public function it_has_many_members(): void
-    {
-        $this->assertInstanceOf(BelongsToMany::class, $this->series->members());
-    }
+it('has an add member function for membership', function () {
+    expect($this->series->addMember(User::factory()->create()))->toBeInstanceOf(User::class);
+});
 
-    /** @test */
-    public function it_has_many_subscribers(): void
-    {
-        $this->assertInstanceOf(BelongsToMany::class, $this->series->subscribers());
-    }
+it('han a remove member function for membership', function () {
+    expect($this->series->removeMember(User::factory()->create()))->toBeInstanceOf(User::class);
+});
 
-    /** @test */
-    public function it_has_an_add_member_function_for_membership(): void
-    {
-        $this->assertInstanceOf(User::class, $this->series->addMember(User::factory()->create()));
-    }
+it('has many presenters using presentable trait', function () {
+    expect($this->series->presenters())->toBeInstanceOf(MorphToMany::class);
+});
 
-    /** @test */
-    public function it_han_a_remove_member_function_for_membership(): void
-    {
-        $this->assertInstanceOf(User::class, $this->series->removeMember(User::factory()->create()));
-    }
+it('has many documents using documentable trait', function () {
+    expect($this->series->documents())->toBeInstanceOf(MorphToMany::class);
+});
 
-    /** @test */
-    public function it_has_many_presenters_using_presentable_trait(): void
-    {
-        $this->assertInstanceOf(MorphToMany::class, $this->series->presenters());
-    }
+it('has many comments', function () {
+    expect($this->series->comments())->toBeInstanceOf(MorphMany::class);
+});
 
-    /** @test */
-    public function it_has_many_documents_using_documentable_trait(): void
-    {
-        $this->assertInstanceOf(MorphToMany::class, $this->series->documents());
-    }
+it('fetches the latest clip', function () {
+    expect($this->series->latestClip())->toBeInstanceOf(HasOne::class);
+});
 
-    /** @test */
-    public function it_has_many_comments(): void
-    {
-        $this->assertInstanceOf(MorphMany::class, $this->series->comments());
-    }
+it('belongs to an organization unit', function () {
+    expect($this->series->organization())->toBeInstanceOf(BelongsTo::class);
+});
 
-    /** @test */
-    public function it_fetches_the_latest_clip(): void
-    {
-        $this->assertInstanceOf(HasOne::class, $this->series->latestClip());
-    }
+it('belongs to an image', function () {
+    expect($this->series->image())->toBeInstanceOf(BelongsTo::class);
+});
 
-    /** @test */
-    public function it_belongs_to_an_organization_unit(): void
-    {
-        $this->assertInstanceOf(BelongsTo::class, $this->series->organization());
-    }
+it('can add a clip', function () {
+    signIn();
 
-    /** @test */
-    public function it_belongs_to_an_image(): void
-    {
-        $this->assertInstanceOf(BelongsTo::class, $this->series->image());
-    }
+    expect($this->series->addClip([
+        'title' => 'a clip',
+        'slug' => 'a-clip',
+        'tags' => [],
+        'description' => 'clip description',
+        'semester_id' => '1',
+    ]))->toBeInstanceOf(Clip::class);
+});
 
-    /** @test */
-    public function it_can_add_a_clip(): void
-    {
-        $this->signIn();
+it('can reorder clips based on an array of episodes', function () {
+    Clip::factory(2)->create(['series_id' => $this->series->id]);
 
-        $this->assertInstanceOf(Clip::class, $this->series->addClip([
-            'title' => 'a clip',
-            'slug' => 'a-clip',
-            'tags' => [],
-            'description' => 'clip description',
-            'semester_id' => '1',
-        ]));
-    }
+    expect($this->series->reorderClips(collect([
+        1 => '3',
+        2 => '1',
+    ])))->toBeInstanceOf(Series::class);
+});
 
-    /** @test */
-    public function it_can_reorder_clips_based_on_an_array_of_episodes(): void
-    {
-        Clip::factory(2)->create(['series_id' => $this->series->id]);
+it('updates opencast series id', function () {
+    $series = SeriesFactory::create();
+    $series->updateOpencastSeriesId($this->mockCreateSeriesResponse());
 
-        $this->assertInstanceOf(Series::class, $this->series->reorderClips(collect([
-            1 => '3',
-            2 => '1',
-        ])));
-    }
+    expect($series->opencast_series_id)->not->toBeNull();
+});
 
-    /** @test */
-    public function it_updates_opencast_series_id(): void
-    {
-        $series = SeriesFactory::create();
+it('has a public scope', function () {
+    expect(Series::isPublic())->toBeInstanceOf(Builder::class);
+});
 
-        $series->updateOpencastSeriesId($this->mockCreateSeriesResponse());
+it('has a current semester scope', function () {
+    expect(Series::currentSemester())->toBeInstanceOf(Builder::class);
+});
 
-        $this->assertNotNull($series->opencast_series_id);
-    }
+it('has a scope to fetch clips with assets', function () {
+    expect(Series::hasClipsWithAssets())->toBeInstanceOf(Builder::class);
+});
 
-    /** @test */
-    public function it_has_a_public_scope(): void
-    {
-        $this->assertInstanceOf(Builder::class, Series::isPublic());
-    }
+test('series owner can be null', function () {
+    $user = User::factory()->create();
+    $series = $user->series()->create(['title' => 'test', 'slug' => 'test']);
+    $user->delete();
+    $series = Series::find($series->id);
 
-    /** @test */
-    public function it_has_a_current_semester_scope(): void
-    {
-        $this->assertInstanceOf(Builder::class, Series::currentSemester());
-    }
+    expect($series->owner_id)->toBeNull();
+});
 
-    /** @test */
-    public function it_has_a_scope_to_fetch_clips_with_assets(): void
-    {
-        $this->assertInstanceOf(Builder::class, Series::hasClipsWithAssets());
-    }
+it('has an opencast series id scope', function () {
+    expect(Series::hasOpencastSeriesID())->toBeInstanceOf(Builder::class);
+});
 
-    /** @test */
-    public function series_owner_can_be_null(): void
-    {
-        $user = User::factory()->create();
+it('resolves also id in route', function () {
+    get('series/'.$this->series->id)->assertStatus(403);
+    get(route('frontend.series.show', $this->series->id))->assertStatus(403);
+    get('/series/535')->assertStatus(404);
+});
 
-        $series = $user->series()->create(['title' => 'test', 'slug' => 'test']);
+it('fetches clip acls as comma seperated string', function () {
+    expect($this->series->fetchClipsAcls())->toBeString();
+});
 
-        $user->delete();
-
-        $series = Series::find($series->id);
-
-        $this->assertNull($series->owner_id);
-    }
-
-    /** @test */
-    public function it_has_an_opencast_series_id_scope(): void
-    {
-        $this->assertInstanceOf(Builder::class, Series::hasOpencastSeriesID());
-    }
-
-    /** @test */
-    public function it_resolves_also_id_in_route(): void
-    {
-        $this->get('series/'.$this->series->id)->assertStatus(403);
-        $this->get(route('frontend.series.show', $this->series->id))->assertStatus(403);
-        $this->get('/series/535')->assertStatus(404);
-    }
-
-    /** @test */
-    public function it_fetches_clip_acls_as_comma_seperated_string(): void
-    {
-        $this->assertIsString($this->series->fetchClipsAcls());
-    }
-
-    /** @test */
-    public function it_returns_bool_for_clips_acls_check(): void
-    {
-        $this->assertIsBool($this->series->checkAcls());
-    }
-}
+it('returns bool for clips acls check', function () {
+    expect($this->series->checkAcls())->toBeBool();
+});

@@ -11,6 +11,8 @@ use Facades\Tests\Setup\SeriesFactory;
 
 use function Pest\Laravel\get;
 
+uses()->group('frontend');
+
 it('shows all available series on series index page', function () {
     $series = SeriesFactory::withClips(2)->withAssets(1)->create();
     get(route('frontend.series.index'))->assertSee($series->title);
@@ -19,7 +21,7 @@ it('shows all available series on series index page', function () {
 test(' series route working also with course urls keeping backwards compatibility', function () {
     $series = Series::factory()->create();
 
-    $this->get('/course/id/'.$series->id)->assertRedirectToRoute('frontend.series.show', $series);
+    get('/course/id/'.$series->id)->assertRedirectToRoute('frontend.series.show', $series);
 });
 
 it('lists a livestream clip to visitors', function () {
@@ -37,7 +39,7 @@ it('lists all clips with media assets to visitors', function () {
     $series = SeriesFactory::withClips(2)->withAssets(2)->create();
     $clipWithoutAsset = Clip::factory()->create(['series_id' => $series->id]);
 
-    $this->get(route('frontend.series.show', $series))
+    get(route('frontend.series.show', $series))
         ->assertSee($series->first()->title)
         ->assertDontSee($clipWithoutAsset->title);
 });
@@ -52,12 +54,12 @@ it('shows a forbidden series page for series without clips to visitors', functio
 });
 
 it('shows an unauthorized page for non public series to visitors', function () {
-    $this->get(route('frontend.series.show', SeriesFactory::withClips(2)->withAssets(1)->notPublic()->create()))
+    get(route('frontend.series.show', SeriesFactory::withClips(2)->withAssets(1)->notPublic()->create()))
         ->assertForbidden();
 });
 
 it('shows series public page if series is not public to series owner', function () {
-    $this->get(route(
+    get(route(
         'frontend.series.show',
         SeriesFactory::ownedBy($this->signIn())->withClips(2)->withAssets(1)->notPublic()->create()
     ))
@@ -66,7 +68,7 @@ it('shows series public page if series is not public to series owner', function 
 
 it('shows series public page to portal admins', function () {
     signInRole(Role::ADMIN);
-    $this->get(route('frontend.series.show', SeriesFactory::withClips(2)->withAssets(1)->notPublic()->create()))
+    get(route('frontend.series.show', SeriesFactory::withClips(2)->withAssets(1)->notPublic()->create()))
         ->assertOk();
 });
 
@@ -163,7 +165,7 @@ it('shows an unlock button if series has password protection', function () {
         $clip->addAcls(collect([Acl::PASSWORD()]));
     });
 
-    $this->get(route('frontend.series.show', $series))->assertSee('Unlock series');
+    get(route('frontend.series.show', $series))->assertSee('Unlock series');
 });
 
 it('hides unlock button to portal admins', function () {
@@ -196,7 +198,6 @@ it('will display chapters with clips that have assets and are public', function 
 
 it('will display chapters with livestream clips', function () {
     $series = SeriesFactory::withClips(1)->withChapters(1)->create();
-
     $clip = $series->clips()->first();
     $clip->is_livestream = true;
     $clip->save();

@@ -1,235 +1,182 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Frontend;
-
 use App\Enums\Acl;
 use App\Enums\Role;
 use App\Models\Clip;
 use App\Models\Series;
 use Facades\Tests\Setup\ClipFactory;
 use Facades\Tests\Setup\SeriesFactory;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Str;
-use Tests\TestCase;
 
-class HomePageTest extends TestCase
-{
-    use RefreshDatabase;
-    use WithFaker;
+use function Pest\Laravel\followingRedirects;
+use function Pest\Laravel\get;
+use function Pest\Laravel\put;
 
-    /** @test */
-    public function should_show_project_name(): void
-    {
-        $this->get(route('home'))->assertSee(env('APP_NAME'));
-    }
+uses()->group('frontend');
 
-    /** @test */
-    public function it_has_a_language_switcher(): void
-    {
-        $this->get(route('home'))->assertSee('EN')->assertSee('DE');
-    }
+uses(WithFaker::class);
 
-    /** @test */
-    public function it_has_a_series_top_menu_item(): void
-    {
-        $menuItem = '<a href="'.route('frontend.series.index').'" class="text-lg text-white">';
+test('should show project name', function () {
+    get(route('home'))->assertSee(env('APP_NAME'));
+});
 
-        $this->get(route('home'))->assertSee($menuItem, false);
-    }
+it('has a language switcher', function () {
+    get(route('home'))->assertSee('EN')->assertSee('DE');
+});
 
-    /** @test */
-    public function it_has_a_clips_top_menu_item(): void
-    {
-        $menuItem = '<a href="'.route('frontend.clips.index').'" class="text-lg text-white">';
+it('has a series top menu item', function () {
+    $menuItem = '<a href="'.route('frontend.series.index').'" class="text-lg text-white">';
 
-        $this->get(route('home'))->assertSee($menuItem, false);
-    }
+    get(route('home'))->assertSee($menuItem, false);
+});
 
-    /** @test */
-    public function it_has_a_faculties_top_menu_item(): void
-    {
-        $menuItem = '<a href="'.route('frontend.organizations.index').'" class="text-lg text-white">';
+it('has a clips top menu item', function () {
+    $menuItem = '<a href="'.route('frontend.clips.index').'" class="text-lg text-white">';
 
-        $this->get(route('home'))->assertSee($menuItem, false);
-    }
+    get(route('home'))->assertSee($menuItem, false);
+});
 
-    /** @test */
-    public function it_changes_portal_language(): void
-    {
-        $this->followingRedirects()->get('/set_lang/de');
+it('has a faculties top menu item', function () {
+    $menuItem = '<a href="'.route('frontend.organizations.index').'" class="text-lg text-white">';
 
-        $this->get(route('home'))->assertSee('Letzte Videoaufnahmen');
-    }
+    get(route('home'))->assertSee($menuItem, false);
+});
 
-    /** @test */
-    public function it_does_not_display_series_with_clips_without_assets(): void
-    {
-        $series = SeriesFactory::withClips(1)->create();
+it('changes portal language', function () {
+    followingRedirects()->get('/set_lang/de');
 
-        $this->get(route('home'))->assertDontSee($series->title);
-    }
+    get(route('home'))->assertSee('Letzte Videoaufnahmen');
+});
 
-    /** @test */
-    public function it_displays_latest_series_with_clips_that_have_assets(): void
-    {
-        $series = SeriesFactory::create();
+it('does not display series with clips without assets', function () {
+    $series = SeriesFactory::withClips(1)->create();
 
-        $clip = ClipFactory::withAssets(1)->create();
+    get(route('home'))->assertDontSee($series->title);
+});
 
-        $series->clips()->save($clip);
+it('displays latest series with clips that have assets', function () {
+    $series = SeriesFactory::create();
+    $clip = ClipFactory::withAssets(1)->create();
+    $series->clips()->save($clip);
 
-        $this->get(route('home'))->assertSee(Str::limit($series->title, 20, ''));
-    }
+    get(route('home'))->assertSee(Str::limit($series->title, 20, ''));
+});
 
-    /** @test */
-    public function it_should_not_display_series_that_is_not_public(): void
-    {
-        $series = SeriesFactory::create();
+it('should not display series that is not public', function () {
+    $series = SeriesFactory::create();
+    $clip = ClipFactory::withAssets(1)->create();
+    $series->clips()->save($clip);
 
-        $clip = ClipFactory::withAssets(1)->create();
+    get(route('home'))->assertSee(Str::limit($series->title, 20, ''));
 
-        $series->clips()->save($clip);
+    $series->is_public = false;
+    $series->save();
 
-        $this->get(route('home'))->assertSee(Str::limit($series->title, 20, ''));
+    get(route('home'))->assertDontSee(Str::limit($series->title, 20, ''));
+});
 
-        $series->is_public = false;
+it('does not display clips without assets', function () {
+    $clip = ClipFactory::create();
 
-        $series->save();
+    get(route('home'))->assertDontSee(Str::limit($clip->title, 20, '...'));
+});
 
-        $this->get(route('home'))->assertDontSee(Str::limit($series->title, 20, ''));
-    }
+it('does not display clips that belong to a series', function () {
+    $series = SeriesFactory::withClips(1)->create();
 
-    /** @test */
-    public function it_does_not_display_clips_without_assets(): void
-    {
-        $clip = ClipFactory::create();
+    get(route('home'))->assertDontSee(Str::limit($series->clips()->first()->title, 20, '...'));
+});
 
-        $this->get(route('home'))->assertDontSee(Str::limit($clip->title, 20, '...'));
-    }
+it('displays clips with video assets', function () {
+    $clip = ClipFactory::withAssets(1)->create();
 
-    /** @test */
-    public function it_does_not_display_clips_that_belong_to_a_series(): void
-    {
-        $series = SeriesFactory::withClips(1)->create();
+    get(route('home'))->assertSee(Str::limit($clip->title, 20, '...'));
+});
 
-        $this->get(route('home'))->assertDontSee(Str::limit($series->clips()->first()->title, 20, '...'));
-    }
+it('should not display clips that are not public', function () {
+    $clip = ClipFactory::withAssets(1)->create();
 
-    /** @test */
-    public function it_displays_clips_with_video_assets(): void
-    {
-        $clip = ClipFactory::withAssets(1)->create();
+    get(route('home'))->assertSee(Str::limit($clip->title, 20, '...'));
 
-        $this->get(route('home'))->assertSee(Str::limit($clip->title, 20, '...'));
-    }
+    $clip->is_public = false;
+    $clip->save();
 
-    /** @test */
-    public function it_should_not_display_clips_that_are_not_public(): void
-    {
-        $clip = ClipFactory::withAssets(1)->create();
+    get(route('home'))->assertDontSee(Str::limit($clip->title, 20, '...'));
+});
 
-        $this->get(route('home'))->assertSee(Str::limit($clip->title, 20, '...'));
+it('shows dashboard menu item for admins', function () {
+    signInRole(Role::ADMIN);
 
-        $clip->is_public = false;
+    get(route('home'))->assertSee('Dashboard');
+});
 
-        $clip->save();
+it('shows dashboard menu item for moderators', function () {
+    signInRole(Role::MODERATOR);
 
-        $this->get(route('home'))->assertDontSee(Str::limit($clip->title, 20, '...'));
-    }
+    get(route('home'))->assertSee('Dashboard');
+});
 
-    /** @test */
-    public function it_shows_dashboard_menu_item_for_admins(): void
-    {
-        $this->signInRole(Role::ADMIN);
+it('shows dashboard menu item for assistants', function () {
+    signInRole(Role::ASSISTANT);
 
-        $this->get(route('home'))->assertSee('Dashboard');
-    }
+    get(route('home'))->assertSee('Dashboard');
+});
 
-    /** @test */
-    public function it_shows_dashboard_menu_item_for_moderators(): void
-    {
-        $this->signInRole(Role::MODERATOR);
+it('show an hide logged in user series subscriptions', function () {
+    signIn();
 
-        $this->get(route('home'))->assertSee('Dashboard');
-    }
+    $userSettings = auth()->user()->settings;
 
-    /** @test */
-    public function it_shows_dashboard_menu_item_for_assistants(): void
-    {
-        $this->signInRole(Role::ASSISTANT);
+    SeriesFactory::withClips(2)->withAssets(2)->create(10);
 
-        $this->get(route('home'))->assertSee('Dashboard');
-    }
+    $this->assertDatabaseHas('settings', [
+        'name' => auth()->user()->username,
+        'data' => json_encode(config('settings.user')), ]);
 
-    /** @test */
-    public function it_show_an_hide_logged_in_user_series_subscriptions(): void
-    {
-        $this->signIn();
+    acceptUseTerms();
 
-        $userSettings = auth()->user()->settings;
+    $userSettings->refresh();
 
-        SeriesFactory::withClips(2)->withAssets(2)->create(10);
+    get(route('home'))->assertDontSee('Your Series subscriptions');
 
-        $this->assertDatabaseHas('settings', [
-            'name' => auth()->user()->username,
-            'data' => json_encode(config('settings.user')), ]);
+    $attributes = [
+        'language' => 'en',
+        'show_subscriptions_to_home_page' => 'on',
+    ];
 
-        $this->acceptUseTerms();
+    put(route('frontend.userSettings.update'), $attributes);
 
-        $userSettings->refresh();
+    get(route('home'))
+        ->assertSee(__('homepage.series.Your series subscriptions'))
+        ->assertSee(__('homepage.series.You are not subscribed to any series'));
 
-        $this->get(route('home'))->assertDontSee('Your Series subscriptions');
+    auth()->user()->subscriptions()->attach([
+        Series::find(3)->id, Series::find(4)->id,
+    ]);
 
-        $attributes = [
-            'language' => 'en',
-            'show_subscriptions_to_home_page' => 'on',
-        ];
+    auth()->user()->refresh();
 
-        $this->put(route('frontend.userSettings.update'), $attributes);
+    get(route('home'))
+        ->assertSee(__('homepage.series.Your series subscriptions'))
+        ->assertDontSee(__('homepage.series.You are not subscribed to any series'));
+});
 
-        $this->get(route('home'))
-            ->assertSee(__('homepage.series.Your series subscriptions'))
-            ->assertSee(__('homepage.series.You are not subscribed to any series'));
+it('hide non visible clip acls in series description', function () {
+    $series = SeriesFactory::withClips(2)->withAssets(1)->create();
 
-        auth()->user()->subscriptions()->attach([
-            Series::find(3)->id, Series::find(4)->id,
-        ]);
+    $firstClip = Clip::find(1);
+    $secondClip = Clip::find(2);
 
-        auth()->user()->refresh();
+    $firstClip->addAcls(collect([Acl::PORTAL()]));
+    $secondClip->addAcls(collect([Acl::PASSWORD()]));
 
-        $this->get(route('home'))
-            ->assertSee(__('homepage.series.Your series subscriptions'))
-            ->assertDontSee(__('homepage.series.You are not subscribed to any series'));
-    }
+    get(route('home'))->assertSee('portal, password');
 
-    /** @test */
-    public function it_hide_non_visible_clip_acls_in_series_description(): void
-    {
-        $series = SeriesFactory::withClips(2)->withAssets(1)->create();
+    //clip has no assets thus should not be displayed to visitors
+    $thirdClip = Clip::factory()->create(['series_id' => $series]);
 
-        $firstClip = Clip::find(1);
-        $secondClip = Clip::find(2);
+    $thirdClip->addAcls(collect([Acl::LMS()]));
 
-        $firstClip->addAcls(collect([Acl::PORTAL()]));
-        $secondClip->addAcls(collect([Acl::PASSWORD()]));
-
-        $this->get(route('home'))->assertSee('portal, password');
-
-        //clip has no assets thus should not be displayed to visitors
-        $thirdClip = Clip::factory()->create(['series_id' => $series]);
-
-        $thirdClip->addAcls(collect([Acl::LMS()]));
-
-        $this->get(route('home'))->assertDontSee('portal, password, lms');
-    }
-
-    /*
- * Helper functions
- *
- */
-    private function acceptUseTerms()
-    {
-        $this->put(route('frontend.acceptUseTerms'), ['accept_use_terms' => 'on']);
-    }
-}
+    get(route('home'))->assertDontSee('portal, password, lms');
+});

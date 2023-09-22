@@ -1,26 +1,15 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Backend;
-
 use App\Enums\Role;
 use App\Models\Clip;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
-class UpdateClipImageTest extends TestCase
-{
-    use RefreshDatabase;
+it('can update clip image', function () {
+    signInRole(Role::MODERATOR);
+    $clip = Clip::factory()->create();
 
-    /** @test */
-    public function it_can_update_clip_image(): void
-    {
-        $this->signInRole(Role::MODERATOR);
-        $clip = Clip::factory()->create();
+    $this->put(route('update.clip.image', $clip), ['imageID' => 1])
+        ->assertRedirectToRoute('clips.edit', $clip);
 
-        $this->put(route('update.clip.image', $clip), ['imageID' => 1])
-            ->assertRedirectToRoute('clips.edit', $clip);
-
-        $clip->refresh();
-        $this->assertEquals(1, $clip->image_id);
-    }
-}
+    $clip->refresh();
+    expect($clip->image_id)->toEqual(1);
+});

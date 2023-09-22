@@ -1,7 +1,5 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Backend;
-
 use App\Enums\Role;
 use App\Models\Series;
 use App\Models\User;
@@ -9,210 +7,145 @@ use App\Notifications\SeriesMembershipAddUser;
 use App\Notifications\SeriesOwnershipAddUser;
 use App\Notifications\SeriesOwnershipRemoveUser;
 use Facades\Tests\Setup\SeriesFactory;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
-use Tests\TestCase;
 
-class SeriesMembershipTest extends TestCase
-{
-    use RefreshDatabase;
+use function Pest\Laravel\get;
+use function Pest\Laravel\post;
 
-    /** @test */
-    public function guests_are_not_allowed_to_add_users_in_a_series(): void
-    {
-        $nonSeriesUser = User::factory()->create();
-        $series = SeriesFactory::create();
+test('guests are not allowed to add users in a series', function () {
+    $nonSeriesUser = User::factory()->create();
+    $series = SeriesFactory::create();
 
-        $this->post(route('series.membership.addUser', $series), [$nonSeriesUser->id])->assertRedirect(route('login'));
-    }
+    post(route('series.membership.addUser', $series), [$nonSeriesUser->id])->assertRedirect(route('login'));
+});
 
-    /** @test */
-    public function a_moderator_is_not_allowed_to_add_users_to_a_non_owned_series(): void
-    {
-        $series = SeriesFactory::create();
+test('a moderator is not allowed to add users to a non owned series', function () {
+    $series = SeriesFactory::create();
+    signInRole(Role::MODERATOR);
 
-        $this->signInRole(Role::MODERATOR);
+    post(route('series.membership.addUser', $series), ['userID' => auth()->user()->id])->assertForbidden();
+});
 
-        $this->post(route('series.membership.addUser', $series), ['userID' => auth()->user()->id])->assertForbidden();
-    }
+test('a series owner cannot add simple users', function () {
+    $series = SeriesFactory::ownedBy(signInRole(Role::MODERATOR))->create();
+    $user = User::factory()->create();
 
-    /** @test */
-    public function a_series_owner_cannot_add_simple_users(): void
-    {
-        $series = SeriesFactory::ownedBy($this->signInRole(Role::MODERATOR))->create();
+    post(route('series.membership.addUser', $series), ['userID' => $user->id])
+        ->assertSessionHasErrors('userID');
+});
 
-        $user = User::factory()->create();
+test('a series owner can add a user with moderator role', function () {
+    $series = SeriesFactory::ownedBy(signInRole(Role::MODERATOR))->create();
+    $user = User::factory()->create();
+    $user->assignRole(Role::MODERATOR);
 
-        $this->post(route('series.membership.addUser', $series), ['userID' => $user->id])
-            ->assertSessionHasErrors('userID');
-    }
+    post(route('series.membership.addUser', $series), ['userID' => $user->id])
+        ->assertRedirect(route('series.edit', $series));
+    get(route('series.edit', $series))->assertSee($user->getFullNameAttribute());
+});
 
-    /** @test */
-    public function a_series_owner_can_add_a_user_with_moderator_role(): void
-    {
-        $series = SeriesFactory::ownedBy($this->signInRole(Role::MODERATOR))->create();
+test('a series member cannot add users to series', function () {
+    $series = SeriesFactory::create();
+    $user = $series->addMember(User::factory()->create()->assignRole(Role::MODERATOR));
+    $this->signIn($user);
 
-        $user = User::factory()->create();
+    get(route('series.edit', $series))->assertDontSee('Add a moderator as series member');
+});
 
-        $user->assignRole(Role::MODERATOR);
+it('sends an email to user after being added in series', function () {
+    Notification::fake();
+    $series = SeriesFactory::ownedBy(signInRole(Role::MODERATOR))->create();
+    $user = User::factory()->create();
+    $user->assignRole(Role::MODERATOR);
+    post(route('series.membership.addUser', $series), ['userID' => $user->id]);
 
-        $this->post(route('series.membership.addUser', $series), ['userID' => $user->id])
-            ->assertRedirect(route('series.edit', $series));
+    Notification::assertSentTo(
+        [$user],
+        SeriesMembershipAddUser::class
+    );
+});
 
-        $this->get(route('series.edit', $series))->assertSee($user->getFullNameAttribute());
-    }
+test('a series owner can remove a member from series', function () {
+    $series = SeriesFactory::ownedBy(signInRole(Role::MODERATOR))->create();
+    expect($series->members()->count())->toEqual(0);
 
-    /** @test */
-    public function a_series_member_cannot_add_users_to_series(): void
-    {
-        $series = SeriesFactory::create();
+    $user = $series->addMember(User::factory()->create()->assignRole(Role::MODERATOR));
+    expect($series->members()->count())->toEqual(1);
 
-        $user = $series->addMember(User::factory()->create()->assignRole(Role::MODERATOR));
+    post(route('series.membership.removeUser', $series), ['userID' => $user->id]);
+    expect($series->members()->count())->toEqual(0);
+});
 
-        $this->signIn($user);
+test('an assistant cannot see change series ownership button', function () {
+    $series = Series::factory()->create(['owner_id' => null]);
+    signInRole(Role::ASSISTANT);
 
-        $this->get(route('series.edit', $series))->assertDontSee('Add a moderator as series member');
-    }
+    get(route('series.edit', $series))->assertDontSee('Set series owner');
+});
 
-    /** @test */
-    public function it_sends_an_email_to_user_after_being_added_in_series(): void
-    {
-        Notification::fake();
+test('an admin can see change series ownership button', function () {
+    $series = Series::factory()->create(['owner_id' => null]);
+    signInRole(Role::ADMIN);
 
-        $series = SeriesFactory::ownedBy($this->signInRole(Role::MODERATOR))->create();
+    get(route('series.edit', $series))->assertSee('Set series owner');
+});
 
-        $user = User::factory()->create();
+test('an assistant is not allowed to change series ownership', function () {
+    $series = Series::factory()->create(['owner_id' => null]);
+    signInRole(Role::ASSISTANT);
 
-        $user->assignRole(Role::MODERATOR);
+    post(route('series.ownership.change', $series))->assertForbidden();
+});
 
-        $this->post(route('series.membership.addUser', $series), ['userID' => $user->id]);
+test('an assistant is not allowed to change series owner', function () {
+    $user = User::factory()->create();
+    $user->assignRole(Role::MODERATOR);
+    $series = Series::factory()->create(['owner_id' => null]);
+    signInRole(Role::ASSISTANT);
 
-        Notification::assertSentTo(
-            [$user],
-            SeriesMembershipAddUser::class
-        );
-    }
+    post(route('series.ownership.change', $series), ['userID' => $user->id])->assertForbidden();
+});
 
-    /** @test */
-    public function a_series_owner_can_remove_a_member_from_series(): void
-    {
-        $series = SeriesFactory::ownedBy($this->signInRole(Role::MODERATOR))->create();
-        $this->assertEquals(0, $series->members()->count());
+test('an admin is allowed to change series ownership', function () {
+    $user = User::factory()->create();
+    $user->assignRole(Role::MODERATOR);
+    $series = Series::factory()->create(['owner_id' => null]);
+    signInRole(Role::ADMIN);
+    post(route('series.ownership.change', $series), ['userID' => $user->id]);
+    $series->refresh();
 
-        $user = $series->addMember(User::factory()->create()->assignRole(Role::MODERATOR));
+    expect($series->owner()->is($user))->toBeTrue();
+});
 
-        $this->assertEquals(1, $series->members()->count());
+test('moderator should notified for ownership change', function () {
+    Notification::fake();
+    $series = Series::factory()->create(['owner_id' => null]);
+    $user = User::factory()->create();
+    $user->assignRole(Role::MODERATOR);
+    signInRole(Role::ADMIN);
+    post(route('series.ownership.change', $series), ['userID' => $user->id]);
 
-        $this->post(route('series.membership.removeUser', $series), ['userID' => $user->id]);
+    Notification::assertSentTo(
+        [$user],
+        SeriesOwnershipAddUser::class
+    );
+});
 
-        $this->assertEquals(0, $series->members()->count());
-    }
+test('old owner should be notified on ownership change', function () {
+    Notification::fake();
+    $firstOwner = User::factory()->create();
+    $series = Series::factory()->create(['owner_id' => $firstOwner->id]);
+    $user = User::factory()->create();
+    $user->assignRole(Role::MODERATOR);
+    signInRole(Role::ADMIN);
+    post(route('series.ownership.change', $series), ['userID' => $user->id]);
 
-    /** @test */
-    public function an_assistant_cannot_see_change_series_ownership_button(): void
-    {
-        $series = Series::factory()->create(['owner_id' => null]);
-
-        $this->signInRole(Role::ASSISTANT);
-
-        $this->get(route('series.edit', $series))->assertDontSee('Set series owner');
-    }
-
-    /** @test */
-    public function an_admin_can_see_change_series_ownership_button(): void
-    {
-        $series = Series::factory()->create(['owner_id' => null]);
-
-        $this->signInRole(Role::ADMIN);
-
-        $this->get(route('series.edit', $series))->assertSee('Set series owner');
-    }
-
-    /** @test */
-    public function an_assistant_is_not_allowed_to_change_series_ownership(): void
-    {
-        $series = Series::factory()->create(['owner_id' => null]);
-
-        $this->signInRole(Role::ASSISTANT);
-
-        $this->post(route('series.ownership.change', $series))->assertForbidden();
-    }
-
-    /** @test */
-    public function an_assistant_is_not_allowed_to_change_series_owner(): void
-    {
-        $user = User::factory()->create();
-
-        $user->assignRole(Role::MODERATOR);
-
-        $series = Series::factory()->create(['owner_id' => null]);
-
-        $this->signInRole(Role::ASSISTANT);
-
-        $this->post(route('series.ownership.change', $series), ['userID' => $user->id])->assertForbidden();
-    }
-
-    /** @test */
-    public function an_admin_is_allowed_to_change_series_ownership(): void
-    {
-        $user = User::factory()->create();
-
-        $user->assignRole(Role::MODERATOR);
-
-        $series = Series::factory()->create(['owner_id' => null]);
-
-        $this->signInRole(Role::ADMIN);
-
-        $this->post(route('series.ownership.change', $series), ['userID' => $user->id]);
-
-        $series->refresh();
-
-        $this->assertTrue($series->owner()->is($user));
-    }
-
-    /** @test */
-    public function moderator_should_notified_for_ownership_change(): void
-    {
-        Notification::fake();
-
-        $series = Series::factory()->create(['owner_id' => null]);
-
-        $user = User::factory()->create();
-        $user->assignRole(Role::MODERATOR);
-
-        $this->signInRole(Role::ADMIN);
-
-        $this->post(route('series.ownership.change', $series), ['userID' => $user->id]);
-
-        Notification::assertSentTo(
-            [$user],
-            SeriesOwnershipAddUser::class
-        );
-    }
-
-    /** @test */
-    public function old_owner_should_be_notified_on_ownership_change(): void
-    {
-        Notification::fake();
-        $firstOwner = User::factory()->create();
-
-        $series = Series::factory()->create(['owner_id' => $firstOwner->id]);
-
-        $user = User::factory()->create();
-        $user->assignRole(Role::MODERATOR);
-
-        $this->signInRole(Role::ADMIN);
-
-        $this->post(route('series.ownership.change', $series), ['userID' => $user->id]);
-
-        Notification::assertSentTo(
-            [$firstOwner],
-            SeriesOwnershipRemoveUser::class
-        );
-
-        Notification::assertSentTo(
-            [$user],
-            SeriesOwnershipAddUser::class
-        );
-    }
-}
+    Notification::assertSentTo(
+        [$firstOwner],
+        SeriesOwnershipRemoveUser::class
+    );
+    Notification::assertSentTo(
+        [$user],
+        SeriesOwnershipAddUser::class
+    );
+});

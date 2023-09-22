@@ -1,7 +1,5 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Backend;
-
 use App\Enums\Acl;
 use App\Enums\OpencastWorkflowState;
 use App\Enums\Role;
@@ -13,775 +11,626 @@ use App\Models\Series;
 use App\Models\User;
 use App\Services\OpencastService;
 use Facades\Tests\Setup\SeriesFactory;
-use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Livewire\Livewire;
 use Tests\Setup\WorksWithOpencastClient;
-use Tests\TestCase;
 
-class ManageSeriesTest extends TestCase
+use function Pest\Laravel\assertDatabaseHas;
+use function Pest\Laravel\delete;
+use function Pest\Laravel\followingRedirects;
+use function Pest\Laravel\get;
+use function Pest\Laravel\post;
+
+uses()->group('backend');
+uses(WithFaker::class);
+uses(WorksWithOpencastClient::class);
+
+beforeEach(function () {
+    $this->mockHandler = $this->swapOpencastClient();
+    $this->opencastService = app(OpencastService::class);
+    $this->flashMessageName = 'flashMessage';
+});
+
+function a_visitor_cannot_manage_series(): void
 {
-    use RefreshDatabase;
-    use WithFaker;
-    use WorksWithOpencastClient;
+    post(route('series.store'), [])->assertRedirect('login');
+}
 
-    private OpencastService $opencastService;
+it('shows a create series button if moderator has no series', function () {
+    signInRole(Role::MODERATOR);
 
-    private MockHandler $mockHandler;
+    get(route('series.index'))->assertSee('Create new series');
+});
 
-    private string $flashMessageName;
+it('shows series information in index page', function () {
+    $series = SeriesFactory::ownedBy(signInRole(Role::MODERATOR))
+        ->withClips(3)
+        ->withAssets(2)
+        ->create();
+    Clip::find(1)->addAcls(collect([Acl::PORTAL()]));
+    //assign 'intern' acl
+    Clip::find(2)->addAcls(collect([Acl::LMS()]));
+    //assign 'lms' acl
+    Clip::find(3)->addAcls(collect([Acl::LMS()]));
 
-    private Role $role;
+    //assign 'lms' acl
+    get(route('series.index'))
+        ->assertSee($series->title)
+        ->assertSee('portal, lms');
+});
 
-    protected function setUp(): void
-    {
-        parent::setUp();
+test('a moderator can see only owned series in index', function () {
+    $user = signInRole(Role::MODERATOR);
+    $userSeries = Series::factory(3)->create(['owner_id' => $user->id]);
 
-        $this->mockHandler = $this->swapOpencastClient();
+    get(route('series.index'))
+        ->assertSee($userSeries->first()->get()->first()->title);
+});
 
-        $this->opencastService = app(OpencastService::class);
+test('a moderator can see in series index all series that is member of', function () {
+    $series = Series::factory()->create(['title' => 'First series']);
+    $user = signInRole(Role::MODERATOR);
+    Series::factory(3)->create(['owner_id' => $user->id, 'title' => 'User series']);
 
-        $this->flashMessageName = 'flashMessage';
+    get(route('series.index'))
+        ->assertSee('User series')
+        ->assertDontSee('First series');
 
-        $this->role = Role::MODERATOR;
-    }
+    $series->addMember($user);
 
-    public function a_visitor_cannot_manage_series(): void
-    {
-        $this->post(route('series.store'), [])->assertRedirect('login');
-    }
+    get(route('series.index'))->assertSee('First series');
+});
 
-    /** @test */
-    public function it_shows_a_create_series_button_if_moderator_has_no_series(): void
-    {
-        $this->signInRole($this->role);
+test('a moderator can see the create series form and all form fields', function () {
+    signInRole(Role::MODERATOR);
 
-        $this->get(route('series.index'))->assertSee('Create new series');
-    }
+    get(route('series.create'))
+        ->assertSee('title')
+        ->assertSee('description')
+        ->assertSee('presenters')
+        ->assertSee('acls')
+        ->assertSee('password')
+        ->assertSee('is_public')
+        ->assertSee('Organization');
 
-    /** @test */
-    public function it_shows_series_information_in_index_page(): void
-    {
-        $series = SeriesFactory::ownedBy($this->signInRole($this->role))
-            ->withClips(3)
-            ->withAssets(2)
-            ->create();
+    get(route('series.create'))->assertOk()
+        ->assertViewIs('backend.series.create');
+});
 
-        Clip::find(1)->addAcls(collect([Acl::PORTAL()])); //assign 'intern' acl
-        Clip::find(2)->addAcls(collect([Acl::LMS()])); //assign 'lms' acl
-        Clip::find(3)->addAcls(collect([Acl::LMS()])); //assign 'lms' acl
+it('requires a title when creating a new series', function () {
+    signInRole(Role::MODERATOR);
+    $attributes = Series::factory()->raw(['title' => '']);
 
-        $this->get(route('series.index'))
-            ->assertSee($series->title)
-            ->assertSee('portal, lms');
-    }
+    post(route('series.store'), $attributes)->assertSessionHasErrors('title');
+});
 
-    /** @test */
-    public function a_moderator_can_see_only_owned_series_in_index(): void
-    {
-        $user = $this->signInRole($this->role);
+it('requires an organization id when creating a new series', function () {
+    signInRole(Role::MODERATOR);
+    $attributes = Series::factory()->raw(['organization_id' => null]);
 
-        $userSeries = Series::factory(3)->create(['owner_id' => $user->id]);
+    post(route('series.store'), $attributes)->assertSessionHasErrors('organization_id');
+});
 
-        $this->get(route('series.index'))
-            ->assertSee($userSeries->first()->get()->first()->title);
-    }
+it('must have a strong password if any', function () {
+    signInRole(Role::MODERATOR);
 
-    /** @test */
-    public function a_moderator_can_see_in_series_index_all_series_that_is_member_of(): void
-    {
-        $series = Series::factory()->create(['title' => 'First series']);
+    post(route('series.store', Series::factory()->raw([
+        'title' => 'This is a test',
+        'password' => '1234',
+        'organization_id' => '1',
+    ])))->assertSessionHasErrors('password');
 
-        $user = $this->signInRole($this->role);
+    post(route('series.store', Series::factory()->raw([
+        'title' => 'This is a test',
+        'password' => '1234qwER',
+        'organization_id' => '1',
+    ])));
 
-        Series::factory(3)->create(['owner_id' => $user->id, 'title' => 'User series']);
+    assertDatabaseHas('series', ['password' => '1234qwER']);
+});
 
-        $this->get(route('series.index'))
-            ->assertSee('User series')
-            ->assertDontSee('First series');
+test('an authenticated user is not allowed to create new series', function () {
+    $this->signIn();
 
-        $series->addMember($user);
-
-        $this->get(route('series.index'))->assertSee('First series');
-    }
-
-    /** @test */
-    public function a_moderator_can_see_the_create_series_form_and_all_form_fields(): void
-    {
-        $this->signInRole($this->role);
-
-        $this->get(route('series.create'))
-            ->assertSee('title')
-            ->assertSee('description')
-            ->assertSee('presenters')
-            ->assertSee('acls')
-            ->assertSee('password')
-            ->assertSee('is_public')
-            ->assertSee('Organization');
-
-        $this->get(route('series.create'))->assertOk()
-            ->assertViewIs('backend.series.create');
-    }
-
-    /** @test */
-    public function it_requires_a_title_when_creating_a_new_series(): void
-    {
-        $this->signInRole($this->role);
-
-        $attributes = Series::factory()->raw(['title' => '']);
-
-        $this->post(route('series.store'), $attributes)->assertSessionHasErrors('title');
-    }
-
-    /** @test */
-    public function it_requires_an_organization_id_when_creating_a_new_series(): void
-    {
-        $this->signInRole($this->role);
-
-        $attributes = Series::factory()->raw(['organization_id' => null]);
-
-        $this->post(route('series.store'), $attributes)->assertSessionHasErrors('organization_id');
-    }
-
-    /** @test */
-    public function it_must_have_a_strong_password_if_any(): void
-    {
-        $this->signInRole($this->role);
-
-        $this->post(route('series.store', Series::factory()->raw([
-            'title' => 'This is a test',
-            'password' => '1234',
+    post(
+        route('series.store'),
+        [
+            'title' => 'Test title',
+            'description' => 'Test description',
             'organization_id' => '1',
-        ])))->assertSessionHasErrors('password');
+        ]
+    )->assertForbidden();
+});
 
-        $this->post(route('series.store', Series::factory()->raw([
-            'title' => 'This is a test',
-            'password' => '1234qwER',
-            'organization_id' => '1',
-        ])));
+test('an assistant is not allowed to create new series', function () {
+    signInRole(Role::ASSISTANT);
+    $this->mockHandler->append($this->mockCreateSeriesResponse());
 
-        $this->assertDatabaseHas('series', ['password' => '1234qwER']);
-    }
-
-    /** @test */
-    public function an_authenticated_user_is_not_allowed_to_create_new_series(): void
-    {
-        $this->signIn();
-
-        $this->post(
-            route('series.store'),
-            [
-                'title' => 'Test title',
-                'description' => 'Test description',
-                'organization_id' => '1',
-            ]
-        )->assertForbidden();
-    }
-
-    /** @test */
-    public function an_assistant_is_not_allowed_to_create_new_series(): void
-    {
-        $this->signInRole(Role::ASSISTANT);
-        $this->mockHandler->append($this->mockCreateSeriesResponse());
-
-        $this->post(
-            route('series.store'),
-            [
-                'title' => 'Test title',
-                'description' => 'Test description',
-                'organization_id' => '1',
-                'image_id' => config('settings.portal.default_image_id'),
-            ]
-        )->assertForbidden();
-    }
-
-    /** @test */
-    public function a_moderator_can_create_a_series(): void
-    {
-        $this->signInRole($this->role);
-
-        $this->post(
-            route('series.store'),
-            [
-                'title' => 'Test title',
-                'description' => 'Test description',
-                'organization_id' => '1',
-                'image_id' => config('settings.portal.default_image_id'),
-            ]
-        );
-
-        $this->assertDatabaseHas('series', ['title' => 'Test title']);
-    }
-
-    /** @test */
-    public function an_admin_can_create_a_series(): void
-    {
-        $this->signInRole(Role::ADMIN);
-
-        $this->post(
-            route('series.store'),
-            [
-                'title' => 'Test title',
-                'description' => 'Test description',
-                'organization_id' => '1',
-                'image_id' => config('settings.portal.default_image_id'),
-            ]
-        );
-
-        $this->assertDatabaseHas('series', ['title' => 'Test title']);
-    }
-
-    /** @test */
-    public function it_shows_a_flash_message_when_a_series_is_created(): void
-    {
-        $this->signInRole($this->role);
-
-        $this->post(
-            route('series.store'),
-            [
-                'title' => 'Test title',
-                'description' => 'Test description',
-                'organization_id' => '1',
-            ]
-        )->assertSessionHas($this->flashMessageName);
-    }
-
-    /** @test */
-    public function it_creates_an_opencast_series_when_new_series_is_created(): void
-    {
-        $this->signInRole($this->role);
-
-        $this->mockHandler->append($this->mockCreateSeriesResponse());
-
-        $this->post(route('series.store'), [
-            'title' => 'Series title',
-            'description' => 'test',
+    post(
+        route('series.store'),
+        [
+            'title' => 'Test title',
+            'description' => 'Test description',
             'organization_id' => '1',
             'image_id' => config('settings.portal.default_image_id'),
-        ]);
-
-        $series = Series::all()->first();
-
-        $this->assertNotNull($series->opencast_series_id);
-    }
-
-    /** @test */
-    public function it_requires_a_title_creating_a_series(): void
-    {
-        $this->signInRole($this->role);
-
-        $attributes = Series::factory()->raw(['title' => '']);
-
-        $this->post(route('series.store'), $attributes)->assertSessionHasErrors('title');
-    }
-
-    /** @test */
-    public function create_series_form_should_remember_old_values_on_validation_error(): void
-    {
-        $this->signInRole($this->role);
-
-        $attributes = [
-            'title' => '',
-            'description' => 'test',
-        ];
-
-        $this->post(route('series.store'), $attributes);
-
-        $this->followingRedirects();
-
-        $this->get(route('series.create'))->assertSee($attributes);
-    }
-
-    /** @test */
-    public function a_series_owner_can_view_edit_form_fields(): void
-    {
-        $series = SeriesFactory::ownedBy($this->signInRole($this->role))->create();
-
-        $this->mockHandler->append(
-            $this->mockHealthResponse(), //health
-            $this->mockSeriesMetadata($series), // seriesInfo
-            $this->mockNoResultsResponse(), //recording
-            $this->mockNoResultsResponse(), //running
-            $this->mockNoResultsResponse(), //scheduled
-            $this->mockNoResultsResponse(), //failed
-            $this->mockNoTrimmingResultsResponse(), //trimming
-            $this->mockNoResultsResponse(), //upcoming
-        );
-
-        $this->get(route('series.edit', $series))
-            ->assertOk()
-            ->assertViewIs('backend.series.edit')
-            ->assertSee('title')
-            ->assertSee('presenters')
-            ->assertSee('description');
-    }
-
-    /** @test */
-    public function a_series_member_can_view_edit_form_fields_and_owner_name_and_username(): void
-    {
-        $series = SeriesFactory::ownedBy($this->signInRole($this->role))->create();
-        auth()->logout();
-
-        $user2 = $this->signInRole(Role::MODERATOR);
-
-        $this->get(route('series.edit', $series))->assertForbidden();
-
-        $series->addMember($user2);
-
-        $this->mockHandler->append(
-            $this->mockHealthResponse(), //health
-            $this->mockSeriesMetadata($series), // seriesInfo
-            $this->mockNoResultsResponse(), //recording
-            $this->mockNoResultsResponse(), //running
-            $this->mockNoResultsResponse(), //scheduled
-            $this->mockNoResultsResponse(), //failed
-            $this->mockNoTrimmingResultsResponse(), //trimming
-            $this->mockNoResultsResponse(), //upcoming
-        );
-
-        $this->get(route('series.edit', $series))
-            ->assertOk()
-            ->assertSee($series->owner->username);
-    }
-
-    /** @test */
-    public function a_moderator_cannot_view_edit_clip_form_for_not_owned_series(): void
-    {
-        $series = SeriesFactory::create();
-
-        $this->signInRole($this->role);
-
-        $this->get(route('series.edit', $series))->assertForbidden();
-    }
-
-    /** @test */
-    public function an_admin_can_edit_a_not_owned_series(): void
-    {
-        $series = SeriesFactory::create();
-
-        $this->mockHandler->append(
-            $this->mockHealthResponse(), //health
-            $this->mockSeriesMetadata($series), // seriesInfo
-            $this->mockNoResultsResponse(), //recording
-            $this->mockNoResultsResponse(), //running
-            $this->mockNoResultsResponse(), //scheduled
-            $this->mockNoResultsResponse(), //failed
-            $this->mockNoTrimmingResultsResponse(), //trimming
-            $this->mockNoResultsResponse(), //upcoming
-        );
-
-        $this->signInRole(Role::ADMIN);
-
-        $this->get(route('series.edit', $series))->assertOk();
-    }
-
-    /** @test */
-    public function a_superadmin_can_edit_a_not_owned_series(): void
-    {
-        $series = SeriesFactory::create();
-
-        $this->mockHandler->append(
-            $this->mockHealthResponse(), //health
-            $this->mockSeriesMetadata($series), // seriesInfo
-            $this->mockNoResultsResponse(), //recording
-            $this->mockNoResultsResponse(), //running
-            $this->mockNoResultsResponse(), //scheduled
-            $this->mockNoResultsResponse(), //failed
-            $this->mockNoTrimmingResultsResponse(), //trimming
-            $this->mockNoResultsResponse(), //upcoming
-        );
-
-        $this->signInRole(Role::SUPERADMIN);
-
-        $this->get(route('series.edit', $series))->assertOk();
-    }
-
-    /** @test */
-    public function it_has_an_add_clips_button(): void
-    {
-        $this->get(route('series.edit', SeriesFactory::ownedBy($this->signInRole($this->role))->create()))
-            ->assertSee('Add new clip');
-    }
-
-    /** @test */
-    public function it_has_go_to_public_page_button(): void
-    {
-        $this->get(route('series.edit', SeriesFactory::ownedBy($this->signInRole($this->role))->create()))
-            ->assertSee('Go to public page');
-    }
-
-    /** @test */
-    public function edit_series_page_should_display_belonging_clips(): void
-    {
-        $series = SeriesFactory::ownedBy($this->signInRole($this->role))->withClips(2)->create();
-
-        $this->get(route('series.edit', $series))->assertSee($series->clips()->first()->title);
-    }
-
-    /** @test */
-    public function edit_series_should_display_series_image_information(): void
-    {
-
-        $series = SeriesFactory::ownedBy($this->signInRole($this->role))->create();
-        $this->mockHandler->append(
-            $this->mockHealthResponse(), //health
-            $this->mockSeriesMetadata($series), // seriesInfo
-            $this->mockNoResultsResponse(), //recording
-            $this->mockNoResultsResponse(), //running
-            $this->mockNoResultsResponse(), //scheduled
-            $this->mockNoResultsResponse(), //failed
-            $this->mockNoTrimmingResultsResponse(), //trimming
-            $this->mockNoResultsResponse(), //upcoming
-        );
-
-        $this->get(route('series.edit', $series))
-            ->assertSee($series->image->description);
-    }
-
-    /** @test */
-    public function edit_series_should_allow_user_to_switch_to_default_image_if_one_is_set(): void
-    {
-        Image::factory(2)->create();
-        $series = SeriesFactory::ownedBy($this->signInRole($this->role))->create();
-        $series->image_id = Image::find(2)->id;
-        $series->save();
-
-        $this->mockHandler->append(
-            $this->mockHealthResponse(), //health
-            $this->mockSeriesMetadata($series), // seriesInfo
-            $this->mockNoResultsResponse(), //recording
-            $this->mockNoResultsResponse(), //running
-            $this->mockNoResultsResponse(), //scheduled
-            $this->mockNoResultsResponse(), //failed
-            $this->mockNoTrimmingResultsResponse(), //trimming
-            $this->mockNoResultsResponse(), //upcoming
-        );
-
-        $this->get(route('series.edit', $series))
-            ->assertSee('Set Default image');
-
-        $series->image_id = 1;
-        $series->save();
-
-        $this->mockHandler->append(
-            $this->mockHealthResponse(), //health
-            $this->mockSeriesMetadata($series), // seriesInfo
-            $this->mockNoResultsResponse(), //recording
-            $this->mockNoResultsResponse(), //running
-            $this->mockNoResultsResponse(), //scheduled
-            $this->mockNoResultsResponse(), //failed
-            $this->mockNoTrimmingResultsResponse(), //trimming
-            $this->mockNoResultsResponse(), //upcoming
-        );
-
-        $this->get(route('series.edit', $series))
-            ->assertDontSee('Set Default image');
-    }
-
-    /** @test */
-    public function series_admin_can_select_another_image(): void
-    {
-        $series = SeriesFactory::ownedBy($this->signInRole($this->role))->create();
-        $series->image_id = Image::find(1)->id;
-        $series->save();
-
-        $this->mockHandler->append(
-            $this->mockHealthResponse(), //health
-            $this->mockSeriesMetadata($series), // seriesInfo
-            $this->mockNoResultsResponse(), //recording
-            $this->mockNoResultsResponse(), //running
-            $this->mockNoResultsResponse(), //scheduled
-            $this->mockNoResultsResponse(), //failed
-            $this->mockNoTrimmingResultsResponse(), //trimming
-            $this->mockNoResultsResponse(), //upcoming
-        );
-
-        $this->get(route('series.edit', $series))
-            ->assertSee('Assign selected image');
-    }
-
-    /** @test */
-    public function edit_series_page_should_display_opencast_users_rights(): void
-    {
-        $series = SeriesFactory::ownedBy($this->signInRole($this->role))->create();
-
-        $this->mockHandler->append(
-            $this->mockHealthResponse(), //health
-            $this->mockSeriesMetadata($series), // seriesInfo
-            $this->mockNoResultsResponse(), //recording
-            $this->mockNoResultsResponse(), //running
-            $this->mockNoResultsResponse(), //scheduled
-            $this->mockNoResultsResponse(), //failed
-            $this->mockNoTrimmingResultsResponse(), //trimming
-            $this->mockNoResultsResponse(), //upcoming
-        );
-        $this->get(route('series.edit', $series))
-            ->assertViewHas(['opencastSeriesInfo'])
-            ->assertSee(User::find(1)->first()->getFullNameAttribute());
-    }
-
-    /** @test */
-    public function edit_series_should_display_opencast_running_events_if_any(): void
-    {
-        $series = SeriesFactory::ownedBy($this->signInRole($this->role))->withOpencastID()->create();
-
-        $this->mockHandler->append(
-            $this->mockHealthResponse(), //health
-            $this->mockSeriesMetadata($series), // seriesInfo
-            $this->mockNoResultsResponse(), //recording
-            $runningWorkflow = $this->mockEventResponse($series, OpencastWorkflowState::RUNNING), //running
-            $this->mockNoResultsResponse(), //scheduled
-            $this->mockNoResultsResponse(), //failed
-            $this->mockNoTrimmingResultsResponse(), //trimming
-            $this->mockNoResultsResponse(), //upcoming
-        );
-
-        $opencastViewData = collect(json_decode($runningWorkflow->getBody(), true));
-
-        $this->get(route('series.edit', $series))
-            ->assertViewHas(['opencastSeriesInfo'])
-            ->assertSee($opencastViewData[0]['title']);
-    }
-
-    /** @test */
-    public function edit_series_should_display_opencast_failed_events_if_any(): void
-    {
-        $series = SeriesFactory::ownedBy($this->signInRole($this->role))
-            ->withOpencastID()
-            ->create(); //pass an empty opencast response
-
-        $this->mockHandler->append(
-            $this->mockHealthResponse(), //health
-            $this->mockSeriesMetadata($series), // seriesInfo
-            $this->mockNoResultsResponse(), //recording
-            $this->mockNoResultsResponse(), //running
-            $this->mockNoResultsResponse(), //scheduled
-            $this->mockEventResponse($series, OpencastWorkflowState::FAILED), //failed
-            $this->mockNoTrimmingResultsResponse(), //trimming
-            $this->mockNoResultsResponse(), //upcoming
-        );
-        $this->get(route('series.edit', $series))
-            ->assertViewHas(['opencastSeriesInfo'])
-            ->assertSee('Opencast failed events');
-    }
-
-    /** @test */
-    public function it_loads_comments_component_at_edit_page(): void
-    {
-        $this->mockHandler->append(new Response());
-        $series = SeriesFactory::ownedBy($this->signInRole($this->role))->create();
-
-        $this->get(route('series.edit', $series))->assertSeeLivewire('comments-section');
-    }
-
-    /** @test */
-    public function edit_series_should_display_admin_comments(): void
-    {
-        $this->mockHandler->append(new Response());
-        $series = SeriesFactory::ownedBy($this->signInRole($this->role))->create();
-
-        $this->get(route('series.edit', $series))->assertSee(__('clip.frontend.comments'));
-
-        Livewire::test(CommentsSection::class, [
-            'model' => $series,
-            'type' => 'backend',
-        ])
-            ->set('content', 'Admin series comment')
-            ->call('postComment')
-            ->assertSee('Comment posted successfully')
-            ->assertSee('Admin series comment');
-    }
-
-    /** @test */
-    public function edit_series_should_display_series_activities(): void
-    {
-        $this->mockHandler->append(new Response());
-        $series = SeriesFactory::ownedBy($this->signInRole($this->role))->create();
-
-        $this->get(route('series.edit', $series))->assertSee('Activities');
-
-        Livewire::test(ActivitiesDataTable::class)
-            ->assertSee('created series');
-    }
-
-    /** @test */
-    public function a_series_owner_can_update_series(): void
-    {
-        $this->mockHandler->append(new Response());
-
-        $series = SeriesFactory::ownedBy($this->signInRole($this->role))->create();
-
-        $this->patch(route('series.edit', $series), [
-            'title' => 'changed',
-            'description' => 'changed',
+        ]
+    )->assertForbidden();
+});
+
+test('a moderator can create a series', function () {
+    signInRole(Role::MODERATOR);
+
+    post(
+        route('series.store'),
+        [
+            'title' => 'Test title',
+            'description' => 'Test description',
             'organization_id' => '1',
-        ]);
+            'image_id' => config('settings.portal.default_image_id'),
+        ]
+    );
 
-        $series->refresh();
+    assertDatabaseHas('series', ['title' => 'Test title']);
+});
 
-        $this->assertDatabaseHas('series', [
-            'title' => 'changed',
-            'description' => 'changed',
+test('an admin can create a series', function () {
+    signInRole(Role::ADMIN);
+
+    post(
+        route('series.store'),
+        [
+            'title' => 'Test title',
+            'description' => 'Test description',
             'organization_id' => '1',
-        ]);
+            'image_id' => config('settings.portal.default_image_id'),
+        ]
+    );
 
-        $this->get(route('series.edit', $series))->assertSee('changed');
-    }
+    assertDatabaseHas('series', ['title' => 'Test title']);
+});
 
-    /** @test */
-    public function it_updates_opencast_series_id_if_is_null()
-    {
-        $series = SeriesFactory::ownedBy($this->signInRole($this->role))->create();
+it('shows a flash message when a series is created', function () {
+    signInRole(Role::MODERATOR);
 
-        //pass an empty opencast response
-        $this->mockHandler->append($this->mockCreateSeriesResponse());
-
-        $this->patch(route('series.edit', $series), [
-            'title' => 'changed',
-            'description' => 'changed',
+    post(
+        route('series.store'),
+        [
+            'title' => 'Test title',
+            'description' => 'Test description',
             'organization_id' => '1',
-        ]);
+        ]
+    )->assertSessionHas($this->flashMessageName);
+});
 
-        $series = $series->refresh();
+it('creates an opencast series when new series is created', function () {
+    signInRole(Role::MODERATOR);
+    $this->mockHandler->append($this->mockCreateSeriesResponse());
+    post(route('series.store'), [
+        'title' => 'Series title',
+        'description' => 'test',
+        'organization_id' => '1',
+        'image_id' => config('settings.portal.default_image_id'),
+    ]);
+    $series = Series::all()->first();
 
-        $this->assertNotNull($series->opencast_series_id);
-    }
+    expect($series->opencast_series_id)->not->toBeNull();
+});
 
-    /** @test */
-    public function it_shows_create_oc_series_button_if_no_series_exist_in_opencast(): void
-    {
-        $series = SeriesFactory::ownedBy($this->signInRole($this->role))
-            ->create();
+it('requires a title creating a series', function () {
+    signInRole(Role::MODERATOR);
+    $attributes = Series::factory()->raw(['title' => '']);
 
-        $this->mockHandler->append(
-            $this->mockHealthResponse(), //health
-            $this->mockNoResultsResponse(), // seriesInfo
-            $this->mockNoResultsResponse(), //recording
-            $this->mockNoResultsResponse(), //running
-            $this->mockNoResultsResponse(), //scheduled
-            $this->mockNoResultsResponse(), //failed
-            $this->mockNoTrimmingResultsResponse(), //trimming
-            $this->mockNoResultsResponse(), //upcoming
-        );
+    post(route('series.store'), $attributes)->assertSessionHasErrors('title');
+});
 
-        $this->get(route('series.edit', $series))->assertSee('Create Opencast series for this object');
-    }
+test('create series form should remember old values on validation error', function () {
+    signInRole(Role::MODERATOR);
+    $attributes = [
+        'title' => '',
+        'description' => 'test',
+    ];
+    post(route('series.store'), $attributes);
+    followingRedirects();
 
-    /** @test */
-    public function a_moderator_cannot_update_a_not_owned_series(): void
-    {
-        $series = SeriesFactory::create();
+    get(route('series.create'))->assertSee($attributes);
+});
 
-        $this->signInRole($this->role);
+test('a series owner can view edit form fields', function () {
+    $series = SeriesFactory::ownedBy(signInRole(Role::MODERATOR))->create();
+    $this->mockHandler->append(
+        $this->mockHealthResponse(), //health
+        $this->mockSeriesMetadata($series), // seriesInfo
+        $this->mockNoResultsResponse(), //recording
+        $this->mockNoResultsResponse(), //running
+        $this->mockNoResultsResponse(), //scheduled
+        $this->mockNoResultsResponse(), //failed
+        $this->mockNoTrimmingResultsResponse(), //trimming
+        $this->mockNoResultsResponse(), //upcoming
+    );
 
-        $this->patch(route('series.edit', $series), [
-            'title' => 'changed',
-            'description' => 'changed',
-            'organization_id' => '1',
-        ])->assertForbidden();
+    get(route('series.edit', $series))
+        ->assertOk()
+        ->assertViewIs('backend.series.edit')
+        ->assertSee('title')
+        ->assertSee('presenters')
+        ->assertSee('description');
+});
 
-        $this->assertDatabaseMissing('series', ['title' => 'changed']);
-    }
+test('a series member can view edit form fields and owner name and username', function () {
+    $series = SeriesFactory::ownedBy(signInRole(Role::MODERATOR))->create();
+    auth()->logout();
+    $user2 = signInRole(Role::MODERATOR);
 
-    /** @test */
-    public function an_admin_user_can_update_a_not_owned_series(): void
-    {
-        $series = SeriesFactory::create();
+    get(route('series.edit', $series))->assertForbidden();
 
-        $this->signInRole(Role::ADMIN);
+    $series->addMember($user2);
+    $this->mockHandler->append(
+        $this->mockHealthResponse(), //health
+        $this->mockSeriesMetadata($series), // seriesInfo
+        $this->mockNoResultsResponse(), //recording
+        $this->mockNoResultsResponse(), //running
+        $this->mockNoResultsResponse(), //scheduled
+        $this->mockNoResultsResponse(), //failed
+        $this->mockNoTrimmingResultsResponse(), //trimming
+        $this->mockNoResultsResponse(), //upcoming
+    );
 
-        //pass an empty opencast respons
-        $this->mockHandler->append($this->mockSeriesRunningWorkflowsResponse($series, false));
+    get(route('series.edit', $series))
+        ->assertOk()
+        ->assertSee($series->owner->username);
+});
 
-        $this->patch(route('series.edit', $series), [
-            'title' => 'changed',
-            'description' => 'changed',
-            'organization_id' => '1',
-        ]);
+test('a moderator cannot view edit clip form for not owned series', function () {
+    $series = SeriesFactory::create();
+    signInRole(Role::MODERATOR);
 
-        $this->assertDatabaseHas('series', ['title' => 'changed']);
-    }
+    get(route('series.edit', $series))->assertForbidden();
+});
 
-    /** @test */
-    public function it_shows_a_flash_message_when_a_series_is_updated()
-    {
-        $series = SeriesFactory::ownedBy($this->signInRole($this->role))->create();
+test('an admin can edit a not owned series', function () {
+    $series = SeriesFactory::create();
+    $this->mockHandler->append(
+        $this->mockHealthResponse(), //health
+        $this->mockSeriesMetadata($series), // seriesInfo
+        $this->mockNoResultsResponse(), //recording
+        $this->mockNoResultsResponse(), //running
+        $this->mockNoResultsResponse(), //scheduled
+        $this->mockNoResultsResponse(), //failed
+        $this->mockNoTrimmingResultsResponse(), //trimming
+        $this->mockNoResultsResponse(), //upcoming
+    );
+    signInRole(Role::ADMIN);
 
-        $this->patch(route('series.edit', $series), [
-            'title' => 'changed',
-            'description' => 'changed',
-            'organization_id' => '1',
-        ])->assertSessionHas($this->flashMessageName);
-    }
+    get(route('series.edit', $series))->assertOk();
+});
 
-    /** @test */
-    public function a_moderator_cannot_delete_a_not_owned_series(): void
-    {
-        $series = SeriesFactory::create();
+test('a superadmin can edit a not owned series', function () {
+    $series = SeriesFactory::create();
 
-        $this->signInRole($this->role);
+    $this->mockHandler->append(
+        $this->mockHealthResponse(), //health
+        $this->mockSeriesMetadata($series), // seriesInfo
+        $this->mockNoResultsResponse(), //recording
+        $this->mockNoResultsResponse(), //running
+        $this->mockNoResultsResponse(), //scheduled
+        $this->mockNoResultsResponse(), //failed
+        $this->mockNoTrimmingResultsResponse(), //trimming
+        $this->mockNoResultsResponse(), //upcoming
+    );
 
-        $this->delete(route('series.edit', $series))->assertForbidden();
+    signInRole(Role::SUPERADMIN);
 
-        $this->assertDatabaseHas('series', $series->only('id'));
-    }
+    get(route('series.edit', $series))->assertOk();
+});
 
-    /** @test */
-    public function an_assistant_is_not_allowed_to_delete_series(): void
-    {
-        $series = SeriesFactory::create();
+it('has an add clips button', function () {
+    get(route('series.edit', SeriesFactory::ownedBy(signInRole(Role::MODERATOR))->create()))
+        ->assertSee('Add new clip');
+});
 
-        $this->signInRole(Role::ASSISTANT);
+it('has go to public page button', function () {
+    get(route('series.edit', SeriesFactory::ownedBy(signInRole(Role::MODERATOR))->create()))
+        ->assertSee('Go to public page');
+});
 
-        $this->delete(route('series.edit', $series))->assertForbidden();
+test('edit series page should display belonging clips', function () {
+    $series = SeriesFactory::ownedBy(signInRole(Role::MODERATOR))->withClips(2)->create();
 
-        $this->assertDatabaseHas('series', $series->only('id'));
-    }
+    get(route('series.edit', $series))->assertSee($series->clips()->first()->title);
+});
 
-    /** @test */
-    public function an_admin_user_can_delete_a_not_owned_series(): void
-    {
-        $series = SeriesFactory::create();
+test('edit series should display series image information', function () {
+    $series = SeriesFactory::ownedBy(signInRole(Role::MODERATOR))->create();
+    $this->mockHandler->append(
+        $this->mockHealthResponse(), //health
+        $this->mockSeriesMetadata($series), // seriesInfo
+        $this->mockNoResultsResponse(), //recording
+        $this->mockNoResultsResponse(), //running
+        $this->mockNoResultsResponse(), //scheduled
+        $this->mockNoResultsResponse(), //failed
+        $this->mockNoTrimmingResultsResponse(), //trimming
+        $this->mockNoResultsResponse(), //upcoming
+    );
 
-        $this->signInRole(Role::ADMIN);
+    get(route('series.edit', $series))
+        ->assertSee($series->image->description);
+});
 
-        $this->followingRedirects()->delete(route('series.edit', $series))->assertOk();
+test('edit series should allow user to switch to default image if one is set', function () {
+    Image::factory(2)->create();
+    $series = SeriesFactory::ownedBy(signInRole(Role::MODERATOR))->create();
+    $series->image_id = Image::find(2)->id;
+    $series->save();
+    $this->mockHandler->append(
+        $this->mockHealthResponse(), //health
+        $this->mockSeriesMetadata($series), // seriesInfo
+        $this->mockNoResultsResponse(), //recording
+        $this->mockNoResultsResponse(), //running
+        $this->mockNoResultsResponse(), //scheduled
+        $this->mockNoResultsResponse(), //failed
+        $this->mockNoTrimmingResultsResponse(), //trimming
+        $this->mockNoResultsResponse(), //upcoming
+    );
 
-        $this->assertDatabaseMissing('series', $series->only('id'));
-    }
+    get(route('series.edit', $series))
+        ->assertSee('Set Default image');
 
-    /** @test */
-    public function a_series_owner_can_delete_series(): void
-    {
-        $series = SeriesFactory::ownedBy($this->signInRole($this->role))->create();
+    $series->image_id = 1;
+    $series->save();
+    $this->mockHandler->append(
+        $this->mockHealthResponse(), //health
+        $this->mockSeriesMetadata($series), // seriesInfo
+        $this->mockNoResultsResponse(), //recording
+        $this->mockNoResultsResponse(), //running
+        $this->mockNoResultsResponse(), //scheduled
+        $this->mockNoResultsResponse(), //failed
+        $this->mockNoTrimmingResultsResponse(), //trimming
+        $this->mockNoResultsResponse(), //upcoming
+    );
 
-        $this->delete(route('series.edit', $series));
+    get(route('series.edit', $series))
+        ->assertDontSee('Set Default image');
+});
 
-        $this->assertDatabaseMissing('series', $series->only('id'));
-    }
+test('series admin can select another image', function () {
+    $series = SeriesFactory::ownedBy(signInRole(Role::MODERATOR))->create();
+    $series->image_id = Image::find(1)->id;
+    $series->save();
+    $this->mockHandler->append(
+        $this->mockHealthResponse(), //health
+        $this->mockSeriesMetadata($series), // seriesInfo
+        $this->mockNoResultsResponse(), //recording
+        $this->mockNoResultsResponse(), //running
+        $this->mockNoResultsResponse(), //scheduled
+        $this->mockNoResultsResponse(), //failed
+        $this->mockNoTrimmingResultsResponse(), //trimming
+        $this->mockNoResultsResponse(), //upcoming
+    );
 
-    /** @test */
-    public function it_shows_a_flash_message_when_a_series_is_deleted()
-    {
-        $series = SeriesFactory::ownedBy($this->signInRole($this->role))->create();
+    get(route('series.edit', $series))
+        ->assertSee('Assign selected image');
+});
 
-        $this->delete(route('series.edit', $series))->assertSessionHas($this->flashMessageName);
-    }
+test('edit series page should display opencast users rights', function () {
+    $series = SeriesFactory::ownedBy(signInRole(Role::MODERATOR))->create();
+    $this->mockHandler->append(
+        $this->mockHealthResponse(), //health
+        $this->mockSeriesMetadata($series), // seriesInfo
+        $this->mockNoResultsResponse(), //recording
+        $this->mockNoResultsResponse(), //running
+        $this->mockNoResultsResponse(), //scheduled
+        $this->mockNoResultsResponse(), //failed
+        $this->mockNoTrimmingResultsResponse(), //trimming
+        $this->mockNoResultsResponse(), //upcoming
+    );
+    get(route('series.edit', $series))
+        ->assertViewHas(['opencastSeriesInfo'])
+        ->assertSee(User::find(1)->first()->getFullNameAttribute());
+});
 
-    /** @test */
-    public function it_shows_series_owner_if_user_is_admin(): void
-    {
-        $series = Series::factory()->create();
+test('edit series should display opencast running events if any', function () {
+    $series = SeriesFactory::ownedBy(signInRole(Role::MODERATOR))->withOpencastID()->create();
+    $this->mockHandler->append(
+        $this->mockHealthResponse(), //health
+        $this->mockSeriesMetadata($series), // seriesInfo
+        $this->mockNoResultsResponse(), //recording
+        $runningWorkflow = $this->mockEventResponse($series, OpencastWorkflowState::RUNNING), //running
+        $this->mockNoResultsResponse(), //scheduled
+        $this->mockNoResultsResponse(), //failed
+        $this->mockNoTrimmingResultsResponse(), //trimming
+        $this->mockNoResultsResponse(), //upcoming
+    );
+    $opencastViewData = collect(json_decode($runningWorkflow->getBody(), true));
 
-        $this->signInRole(Role::ADMIN);
+    get(route('series.edit', $series))
+        ->assertViewHas(['opencastSeriesInfo'])
+        ->assertSee($opencastViewData[0]['title']);
+});
 
-        $this->get(route('series.edit', $series))->assertSee($series->owner->first_name);
-    }
+test('edit series should display opencast failed events if any', function () {
+    $series = SeriesFactory::ownedBy(signInRole(Role::MODERATOR))
+        ->withOpencastID()
+        ->create();
+    //pass an empty opencast response
+    $this->mockHandler->append(
+        $this->mockHealthResponse(), //health
+        $this->mockSeriesMetadata($series), // seriesInfo
+        $this->mockNoResultsResponse(), //recording
+        $this->mockNoResultsResponse(), //running
+        $this->mockNoResultsResponse(), //scheduled
+        $this->mockEventResponse($series, OpencastWorkflowState::FAILED), //failed
+        $this->mockNoTrimmingResultsResponse(), //trimming
+        $this->mockNoResultsResponse(), //upcoming
+    );
 
-    protected function tearDown(): void
-    {
-        parent::tearDown(); // TODO: Change the autogenerated stub
-    }
-}
+    get(route('series.edit', $series))
+        ->assertViewHas(['opencastSeriesInfo'])
+        ->assertSee('Opencast failed events');
+});
+
+it('loads comments component at edit page', function () {
+    $this->mockHandler->append(new Response());
+    $series = SeriesFactory::ownedBy(signInRole(Role::MODERATOR))->create();
+
+    get(route('series.edit', $series))->assertSeeLivewire('comments-section');
+});
+
+test('edit series should display admin comments', function () {
+    $this->mockHandler->append(new Response());
+    $series = SeriesFactory::ownedBy(signInRole(Role::MODERATOR))->create();
+
+    get(route('series.edit', $series))->assertSee(__('clip.frontend.comments'));
+
+    Livewire::test(CommentsSection::class, [
+        'model' => $series,
+        'type' => 'backend',
+    ])
+        ->set('content', 'Admin series comment')
+        ->call('postComment')
+        ->assertSee('Comment posted successfully')
+        ->assertSee('Admin series comment');
+});
+
+test('edit series should display series activities', function () {
+    $this->mockHandler->append(new Response());
+    $series = SeriesFactory::ownedBy(signInRole(Role::MODERATOR))->create();
+
+    get(route('series.edit', $series))->assertSee('Activities');
+
+    Livewire::test(ActivitiesDataTable::class)
+        ->assertSee('created series');
+});
+
+test('a series owner can update series', function () {
+    $this->mockHandler->append(new Response());
+    $series = SeriesFactory::ownedBy(signInRole(Role::MODERATOR))->create();
+    $this->patch(route('series.edit', $series), [
+        'title' => 'changed',
+        'description' => 'changed',
+        'organization_id' => '1',
+    ]);
+    $series->refresh();
+
+    assertDatabaseHas('series', [
+        'title' => 'changed',
+        'description' => 'changed',
+        'organization_id' => '1',
+    ]);
+    get(route('series.edit', $series))->assertSee('changed');
+});
+
+it('updates opencast series id if is null', function () {
+    $series = SeriesFactory::ownedBy(signInRole(Role::MODERATOR))->create();
+    //pass an empty opencast response
+    $this->mockHandler->append($this->mockCreateSeriesResponse());
+    $this->patch(route('series.edit', $series), [
+        'title' => 'changed',
+        'description' => 'changed',
+        'organization_id' => '1',
+    ]);
+    $series = $series->refresh();
+
+    expect($series->opencast_series_id)->not->toBeNull();
+});
+
+it('shows create oc series button if no series exist in opencast', function () {
+    $series = SeriesFactory::ownedBy(signInRole(Role::MODERATOR))
+        ->create();
+    $this->mockHandler->append(
+        $this->mockHealthResponse(), //health
+        $this->mockNoResultsResponse(), // seriesInfo
+        $this->mockNoResultsResponse(), //recording
+        $this->mockNoResultsResponse(), //running
+        $this->mockNoResultsResponse(), //scheduled
+        $this->mockNoResultsResponse(), //failed
+        $this->mockNoTrimmingResultsResponse(), //trimming
+        $this->mockNoResultsResponse(), //upcoming
+    );
+
+    get(route('series.edit', $series))->assertSee('Create Opencast series for this object');
+});
+
+test('a moderator cannot update a not owned series', function () {
+    $series = SeriesFactory::create();
+    signInRole(Role::MODERATOR);
+
+    $this->patch(route('series.edit', $series), [
+        'title' => 'changed',
+        'description' => 'changed',
+        'organization_id' => '1',
+    ])->assertForbidden();
+    $this->assertDatabaseMissing('series', ['title' => 'changed']);
+});
+
+test('an admin user can update a not owned series', function () {
+    $series = SeriesFactory::create();
+    signInRole(Role::ADMIN);
+    //pass an empty opencast respons
+    $this->mockHandler->append($this->mockSeriesRunningWorkflowsResponse($series, false));
+    $this->patch(route('series.edit', $series), [
+        'title' => 'changed',
+        'description' => 'changed',
+        'organization_id' => '1',
+    ]);
+
+    assertDatabaseHas('series', ['title' => 'changed']);
+});
+
+it('shows a flash message when a series is updated', function () {
+    $series = SeriesFactory::ownedBy(signInRole(Role::MODERATOR))->create();
+
+    $this->patch(route('series.edit', $series), [
+        'title' => 'changed',
+        'description' => 'changed',
+        'organization_id' => '1',
+    ])->assertSessionHas($this->flashMessageName);
+});
+
+test('a moderator cannot delete a not owned series', function () {
+    $series = SeriesFactory::create();
+    signInRole(Role::MODERATOR);
+
+    delete(route('series.edit', $series))->assertForbidden();
+    assertDatabaseHas('series', $series->only('id'));
+});
+
+test('an assistant is not allowed to delete series', function () {
+    $series = SeriesFactory::create();
+    signInRole(Role::ASSISTANT);
+
+    delete(route('series.edit', $series))->assertForbidden();
+    assertDatabaseHas('series', $series->only('id'));
+});
+
+test('an admin user can delete a not owned series', function () {
+    $series = SeriesFactory::create();
+    signInRole(Role::ADMIN);
+
+    $this->followingRedirects()->delete(route('series.edit', $series))->assertOk();
+    $this->assertDatabaseMissing('series', $series->only('id'));
+});
+
+test('a series owner can delete series', function () {
+    $series = SeriesFactory::ownedBy(signInRole(Role::MODERATOR))->create();
+    delete(route('series.edit', $series));
+
+    $this->assertDatabaseMissing('series', $series->only('id'));
+});
+
+it('shows a flash message when a series is deleted', function () {
+    $series = SeriesFactory::ownedBy(signInRole(Role::MODERATOR))->create();
+
+    delete(route('series.edit', $series))->assertSessionHas($this->flashMessageName);
+});
+
+it('shows series owner if user is admin', function () {
+    $series = Series::factory()->create();
+    signInRole(Role::ADMIN);
+
+    get(route('series.edit', $series))->assertSee($series->owner->first_name);
+});
+
+afterEach(function () {
+    // TODO: Change the autogenerated stub
+});
