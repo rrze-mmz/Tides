@@ -12,11 +12,11 @@ use Livewire\Component;
 
 class UnlockObject extends Component
 {
-    public $model;
-
     public $showModal = false;
 
     public $password;
+
+    public $model;
 
     /**
      * Unlock form validation rules
@@ -30,12 +30,19 @@ class UnlockObject extends Component
         ];
     }
 
+    public function mount($model): void
+    {
+        $this->model = $model;
+    }
+
     /**
      * Livewire render function for the component
      */
     public function render(): Factory|View|Application
     {
-        return view('livewire.unlock-object');
+        return view('livewire.unlock-object', [
+            'model' => $this->model,
+        ]);
     }
 
     /**
