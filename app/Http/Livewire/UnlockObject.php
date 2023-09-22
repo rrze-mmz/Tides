@@ -12,11 +12,11 @@ use Livewire\Component;
 
 class UnlockObject extends Component
 {
-    public $model;
-
     public $showModal = false;
 
     public $password;
+
+    public $model;
 
     /**
      * Unlock form validation rules
@@ -28,6 +28,11 @@ class UnlockObject extends Component
         return [
             'password' => ['required', Password::min(8)->mixedCase()],
         ];
+    }
+
+    public function mount($model): void
+    {
+        $this->model = $model;
     }
 
     /**

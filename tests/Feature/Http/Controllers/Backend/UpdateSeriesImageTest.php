@@ -1,57 +1,41 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Backend;
-
 use App\Enums\Role;
 use App\Models\Series;
 use Facades\Tests\Setup\SeriesFactory;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
-class UpdateSeriesImageTest extends TestCase
-{
-    use RefreshDatabase;
+use function Pest\Laravel\put;
 
-    /** @test */
-    public function an_image_id_must_selected_to_update_series_image(): void
-    {
-        $this->signInRole(Role::MODERATOR);
+test('an image id must selected to update series image', function () {
+    signInRole(Role::MODERATOR);
+    $series = Series::factory()->create();
 
-        $series = Series::factory()->create();
+    put(route('update.series.image', $series), ['imageID' => ''])
+        ->assertSessionHasErrors('imageID');
+});
 
-        $this->put(route('update.series.image', $series), ['imageID' => ''])
-            ->assertSessionHasErrors('imageID');
-    }
+it('can update images for series and for all series clips', function () {
+    $series = SeriesFactory::ownedBy(signInRole(Role::MODERATOR))
+        ->withClips(3)
+        ->create();
 
-    /** @test */
-    public function it_can_update_images_for_series_and_for_all_series_clips(): void
-    {
-        $series = SeriesFactory::ownedBy($this->signInRole(Role::MODERATOR))
-            ->withClips(3)
-            ->create();
+    expect($series->image_id)->toEqual(2);
+    expect($series->clips()->first()->image_id)->toEqual(2);
 
-        $this->assertEquals(2, $series->image_id);
-        $this->assertEquals(2, $series->clips()->first()->image_id);
+    put(route('update.series.image', $series), ['imageID' => 1, 'assignClips' => 'on']);
+    $series->refresh();
 
-        $this->put(route('update.series.image', $series), ['imageID' => 1, 'assignClips' => 'on']);
+    expect($series->image_id)->toEqual(1);
+    expect($series->clips()->first()->image_id)->toEqual(1);
+});
 
-        $series->refresh();
+it('can update series image', function () {
+    signInRole(Role::MODERATOR);
+    $series = Series::factory()->create();
 
-        $this->assertEquals(1, $series->image_id);
-        $this->assertEquals(1, $series->clips()->first()->image_id);
-    }
+    put(route('update.series.image', $series), ['imageID' => 1])
+        ->assertRedirectToRoute('series.edit', $series);
 
-    /** @test */
-    public function it_can_update_series_image(): void
-    {
-        $this->signInRole(Role::MODERATOR);
-
-        $series = Series::factory()->create();
-
-        $this->put(route('update.series.image', $series), ['imageID' => 1])
-            ->assertRedirectToRoute('series.edit', $series);
-
-        $series->refresh();
-        $this->assertEquals(1, $series->image_id);
-    }
-}
+    $series->refresh();
+    expect($series->image_id)->toEqual(1);
+});

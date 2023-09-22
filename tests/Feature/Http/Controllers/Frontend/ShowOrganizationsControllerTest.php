@@ -1,34 +1,25 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Frontend;
-
 use App\Models\Organization;
 use App\Models\Series;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
-class ShowOrganizationsControllerTest extends TestCase
-{
-    use RefreshDatabase;
+use function Pest\Laravel\get;
 
-    /** @test */
-    public function it_has_a_faculties_index_page(): void
-    {
-        $this->get(route('frontend.organizations.index'))->assertOk();
+uses()->group('frontend');
 
-        $this->get(route('frontend.organizations.index'))->assertSee('Organizations index');
-    }
+it('has a faculties index page', function () {
+    get(route('frontend.organizations.index'))->assertOk();
 
-    /** @test */
-    public function it_shows_all_public_series_for_a_organization(): void
-    {
-        $organization = Organization::find(1);
+    get(route('frontend.organizations.index'))->assertSee('Organizations index');
+});
 
-        $series = Series::factory()->create([
-            'organization_id' => 1,
-            'is_public' => false,
-        ]);
+it('shows all public series for a organization', function () {
+    $organization = Organization::find(1);
 
-        $this->get(route('frontend.organizations.show', $organization))->assertDontSee($series->title);
-    }
-}
+    $series = Series::factory()->create([
+        'organization_id' => 1,
+        'is_public' => false,
+    ]);
+
+    get(route('frontend.organizations.show', $organization))->assertDontSee($series->title);
+});

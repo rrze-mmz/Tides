@@ -9,6 +9,8 @@ use App\Services\WowzaService;
 use Facades\Tests\Setup\ClipFactory;
 use Facades\Tests\Setup\FileFactory;
 use Illuminate\Support\Facades\Storage;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 use function Pest\Laravel\get;
@@ -106,47 +108,49 @@ it('has as setSessionAccessToken function for url tokens', function () {
         ]);
 });
 
-it('has a checkAccessToken for url tokens', function () {
-    $time = dechex(time());
-    $client = Acl::LMS->lower();
-    $token = md5('clip'.'1'.'1234qwER'.'127.0.0.1'.$time.$client);
-    $clip = Clip::factory()->create();
+it(/**
+ * @throws NotFoundExceptionInterface
+ * @throws ContainerExceptionInterface
+ */ 'has a checkAccessToken for url tokens',
+    function () {
+        $time = dechex(time());
+        $client = Acl::LMS->lower();
+        $token = md5('clip'.'1'.'1234qwER'.'127.0.0.1'.$time.$client);
+        $clip = Clip::factory()->create();
 
-    expect(checkAccessToken($clip))->toBeFalse();
+        expect(checkAccessToken($clip))->toBeFalse();
 
-    session()->put([
-        "clip_{$clip->id}_token" => $token,
-        "clip_{$clip->id}_time" => $time,
-        "clip_{$clip->id}_client" => $client,
-    ]);
-    expect(checkAccessToken($clip))->toBeFalse();
+        session()->put([
+            "clip_{$clip->id}_token" => $token,
+            "clip_{$clip->id}_time" => $time,
+            "clip_{$clip->id}_client" => $client,
+        ]);
+        expect(checkAccessToken($clip))->toBeFalse();
 
-    $clip->password = '1234qwER';
-    $clip->save();
-    expect(checkAccessToken($clip))->toBeTrue();
+        $clip->password = '1234qwER';
+        $clip->save();
+        expect(checkAccessToken($clip))->toBeTrue();
 
-    session()->flush();
+        session()->flush();
 
-    //test again clip series token
-    $time = dechex(time());
-    $client = Acl::LMS->lower();
-    $seriesToken = md5('series'.'1'.'1234QWer'.'127.0.0.1'.$time.$client);
-    $series = Series::factory()->create(['password' => '1234QWer']);
+        //test again clip series token
+        $time = dechex(time());
+        $client = Acl::LMS->lower();
+        $seriesToken = md5('series'.'1'.'1234QWer'.'127.0.0.1'.$time.$client);
+        $series = Series::factory()->create(['password' => '1234QWer']);
+        session()->put([
+            "series_{$series->id}_token" => $seriesToken,
+            "series_{$series->id}_time" => $time,
+            "series_{$series->id}_client" => $client,
+        ]);
+        expect(checkAccessToken($clip))->toBeFalse();
 
-    session()->put([
-        "series_{$series->id}_token" => $seriesToken,
-        "series_{$series->id}_time" => $time,
-        "series_{$series->id}_client" => $client,
-    ]);
-
-    expect(checkAccessToken($clip))->toBeFalse();
-
-    $clip->series_id = $series->id;
-    $clip->save();
-    $clip->refresh();
-
-    expect(checkAccessToken($clip))->toBeTrue();
-});
+        $clip->series_id = $series->id;
+        $clip->save();
+        $clip->refresh();
+        expect(checkAccessToken($clip))->toBeTrue();
+    }
+);
 
 it('has a getAccessToken function for url option parameters', function () {
     $time = dechex(time());
@@ -167,17 +171,13 @@ it('has a getFileExtension function', function () {
 it('has a findUserByOpencastRole function', function () {
     $user = User::factory()->create();
     $opencastUserRole = 'ROLE_USER_'.strtoupper($user->username);
-
     expect(findUserByOpencastRole($opencastUserRole)->getFullNameAttribute())->toBe($user->getFullNameAttribute());
 
     $opencastUserRole = 'ROLE_ADMIN';
-
     expect(findUserByOpencastRole($opencastUserRole))->toBe($opencastUserRole);
 
     $opencastUserRole = 'ROLE_USER_NOTEXISTINGUSER';
-
     expect(findUserByOpencastRole($opencastUserRole))->toBe($opencastUserRole);
-
 });
 
 it('has a humanFileSizeFormat function ', function () {

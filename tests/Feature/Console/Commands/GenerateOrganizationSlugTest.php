@@ -1,29 +1,20 @@
 <?php
 
-namespace Tests\Feature\Console\Commands;
-
 use App\Models\Organization;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
-use Tests\TestCase;
 
-class GenerateOrganizationSlugTest extends TestCase
-{
-    use RefreshDatabase;
+uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
 
-    /** @test */
-    public function it_generates_organization_slug(): void
-    {
-        $organization = Organization::find(1);
+it('generates organization slug', function () {
+    $organization = Organization::find(1);
 
-        $organization->slug = null;
-        $organization->save();
-        $organization->refresh();
+    $organization->slug = null;
+    $organization->save();
+    $organization->refresh();
 
-        $this->artisan('organizations:slugs')->expectsOutput('Finish organizations slugs');
+    $this->artisan('organizations:slugs')->expectsOutput('Finish organizations slugs');
 
-        $organization->refresh();
+    $organization->refresh();
 
-        $this->assertEquals($organization->slug, Str::slug($organization->name));
-    }
-}
+    expect(Str::slug($organization->name))->toEqual($organization->slug);
+});

@@ -1,133 +1,89 @@
 <?php
 
-namespace Tests\Unit;
-
 use App\Enums\Role;
 use App\Models\Series;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
-class UserTest extends TestCase
-{
-    use RefreshDatabase;
+uses()->group('unit');
 
-    private User $user;
+beforeEach(function () {
+    $this->user = User::factory()->create();
+});
 
-    protected function setUp(): void
-    {
-        parent::setUp();
+it('has many series', function () {
+    expect($this->user->series())->toBeInstanceOf(HasMany::class);
+});
 
-        $this->user = User::factory()->create();
-    }
+it('has many clips', function () {
+    expect($this->user->clips())->toBeInstanceOf(HasMany::class);
+});
 
-    /** @test */
-    public function it_has_many_series(): void
-    {
-        $this->assertInstanceOf(HasMany::class, $this->user->series());
-    }
+it('has many supervised clips', function () {
+    expect($this->user->supervisedClips())->toBeInstanceOf(HasMany::class);
+});
 
-    /** @test */
-    public function it_has_many_clips(): void
-    {
-        $this->assertInstanceOf(HasMany::class, $this->user->clips());
-    }
+it('has many subscriptions', function () {
+    expect($this->user->subscriptions())->toBeInstanceOf(BelongsToMany::class);
+});
 
-    /** @test */
-    public function it_has_many_supervised_clips(): void
-    {
-        $this->assertInstanceOf(HasMany::class, $this->user->supervisedClips());
-    }
+it('fetch all user series', function () {
+    expect($this->user->getAllSeries())->toBeInstanceOf(Builder::class);
+});
 
-    /** @test */
-    public function it_has_many_subscriptions(): void
-    {
-        $this->assertInstanceOf(BelongsToMany::class, $this->user->subscriptions());
-    }
+it('has many roles', function () {
+    expect($this->user->roles())->toBeInstanceOf(BelongsToMany::class);
+});
 
-    /** @test */
-    public function it_fetch_all_user_series(): void
-    {
-        $this->assertInstanceOf(Builder::class, $this->user->getAllSeries());
-    }
+it('has many memberships', function () {
+    expect($this->user->memberships())->toBeInstanceOf(BelongsToMany::class);
+});
 
-    /** @test */
-    public function it_has_many_roles(): void
-    {
-        $this->assertInstanceOf(BelongsToMany::class, $this->user->roles());
-    }
+it('checks whether a user is member of a series', function () {
+    expect($this->user->isMemberOf(Series::factory()->create()))->toBeFalse();
+});
 
-    /** @test */
-    public function it_has_many_memberships(): void
-    {
-        $this->assertInstanceOf(BelongsToMany::class, $this->user->memberships());
-    }
+it('can assign a role', function () {
+    $this->user->assignRole(Role::MEMBER);
 
-    /** @test */
-    public function it_checks_whether_a_user_is_member_of_a_series(): void
-    {
-        $this->assertFalse($this->user->isMemberOf(Series::factory()->create()));
-    }
+    expect($this->user->hasRole(Role::USER))->toBeFalse();
+    expect($this->user->assignRole(Role::ADMIN))->toBeInstanceOf(User::class);
+    expect($this->user->roles()->first()->name)->toEqual('admin');
+});
 
-    /** @test */
-    public function it_can_assign_a_role(): void
-    {
-        $this->user->assignRole(Role::MEMBER);
-        $this->assertFalse($this->user->hasRole(Role::USER));
+it('can check for a role', function () {
+    $this->user->assignRole(Role::ADMIN);
 
-        $this->assertInstanceOf(User::class, $this->user->assignRole(Role::ADMIN));
+    expect($this->user->hasRole(Role::ADMIN))->toBeTrue();
+    expect($this->user->hasRole(Role::STUDENT))->toBeFalse();
+});
 
-        $this->assertEquals('admin', $this->user->roles()->first()->name);
-    }
+it('check for superadmin role', function () {
+    signInRole(Role::SUPERADMIN);
 
-    /** @test */
-    public function it_can_check_for_a_role(): void
-    {
-        $this->user->assignRole(Role::ADMIN);
+    expect(auth()->user()->isSuperAdmin())->toBeTrue();
+});
 
-        $this->assertTrue($this->user->hasRole(Role::ADMIN));
+it('check for admin role', function () {
+    signInRole(Role::ADMIN);
 
-        $this->assertFalse($this->user->hasRole(Role::STUDENT));
-    }
+    expect(auth()->user()->isAdmin())->toBeTrue();
+});
 
-    /** @test */
-    public function it_check_for_superadmin_role(): void
-    {
-        $this->signInRole(Role::SUPERADMIN);
+it('check for moderator role', function () {
+    signInRole(Role::MODERATOR);
 
-        $this->assertTrue(auth()->user()->isSuperAdmin());
-    }
+    expect(auth()->user()->isModerator())->toBeTrue();
+});
 
-    /** @test */
-    public function it_check_for_admin_role(): void
-    {
-        $this->signInRole(Role::ADMIN);
+it('check for assistant role', function () {
+    signInRole(Role::ASSISTANT);
 
-        $this->assertTrue(auth()->user()->isAdmin());
-    }
+    expect(auth()->user()->isAssistant())->toBeTrue();
+});
 
-    /** @test */
-    public function it_check_for_moderator_role(): void
-    {
-        $this->signInRole(Role::MODERATOR);
-
-        $this->assertTrue(auth()->user()->isModerator());
-    }
-
-    /** @test */
-    public function it_check_for_assistant_role(): void
-    {
-        $this->signInRole(Role::ASSISTANT);
-
-        $this->assertTrue(auth()->user()->isAssistant());
-    }
-
-    /** @test */
-    public function it_has_an_admins_scope(): void
-    {
-        $this->assertInstanceOf(Builder::class, User::admins());
-    }
-}
+it('has an admins scope', function () {
+    expect(User::admins())->toBeInstanceOf(Builder::class);
+});

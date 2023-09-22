@@ -55,7 +55,7 @@ it('has a unique slug', function () {
 });
 
 it('belongs to a series', function () {
-    $this->assertInstanceOf(BelongsTo::class, $this->clip->series());
+    expect($this->clip->series())->toBeInstanceOf(BelongsTo::class);
 });
 
 it('has many assets', function () {
@@ -65,51 +65,51 @@ it('has many assets', function () {
 });
 
 it('has many collections', function () {
-    $this->assertInstanceOf(BelongsToMany::class, $this->clip->collections());
+    expect($this->clip->collections())->toBeInstanceOf(BelongsToMany::class);
 });
 
 it('has only one semester', function () {
-    $this->assertInstanceOf(BelongsTo::class, $this->clip->semester());
+    expect($this->clip->semester())->toBeInstanceOf(BelongsTo::class);
 });
 
 it('belongs to an organization unit', function () {
-    $this->assertInstanceOf(BelongsTo::class, $this->clip->organisation());
+    expect($this->clip->organisation())->toBeInstanceOf(BelongsTo::class);
 });
 
 it('belongs to an image', function () {
-    $this->assertInstanceOf(BelongsTo::class, $this->clip->image());
+    expect($this->clip->image())->toBeInstanceOf(BelongsTo::class);
 });
 
 it('has one language', function () {
-    $this->assertInstanceOf(BelongsTo::class, $this->clip->language());
+    expect($this->clip->language())->toBeInstanceOf(BelongsTo::class);
 });
 
 it('has one context', function () {
-    $this->assertInstanceOf(HasOne::class, $this->clip->context());
+    expect($this->clip->context())->toBeInstanceOf(HasOne::class);
 });
 
 it('has one format', function () {
-    $this->assertInstanceOf(HasOne::class, $this->clip->format());
+    expect($this->clip->format())->toBeInstanceOf(HasOne::class);
 });
 
 it('has one type', function () {
-    $this->assertInstanceOf(HasOne::class, $this->clip->type());
+    expect($this->clip->type())->toBeInstanceOf(HasOne::class);
 });
 
 it('belongs to an owner', function () {
-    $this->assertInstanceOf(User::class, $this->clip->owner);
+    expect($this->clip->owner)->toBeInstanceOf(User::class);
 });
 
 it('has many presenters using presentable trait', function () {
-    $this->assertInstanceOf(MorphToMany::class, $this->clip->presenters());
+    expect($this->clip->presenters())->toBeInstanceOf(MorphToMany::class);
 });
 
 it('has many documents using documentable trait', function () {
-    $this->assertInstanceOf(MorphToMany::class, $this->clip->documents());
+    expect($this->clip->documents())->toBeInstanceOf(MorphToMany::class);
 });
 
 it('has many comments', function () {
-    $this->assertInstanceOf(MorphMany::class, $this->clip->comments());
+    expect($this->clip->comments())->toBeInstanceOf(MorphMany::class);
 });
 
 it('can add an asset', function () {
@@ -124,16 +124,14 @@ it('can add an asset', function () {
         'type' => 'video',
     ]);
 
-    $this->assertInstanceOf(Asset::class, $asset);
+    expect($asset)->toBeInstanceOf(Asset::class);
 });
 
 it('can update it\'s poster image', function () {
     expect($this->clip->posterImage)->toBeNull();
 
     $file = FileFactory::videoFile();
-
     $file->storeAs('thumbnails', $this->clip->id.'_poster.png');
-
     $this->clip->updatePosterImage();
 
     Storage::assertExists('/thumbnails/'.$this->clip->posterImage);
@@ -147,48 +145,42 @@ it('can add tags', function () {
 
 it('can fetch previous and nect clip models if clip belongs to a series', function () {
     $series = Series::factory()->create();
-
     Clip::factory()->create([
         'title' => 'first clip',
         'series_id' => $series->id,
         'episode' => 1,
     ]);
-
     $secondClip = Clip::factory()->create([
         'title' => 'second clip',
         'series_id' => $series->id,
         'episode' => 2,
     ]);
-
     Clip::factory()->create([
         'title' => 'third clip',
         'series_id' => $series->id,
         'episode' => 3,
     ]);
 
-    $this->assertInstanceOf(Collection::class, $secondClip->previousNextClipCollection());
-    $this->assertInstanceOf(Clip::class, $secondClip->previousNextClipCollection()->get('previousClip'));
-    $this->assertInstanceOf(Clip::class, $secondClip->previousNextClipCollection()->get('nextClip'));
+    expect($secondClip->previousNextClipCollection())->toBeInstanceOf(Collection::class);
+    expect($secondClip->previousNextClipCollection()->get('previousClip'))->toBeInstanceOf(Clip::class);
+    expect($secondClip->previousNextClipCollection()->get('nextClip'))->toBeInstanceOf(Clip::class);
 });
 
 it('has a public scope', function () {
-    $this->assertInstanceOf(Builder::class, Clip::public());
+    expect(Clip::public())->toBeInstanceOf(Builder::class);
 });
 
 it('has a single clip scope', function () {
-    $this->assertInstanceOf(Builder::class, Clip::single());
+    expect(Clip::single())->toBeInstanceOf(Builder::class);
 });
 
 test('clip owner can be null', function () {
     $user = User::factory()->create();
-
     $clip = $user->clips()->create(['title' => 'test', 'slug' => 'test', 'semester_id' => 1]);
-
     $user->delete();
-
     $clip = Clip::find($clip->id);
 
-    $this->assertNull($clip->owner_id);
+    expect($clip->owner_id)->toBeNull();
 });
 
 it('resolves also an id in route', function () {
@@ -198,14 +190,14 @@ it('resolves also an id in route', function () {
 });
 
 it('fetches assets by type', function () {
-    $this->assertInstanceOf(HasMany::class, $this->clip->getAssetsByType(Content::PRESENTER));
+    expect($this->clip->getAssetsByType(Content::PRESENTER))->toBeInstanceOf(HasMany::class);
 });
 
 it('creates a folder id after model save', function () {
     //second db update will be done in clip observer class
-    $this->assertEquals('TIDES_ClipID_1', $this->clip->folder_id);
+    expect($this->clip->folder_id)->toEqual('TIDES_ClipID_1');
 });
 
 it('has a method for returning caption assets', function () {
-    $this->assertNull($this->clip->getCaptionAsset());
+    expect($this->clip->getCaptionAsset())->toBeNull();
 });
