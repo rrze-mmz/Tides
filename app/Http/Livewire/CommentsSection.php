@@ -33,12 +33,9 @@ class CommentsSection extends Component
         'type' => 'required|string',
     ];
 
-    /**
-     * Get all comments for a clip
-     */
-    public function fetchComments(): void
+    public function mount($model): void
     {
-        $this->comments = $this->model->comments()->where('type', $this->type)->get();
+        $this->model = $model;
     }
 
     /**
@@ -75,6 +72,14 @@ class CommentsSection extends Component
         $this->messageType = 'success';
         $this->fetchComments();
         $this->emit('updated');
+    }
+
+    /**
+     * Get all comments for a clip
+     */
+    public function fetchComments(): void
+    {
+        $this->comments = $this->model->comments()->where('type', $this->type)->get();
     }
 
     /**

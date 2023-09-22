@@ -40,9 +40,7 @@ class UnlockObject extends Component
      */
     public function render(): Factory|View|Application
     {
-        return view('livewire.unlock-object', [
-            'model' => $this->model,
-        ]);
+        return view('livewire.unlock-object');
     }
 
     /**
