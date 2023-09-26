@@ -115,7 +115,9 @@ it('shows sidebar menu items for admins', function () {
         ->assertSee(route('collections.index'))
         ->assertSee(trans_choice('common.menu.user', 2))
         ->assertSee(route('users.index'))
-        ->assertSee(trans_choice('common.menu.image', 2));
+        ->assertSee(trans_choice('common.menu.image', 2))
+        ->assertSee(route('articles.index'))
+        ->assertSee(trans_choice(''));
 });
 
 it('shows sidebar menu items for superadmins', function () {

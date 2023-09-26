@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Backend\AdminPortalApplicationController;
+use App\Http\Controllers\Backend\ArticlesController;
 use App\Http\Controllers\Backend\AssetDestroyController;
 use App\Http\Controllers\Backend\AssetsTransferController;
 use App\Http\Controllers\Backend\ChaptersController;
@@ -291,6 +292,9 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
         Route::resource('collections', CollectionsController::class)->except(['show']);
         Route::post('collections/{collection}/toggleClips', ClipsCollectionsController::class)
             ->name('collections.toggleClips');
+
+        //Articles
+        Route::resource('articles', ArticlesController::class)->except(['show']);
     });
 
     //Superadmin routes

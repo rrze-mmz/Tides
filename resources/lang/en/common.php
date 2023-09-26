@@ -27,6 +27,7 @@ return [
         'document' => 'Document|Documents',
         'portal settings' => 'Portal settings',
         'image' => 'Image|Images',
+        'article' => 'Article|Articles',
     ],
     'heading' => [
         'create new series' => 'Create new series',
