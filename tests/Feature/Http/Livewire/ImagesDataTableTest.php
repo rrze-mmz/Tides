@@ -15,7 +15,7 @@ beforeEach(function () {
     signInRole(Role::ADMIN);
 });
 
-it('loads a images livewire component on images index page', function () {
+it('loads an images livewire component on images index page', function () {
     get(route('images.index'))->assertSeeLivewire('images-data-table');
 });
 
@@ -41,7 +41,6 @@ it('can sorts an image by his file name', function () {
 
 it('has a delete livewire component for deleting images', function () {
     Image::factory(2)->create();
-
     Livewire::actingAs(auth()->user());
 
     get(route('images.index'))->assertSeeLivewire(DeleteModalWindow::class);

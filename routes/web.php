@@ -284,7 +284,7 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
     Route::post('images/import/', UploadImageController::class)->name('images.import');
     Route::post('/uploads/process', [FileUploadController::class, 'process'])->name('uploads.process');
 
-    // Portal admin resources
+    // Portal admin resources (portal assistants are not included)
     Route::middleware(['user.admin'])->group(function () {
         Route::resource('users', UsersController::class)->except(['show']);
 
