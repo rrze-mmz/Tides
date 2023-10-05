@@ -10,7 +10,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
-    <link rel="icon" href="{{ URL::asset('/css/favicon.ico') }}" type="image/x-icon"/>
+    <link rel="icon" href="{{ URL::asset('/css/favicon.ico') }}" type="image/x-icon" />
     @vite('resources/css/app.css')
     @livewireStyles
 </head>
@@ -33,6 +33,6 @@
     </footer>
 </div>
 @vite('resources/js/app.js')
-@livewireScripts
+@livewireScriptConfig
 </body>
 </html>

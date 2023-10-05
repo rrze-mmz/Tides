@@ -1,14 +1,14 @@
 <div class="mb-2 space-y-10" id="comments-section">
     <x-message
         :messageText="$messageText"
-        :messageType="$messageType"/>
+        :messageType="$messageType" />
 
-    <form wire:submit.prevent="postComment" action="#" method="POST" class="my-12 w-1/2">
+    <form wire:submit="postComment" action="#" method="PATCH" class="my-12 w-1/2">
         @csrf
         <div class="flex">
             <img class="h-10 w-10 rounded-full" src="{{ URL::asset('/images/none.jpg') }}" alt="avatar">
             <div class="ml-4 flex-1">
-                <textarea wire:model.defer="content"
+                <textarea wire:model="content"
                           name="content"
                           id="content"
                           rows="4"

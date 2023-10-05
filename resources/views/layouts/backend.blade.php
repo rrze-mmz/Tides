@@ -28,7 +28,7 @@
         </nav>
         <a href="#"
            class="absolute bottom-0 flex w-full items-center justify-center py-4 text-white upgrade-btn active-nav-link">
-            <x-heroicon-o-chevron-double-left class="h-6 w-6"/>
+            <x-heroicon-o-chevron-double-left class="h-6 w-6" />
         </a>
     </aside>
 
@@ -41,7 +41,7 @@
             <div x-data="{ isOpen: false }" class="relative flex justify-end">
                 <x-heroicon-o-user @click="isOpen = !isOpen"
                                    class="relative z-10 w-12 h-12 rounded-full overflow-hidden border-2 border-gray-400
-                                            hover:border-gray-300 focus:border-gray-300 focus:outline-none"/>
+                                            hover:border-gray-300 focus:border-gray-300 focus:outline-none" />
                 </button>
                 <button x-show="isOpen"
                         @click="isOpen = false"
@@ -147,7 +147,7 @@
             <main class="w-full flex-grow px-3 py-2 font-light">
                 <div class="pb-6 text-3xl text-black">
                     @if(Session::has('flashMessage'))
-                        <x-alerts.flash-alert :message="Session::get('flashMessage', 'default')"/>
+                        <x-alerts.flash-alert :message="Session::get('flashMessage', 'default')" />
                     @endif
                 </div>
                 <div>
@@ -161,8 +161,6 @@
     </div>
 </div>
 <!-- Scripts -->
-@livewireScripts
-{{--@vite('resources/js/app.js')--}}
-{{--<script src="{{ asset('js/app.js') }}" defer></script>--}}
+@livewireScriptConfig
 </body>
 </html>

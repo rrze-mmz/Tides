@@ -1,7 +1,10 @@
 import "boot";
 
+import {
+    Livewire,
+    Alpine,
+} from "../../vendor/livewire/livewire/dist/livewire.esm";
 import jQuery from "jquery";
-import Alpine from "alpinejs";
 import Hls from "hls.js";
 import Pikaday from "pikaday";
 import * as FilePond from "filepond";
@@ -9,8 +12,9 @@ import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond/dist/filepond.min.css";
 import select2 from "select2";
 
+Livewire.start();
+
 window.jQuery = window.$ = jQuery;
-window.Alpine = Alpine;
 window.Pikaday = Pikaday;
 window.select2 = select2();
 
@@ -271,14 +275,6 @@ document.addEventListener(
     },
     false
 );
-
-if (window.deferLoadingAlpine) {
-    window.deferLoadingAlpine(function () {
-        window.Alpine.start();
-    });
-} else {
-    window.Alpine.start();
-}
 
 FilePond.registerPlugin(FilePondPluginImagePreview);
 

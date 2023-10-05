@@ -1,7 +1,7 @@
 <?php
 
 use App\Enums\Role;
-use App\Http\Livewire\ArticlesDataTable;
+use App\Livewire\ArticlesDataTable;
 use App\Models\Article;
 
 use function Pest\Laravel\get;

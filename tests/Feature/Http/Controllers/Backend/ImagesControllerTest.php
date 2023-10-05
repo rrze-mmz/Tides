@@ -1,7 +1,7 @@
 <?php
 
 use App\Enums\Role;
-use App\Http\Livewire\ImagesDataTable;
+use App\Livewire\ImagesDataTable;
 use App\Models\Image;
 use App\Models\Presenter;
 use Facades\Tests\Setup\FileFactory;

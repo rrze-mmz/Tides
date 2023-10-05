@@ -2,7 +2,7 @@
 
 use App\Enums\Role;
 use App\Enums\Role as EnumRole;
-use App\Http\Livewire\UserDataTable;
+use App\Livewire\UserDataTable;
 use App\Mail\EmailUserPassword;
 use App\Models\User;
 use Facades\Tests\Setup\ClipFactory;

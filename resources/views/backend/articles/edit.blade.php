@@ -41,7 +41,7 @@
                                       label="Is published"
                                       field-name="is_published"
                 />
-
+                
                 <div class="col-span-7 w-4/5 pt-10">
                     <x-button class="bg-blue-600 hover:bg-blue-700">
                         Update Article

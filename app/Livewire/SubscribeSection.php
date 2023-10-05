@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Livewire;
 
 use App\Notifications\UserSubscribed;
 use Illuminate\Contracts\Foundation\Application;
@@ -20,14 +20,9 @@ class SubscribeSection extends Component
 
     public $btnText;
 
-    public function __construct($id = null)
-    {
-        parent::__construct($id);
-        $this->user = auth()->user();
-    }
-
     public function mount(): void
     {
+        $this->user = auth()->user();
         $this->isUserSubscribed = $this->user->subscriptions()->where('series_id', $this->series->id)->exists();
         $this->formAction = ($this->isUserSubscribed) ? 'unsubscribe' : 'subscribe';
         $this->btnText = ($this->isUserSubscribed) ? 'Unsubscribe' : 'Subscribe';

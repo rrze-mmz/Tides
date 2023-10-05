@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Livewire\SubscribeSection;
+use App\Livewire\SubscribeSection;
 use Facades\Tests\Setup\SeriesFactory;
 use Livewire\Livewire;
 

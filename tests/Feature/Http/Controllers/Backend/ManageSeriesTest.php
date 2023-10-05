@@ -3,8 +3,8 @@
 use App\Enums\Acl;
 use App\Enums\OpencastWorkflowState;
 use App\Enums\Role;
-use App\Http\Livewire\ActivitiesDataTable;
-use App\Http\Livewire\CommentsSection;
+use App\Livewire\ActivitiesDataTable;
+use App\Livewire\CommentsSection;
 use App\Models\Clip;
 use App\Models\Image;
 use App\Models\Series;

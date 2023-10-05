@@ -1,8 +1,8 @@
 <?php
 
 use App\Enums\Role;
-use App\Http\Livewire\IngestOpencast;
 use App\Jobs\IngestVideoFileToOpencast;
+use App\Livewire\IngestOpencast;
 use App\Services\OpencastService;
 use Facades\Tests\Setup\ClipFactory;
 use Illuminate\Http\UploadedFile;
@@ -46,7 +46,7 @@ it('does not dispatches an ingest job if a file is not a video', function () {
     Livewire::test(IngestOpencast::class, ['clip' => $this->clip])
         ->set('videoFile', $file)
         ->call('submitForm')
-        ->assertSee('The video file field is required.');
+        ->assertSee('The video file must be a file of type: video/mp4, video/mpeg, video/x-matroska, video/x-m4v.');
 
     Queue::assertNotPushed(IngestVideoFileToOpencast::class);
 });
