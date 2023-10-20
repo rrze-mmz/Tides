@@ -117,8 +117,7 @@
 
                 <div class="col-span-7 w-4/5 pt-10">
                     <x-form.button :link="$link=false"
-                                   type="submit" t
-                                   ext="Create device" />
+                                   type="submit" text="Create device" />
                 </div>
             </div>
 
