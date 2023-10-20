@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Livewire\ActivitiesDataTable;
+use App\Livewire\ActivitiesDataTable;
 use App\Models\Activity;
 use App\Models\Asset;
 use App\Models\Clip;

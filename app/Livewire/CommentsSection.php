@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Livewire;
 
 use App\Models\Comment;
 use App\Models\User;
@@ -71,7 +71,7 @@ class CommentsSection extends Component
         $this->messageText = 'Comment posted successfully';
         $this->messageType = 'success';
         $this->fetchComments();
-        $this->emit('updated');
+        $this->dispatch('updated');
     }
 
     /**
@@ -99,7 +99,7 @@ class CommentsSection extends Component
 
         $this->messageText = 'Comment deleted successfully';
         $this->messageType = 'error';
-        $this->emit('updated');
+        $this->dispatch('updated');
     }
 
     /**

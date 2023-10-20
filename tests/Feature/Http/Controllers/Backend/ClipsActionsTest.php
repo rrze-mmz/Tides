@@ -3,7 +3,7 @@
 use App\Enums\Acl;
 use App\Enums\Content;
 use App\Enums\Role;
-use App\Http\Livewire\CommentsSection;
+use App\Livewire\CommentsSection;
 use App\Models\Clip;
 use App\Services\OpencastService;
 use Facades\Tests\Setup\ClipFactory;

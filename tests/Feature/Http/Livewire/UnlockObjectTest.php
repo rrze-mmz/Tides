@@ -1,7 +1,7 @@
 <?php
 
 use App\Enums\Acl;
-use App\Http\Livewire\UnlockObject;
+use App\Livewire\UnlockObject;
 use Facades\Tests\Setup\SeriesFactory;
 use Livewire\Livewire;
 

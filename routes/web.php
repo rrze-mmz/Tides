@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Backend\AdminPortalApplicationController;
+use App\Http\Controllers\Backend\ArticlesController;
 use App\Http\Controllers\Backend\AssetDestroyController;
 use App\Http\Controllers\Backend\AssetsTransferController;
 use App\Http\Controllers\Backend\ChaptersController;
@@ -36,6 +37,7 @@ use App\Http\Controllers\Frontend\AssetsDownloadController;
 use App\Http\Controllers\Frontend\FeedsController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\ShowClipsController;
+use App\Http\Controllers\Frontend\ShowLivestreamsController;
 use App\Http\Controllers\Frontend\ShowOrganizationsController;
 use App\Http\Controllers\Frontend\ShowSearchResultsController;
 use App\Http\Controllers\Frontend\ShowSeriesController;
@@ -44,6 +46,7 @@ use App\Http\Controllers\Frontend\UserCommentsController;
 use App\Http\Controllers\Frontend\UserSettingsController;
 use App\Http\Controllers\Frontend\UserSubscriptionsController;
 use App\Models\Activity;
+use App\Models\Article;
 use App\Models\Clip;
 use App\Models\Series;
 use App\Services\ElasticsearchService;
@@ -84,6 +87,25 @@ Route::get('/organizations/', [ShowOrganizationsController::class, 'index'])
     ->name('frontend.organizations.index');
 Route::get('/organizations/{organization:slug}', [ShowOrganizationsController::class, 'show'])
     ->name('frontend.organizations.show');
+
+Route::get('/live-now', ShowLivestreamsController::class)->name('live-now');
+
+//static pages
+Route::get('/faq', function () {
+    return view('frontend.articles.show')->withArticle(Article::whereSlug('faq')->first());
+})->name('frontend.faq');
+Route::get('/contact', function () {
+    return view('frontend.articles.show')->withArticle(Article::whereSlug('contact')->first());
+})->name('frontend.contact');
+Route::get('/imprint', function () {
+    return view('frontend.articles.show')->withArticle(Article::whereSlug('imprint')->first());
+})->name('frontend.imprint');
+Route::get('/privacy', function () {
+    return view('frontend.articles.show')->withArticle(Article::whereSlug('privacy')->first());
+})->name('frontend.privacy');
+Route::get('/accessibility', function () {
+    return view('frontend.articles.show')->withArticle(Article::whereSlug('accessibility')->first());
+})->name('frontend.accessibility');
 
 //Frontend myPortal links
 Route::prefix('/my'.str(config('app.name')))->middleware(['auth'])->group(function () {
@@ -283,7 +305,7 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
     Route::post('images/import/', UploadImageController::class)->name('images.import');
     Route::post('/uploads/process', [FileUploadController::class, 'process'])->name('uploads.process');
 
-    // Portal admin resources
+    // Portal admin resources (portal assistants are not included)
     Route::middleware(['user.admin'])->group(function () {
         Route::resource('users', UsersController::class)->except(['show']);
 
@@ -291,6 +313,9 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
         Route::resource('collections', CollectionsController::class)->except(['show']);
         Route::post('collections/{collection}/toggleClips', ClipsCollectionsController::class)
             ->name('collections.toggleClips');
+
+        //Articles
+        Route::resource('articles', ArticlesController::class)->except(['show']);
     });
 
     //Superadmin routes

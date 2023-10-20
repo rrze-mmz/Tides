@@ -3,7 +3,7 @@
 namespace Tests\Feature\Http\Controllers\Backend;
 
 use App\Enums\Role;
-use App\Http\Livewire\PresenterDataTable;
+use App\Livewire\PresenterDataTable;
 use App\Models\Clip;
 use App\Models\Presenter;
 use App\Models\Series;

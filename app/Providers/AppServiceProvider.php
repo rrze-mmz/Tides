@@ -29,6 +29,7 @@ class AppServiceProvider extends ServiceProvider
             'series' => 'App\Models\Series',
             'clip' => 'App\Models\Clip',
             'user' => 'App\Models\User',
+            'image' => 'App\Models\Image',
         ]);
     }
 }

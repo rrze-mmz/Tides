@@ -54,6 +54,14 @@
     </a>
 
     <a
+        href="{{ route('articles.index') }}"
+        class="flex items-left text-white hover:opacity-100 py-4
+        pl-6 nav-item  {{ setActiveLink(route('articles.index')) }}"
+    >
+        {{ trans_choice('common.menu.article', 2) }}
+    </a>
+
+    <a
         href="{{ route('collections.index') }}"
         class="flex items-left text-white hover:opacity-100 py-4
         pl-6 nav-item {{ setActiveLink(route('collections.index')) }}"
@@ -83,7 +91,7 @@
           placeholder-black">
             <form action="{{route('goto.series')}}" method="POST">
                 @csrf
-                <input class="mt-2 w-full rounded" type="text" name="seriesID" placeholder="Series ID"/>
+                <input class="mt-2 w-full rounded" type="text" name="seriesID" placeholder="Series ID" />
             </form>
         </div>
 
@@ -91,7 +99,7 @@
           placeholder-black">
             <form action="{{route('goto.clip')}}" method="POST">
                 @csrf
-                <input class="mt-2 w-full rounded" type="text" name="clipID" placeholder="Clip ID"/>
+                <input class="mt-2 w-full rounded" type="text" name="clipID" placeholder="Clip ID" />
             </form>
         </div>
     </div>

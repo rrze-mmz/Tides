@@ -5,7 +5,7 @@
             :messageType="$messageType"/>
     @endif
 
-    <form wire:submit.prevent="submitForm" action="#"
+    <form wire:submit="submitForm" action="#"
           class="flex flex-col"
     >
         @csrf
@@ -18,7 +18,7 @@
              x-on:livewire-upload-progress="progress = $event.detail.progress"
         >
 
-            <input wire:model="videoFile" type="file" id="videoFile" name="videoFile">
+            <input wire:model.live="videoFile" type="file" id="videoFile" name="videoFile">
             <p class="pt-2 text-sm italic">
                 * will start an Opencast workflow and your video will be transcoded directly to Opencast server
             </p>

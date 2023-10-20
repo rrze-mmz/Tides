@@ -69,7 +69,7 @@
                 <span class="pl-3">
                     {{
                     $series->clips
-                    ->sortByDesc('semester_id')
+                    ->sortBy('semester_id')
                     ->map(function ($clip){ return $clip->semester;})
                     ->pluck('name')
                     ->unique()

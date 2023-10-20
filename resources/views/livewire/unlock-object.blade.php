@@ -5,19 +5,19 @@
         <x-heroicon-o-lock-open class="ml-2 h-4 w-4"/>
     </x-button>
 
-    <x-modal wire:model.defer="showModal">
+    <x-modal wire:model="showModal">
         <x-slot name="title">
             Unlock series:{{ str($model->title)->limit(50,'...') }}
         </x-slot>
         <x-slot name="body">
             <form
-                wire:submit.prevent="unlock"
+                wire:submit="unlock"
                 action="#"
                 method="POST">
                 @csrf
 
                 <label for="password" class="mx-auto flex justify-center">
-                    <input class="my-4 rounded-md" type="password" name="password" wire:model="password">
+                    <input class="my-4 rounded-md" type="password" name="password" wire:model.live="password">
                 </label>
 
                 @error('password')

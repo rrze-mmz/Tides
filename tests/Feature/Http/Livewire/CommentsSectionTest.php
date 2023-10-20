@@ -1,7 +1,7 @@
 <?php
 
 use App\Enums\Role;
-use App\Http\Livewire\CommentsSection;
+use App\Livewire\CommentsSection;
 use App\Models\Comment;
 use App\Models\User;
 use App\Notifications\NewComment;
@@ -10,6 +10,7 @@ use Facades\Tests\Setup\SeriesFactory;
 use Illuminate\Support\Facades\Notification;
 use Livewire\Livewire;
 
+use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\get;
 
 beforeEach(function () {
@@ -152,8 +153,11 @@ test('a user cannot delete other users comment', function () {
         'model' => $this->clip,
         'type' => 'frontend',
     ])
-        ->call('deleteComment', $comment)
-        ->assertSee('test comment');
+        ->call('deleteComment', $comment);
+
+    assertDatabaseHas('comments', [
+        'id' => $comment->id,
+    ]);
 });
 
 test('an admin can delete a not owned comment', function () {

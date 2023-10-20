@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Livewire;
 
-use App\Models\Device;
+use App\Models\Article;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -10,7 +10,7 @@ use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class DevicesDataTable extends Component
+class ArticlesDataTable extends Component
 {
     use WithPagination;
 
@@ -27,9 +27,6 @@ class DevicesDataTable extends Component
         $this->sortField = $field;
     }
 
-    /**
-     * Updates the status of the component if search input changed
-     */
     public function updatingSearch(): void
     {
         $this->resetPage();
@@ -39,11 +36,9 @@ class DevicesDataTable extends Component
     {
         $search = trim(Str::lower($this->search));
 
-        $devices = Device::search($search)
-            ->orWhereHas('location', function ($q) use ($search) {
-                $q->WhereRaw("lower(name) like ('%{$search}%')");
-            })->paginate(30);
+        $articles = Article::search($search)
+            ->paginate(30);
 
-        return view('livewire.devices-data-table', ['devices' => $devices]);
+        return view('livewire.articles-data-table', ['articles' => $articles]);
     }
 }

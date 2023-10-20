@@ -135,7 +135,7 @@ it('shows feed links for different formats', function () {
 it('shows series multiple semester info if has clips from multiple semesters', function () {
     $series = SeriesFactory::withClips(2)->withAssets(1)->create();
     $firstClip = $series->clips()->first();
-    $firstClip->semester_id = 3;
+    $firstClip->semester_id = 1;
     $firstClip->save();
 
     get(route('frontend.series.show', $series))

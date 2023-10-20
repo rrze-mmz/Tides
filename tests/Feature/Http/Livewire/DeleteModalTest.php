@@ -1,7 +1,7 @@
 <?php
 
 use App\Enums\Role;
-use App\Http\Livewire\DeleteModalWindow;
+use App\Livewire\DeleteModalWindow;
 use App\Models\Image;
 use Facades\Tests\Setup\FileFactory;
 use Illuminate\Support\Facades\Storage;

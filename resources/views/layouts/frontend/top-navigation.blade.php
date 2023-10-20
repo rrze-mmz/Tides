@@ -20,9 +20,14 @@
                 Organizations
             </a>
         </span>
-        <span class="pr-10 no-underline hover:underline">
-            <a href="{{ route('frontend.series.index') }}" class="text-lg text-white">
+        <span class="no-underline hover:underline">
+            <a href="{{ route('live-now') }}" class="text-lg text-white">
                 Live now!
+            </a>
+        </span>
+        <span class="pr-10 no-underline hover:underline">
+            <a href="{{ route('frontend.faq') }}" class="text-lg text-white">
+                FAQs
             </a>
         </span>
     </nav>

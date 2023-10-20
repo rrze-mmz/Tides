@@ -4,7 +4,7 @@
     <div class="flex border-b border-black pb-2 font-semibold font-2xl">
         Create a device
     </div>
-    <div class="flex px-2 py-2">
+    <div class="flex p-2">
         <form action="{{ route('devices.store') }}"
               method="POST" class="w-4/5">
             @csrf
@@ -116,7 +116,8 @@
                 />
 
                 <div class="col-span-7 w-4/5 pt-10">
-                    <x-form.button :link="$link=false" type="submit" text="Create device"/>
+                    <x-form.button :link="$link=false"
+                                   type="submit" text="Create device" />
                 </div>
             </div>
 

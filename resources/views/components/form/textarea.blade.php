@@ -7,7 +7,7 @@
         </label>
     </div>
     <div class="col-start-2 col-end-8">
-        <x-trix name="description">{{$value}}</x-trix>
+        <x-trix name="{{$fieldName}}">{{$value}}</x-trix>
     </div>
 
     @error($fieldName)

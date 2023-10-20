@@ -1,7 +1,7 @@
 <?php
 
 use App\Enums\Role;
-use App\Http\Livewire\DevicesDataTable;
+use App\Livewire\DevicesDataTable;
 use App\Models\Device;
 use App\Models\DeviceLocation;
 use Livewire\Livewire;
