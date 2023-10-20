@@ -22,4 +22,9 @@ class Livestream extends BaseModel
     {
         return $this->belongsTo(Clip::class)->withDefault();
     }
+
+    public function scopeActive($query): mixed
+    {
+        return $query->whereNotNull('clip_id');
+    }
 }

@@ -4,6 +4,7 @@ namespace Tests;
 
 use App\Models\AcademicDegree;
 use App\Models\Acl;
+use App\Models\Article;
 use App\Models\Image;
 use App\Models\Language;
 use App\Models\Organization;
@@ -50,6 +51,24 @@ abstract class TestCase extends BaseTestCase
         Acl::create([
             'name' => 'lms',
             'description' => 'Material is accessed via LMS (moodle, Ilias, etc.) log in',
+        ]);
+
+        Article::create([
+            'title_en' => 'Contact',
+            'content_en' => 'Contact page',
+            'title_de' => 'Kontakt',
+            'content_de' => 'Kontakt Seite',
+            'slug' => 'contact',
+            'is_published' => true,
+        ]);
+
+        Article::create([
+            'title_en' => 'FAQ',
+            'content_en' => 'FAQ page',
+            'title_de' => 'FAQ',
+            'content_de' => 'FAQ Seite',
+            'slug' => 'faq',
+            'is_published' => true,
         ]);
 
         Language::create([

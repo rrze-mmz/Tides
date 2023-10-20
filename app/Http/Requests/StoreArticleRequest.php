@@ -6,7 +6,7 @@ use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UpdateArticleRequest extends FormRequest
+class StoreArticleRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -19,16 +19,14 @@ class UpdateArticleRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array|string>
      */
     public function rules(): array
     {
-        $articleId = $this->route('article');
-
         return [
-            'title_en' => ['required', 'string', 'max:255', Rule::unique('articles')->ignore($articleId)],
-            'title_de' => ['required', 'string', 'max:255', Rule::unique('articles')->ignore($articleId)],
-            'slug' => ['required', 'string', Rule::unique('articles')->ignore($articleId)],
+            'title_en' => ['required', 'string', 'max:255'],
+            'title_de' => ['required', 'string', 'max:255'],
+            'slug' => ['required', 'string', Rule::unique('articles')],
             'content_en' => ['string', 'max:40000'],
             'content_de' => ['string', 'max:40000'],
             'is_published' => ['required', 'boolean'],

@@ -26,9 +26,12 @@
         </div>
     </main>
 
-    <footer class="flex h-10 items-center justify-center bg-gray-800">
-        <div class="text-sm text-gray-300 space-x-4 sm:text-base">
+    <footer class="grid h-16 grid-cols-3 gap-2 items-center justify-between bg-gray-800">
+        <div class="col-span-2 items-center text-center text-sm text-gray-300 sm:text-base">
             Copyright @ {{ Illuminate\Support\Carbon::now()->year }} MIT Licence
+        </div>
+        <div class="text-sm">
+            @include('layouts.frontend.bottom-navigation')
         </div>
     </footer>
 </div>

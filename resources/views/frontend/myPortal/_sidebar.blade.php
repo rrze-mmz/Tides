@@ -2,7 +2,7 @@
 <aside class="w-64"
        aria-label="Sidebar">
     <div class="overflow-y-auto rounded bg-gray-50 px-3 py-4 text-white dark:bg-gray-800">
-        <ul class="space-y-2">
+        <ul class="space-y-2 list-none">
             <li>
                 <a href="{{ route('frontend.userSettings.edit') }}"
                    class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg
@@ -22,7 +22,7 @@
                                    dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
                 >
                     <x-heroicon-o-book-open class="w-6 h-6 text-gray-500 transition duration-75
-                                    dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"/>
+                                    dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
                     <span class="ml-3">
                                         {{ __('myPortal._sidebar_menu.Series subscriptions') }}
                                     </span>
@@ -35,7 +35,7 @@
                 >
                     <x-heroicon-o-chat class="flex-shrink-0 w-6 h-6 text-gray-500 transition
                                     duration-75 dark:text-gray-400 group-hover:text-gray-900
-                                    dark:group-hover:text-white"/>
+                                    dark:group-hover:text-white" />
                     <span class="ml-3 flex-1 whitespace-nowrap">
                             {{ __('myPortal._sidebar_menu.Comments') }}
                         </span>
@@ -56,7 +56,7 @@
                                    dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
                         >
                             <x-heroicon-o-exclamation-circle class="w-6 h-6 text-gray-500 transition duration-75
-                                    dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"/>
+                                    dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
                             <span class="ml-3">
                                         {{ __('myPortal._sidebar_menu.Application status') }}
                                     </span>
@@ -69,7 +69,7 @@
                                    dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
                         >
                             <x-heroicon-o-exclamation-circle class="w-6 h-6 text-gray-500 transition duration-75
-                                    dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"/>
+                                    dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
                             <span class="ml-3">
                                         {{ __('myPortal._sidebar_menu.Apply for admin portal') }}
                                     </span>

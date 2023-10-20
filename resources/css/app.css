@@ -67,6 +67,34 @@
 
 }
 
+article ol li {
+    list-style: decimal;
+    margin-left: 1em;
+}
+
+article ul li {
+    list-style: disc;
+    margin-left: 1em;
+}
+
+.trix-content ol li {
+    list-style: decimal;
+    margin-left: 1em;
+}
+
+.trix-content ul li {
+    list-style: disc;
+    margin-left: 1em;
+}
+
+.trix-content a {
+}
+
+trix-editor {
+    height: 350px !important;
+    max-height: 350px !important;
+    overflow-y: auto !important;
+}
 
 /*.account-link:hover {*/
 /*    background: #3d68ff;*/

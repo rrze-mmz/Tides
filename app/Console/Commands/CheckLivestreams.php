@@ -33,7 +33,7 @@ class CheckLivestreams extends Command
             return Command::SUCCESS;
         }
 
-        $activeLivestreams = Livestream::whereNotNull('clip_id')->get();
+        $activeLivestreams = Livestream::active()->get();
         if ($activeLivestreams->isEmpty()) {
             $this->info('No active livestreams found');
 

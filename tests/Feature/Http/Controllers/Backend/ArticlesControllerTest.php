@@ -54,10 +54,10 @@ it('allows access to articles routes for admin and superadmin', function () {
 
     get(route('articles.index'))->assertOk();
     get(route('articles.create'))->assertOk();
-    post(route('articles.store'))->assertOk();
+    post(route('articles.store'))->assertRedirect(route('articles.create'));
     get(route('articles.edit', $article))->assertOk();
-    patch(route('articles.update', $article))->assertRedirect();
-    delete(route('articles.destroy', $article))->assertOk();
+    patch(route('articles.update', $article))->assertRedirect(route('articles.edit', $article));
+    delete(route('articles.destroy', $article))->assertRedirect();
 });
 
 it('shows all articles in the index page', function () {
@@ -65,6 +65,36 @@ it('shows all articles in the index page', function () {
     [$articleA, $articleB] = Article::factory(2)->create();
 
     get(route('articles.index'))->assertSee($articleA->slug)->assertSee($articleB->slug);
+});
+
+it('displays create new article form and all form fields', function () {
+    signInRole(Role::ADMIN);
+
+    get(route('articles.create'))->assertSee('title_en')
+        ->assertSee('title_de')
+        ->assertSee('content_en')
+        ->assertSee('content_de')
+        ->assertSee('is_published')
+        ->assertViewIs('backend.articles.create');
+});
+
+it('validates article store request', function () {
+    signInRole(Role::ADMIN);
+    post(route('articles.store'), [])
+        ->assertSessionHasErrors(['title_en', 'title_de', 'slug']);
+});
+
+it('creates an article', function () {
+    signInRole(Role::ADMIN);
+    post(route('articles.store'), $attributes = [
+        'title_en' => 'Test title',
+        'title_de' => 'Das ist ein Test',
+        'content_en' => 'That is a test text',
+        'content_de' => 'Das ist ein Test Text',
+        'slug' => 'test-title',
+    ]);
+
+    assertDatabaseHas('articles', $attributes);
 });
 
 it('displays edit article form and all form fields ', function () {
@@ -80,6 +110,13 @@ it('displays edit article form and all form fields ', function () {
         ->assertViewIs('backend.articles.edit');
 });
 
+it('validates article update request', function () {
+    $article = Article::factory()->create();
+    signInRole(Role::ADMIN);
+    patch(route('articles.update', $article), [])
+        ->assertSessionHasErrors(['title_en', 'title_de', 'slug']);
+});
+
 it('updates an article', function () {
     $article = Article::factory()->create();
     signInRole(Role::ADMIN);
@@ -88,6 +125,7 @@ it('updates an article', function () {
         'title_de' => 'Das ist ein Test',
         'content_en' => 'That is a test text',
         'content_de' => 'Das ist ein Test Text',
+        'slug' => 'test-title',
     ]);
 
     $article->refresh();

@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Livestream;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 use function PHPUnit\Framework\assertInstanceOf;
@@ -13,4 +14,8 @@ beforeEach(function () {
 
 it('belongs to sometimes to a clip', function () {
     assertInstanceOf(BelongsTo::class, $this->livestream->clip());
+});
+
+it('has an active scope', function () {
+    expect(Livestream::active())->toBeInstanceOf(Builder::class);
 });

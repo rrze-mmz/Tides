@@ -43,6 +43,42 @@ it('has a faculties top menu item', function () {
     get(route('home'))->assertSee($menuItem, false);
 });
 
+it('has a live now menu item,', function () {
+    $menuItem = '<a href="'.route('live-now').'" class="text-lg text-white">';
+
+    get(route('home'))->assertSee($menuItem, false);
+});
+
+it('has an faq menu item,', function () {
+    $menuItem = '<a href="'.route('frontend.faq').'" class="text-lg text-white">';
+
+    get(route('home'))->assertSee($menuItem, false);
+});
+
+it('has a contact menu item,', function () {
+    $menuItem = '<a href="'.route('frontend.contact').'" class="text-white">';
+
+    get(route('home'))->assertSee($menuItem, false);
+});
+
+it('has an imprint menu item,', function () {
+    $menuItem = '<a href="'.route('frontend.contact').'" class="text-white">';
+
+    get(route('home'))->assertSee($menuItem, false);
+});
+
+it('has a privacy menu item,', function () {
+    $menuItem = '<a href="'.route('frontend.privacy').'" class="text-white">';
+
+    get(route('home'))->assertSee($menuItem, false);
+});
+
+it('has an accessibility menu item,', function () {
+    $menuItem = '<a href="'.route('frontend.accessibility').'" class="text-white">';
+
+    get(route('home'))->assertSee($menuItem, false);
+});
+
 it('changes portal language', function () {
     followingRedirects()->get('/set_lang/de');
 
@@ -179,4 +215,12 @@ it('hide non visible clip acls in series description', function () {
     $thirdClip->addAcls(collect([Acl::LMS()]));
 
     get(route('home'))->assertDontSee('portal, password, lms');
+});
+
+it('has an faq static page,', function () {
+    get(route('frontend.faq'))->assertOk();
+});
+
+it('has a contact static page,', function () {
+    get(route('frontend.contact'))->assertOk();
 });

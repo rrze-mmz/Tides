@@ -17,6 +17,7 @@
         "blade-ui-kit/blade-ui-kit": "^0.4",
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
         "elasticsearch/elasticsearch": "^7.0",
+        "graham-campbell/markdown": "^15.0",
         "guzzlehttp/guzzle": "^7.3",
         "intervention/image": "^2.7",
         "laravel/framework": "^10.0",
