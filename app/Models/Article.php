@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\RecordsActivity;
 use App\Models\Traits\Searchable;
 use App\Models\Traits\Slugable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -10,6 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Article extends BaseModel
 {
     use HasFactory;
+    use RecordsActivity;
     use Searchable;
     use Slugable;
 

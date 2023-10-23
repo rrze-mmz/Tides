@@ -132,3 +132,51 @@ it('updates an article', function () {
 
     assertDatabaseHas('articles', $attributes);
 });
+
+it('records activity when creating an article', function () {
+    $user = signInRole(Role::ADMIN);
+
+    post(route('articles.store'), $attributes = [
+        'title_en' => 'Test title',
+        'title_de' => 'Das ist ein Test',
+        'content_en' => 'That is a test text',
+        'content_de' => 'Das ist ein Test Text',
+        'slug' => 'test-title',
+    ]);
+
+    assertDatabaseHas('activities', [
+        'user_id' => $user->id,
+        'content_type' => 'article',
+        'change_message' => 'created article',
+    ]);
+});
+
+it('records activity when updating an article', function () {
+    $article = Article::factory()->create();
+    $user = signInRole(Role::ADMIN);
+    patch(route('articles.update', $article), $attributes = [
+        'title_en' => 'Test title',
+        'title_de' => 'Das ist ein Test',
+        'content_en' => 'That is a test text',
+        'content_de' => 'Das ist ein Test Text',
+        'slug' => 'test-title',
+    ]);
+
+    assertDatabaseHas('activities', [
+        'user_id' => $user->id,
+        'content_type' => 'article',
+        'change_message' => 'updated article',
+    ]);
+});
+
+it('records activity when deleting an article', function () {
+    $article = Article::factory()->create();
+    $user = signInRole(Role::ADMIN);
+    delete(route('articles.update', $article));
+
+    assertDatabaseHas('activities', [
+        'user_id' => $user->id,
+        'content_type' => 'article',
+        'change_message' => 'deleted article',
+    ]);
+});
