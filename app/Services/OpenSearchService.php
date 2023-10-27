@@ -2,50 +2,49 @@
 
 namespace App\Services;
 
-use App\Http\Clients\ElasticsearchClient;
+use App\Http\Clients\OpenSearchClient;
 use App\Models\Setting;
-use Elasticsearch\ClientBuilder;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use Log;
+use OpenSearch\ClientBuilder;
 
-class ElasticsearchService
+class OpenSearchService
 {
     private string $type;
 
     private Collection $response;
 
-    private Setting $elasticsearchSettings;
+    private Setting $openSearchSettings;
 
-    public function __construct(private ClientBuilder $clientBuilder, private ElasticsearchClient $client)
+    public function __construct(private ClientBuilder $clientBuilder, private OpenSearchClient $client)
     {
         $this->type = '';
         $this->response = collect([]);
 
-        $this->elasticsearchSettings = Setting::elasticSearch();
+        $this->openSearchSettings = Setting::openSearch();
     }
 
+    /*
+     * returns OpenSearch cluster health
+     */
     public function getHealth(): Collection
     {
         $this->response = collect([
             'releaseId' => [
                 'version' => [
-                    'number' => 'Elasticsearch server not available',
+                    'number' => 'OpenSearch server not available',
                     'build_type' => 'unknown',
                 ],
             ],
             'status' => 'failed',
         ]);
         try {
-            $response = $this->client->get('/', [
-                'headers' => [
-                    'Authorization' => 'Bearer '.config('elasticsearch.api_key'),
-                ],
-            ]);
+            $response = $this->client->get('/');
 
             if (! empty(json_encode((string) $response->getBody(), true))) {
                 $this->response->put('releaseId', json_decode((string) $response->getBody(), true))
@@ -61,22 +60,13 @@ class ElasticsearchService
     public function createIndex(Model $model): Collection
     {
         $this->type = $model->getTable();
-
         try {
             $params = [
-                'index' => $this->elasticsearchSettings->data['prefix'].$this->type,
-                'type' => $this->type,
+                'index' => $this->openSearchSettings->data['prefix'].$this->type,
                 'id' => "{$this->type}_$model->id",
                 'body' => $model->toJson(),
             ];
-
-            $this->response = collect($this->clientBuilder
-                ->setBasicAuthentication(
-                    $this->elasticsearchSettings->data['username'],
-                    $this->elasticsearchSettings->data['password']
-                )
-                ->build()
-                ->index($params));
+            $this->response = collect($this->clientBuilder->build()->index($params));
         } catch (Exception $exception) {
             Log::error($exception->getMessage());
         }
@@ -90,7 +80,7 @@ class ElasticsearchService
 
         try {
             $params = [
-                'index' => $this->elasticsearchSettings->data['prefix'].$this->type,
+                'index' => $this->openSearchSettings->data['prefix'].$this->type,
                 'id' => "{$this->type}_$model->id",
                 'body' => [
                     'doc' => $model->toArray(),
@@ -115,17 +105,11 @@ class ElasticsearchService
 
         try {
             $params = [
-                'index' => $this->elasticsearchSettings->data['prefix'].$this->type,
-                'type' => $this->type,
+                'index' => $this->openSearchSettings->data['prefix'].$this->type,
                 'id' => $this->type.'_'.$model->id,
             ];
 
-            $this->response = collect($this->clientBuilder
-                ->setBasicAuthentication(
-                    $this->elasticsearchSettings->data['username'],
-                    $this->elasticsearchSettings->data['password']
-                )
-                ->build()->delete($params));
+            $this->response = collect($this->clientBuilder->build()->delete($params));
         } catch (Exception $exception) {
             Log::error($exception->getMessage());
         }
@@ -156,7 +140,7 @@ class ElasticsearchService
     {
         try {
             $this->response =
-                collect($this->client->delete($this->elasticsearchSettings->data['prefix'].Str::lower($model)));
+                collect($this->client->delete($this->openSearchSettings->data['prefix'].Str::lower($model)));
         } catch (Exception $exception) {
             Log::error($exception->getMessage());
         }

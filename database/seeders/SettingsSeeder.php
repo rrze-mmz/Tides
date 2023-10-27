@@ -30,8 +30,8 @@ class SettingsSeeder extends Seeder
         ]);
 
         DB::table('settings')->insert([
-            'name' => 'elasticSearch',
-            'data' => json_encode(config('settings.elasticSearch')),
+            'name' => 'openSearch',
+            'data' => json_encode(config('settings.openSearch')),
         ]);
     }
 }

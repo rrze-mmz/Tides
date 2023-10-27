@@ -2,12 +2,12 @@
 
 namespace App\Providers;
 
-use App\Http\Clients\ElasticsearchClient;
+use App\Http\Clients\OpenSearchClient;
 use App\Models\Setting;
-use Elasticsearch\ClientBuilder;
 use Illuminate\Support\ServiceProvider;
+use OpenSearch\ClientBuilder;
 
-class ElasticsearchServiceProvider extends ServiceProvider
+class OpenSearchServiceProvider extends ServiceProvider
 {
     private array $settingsData;
 
@@ -21,19 +21,18 @@ class ElasticsearchServiceProvider extends ServiceProvider
 
             $builder = new ClientBuilder();
 
-            $connectionString =
-                "{$this->settingsData['username']}:{$this->settingsData['password']}
-                @{$this->settingsData['url']}:{$this->settingsData['port']}";
-
-            $builder->setHosts([$connectionString]);
+            $builder->setHosts([$this->settingsData['url'].':'.$this->settingsData['port']])
+                ->setBasicAuthentication($this->settingsData['username'], $this->settingsData['password'])
+                ->setSSLVerification(config('app.env') === 'production')
+                ->build();
 
             return $builder;
         });
 
-        $this->app->singleton(ElasticsearchClient::class, function () {
+        $this->app->singleton(OpenSearchClient::class, function () {
             $this->settingsData = $this->getConfig();
 
-            return new ElasticsearchClient([
+            return new OpenSearchClient([
                 'base_uri' => "{$this->settingsData['url']}:{$this->settingsData['port']}",
                 'verify' => config('app.env') === 'production',
                 'auth' => [
@@ -44,23 +43,23 @@ class ElasticsearchServiceProvider extends ServiceProvider
         });
     }
 
+    private function getConfig()
+    {
+        $setting = Setting::firstOrCreate(
+            ['name' => 'openSearch'],
+            [
+                'data' => config('settings.openSearch'),
+            ]
+        );
+
+        return $setting->data;
+    }
+
     /**
      * Bootstrap services.
      */
     public function boot(): void
     {
         //
-    }
-
-    private function getConfig()
-    {
-        $setting = Setting::firstOrCreate(
-            ['name' => 'elasticSearch'],
-            [
-                'data' => config('settings.elasticSearch'),
-            ]
-        );
-
-        return $setting->data;
     }
 }

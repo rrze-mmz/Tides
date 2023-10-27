@@ -11,15 +11,7 @@ class Setting extends BaseModel
 {
     use HasFactory;
 
-    protected function data(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => json_decode($value, true),
-            set: fn ($value) => json_encode($value),
-        );
-    }
-
-    public function scopeOpenAdminPortalApplications()
+    public function scopeOpenAdminPortalApplications(): \Illuminate\Support\Collection
     {
         return DB::table('settings')
             ->select('name')
@@ -27,7 +19,10 @@ class Setting extends BaseModel
             ->get();
     }
 
-    public function scopeUser($query, User $user)
+    /**
+     * Scope a query to only include a single user settings
+     */
+    public function scopeUser($query, User $user): mixed
     {
         return $query->where('name', $user->username);
     }
@@ -57,10 +52,18 @@ class Setting extends BaseModel
     }
 
     /**
-     * Scope a query to only include elasticsearch settings
+     * Scope a query to only include OpenSearch settings
      */
-    public function scopeElasticSearch($query): mixed
+    public function scopeOpenSearch($query): mixed
     {
-        return $query->where('name', 'elasticSearch')->firstOrFail();
+        return $query->where('name', 'openSearch')->firstorFail();
+    }
+
+    protected function data(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => json_decode($value, true),
+            set: fn ($value) => json_encode($value),
+        );
     }
 }

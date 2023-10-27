@@ -11,10 +11,10 @@ use App\Http\Controllers\Backend\CollectionsController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\DevicesController;
 use App\Http\Controllers\Backend\DocumentController;
-use App\Http\Controllers\Backend\ElasticSearchSettingsController;
 use App\Http\Controllers\Backend\FileUploadController;
 use App\Http\Controllers\Backend\ImagesController;
 use App\Http\Controllers\Backend\OpencastSettingsController;
+use App\Http\Controllers\Backend\OpenSearchSettingsController;
 use App\Http\Controllers\Backend\PortalSettingsController;
 use App\Http\Controllers\Backend\PresentersController;
 use App\Http\Controllers\Backend\SeriesClipsController;
@@ -49,7 +49,7 @@ use App\Models\Activity;
 use App\Models\Article;
 use App\Models\Clip;
 use App\Models\Series;
-use App\Services\ElasticsearchService;
+use App\Services\OpenSearchService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
@@ -330,17 +330,17 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
             ->name('settings.streaming.show');
         Route::put('/settings/streaming', [StreamingSettingsController::class, 'update'])
             ->name('settings.streaming.update');
-        Route::get('/settings/elasticSearch', [ElasticSearchSettingsController::class, 'show'])
-            ->name('settings.elasticSearch.show');
-        Route::put('/settings/elasticSearch', [ElasticSearchSettingsController::class, 'update'])
-            ->name('settings.elasticSearch.update');
+        Route::get('/settings/openSearch', [OpenSearchSettingsController::class, 'show'])
+            ->name('settings.openSearch.show');
+        Route::put('/settings/openSearch', [OpenSearchSettingsController::class, 'update'])
+            ->name('settings.openSearch.update');
         Route::post('/adminPortal/application', AdminPortalApplicationController::class)
             ->name('admin.portal.application.grant');
     });
 });
 
-Route::get('/test/{series}/elk', function (Series $series, ElasticsearchService $elkService) {
+Route::get('/test/{series}/elk', function (Series $series, OpenSearchService $elkService) {
     $elkService->createIndex($series);
-})->name('elasticsearch.test');
+})->name('opensearch.test');
 
 require __DIR__.'/auth.php';

@@ -3,12 +3,13 @@
 namespace App\Observers;
 
 use App\Models\Clip;
-use App\Services\ElasticsearchService;
+use App\Services\OpenSearchService;
 
 class ClipObserver
 {
-    public function __construct(private ElasticsearchService $elasticsearchService)
-    {
+    public function __construct(
+        private OpenSearchService $openSearchService
+    ) {
     }
 
     public function creating(Clip $clip): void
@@ -42,7 +43,7 @@ class ClipObserver
         $clip->save();
         session()->flash('flashMessage', $clip->title.' '.__FUNCTION__.' successfully');
 
-        $this->elasticsearchService->createIndex($clip);
+        $this->openSearchService->createIndex($clip);
     }
 
     public function updating(Clip $clip): void
@@ -64,7 +65,7 @@ class ClipObserver
 
         session()->flash('flashMessage', "{$clip->title} ".__FUNCTION__.' successfully');
 
-        $this->elasticsearchService->updateIndex($clip);
+        $this->openSearchService->updateIndex($clip);
     }
 
     /**
@@ -74,7 +75,7 @@ class ClipObserver
     {
         session()->flash('flashMessage', "{$clip->title} ".__FUNCTION__.' successfully');
 
-        $this->elasticsearchService->deleteIndex($clip);
+        $this->openSearchService->deleteIndex($clip);
     }
 
     /**

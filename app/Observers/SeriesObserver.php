@@ -3,12 +3,12 @@
 namespace App\Observers;
 
 use App\Models\Series;
-use App\Services\ElasticsearchService;
+use App\Services\OpenSearchService;
 
 class SeriesObserver
 {
     public function __construct(
-        readonly private ElasticsearchService $elasticsearchService,
+        readonly private OpenSearchService $openSearchService,
     ) {
     }
 
@@ -19,7 +19,7 @@ class SeriesObserver
     {
         session()->flash('flashMessage', "{$series->title} ".__FUNCTION__.' successfully');
 
-        $this->elasticsearchService->createIndex($series);
+        $this->openSearchService->createIndex($series);
     }
 
     /**
@@ -29,7 +29,7 @@ class SeriesObserver
     {
         session()->flash('flashMessage', "{$series->title} ".__FUNCTION__.' successfully');
 
-        $this->elasticsearchService->updateIndex($series);
+        $this->openSearchService->updateIndex($series);
     }
 
     /**
@@ -39,7 +39,7 @@ class SeriesObserver
     {
         session()->flash('flashMessage', "{$series->title} ".__FUNCTION__.' successfully');
 
-        $this->elasticsearchService->deleteIndex($series);
+        $this->openSearchService->deleteIndex($series);
     }
 
     /**

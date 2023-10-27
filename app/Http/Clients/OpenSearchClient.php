@@ -4,6 +4,6 @@ namespace App\Http\Clients;
 
 use GuzzleHttp\Client;
 
-class ElasticsearchClient extends Client
+class OpenSearchClient extends Client
 {
 }

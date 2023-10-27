@@ -16,7 +16,7 @@
                     </h3>
                 </div>
                 <div>
-                    <x-heroicon-o-check-circle class="h-6 w-6 rounded text-green-600"/>
+                    <x-heroicon-o-check-circle class="h-6 w-6 rounded text-green-600" />
                 </div>
             </div>
 
@@ -36,7 +36,7 @@
                             Settings
                         </div>
                         <div>
-                            <x-heroicon-o-arrow-circle-right class="w-6"/>
+                            <x-heroicon-o-arrow-circle-right class="w-6" />
                         </div>
                     </x-button>
                 </a>
@@ -50,9 +50,9 @@
                 </div>
                 <div>
                     @if($opencastStatus->contains('pass'))
-                        <x-heroicon-o-check-circle class="h-6 w-6 rounded text-green-600"/>
+                        <x-heroicon-o-check-circle class="h-6 w-6 rounded text-green-600" />
                     @else
-                        <x-heroicon-o-x-circle class="h-6 w-6 rounded text-red-600"/>
+                        <x-heroicon-o-x-circle class="h-6 w-6 rounded text-red-600" />
                     @endif
                 </div>
             </div>
@@ -73,7 +73,7 @@
                             Settings
                         </div>
                         <div>
-                            <x-heroicon-o-arrow-circle-right class="w-6"/>
+                            <x-heroicon-o-arrow-circle-right class="w-6" />
                         </div>
                     </x-button>
                 </a>
@@ -87,9 +87,9 @@
                 </div>
                 <div>
                     @if($wowzaStatus->contains('pass'))
-                        <x-heroicon-o-check-circle class="h-6 w-6 rounded text-green-600"/>
+                        <x-heroicon-o-check-circle class="h-6 w-6 rounded text-green-600" />
                     @else
-                        <x-heroicon-o-x-circle class="h-6 w-6 rounded text-red-600"/>
+                        <x-heroicon-o-x-circle class="h-6 w-6 rounded text-red-600" />
                     @endif
                 </div>
             </div>
@@ -107,7 +107,7 @@
                             Settings
                         </div>
                         <div>
-                            <x-heroicon-o-arrow-circle-right class="w-6"/>
+                            <x-heroicon-o-arrow-circle-right class="w-6" />
                         </div>
                     </x-button>
                 </a>
@@ -117,38 +117,46 @@
         <div class="m-2 rounded-lg border-2 border-solid border-black p-2">
             <div class="flex place-content-around justify-between">
                 <div>
-                    <h3 class="pb-6 font-semibold">Elasticsearch
+                    <h3 class="pb-6 font-semibold  text-blue-500">OpenSearch
                     </h3>
                 </div>
                 <div>
-                    @if($elasticsearchStatus->contains('pass'))
-                        <x-heroicon-o-check-circle class="h-6 w-6 rounded text-green-600"/>
+                    @if($openSearchStatus->contains('pass'))
+                        <x-heroicon-o-check-circle class="h-6 w-6 rounded text-green-600" />
                     @else
-                        <x-heroicon-o-x-circle class="h-6 w-6 rounded text-red-600"/>
+                        <x-heroicon-o-x-circle class="h-6 w-6 rounded text-red-600" />
                     @endif
                 </div>
             </div>
 
-            <div>
+            @if($openSearchStatus->contains('pass'))
                 <div>
-                    Version:<span
-                        class="font-bold"> {{ $elasticsearchStatus->get('releaseId')['version']['number'] }} </span>
-                </div>
-                <div>
-                    Description:<span
-                        class="font-bold">{{ $elasticsearchStatus->get('releaseId')['version']['build_type'] }}
+                    <div>
+                        Version:<span
+                            class="font-bold"> {{ $openSearchStatus->get('releaseId')['version']['number'] }} </span>
+                    </div>
+                    <div>
+                        Description:<span
+                            class="font-bold">{{ $openSearchStatus->get('releaseId')['version']['distribution'] }}
                     </span>
+                    </div>
                 </div>
-            </div>
+            @else
+                <div>
+                    <div>
+                        OpenSearch server does not exists or not configured successfully </span>
+                    </div>
+                </div>
+            @endif
             <div class="pt-5">
-                <a href="{{ route('settings.elasticSearch.show') }}" class="flex flex-row">
+                <a href="{{ route('settings.openSearch.show') }}" class="flex flex-row">
                     <x-button type="button"
                               class="flex basis-1/2 content-center justify-center justify-between bg-blue-600 hover:bg-blue-700">
                         <div>
                             Settings
                         </div>
                         <div>
-                            <x-heroicon-o-arrow-circle-right class="w-6"/>
+                            <x-heroicon-o-arrow-circle-right class="w-6" />
                         </div>
                     </x-button>
                 </a>

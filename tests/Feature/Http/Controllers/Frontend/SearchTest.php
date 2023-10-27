@@ -3,16 +3,16 @@
 use App\Models\Asset;
 use App\Models\Clip;
 use App\Models\User;
-use App\Services\ElasticsearchService;
+use App\Services\OpenSearchService;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Testing\TestResponse;
-use Tests\Setup\WorksWithElasticsearchClient;
+use Tests\Setup\WorksWithOpenSearchClient;
 
 use function Pest\Laravel\get;
 
 uses(WithFaker::class);
 
-uses(WorksWithElasticsearchClient::class);
+uses(WorksWithOpenSearchClient::class);
 
 uses()->group('frontend');
 
@@ -29,8 +29,8 @@ beforeEach(function () {
 
     Asset::factory()->create(['clip_id' => $this->clip]);
 
-    $this->mockHandler = $this->swapElasticsearchGuzzleClient();
-    $this->elasticsearchService = app(ElasticsearchService::class);
+    $this->mockHandler = $this->swapOpenSearchGuzzleClient();
+    $this->openSearchService = app(OpenSearchService::class);
 });
 
 function searchFor($term): TestResponse
@@ -38,7 +38,7 @@ function searchFor($term): TestResponse
     return get(route('search').'?term='.$term);
 }
 
-it('uses elasticsearch if it is available', function () {
+it('uses OpenSearch if it is available', function () {
     $this->mockHandler->append(
         $this->mockClusterHealthResponse()
     );
@@ -59,7 +59,7 @@ it('shows an error when search term is less than 3 chars', function () {
 });
 
 it('renders a results page', function () {
-    //disable elasticsearch
+    //disable OpenSearch
     $this->mockHandler->append($this->mockClusterNotAvailable());
     $response = searchFor('test');
 
@@ -67,7 +67,7 @@ it('renders a results page', function () {
 });
 
 it('returns only clips with assets', function () {
-    //disable elasticsearch
+    //disable OpenSearch
     $this->mockHandler->append($this->mockClusterNotAvailable());
     Clip::factory()->create(['title' => 'without assets', 'description' => 'clip without assets']);
 
@@ -75,28 +75,28 @@ it('returns only clips with assets', function () {
 });
 
 it('searches for clip title', function () {
-    //disable elasticsearch
+    //disable OpenSearch
     $this->mockHandler->append($this->mockClusterNotAvailable());
 
     searchFor('lorem')->assertSee($this->clip->title);
 });
 
 it('searches for clip description', function () {
-    //disable elasticsearch
+    //disable OpenSearch
     $this->mockHandler->append($this->mockClusterNotAvailable());
 
     searchFor('dolor')->assertSee($this->clip->title);
 });
 
 it('searches for clip owner', function () {
-    //disable elasticsearch
+    //disable OpenSearch
     $this->mockHandler->append($this->mockClusterNotAvailable());
 
     searchFor('Doe')->assertSee($this->clip->owner->first_name);
 });
 
 it('searches for multiple owners', function () {
-    //disable elasticsearch
+    //disable OpenSearch
     $this->mockHandler->append($this->mockClusterNotAvailable());
     $secondClip = Clip::factory()->create([
         'title' => 'Lorem ipsum for testing  the search function',

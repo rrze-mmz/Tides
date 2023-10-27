@@ -5,11 +5,11 @@ namespace App\Observers;
 use App\Enums\Role;
 use App\Models\Setting;
 use App\Models\User;
-use App\Services\ElasticsearchService;
+use App\Services\OpenSearchService;
 
 class UserObserver
 {
-    public function __construct(private ElasticsearchService $elasticsearchService)
+    public function __construct(private OpenSearchService $openSearchService)
     {
     }
 
@@ -27,7 +27,7 @@ class UserObserver
 
         session()->flash('flashMessage', "{$user->getFullNameAttribute()} ".__FUNCTION__.' successfully');
 
-        $this->elasticsearchService->createIndex($user);
+        $this->openSearchService->createIndex($user);
     }
 
     /**
@@ -39,7 +39,7 @@ class UserObserver
     {
         session()->flash('flashMessage', "{$user->getFullNameAttribute()} ".__FUNCTION__.' successfully');
 
-        $this->elasticsearchService->updateIndex($user);
+        $this->openSearchService->updateIndex($user);
     }
 
     /**
@@ -52,6 +52,6 @@ class UserObserver
         Setting::where('name', $user->username)->delete();
         session()->flash('flashMessage', "{$user->getFullNameAttribute()} ".__FUNCTION__.' successfully');
 
-        $this->elasticsearchService->deleteIndex($user);
+        $this->openSearchService->deleteIndex($user);
     }
 }

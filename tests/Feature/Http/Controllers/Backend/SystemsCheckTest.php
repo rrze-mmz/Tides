@@ -1,37 +1,37 @@
 <?php
 
 use App\Enums\Role;
-use App\Services\ElasticsearchService;
 use App\Services\OpencastService;
+use App\Services\OpenSearchService;
 use App\Services\WowzaService;
 use Illuminate\Foundation\Testing\WithFaker;
-use Tests\Setup\WorksWithElasticsearchClient;
 use Tests\Setup\WorksWithOpencastClient;
+use Tests\Setup\WorksWithOpenSearchClient;
 use Tests\Setup\WorksWithWowzaClient;
 
 use function Pest\Laravel\get;
 
 uses(WithFaker::class);
-uses(WorksWithElasticsearchClient::class);
 uses(WorksWithOpencastClient::class);
 uses(WorksWithWowzaClient::class);
+uses(WorksWithOpenSearchClient::class);
 uses()->group('backend');
 
 beforeEach(function () {
     $this->mockOpencastHandler = $this->swapOpencastClient();
     $this->mockWowzaHandler = $this->swapWowzaClient();
-    $this->mockElasticsearchHandler = $this->swapElasticsearchGuzzleClient();
+    $this->mockOpenSearchHandler = $this->swapOpenSearchGuzzleClient();
 
     $this->opencastService = app(OpencastService::class);
     $this->wowzaService = app(WowzaService::class);
-    $this->elasticsearchService = app(ElasticsearchService::class);
+    $this->openSearchService = app(OpenSearchService::class);
 });
 
 test('a moderator is now allowed to view system cheks page', function () {
     signInRole(Role::MODERATOR);
     $this->mockOpencastHandler->append($this->mockServerNotAvailable());
     $this->mockWowzaHandler->append($this->mockServerNotAvailable());
-    $this->mockElasticsearchHandler->append(($this->mockClusterHealthResponse()));
+    $this->mockOpenSearchHandler->append($this->mockClusterHealthResponse());
 
     get(route('systems.status'))->assertForbidden();
 });
@@ -40,7 +40,7 @@ it('should check for opencast server', function () {
     signInRole(Role::SUPERADMIN);
     $this->mockOpencastHandler->append($this->mockServerNotAvailable());
     $this->mockWowzaHandler->append($this->mockServerNotAvailable());
-    $this->mockElasticsearchHandler->append(($this->mockClusterHealthResponse()));
+    $this->mockOpenSearchHandler->append($this->mockClusterHealthResponse());
 
     get(route('systems.status'))->assertSee('Opencast version');
 });
@@ -49,7 +49,7 @@ it('shows an info message if opencast server is not available', function () {
     signInRole(Role::SUPERADMIN);
     $this->mockOpencastHandler->append($this->mockServerNotAvailable());
     $this->mockWowzaHandler->append($this->mockCheckApiConnection());
-    $this->mockElasticsearchHandler->append(($this->mockClusterNotAvailable()));
+    $this->mockOpenSearchHandler->append($this->mockClusterNotAvailable());
 
     get(route('systems.status'))
         ->assertOk()
@@ -60,7 +60,7 @@ it('should check for opencast status', function () {
     signInRole(Role::SUPERADMIN);
     $this->mockOpencastHandler->append($this->mockHealthResponse());
     $this->mockWowzaHandler->append($this->mockCheckApiConnection());
-    $this->mockElasticsearchHandler->append(($this->mockClusterHealthResponse()));
+    $this->mockOpenSearchHandler->append($this->mockClusterHealthResponse());
 
     get(route('systems.status'))->assertOk()->assertSee('8.10.0');
 });
@@ -69,7 +69,7 @@ it('should check for wowza server', function () {
     signInRole(Role::SUPERADMIN);
     $this->mockOpencastHandler->append($this->mockServerNotAvailable());
     $this->mockWowzaHandler->append($this->mockServerNotAvailable());
-    $this->mockElasticsearchHandler->append(($this->mockClusterNotAvailable()));
+    $this->mockOpenSearchHandler->append($this->mockClusterNotAvailable());
 
     get(route('systems.status'))->assertSee('Wowza description');
 });
@@ -78,7 +78,7 @@ it('shows an info message if wowza server is not available', function () {
     signInRole(Role::SUPERADMIN);
     $this->mockOpencastHandler->append($this->mockServerNotAvailable());
     $this->mockWowzaHandler->append($this->mockServerNotAvailable());
-    $this->mockElasticsearchHandler->append(($this->mockClusterNotAvailable()));
+    $this->mockOpenSearchHandler->append($this->mockClusterHealthResponse());
 
     get(route('systems.status'))
         ->assertOk()
@@ -89,20 +89,20 @@ it('should check for wowza status', function () {
     signInRole(Role::SUPERADMIN);
     $this->mockOpencastHandler->append($this->mockHealthResponse());
     $this->mockWowzaHandler->append($this->mockCheckApiConnection());
-    $this->mockElasticsearchHandler->append(($this->mockClusterHealthResponse()));
+    $this->mockOpenSearchHandler->append($this->mockClusterHealthResponse());
 
     get(route('systems.status'))
         ->assertOk()
         ->assertSee('Wowza Streaming Engine X Perpetual Edition X.X.X.xxx buildYYYVERSION');
 });
 
-it('should check for elasticsearch server', function () {
+it('should check for OpenSearch server', function () {
     signInRole(Role::SUPERADMIN);
     $this->mockOpencastHandler->append($this->mockServerNotAvailable());
     $this->mockWowzaHandler->append($this->mockServerNotAvailable());
-    $this->mockElasticsearchHandler->append($this->mockClusterNotAvailable());
+    $this->mockOpenSearchHandler->append($this->mockClusterHealthResponse());
 
-    get(route('systems.status'))->assertSee('Elasticsearch');
+    get(route('systems.status'))->assertSee('OpenSearch');
 });
 
 afterEach(function () {

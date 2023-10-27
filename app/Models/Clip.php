@@ -43,7 +43,7 @@ class Clip extends BaseModel
     // search columns for searchable trait
     protected array $searchable = ['title', 'description'];
 
-    // hide clip password from elasticsearch index
+    // hide clip password from OpenSearch index
     protected $hidden = ['password'];
 
     protected $dispatchesEvents = [

@@ -2,44 +2,30 @@
 
 namespace App\Console\Commands;
 
-use App\Services\ElasticsearchService;
-use GuzzleHttp\Exception\GuzzleException;
+use App\Services\OpenSearchService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 
-class ElasticsearchRebuildIndexes extends Command
+class OpenSearchRebuildIndexes extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'elasticsearch:rebuild-indexes {model : The model index}';
+    protected $signature = 'opensearch:rebuild-indexes {model : the model to be indexed}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Rebuild indexes for a given model';
-
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
+    protected $description = 'Rebuild OpenSearch indexes for the given model';
 
     /**
      * Execute the console command.
-     *
-     *
-     * @throws GuzzleException
      */
-    public function handle(ElasticsearchService $elasticsearchService): int
+    public function handle(OpenSearchService $openSearchService)
     {
         $modelName = Str::singular($this->argument('model'));
 
@@ -53,12 +39,12 @@ class ElasticsearchRebuildIndexes extends Command
 
         $modelCollection = $modelClass::all();
 
-        $elasticsearchService->deleteIndexes(Str::plural($this->argument('model')));
+        $openSearchService->deleteIndexes(Str::plural($this->argument('model')));
 
         $this->info($modelName.' Indexes deleted successfully');
 
-        $modelCollection->each(function ($series) use ($elasticsearchService) {
-            $elasticsearchService->createIndex($series);
+        $modelCollection->each(function ($series) use ($openSearchService) {
+            $openSearchService->createIndex($series);
         });
 
         $this->info("{$modelCollection->count()} ".Str::plural($modelName).' Indexes created successfully');

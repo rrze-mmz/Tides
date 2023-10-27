@@ -2,19 +2,19 @@
 
 namespace App\Console\Commands;
 
-use App\Services\ElasticsearchService;
+use App\Services\OpenSearchService;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 
-class ElasticsearchDeleteIndexes extends Command
+class OpenSearchDeleteIndexes extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'elasticsearch:delete-indexes {model : The model index}';
+    protected $signature = 'opensearch:delete-indexes {model : The model index}';
 
     /**
      * The console command description.
@@ -39,11 +39,11 @@ class ElasticsearchDeleteIndexes extends Command
      *
      * @throws GuzzleException
      */
-    public function handle(ElasticsearchService $elasticsearchService): int
+    public function handle(OpenSearchService $openSearchService): int
     {
         $modelName = Str::singular($this->argument('model'));
 
-        $elasticsearchService->deleteIndexes(Str::plural($this->argument('model')));
+        $openSearchService->deleteIndexes(Str::plural($this->argument('model')));
 
         $this->info("{$modelName} Indexes deleted successfully");
 

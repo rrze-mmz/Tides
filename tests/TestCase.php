@@ -138,8 +138,8 @@ abstract class TestCase extends BaseTestCase
         ]);
 
         Setting::create([
-            'name' => 'elasticSearch',
-            'data' => \config('settings.elasticSearch'),
+            'name' => 'openSearch',
+            'data' => \config('settings.openSearch'),
         ]);
 
         Setting::create([

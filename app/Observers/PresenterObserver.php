@@ -3,11 +3,11 @@
 namespace App\Observers;
 
 use App\Models\Presenter;
-use App\Services\ElasticsearchService;
+use App\Services\OpenSearchService;
 
 class PresenterObserver
 {
-    public function __construct(private ElasticsearchService $elasticsearchService)
+    public function __construct(private OpenSearchService $openSearchService)
     {
     }
 
@@ -19,7 +19,7 @@ class PresenterObserver
     public function created(Presenter $presenter)
     {
         session()->flash('flashMessage', "{$presenter->getFullNameAttribute()} ".__FUNCTION__.' successfully');
-        $this->elasticsearchService->createIndex($presenter);
+        $this->openSearchService->createIndex($presenter);
     }
 
     /**
@@ -30,7 +30,7 @@ class PresenterObserver
     public function updated(Presenter $presenter)
     {
         session()->flash('flashMessage', "{$presenter->getFullNameAttribute()} ".__FUNCTION__.' successfully');
-        $this->elasticsearchService->updateIndex($presenter);
+        $this->openSearchService->updateIndex($presenter);
     }
 
     /**
@@ -41,6 +41,6 @@ class PresenterObserver
     public function deleted(Presenter $presenter)
     {
         session()->flash('flashMessage', "{$presenter->getFullNameAttribute()} ".__FUNCTION__.' successfully');
-        $this->elasticsearchService->deleteIndex($presenter);
+        $this->openSearchService->deleteIndex($presenter);
     }
 }

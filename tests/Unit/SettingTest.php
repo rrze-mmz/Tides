@@ -22,6 +22,6 @@ it('has a user scope', function () {
     expect(Setting::user(User::factory()->create()))->toBeInstanceOf(Builder::class);
 });
 
-it('has an elastic search scope', function () {
-    expect(Setting::elasticSearch())->toBeInstanceOf(Setting::class);
+it('has an Opensearch scope', function () {
+    expect(Setting::openSearch())->toBeInstanceOf(Setting::class);
 });
