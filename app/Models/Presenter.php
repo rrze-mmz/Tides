@@ -54,6 +54,13 @@ class Presenter extends BaseModel
         return $this->clips->whereNull('series_id');
     }
 
+    public function getImageUrl(): string
+    {
+        return (! is_null($this->image))
+            ? env('app_url').'/images/'.$this->image?->file_name
+            : env('app_url').'/images/DummyMann.png';
+    }
+
     /**
      * Degree relationship
      */

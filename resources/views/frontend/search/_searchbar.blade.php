@@ -1,6 +1,6 @@
 <div class="flex content-center justify-center">
     <form method="GET"
-          action="search"
+          action="{{route('search')}}"
           class="w-3/5">
 
         <div class="p-2">

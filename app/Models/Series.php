@@ -223,12 +223,29 @@ class Series extends BaseModel
          */
         $clips = (auth()->user()?->id === $this->owner_id || auth()->user()?->isAdmin())
             ? $this->clips
-            : $this->clips->filter(fn ($clip) => $clip->assets->count() && $clip->is_public);
+            : $this->clips->filter(fn ($clip) => $clip->assets->count() && $clip->is_public && ! $clip->is_livestream);
 
         //iterate every clip and get a unique acl name
         return $clips->map(function ($clip) {
             return $clip->acls->pluck('name');
         })->flatten()->unique()->values()->implode(', ');
+    }
+
+    /**
+     * Returns a comma seperated semester name for all clips
+     *
+     * @return mixed
+     */
+    public function fetchClipsSemester(): string
+    {
+        return $this->clips
+            ->sortBy('semester_id')
+            ->map(function ($clip) {
+                return $clip->semester;
+            })
+            ->pluck('name')
+            ->unique()
+            ->implode(', ');
     }
 
     /**

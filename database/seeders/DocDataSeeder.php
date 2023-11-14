@@ -49,6 +49,7 @@ class DocDataSeeder extends Seeder
             '30' => 'Hon.-Prof. Dr.-Ing.',
             '31' => 'B. Sc.',
             '32' => 'OStRin',
+            '33' => 'PD Dr.-Ing. habil.',
         ]);
 
         $list->each(function ($value, $key) {

@@ -22,12 +22,27 @@ class ShowSearchResultsController extends Controller
 
         //check whether OpenSearch server is up and running
         if ($health->contains('pass')) {
-            $results = $openSearchService->searchIndexes($request->term);
-            $counter = $results['hits']['total']['value'];
+            $results = [];
 
-            $searchResults = $searchResults->put('clips', $results)->put('counter', $counter);
+            $filters = [];
+            if (! auth()->check() || auth()->user()->cannot('administrate-admin-portal-pages')) {
+                $filters['is_public'] = 'true';
+            }
+            //keep this order to pass testing search result
+            $results['clips'] = $openSearchService->searchIndexes('tides_clips', $request->term, $filters);
+            $results['series'] = $openSearchService->searchIndexes('tides_series', $request->term, $filters);
 
-            return view('frontend.search.results.opensearch', compact('searchResults'));
+            $results['series']['counter'] = ($results['series']->isNotEmpty())
+                ? $results['series']['hits']['total']['value'] : [];
+            $results['clips']['counter'] = ($results['clips']->isNotEmpty())
+                ? $results['clips']['hits']['total']['value'] : [];
+
+            $searchResults =
+                $searchResults->put('series', $results['series'])->put('series_counter', $results['series']['counter']);
+            $searchResults =
+                $searchResults->put('clips', $results['clips'])->put('clips_counter', $results['clips']['counter']);
+
+            return view('frontend.search.results.opensearch.index', compact('searchResults'));
         } else { //use slow db __invoke if no OpenSearch node is found
             $clips = Clip::with('presenters', 'assets')
                 ->search($request->term)

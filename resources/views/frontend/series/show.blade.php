@@ -3,6 +3,11 @@
 
 @section('content')
     <div class="container mx-auto mt-16 md:mt-16">
+        <div class="pb-10">
+            @include('frontend.search._searchbar')
+        </div>
+
+        
         <div class="flex justify-between border-b-2 border-black pb-2">
             <h2 class="text-2xl font-bold">{{ $series->title }} [ID: {{ $series->id }}]</h2>
             @cannot('administrate-admin-portal-pages')
@@ -67,14 +72,7 @@
             <div class="flex w-1/4 items-center">
                 <x-heroicon-o-clock class="h-6 w-6" />
                 <span class="pl-3">
-                    {{
-                    $series->clips
-                    ->sortBy('semester_id')
-                    ->map(function ($clip){ return $clip->semester;})
-                    ->pluck('name')
-                    ->unique()
-                    ->implode(', ')
-                    }}
+                    {{  $series->fetchClipsSemester() }}
                 </span>
             </div>
 

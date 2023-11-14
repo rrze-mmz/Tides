@@ -19,10 +19,11 @@ class ShowOrganizationsController extends Controller
 
     public function show(Organization $organization)
     {
-        $orgSeries = Series::with(['organization' => function ($q) use ($organization) {
+        $orgSeries = Series::whereHas('organization', function ($q) use ($organization) {
             $string = Str::substr($organization->orgno, 0, 2);
             $q->whereRaw('orgno  like (?)', ["{$string}%"]);
-        }])->isPublic()
+        })->isPublic()
+            ->withLastPublicClip()
             ->hasClipsWithAssets()
             ->orderByDesc('updated_at')
             ->paginate(12);

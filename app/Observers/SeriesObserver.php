@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Http\Resources\SeriesResource;
 use App\Models\Series;
 use App\Services\OpenSearchService;
 
@@ -19,7 +20,7 @@ class SeriesObserver
     {
         session()->flash('flashMessage', "{$series->title} ".__FUNCTION__.' successfully');
 
-        $this->openSearchService->createIndex($series);
+        $this->openSearchService->createIndex(new SeriesResource($series));
     }
 
     /**
@@ -29,7 +30,7 @@ class SeriesObserver
     {
         session()->flash('flashMessage', "{$series->title} ".__FUNCTION__.' successfully');
 
-        $this->openSearchService->updateIndex($series);
+        $this->openSearchService->updateIndex(new SeriesResource($series));
     }
 
     /**

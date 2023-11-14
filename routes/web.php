@@ -58,7 +58,7 @@ Route::redirect('/home', '/');
 Route::redirect('/admin', '/admin/dashboard');
 
 //Quick __invoke
-Route::get('search', ShowSearchResultsController::class)->name('search');
+Route::get('/search', ShowSearchResultsController::class)->name('search');
 
 //frontend series routes
 

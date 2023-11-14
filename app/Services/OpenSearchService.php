@@ -57,7 +57,7 @@ class OpenSearchService
         return $this->response;
     }
 
-    public function createIndex(Model $model): Collection
+    public function createIndex($model): Collection
     {
         $this->type = $model->getTable();
         try {
@@ -74,7 +74,7 @@ class OpenSearchService
         return $this->response;
     }
 
-    public function updateIndex(Model $model): Collection
+    public function updateIndex($model): Collection
     {
         $this->type = $model->getTable();
 
@@ -83,7 +83,7 @@ class OpenSearchService
                 'index' => $this->openSearchSettings->data['prefix'].$this->type,
                 'id' => "{$this->type}_$model->id",
                 'body' => [
-                    'doc' => $model->toArray(),
+                    'doc' => $model,
                     'doc_as_upsert' => true,
                 ],
             ];
@@ -93,6 +93,7 @@ class OpenSearchService
             //avoid error messages if it is running on console command
             if (! App::runningInConsole()) {
                 Log::error($exception->getMessage());
+                Log::info($model->toJson());
             }
         }
 
@@ -148,44 +149,45 @@ class OpenSearchService
         return $this->response;
     }
 
-    public function searchIndexes($term, string $index = 'tides_clips'): Collection
+    public function searchIndexes(string $index, string $searchTerm, array $filters = []): Collection
     {
+        $filtersCollection = collect();
+        if (! empty($filters)) {
+            $filtersCollection->put('term', collect($filters));
+        }
         try {
             $params = [
                 'index' => $index,
                 'body' => [
                     'sort' => [
-                        [
-                            'updated_at' => [
-                                'order' => 'desc',
-                            ],
-                        ],
+                        ['updated_at' => ['order' => 'desc']],
                     ],
                     'query' => [
-                        'multi_match' => [
-                            'query' => "{$term}",
-                            'fields' => [
-                                'title',
-                                'description',
+                        'bool' => [
+                            'must' => [
+                                'multi_match' => [
+                                    'query' => "{$searchTerm}",
+                                    'fuzziness' => 1,
+                                    'slop' => 1,
+                                    'max_expansions' => 1,
+                                    'prefix_length' => 1,
+                                ],
                             ],
-                            'fuzziness' => 1,
-                            'slop' => 1,
-                            'max_expansions' => 1,
-                            'prefix_length' => 1,
+                            'filter' => $filtersCollection->isNotEmpty() ? $filtersCollection->toArray() : [],
                         ],
                     ],
-                    '_source' => [
-                        '*',
-                    ],
+                    '_source' => ['*'],
                     'size' => 100,
                     'highlight' => [
                         'pre_tags' => '<mark>',
                         'post_tags' => '<\/mark>',
-                        'fields' => [
-                        ],
+                        'fields' => [],
                     ],
                 ],
             ];
+            //            if ($filters->isNotEmpty()) {
+            //                $params['body']['query']['bool']['must']['filter']['term'] = $filters->toArray();
+            //            }
             $this->response = collect($this->clientBuilder->build()->search($params));
         } catch (Exception $exception) {
             Log::error($exception->getMessage());

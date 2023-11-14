@@ -1,6 +1,9 @@
 <div class="my-2 flex w-full bg-white">
     <div class="mx-2 flex h-full w-48 place-items-center justify-center justify-items-center">
-        <img src="{{ 'thumbnails/'.$clip->get('posterImage') }}"
+        @php
+            dd($clip);
+        @endphp
+        <img src="{{ $clip->poster }}"
              alt="preview image">
     </div>
 
