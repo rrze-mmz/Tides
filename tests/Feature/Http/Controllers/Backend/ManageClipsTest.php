@@ -25,13 +25,13 @@ use function Pest\Laravel\post;
 uses()->group('backend');
 
 it('shows all portal clips in index page for assistants', function () {
-    Clip::factory(10)->create();
+    ClipFactory::withAssets(1)->create();
 
-    signInRole(Role::ASSISTANT);
+    signInRole(Role::MODERATOR);
 
     get(route('clips.index'))
         ->assertOk()
-        ->assertViewIs('backend.clips.index')->assertViewHas('clips')
+        ->assertViewIs('backend.clips.index')
         ->assertSee(Clip::all()->first()->title);
 });
 
@@ -144,13 +144,11 @@ it('shows all available form fields for create a new clip', function () {
 });
 
 it('shows all portal clips in index page for admins', function () {
-    Clip::factory(10)->create();
-
+    ClipFactory::create();
     signInRole(Role::ADMIN);
 
     get(route('clips.index'))
         ->assertOk()
-        ->assertViewIs('backend.clips.index')->assertViewHas('clips')
         ->assertSee(Clip::all()->first()->title);
 });
 

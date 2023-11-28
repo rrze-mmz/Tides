@@ -1,9 +1,14 @@
 <?php
 
+use App\Enums\Role;
 use App\Livewire\ClipsDataTable;
-use Livewire\Livewire;
 
-it('renders successfully', function () {
-    Livewire::test(ClipsDataTable::class)
-        ->assertStatus(200);
+use function Pest\Laravel\get;
+
+uses()->group('backend');
+
+it('renders a livewire data table component for clips index page', function () {
+    signInRole(Role::MODERATOR);
+
+    get(route('clips.index'))->assertSeeLivewire(ClipsDataTable::class);
 });

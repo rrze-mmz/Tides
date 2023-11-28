@@ -1,10 +1,11 @@
 <?php
 
 use App\Enums\Role;
+use App\Livewire\SearchDataTable;
+use Tests\Setup\WorksWithOpenSearchClient;
 
 uses()->group('backend');
-
-use App\Livewire\SearchDataTable;
+uses(WorksWithOpenSearchClient::class);
 
 use function Pest\Laravel\get;
 
@@ -23,9 +24,10 @@ it('denies showing admin search results for members or users', function () {
 });
 
 it('has a url for showing backend search results', function () {
-    get(route('admin.search'))->assertOk();
+    get(route('admin.search', ['term' => 'test']))->assertOk();
 });
 
 it('loads a livewire component for showing admin search results', function () {
-    get(route('admin.search'))->assertSeeLivewire(SearchDataTable::class);
+    get(route('admin.search', ['term' => 'test']))
+        ->assertSeeLivewire(SearchDataTable::class);
 });

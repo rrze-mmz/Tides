@@ -267,6 +267,11 @@
                     </tbody>
                 </table>
             </div>
+            <div class="flex pt-4">
+                <x-form.button :link="route('clips.create')"
+                               type="submit"
+                               text="Create new clip" />
+            </div>
             <div class="mt-8">
                 {{ $clips->links() }}
             </div>

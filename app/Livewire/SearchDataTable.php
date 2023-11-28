@@ -80,19 +80,23 @@ class SearchDataTable extends Component
                 $this->search,
                 $filters,
                 $this->page,
-                $this->perPage);
+                $this->perPage
+            );
 
             $results['series']['counter'] = ($results['series']->isNotEmpty())
                 ? $results['series']['hits']['total']['value'] : [];
             $searchResults =
                 $searchResults->put('series', $results['series'])
-                    ->put('series_counter', $results['series']['counter']);
-            $searchResults = $searchResults->put('searchTerm', $this->search);
+                    ->put('series_counter', $results['series']['counter'])
+                    ->put('searchTerm', $this->search)
+                    ->put('openSearch', true);
         } else {
             $search = trim(Str::lower($this->search));
             $series = Series::search($search)->withLastPublicClip()->paginate(30)->withQueryString();
             $searchResults->put('series', $series)
-                ->put('series_counter', $series->count());
+                ->put('series_counter', $series->count())
+                ->put('searchTerm', $this->search)
+                ->put('openSearch', false);
         }
 
         return view('livewire.search-data-table', compact('searchResults'));
