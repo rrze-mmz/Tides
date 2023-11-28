@@ -1,0 +1,4 @@
+{
+    "$schema": "/tmp/.mount_TinkeroUrRYB/resources/phpactor/phpactor.schema.json",
+    "language_server_phpstan.enabled": false
+}

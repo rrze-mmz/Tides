@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Http\Clients\OpenSearchClient;
 use App\Models\Setting;
+use Debugbar;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Database\Eloquent\Model;
@@ -57,7 +58,7 @@ class OpenSearchService
         return $this->response;
     }
 
-    public function createIndex(Model $model): Collection
+    public function createIndex($model): Collection
     {
         $this->type = $model->getTable();
         try {
@@ -74,7 +75,7 @@ class OpenSearchService
         return $this->response;
     }
 
-    public function updateIndex(Model $model): Collection
+    public function updateIndex($model): Collection
     {
         $this->type = $model->getTable();
 
@@ -83,7 +84,7 @@ class OpenSearchService
                 'index' => $this->openSearchSettings->data['prefix'].$this->type,
                 'id' => "{$this->type}_$model->id",
                 'body' => [
-                    'doc' => $model->toArray(),
+                    'doc' => $model,
                     'doc_as_upsert' => true,
                 ],
             ];
@@ -93,6 +94,7 @@ class OpenSearchService
             //avoid error messages if it is running on console command
             if (! App::runningInConsole()) {
                 Log::error($exception->getMessage());
+                Log::info($model->toJson());
             }
         }
 
@@ -148,41 +150,71 @@ class OpenSearchService
         return $this->response;
     }
 
-    public function searchIndexes($term, string $index = 'tides_clips'): Collection
-    {
-        try {
-            $params = [
-                'index' => $index,
-                'body' => [
-                    'sort' => [
-                        [
-                            'updated_at' => [
-                                'order' => 'desc',
-                            ],
-                        ],
-                    ],
-                    'query' => [
+    public function searchIndexes(
+        string $index,
+        string $searchTerm,
+        array $filters = [],
+        int $page = 1,
+        int $pageSize = 100
+    ): Collection {
+        $from = ($page - 1) * $pageSize;
+        $termFilters = [];
+        if (! empty($filters)) {
+            foreach ($filters as $key => $value) {
+                $termFilters[] = ['term' => [$key => $value]];
+            }
+        }
+
+        $isPhrase = Str::contains($searchTerm, ' ');
+        Debugbar::info($isPhrase);
+        $query = ($isPhrase) ?
+            [
+                //                'multi_match' => [
+                //                    'must' => [
+                //                        'multi_match' => [
+                //                            'query' => "{$searchTerm}",
+                //                            //                            'fuzziness' => 1,
+                //                            //                            'slop' => 1,
+                //                            //                            'max_expansions' => 1,
+                //                            //                            'prefix_length' => 1,
+                //                        ],
+                //                    ],
+                //                    'filter' => ! empty($termFilters) ? $termFilters : [],
+                //                ],
+                'multi_match' => [
+                    'query' => "{$searchTerm}",
+                    'type' => 'phrase',
+                ],
+            ]
+            : [
+                'bool' => [
+                    'must' => [
                         'multi_match' => [
-                            'query' => "{$term}",
-                            'fields' => [
-                                'title',
-                                'description',
-                            ],
+                            'query' => "{$searchTerm}",
                             'fuzziness' => 1,
                             'slop' => 1,
                             'max_expansions' => 1,
                             'prefix_length' => 1,
                         ],
                     ],
-                    '_source' => [
-                        '*',
+                    'filter' => ! empty($termFilters) ? $termFilters : [],
+                ],
+            ];
+        try {
+            $params = [
+                'index' => $index,
+                'body' => [
+                    'sort' => [
+                        ['updated_at' => ['order' => 'desc']],
                     ],
-                    'size' => 100,
+                    'from' => $from,
+                    'size' => $pageSize,
+                    'query' => $query,
+                    '_source' => ['*'],
                     'highlight' => [
                         'pre_tags' => '<mark>',
                         'post_tags' => '<\/mark>',
-                        'fields' => [
-                        ],
+                        'fields' => [],
                     ],
                 ],
             ];

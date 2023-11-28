@@ -7,6 +7,7 @@ use App\Models\Traits\Accessable;
 use App\Models\Traits\Documentable;
 use App\Models\Traits\Presentable;
 use App\Models\Traits\RecordsActivity;
+use App\Models\Traits\Searchable;
 use App\Models\Traits\Slugable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
@@ -26,7 +27,12 @@ class Series extends BaseModel
     use Documentable;
     use Presentable;
     use RecordsActivity;
+    use Searchable;
     use Slugable;
+
+    protected array $searchable = [
+        'title', 'description',
+    ];
 
     protected $dispatchesEvents = ['deleted' => SeriesDeleted::class];
 
@@ -223,12 +229,29 @@ class Series extends BaseModel
          */
         $clips = (auth()->user()?->id === $this->owner_id || auth()->user()?->isAdmin())
             ? $this->clips
-            : $this->clips->filter(fn ($clip) => $clip->assets->count() && $clip->is_public);
+            : $this->clips->filter(fn ($clip) => $clip->assets->count() && $clip->is_public && ! $clip->is_livestream);
 
         //iterate every clip and get a unique acl name
         return $clips->map(function ($clip) {
             return $clip->acls->pluck('name');
         })->flatten()->unique()->values()->implode(', ');
+    }
+
+    /**
+     * Returns a comma seperated semester name for all clips
+     *
+     * @return mixed
+     */
+    public function fetchClipsSemester(): string
+    {
+        return $this->clips
+            ->sortBy('semester_id')
+            ->map(function ($clip) {
+                return $clip->semester;
+            })
+            ->pluck('name')
+            ->unique()
+            ->implode(', ');
     }
 
     /**

@@ -7,11 +7,6 @@ use function Pest\Laravel\artisan;
 uses(WorksWithOpenSearchClient::class);
 
 it('throws an error for rebuilding if model does not exists', function () {
-    artisan('opensearch:rebuild-indexes NotExistingModelName')
-        ->expectsOutput("Model doesn't exists");
-});
-test('example', function () {
-    $response = $this->get('/');
-
-    $response->assertStatus(200);
+    artisan('opensearch:rebuild-indexes')
+        ->expectsQuestion('Which search index do you want to rebuild?', 'Series');
 });

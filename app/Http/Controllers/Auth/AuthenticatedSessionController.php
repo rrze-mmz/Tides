@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\Setting;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -38,6 +39,12 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        $setting = Setting::firstOrCreate(
+            ['name' => auth()->user()->username],
+            [
+                'data' => config('settings.user'),
+            ]
+        );
         $lang = auth()->user()->settings->data['language'];
 
         $request->session()->put('locale', $lang);

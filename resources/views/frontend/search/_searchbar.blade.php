@@ -1,6 +1,6 @@
 <div class="flex content-center justify-center">
     <form method="GET"
-          action="search"
+          action="{{route('search')}}"
           class="w-3/5">
 
         <div class="p-2">
@@ -13,6 +13,36 @@
                            name="term"
                            placeholder="{{ __('homepage.Search form placeholder') }}">
 
+                    <div class="p-4">
+                        <div class="flex items-center">
+                            <input type="checkbox"
+                                   id="search-series-checkbox"
+                                   class="form-checkbox h-5 w-5 text-blue-600"
+                                   name="series"
+                                   checked
+                            />
+                            <label for="search-series-checkbox"
+                                   class="ml-2 text-gray-700"
+                            >
+                                Series
+                            </label>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex items-center">
+                            <input type="checkbox"
+                                   id="search-clips-checkbox"
+                                   class="form-checkbox h-5 w-5 text-blue-600"
+                                   name="clips"
+                                   checked
+                            />
+                            <label for="search-clips-checkbox"
+                                   class="ml-2 text-gray-700"
+                            >
+                                Clips
+                            </label>
+                        </div>
+                    </div>
                     <div class="p-4">
                         <button class="flex justify-center items-center p-2 w-8 h-8 text-white bg-gray-600
                                             rounded-full hover:bg-gray-500 focus:outline-none"

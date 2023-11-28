@@ -20,7 +20,17 @@ class SearchRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'term' => ['required', 'min:3'],
+            'term' => ['required', 'min:3', 'string'],
+            'series' => ['nullable', 'boolean'],
+            'clips' => ['nullable', 'boolean'],
         ];
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'series' => $this->series === 'on',
+            'clips' => $this->clips === 'on',
+        ]);
     }
 }

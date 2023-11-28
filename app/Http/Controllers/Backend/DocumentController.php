@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Clip;
 use App\Models\Document;
 use App\Models\Series;
+use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -23,7 +24,7 @@ class DocumentController extends Controller
         $validated = $request->validate([
             'id' => ['required', 'integer'],
             'type' => ['required', Rule::in(['series', 'clip'])], //types are not dynamic
-            'document' => ['required', 'file', 'mimes:pdf,xsl,doc'],
+            'document' => ['file', 'mimes:pdf,xsl,doc'],
         ]);
 
         $model = match ($validated['type']) {
@@ -58,7 +59,7 @@ class DocumentController extends Controller
         //file maybe not found especially in testing
         try {
             return response()->file(public_path('documents/').$document->save_path);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             Log::error($exception);
 
             return to_route('series.edit', $series);
@@ -78,7 +79,7 @@ class DocumentController extends Controller
         //file maybe not found especially in testing
         try {
             return response()->file(public_path('documents/').$document->save_path);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             Log::error($exception);
 
             return to_route('clips.edit', $clip);

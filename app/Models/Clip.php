@@ -161,14 +161,6 @@ class Clip extends BaseModel
     }
 
     /**
-     * A clip has one context
-     */
-    public function context(): HasOne
-    {
-        return $this->hasOne(Context::class);
-    }
-
-    /**
      * Get all the clips's comments.
      */
     public function comments(): MorphMany
@@ -177,19 +169,27 @@ class Clip extends BaseModel
     }
 
     /**
-     * A clip has one format
+     * A clip belongs to context
      */
-    public function format(): HasOne
+    public function context(): BelongsTo
     {
-        return $this->hasOne(Format::class);
+        return $this->BelongsTo(Context::class);
     }
 
     /**
-     * A clip has one type
+     * A clip belongs to format
      */
-    public function type(): HasOne
+    public function format(): BelongsTo
     {
-        return $this->hasOne(Type::class);
+        return $this->BelongsTo(Format::class);
+    }
+
+    /**
+     * A clip belongs to type
+     */
+    public function type(): BelongsTo
+    {
+        return $this->BelongsTo(Type::class);
     }
 
     /**

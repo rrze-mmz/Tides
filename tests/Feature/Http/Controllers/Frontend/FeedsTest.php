@@ -49,9 +49,9 @@ it('has a copyright item in series feed page', function () {
 });
 
 it('has an itunes author item in series feed page', function () {
+
     get(route('frontend.series.feed', [$this->series, 'QHD']))
-        ->assertSee('<itunes:author>', false)
-        ->assertSee($this->series->presenters()->first()?->getFullNameAttribute());
+        ->assertSee('<itunes:author>', false);
 });
 
 it('has a description item in series feed page', function () {

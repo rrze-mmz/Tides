@@ -80,7 +80,6 @@
                                        model="organization"
                                        :selectedItem="old('organization_id', $clip->organization_id)"
                 />
-
                 <x-form.select2-single field-name="language_id"
                                        label="Language"
                                        select-class="select2-tides"
@@ -185,7 +184,6 @@
             @endif
 
             @if ($opencastConnectionCollection['status']==='pass' && !$clip->is_livestream)
-                )
                 @include('backend.clips.sidebar._ingest-video')
             @endif
 

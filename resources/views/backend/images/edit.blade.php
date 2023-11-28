@@ -9,7 +9,7 @@
             <a href="{{ route('images.index') }}">
                 <x-button class="flex items-center bg-blue-700 hover:bg-blue-700">
                     <div class="pr-2">
-                        <x-heroicon-o-arrow-circle-left class="h-6 w-6"/>
+                        <x-heroicon-o-arrow-circle-left class="h-6 w-6" />
                     </div>
                     <div>
                         Back to images list
@@ -91,7 +91,7 @@
                     </div>
                 </form>
             </div>
-            <div class="mr-10 flex-none flex-col">
+            <div class="mr-10 flex-none flex-col align-middle items-center">
                 <div>
                     <img class="h-96 w-48 w-auto object-contain rounded-[0.25rem] md:"
                          src="{{ URL::asset('/images/'.$image->file_name) }}"
@@ -129,7 +129,7 @@
     @if($image->presenters()->count() > 0)
         <div class="flex items-center border-b-2 border-black pt-10">
             <div class="pr-2">
-                <x-heroicon-o-user-group class="h-6 w-6"/>
+                <x-heroicon-o-user-group class="h-6 w-6" />
             </div>
             <h3 class="font-bold">Used in {{$image->presenters()->count()}} lecturers
             </h3>
@@ -145,7 +145,7 @@
                                 </div>
                                 <div class="pl-2">
                                     <a href="{{ route('presenters.edit', $presenter) }}">
-                                        <x-heroicon-o-eye class="h-5 w-5"/>
+                                        <x-heroicon-o-eye class="h-5 w-5" />
                                     </a>
                                 </div>
                             </div>
@@ -158,7 +158,7 @@
     @if($image->series()->count() > 0)
         <div class="flex items-center border-b-2 border-black pt-10">
             <div class="pr-2">
-                <x-heroicon-o-user-group class="h-6 w-6"/>
+                <x-heroicon-o-user-group class="h-6 w-6" />
             </div>
             <h3 class="font-bold">Used in {{$image->series()->count()}} series
             </h3>
@@ -174,7 +174,7 @@
                                 </div>
                                 <div class="pl-2">
                                     <a href="{{ route('series.edit', $clip) }}">
-                                        <x-heroicon-o-eye class="h-5 w-5"/>
+                                        <x-heroicon-o-eye class="h-5 w-5" />
                                     </a>
                                 </div>
                             </div>
@@ -187,7 +187,7 @@
     @if($image->clips()->count() > 0)
         <div class="flex items-center border-b-2 border-black pt-10">
             <div class="pr-2">
-                <x-heroicon-o-user-group class="h-6 w-6"/>
+                <x-heroicon-o-user-group class="h-6 w-6" />
             </div>
             <h3 class="font-bold">Used in {{$image->clips()->count()}} clips
             </h3>
@@ -203,7 +203,7 @@
                                 </div>
                                 <div class="pl-2">
                                     <a href="{{ route('clips.edit', $clip) }}">
-                                        <x-heroicon-o-eye class="h-5 w-5"/>
+                                        <x-heroicon-o-eye class="h-5 w-5" />
                                     </a>
                                 </div>
                             </div>

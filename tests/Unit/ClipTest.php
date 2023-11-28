@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Collection;
@@ -85,15 +84,15 @@ it('has one language', function () {
 });
 
 it('has one context', function () {
-    expect($this->clip->context())->toBeInstanceOf(HasOne::class);
+    expect($this->clip->context())->toBeInstanceOf(BelongsTo::class);
 });
 
 it('has one format', function () {
-    expect($this->clip->format())->toBeInstanceOf(HasOne::class);
+    expect($this->clip->format())->toBeInstanceOf(BelongsTo::class);
 });
 
 it('has one type', function () {
-    expect($this->clip->type())->toBeInstanceOf(HasOne::class);
+    expect($this->clip->type())->toBeInstanceOf(BelongsTo::class);
 });
 
 it('belongs to an owner', function () {

@@ -50,7 +50,7 @@
                                 <x-sort-icon
                                     field="first_name"
                                     :sortField="$sortField"
-                                    :sortAsc="$sortAsc"/>
+                                    :sortAsc="$sortAsc" />
                             </div>
                         </th>
                         <th
@@ -64,7 +64,7 @@
                                 <x-sort-icon
                                     field="last_name"
                                     :sortField="$sortField"
-                                    :sortAsc="$sortAsc"/>
+                                    :sortAsc="$sortAsc" />
                             </div>
                         </th>
                         <th
@@ -78,7 +78,7 @@
                                 <x-sort-icon
                                     field="username"
                                     :sortField="$sortField"
-                                    :sortAsc="$sortAsc"/>
+                                    :sortAsc="$sortAsc" />
                             </div>
                         </th>
                         <th
@@ -93,7 +93,7 @@
                                 <x-sort-icon
                                     field="email"
                                     :sortField="$sortField"
-                                    :sortAsc="$sortAsc"/>
+                                    :sortAsc="$sortAsc" />
                             </div>
                         </th>
                         <th class="bg-gray-50 px-6 py-3"></th>
@@ -106,7 +106,7 @@
                                 <div class="flex items-center">
                                     <div class="h-10 w-10 flex-shrink-0">
                                         <img class="h-10 w-10 rounded-full"
-                                             src="{{ URL::asset('/images/none.jpg') }}" alt="">
+                                             src="{{ $presenter->getImageUrl() }}" alt="">
                                     </div>
                                     <div class="ml-4">
                                         <div class="text-sm font-medium leading-5 text-gray-900">

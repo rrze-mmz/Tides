@@ -45,7 +45,7 @@ it('shows the application status for user application notifications', function (
 
 it('displays which superadmin processed the application in notifications index page', function () {
     [$superAdminA, $superadminB] = User::factory(2)
-        ->create()
+        ->create(['last_name' => 'LastnameUser']) // faker names like 0'Reilly fail the test
         ->each(fn ($user) => $user->assignRole(Role::SUPERADMIN));
     $memberUser = User::factory()->create()->assignRole(Role::MEMBER);
 

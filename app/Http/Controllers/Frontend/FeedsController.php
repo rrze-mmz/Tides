@@ -26,16 +26,16 @@ class FeedsController extends Controller
     public function series(Series $series, string $assetsResolution)
     {
         Debugbar::disable();
-
         $setting = Setting::portal();
-
         $array = [
             'channel' => [
                 'title' => $series->title.' Series ID:'.$series->id,
                 'link' => route('frontend.series.feed', [$series, $assetsResolution]),
                 'language' => $series->clipsLanguageCode(),
                 'copyright' => Carbon::now()->year.' Tides Portal',
-                'itunes:author' => $series->presenters->first()?->getFullNameAttribute(),
+                'itunes:author' => is_null($series->presenters->first()?->getFullNameAttribute())
+                        ? ''
+                        : $series->presenters->first()->getFullNameAttribute(),
                 'description' => $series->description,
                 'itunes:type' => 'serial',
                 'itunes:owner' => [
@@ -97,6 +97,17 @@ class FeedsController extends Controller
         return response($arrayToXml->prettify()->toXml(), 200, ['Content-Type' => 'application/xml']);
     }
 
+    private function assetCheck(Asset $asset, string $assetsResolution)
+    {
+        return match (true) {
+            ($assetsResolution === 'QHD' && $asset->width >= 1920) => $asset,
+            ($assetsResolution === 'HD' && ($asset->width >= 720 && $asset->width < 1920)) => $asset,
+            ($assetsResolution === 'SD' && ($asset->width >= 10 && $asset->width < 720)) => $asset,
+            ($assetsResolution === 'Audio' && $asset->type == Content::AUDIO()) => $asset,
+            default => false,
+        };
+    }
+
     public function clips(Clip $clip, string $assetsResolution)
     {
         Debugbar::disable();
@@ -109,7 +120,9 @@ class FeedsController extends Controller
                 'link' => route('frontend.series.feed', [$clip, $assetsResolution]),
                 'language' => $clip->language->code,
                 'copyright' => Carbon::now()->year.' Tides Portal',
-                'itunes:author' => $clip->presenters->first()?->getFullNameAttribute(),
+                'itunes:author' => (is_null($clip->presenters->first()?->getFullNameAttribute()))
+                    ? ''
+                    : $clip->presenters->first()->getFullNameAttribute(),
                 'description' => $clip->description,
                 'itunes:type' => 'episodic',
                 'itunes:owner' => [
@@ -168,16 +181,5 @@ class FeedsController extends Controller
         $arrayToXml->setDomProperties(['formatOutput' => true]);
 
         return response($arrayToXml->prettify()->toXml(), 200, ['Content-Type' => 'application/xml']);
-    }
-
-    private function assetCheck(Asset $asset, string $assetsResolution)
-    {
-        return match (true) {
-            ($assetsResolution === 'QHD' && $asset->width >= 1920) => $asset,
-            ($assetsResolution === 'HD' && ($asset->width >= 720 && $asset->width < 1920)) => $asset,
-            ($assetsResolution === 'SD' && ($asset->width >= 10 && $asset->width < 720)) => $asset,
-            ($assetsResolution === 'Audio' && $asset->type == Content::AUDIO()) => $asset,
-            default => false,
-        };
     }
 }

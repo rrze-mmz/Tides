@@ -40,7 +40,7 @@
             </div>
             <div x-data="{ isOpen: false }" class="relative flex justify-end">
                 <x-heroicon-o-user @click="isOpen = !isOpen"
-                                   class="relative z-10 w-12 h-12 rounded-full overflow-hidden border-2 border-gray-400
+                                   class="relative z-10 w-8 h-8 rounded-full overflow-hidden border-2 border-gray-400
                                             hover:border-gray-300 focus:border-gray-300 focus:outline-none" />
                 </button>
                 <button x-show="isOpen"

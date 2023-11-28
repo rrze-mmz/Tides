@@ -23,14 +23,15 @@ class ClipsController extends Controller
      */
     public function index(): Application|Factory|\Illuminate\Contracts\View\View
     {
-        return view(
-            'backend.clips.index',
-            [
-                'clips' => (auth()->user()->can('index-all-clips'))
-                    ? Clip::orderBy('title')->paginate(24)
-                    : auth()->user()->clips()->orderBy('updated_at')->paginate(12),
-            ]
-        );
+        //        return view(
+        //            'backend.clips.index',
+        //            [
+        //                'clips' => (auth()->user()->can('index-all-clips'))
+        //                    ? Clip::orderBy('title')->paginate(24)
+        //                    : auth()->user()->clips()->orderBy('updated_at')->paginate(12),
+        //            ]
+        //        );
+        return view('backend.clips.index');
     }
 
     /**
