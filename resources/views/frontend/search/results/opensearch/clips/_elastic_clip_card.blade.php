@@ -1,62 +1,119 @@
-<div class="my-2 flex w-full bg-white">
-    <div class="mx-2 flex h-full w-48 place-items-center justify-center justify-items-center">
-        @php
-            dd($clip);
-        @endphp
-        <img src="{{ $clip->poster }}"
-             alt="preview image">
-    </div>
-
-    <div class="flex w-full flex-col justify-between bg-white p-4">
+@php use Illuminate\Support\Carbon; @endphp
+<figure class="my-2 flex w-full align-middle bg-indigo-200 rounded-2xl">
+    <div class="flex w-full flex-col justify-between p-4">
         <div class="mb-1">
-            <div class="text-sm font-bold text-gray-900">
-                <a href="/clips/{{$clip->get('slug')}}"
-                   class="underline"
-                >{{ $clip->get('title') }}</a>
+            <div class="text-lg font-bold text-gray-900">
+                <a href="{{ route('frontend.clips.show', $clip['slug']) }}"
+                   class=""
+                >
+                    {{ $clip['title'].' |'.$clip['semester'].' |  ClipID:'.$clip['id'] }}
+                </a>
             </div>
             <p class="py-3 text-base text-gray-700">
-                {{ (str_contains(url()->current(),'search'))?$clip->get('description'):Str::limit($clip->get('description'), 30) }}
+                {!! $clip['description'] !!}
+
             </p>
         </div>
-        <div class="flex items-center justify-content-between">
-            <div class="pr-2">
-                <svg class="h-4 w-4"
-                     fill="none"
-                     stroke="currentColor"
-                     viewBox="0 0 24 24"
-                     xmlns="http://www.w3.org/2000/svg"
-                >
-                    <path stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                    ></path>
-                </svg>
+        <div class="flex justify-between  border-t-2 pt-2">
+            <div>
+                <div class="flex items-center ">
+                    <div class="flex">
+                        <div class="pr-2">
+                            <x-heroicon-o-clock class="h-4" />
+                        </div>
+                    </div>
+                    <div class="">
+                        <p class="text-gray-900">
+                            {{ Carbon::parse($clip['updated_at'])->format('Y-m-d  H:i:s') }}
+                        </p>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <div class="pr-2">
+                        <div class="">
+                            <x-heroicon-o-lock-open class="h-4" />
+                        </div>
+                    </div>
+                    <div class="">
+                        <p class="text-gray-900">
+                            {{ $clip['acls'] }}
+                        </p>
+                    </div>
+                </div>
+                @if(!is_null($clip['owner']))
+                    <div class="flex items-center">
+                        <div class="pr-2">
+                            <x-heroicon-o-upload class="h-4" />
+                        </div>
+                        <div class="">
+                            <p class="text-gray-900">
+                                {{ ($clip['owner']['fullName'])}}
+                            </p>
+                        </div>
+                    </div>
+                @endif
+
+                @if(collect($clip['presenters'])->isNotEmpty())
+                    <div class="flex items-center">
+                        <div class="flex pr-2 items-center">
+                            <div class="pr-2">
+                                <x-heroicon-o-user class="h-4" />
+                            </div>
+                            <div class="flex items-center align-middle">
+                                @foreach ($clip['presenters'] as $presenter)
+
+                                    <div class="pr-2">
+                                        {{ $presenter['presenter_fullName'] }}
+                                    </div>
+                                    <img src="{{ env('app_url').$presenter['presenter_image_url'] }}" alt=""
+                                         class="h-8 rounded-full">
+                                @endforeach
+                            </div>
+
+                        </div>
+                    </div>
+                @endif
+                <div class="flex items-center">
+                    <div class="pr-2">
+                        <x-heroicon-o-office-building class="h-4" />
+                    </div>
+                    <div class="">
+                        <p class="text-gray-900">
+                            {{ ($clip['organization']['org_name'])}}
+                        </p>
+                    </div>
+                </div>
+                @if(!empty($clip['series']))
+                    <div class="flex items-center">
+                        <div class="flex pr-2 items-center">
+                            <div class="pr-2 font-bold">
+                                Part of Videoseries :
+                            </div>
+                            <div class="flex items-center align-middle italic">
+                                <a href="{{ route('frontend.series.show', $clip['series']['series_slug']) }}">
+                                    @php
+                                        if(\Illuminate\Support\Str::length($clip['series']['series_semester']) > 50) {
+                                                $semester = 'Multiple Semesters';
+                                            }
+                                        else {
+                                            $semester  = $clip['series']['series_semester'];
+                                        }
+                                    @endphp
+                                    {{ $clip['series']['series_title'].' |'.$semester.' |  SeriesID:'.$clip['series']['series_id'] }}
+                                </a>
+
+                            </div>
+
+                        </div>
+                    </div>
+                @endif
             </div>
-            <div class="text-sm">
-                <p class="italic text-gray-900">
-                    {{--                    {{ Illuminate\Support\Carbon::createFromFormat('Y-m-d H:i:s', $clip->get('updated_at'))->format('Y-m-d')  }}--}}
-                </p>
+            <div>
+                <div class="pt-8 flex w-48 h-auto place-items-center justify-center justify-items-center">
+                    <img src="{{ $clip['poster']}}"
+                         alt="preview image">
+                </div>
             </div>
         </div>
-
-        <div class="flex items-center pt-2 justify-content-between">
-            <div class="pr-2">
-                <svg class="h-4 w-4"
-                     fill="none"
-                     stroke="currentColor"
-                     viewBox="0 0 24 24"
-                     xmlns="http://www.w3.org/2000/svg"
-                >
-                    <path stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                    >
-                    </path>
-                </svg>
-            </div>
-        </div>
-
     </div>
-</div>
+</figure>

@@ -1,3 +1,4 @@
+@php use Illuminate\Support\Carbon; @endphp
 <figure class="my-2 flex w-full align-middle bg-indigo-200 rounded-2xl">
     <div class="flex w-full flex-col justify-between p-4">
         <div class="mb-1">
@@ -23,7 +24,7 @@
                     </div>
                     <div class="">
                         <p class="text-gray-900">
-                            {{ $series['updated_at'] }}
+                            {{ Carbon::parse($series['updated_at'])->format('Y-m-d  H:i:s') }}
                         </p>
                     </div>
                 </div>

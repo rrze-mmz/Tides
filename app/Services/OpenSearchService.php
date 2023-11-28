@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Http\Clients\OpenSearchClient;
 use App\Models\Setting;
+use Debugbar;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Database\Eloquent\Model;
@@ -149,12 +150,56 @@ class OpenSearchService
         return $this->response;
     }
 
-    public function searchIndexes(string $index, string $searchTerm, array $filters = []): Collection
-    {
-        $filtersCollection = collect();
+    public function searchIndexes(
+        string $index,
+        string $searchTerm,
+        array $filters = [],
+        int $page = 1,
+        int $pageSize = 100
+    ): Collection {
+        $from = ($page - 1) * $pageSize;
+        $termFilters = [];
         if (! empty($filters)) {
-            $filtersCollection->put('term', collect($filters));
+            foreach ($filters as $key => $value) {
+                $termFilters[] = ['term' => [$key => $value]];
+            }
         }
+
+        $isPhrase = Str::contains($searchTerm, ' ');
+        Debugbar::info($isPhrase);
+        $query = ($isPhrase) ?
+            [
+                //                'multi_match' => [
+                //                    'must' => [
+                //                        'multi_match' => [
+                //                            'query' => "{$searchTerm}",
+                //                            //                            'fuzziness' => 1,
+                //                            //                            'slop' => 1,
+                //                            //                            'max_expansions' => 1,
+                //                            //                            'prefix_length' => 1,
+                //                        ],
+                //                    ],
+                //                    'filter' => ! empty($termFilters) ? $termFilters : [],
+                //                ],
+                'multi_match' => [
+                    'query' => "{$searchTerm}",
+                    'type' => 'phrase',
+                ],
+            ]
+            : [
+                'bool' => [
+                    'must' => [
+                        'multi_match' => [
+                            'query' => "{$searchTerm}",
+                            'fuzziness' => 1,
+                            'slop' => 1,
+                            'max_expansions' => 1,
+                            'prefix_length' => 1,
+                        ],
+                    ],
+                    'filter' => ! empty($termFilters) ? $termFilters : [],
+                ],
+            ];
         try {
             $params = [
                 'index' => $index,
@@ -162,22 +207,10 @@ class OpenSearchService
                     'sort' => [
                         ['updated_at' => ['order' => 'desc']],
                     ],
-                    'query' => [
-                        'bool' => [
-                            'must' => [
-                                'multi_match' => [
-                                    'query' => "{$searchTerm}",
-                                    'fuzziness' => 1,
-                                    'slop' => 1,
-                                    'max_expansions' => 1,
-                                    'prefix_length' => 1,
-                                ],
-                            ],
-                            'filter' => $filtersCollection->isNotEmpty() ? $filtersCollection->toArray() : [],
-                        ],
-                    ],
+                    'from' => $from,
+                    'size' => $pageSize,
+                    'query' => $query,
                     '_source' => ['*'],
-                    'size' => 100,
                     'highlight' => [
                         'pre_tags' => '<mark>',
                         'post_tags' => '<\/mark>',
@@ -185,9 +218,6 @@ class OpenSearchService
                     ],
                 ],
             ];
-            //            if ($filters->isNotEmpty()) {
-            //                $params['body']['query']['bool']['must']['filter']['term'] = $filters->toArray();
-            //            }
             $this->response = collect($this->clientBuilder->build()->search($params));
         } catch (Exception $exception) {
             Log::error($exception->getMessage());

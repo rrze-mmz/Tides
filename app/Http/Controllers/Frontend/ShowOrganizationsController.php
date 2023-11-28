@@ -12,7 +12,9 @@ class ShowOrganizationsController extends Controller
 {
     public function index(): View
     {
-        $organizations = Organization::chairs()->orderBy('org_id')->get();
+        $organizations = Organization::chairs()
+            ->whereHas('series')
+            ->orderBy('org_id')->get();
 
         return view('frontend.organizations.index', compact('organizations'));
     }

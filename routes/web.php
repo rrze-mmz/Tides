@@ -171,6 +171,7 @@ Route::get('/assetDownload/{asset}', AssetsDownloadController::class)->name('ass
 //Backend routes
 Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->group(function () {
     //Dashboard
+    Route::get('search', \App\Http\Controllers\Backend\ShowSearchResultsController::class)->name('admin.search');
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
     Route::post('/goto/series', function (Request $request) {
         $validated = $request->validate([

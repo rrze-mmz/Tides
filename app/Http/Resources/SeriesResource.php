@@ -59,6 +59,8 @@ class SeriesResource extends JsonResource
             'poster' => ($seriesWithLastPublicClip->lastPublicClip)
                 ? fetchClipPoster($seriesWithLastPublicClip->lastPublicClip->latestAsset?->player_preview)
                 : '/images/generic_clip_poster_image.png',
+            'has_last_public_clip' => ! is_null($seriesWithLastPublicClip->lastPublicClip),
+            'last_public_clip' => [$seriesWithLastPublicClip->lastPublicClip],
         ];
     }
 }

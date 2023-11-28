@@ -30,6 +30,7 @@ class AppServiceProvider extends ServiceProvider
             'clip' => 'App\Models\Clip',
             'user' => 'App\Models\User',
             'image' => 'App\Models\Image',
+            'semester' => 'App\Models\Semester',
         ]);
     }
 }
