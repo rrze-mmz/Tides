@@ -1,7 +1,8 @@
 <div class="flex content-center justify-center">
     <form method="GET"
-          action="search"
+          action="{{ route('admin.search') }}"
           class="w-3/5">
+        @csrf
 
         <div class="p-2">
             <div class="flex flex-col items-center rounded-full bg-white">

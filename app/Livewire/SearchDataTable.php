@@ -92,7 +92,10 @@ class SearchDataTable extends Component
                     ->put('openSearch', true);
         } else {
             $search = trim(Str::lower($this->search));
-            $series = Series::search($search)->withLastPublicClip()->paginate(30)->withQueryString();
+            $series = Series::whereRaw('lower(title) like ?', ["%{$search}%"])
+                ->withLastPublicClip()
+                ->paginate(30)
+                ->withQueryString();
             $searchResults->put('series', $series)
                 ->put('series_counter', $series->count())
                 ->put('searchTerm', $this->search)

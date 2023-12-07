@@ -139,7 +139,7 @@ class Clip extends BaseModel
     /**
      *  A clip belongs to an organization
      */
-    public function organisation(): BelongsTo
+    public function organization(): BelongsTo
     {
         return $this->BelongsTo(Organization::class, 'organization_id', 'org_id');
     }

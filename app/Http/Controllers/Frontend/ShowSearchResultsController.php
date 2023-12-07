@@ -27,8 +27,11 @@ class ShowSearchResultsController extends Controller
             $filters = [];
             if (! auth()->check() || auth()->user()->cannot('administrate-admin-portal-pages')) {
                 $filters['is_public'] = 'true';
-                $filters['has_last_public_clip'] = 'true';
+                if ($request->series) {
+                    $filters['has_last_public_clip'] = 'true';
+                }
             }
+
             //keep this order to pass testing search result
             if ($request->clips) {
                 $results['clips'] = $openSearchService->searchIndexes('tides_clips', $request->term, $filters);

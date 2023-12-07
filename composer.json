@@ -41,7 +41,7 @@
         "laravel/sail": "^1.13",
         "mockery/mockery": "^1.4.2",
         "nunomaduro/collision": "^7.0",
-        "nunomaduro/larastan": "^2.2",
+        "larastan/larastan": "^2.2",
         "pestphp/pest": "^2.2",
         "pestphp/pest-plugin-drift": "^2.4",
         "pestphp/pest-plugin-faker": "^2.0",

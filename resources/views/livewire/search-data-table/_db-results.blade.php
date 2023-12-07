@@ -20,7 +20,7 @@
             <div class="flex items-center">
                 <div class="ml-4">
                     <div class="text-sm font-medium leading-5 text-gray-900">
-                        SEMESTER
+                        {{ $series->fetchClipsSemester()  }}
                     </div>
                 </div>
             </div>

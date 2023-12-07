@@ -4,6 +4,10 @@ namespace App\Livewire;
 
 use App\Models\Clip;
 use App\Models\Semester;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Foundation\Application as FoundationApplication;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -13,6 +17,8 @@ class ClipsDataTable extends Component
     use WithPagination;
 
     public $userClips = false;
+
+    public $withAssets = false;
 
     public $search;
 
@@ -37,7 +43,7 @@ class ClipsDataTable extends Component
         $this->resetPage();
     }
 
-    public function render()
+    public function render(): View|FoundationApplication|Factory|Application
     {
         $search = trim(Str::lower($this->search));
         $clips = $this->determineClipQuery($search)->paginate(30);
@@ -62,50 +68,61 @@ class ClipsDataTable extends Component
 
     protected function userClipsQuery($search)
     {
-        return auth()->user()->clips()->search($search)
+        $query = auth()->user()->clips();
+
+        $query->search($search);
+
+        return $query
             ->when($this->sortField, fn ($query) => $query->orderBy($this->sortField, $this->sortAsc ? 'asc' : 'desc'));
     }
 
     protected function adminOrDefaultQuery($search)
     {
-        $query = Clip::query();
-
         if (auth()->user()->can('administrate-portal-pages')) {
-            $query = $query->search($search)
-                ->where('id', (int) $search)
-                ->orWhere(function ($query) use ($search) {
-                    $query->whereHas('presenters', function ($q) use ($search) {
-                        $q->whereRaw('lower(first_name) like ?', ["%{$search}%"])
-                            ->orWhereRaw('lower(last_name) like ?', ["%{$search}%"]);
+            $query = Clip::search($search);
+            // First, filter the clips that have assets
+            if ($this->withAssets) {
+                $query->whereHas('assets');
+            }
+            $query->where(function ($q) use ($search) {
+                $q->orWhere('id', (int) $search)
+                    ->orWhere(function ($query) use ($search) {
+                        $query->WhereHas('presenters', function ($q) use ($search) {
+                            // Concatenate first_name and last_name and then apply the LIKE condition
+                            $q->whereRaw('lower(first_name || last_name) like ?', ["%{$search}%"]);
+                        })
+                            ->orWhereDoesntHave('presenters');
                     })
-                        ->orWhereDoesntHave('presenters');
-                })
-                ->orWhere(function ($query) use ($search) {
-                    $query->whereHas('series', function ($q) use ($search) {
-                        $q->whereRaw('lower(title) like ?', ["%{$search}%"])
-                            ->orWhereRaw('lower(description) like ?', ["%{$search}%"]);
-                    })
-                        ->orWhereDoesntHave('series');
-                });
+                    ->orWhere(function ($query) use ($search) {
+                        $query->orWhereHas('series', function ($q) use ($search) {
+                            $q->whereRaw('lower(title) like ?', ["%{$search}%"])
+                                ->orWhereRaw('lower(description) like ?', ["%{$search}%"]);
+                        })
+                            ->orWhereDoesntHave('series');
+                    });
+            });
         } else {
-            $query = $query->with(['assets', 'presenters'])
+            $query = Clip::query();
+            $query->with(['assets', 'presenters'])
                 ->public()
                 ->whereHas('assets')
-                ->orWhere('id', (int) $search)
-                ->search($search)
-                ->orWhere(function ($query) use ($search) {
-                    $query->whereHas('presenters', function ($q) use ($search) {
-                        $q->whereRaw('lower(first_name) like ?', ["%{$search}%"])
-                            ->orWhereRaw('lower(last_name) like ?', ["%{$search}%"]);
-                    })
-                        ->orWhereDoesntHave('presenters');
-                })
-                ->orWhere(function ($query) use ($search) {
-                    $query->whereHas('series', function ($q) use ($search) {
-                        $q->whereRaw('lower(title) like ?', ["%{$search}%"])
-                            ->orWhereRaw('lower(description) like ?', ["%{$search}%"]);
-                    })
-                        ->orWhereDoesntHave('series');
+                ->where(function ($q) use ($search) {
+                    $q->orWhere('id', (int) $search)
+                        ->search($search)
+                        ->orWhere(function ($query) use ($search) {
+                            $query->whereHas('presenters', function ($q) use ($search) {
+                                // Concatenate first_name and last_name and then apply the LIKE condition
+                                $q->whereRaw('lower(first_name || last_name) like ?', ["%{$search}%"]);
+                            })
+                                ->orWhereDoesntHave('presenters');
+                        })
+                        ->orWhere(function ($query) use ($search) {
+                            $query->whereHas('series', function ($q) use ($search) {
+                                $q->whereRaw('lower(title) like ?', ["%{$search}%"])
+                                    ->orWhereRaw('lower(description) like ?', ["%{$search}%"]);
+                            })
+                                ->orWhereDoesntHave('series');
+                        });
                 });
         }
 

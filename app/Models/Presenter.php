@@ -18,6 +18,16 @@ class Presenter extends BaseModel
     //search columns for searchable trait
     protected array $searchable = ['first_name', 'last_name', 'email', 'username'];
 
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
     public function getFullNameAttribute(): string
     {
         return ($this->academic_degree_id > 0)

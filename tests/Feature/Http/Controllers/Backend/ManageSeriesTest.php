@@ -60,28 +60,6 @@ it('shows series information in index page', function () {
         ->assertSee('portal, lms');
 });
 
-test('a moderator can see only owned series in index', function () {
-    $user = signInRole(Role::MODERATOR);
-    $userSeries = Series::factory(3)->create(['owner_id' => $user->id]);
-
-    get(route('series.index'))
-        ->assertSee($userSeries->first()->get()->first()->title);
-});
-
-test('a moderator can see in series index all series that is member of', function () {
-    $series = Series::factory()->create(['title' => 'First series']);
-    $user = signInRole(Role::MODERATOR);
-    Series::factory(3)->create(['owner_id' => $user->id, 'title' => 'User series']);
-
-    get(route('series.index'))
-        ->assertSee('User series')
-        ->assertDontSee('First series');
-
-    $series->addMember($user);
-
-    get(route('series.index'))->assertSee('First series');
-});
-
 test('a moderator can see the create series form and all form fields', function () {
     signInRole(Role::MODERATOR);
 

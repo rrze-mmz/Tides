@@ -21,17 +21,10 @@
                 <div class="flex justify-between items-center">
                     <div class="relative flex items-start pr-4 ">
                         <div class="flex h-5 items-center pr-4">
-                            <input wire:model.live="userClips" id="user-clips" type="checkbox"
+                            <input wire:model.live="userSeries" id="user-series" type="checkbox"
                                    class="h-4 w-4 text-indigo-600 transition duration-150 ease-in-out form-checkbox">
                             <div class="ml-3 text-sm leading-5">
-                                <label for="admin" class="font-medium text-gray-700">My clips</label>
-                            </div>
-                        </div>
-                        <div class="flex h-5 items-center">
-                            <input wire:model.live="withAssets" id="user-clips" type="checkbox"
-                                   class="h-4 w-4 text-indigo-600 transition duration-150 ease-in-out form-checkbox">
-                            <div class="ml-3 text-sm leading-5">
-                                <label for="admin" class="font-medium text-gray-700">With video files</label>
+                                <label for="admin" class="font-medium text-gray-700">My series</label>
                             </div>
                         </div>
                     </div>
@@ -63,20 +56,6 @@
                                 </button>
                                 <x-sort-icon
                                     field="title"
-                                    :sortField="$sortField"
-                                    :sortAsc="$sortAsc" />
-                            </div>
-                        </th>
-                        <th
-                            class="px-6 py-3 text-left">
-                            <div class="flex items-center">
-                                <button wire:click="sortBy('series_id')" class="bg-gray-50 text-xs leading-4 font-medium
-                                                    text-gray-500 uppercase tracking-wider"
-                                >
-                                    Series
-                                </button>
-                                <x-sort-icon
-                                    field="series_id"
                                     :sortField="$sortField"
                                     :sortAsc="$sortAsc" />
                             </div>
@@ -153,40 +132,20 @@
 
                     <tbody class="bg-white divide-y divide-gray-200">
 
-                    @forelse ($clips as $clip)
+                    @forelse ($series as $singleSeries)
                         <tr>
                             <td class="w-4/12 px-6 py-4 whitespace-no-wrap">
                                 <div class="flex items-center">
                                     <div class="h-12 w-24 flex-shrink-0">
                                         <img class="h-12 w-24 "
-                                             src="{{fetchClipPoster($clip->latestAsset?->player_preview) }}" alt="">
+                                             src="{{ ($singleSeries->lastPublicClip)
+                                            ? fetchClipPoster($singleSeries->lastPublicClip?->latestAsset?->player_preview)
+                                            : "/images/generic_clip_poster_image.png" }}"
+                                             alt="">
                                     </div>
                                     <div class="ml-4">
                                         <div class="text-sm font-medium leading-5 text-gray-900">
-                                            {{ $clip->title.' / ID:'.$clip->id }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
-                                <div class="flex items-center">
-                                    <div class="ml-4">
-
-                                        <div class="text-sm font-medium leading-5 text-gray-900">
-                                            @if($clip->series_id > 0 && $clip->series->exists)
-                                                @can('edit-clips', $clip)
-                                                    <a href="{{ route('series.edit', $clip->series) }}">
-                                                        {{ $clip->series->title }}
-                                                    </a>
-                                                @else
-                                                    <a href="{{ route('frontend.series.show', $clip->series->slug) }}">
-                                                        {{ $clip->series->title }}
-                                                    </a>
-                                                @endcan
-                                            @else
-                                                {{ 'No Series' }}
-                                            @endif
-
+                                            {{ $singleSeries->title.' / ID:'.$singleSeries->id }}
                                         </div>
                                     </div>
                                 </div>
@@ -195,7 +154,7 @@
                                 <div class="flex items-center">
                                     <div class="ml-4">
                                         <div class="text-sm font-medium leading-5 text-gray-900">
-                                            {{ $clip->semester->name }}
+                                            {{ $singleSeries->fetchClipsSemester() }}
                                         </div>
                                     </div>
                                 </div>
@@ -205,17 +164,37 @@
                                     <div class="ml-4">
                                         <div class="text-sm font-medium leading-5 text-gray-900">
                                             <div class="pr-2">
-                                                @if(!$clip->acls->contains(Acl::PUBLIC))
-                                                    @can('watch-video', $clip)
-                                                        <x-heroicon-o-lock-open class="h-4 w-4 text-green-500" />
-                                                        <span class="sr-only">Unlock clip</span>
-                                                    @else
-                                                        <x-heroicon-o-lock-closed class="h-4 w-4 text-red-700" />
-                                                        <span class="sr-only">Lock clip</span>
-                                                    @endcan
+                                                @if($seriesAcls = $singleSeries->getSeriesACLSUpdated())
+                                                    @if($seriesAcls!== 'public')
+                                                        <div class="flex items-center justify-content-between">
+                                                            <div class="pr-2">
+                                                                @if($singleSeries->checkClipAcls($singleSeries->clips))
+                                                                    <x-heroicon-o-lock-open
+                                                                        class="w-4 h-4 text-green-500" />
+                                                                    <span class="sr-only">Unlock clip</span>
+                                                                @else
+                                                                    <x-heroicon-o-lock-closed
+                                                                        class="w-4 h-4 text-red-700" />
+                                                                    <span class="sr-only">Lock clip</span>
+                                                                @endif
+                                                            </div>
+                                                            <div class="text-sm">
+                                                                <p class="italic text-gray-900">
+                                                                    {{ $seriesAcls}}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    @endif
                                                 @endif
                                             </div>
-                                            {{ $clip->acls->pluck('name')->implode(', ') }}
+                                        </div>
+                                    </div>
+                            </td>
+                            <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
+                                <div class="flex items-center">
+                                    <div class="ml-4">
+                                        <div class="text-sm font-medium leading-5 text-gray-900">
+                                            {{  $singleSeries->organization->name }}
                                         </div>
                                     </div>
                                 </div>
@@ -224,23 +203,14 @@
                                 <div class="flex items-center">
                                     <div class="ml-4">
                                         <div class="text-sm font-medium leading-5 text-gray-900">
-                                            {{  $clip->organization->name }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
-                                <div class="flex items-center">
-                                    <div class="ml-4">
-                                        <div class="text-sm font-medium leading-5 text-gray-900">
-                                            @if($clip->presenters->isNotEmpty())
+                                            @if($singleSeries->presenters->isNotEmpty())
                                                 <div class="flex items-center">
                                                     <div class="flex pr-2 items-center">
                                                         <div class="pr-2">
                                                             <x-heroicon-o-user class="h-4" />
                                                         </div>
                                                         <div class="flex items-center align-middle">
-                                                            {{ $clip->presenters
+                                                            {{ $singleSeries->presenters
                                                                        ->map(function($presenter){
                                                                            return $presenter->getFullNameAttribute();
                                                                        })->implode(',') }}
@@ -255,13 +225,13 @@
                             </td>
                             <td class="w-2/12 px-6 py-4 text-right text-sm font-medium leading-5 whitespace-no-wrap">
                                 <div class="flex space-x-2">
-                                    <a href="{{route('frontend.clips.show',$clip)}}">
+                                    <a href="{{route('frontend.series.show',$singleSeries)}}">
                                         <x-button type="button" class="bg-green-600 hover:bg-green-700">
                                             {{__('common.actions.show')}}
                                         </x-button>
                                     </a>
-                                    @can('edit-clips', $clip)
-                                        <a href="{{route('clips.edit',$clip)}}">
+                                    @can('edit-series', $singleSeries)
+                                        <a href="{{route('series.edit',$singleSeries)}}">
                                             <x-button type="button" class="bg-green-600 hover:bg-green-700">
                                                 {{__('common.actions.edit')}}
                                             </x-button>
@@ -274,7 +244,7 @@
                         <tr>
                             <td colspan="7" class="items-center w-full text-center">
                                 <div class="text-2xl m-4 p-4">
-                                    No clips found
+                                    No series found
                                 </div>
                             </td>
                         </tr>
@@ -283,12 +253,12 @@
                 </table>
             </div>
             <div class="flex pt-4">
-                <x-form.button :link="route('clips.create')"
+                <x-form.button :link="route('series.create')"
                                type="submit"
-                               text="Create new clip" />
+                               text="Create new series" />
             </div>
             <div class="mt-8">
-                {{ $clips->links() }}
+                {{ $series->links() }}
             </div>
         </div>
     </div>

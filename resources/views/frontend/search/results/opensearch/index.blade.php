@@ -37,13 +37,13 @@
                 @forelse($searchResults['clips']['hits']['hits'] as $clip)
                     @include('frontend.search.results.opensearch.clips._elastic_clip_card',['clip'  => collect($clip['_source'])])
                 @empty
-                    {{ __('search.no results found') }}
+                    {{ __('search.no clips results found') }}
                 @endforelse
             </div>
         @else
             <div class="flex justify-between border-b-2 border-black pb-2">
                 <h2 class="text-2xl font-bold">
-                    {{ __('search.no results found') }}
+                    {{ __('search.no clips results found') }}
                 </h2>
             </div>
 

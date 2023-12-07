@@ -7,7 +7,6 @@ use App\Models\Traits\Accessable;
 use App\Models\Traits\Documentable;
 use App\Models\Traits\Presentable;
 use App\Models\Traits\RecordsActivity;
-use App\Models\Traits\Searchable;
 use App\Models\Traits\Slugable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
@@ -27,12 +26,7 @@ class Series extends BaseModel
     use Documentable;
     use Presentable;
     use RecordsActivity;
-    use Searchable;
     use Slugable;
-
-    protected array $searchable = [
-        'title', 'description',
-    ];
 
     protected $dispatchesEvents = ['deleted' => SeriesDeleted::class];
 

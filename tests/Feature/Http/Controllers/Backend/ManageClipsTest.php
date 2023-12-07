@@ -26,6 +26,8 @@ uses()->group('backend');
 
 it('shows all portal clips in index page for assistants', function () {
     ClipFactory::withAssets(1)->create();
+    ClipFactory::withAssets(1)->create();
+    ClipFactory::withAssets(1)->create();
 
     signInRole(Role::MODERATOR);
 

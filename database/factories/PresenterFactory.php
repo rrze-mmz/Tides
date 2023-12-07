@@ -22,8 +22,9 @@ class PresenterFactory extends Factory
     {
         return [
             'academic_degree_id' => '1',
-            'first_name' => $this->faker->firstName(),
-            'last_name' => $this->faker->lastName(),
+            'first_name' => $firstName = $this->faker->firstName(),
+            'last_name' => $lastName = $this->faker->lastName(),
+            'slug' => $firstName.'-'.$lastName,
             'username' => $this->faker->unique()->userName(),
             'email' => $this->faker->unique()->safeEmail(),
             'image_id' => Image::factory()->create(),

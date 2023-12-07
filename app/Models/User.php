@@ -143,11 +143,11 @@ class User extends Authenticatable
     }
 
     /**
-     * Series Membership relationship
+     * Check whether the current user is a superadmin
      */
-    public function memberships(): BelongsToMany
+    public function isSuperAdmin(): bool
     {
-        return $this->belongsToMany(Series::class, 'series_members')->withTimestamps();
+        return $this->hasRole(Role::SUPERADMIN);
     }
 
     /**
@@ -156,14 +156,6 @@ class User extends Authenticatable
     public function hasRole(Role $role): bool
     {
         return $this->roles->contains('name', $role->lower());
-    }
-
-    /**
-     * Check whether the current user is a superadmin
-     */
-    public function isSuperAdmin(): bool
-    {
-        return $this->hasRole(Role::SUPERADMIN);
     }
 
     /**
@@ -198,11 +190,23 @@ class User extends Authenticatable
         return $this->memberships()->get()->contains($series);
     }
 
+    /**
+     * Series Membership relationship
+     */
+    public function memberships(): BelongsToMany
+    {
+        return $this->belongsToMany(Series::class, 'series_members')->withTimestamps();
+    }
+
     public function getAllSeries(): Builder|Series
     {
         return Series::whereHas('clips', function ($q) {
             $q->where('supervisor_id', $this->id);
-        })->orWhere('owner_id', $this->id);
+        })
+            ->orWhere('owner_id', $this->id)
+            ->orWhereHas('members', function ($query) {
+                $query->where('user_id', $this->id);
+            });
     }
 
     /*

@@ -42,6 +42,20 @@
                         <th
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
+                                <button wire:click="sortBy('last_name')" class="bg-gray-50 text-xs leading-4 font-medium
+                                                    text-gray-500 uppercase tracking-wider"
+                                >
+                                    Doc Title
+                                </button>
+                                <x-sort-icon
+                                    field="last_name"
+                                    :sortField="$sortField"
+                                    :sortAsc="$sortAsc" />
+                            </div>
+                        </th>
+                        <th
+                            class="px-6 py-3 text-left">
+                            <div class="flex items-center">
                                 <button wire:click="sortBy('first_name')" class="bg-gray-50 text-xs leading-4 font-medium
                                                     text-gray-500 uppercase tracking-wider"
                                 >
@@ -67,6 +81,7 @@
                                     :sortAsc="$sortAsc" />
                             </div>
                         </th>
+
                         <th
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
@@ -104,6 +119,17 @@
                         <tr>
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
                                 <div class="flex items-center">
+                                    <div class="ml-4">
+                                        <div class="text-sm font-medium leading-5 text-gray-900">
+                                            @if($presenter->academic_degree_id > 1 )
+                                                {{  $presenter->academicDegree?->title}}
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
+                                <div class="flex items-center">
                                     <div class="h-10 w-10 flex-shrink-0">
                                         <img class="h-10 w-10 rounded-full"
                                              src="{{ $presenter->getImageUrl() }}" alt="">
@@ -120,9 +146,6 @@
                                     <div class="ml-4">
                                         <div class="text-sm font-medium leading-5 text-gray-900">
                                             {{ $presenter->last_name}}
-                                            @if($presenter->academic_degree_id > 1 )
-                                                {{','. $presenter->academic_degree?->title}}
-                                            @endif
                                         </div>
                                     </div>
                                 </div>

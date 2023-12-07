@@ -72,7 +72,7 @@ it('has only one semester', function () {
 });
 
 it('belongs to an organization unit', function () {
-    expect($this->clip->organisation())->toBeInstanceOf(BelongsTo::class);
+    expect($this->clip->organization())->toBeInstanceOf(BelongsTo::class);
 });
 
 it('belongs to an image', function () {
