@@ -3,7 +3,7 @@
         :messageText="$messageText"
         :messageType="$messageType" />
 
-    <form wire:submit="postComment" action="#" method="PATCH" class="my-12 w-1/2">
+    <form wire:submit="postComment" action="#" method="PATCH" class="my-12 w-full">
         @csrf
         <div class="flex">
             <img class="h-10 w-10 rounded-full" src="{{ URL::asset('/images/none.jpg') }}" alt="avatar">
@@ -13,7 +13,7 @@
                           id="content"
                           rows="4"
                           placeholder="Type your comment here..."
-                          class="w-full rounded-md border px-4 py-2 shadow"
+                          class="w-full rounded-md border px-4 py-2 shadow dark:text-black text-sm"
                 ></textarea>
 
                 @error('content')
@@ -59,16 +59,20 @@
                          src="{{ URL::asset('/images/none.jpg') }}"
                          alt="avatar">
                     <div class="ml-4 flex-grow">
-                        <div class="flex items-center">
+                        <div class="flex items-center dark:text-white">
                             <div class="font-semibold">{{ $comment->owner->getFullNameAttribute() }}</div>
-                            <div class="ml-2 text-gray-500">{{ $comment->created_at->diffForHumans() }}</div>
+                            <div
+                                class="ml-2 text-gray-500 dark:text-gray-50">{{ $comment->created_at->diffForHumans() }}</div>
                         </div>
                         <div class="flex flex-col">
-                            <div class="mt-2 w-full text-gray-700">{{ $comment->content }}</div>
+                            <div
+                                class="mt-2 w-full text-gray-700 dark:text-gray-50 text-sm">
+                                {{ $comment->content }}
+                            </div>
                             @can('delete-comment', $comment)
                                 <div class="flex">
                                     <a href="#comments-section"
-                                       class="pt-2 text-red-800 underline hover:text-red-700"
+                                       class="pt-2 text-sm text-red-800 dark:text-red-900 underline hover:text-red-700"
                                        wire:click="deleteComment({{ $comment }})">
                                         <span>Delete</span>
                                     </a>

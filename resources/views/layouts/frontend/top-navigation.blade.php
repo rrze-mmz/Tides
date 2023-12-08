@@ -1,55 +1,61 @@
 <nav class="container mx-auto flex items-center justify-between px-6">
     <div>
-        <a href="{{ url('/') }}" class="text-lg font-semibold text-gray-100 no-underline">
+        <a href="{{ url('/') }}"
+           class="text-lg font-semibold text-gray-800 dark:text-gray-100 no-underline"
+        >
             {{ config('app.name', 'Laravel') }}
         </a>
     </div>
-    <nav class="font-semibold text-gray-300 space-x-4 sm:text-base">
-        <span class="no-underline hover:underline">
-            <a href="{{ route('frontend.series.index') }}" class="text-lg text-white">
+    <nav class="font-semibold space-x-4 text-lg ">
+        <span class="pl-10 no-underline hover:text-gray-800 dark:hover:text-gray-200">
+            <a href="{{ route('frontend.faq') }}">
+                Channels
+            </a>
+        </span>
+        <span class="no-underline hover:text-gray-800 dark:hover:text-gray-200">
+            <a href="{{ route('frontend.series.index') }}">
                 Series
             </a>
         </span>
-        <span class="no-underline hover:underline">
-            <a href="{{ route('frontend.clips.index') }}" class="text-lg text-white">
+        <span class="no-underline hover:text-gray-800 dark:hover:text-gray-200">
+            <a href="{{ route('frontend.clips.index') }}">
                 Clips
             </a>
         </span>
-        <span class="no-underline hover:underline">
-            <a href="{{ route('frontend.organizations.index') }}" class="text-lg text-white">
+        <span class="no-underline hover:text-gray-800 dark:hover:text-gray-200">
+            <a href="{{ route('frontend.organizations.index') }}">
                 Organizations
             </a>
         </span>
-        <span class="no-underline hover:underline">
-            <a href="{{ route('live-now') }}" class="text-lg text-white">
+        <span class="no-underline hover:text-gray-800 dark:hover:text-gray-200">
+            <a href="{{ route('live-now') }}">
                 Live now!
             </a>
         </span>
-        <span class="pr-10 no-underline hover:underline">
-            <a href="{{ route('frontend.faq') }}" class="text-lg text-white">
+        <span class="pr-10 no-underline hover:text-gray-800 dark:hover:text-gray-200">
+            <a href="{{ route('frontend.faq') }}">
                 FAQs
             </a>
         </span>
     </nav>
-    <nav class="text-sm font-semibold text-gray-300 space-x-4 sm:text-base">
-
+    <nav class=" flex font-semibold text-lg space-x-4 ">
         @guest
-            <a class="no-underline hover:underline"
+            <a class="hover:text-gray-800 dark:hover:text-gray-200"
                href="{{ route('login') }}"
             >{{ __('auth.Login') }}</a>
         @else
             <span>Hi, {{ Auth::user()->getFullNameAttribute() }}</span>
-            <a href="{{route('frontend.userSettings.edit')}}" class="no-underline hover:underline">
+            <a href="{{route('frontend.userSettings.edit')}}" class="hover:text-gray-800 dark:hover:text-gray-200">
                 my{{ str(config('app.name'))->ucfirst() }}
             </a>
             @if(!str_contains(url()->current(), 'admin') && auth()->user()->can('access-dashboard'))
                 <a href="/admin/dashboard"
-                   class="no-underline hover:underline"
+                   class="hover:text-gray-800 dark:hover:text-gray-200"
                 > Dashboard </a>
             @endif
 
             <a href="{{ route('logout') }}"
-               class="no-underline hover:underline"
+               class="hover:text-gray-800 dark:hover:text-gray-200"
                onclick="event.preventDefault();
                                 document.getElementById('logout-form').submit();"
             >{{ __('auth.Logout') }}</a>
@@ -60,9 +66,14 @@
                 {{ csrf_field() }}
             </form>
         @endguest
+        <div class="flex px-2">
+            <x-theme-toogle />
+        </div>
+        <!-- Dark Mode Toggle Component -->
         <span class="mr-10 no-underline">
             <a href="/set_lang/en" class="{{ (session('locale') === 'en')?'underline':'' }}">EN</a> |
             <a href="/set_lang/de" class="{{ (session('locale') === 'de')?'underline':'' }}">DE</a>
         </span>
+
     </nav>
 </nav>

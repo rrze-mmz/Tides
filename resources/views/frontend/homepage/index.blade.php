@@ -2,7 +2,8 @@
 
 @section('content')
     <div
-        class="flex h-72 w-full place-content-center place-items-center justify-center justify-items-center bg-gray-900">
+        class="flex h-72 w-full place-content-center place-items-center justify-center justify-items-center
+        bg-gray-900 dark:bg-gray-700">
         <div class="text-6xl font-bold text-white">
             <h2>{{__('homepage.Start by creating something new')}}</h2>
         </div>
@@ -34,13 +35,13 @@
 
         <div class="flex w-full items-end border-b justify-content-between">
             <div class="flex w-full items-end justify-between pb-2">
-                <div class="text-2xl">  {{  __('homepage.series.Recently added!') }} </div>
+                <div class="text-2xl dark:text-white">  {{  __('homepage.series.Recently added!') }} </div>
                 <a href="{{ route('frontend.series.index') }}"
-                   class="text-sm underline">{{__('homepage.series.more series') }}</a>
+                   class="text-sm underline dark:text-white ">{{__('homepage.series.more series') }}</a>
             </div>
 
         </div>
-        <div class="grid grid-cols-4 gap-4">
+        <div class="grid grid-cols-4 gap-4 ">
             @forelse($series as $single)
                 @include('backend.series._card',[
                         'series'=> $single,
@@ -53,9 +54,9 @@
 
         <div class="flex w-full items-end border-b justify-content-between">
             <div class="flex w-full items-end justify-between pb-2">
-                <div class="text-2xl"> {{  __('homepage.clips.Recently added!') }}</div>
+                <div class="text-2xl dark:text-white"> {{  __('homepage.clips.Recently added!') }}</div>
                 <a href="{{ route('frontend.clips.index') }}"
-                   class="text-sm underline">{{__('homepage.clips.more clips')}}</a>
+                   class="text-sm underline dark:text-white">{{__('homepage.clips.more clips')}}</a>
             </div>
 
         </div>

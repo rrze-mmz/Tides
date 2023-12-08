@@ -1,7 +1,7 @@
 @php use App\Enums\Acl; @endphp
 @if(method_exists($series, 'chapters') && $series->chapters()->count() > 0)
-    <div class="mt-5 flex border-t-1 border-t" x-data="{selected: 0 }">
-        <ul class="shadow-box mb-4 flex flex-col w-full   text-center text-lg">
+    <div class="mt-5 flex border-t-2 border-black dark:border-white " x-data="{selected: 0 }">
+        <ul class="shadow-box mb-4 flex flex-col w-full text-center text-lg dark:bg-gray-900 dark:text-white">
             @foreach($chapters as $chapter)
                 <li class="relative flex w-full rounded-lg pb-5">
                     <div class="w-full">
@@ -208,16 +208,15 @@
         </ul>
     </div>
 @else
-    <div class="mt-5 flex border-t-2 border-t">
+    <div class="mt-5 flex border-t-2 border-black dark:border-white">
         @if($reorder)
             <form class="w-full" action="{{route('series.clips.reorder', $series)}}" method="POST">
                 @csrf
                 @endif
                 <ul class="w-full pt-3">
-
                     @forelse($clips as $clip)
                         <li class="mb-4 flex content-center items-center rounded
-                        @if($clip->is_public) bg-gray-200  @else bg-gray-500  @endif
+                        @if($clip->is_public) bg-gray-200 dark:bg-gray-700  @else bg-gray-500 dark:bg-blue-700  @endif
                          p-2 text-center text-lg">
                             <div class="w-1/12">
                                 @if ($reorder)
@@ -288,10 +287,11 @@
                                           action="{{$clip->Path() }}"
                                     >
                                         <button type="submit"
-                                                class="focus:outline-none text-white text-sm py-1.5 px-5 rounded-md bg-blue-700
-                                            hover:bg-blue-500 hover:shadow-lg"
+                                                class="focus:outline-none text-white text-sm py-1.5 px-5 rounded-md
+                                                bg-blue-700 dark:bg-white hover:bg-blue-500 dark:hover:bg-gray-600
+                                                hover:shadow-lg"
                                         >
-                                            <x-heroicon-o-play class="h-6 w-6" />
+                                            <x-heroicon-o-play class="h-6 w-6 dark:text-gray-900" />
                                         </button>
                                     </form>
                                 @endif

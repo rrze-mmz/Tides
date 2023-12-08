@@ -8,6 +8,11 @@
 @import "filepond/dist/filepond.min.css";
 @import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css";
 
+/*Dark mode switcher smooth transition*/
+[x-cloak] {
+    display: none !important;
+}
+
 .select2-dropdown {
     @apply rounded-b-lg shadow-md;
 }

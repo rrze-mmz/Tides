@@ -4,10 +4,12 @@
           class="w-3/5">
 
         <div class="p-2">
-            <div class="flex flex-col items-center rounded-full bg-white shadow-xl">
+            <div
+                class="flex flex-col items-center rounded-full bg-gray-50 dark:bg-gray-800 dark:border-white shadow-xl">
                 <div class="flex w-full items-center rounded-full">
-                    <input class="ml-2 py-2 px-4 w-full leading-tight text-gray-700
-                                        rounded-l-full focus:outline-none"
+                    <input class="ml-2 py-2 px-4 w-full leading-tight text-gray-700 dark:text-white
+                                        rounded-l-full dark:placeholder-white  dark:focus:border-white
+                                        focus:outline-none dark:bg-gray-950"
                            id="term"
                            type="text"
                            name="term"
@@ -22,7 +24,7 @@
                                    checked
                             />
                             <label for="search-series-checkbox"
-                                   class="ml-2 text-gray-700"
+                                   class="ml-2 text-black dark:text-white"
                             >
                                 Series
                             </label>
@@ -37,9 +39,24 @@
                                    checked
                             />
                             <label for="search-clips-checkbox"
-                                   class="ml-2 text-gray-700"
+                                   class="ml-2 text-black dark:text-white"
                             >
                                 Clips
+                            </label>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex items-center">
+                            <input type="checkbox"
+                                   id="search-clips-checkbox"
+                                   class="form-checkbox h-5 w-5 text-blue-600"
+                                   name="clips"
+                                @checked(old('channels', ))
+                            />
+                            <label for="search-clips-checkbox"
+                                   class="ml-2 text-black dark:text-white"
+                            >
+                                Channels
                             </label>
                         </div>
                     </div>
@@ -48,7 +65,7 @@
                                             rounded-full hover:bg-gray-500 focus:outline-none"
                                 type="search"
                         >
-                            <svg class="h-6 w-6"
+                            <svg class="h-6 w-6 dar:bg-white"
                                  fill="none"
                                  stroke="currentColor"
                                  viewBox="0 0 24 24"

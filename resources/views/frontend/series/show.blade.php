@@ -2,14 +2,14 @@
 @extends('layouts.frontend')
 
 @section('content')
-    <div class="container mx-auto mt-16 md:mt-16">
+    <div class="container mx-auto mt-16 md:mt-16 dark:text-white">
         <div class="pb-10">
             @include('frontend.search._searchbar')
         </div>
 
-        
+
         <div class="flex justify-between border-b-2 border-black pb-2">
-            <h2 class="text-2xl font-bold">{{ $series->title }} [ID: {{ $series->id }}]</h2>
+            <h2 class="text-2xl font-bold ">{{ $series->title }} [ID: {{ $series->id }}]</h2>
             @cannot('administrate-admin-portal-pages')
                 @if( str()->contains($series->fetchClipsAcls(),[Acl::PASSWORD->lower()]))
                     <livewire:unlock-object :model="$series" />
@@ -100,7 +100,7 @@
         </div>
         @auth()
             <div class="flex flex-col pt-10">
-                <h2 class="border-b-2 border-black pb-2 text-2xl font-semibold">
+                <h2 class="border-b-2 border-black  dark:border-white pb-2 text-2xl font-semibold">
                     {{ __('clip.frontend.comments') }}
                 </h2>
                 <livewire:comments-section :model="$series" :type="'frontend'" />

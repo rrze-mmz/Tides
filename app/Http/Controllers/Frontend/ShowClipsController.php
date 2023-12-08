@@ -16,7 +16,7 @@ class ShowClipsController extends Controller
      */
     public function index(): View
     {
-        $clips = Clip::Public()->Single()->orderByDesc('updated_at')->paginate(10);
+        $clips = Clip::Public()->Single()->orderByDesc('updated_at')->paginate(12);
 
         return view('frontend.clips.index', compact('clips'));
     }

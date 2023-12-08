@@ -22,6 +22,12 @@ $(".solution-trix-field-wrapper")
     .find($("trix-editor"))
     .css("min-height", "350px");
 
+document.addEventListener("alpine:init", () => {
+    Alpine.store("darkMode", {
+        on: Alpine.$persist(false),
+    });
+});
+
 document.addEventListener(
     "DOMContentLoaded",
     function () {

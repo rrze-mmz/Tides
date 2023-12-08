@@ -14,19 +14,22 @@
     @vite('resources/css/app.css')
     @livewireStyles
 </head>
-<body class="h-screen bg-gray-100 font-sans leading-none antialiased">
+<body x-cloak
+      x-data="{darkMode:  $persist(false)}"
+      :class="{'dark': darkMode === true }"
+      class="antialiased">
 <div id="app">
-    <header class="fixed top-0 z-10 mt-0 w-full bg-gray-800 p-2 py-4">
+    <header class="fixed top-0 z-10 mt-0 w-full bg-gray-100 dark:bg-gray-900 p-2 py-4 text-dark dark:text-gray-200">
         @include('layouts.frontend.top-navigation')
     </header>
 
-    <main class="mx-auto max-h-full min-h-screen pt-12 lg:flex">
+    <main class="mx-auto max-h-full min-h-screen pt-12 lg:flex bg-white dark:bg-gray-900">
         <div class="w-full pb-10 lg:flex-grow">
             @yield('content')
         </div>
     </main>
 
-    <footer class="grid h-16 grid-cols-3 gap-2 items-center justify-between bg-gray-800">
+    <footer class="grid h-16 grid-cols-3 gap-2 items-center justify-between bg-gray-800 dark:bg-dark">
         <div class="col-span-2 items-center text-center text-sm text-gray-300 sm:text-base">
             Copyright @ {{ Illuminate\Support\Carbon::now()->year }} MIT Licence
         </div>

@@ -25,32 +25,37 @@ it('has a language switcher', function () {
     get(route('home'))->assertSee('EN')->assertSee('DE');
 });
 
+it('has a channels top menu item', function () {
+    $menuItem = '<a href="'.route('frontend.channels.index').'">';
+
+    get(route('home'))->assertSee($menuItem, false);
+});
 it('has a series top menu item', function () {
-    $menuItem = '<a href="'.route('frontend.series.index').'" class="text-lg text-white">';
+    $menuItem = '<a href="'.route('frontend.series.index').'">';
 
     get(route('home'))->assertSee($menuItem, false);
 });
 
 it('has a clips top menu item', function () {
-    $menuItem = '<a href="'.route('frontend.clips.index').'" class="text-lg text-white">';
+    $menuItem = '<a href="'.route('frontend.clips.index').'">';
 
     get(route('home'))->assertSee($menuItem, false);
 });
 
 it('has a faculties top menu item', function () {
-    $menuItem = '<a href="'.route('frontend.organizations.index').'" class="text-lg text-white">';
+    $menuItem = '<a href="'.route('frontend.organizations.index').'">';
 
     get(route('home'))->assertSee($menuItem, false);
 });
 
 it('has a live now menu item,', function () {
-    $menuItem = '<a href="'.route('live-now').'" class="text-lg text-white">';
+    $menuItem = '<a href="'.route('live-now').'">';
 
     get(route('home'))->assertSee($menuItem, false);
 });
 
 it('has an faq menu item,', function () {
-    $menuItem = '<a href="'.route('frontend.faq').'" class="text-lg text-white">';
+    $menuItem = '<a href="'.route('frontend.faq').'">';
 
     get(route('home'))->assertSee($menuItem, false);
 });

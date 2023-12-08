@@ -25,6 +25,7 @@
         "vue-template-compiler": "^2.6.11"
     },
     "dependencies": {
+        "@alpinejs/persist": "^3.13.3",
         "@popperjs/core": "^2.11.8",
         "@toast-ui/editor": "^3.2.2",
         "filepond": "^4.30.4",
