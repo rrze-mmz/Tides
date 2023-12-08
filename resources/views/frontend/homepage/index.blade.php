@@ -13,8 +13,8 @@
 
         @auth()
             @if(auth()->user()->settings->data['show_subscriptions_to_home_page'])
-                <div class="flex w-full items-end border-b justify-content-between">
-                    <div class="flex w-full items-end justify-between pb-2">
+                <div class="flex w-full items-end border-b-2 border-black dark:border-white justify-content-between">
+                    <div class="flex w-full items-end justify-between pb-2 border-b-2 border-black dark:border-white">
                         <div class="text-2xl"> {{ __('homepage.series.Your series subscriptions') }}</div>
                         <a href="{{ route('frontend.series.index') }}"
                            class="text-sm underline">{{__('homepage.series.more series') }}</a>
@@ -33,15 +33,17 @@
             @endif
         @endauth
 
-        <div class="flex w-full items-end border-b justify-content-between">
+        <div class="flex w-full items-end border-b justify-content-between pb-4
+            border-b-2 border-black dark:border-white "
+        >
             <div class="flex w-full items-end justify-between pb-2">
                 <div class="text-2xl dark:text-white">  {{  __('homepage.series.Recently added!') }} </div>
                 <a href="{{ route('frontend.series.index') }}"
                    class="text-sm underline dark:text-white ">{{__('homepage.series.more series') }}</a>
             </div>
-
         </div>
-        <div class="grid grid-cols-4 gap-4 ">
+
+        <div class="grid grid-cols-4 gap-4 pt-8 border-b-2 border-black dark:border-white ">
             @forelse($series as $single)
                 @include('backend.series._card',[
                         'series'=> $single,
@@ -52,7 +54,7 @@
             @endforelse
         </div>
 
-        <div class="flex w-full items-end border-b justify-content-between">
+        <div class="flex w-full items-end border-b justify-content-between pt-10 pb-4">
             <div class="flex w-full items-end justify-between pb-2">
                 <div class="text-2xl dark:text-white"> {{  __('homepage.clips.Recently added!') }}</div>
                 <a href="{{ route('frontend.clips.index') }}"
@@ -61,7 +63,7 @@
 
         </div>
         <ul class="flex-row">
-            <div class="grid grid-cols-4 gap-6 ">
+            <div class="grid grid-cols-4 gap-6 pt-8">
                 @forelse($clips as $clip)
                     <li class="my-2 w-full rounded bg-white dark:bg-gray-900 p-4">
                         @include('backend.clips._card',[

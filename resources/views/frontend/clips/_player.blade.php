@@ -1,14 +1,15 @@
-@php use App\Models\Series; @endphp
-<div class="flex flex-col">
-    <div class="flex content-center justify-center pt-6">
+@use(App\Models\Series)
 
+<div class="flex flex-col">
+
+    <div class="flex content-center justify-center pt-6">
         @if($clip->checkAcls())
             <x-player :clip="$clip" :wowzaStatus="$wowzaStatus" />
         @else
             <p>{{ __('clip.frontend.not authorized to view video') }}</p>
         @endif
-
     </div>
+
     <div class="flex">
         <div x-data="{ open: false }">
             <div class="flex w-full pt-4 pr-4">
