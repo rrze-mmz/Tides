@@ -1,12 +1,14 @@
 @extends('layouts.myPortal')
 
 @section('myPortalHeader')
-    {{ __('myPortal.comments.You have X comments', ['counter' => $comments->count() ]) }}
+    <div class="dark:text-white">
+        {{ __('myPortal.comments.You have X comments', ['counter' => $comments->count() ]) }}
+    </div>
 @endsection
 
 @section('myPortalContent')
     @foreach ($comments->sortDesc() as $comment)
-        <div class="border-b-2 border-black font-extrabold">
+        <div class="border-b-2 border-black font-extrabold dark:text-white dark:border-white">
             For {{ str($comment->commentable_type)->ucfirst() }} : {{ $comment->commentable->title }}
         </div>
         <div class="my-10 flex justify-between">
@@ -15,11 +17,11 @@
                  alt="avatar">
             <div class="ml-4 flex-grow">
                 <div class="flex items-center">
-                    <div class="font-semibold"> You</div>
-                    <div class="ml-2 text-gray-500">{{ $comment->created_at->diffForHumans() }}</div>
+                    <div class="dark:text-white"> You</div>
+                    <div class="ml-2 text-sm italic dark:text-white">{{ $comment->created_at->diffForHumans() }}</div>
                 </div>
                 <div class="flex flex-col">
-                    <div class="mt-2 w-full text-gray-700">{{ $comment->content }}</div>
+                    <div class="mt-2 w-full text-gray-700 dark:text-white">{{ $comment->content }}</div>
                     <div class="flex">
                         <a href="{{ route('frontend.'.str($comment->commentable_type)->plural().'.show',$comment->commentable) }}"
                            class="pt-2 text-red-800 underline hover:text-red-700">

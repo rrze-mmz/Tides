@@ -1,7 +1,9 @@
 @extends('layouts.myPortal')
 
 @section('myPortalHeader')
-    {{ __('myPortal.myPortal Settings') }}
+    <div class="dark:text-white">
+        {{ __('myPortal.myPortal Settings') }}
+    </div>
 @endsection
 
 @section('myPortalContent')
@@ -14,7 +16,7 @@
 
             <div class="my-10 grid grid-cols-6 content-center items-center gap-2">
                 <div class="col-span-2">
-                    <label for="language" class="mr-6 block py-2 font-bold text-gray-700 text-md">
+                    <label for="language" class="mr-6 block py-2 font-bold text-gray-700 text-md dark:text-white">
                         {{ __('myPortal.Portal language') }}
                     </label>
                 </div>

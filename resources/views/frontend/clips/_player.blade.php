@@ -32,7 +32,7 @@
                     @foreach($assetsResolutions as $key=>$resolutionText)
                         <li>
                             <a href="{{route('frontend.clips.feed', [$clip, $resolutionText])}}"
-                               class="underline">
+                               class="underline dark:text-white">
                                 {{ $resolutionText }}
                             </a>
                         </li>
@@ -44,7 +44,7 @@
     <div class="flex justify-around border-b-2 border-gray-500 pt-8 pb-3">
 
         @if ($clip->series_id)
-            <div class="flex items-center">
+            <div class="flex items-center dark:text-white">
                 <x-heroicon-o-academic-cap class="h-6 w-6" />
                 <a href="{{ route('frontend.series.show', $clip->series) }}">
                     <span class="pl-3 underline"> {{ $clip->series->title }}</span>
@@ -52,36 +52,36 @@
 
             </div>
         @endif
-        <div class="flex items-center">
+        <div class="flex items-center dark:text-white">
             <x-heroicon-o-user-group class="h-6 w-6" />
             <span class="pl-3"> {{ $clip->presenters->pluck(['full_name'])->implode(', ') }} </span>
         </div>
 
         @if($clip->is_livestream)
-            <div class="flex items-center">
+            <div class="flex items-center dark:text-white">
                 <x-heroicon-o-clock class="h-6 w-6" />
                 <span class="pl-3"></span>
                 LIVESTREAM
             </div>
         @else
-            <div class="flex items-center">
+            <div class="flex items-center dark:text-white">
                 <x-heroicon-o-clock class="h-6 w-6" />
                 <span class="pl-3"></span> {{ $clip->assets()->first()->durationToHours() }} Min
             </div>
         @endif
 
 
-        <div class="flex items-center">
+        <div class="flex items-center dark:text-white">
             <x-heroicon-o-calendar class="h-6 w-6" />
             <span class="pl-3">{{ $clip->created_at->format('Y-m-d') }}</span>
         </div>
 
-        <div class="flex items-center">
+        <div class="flex items-center dark:text-white">
             <x-heroicon-o-upload class="h-6 w-6" />
             <span class="pl-3"> {{ $clip->assets->first()?->updated_at }}</span>
         </div>
 
-        <div class="flex items-center">
+        <div class="flex items-center dark:text-white">
             <x-heroicon-o-eye class="h-6 w-6" />
             <span class="pl-3"> 0 Views </span>
         </div>

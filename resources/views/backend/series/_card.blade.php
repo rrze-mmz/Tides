@@ -7,7 +7,7 @@
         $url = route('frontend.series.show', $series)
     @endphp
 @endif
-<div class="relative my-2 bg-gray-50 dark:bg-gray-800 rounded-md dark:border-white">
+<div class="relative my-2 bg-gray-50 dark:bg-slate-800 rounded-md dark:border-white">
     <div class="relative h-15 overflow-hidden">
         <a href="{{ $url }}">
             <img
@@ -24,12 +24,12 @@
         </div>
     </div>
 
-    <div class="flex-row justify-between p-2 mb-6 w-full bg-gray-50 dark:bg-gray-800 pb-7">
+    <div class="flex-row justify-between p-2 mb-6 w-full bg-gray-50 dark:bg-slate-800 pb-7">
         <div class="mb-1">
             <div class="text-md font-bold text-gray-900 dark:text-white">
                 <a
                     href="{{ $url }}"
-                    class="text-md"
+                    class="text-lg"
                 >
                     {{ $series->title }}
                 </a>
@@ -112,8 +112,8 @@
         @endif
     </div>
     @can('edit-series',$series)
-        <div class="absolute w-full py-2.5 bottom-0 inset-x-0 text-white dark:text-white
-                    text-xs text-right pr-2 pb-2 leading-4 min-pt-10">
+        <div class="absolute w-full py-1.5 bottom-0 inset-x-0 text-white dark:text-white
+                    text-xs text-right pr-2 pb-2 leading-2 min-pt-5">
             <a href="{{route('series.edit', $series)}}">
                 <x-button class="bg-blue-500 hover:bg-blue-700">
                     <div class="flex items-center">

@@ -2,8 +2,8 @@
 
 @section('content')
     <div
-        class="flex h-72 w-full place-content-center place-items-center justify-center justify-items-center
-        bg-gray-900 dark:bg-gray-700">
+        class="flex h-72 w-full place-content-center place-items-center justify-center
+        justify-items-center bg-gray-900 dark:bg-gray-700">
         <div class="text-6xl font-bold text-white">
             <h2>{{__('homepage.Start by creating something new')}}</h2>
         </div>
@@ -60,15 +60,19 @@
             </div>
 
         </div>
-        <div class="grid grid-cols-3 gap-4 py-8 h48">
-            @forelse($clips as $clip)
-                @include('backend.clips._card',[
-                        'clip'=> $clip,
-                        'route' => 'admin'
-                        ])
-            @empty
-                {{ __('homepage.clips.no clips found' )}}
-            @endforelse
-        </div>
+        <ul class="flex-row">
+            <div class="grid grid-cols-4 gap-6 ">
+                @forelse($clips as $clip)
+                    <li class="my-2 w-full rounded bg-white dark:bg-gray-900 p-4">
+                        @include('backend.clips._card',[
+                                'clip'=> $clip,
+                                'route' => 'admin'
+                                ])
+                    </li>
+                @empty
+                    {{ __('homepage.clips.no clips found' )}}
+                @endforelse
+            </div>
+        </ul>
     </main>
 @endsection

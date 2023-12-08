@@ -21,8 +21,8 @@
 
         </div>
         @if($series->description!=='')
-            <div class="flex flex-col pt-4">
-                <h2 class="text-2xl font-semibold">{{ __('common.description') }}</h2>
+            <h2 class="py-2 text-2xl font-semibold dark:text-white">{{ __('common.description') }}</h2>
+            <div class="flex flex-col pt-4 dark:bg-gray-200 p-6">
                 <p class="pt-4 leading-loose">
                     {!! $series->description !!}
                 </p>

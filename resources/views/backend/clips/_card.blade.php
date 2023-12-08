@@ -1,43 +1,53 @@
 @use(App\Enums\Acl)
-<div class="my-2 flex w-full rounded-2xl bg-white dark:bg-gray-800">
-    <div class="mx-2 flex h-full w-48 place-items-center justify-center justify-items-center">
-        <img src="{{ fetchClipPoster($clip->latestAsset?->player_preview) }}" alt="preview image">
+<div class="relative my-2 bg-gray-50 dark:bg-slate-900       rounded-md dark:border-white">
+    <div class="relative h-15 overflow-hidden">
+        <a href="@if (str_contains(url()->current(), 'admin')) {{route('clips.edit', $clip)}}
+                @else {{route('frontend.clips.show', $clip) }} @endif">
+            <img
+                src="{{ ($clip->latestAsset)
+                    ? fetchClipPoster($clip->latestAsset?->player_preview)
+                    : "/images/generic_clip_poster_image.png" }}"
+                alt="preview image"
+                class="object-cover w-full h-full" />
+        </a>
+        <div
+            class="absolute w-full py-2.5 bottom-0 inset-x-0 bg-blue-600  text-white
+                    text-xs text-right pr-2 pb-2 leading-4 ">
+            {{ $clip->latestAsset?->durationToHours() }}
+        </div>
     </div>
 
-    <div class="flex w-full flex-col justify-between bg-white dark:bg-gray-800 p-4">
+    <div class="flex-row justify-between p-2 mb-6 w-full bg-gray-50 dark:bg-slate-900        pb-7">
         <div class="mb-1">
-            <div class="text-sm font-bold text-gray-900 dark:text-white">
-                <a href="@if (str_contains(url()->current(), 'admin')) {{route('clips.edit', $clip)}}
+            <div class="text-md font-bold text-gray-900 dark:text-white">
+                <a
+                    href="@if (str_contains(url()->current(), 'admin')) {{route('clips.edit', $clip)}}
                 @else {{route('frontend.clips.show', $clip) }} @endif"
-                   class="underline"
-                >{{ (request()->routeIs('clips.index') ||
-                     request()->routeIs('frontend.clips.index') ||
-                     request()->routeIs('search'))
-                    ?$clip->title
-                    :Str::limit($clip->title, 20, '...')}}
+                    class="text-md"
+                >
+                    {{ (request()->routeIs('clips.index') ||
+                      request()->routeIs('frontend.clips.index') ||
+                      request()->routeIs('search'))
+                     ?$clip->title
+                     :Str::limit($clip->title, 20, '...')}}
                 </a>
             </div>
-            <p class="py-3 text-base text-gray-700 dark:text-white">
+            <div>
+                @if ($clip->owner)
+                    <span class="text-sm italic dark:text-white">von {{ $clip->owner?->getFullNameAttribute() }}</span>
+                @endif
+            </div>
+            <p class="text-base text-gray-700 dark:text-white">
                 {{ strip_tags(str_contains(url()->current(),'search')
                     ?$clip->description
                     :Str::limit($clip->description, 30)) }}
             </p>
         </div>
-        <div class="flex items-center justify-content-between">
-            <div class="pr-2">
-                <x-heroicon-o-clock class="h-4 w-4 dark:text-white" />
-            </div>
-            <div class="text-sm">
-                <p class="italic text-gray-900 dark:text-white">
-                    {{ $clip->recording_date }}
-                </p>
-            </div>
-        </div>
 
-        @if($clip->presenters->count() > 0)
+        @if($clip->presenters->isNotEmpty())
             <div class="flex items-center pt-2 justify-content-between">
                 <div class="pr-2">
-                    <x-heroicon-o-user-group class="h-4 w-4 dark:text-white" />
+                    <x-heroicon-o-user class="h-4 w-4" />
                 </div>
                 <div class="text-sm">
                     <p class="italic text-gray-900 dark:text-white">
@@ -49,19 +59,17 @@
                 </div>
             </div>
         @endif
+        <div class="flex items-center justify-content-between">
 
-        @if($clip->owner)
-            <div class="flex items-center pt-2 justify-content-between">
-                <div class="pr-2">
-                    <x-heroicon-o-user class="h-4 w-4 dark:text-white" />
-                </div>
-                <div class="text-sm">
-                    <p class="italic text-gray-900 dark:text-white">
-                        {{ $clip->owner?->getFullNameAttribute() }}
-                    </p>
-                </div>
+            <div class="pr-2">
+                <x-heroicon-o-clock class="w-4 h-4 dark:text-white" />
             </div>
-        @endif
+            <div class="text-sm">
+                <p class="italic text-gray-900 dark:text-white">
+                    {{ $clip->recording_date->diffForHumans()  }}
+                </p>
+            </div>
+        </div>
 
         @if($clip->acls->isNotEmpty() )
             <div class="flex items-center pt-2 justify-content-between">
@@ -83,6 +91,23 @@
                 </div>
             </div>
         @endif
-
     </div>
+    @can('edit-clips',$clip)
+        <div class="absolute w-full py-2.5 bottom-0 inset-x-0 text-white dark:text-white
+                    text-xs text-right pr-2 pb-2 leading-4 min-pt-10">
+            <a href="{{route('clips.edit', $clip)}}">
+                <x-button class="bg-blue-500 hover:bg-blue-700">
+                    <div class="flex items-center">
+                        <div class="pr-5">
+                            {{ __('common.actions.edit') }}
+                        </div>
+                        <div>
+                            <x-heroicon-o-pencil class="w-4 h-4" />
+                        </div>
+                    </div>
+
+                </x-button>
+            </a>
+        </div>
+    @endcan
 </div>

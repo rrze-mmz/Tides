@@ -1,7 +1,8 @@
-@php use App\Enums\Role; @endphp
+@use(App\Enums\Role)
 <aside class="w-64"
        aria-label="Sidebar">
-    <div class="overflow-y-auto rounded bg-gray-50 px-3 py-4 text-white dark:bg-gray-800">
+    <div class="overflow-y-auto rounded bg-gray-50 px-3 py-4 bg-gray-100 dark:bg-sky-950 text-dark
+                dark:text-gray-200">
         <ul class="space-y-2 list-none">
             <li>
                 <a href="{{ route('frontend.userSettings.edit') }}"

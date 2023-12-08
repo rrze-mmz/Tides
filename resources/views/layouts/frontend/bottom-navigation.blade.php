@@ -1,5 +1,5 @@
 <nav class="container mx-auto flex flex-row-reverse items-center justify-between">
-    <nav class="text-gray-300 space-x-2 sm:text-base">
+    <nav class="text-gray-300 dark:text-white space-x-2 sm:text-base">
         <span class="no-underline hover:underline">
             <a href="{{ route('frontend.contact') }}" class="text-white">
                 Kontakt

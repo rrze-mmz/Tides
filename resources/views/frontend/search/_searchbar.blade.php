@@ -5,11 +5,11 @@
 
         <div class="p-2">
             <div
-                class="flex flex-col items-center rounded-full bg-gray-50 dark:bg-gray-800 dark:border-white shadow-xl">
+                class="flex flex-col items-center rounded-full bg-gray-50 dark:bg-slate-800 dark:border-white shadow-xl">
                 <div class="flex w-full items-center rounded-full">
                     <input class="ml-2 py-2 px-4 w-full leading-tight text-gray-700 dark:text-white
                                         rounded-l-full dark:placeholder-white  dark:focus:border-white
-                                        focus:outline-none dark:bg-gray-950"
+                                        focus:outline-none dark:bg-slate-900"
                            id="term"
                            type="text"
                            name="term"

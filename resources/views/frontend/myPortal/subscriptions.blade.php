@@ -1,7 +1,9 @@
 @extends('layouts.myPortal')
 
 @section('myPortalHeader')
-    {{ __('myPortal.subscriptions.Your are subscribed to X Series', ['counter' => count($series)]) }}
+    <div class="dark:text-white">
+        {{ __('myPortal.subscriptions.Your are subscribed to X Series', ['counter' => count($series)]) }}
+    </div>
 @endsection
 
 @section('myPortalContent')
@@ -12,7 +14,10 @@
                     'route' => 'admin'
                     ])
         @empty
-            {{ __('homepage.series.no series subscriptions found') }}
+            <div class="dark:text-white">
+                {{ __('homepage.series.no series subscriptions found') }}
+            </div>
+
         @endforelse
     </div>
 @endsection

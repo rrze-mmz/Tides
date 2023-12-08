@@ -7,14 +7,14 @@
         </div>
         @if(isset($searchResults['series']['hits']))
             <div class="flex justify-between border-b-2 border-black pb-2">
-                <h2 class="text-2xl font-bold">
+                <h2 class="text-2xl font-bold dark:text-white">
                     {!! __('search.search series results header', [
                                 'counter' => $searchResults['series']['counter'],
                                 'searchTerm' =>  $searchResults['searchTerm']
                                 ]) !!}
                 </h2>
             </div>
-            <div class="mx-2 flex flex-col pt-2">
+            <div class="mx-2 flex flex-col pt-2 dark:text-white">
                 @forelse($searchResults['series']['hits']['hits'] as $series)
                     @include('frontend.search.results.opensearch.series._elastic_series_card',
                                 ['series'  => ($series['_source'])])
@@ -25,7 +25,7 @@
         @endif
 
         @if(isset($searchResults['clips']['hits']))
-            <div class="flex justify-between border-b-2 border-black pb-2">
+            <div class="flex justify-between border-b-2 border-black pb-2 dark:text-white pt-10">
                 <h2 class="text-2xl font-bold">
                     {{ __('search.search clips results header', [
                                 'counter' => $searchResults['clips']['counter'],

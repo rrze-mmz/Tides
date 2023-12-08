@@ -1,7 +1,7 @@
 @extends('layouts.frontend')
 
 @section('content')
-    <main class="container mx-auto mt-32 h-screen md:mt-32">
+    <main class="container mx-auto mt-32 h-auto md:mt-32">
         <div class="pb-10">
             @include('frontend.search._searchbar')
         </div>
@@ -28,4 +28,3 @@
         </ul>
     </main>
 @endsection
-

@@ -7,16 +7,16 @@
         </div>
 
         <div class="flex flex-col place-content-center content-center items-center justify-center">
-            <h2 class="text-2xl font-bold">Organizations index</h2>
+            <h2 class="text-2xl font-bold dark:text-white">Organizations index</h2>
         </div>
         <ul class="flex-row">
             <div class="grid grid-cols-3 items-stretch gap-4 pt-4">
                 @forelse($organizations as $organization)
                     <a href="{{ route('frontend.organizations.show', $organization) }}"
-                       class="m-2 rounded-lg border-2 border-solid border-black p-2 hover:bg-blue-200">
+                       class="m-2 rounded-lg border-2 border-solid border-black dark:border-white p-2 dark:hover:bg-slate-500 hover:bg-blue-200">
                         <div class="flex place-content-center content-center items-center justify-center self-center">
                             <div>
-                                <h3 class="pb-6 font-semibold">
+                                <h3 class="pb-6 font-semibold dark:text-white">
                                     {{ $organization->name }}
                                 </h3>
                             </div>

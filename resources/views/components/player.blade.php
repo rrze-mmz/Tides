@@ -15,7 +15,6 @@
             src="{{ $wowzaService->vodSecureUrl($clip) }}"
             type="application/x-mpegURL"
         />
-
         @if($captionAsset = $clip->getCaptionAsset())
             <track kind="captions"
                    label="DE"

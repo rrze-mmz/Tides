@@ -1,4 +1,4 @@
-@php use Illuminate\Support\Carbon; @endphp
+@use(Illuminate\Support\Carbon)
 <figure class="my-2 flex w-full align-middle bg-indigo-200 rounded-2xl">
     <div class="flex w-full flex-col justify-between p-4">
         <div class="mb-1">
@@ -36,7 +36,9 @@
                     </div>
                     <div class="">
                         <p class="text-gray-900">
-                            {{ $clip['acls'] }}
+                            @if (!is_array($clip['acls']))
+                                {{ $clip['acls'] }}
+                            @endif
                         </p>
                     </div>
                 </div>
