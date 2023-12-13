@@ -1,4 +1,4 @@
-<div class="mb-2 space-y-10" id="comments-section">
+<div class="mb-2 space-y-5 font-normal" id="comments-section">
     <x-message
         :messageText="$messageText"
         :messageType="$messageType" />
@@ -72,7 +72,7 @@
                             @can('delete-comment', $comment)
                                 <div class="flex">
                                     <a href="#comments-section"
-                                       class="pt-2 text-sm text-red-800 dark:text-red-900 underline hover:text-red-700"
+                                       class="pt-2 text-sm text-red-800 dark:text-red-500 underline hover:text-red-700"
                                        wire:click="deleteComment({{ $comment }})">
                                         <span>Delete</span>
                                     </a>

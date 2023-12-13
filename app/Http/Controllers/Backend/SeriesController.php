@@ -25,11 +25,11 @@ class SeriesController extends Controller
     public function index(): View
     {
         return view('backend.series.index', [
-            'series' => (auth()->user()->can('index-all-series'))
-                    ? Series::with('presenters')
-                        ->withLastPublicClip()
-                        ->orderByDesc('updated_at')->paginate(12)
-                    : auth()->user()->accessableSeries()->paginate(12),
+            //            'series' => (auth()->user()->can('index-all-series'))
+            //                    ? Series::with('presenters')
+            //                        ->withLastPublicClip()
+            //                        ->orderByDesc('updated_at')->paginate(12)
+            //                    : auth()->user()->accessableSeries()->paginate(12),
         ]);
     }
 

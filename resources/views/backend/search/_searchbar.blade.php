@@ -5,7 +5,7 @@
         @csrf
 
         <div class="p-2">
-            <div class="flex flex-col items-center rounded-full bg-white">
+            <div class="flex flex-col items-center rounded-full bg-white dark:bg-sky-950">
                 <div class="flex w-full items-center rounded-full">
                     <input class="ml-2 w-full px-4 py-2 leading-tight text-gray-700 focus:outline-none"
                            id="term"
@@ -14,11 +14,11 @@
                            placeholder="{{ __('homepage.Search form placeholder') }}">
 
                     <div class="p-4">
-                        <button class="flex justify-center items-center p-2 w-8 h-8 text-white bg-gray-600
+                        <button class="flex justify-center items-center p-2 w-8 h-8 text-white bg-gray-600 dark:bg-white
                                             rounded-full hover:bg-gray-500 focus:outline-none"
                                 type="search"
                         >
-                            <svg class="h-6 w-6"
+                            <svg class="h-6 w-6 dark:text-black"
                                  fill="none"
                                  stroke="currentColor"
                                  viewBox="0 0 24 24"

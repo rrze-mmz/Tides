@@ -1,11 +1,11 @@
 @extends('layouts.backend')
 
 @section('content')
-    <div class="flex border-b border-black pb-2 font-semibold font-2xl">
+    <div class="flex border-b border-black pb-2 font-semibold font-2xl dark:text-white dark:border-white">
         {{ __('dashboard.welcome to personal dashboard', ['fullName' => auth()->user()->getFullNameAttribute() ]) }}
         !
     </div>
-    <div class="flex flex-col px-2 py-2">
+    <div class="flex flex-col px-2 py-2 dark:text-white">
         <div>
             <p class="pt-2">
                 <span class="mr-2">{{ __('dashboard.start creating new series') }}</span>

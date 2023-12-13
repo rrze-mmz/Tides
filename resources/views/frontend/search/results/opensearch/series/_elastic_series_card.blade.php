@@ -1,18 +1,20 @@
-@php use Illuminate\Support\Carbon; @endphp
-<figure class="my-2 flex w-full align-middle bg-indigo-200 rounded-2xl">
+@use(Illuminate\Support\Carbon)
+<figure class="my-2 flex w-full align-middle bg-indigo-200 dark:bg-indigo-800 rounded-2xl">
     <div class="flex w-full flex-col justify-between p-4">
         <div class="mb-1">
-            <div class="text-lg font-bold text-gray-900">
+            <div class="text-lg font-bold text-gray-900 dark:text-white">
                 <a href="{{ route('frontend.series.show', $series['slug']) }}"
                    class=""
                 >
                     {{ $series['title'].' |'.$series['semester'].' |  SeriesID:'.$series['id'] }}
                 </a>
             </div>
-            <p class="py-3 text-base text-gray-700">
-                {!! $series['description'] !!}
+            <div class="">
+                <p class="py-3 text-base text-gray-700">
+                    {!! $series['description'] !!}
+                </p>
+            </div>
 
-            </p>
         </div>
         <div class="flex justify-between  border-t-2 pt-2">
             <div>
@@ -23,7 +25,7 @@
                         </div>
                     </div>
                     <div class="">
-                        <p class="text-gray-900">
+                        <p class="text-gray-900 dark:text-white">
                             {{ Carbon::parse($series['updated_at'])->format('Y-m-d  H:i:s') }}
                         </p>
                     </div>
@@ -35,7 +37,7 @@
                         </div>
                     </div>
                     <div class="">
-                        <p class="text-gray-900">
+                        <p class="text-gray-900 dark:text-white">
                             {{ $series['acls'] }}
                         </p>
                     </div>
@@ -46,7 +48,7 @@
                             <x-heroicon-o-upload class="h-4" />
                         </div>
                         <div class="">
-                            <p class="text-gray-900">
+                            <p class="text-gray-900 dark:text-white">
                                 {{ ($series['owner']['fullName'])}}
                             </p>
                         </div>
@@ -62,7 +64,7 @@
                             <div class="flex items-center align-middle">
                                 @foreach ($series['presenters'] as $presenter)
 
-                                    <div class="pr-2">
+                                    <div class="pr-2 dark:text-white">
                                         {{ $presenter['presenter_fullName'] }}
                                     </div>
                                     <img src="{{ env('app_url').$presenter['presenter_image_url'] }}" alt=""
@@ -78,7 +80,7 @@
                         <x-heroicon-o-office-building class="h-4" />
                     </div>
                     <div class="">
-                        <p class="text-gray-900">
+                        <p class="text-gray-900 dark:text-white">
                             {{ ($series['organization']['org_name'])}}
                         </p>
                     </div>

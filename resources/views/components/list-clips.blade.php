@@ -107,7 +107,7 @@
             @if($series->clipsWithoutChapter()->isNotEmpty())
                 <li class="relative flex w-full rounded-lg pb-5">
                     <div class="w-full">
-                        <button type="button" class="w-full px-8 py-6 text-left  border-2 border-gray-600 py-4"
+                        <button type="button" class="w-full px-8 py-6 text-left  border-2 border-gray-600"
                                 @click="selected !==  1 ? selected = 1  : selected = null">
                             <div class="flex items-center justify-between">
                                 <span>
@@ -193,7 +193,8 @@
 
                                     @empty
                                         <div class="grid place-items-center">
-                                            <div class="mb-4 w-full rounded bg-gray-200 p-5 text-center text-2xl">
+                                            <div class="mb-4 w-full rounded bg-gray-200 dark:bg-slate-800 p-5
+                                            text-center text-2xl dark:text-white">>
                                                 {{ __('series.common.no clips') }}
                                             </div>
                                         </div>
@@ -217,7 +218,7 @@
                     @forelse($clips as $clip)
                         <li class="mb-4 flex content-center items-center rounded
                         @if($clip->is_public) bg-gray-300 dark:bg-gray-700  @else bg-gray-500 dark:bg-blue-700  @endif
-                         p-2 text-center text-sm">
+                         p-2 text-center text-sm dark:text-white">
                             <div class="w-1/12">
                                 @if ($reorder)
                                     <label>
@@ -300,7 +301,8 @@
 
                     @empty
                         <div class="grid place-items-center">
-                            <div class="mb-4 w-full rounded bg-gray-200 p-5 text-center text-2xl">
+                            <div
+                                class="mb-4 w-full rounded bg-gray-200 dark:bg-slate-800 p-5 text-center text-2xl dark:text-white">
                                 {{ __('series.common.no clips') }}
                             </div>
                         </div>

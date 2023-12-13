@@ -6,19 +6,20 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
-
-    <!-- Fonts -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
-
     <!-- Styles -->
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    @vite('resources/css/app.css')
+    @livewireStyles
 </head>
-<body>
-<div id="app" class="font-sans text-gray-900 antialiased">
+<body x-cloak
+      x-data="{darkMode:  $persist(false)}"
+      :class="{'dark': darkMode === true }"
+      class="antialiased">
+<div id="app" class="font-sans bg-slate-500 antialiased">
     {{ $slot }}
 </div>
+@vite('resources/js/app.js')
+@livewireScriptConfig
 </body>
 </html>

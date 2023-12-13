@@ -1,6 +1,6 @@
 <div class="grid grid-cols-8">
     <div class="content-center items-center">
-        <label class="mr-6 block py-2 font-bold text-gray-700 text-md"
+        <label class="mr-6 block py-2 font-bold text-gray-700 text-md dark:text-white"
                for="{{ $fieldName }}"
         >
             {{$label}}
@@ -13,7 +13,7 @@
                    value="{{$value }}"
                    name="{{ $fieldName }}"
                    id="{{ $fieldName }}"
-                   class="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300
+                   class="text-md block px-3 py-2 rounded-lg w-full bg-white dark:bg-gray-200 border-2 border-gray-300
                             placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white
                             focus:border-gray-600 focus:outline-none"
             >

@@ -5,7 +5,7 @@
         @include('frontend.search._searchbar')
 
         <div class="flex justify-between border-b-2 border-black pb-2">
-            <h2 class="text-2xl font-bold">
+            <h2 class="text-2xl font-bold dark:text-white">
                 {{ __('search.search clips results header', ['counter' => $searchResults['clips']->total()]) }}
             </h2>
         </div>

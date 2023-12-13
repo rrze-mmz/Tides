@@ -2,8 +2,9 @@
     $resource = $resource ?? null ;
 @endphp
 @if($resource)
-    <div class="mx-4 h-full w-full rounded border bg-white px-4 py-4">
-        <h2 class="mb-3 -ml-5 border-l-4 border-blue-600 py-4 pl-4 text-xl font-normal">
+    <div class="mx-4 h-full w-full rounded border bg-white px-4 py-4  dark:bg-gray-800
+           dark:border-blue-800 dark:text-white  font-normal">
+        <h2 class="mb-3 -ml-5 border-l-4 border-blue-600 py-4 pl-4 text-xl">
             {{ __('common.forms.Upload a document') }}
         </h2>
 
@@ -17,7 +18,7 @@
 
             <div class="flex pb-6">
                 <input type="file" name="document" accept="application/pdf,  application/doc, application/docx">
-                <input type="hidden" name="type" value="{{ str(class_basename($resource))->lower() }}"/>
+                <input type="hidden" name="type" value="{{ str(class_basename($resource))->lower() }}" />
                 <input type="hidden" name="id" value="{{ $resource?->id }}">
             </div>
             @error('document')
@@ -44,7 +45,7 @@
                             >
                                 <a data-message="view-document"
                                    href="{{ route('document.'.str(class_basename($resource))->lower().'.view',[$resource, $document]) }}">
-                                    <x-heroicon-o-eye class="h-6 w-6"/>
+                                    <x-heroicon-o-eye class="h-6 w-6" />
                                 </a>
                                 <div>
                                     <form action="{{route('documents.destroy',$document)}}"
@@ -53,7 +54,7 @@
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" data-message="delete-document">
-                                            <x-heroicon-o-x-circle class="h-6 w-6"/>
+                                            <x-heroicon-o-x-circle class="h-6 w-6" />
                                         </button>
 
                                     </form>

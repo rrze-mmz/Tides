@@ -14,9 +14,13 @@
     @livewireStyles
     @trixassets
 </head>
-<body id="app">
+<body id="app"
+      x-cloak
+      x-data="{darkMode:  $persist(false)}"
+      :class="{'dark': darkMode === true }"
+      class="antialiased">
 <div class="flex bg-gray-100">
-    <aside class="relative hidden h-screen w-1/12 shadow-xl bg-sidebar sm:block">
+    <aside class="relative hidden h-screen w-1/12 shadow-xl bg-sidebar dark:bg-sky-950 sm:block">
         <div class="p-6 text-center align-center">
             <a href="{{route('home')}}"
                class="text-3xl font-semibold text-white hover:text-gray-300">
@@ -34,15 +38,21 @@
 
     <div class="relative flex h-screen w-full flex-col overflow-y-hidden">
         <!-- Desktop Header -->
-        <header class="flex hidden w-full items-center justify-end bg-white px-6 sm:flex">
+        <header class="flex hidden w-full items-center justify-end bg-white px-6 sm:flex dark:bg-sky-950">
             <div class="w-1/2">
                 @include('backend.search._searchbar')
+            </div>
+            <div>
+                <div class="flex px-2">
+                    <x-theme-toogle />
+                </div>
             </div>
             <div x-data="{ isOpen: false }" class="relative flex justify-end">
                 <x-heroicon-o-user @click="isOpen = !isOpen"
                                    class="relative z-10 w-8 h-8 rounded-full overflow-hidden border-2 border-gray-400
-                                            hover:border-gray-300 focus:border-gray-300 focus:outline-none" />
-                </button>
+                                            hover:border-gray-300 focus:border-gray-300
+                                            focus:outline-none dark:text-white"
+                />
                 <button x-show="isOpen"
                         @click="isOpen = false"
                         class="fixed inset-0 h-full w-full cursor-default">
@@ -143,8 +153,8 @@
             </button> -->
         </header>
 
-        <div class="flex h-screen w-full flex-col overflow-x-hidden border-t">
-            <main class="w-full flex-grow px-3 py-2 font-light">
+        <div class="flex h-screen w-full flex-col overflow-x-hidden">
+            <main class="w-full flex-grow px-3 py-2 font-light bg-gray-100 dark:bg-gray-900">
                 <div class="pb-6 text-3xl text-black">
                     @if(Session::has('flashMessage'))
                         <x-alerts.flash-alert :message="Session::get('flashMessage', 'default')" />
@@ -154,7 +164,7 @@
                     @yield('content')
                 </div>
             </main>
-            <footer class="w-full bg-white p-4 text-center">
+            <footer class="w-full bg-white p-4 text-center dark:bg-sky-950 dark:text-white">
                 Copyright @ {{ Illuminate\Support\Carbon::now()->year }} MIT Licence
             </footer>
         </div>

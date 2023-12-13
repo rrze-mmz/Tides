@@ -2,6 +2,9 @@
 
 @section('content')
     <main class="container mx-auto mt-6 md:mt-12">
+        <div class="pb-10">
+            @include('frontend.search._searchbar')
+        </div>
         <div class="flex items-center border-b-2 border-black pb-2 dark:border-white">
             <div class="flex-grow">
                 <h2 class="text-2xl font-bold dark:text-white">{{ $clip->title }} [ID: {{ $clip->id }}]</h2>
@@ -53,16 +56,10 @@
         </div>
 
         @if($clip->description !== null && $clip->description !=='')
-            <div class="pt-10">
-                <h2 class="w-full border-b-2 border-black pb-2  dark:border-white text-2xl
-                font-semibold dark:text-white"
-                >
-                    {{ __('common.description') }}
-                </h2>
-            </div>
-            <div class="flex flex-col dark:bg-gray-200">
-                <p class="pt-4 bg-gray-50">
-                    {!!   $clip->description !!}
+            <h2 class="py-2 text-2xl font-semibold dark:text-white">{{ __('common.description') }}</h2>
+            <div class="flex flex-col pt-4 dark:bg-slate-800 p-6">
+                <p class="pt-4 leading-loose dark:text-white">
+                    {{ $clip->description }}
                 </p>
             </div>
         @endif

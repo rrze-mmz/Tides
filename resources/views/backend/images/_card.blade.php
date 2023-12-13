@@ -1,5 +1,8 @@
-<div class="mx-4 h-full w-full rounded border bg-white px-4 py-4" id="image">
-    <h2 class="mb-3 -ml-5 border-l-4 border-blue-600 py-4 pl-4 text-xl font-normal">
+<div id="image"
+     class="mx-4 h-full w-full rounded border bg-white px-4 py-4 dark:bg-gray-800
+           dark:border-blue-800 dark:text-white  font-normal"
+>
+    <h2 class="mb-3 -ml-5 border-l-4 border-blue-600 py-4 pl-4 text-xl">
         {{ str($type)->ucfirst() }} Image
     </h2>
 

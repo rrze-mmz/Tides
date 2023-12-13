@@ -24,7 +24,6 @@
                 dark:text-gray-200">
         @include('layouts.frontend.top-navigation')
     </header>
-
     <main class="mx-auto max-h-full min-h-screen pt-12 lg:flex bg-gray-200 dark:bg-slate-900">
         <div class="w-full pb-10 lg:flex-grow">
             @yield('content')
@@ -37,7 +36,7 @@
         <div class="col-span-2 items-center text-center text-sm text-gray-300 dark:text-white sm:text-base">
             Copyright @ {{ Illuminate\Support\Carbon::now()->year }} MIT Licence
         </div>
-        <div class="text-sm >
+        <div class="text-sm">
             @include('layouts.frontend.bottom-navigation')
         </div>
     </footer>

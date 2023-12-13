@@ -1,13 +1,13 @@
 @extends('layouts.backend')
 
 @section('content')
-    <div class="flex border-b border-black text-2xl flex-col">
-        <div class="font-semibold">
+    <div class="flex border-b border-black text-2xl flex-col dark:text-white dark:border-white">
+        <div class="font-semibold ">
             {{ $series->title }} [ ID : {{ $series->id }}]
         </div>
         <div>
      <span
-         class="text-sm italic"> created at {{$series->created_at }} </span>
+         class="text-sm font-normal italic"> created at {{$series->created_at }} </span>
         </div>
 
     </div>
@@ -55,7 +55,7 @@
                                          :model="$series"
                                          label="{{trans_choice('common.menu.presenter',2)}}"
                                          select-class="select2-tides-presenters"
-                                         :items="$series->presenters"/>
+                                         :items="$series->presenters" />
 
                 <x-form.password field-name="password"
                                  :value="$series->password"
@@ -87,13 +87,13 @@
         </div>
     </div>
 
-    <div class="flex pt-8 pb-2  font-2xl w-full">
+    <div class="flex pt-8 pb-2  font-2xl w-full  font-normal">
         <div x-data="{
             activeTab:1,
             activeClass: 'inline-block px-4 py-2 bg-blue-800  rounded-lg font-bold',
             inactiveClass : 'inline-block px-4 py-2 bg-blue-500  rounded-lg'
          }" class="w-full">
-            <ul class="flex space-x-4  pt-8 pb-2 text-white border-b border-black ">
+            <ul class="flex space-x-4  pt-8 pb-2 text-white border-b border-black dark:border-white ">
                 <li>
                     <a href="#clips"
                        x-on:click="activeTab = 1"
@@ -150,21 +150,21 @@
                     @include('backend.series.buttons.more-options')
                 </div>
                 <div x-show="activeTab === 4" id="comments-section">
-                    <div class="flex flex-col pt-10">
+                    <div class="flex flex-col pt-5 font-normal dark:text-white">
                         <h2 class="text-2xl font-semibold pb-2 border-b-2 border-black">
                             Backend {{ __('clip.frontend.comments') }}
                         </h2>
-                        <livewire:comments-section :model="$series" :type="'backend'"/>
+                        <livewire:comments-section :model="$series" :type="'backend'" />
                     </div>
                 </div>
                 <div x-show="activeTab === 5" id="logs">
-                    <div class="flex flex-col pt-10">
-                        <h2 class="text-2xl font-semibold pb-2 border-b-2 border-black">
+                    <div class="flex flex-col pt-5 font-normal dark:text-white">
+                        <h2 class="text-2xl font-semibold pb-2 border-b-2 border-black dark:border-white">
                             {{ $series->title }} Activities
                         </h2>
                     </div>
                     <div class="flex flex-col pt-10">
-                        <livewire:activities-data-table :model="'series'" :object-i-d="$series->id"/>
+                        <livewire:activities-data-table :model="'series'" :object-i-d="$series->id" />
                     </div>
                 </div>
             </div>

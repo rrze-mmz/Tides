@@ -1,5 +1,5 @@
 @php use App\Enums\Acl; @endphp
-<div class="flex flex-col">
+<div class="flex flex-col font-normal">
     <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
             <div class="flex items-center justify-between">
@@ -13,6 +13,7 @@
                                id="search"
                                class="block w-full pl-10 pr-3 py-2 my-2 border border-gray-300 rounded-md leading-5
                                             bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400
+                                            dark:placeholder-gray-800 dark:bg-gray-300 dark:text-gray-900
                                             focus:border-blue-300 focus:shadow-outline-blue sm:text-sm transition
                                             duration-150 ease-in-out"
                                placeholder="Search" type="search">
@@ -24,12 +25,12 @@
                             <input wire:model.live="userSeries" id="user-series" type="checkbox"
                                    class="h-4 w-4 text-indigo-600 transition duration-150 ease-in-out form-checkbox">
                             <div class="ml-3 text-sm leading-5">
-                                <label for="admin" class="font-medium text-gray-700">My series</label>
+                                <label for="admin" class="font-medium text-gray-700 dark:text-white">My series</label>
                             </div>
                         </div>
                     </div>
                     <div class="relative flex items-start">
-                        <select wire:model.live="selectedSemesterID">
+                        <select wire:model.live="selectedSemesterID" class="dark:bg-gray-800 dark:text-white">
                             <option value="">Select a semester</option>
                             @foreach ($semestersList as $semester)
                                 <option value="{{ $semester->id }}">
@@ -42,15 +43,16 @@
 
             </div>
 
-            <div class="mt-4 overflow-hidden border-b border-gray-200 shadow sm:rounded-lg">
+            <div class="mt-4 overflow-hidden shadow">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead>
                     <tr>
                         <th
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
-                                <button wire:click="sortBy('name')" class="bg-gray-50 text-xs leading-4 font-medium
-                                                    text-gray-500 uppercase tracking-wider"
+                                <button wire:click="sortBy('name')"
+                                        class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white leading-4
+                                        font-medium text-gray-500 uppercase tracking-wider"
                                 >
                                     Title
                                 </button>
@@ -63,8 +65,9 @@
                         <th
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
-                                <button wire:click="sortBy('semester_id')" class="bg-gray-50 text-xs leading-4 font-medium
-                                                    text-gray-500 uppercase tracking-wider"
+                                <button wire:click="sortBy('semester_id')"
+                                        class="bg-gray-50 text-xs leading-4 font-medium text-gray-500  dark:bg-gray-800
+                                         dark:text-white uppercase tracking-wider"
                                 >
                                     Semester
                                 </button>
@@ -77,8 +80,9 @@
                         <th
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
-                                <button wire:click="sortBy('faculty')" class="bg-gray-50 text-xs leading-4 font-medium
-                                                    text-gray-500 uppercase tracking-wider"
+                                <button wire:click="sortBy('faculty')"
+                                        class="bg-gray-50 text-xs leading-4 font-medium  dark:bg-gray-800
+                                        dark:text-white text-gray-500 uppercase tracking-wider"
                                 >
                                     Acl
                                 </button>
@@ -91,8 +95,9 @@
                         <th
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
-                                <button wire:click="sortBy('faculty')" class="bg-gray-50 text-xs leading-4 font-medium
-                                                    text-gray-500 uppercase tracking-wider"
+                                <button wire:click="sortBy('faculty')"
+                                        class="bg-gray-50 text-xs leading-4 font-medium  dark:bg-gray-800
+                                        dark:text-white text-gray-500 uppercase tracking-wider"
                                 >
                                     Organization
                                 </button>
@@ -105,8 +110,9 @@
                         <th
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
-                                <button wire:click="sortBy('faculty')" class="bg-gray-50 text-xs leading-4 font-medium
-                                                    text-gray-500 uppercase tracking-wider"
+                                <button wire:click="sortBy('faculty')"
+                                        class="bg-gray-50 text-xs leading-4 font-medium dark:bg-gray-800
+                                        dark:text-white  text-gray-500 uppercase tracking-wider"
                                 >
                                     Presenters
                                 </button>
@@ -120,8 +126,8 @@
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
                                 <div
-                                    class="bg-gray-50 text-xs leading-4 font-medium
-                                                    text-gray-500 uppercase tracking-wider"
+                                    class="bg-gray-50 text-xs leading-4 font-medium dark:bg-gray-800 dark:text-white
+                                            text-gray-500 uppercase tracking-wider"
                                 >
                                     Actions
                                 </div>
@@ -133,8 +139,8 @@
                     <tbody class="bg-white divide-y divide-gray-200">
 
                     @forelse ($series as $singleSeries)
-                        <tr>
-                            <td class="w-4/12 px-6 py-4 whitespace-no-wrap">
+                        <tr class=" dark:bg-slate-800 font-normal">
+                            <td class="w-4/12 px-6 py-4 whitespace-no-wrap  ">
                                 <div class="flex items-center">
                                     <div class="h-12 w-24 flex-shrink-0">
                                         <img class="h-12 w-24 "
@@ -144,7 +150,7 @@
                                              alt="">
                                     </div>
                                     <div class="ml-4">
-                                        <div class="text-sm font-medium leading-5 text-gray-900">
+                                        <div class="leading-5 text-gray-900 dark:text-white ">
                                             {{ $singleSeries->title.' / ID:'.$singleSeries->id }}
                                         </div>
                                     </div>
@@ -153,7 +159,7 @@
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
                                 <div class="flex items-center">
                                     <div class="ml-4">
-                                        <div class="text-sm font-medium leading-5 text-gray-900">
+                                        <div class="leading-5 text-gray-900 dark:text-white">
                                             {{ $singleSeries->fetchClipsSemester() }}
                                         </div>
                                     </div>
@@ -162,7 +168,7 @@
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
                                 <div class="flex items-center">
                                     <div class="ml-4">
-                                        <div class="text-sm font-medium leading-5 text-gray-900">
+                                        <div class="leading-5 text-gray-900 dark:text-white">
                                             <div class="pr-2">
                                                 @if($seriesAcls = $singleSeries->getSeriesACLSUpdated())
                                                     @if($seriesAcls!== 'public')
@@ -179,7 +185,7 @@
                                                                 @endif
                                                             </div>
                                                             <div class="text-sm">
-                                                                <p class="italic text-gray-900">
+                                                                <p class="italic text-gray-900 dark:text-white">
                                                                     {{ $seriesAcls}}
                                                                 </p>
                                                             </div>
@@ -189,11 +195,12 @@
                                             </div>
                                         </div>
                                     </div>
+                                </div>
                             </td>
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
                                 <div class="flex items-center">
                                     <div class="ml-4">
-                                        <div class="text-sm font-medium leading-5 text-gray-900">
+                                        <div class="leading-5 text-gray-900 dark:text-white">
                                             {{  $singleSeries->organization->name }}
                                         </div>
                                     </div>
@@ -202,7 +209,7 @@
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
                                 <div class="flex items-center">
                                     <div class="ml-4">
-                                        <div class="text-sm font-medium leading-5 text-gray-900">
+                                        <div class="leading-5 text-gray-900 dark:text-white">
                                             @if($singleSeries->presenters->isNotEmpty())
                                                 <div class="flex items-center">
                                                     <div class="flex pr-2 items-center">
@@ -223,7 +230,7 @@
                                     </div>
                                 </div>
                             </td>
-                            <td class="w-2/12 px-6 py-4 text-right text-sm font-medium leading-5 whitespace-no-wrap">
+                            <td class="w-2/12 px-6 py-4 text-right leading-5 whitespace-no-wrap">
                                 <div class="flex space-x-2">
                                     <a href="{{route('frontend.series.show',$singleSeries)}}">
                                         <x-button type="button" class="bg-green-600 hover:bg-green-700">
@@ -241,9 +248,9 @@
                             </td>
                         </tr>
                     @empty
-                        <tr>
+                        <tr class="dark:bg-gray-800 dark:text-white">
                             <td colspan="7" class="items-center w-full text-center">
-                                <div class="text-2xl m-4 p-4">
+                                <div class="text-2xl m-4 p-4 ">
                                     No series found
                                 </div>
                             </td>

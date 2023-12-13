@@ -1,5 +1,5 @@
-<div class="flex flex-col">
-    <div class="font-light">
+<div class="flex flex-col dark:text-white">
+    <div class="font-normal">
         No opencast series found with this series ID
     </div>
     <div class="pt-5">
