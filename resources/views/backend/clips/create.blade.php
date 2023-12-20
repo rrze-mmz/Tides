@@ -11,7 +11,6 @@
             @csrf
 
             <div class="flex flex-col gap-3">
-
                 <x-form.input field-name="episode"
                               input-type="number"
                               value="1"
@@ -155,9 +154,9 @@
 
     </div>
     <script>
-        const MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-        const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 
         function app() {
@@ -166,18 +165,18 @@
 
                 showDatepicker: false,
 
-                datepickerValue: "",
+                datepickerValue: '',
 
 
-                month: "",
+                month: '',
 
-                year: "",
+                year: '',
 
                 no_of_days: [],
 
                 blankdays: [],
 
-                days: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+                days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
 
 
                 initDate() {
@@ -209,7 +208,7 @@
 
                     this.datepickerValue = selectedDate.toDateString();
 
-                    this.$refs.date.value = selectedDate.getFullYear() + "-" + ("0" + selectedDate.getMonth()).slice(-2) + "-" + ("0" + selectedDate.getDate()).slice(-2);
+                    this.$refs.date.value = selectedDate.getFullYear() + '-' + ('0' + selectedDate.getMonth()).slice(-2) + '-' + ('0' + selectedDate.getDate()).slice(-2);
 
                     console.log(this.$refs.date.value);
 

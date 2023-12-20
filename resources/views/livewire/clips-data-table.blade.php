@@ -1,5 +1,5 @@
-@php use App\Enums\Acl; @endphp
-<div class="flex flex-col">
+@use(App\Enums\Acl)
+<div class="flex flex-col font-normal">
     <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
             <div class="flex items-center justify-between">
@@ -21,23 +21,41 @@
                 <div class="flex justify-between items-center">
                     <div class="relative flex items-start pr-4 ">
                         <div class="flex h-5 items-center pr-4">
-                            <input wire:model.live="userClips" id="user-clips" type="checkbox"
-                                   class="h-4 w-4 text-indigo-600 transition duration-150 ease-in-out form-checkbox">
+                            <input wire:model.live="userClips"
+                                   id="user-clips"
+                                   type="checkbox"
+                                   class="h-4 w-4 text-indigo-600 transition duration-150 ease-in-out form-checkbox"
+                            >
                             <div class="ml-3 text-sm leading-5">
-                                <label for="admin" class="font-medium text-gray-700">My clips</label>
+                                <label for="user-clips"
+                                       class=" text-gray-700 dark:text-white "
+                                >
+                                    My clips
+                                </label>
                             </div>
                         </div>
                         <div class="flex h-5 items-center">
-                            <input wire:model.live="withAssets" id="user-clips" type="checkbox"
+                            <input wire:model.live="withAssets"
+                                   id="with-assets"
+                                   type="checkbox"
                                    class="h-4 w-4 text-indigo-600 transition duration-150 ease-in-out form-checkbox">
-                            <div class="ml-3 text-sm leading-5">
-                                <label for="admin" class="font-medium text-gray-700">With video files</label>
+                            <div class="ml-3 text-sm leading-5"
+                            >
+                                <label for="with-assets"
+                                       class="text-gray-700 dark:text-white"
+                                >
+                                    With video files
+                                </label>
                             </div>
                         </div>
                     </div>
                     <div class="relative flex items-start">
-                        <select wire:model.live="selectedSemesterID">
-                            <option value="">Select a semester</option>
+                        <select wire:model.live="selectedSemesterID"
+                                class="dark:bg-gray-800 dark:text-white"
+                        >
+                            <option value="">
+                                Select a semester
+                            </option>
                             @foreach ($semestersList as $semester)
                                 <option value="{{ $semester->id }}">
                                     {{ $semester->name }}
@@ -46,7 +64,6 @@
                         </select>
                     </div>
                 </div>
-
             </div>
 
             <div class="mt-4 overflow-hidden border-b border-gray-200 shadow sm:rounded-lg">
@@ -56,21 +73,24 @@
                         <th
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
-                                <button wire:click="sortBy('name')" class="bg-gray-50 text-xs leading-4 font-medium
-                                                    text-gray-500 uppercase tracking-wider"
+                                <button wire:click="sortBy('name')"
+                                        class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white leading-4
+                                        text-gray-500 uppercase tracking-wider"
                                 >
                                     Title
                                 </button>
                                 <x-sort-icon
                                     field="title"
                                     :sortField="$sortField"
-                                    :sortAsc="$sortAsc" />
+                                    :sortAsc="$sortAsc"
+                                />
                             </div>
                         </th>
                         <th
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
-                                <button wire:click="sortBy('series_id')" class="bg-gray-50 text-xs leading-4 font-medium
+                                <button wire:click="sortBy('series_id')"
+                                        class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white leading-4
                                                     text-gray-500 uppercase tracking-wider"
                                 >
                                     Series
@@ -78,13 +98,15 @@
                                 <x-sort-icon
                                     field="series_id"
                                     :sortField="$sortField"
-                                    :sortAsc="$sortAsc" />
+                                    :sortAsc="$sortAsc"
+                                />
                             </div>
                         </th>
                         <th
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
-                                <button wire:click="sortBy('semester_id')" class="bg-gray-50 text-xs leading-4 font-medium
+                                <button wire:click="sortBy('semester_id')"
+                                        class="bg-gray-50 text-xs leading-4 dark:bg-gray-900 text-xs dark:text-white
                                                     text-gray-500 uppercase tracking-wider"
                                 >
                                     Semester
@@ -98,7 +120,8 @@
                         <th
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
-                                <button wire:click="sortBy('faculty')" class="bg-gray-50 text-xs leading-4 font-medium
+                                <button wire:click="sortBy('faculty')"
+                                        class="bg-gray-50 text-xs leading-4 dark:bg-gray-900 text-xs dark:text-white
                                                     text-gray-500 uppercase tracking-wider"
                                 >
                                     Acl
@@ -106,13 +129,15 @@
                                 <x-sort-icon
                                     field="faculty"
                                     :sortField="$sortField"
-                                    :sortAsc="$sortAsc" />
+                                    :sortAsc="$sortAsc"
+                                />
                             </div>
                         </th>
                         <th
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
-                                <button wire:click="sortBy('faculty')" class="bg-gray-50 text-xs leading-4 font-medium
+                                <button wire:click="sortBy('faculty')"
+                                        class="bg-gray-50 text-xs leading-4 dark:bg-gray-900 dark:text-white
                                                     text-gray-500 uppercase tracking-wider"
                                 >
                                     Organization
@@ -126,7 +151,8 @@
                         <th
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
-                                <button wire:click="sortBy('faculty')" class="bg-gray-50 text-xs leading-4 font-medium
+                                <button wire:click="sortBy('faculty')"
+                                        class="bg-gray-50 text-xs leading-4 dark:bg-gray-900 text-xs dark:text-white
                                                     text-gray-500 uppercase tracking-wider"
                                 >
                                     Presenters
@@ -141,7 +167,7 @@
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
                                 <div
-                                    class="bg-gray-50 text-xs leading-4 font-medium
+                                    class="bg-gray-50 text-xs leading-4 dark:bg-gray-900 text-xs dark:text-white
                                                     text-gray-500 uppercase tracking-wider"
                                 >
                                     Actions
@@ -150,11 +176,9 @@
                         </th>
                     </tr>
                     </thead>
-
-                    <tbody class="bg-white divide-y divide-gray-200">
-
+                    <tbody class="bg-white divide-y divide-gray-200 dark:bg-slate-800 ">
                     @forelse ($clips as $clip)
-                        <tr>
+                        <tr class="text-sm leading-5 text-gray-900 dark:text-white ">
                             <td class="w-4/12 px-6 py-4 whitespace-no-wrap">
                                 <div class="flex items-center">
                                     <div class="h-12 w-24 flex-shrink-0">
@@ -162,7 +186,7 @@
                                              src="{{fetchClipPoster($clip->latestAsset?->player_preview) }}" alt="">
                                     </div>
                                     <div class="ml-4">
-                                        <div class="text-sm font-medium leading-5 text-gray-900">
+                                        <div class="">
                                             {{ $clip->title.' / ID:'.$clip->id }}
                                         </div>
                                     </div>
@@ -171,8 +195,7 @@
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
                                 <div class="flex items-center">
                                     <div class="ml-4">
-
-                                        <div class="text-sm font-medium leading-5 text-gray-900">
+                                        <div class="">
                                             @if($clip->series_id > 0 && $clip->series->exists)
                                                 @can('edit-clips', $clip)
                                                     <a href="{{ route('series.edit', $clip->series) }}">
@@ -186,7 +209,6 @@
                                             @else
                                                 {{ 'No Series' }}
                                             @endif
-
                                         </div>
                                     </div>
                                 </div>
@@ -194,7 +216,7 @@
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
                                 <div class="flex items-center">
                                     <div class="ml-4">
-                                        <div class="text-sm font-medium leading-5 text-gray-900">
+                                        <div class="">
                                             {{ $clip->semester->name }}
                                         </div>
                                     </div>
@@ -203,7 +225,7 @@
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
                                 <div class="flex items-center">
                                     <div class="ml-4">
-                                        <div class="text-sm font-medium leading-5 text-gray-900">
+                                        <div class="">
                                             <div class="pr-2">
                                                 @if(!$clip->acls->contains(Acl::PUBLIC))
                                                     @can('watch-video', $clip)
@@ -223,7 +245,7 @@
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
                                 <div class="flex items-center">
                                     <div class="ml-4">
-                                        <div class="text-sm font-medium leading-5 text-gray-900">
+                                        <div class="">
                                             {{  $clip->organization->name }}
                                         </div>
                                     </div>
@@ -232,7 +254,7 @@
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
                                 <div class="flex items-center">
                                     <div class="ml-4">
-                                        <div class="text-sm font-medium leading-5 text-gray-900">
+                                        <div class="">
                                             @if($clip->presenters->isNotEmpty())
                                                 <div class="flex items-center">
                                                     <div class="flex pr-2 items-center">
@@ -245,7 +267,6 @@
                                                                            return $presenter->getFullNameAttribute();
                                                                        })->implode(',') }}
                                                         </div>
-
                                                     </div>
                                                 </div>
                                             @endif
@@ -253,7 +274,7 @@
                                     </div>
                                 </div>
                             </td>
-                            <td class="w-2/12 px-6 py-4 text-right text-sm font-medium leading-5 whitespace-no-wrap">
+                            <td class="w-2/12 px-6 py-4 text-right text-sm  leading-5 whitespace-no-wrap">
                                 <div class="flex space-x-2">
                                     <a href="{{route('frontend.clips.show',$clip)}}">
                                         <x-button type="button" class="bg-green-600 hover:bg-green-700">
@@ -271,9 +292,9 @@
                             </td>
                         </tr>
                     @empty
-                        <tr>
+                        <tr class="dark:bg-gray-800 dark:text-white">
                             <td colspan="7" class="items-center w-full text-center">
-                                <div class="text-2xl m-4 p-4">
+                                <div class="text-2xl m-4 p-4 ">
                                     No clips found
                                 </div>
                             </td>
@@ -285,7 +306,8 @@
             <div class="flex pt-4">
                 <x-form.button :link="route('clips.create')"
                                type="submit"
-                               text="Create new clip" />
+                               text="Create new clip"
+                />
             </div>
             <div class="mt-8">
                 {{ $clips->links() }}

@@ -1,5 +1,8 @@
-<div class="mx-4 h-full w-full rounded border bg-white px-4 py-4">
-    <h2 class="mb-3 -ml-5 border-l-4 border-blue-600 py-4 pl-4 text-xl font-normal">
+<div
+    class="mx-4 h-full w-full rounded border bg-white px-4 py-4 dark:bg-gray-800  dark:text-white dark:border-blue-800
+    font-normal "
+>
+    <h2 class="mb-3 -ml-5 border-l-4 border-blue-600 py-4 pl-4 text-xl dark:border-blue-800">
 
         Belongs to: {{ $clip->series->title  }}
     </h2>

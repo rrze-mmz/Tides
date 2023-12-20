@@ -2,14 +2,16 @@
 
 @section('content')
 
-    <div class="flex items-center border-b border-black pb-2 font-semibold font-2xl align-items-center">
+    <div class="flex items-center border-b border-black pb-2 font-semibold font-2xl align-items-center
+    dark:text-white dark:border-white">
         <div class="pr-4">
             Systems check
         </div>
     </div>
 
-    <div class="grid gap-4 pt-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4">
-        <div class="m-2 rounded-lg border-2 border-solid border-black p-2">
+    <div class="grid gap-4 pt-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 font-normal
+            dark:text-white">
+        <div class="m-2 rounded-lg border-2 border-solid border-black dark:border-white p-2">
             <div class="flex place-content-around justify-between">
                 <div>
                     <h3 class="pb-6 font-semibold text-fuchsia-800">Portal
@@ -42,7 +44,7 @@
                 </a>
             </div>
         </div>
-        <div class="m-2 rounded-lg border-2 border-solid border-black p-2">
+        <div class="m-2 rounded-lg border-2 border-solid border-black  dark:border-white p-2 p-2">
             <div class="flex place-content-around justify-between">
                 <div>
                     <h3 class="pb-6 font-semibold text-green-500">Opencast
@@ -79,7 +81,7 @@
                 </a>
             </div>
         </div>
-        <div class="m-2 rounded-lg border-2 border-solid border-black p-2">
+        <div class="m-2 rounded-lg border-2 border-solid border-black  dark:border-white p-2 p-2">
             <div class="flex place-content-around justify-between">
                 <div>
                     <h3 class="pb-6 font-semibold text-orange-500">Wowza
@@ -114,7 +116,7 @@
             </div>
         </div>
 
-        <div class="m-2 rounded-lg border-2 border-solid border-black p-2">
+        <div class="m-2 rounded-lg border-2 border-solid border-black  dark:border-white p-2 p-2">
             <div class="flex place-content-around justify-between">
                 <div>
                     <h3 class="pb-6 font-semibold  text-blue-500">OpenSearch

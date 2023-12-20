@@ -1,7 +1,9 @@
 @extends('layouts.backend')
 
 @section('content')
-    <div class="mb-5 flex items-center justify-between border-b border-black pb-2 font-semibold font-2xl">
+    <div class="mb-5 flex items-center justify-between border-b border-black pb-2 font-semibold font-2xl
+                dark:text-white dark:border-white"
+    >
         <div class="flex">
             Edit Image ID : {{ $image->id }} / {{ $image->description }}
         </div>
@@ -19,8 +21,8 @@
         </div>
     </div>
     <div class="flex">
-        <figure class="flex w-full rounded-xl bg-slate-100 md:p-0">
-            <div class="grow content-center content-between justify-center px-2 py-2">
+        <figure class="flex w-full rounded-xl md:p-0 dark:text-white dark:border-white font-normal">
+            <div class="grow content-center justify-center px-2 py-2">
                 <form action="{{ route('images.update', $image) }}"
                       method="POST"
                       class="w-full"

@@ -29,7 +29,10 @@
                                class="h-4 w-4 text-indigo-600 transition duration-150 ease-in-out form-checkbox">
                     </div>
                     <div class="ml-3 text-sm leading-5">
-                        <label for="admin" class="font-medium text-gray-700">Presenters</label>
+                        <label for="admin"
+                               class="font-medium text-gray-700 dark:text-white">
+                            Presenters
+                        </label>
                     </div>
                 </div>
             </div>
@@ -56,8 +59,9 @@
                         <th
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
-                                <button wire:click="sortBy('first_name')" class="bg-gray-50 text-xs leading-4 font-medium
-                                                    text-gray-500 uppercase tracking-wider"
+                                <button wire:click="sortBy('first_name')"
+                                        class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white leading-4 font-medium
+                                           text-gray-500 uppercase tracking-wider"
                                 >
                                     First Name
                                 </button>
@@ -70,8 +74,9 @@
                         <th
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
-                                <button wire:click="sortBy('last_name')" class="bg-gray-50 text-xs leading-4 font-medium
-                                                    text-gray-500 uppercase tracking-wider"
+                                <button wire:click="sortBy('last_name')"
+                                        class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white leading-4 font-medium
+                                           text-gray-500 uppercase tracking-wider"
                                 >
                                     Last Name
                                 </button>
@@ -85,8 +90,9 @@
                         <th
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
-                                <button wire:click="sortBy('username')" class="bg-gray-50 text-xs leading-4 font-medium
-                                                    text-gray-500 uppercase tracking-wider"
+                                <button wire:click="sortBy('username')"
+                                        class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white leading-4 font-medium
+                                           text-gray-500 uppercase tracking-wider"
                                 >
                                     Username
                                 </button>
@@ -100,8 +106,8 @@
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
                                 <button wire:click="sortBy('email')"
-                                        class="bg-gray-50 text-xs leading-4 font-medium
-                                                    text-gray-500 uppercase tracking-wider"
+                                        class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white leading-4 font-medium
+                                           text-gray-500 uppercase tracking-wider"
                                 >
                                     Email
                                 </button>
@@ -111,16 +117,20 @@
                                     :sortAsc="$sortAsc" />
                             </div>
                         </th>
-                        <th class="bg-gray-50 px-6 py-3"></th>
+                        <th class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white leading-4 font-medium
+                                           text-gray-500 uppercase tracking-wider"
+                        >
+
+                        </th>
                     </tr>
                     </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
+                    <tbody class="bg-white divide-y divide-gray-200 dark:bg-slate-800 ">
                     @foreach ($presenters as $presenter)
-                        <tr>
+                        <tr class="text-sm leading-5 dark:text-white font-normal ">
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
                                 <div class="flex items-center">
                                     <div class="ml-4">
-                                        <div class="text-sm font-medium leading-5 text-gray-900">
+                                        <div class="">
                                             @if($presenter->academic_degree_id > 1 )
                                                 {{  $presenter->academicDegree?->title}}
                                             @endif
@@ -135,7 +145,7 @@
                                              src="{{ $presenter->getImageUrl() }}" alt="">
                                     </div>
                                     <div class="ml-4">
-                                        <div class="text-sm font-medium leading-5 text-gray-900">
+                                        <div class="">
                                             {{ $presenter->first_name }}
                                         </div>
                                     </div>
@@ -144,7 +154,7 @@
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
                                 <div class="flex items-center">
                                     <div class="ml-4">
-                                        <div class="text-sm font-medium leading-5 text-gray-900">
+                                        <div class="">
                                             {{ $presenter->last_name}}
                                         </div>
                                     </div>
@@ -153,14 +163,14 @@
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
                                 <div class="flex items-center">
                                     <div class="ml-4">
-                                        <div class="text-sm font-medium leading-5 text-gray-900">
+                                        <div class="">
                                             {{ $presenter->username }}
                                         </div>
                                     </div>
                                 </div>
                             </td>
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
-                                <div class="text-sm leading-5 text-gray-900">{{ $presenter->email }}</div>
+                                <div>{{ $presenter->email }}</div>
                             </td>
                             <td class="w-2/12 px-6 py-4 text-right text-sm font-medium leading-5 whitespace-no-wrap">
                                 <div class="flex space-x-2">

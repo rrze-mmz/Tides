@@ -5,7 +5,7 @@
         {{ __('dashboard.welcome to personal dashboard', ['fullName' => auth()->user()->getFullNameAttribute() ]) }}
         !
     </div>
-    <div class="flex flex-col px-2 py-2 dark:text-white">
+    <div class="flex flex-col px-2 py-2 dark:text-white font-normal">
         <div>
             <p class="pt-2">
                 <span class="mr-2">{{ __('dashboard.start creating new series') }}</span>
@@ -20,7 +20,7 @@
             <p class="mt-4 pt-2">
                 <span class="mr-2">{{ __('dashboard.start creating a new clip') }}</span>
                 <a href="{{route('clips.create')}}">
-                    <x-button class="bg-blue-600 hover:bg-blue-700">
+                    <x-button class="bg-blue-600 hover:bg-blue-700 font-normal">
                         {{ __('dashboard.new clip') }}
                     </x-button>
                 </a>

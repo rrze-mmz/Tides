@@ -1,7 +1,9 @@
 @extends('layouts.backend')
 
 @section('content')
-    <div class="mb-5 flex items-center justify-between border-b border-black pb-2 font-semibold font-2xl">
+    <div class="mb-5 flex items-center justify-between border-b border-black pb-2 font-semibold font-2xl
+                dark:text-white dark:border-white"
+    >
         <div class="flex">
             Images Index
         </div>
@@ -14,7 +16,7 @@
                                 Create a new image
                             </div>
                             <div>
-                                <x-heroicon-o-plus-circle class="h-6 w-6"/>
+                                <x-heroicon-o-plus-circle class="h-6 w-6" />
                             </div>
                         </x-button>
                     </a>
@@ -22,5 +24,5 @@
             </div>
         @endcan
     </div>
-    <livewire:images-data-table/>
+    <livewire:images-data-table />
 @endsection

@@ -38,7 +38,7 @@
 
     <div class="relative flex h-screen w-full flex-col overflow-y-hidden">
         <!-- Desktop Header -->
-        <header class="flex hidden w-full items-center justify-end bg-white px-6 sm:flex dark:bg-sky-950">
+        <header class="flex w-full items-center justify-end bg-white px-6 sm:flex dark:bg-sky-950">
             <div class="w-1/2">
                 @include('backend.search._searchbar')
             </div>
@@ -47,18 +47,19 @@
                     <x-theme-toogle />
                 </div>
             </div>
-            <div x-data="{ isOpen: false }" class="relative flex justify-end">
+            <div x-data="{ isOpen: false }" class="flex relative justify-end dark:bg-slate-800 z-10">
                 <x-heroicon-o-user @click="isOpen = !isOpen"
-                                   class="relative z-10 w-8 h-8 rounded-full overflow-hidden border-2 border-gray-400
+                                   class="relative w-8 h-8 rounded-full overflow-hidden border-2 border-gray-400
                                             hover:border-gray-300 focus:border-gray-300
                                             focus:outline-none dark:text-white"
                 />
                 <button x-show="isOpen"
                         @click="isOpen = false"
-                        class="fixed inset-0 h-full w-full cursor-default">
+                        class="fixed inset-0 cursor-default">
                 </button>
                 <div x-show="isOpen"
-                     class="absolute mt-16 w-48 items-center rounded-lg bg-white py-2 align-middle shadow-lg">
+                     class="absolute mt-12 w-48 items-center rounded-lg bg-white
+                     dark:bg-sky-950 py-2 align-middle shadow-lg dark:text-white font-normal">
                     <a href="#" class="block px-4 py-2 hover:text-gray-400">Settings</a>
                     <a href="{{ route('user.notifications') }}" class="block px-4 py-2 hover:text-gray-400">
                         Notifications

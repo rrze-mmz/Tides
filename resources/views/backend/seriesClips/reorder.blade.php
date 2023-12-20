@@ -1,12 +1,12 @@
 @extends('layouts.backend')
 
 @section('content')
-    <div class="flex border-b border-black pb-2">
+    <div class="flex border-b border-black pb-2 font-normal dark:text-white dark:border-white">
         Reorder clips for: <span class="pl-2 font-semibold font-2xl">{{ $series->title }}</span>
     </div>
 
-    <div class="mb-4 flex border-b border-black pt-8 pb-2 text-lg font-semibold">
+    <div class="mb-4 flex border-b border-black pt-8 pb-2 text-lg font-semibold  dark:text-white dark:border-white">
         Clips
     </div>
-    <x-list-clips :series="$series" :clips="$clips" dashboardAction="@can('edit-series', $series)" :reorder="true"/>
+    <x-list-clips :series="$series" :clips="$clips" dashboardAction="@can('edit-series', $series)" :reorder="true" />
 @endsection

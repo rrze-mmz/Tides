@@ -1,7 +1,9 @@
 @extends('layouts.backend')
 
 @section('content')
-    <div class="mb-5 flex items-center border-b border-black pb-2 font-semibold font-2xl">
+    <div
+        class="mb-5 flex items-center border-b border-black pb-2 font-semibold font-2xl
+        dark:text-white dark:border-white">
         <div class="flex">
             Image ID : {{ $image->id }} / {{ $image->description }}
         </div>

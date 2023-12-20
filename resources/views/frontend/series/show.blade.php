@@ -1,4 +1,4 @@
-@php use App\Enums\Acl; @endphp
+@use(App\Enums\Acl)
 @extends('layouts.frontend')
 
 @section('content')
@@ -8,7 +8,7 @@
         </div>
 
 
-        <div class="flex justify-between border-b-2 border-black pb-2">
+        <div class="flex justify-between border-b-2 border-black pb-2 dark:border-white">
             <h2 class="text-2xl font-bold ">{{ $series->title }} [ID: {{ $series->id }}]</h2>
             @cannot('administrate-admin-portal-pages')
                 @if( str()->contains($series->fetchClipsAcls(),[Acl::PASSWORD->lower()]))

@@ -1,4 +1,4 @@
-<div class="flex flex-col">
+<div class="flex flex-col font-normal">
     <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
             <div class="flex items-center justify-between">
@@ -26,8 +26,9 @@
                         <th
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
-                                <button wire:click="sortBy('name')" class="bg-gray-50 text-xs leading-4 font-medium
-                                                    text-gray-500 uppercase tracking-wider"
+                                <button wire:click="sortBy('name')"
+                                        class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white leading-4 font-medium
+                                           text-gray-500 uppercase tracking-wider"
                                 >
                                     Name
                                 </button>
@@ -40,8 +41,9 @@
                         <th
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
-                                <button wire:click="sortBy('location')" class="bg-gray-50 text-xs leading-4 font-medium
-                                                    text-gray-500 uppercase tracking-wider"
+                                <button wire:click="sortBy('location')"
+                                        class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white leading-4 font-medium
+                                           text-gray-500 uppercase tracking-wider"
                                 >
                                     Location
                                 </button>
@@ -54,8 +56,9 @@
                         <th
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
-                                <button wire:click="sortBy('faculty')" class="bg-gray-50 text-xs leading-4 font-medium
-                                                    text-gray-500 uppercase tracking-wider"
+                                <button wire:click="sortBy('faculty')"
+                                        class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white leading-4 font-medium
+                                           text-gray-500 uppercase tracking-wider"
                                 >
                                     Faculty
                                 </button>
@@ -69,8 +72,8 @@
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
                                 <button wire:click="sortBy('camera')"
-                                        class="bg-gray-50 text-xs leading-4 font-medium
-                                                    text-gray-500 uppercase tracking-wider"
+                                        class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white leading-4 font-medium
+                                           text-gray-500 uppercase tracking-wider"
                                 >
                                     Camera
                                 </button>
@@ -84,8 +87,8 @@
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
                                 <button wire:click="sortBy('power_plug')"
-                                        class="bg-gray-50 text-xs leading-4 font-medium
-                                                    text-gray-500 uppercase tracking-wider"
+                                        class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white leading-4 font-medium
+                                           text-gray-500 uppercase tracking-wider"
                                 >
                                     Power Plug
                                 </button>
@@ -99,8 +102,8 @@
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
                                 <div
-                                    class="bg-gray-50 text-xs leading-4 font-medium
-                                                    text-gray-500 uppercase tracking-wider"
+                                    class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white leading-4 font-medium
+                                           text-gray-500 uppercase tracking-wider"
                                 >
                                     Recording Available
                                 </div>
@@ -110,8 +113,8 @@
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
                                 <div
-                                    class="bg-gray-50 text-xs leading-4 font-medium
-                                                    text-gray-500 uppercase tracking-wider"
+                                    class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white leading-4 font-medium
+                                           text-gray-500 uppercase tracking-wider"
                                 >
                                     Livestream available
                                 </div>
@@ -121,8 +124,8 @@
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
                                 <div
-                                    class="bg-gray-50 text-xs leading-4 font-medium
-                                                    text-gray-500 uppercase tracking-wider"
+                                    class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white leading-4 font-medium
+                                           text-gray-500 uppercase tracking-wider"
                                 >
                                     Operational
                                 </div>
@@ -132,8 +135,8 @@
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
                                 <div
-                                    class="bg-gray-50 text-xs leading-4 font-medium
-                                                    text-gray-500 uppercase tracking-wider"
+                                    class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white leading-4 font-medium
+                                           text-gray-500 uppercase tracking-wider"
                                 >
                                     Hybrid
                                 </div>
@@ -143,8 +146,8 @@
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
                                 <div
-                                    class="bg-gray-50 text-xs leading-4 font-medium
-                                                    text-gray-500 uppercase tracking-wider"
+                                    class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white leading-4 font-medium
+                                           text-gray-500 uppercase tracking-wider"
                                 >
                                     Actions
                                 </div>
@@ -153,18 +156,14 @@
                     </tr>
                     </thead>
 
-                    <tbody class="bg-white divide-y divide-gray-200">
+                    <tbody class="bg-white divide-y divide-gray-200 dark:bg-slate-800 ">
 
                     @foreach ($devices as $device)
-                        <tr>
+                        <tr class="leading-5  text-gray-900  dark:text-white  font-normal">
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
                                 <div class="flex items-center">
-                                    <div class="h-10 w-10 flex-shrink-0">
-                                        <img class="h-10 w-10 rounded-full"
-                                             src="{{ URL::asset('/images/none.jpg') }}" alt="">
-                                    </div>
                                     <div class="ml-4">
-                                        <div class="text-sm font-medium leading-5 text-gray-900">
+                                        <div>
                                             {{ $device->name }}
                                         </div>
                                     </div>
@@ -173,7 +172,7 @@
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
                                 <div class="flex items-center">
                                     <div class="ml-4">
-                                        <div class="text-sm font-medium leading-5 text-gray-900">
+                                        <div>
                                             {{ $device->location->name }}
                                         </div>
                                     </div>
@@ -182,28 +181,28 @@
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
                                 <div class="flex items-center">
                                     <div class="ml-4">
-                                        <div class="text-sm font-medium leading-5 text-gray-900">
+                                        <div>
                                             {{ $device->organization->name }}
                                         </div>
                                     </div>
                                 </div>
                             </td>
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
-                                <div class="text-sm leading-5 text-gray-900">
+                                <div>
                                     @if (!empty($device->camera_url))
                                         <a href="{{$device->camera_url}}">Kamera</a>
                                     @endif
                                 </div>
                             </td>
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
-                                <div class="text-sm leading-5 text-gray-900">
+                                <div>
                                     @if (!empty($device->power_outlet_url))
                                         <a href="{{$device->power_outlet_url}}">Power outlet</a>
                                     @endif
                                 </div>
                             </td>
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
-                                <div class="text-sm leading-5 text-gray-900">
+                                <div>
                                     @if ($device->has_recording_func)
                                         <x-heroicon-o-badge-check class="h-6 w-6" />
                                     @else
@@ -212,7 +211,7 @@
                                 </div>
                             </td>
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
-                                <div class="text-sm leading-5 text-gray-900">
+                                <div>
                                     @if ($device->has_livestream_func)
                                         <x-heroicon-o-badge-check class="h-6 w-6" />
                                     @else
@@ -221,7 +220,7 @@
                                 </div>
                             </td>
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
-                                <div class="text-sm leading-5 text-gray-900">
+                                <div>
                                     @if ($device->operational)
                                         <x-heroicon-o-badge-check class="h-6 w-6" />
                                     @else
@@ -230,7 +229,7 @@
                                 </div>
                             </td>
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
-                                <div class="text-sm leading-5 text-gray-900">
+                                <div>
                                     @if ($device->is_hybrid)
                                         <x-heroicon-o-badge-check class="h-6 w-6" />
                                     @else

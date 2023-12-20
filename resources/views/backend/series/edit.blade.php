@@ -1,7 +1,7 @@
 @extends('layouts.backend')
 
 @section('content')
-    <div class="flex border-b border-black text-2xl flex-col dark:text-white dark:border-white">
+    <div class="flex border-b border-black text-2xl flex-col dark:text-white dark:border-white font-normal">
         <div class="font-semibold ">
             {{ $series->title }} [ ID : {{ $series->id }}]
         </div>
@@ -12,7 +12,7 @@
 
     </div>
 
-    <div class="flex justify-center content-center content-between py-2 px-2">
+    <div class="flex justify-center content-center  py-2 px-2">
         <form action="{{ route('series.update',$series) }}"
               method="POST"
               class=" @if(auth()->user()->isAdmin()) w-4/5 @else w-full @endif"
@@ -160,7 +160,7 @@
                 <div x-show="activeTab === 5" id="logs">
                     <div class="flex flex-col pt-5 font-normal dark:text-white">
                         <h2 class="text-2xl font-semibold pb-2 border-b-2 border-black dark:border-white">
-                            {{ $series->title }} Activities
+                            {{ $series->title }} - Activities
                         </h2>
                     </div>
                     <div class="flex flex-col pt-10">

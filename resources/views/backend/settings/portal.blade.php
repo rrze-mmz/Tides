@@ -1,13 +1,13 @@
 @extends('layouts.backend')
 
 @section('content')
-    <div class="flex border-b border-black pb-2 text-2xl font-semibold">
+    <div class="flex border-b border-black pb-2 text-2xl font-semibold dark:text-white dark:border-white">
         Portal settings
     </div>
     <div class="flex px-2 py-2">
         <form action="{{ route('settings.portal.update') }}"
               method="POST"
-              class="w-4/5">
+              class="w-4/5 space-y-4">
             @csrf
             @method('PUT')
             <x-form.toggle-button :value="$setting['maintenance_mode']"
@@ -23,14 +23,14 @@
                           :value="$setting['feeds_default_owner_name']"
                           label="Default feeds owner name"
                           :fullCol="true"
-                          :required="true"/>
+                          :required="true" />
             <x-form.input field-name="feeds_default_owner_email"
                           input-type="email"
                           :value="$setting['feeds_default_owner_email']"
                           label="Default feeds email"
                           :fullCol="true"
-                          :required="true"/>
-            <div class="mt-10">
+                          :required="true" />
+            <div class="mt-10 space-x-4 pt-10">
                 <x-button class="bg-blue-600 hover:bg-blue-700">
                     Update
                 </x-button>

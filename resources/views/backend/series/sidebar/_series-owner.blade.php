@@ -1,5 +1,5 @@
 <div
-    class="mx-4 h-full w-full rounded-md border bg-white px-4 py-4 font-normal dark:bg-gray-800  dark:border-blue-800">
+    class="mx-4 h-full w-full rounded-md border bg-white px-4 py-4 font-normal dark:bg-gray-800 dark:border-blue-800">
     <h2 class="mb-3 -ml-5 border-l-4 border-blue-600 dark:border-blue-800 py-4 pl-4 text-xl
     dark:text-white"
     >

@@ -1,8 +1,9 @@
-@php use App\Enums\Acl; use Carbon\Carbon; @endphp
+@use(App\Enums\Acl)
+@use(Carbon\Carbon)
 @extends('layouts.backend')
 
 @section('content')
-    <div class="w-full flex-row border-b border-black pb-2 font-2xl">
+    <div class="flex border-b border-black text-2xl flex-col dark:text-white dark:border-white font-normal">
         <div class="flex w-full items-center justify-between">
             <div class="">
                 <span class="text-2xl"> [ ID: {{ $clip->id }} ] {{ $clip->title }}</span>
@@ -87,7 +88,9 @@
                                        :selectedItem="old('language_id', $clip->lanugage_id)"
                 />
 
-                <div class="mb-2 border-b border-solid border-b-black pb-2 text-left text-xl font-bold">
+                <div class="mb-2 border-b border-solid border-b-black pb-2 text-left text-xl font-bold
+                            dark:text-white dark:border-white "
+                >
                     Metadata
                 </div>
 
@@ -196,7 +199,7 @@
         </div>
     </div>
 
-    <div class="flex border-b border-black pt-8 pb-2 font-semibold font-2xl">
+    <div class="flex border-b border-black pt-8 pb-2 font-semibold font-2xl dark:text-white dark:border-white ">
         More actions
     </div>
     <div class="flex items-center pt-3 space-x-6">
@@ -249,6 +252,8 @@
             <livewire:comments-section :model="$clip" :type="'backend'" />
 
         </div>
+    </div>
 
     @include('backend.assets.list', ['assets'=>$clip->assets])
+
 @endsection

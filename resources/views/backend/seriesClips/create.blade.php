@@ -1,6 +1,5 @@
-@php
-    use App\Models\Semester;
-@endphp
+@use(App\Models\Semester)
+
 @extends('layouts.backend')
 
 @section('content')

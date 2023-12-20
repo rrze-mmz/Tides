@@ -1,7 +1,9 @@
 @extends('layouts.backend')
 
 @section('content')
-    <div class="flex border-b border-black pb-2 font-semibold font-2xl">
+    <div class="mb-5 flex items-center justify-between border-b border-black pb-2 font-semibold font-2xl
+                dark:text-white dark:border-white"
+    >
         Create a device
     </div>
     <div class="flex p-2">

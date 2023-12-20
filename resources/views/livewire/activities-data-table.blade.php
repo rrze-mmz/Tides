@@ -129,7 +129,7 @@
                     </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
-                    @foreach ($activities as $activity)
+                    @forelse ($activities as $activity)
                         <tr class=" dark:bg-slate-800 text-xs ">
                             <td class="w-1/12 px-2 py-4 whitespace-no-wrap">
                                 <div class="flex items-center">
@@ -201,7 +201,15 @@
                                 </div>
                             </td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr class="dark:bg-gray-800 dark:text-white">
+                            <td colspan="7" class="items-center w-full text-center">
+                                <div class="text-2xl m-4 p-4 ">
+                                    No activities found
+                                </div>
+                            </td>
+                        </tr>
+                    @endforelse
                     </tbody>
                 </table>
             </div>

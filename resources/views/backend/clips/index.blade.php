@@ -1,7 +1,7 @@
 @extends('layouts.backend')
 
 @section('content')
-    <div class="flex border-b border-black pb-2 font-semibold font-2xl">
+    <div class="flex pb-2 font-semibold border-b border-black font-2xl dark:text-white dark:border-white">
         Clips index
     </div>
     <livewire:clips-data-table />

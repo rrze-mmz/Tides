@@ -5,7 +5,9 @@
     @forelse($series as $single)
         @include('backend.series._card',['series'=> $single])
     @empty
-        No series found
+        <div class="dark:text-white">
+            No series found
+        </div>
     @endforelse
 </div>
 

@@ -6,7 +6,8 @@
     >
         <div class="grid grid-cols-12 content-center items-center gap-4">
             <div class="col-span-2">
-                <label for="has_time_availability" class="mr-6 block py-2 font-bold text-gray-700 text-md">
+                <label for="has_time_availability" class="mr-6 block py-2 font-bold text-gray-700 text-md
+                dark:text-white dark:border-white ">
                     Time Availability
                 </label>
             </div>
@@ -35,7 +36,8 @@
                 <div class="grid grid-cols-8 items-center pt-4">
                     <div class="content-center">
                         <div class="flex flex-col">
-                            <label class="ml-4 mr-2 block flex py-2 font-bold text-gray-700 text-md"
+                            <label class="ml-4 mr-2 block flex py-2 font-bold text-gray-700 text-md dark:text-white
+                            dark:border-white "
                                    for="{{ $name }}_start">Start time</label>
                         </div>
                     </div>
@@ -54,7 +56,8 @@
                 <div class="grid grid-cols-8 items-center py-2">
                     <div class="content-center">
                         <div class="flex flex-col">
-                            <label class="ml-4 mr-6 block py-2 font-bold text-gray-700 text-md"
+                            <label class="ml-4 mr-6 block py-2 font-bold text-gray-700 text-md dark:text-white
+                            dark:border-white "
                                    for="{{ $name }}_end">End time</label>
                         </div>
                     </div>

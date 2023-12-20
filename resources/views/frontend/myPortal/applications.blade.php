@@ -1,4 +1,5 @@
-@php use App\Enums\ApplicationStatus; @endphp
+@use(App\Enums\ApplicationStatus)
+
 @extends('layouts.myPortal')
 
 @section('myPortalHeader')

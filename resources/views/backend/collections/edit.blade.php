@@ -1,7 +1,9 @@
 @extends('layouts.backend')
 
 @section('content')
-    <div class="flex border-b border-black pb-2 font-semibold font-2xl">
+    <div class="mb-5 flex items-center justify-between border-b border-black pb-2 font-semibold font-2xl
+                dark:text-white dark:border-white"
+    >
         Edit Collection
     </div>
 
@@ -53,10 +55,14 @@
             </div>
         </form>
     </div>
-    <div class="flex border-b border-black pt-8 pb-2 font-semibold font-2xl">
+    <div class="py-10 mb-5 flex items-center justify-between border-b border-black pb-2 font-semibold font-2xl
+                dark:text-white dark:border-white"
+    >
         Collection options
     </div>
-    <div class="flex border-b border-black pt-8 pb-2 font-semibold font-2xl">
+    <div class="pt-10 mb-5 flex items-center justify-between border-b border-black pb-2 font-semibold font-2xl
+                dark:text-white dark:border-white"
+    >
         Toggle clips
     </div>
     <div class="flex pt-6">
@@ -80,7 +86,9 @@
             </div>
         </form>
     </div>
-    <div class="flex border-b border-black pt-8 pb-2 font-semibold font-2xl">
+    <div class="pt-10                     mb-5 flex items-center justify-between border-b border-black pb-2 font-semibold font-2xl
+                dark:text-white dark:border-white"
+    >
         Collection Clips
     </div>
     <x-list-clips :series="$collection" :clips="$collection->clips" dashboardAction="@can('menu-dashboard-admin')" />

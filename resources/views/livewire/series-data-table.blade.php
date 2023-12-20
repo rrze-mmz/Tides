@@ -25,7 +25,7 @@
                             <input wire:model.live="userSeries" id="user-series" type="checkbox"
                                    class="h-4 w-4 text-indigo-600 transition duration-150 ease-in-out form-checkbox">
                             <div class="ml-3 text-sm leading-5">
-                                <label for="admin" class="font-medium text-gray-700 dark:text-white">My series</label>
+                                <label for="admin" class=" text-gray-700 dark:text-white">My series</label>
                             </div>
                         </div>
                     </div>
@@ -52,7 +52,7 @@
                             <div class="flex items-center">
                                 <button wire:click="sortBy('name')"
                                         class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white leading-4
-                                        font-medium text-gray-500 uppercase tracking-wider"
+                                         text-gray-500 uppercase tracking-wider"
                                 >
                                     Title
                                 </button>
@@ -66,7 +66,7 @@
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
                                 <button wire:click="sortBy('semester_id')"
-                                        class="bg-gray-50 text-xs leading-4 font-medium text-gray-500  dark:bg-gray-800
+                                        class="bg-gray-50 text-xs leading-4  text-gray-500  dark:bg-gray-800
                                          dark:text-white uppercase tracking-wider"
                                 >
                                     Semester
@@ -81,7 +81,7 @@
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
                                 <button wire:click="sortBy('faculty')"
-                                        class="bg-gray-50 text-xs leading-4 font-medium  dark:bg-gray-800
+                                        class="bg-gray-50 text-xs leading-4   dark:bg-gray-800
                                         dark:text-white text-gray-500 uppercase tracking-wider"
                                 >
                                     Acl
@@ -96,7 +96,7 @@
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
                                 <button wire:click="sortBy('faculty')"
-                                        class="bg-gray-50 text-xs leading-4 font-medium  dark:bg-gray-800
+                                        class="bg-gray-50 text-xs leading-4   dark:bg-gray-800
                                         dark:text-white text-gray-500 uppercase tracking-wider"
                                 >
                                     Organization
@@ -111,7 +111,7 @@
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
                                 <button wire:click="sortBy('faculty')"
-                                        class="bg-gray-50 text-xs leading-4 font-medium dark:bg-gray-800
+                                        class="bg-gray-50 text-xs leading-4  dark:bg-gray-800
                                         dark:text-white  text-gray-500 uppercase tracking-wider"
                                 >
                                     Presenters
@@ -126,7 +126,7 @@
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
                                 <div
-                                    class="bg-gray-50 text-xs leading-4 font-medium dark:bg-gray-800 dark:text-white
+                                    class="bg-gray-50 text-xs leading-4  dark:bg-gray-800 dark:text-white
                                             text-gray-500 uppercase tracking-wider"
                                 >
                                     Actions
@@ -136,10 +136,10 @@
                     </tr>
                     </thead>
 
-                    <tbody class="bg-white divide-y divide-gray-200">
+                    <tbody class="bg-white divide-y divide-gray-200 dark:bg-slate-800">
 
                     @forelse ($series as $singleSeries)
-                        <tr class=" dark:bg-slate-800 font-normal">
+                        <tr class="text-sm leading-5 text-gray-900 dark:text-white ">
                             <td class="w-4/12 px-6 py-4 whitespace-no-wrap  ">
                                 <div class="flex items-center">
                                     <div class="h-12 w-24 flex-shrink-0">
@@ -150,7 +150,7 @@
                                              alt="">
                                     </div>
                                     <div class="ml-4">
-                                        <div class="leading-5 text-gray-900 dark:text-white ">
+                                        <div class="">
                                             {{ $singleSeries->title.' / ID:'.$singleSeries->id }}
                                         </div>
                                     </div>
@@ -159,7 +159,7 @@
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
                                 <div class="flex items-center">
                                     <div class="ml-4">
-                                        <div class="leading-5 text-gray-900 dark:text-white">
+                                        <div class="">
                                             {{ $singleSeries->fetchClipsSemester() }}
                                         </div>
                                     </div>
@@ -168,7 +168,7 @@
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
                                 <div class="flex items-center">
                                     <div class="ml-4">
-                                        <div class="leading-5 text-gray-900 dark:text-white">
+                                        <div class="">
                                             <div class="pr-2">
                                                 @if($seriesAcls = $singleSeries->getSeriesACLSUpdated())
                                                     @if($seriesAcls!== 'public')
@@ -200,7 +200,7 @@
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
                                 <div class="flex items-center">
                                     <div class="ml-4">
-                                        <div class="leading-5 text-gray-900 dark:text-white">
+                                        <div class="">
                                             {{  $singleSeries->organization->name }}
                                         </div>
                                     </div>
@@ -209,7 +209,7 @@
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
                                 <div class="flex items-center">
                                     <div class="ml-4">
-                                        <div class="leading-5 text-gray-900 dark:text-white">
+                                        <div class="">
                                             @if($singleSeries->presenters->isNotEmpty())
                                                 <div class="flex items-center">
                                                     <div class="flex pr-2 items-center">

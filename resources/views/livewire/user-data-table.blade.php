@@ -1,4 +1,4 @@
-<div class="flex flex-col">
+<div class="flex flex-col  font-normal">
     <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
             <div class="flex items-center justify-between">
@@ -29,84 +29,92 @@
                                class="h-4 w-4 text-indigo-600 transition duration-150 ease-in-out form-checkbox">
                     </div>
                     <div class="ml-3 text-sm leading-5">
-                        <label for="admin" class="font-medium text-gray-700">Admins</label>
+                        <label for="admin"
+                               class="text-gray-700 dark:text-white"
+                        >
+                            Admins
+                        </label>
                     </div>
                 </div>
             </div>
 
             <div class="mt-4 overflow-hidden border-b border-gray-200 shadow sm:rounded-lg">
-
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead>
                     <tr>
                         <th
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
-                                <button wire:click="sortBy('first_name')" class="bg-gray-50 text-xs leading-4 font-medium
-                                                    text-gray-500 uppercase tracking-wider"
+                                <button wire:click="sortBy('first_name')"
+                                        class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white leading-4
+                                        text-gray-500 uppercase tracking-wider"
                                 >
                                     First Name
                                 </button>
                                 <x-sort-icon
                                     field="first_name"
                                     :sortField="$sortField"
-                                    :sortAsc="$sortAsc"/>
+                                    :sortAsc="$sortAsc" />
                             </div>
                         </th>
                         <th
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
-                                <button wire:click="sortBy('last_name')" class="bg-gray-50 text-xs leading-4 font-medium
-                                                    text-gray-500 uppercase tracking-wider"
+                                <button wire:click="sortBy('last_name')"
+                                        class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white leading-4
+                                        text-gray-500 uppercase tracking-wider"
                                 >
                                     Last Name
                                 </button>
                                 <x-sort-icon
                                     field="last_name"
                                     :sortField="$sortField"
-                                    :sortAsc="$sortAsc"/>
+                                    :sortAsc="$sortAsc" />
                             </div>
                         </th>
                         <th
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
-                                <button wire:click="sortBy('username')" class="bg-gray-50 text-xs leading-4 font-medium
-                                                    text-gray-500 uppercase tracking-wider"
+                                <button wire:click="sortBy('username')"
+                                        class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white leading-4
+                                        text-gray-500 uppercase tracking-wider"
                                 >
                                     Username
                                 </button>
                                 <x-sort-icon
                                     field="username"
                                     :sortField="$sortField"
-                                    :sortAsc="$sortAsc"/>
+                                    :sortAsc="$sortAsc" />
                             </div>
                         </th>
                         <th
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
                                 <button wire:click="sortBy('email')"
-                                        class="bg-gray-50 text-xs leading-4 font-medium
-                                                    text-gray-500 uppercase tracking-wider"
+                                        class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white leading-4
+                                        text-gray-500 uppercase tracking-wider"
                                 >
                                     Email
                                 </button>
                                 <x-sort-icon
                                     field="email"
                                     :sortField="$sortField"
-                                    :sortAsc="$sortAsc"/>
+                                    :sortAsc="$sortAsc" />
                             </div>
                         </th>
-                        <th
-                            class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium
-                                        text-gray-500 uppercase tracking-wider">
-                            Roles
+                        <th class="px-6 py-3 text-left">
+                            <div class="dark:bg-gray-900 text-xs dark:text-white leading-4
+                                        text-gray-500 uppercase tracking-wider"
+                            >
+                                Roles
+                            </div>
                         </th>
-                        <th class="bg-gray-50 px-6 py-3"></th>
+                        <th></th>
                     </tr>
                     </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
+                    <tbody class="bg-white divide-y divide-gray-200 dark:bg-slate-800 ">
                     @foreach ($users as $user)
-                        <tr>
+                        <tr class="text-sm leading-5 text-gray-900 dark:text-white ">
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
                                 <div class="flex items-center">
                                     <div class="h-10 w-10 flex-shrink-0">
@@ -114,7 +122,7 @@
                                              src="https://www.gravatar.com/avatar/?d=mp&f=y" alt="">
                                     </div>
                                     <div class="ml-4">
-                                        <div class="text-sm font-medium leading-5 text-gray-900">
+                                        <div class="">
                                             {{ $user->first_name }}
                                         </div>
                                     </div>
@@ -123,7 +131,7 @@
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
                                 <div class="flex items-center">
                                     <div class="ml-4">
-                                        <div class="text-sm font-medium leading-5 text-gray-900">
+                                        <div class="">
                                             {{ $user->last_name }}
                                         </div>
                                     </div>
@@ -132,14 +140,14 @@
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
                                 <div class="flex items-center">
                                     <div class="ml-4">
-                                        <div class="text-sm font-medium leading-5 text-gray-900">
+                                        <div class="">
                                             {{ $user->username }}
                                         </div>
                                     </div>
                                 </div>
                             </td>
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
-                                <div class="text-sm font-medium leading-5 text-gray-900">{{ $user->email }}</div>
+                                <div class="">{{ $user->email }}</div>
                             </td>
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
                                 @foreach($user->roles as $role)

@@ -1,4 +1,4 @@
-@php use App\Enums\Acl; @endphp
+@use(App\Enums\Acl)
 @if(method_exists($series, 'chapters') && $series->chapters()->count() > 0)
     <div class="mt-5 flex border-t-2 border-black dark:border-white " x-data="{selected: 0 }">
         <ul class="shadow-box mb-4 flex flex-col w-full text-center text-lg dark:bg-gray-900 dark:text-white">
@@ -8,7 +8,7 @@
                         <button type="button" class="w-full px-8 py-6 text-left  border-2 border-gray-600 py-4"
                                 @click="selected !==  {{ $chapter->id }}? selected = {{ $chapter->id }} : selected = null">
                             <div class="flex items-center justify-between">
-                                <span>
+                                <span>1
                                    {{$chapter->position}} -  {{$chapter->title}}
                                 </span>
                                 <x-heroicon-o-plus-circle class="h-6 w-6" />

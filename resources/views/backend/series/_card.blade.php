@@ -7,7 +7,7 @@
         $url = route('frontend.series.show', $series)
     @endphp
 @endif
-<div class="relative my-2 bg-gray-50 dark:bg-slate-800 rounded-md dark:border-white">
+<div class="relative my-2 bg-gray-50 dark:bg-slate-800 rounded-md dark:border-white font-normal">
     <div class="relative h-15 overflow-hidden">
         <a href="{{ $url }}">
             <img
@@ -36,7 +36,8 @@
             </div>
             <div>
                 @if ($series->owner)
-                    <span class="text-sm italic dark:text-white">von {{$series->owner->getFullNameAttribute()}}</span>
+                    <span
+                        class="text-sm italic dark:text-white">von {{$series->owner->getFullNameAttribute()}}</span>
                 @endif
             </div>
             <p class="text-base text-gray-700 dark:text-white">

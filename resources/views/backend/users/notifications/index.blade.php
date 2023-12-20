@@ -1,4 +1,6 @@
-@php use App\Enums\ApplicationStatus;use App\Models\User; @endphp
+@use(App\Enums\ApplicationStatus)
+@use(App\Models\User)
+
 @extends('layouts.backend')
 
 @section('content')
@@ -16,7 +18,7 @@
                     <tr>
                         <th class="px-6 py-3 text-left">
                             <div class="flex items-center">
-                                <x-heroicon-o-trash class="h-6 w-6"/>
+                                <x-heroicon-o-trash class="h-6 w-6" />
                             </div>
                         </th>
                         <th class="px-6 py-3 text-left">
@@ -45,7 +47,8 @@
                     @forelse(auth()->user()->notifications as $notification)
                         <tr class="@if(is_null($notification->read_at)) font-bold @endif ">
                             <td class="w-1/12 px-6 py-4 whitespace-no-wrap">
-                                <input type="checkbox" name="selected_notifications[]" value="{{ $notification->id }}"/>
+                                <input type="checkbox" name="selected_notifications[]"
+                                       value="{{ $notification->id }}" />
                             </td>
                             <td class="w-2/12 px-6 whitespace-no-wrap">
                                 @if($notification->type === 'App\Notifications\NewAdminPortalNotification')

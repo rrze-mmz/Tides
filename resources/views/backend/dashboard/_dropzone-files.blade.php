@@ -1,4 +1,4 @@
-<div class="border-b border-black pt-10 pb-2 font-semibold font-2xl">
+<div class="border-b border-black pt-10 pb-2 font-semibold font-2xl dark:text-white dark:border-white">
     {{ __('dashboard.files in dropzone') }}
 </div>
 <div class="mt-3 w-full rounded-md bg-white py-3">

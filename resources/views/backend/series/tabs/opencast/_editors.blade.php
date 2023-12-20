@@ -1,12 +1,12 @@
 @can('administrate-admin-portal-pages')
-    <div class="flex flex-col">
-        <h4 class="mt-4 mb-4 text-green-700">
+    <div class="flex flex-col font-normal">
+        <h4 class="mt-4 mb-4 text-green-700  dark:text-green-400">
             <span class="text-xl font-bold">Opencast access policy</span>
         </h4>
         <div class="flex w-1/2">
-            <table class="table-auto border-b border-gray-200">
+            <table class="table-auto border-b border-gray-200 dark:border-white">
                 <thead class="text-left">
-                <tr class="uppercase">
+                <tr class="uppercase dark:text-white">
                     <th class="px-4">
                         Name
                     </th>
@@ -21,12 +21,12 @@
                     </th>
                 </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
+                <tbody class="bg-white divide-y divide-gray-200 dark:divide-white">
                 @forelse(collect($opencastSeriesInfo['metadata']['acl'])
                         ->groupBy('role')
                         ->except(['ROLE_USER_ADMIN','ROLE_ADMIN','ROLE_STUDIO','ROLE_USER_STUDIO']) as $key=>$role)
-                    <tr>
-                        <td class="px-4">
+                    <tr class="dark:bg-gray-700">
+                        <td class="px-4 dark:text-white">
                             @php
                                 $user = findUserByOpencastRole($key);
                             @endphp
@@ -76,7 +76,7 @@
 
                 @empty
                     <tr>
-                        <td class="font-bold italic" colspan="4">
+                        <td class="font-bold italic dark:bg-slate-800 dark:text-white" colspan="4">
                             Series in Opencast has no Tides editors
                         </td>
                     </tr>
@@ -94,7 +94,7 @@
               class="flex flex-1 items-center"
         >
             @csrf
-            <label class="mr-4" for="username">Add assistant to opencast series:</label>
+            <label class="font-normal mr-4 dark:text-white" for="username">Add assistant to opencast series:</label>
             <select name="username"
                     id="username"
                     class="mr-4 rounded-md text-md focus:border-blue-500 focus:bg-white focus:outline-none">

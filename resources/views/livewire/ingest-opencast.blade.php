@@ -2,7 +2,7 @@
     @if ($messageText)
         <x-message
             :messageText="$messageText"
-            :messageType="$messageType"/>
+            :messageType="$messageType" />
     @endif
 
     <form wire:submit="submitForm" action="#"
@@ -18,8 +18,13 @@
              x-on:livewire-upload-progress="progress = $event.detail.progress"
         >
 
-            <input wire:model.live="videoFile" type="file" id="videoFile" name="videoFile">
-            <p class="pt-2 text-sm italic">
+            <input wire:model.live="videoFile"
+                   type="file"
+                   id="videoFile"
+                   name="videoFile"
+                   class="dark:text-white"
+            >
+            <p class="pt-2 text-sm italic dark:text-white">
                 * will start an Opencast workflow and your video will be transcoded directly to Opencast server
             </p>
 

@@ -1,5 +1,5 @@
-<div class="flex-row my-10 px-3 py-2 bg-white mt-10">
-    <div class="font-medium w-full">
+<div class="flex-row my-10 px-3 py-2 bg-white mt-10 font-normal dark:text-white dark:border-white dark:bg-gray-900">
+    <div class="font-normal w-full">
         New chapter
     </div>
 

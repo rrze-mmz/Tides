@@ -1,9 +1,8 @@
-<div class="flex-row my-10 px-3 py-4 bg-white mt-10 ">
+<div class="flex-row my-10 px-3 py-4 bg-white mt-10 font-normal dark:text-white dark:border-white dark:bg-gray-900">
     <div class="font-medium w-full">
         Series chapters
     </div>
-
-
+    
     @if($series->chapters()->count() > 0)
         <form action="{{route('series.chapters.update',$series)}}"
               method="POST"

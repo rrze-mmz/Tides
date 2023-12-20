@@ -1,12 +1,12 @@
-@php
-    use App\Enums\ApplicationStatus;
-    use Carbon\Carbon;
-@endphp
+@use(App\Enums\ApplicationStatus)
+@use(Carbon\Carbon)
 
 @extends('layouts.backend')
 
 @section('content')
-    <div class="flex border-b border-black pb-2 font-semibold font-2xl">
+    <div class="mb-5 flex items-center justify-between border-b border-black pb-2 font-semibold font-2xl
+                dark:text-white dark:border-white"
+    >
         Edit user
     </div>
 
@@ -65,14 +65,16 @@
         </form>
     </div>
 
-    <div class="flex border-b border-black py-2 pt-10 font-semibold font-2xl">
+    <div class="pt-10 mb-5 flex items-center justify-between border-b border-black pb-2 font-semibold font-2xl
+                dark:text-white dark:border-white"
+    >
         Applications
     </div>
 
     @if(isset($user->settings->data['admin_portal_application_status']))
         @if($user->settings->data['admin_portal_application_status'] === ApplicationStatus::IN_PROGRESS())
             <div class="flex flex-row items-center pt-5">
-                <div class="pr-10 text-lg font-bold">
+                <div class="pr-10 text-lg font-normal dark:text-white">
                     User requested access to admin portal
                 </div>
                 <div>
@@ -92,7 +94,7 @@
                 </div>
             </div>
         @else
-            <div class="flex flex-row items-center pt-5">
+            <div class="flex flex-row items-center pt-5 dark:text-white">
                 <div class="pr-10 text-lg">
                     User admin portal application processed by
                     <span class="italic"> {{ $user->settings->data['admin_portal_application_processed_by'] }} </span>

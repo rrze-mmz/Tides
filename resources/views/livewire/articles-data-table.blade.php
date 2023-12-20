@@ -26,8 +26,9 @@
                         <th
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
-                                <button wire:click="sortBy('name')" class="bg-gray-50 text-xs leading-4 font-medium
-                                                    text-gray-500 uppercase tracking-wider"
+                                <button wire:click="sortBy('name')"
+                                        class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white leading-4 font-medium
+                                           text-gray-500 uppercase tracking-wider"
                                 >
                                     Title [DE]
                                 </button>
@@ -40,8 +41,9 @@
                         <th
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
-                                <button wire:click="sortBy('faculty')" class="bg-gray-50 text-xs leading-4 font-medium
-                                                    text-gray-500 uppercase tracking-wider"
+                                <button wire:click="sortBy('faculty')"
+                                        class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white leading-4 font-medium
+                                           text-gray-500 uppercase tracking-wider"
                                 >
                                     Title [EN]
                                 </button>
@@ -54,8 +56,9 @@
                         <th
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
-                                <button wire:click="sortBy('location')" class="bg-gray-50 text-xs leading-4 font-medium
-                                                    text-gray-500 uppercase tracking-wider"
+                                <button wire:click="sortBy('location')"
+                                        class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white leading-4 font-medium
+                                           text-gray-500 uppercase tracking-wider"
                                 >
                                     Content Preview [DE]
                                 </button>
@@ -69,8 +72,8 @@
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
                                 <button wire:click="sortBy('camera')"
-                                        class="bg-gray-50 text-xs leading-4 font-medium
-                                                    text-gray-500 uppercase tracking-wider"
+                                        class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white leading-4 font-medium
+                                           text-gray-500 uppercase tracking-wider"
                                 >
                                     Content Preview [EN]
                                 </button>
@@ -84,8 +87,8 @@
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
                                 <div
-                                    class="bg-gray-50 text-xs leading-4 font-medium
-                                                    text-gray-500 uppercase tracking-wider"
+                                    class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white leading-4 font-medium
+                                           text-gray-500 uppercase tracking-wider"
                                 >
                                     Published
                                 </div>
@@ -95,8 +98,8 @@
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
                                 <div
-                                    class="bg-gray-50 text-xs leading-4 font-medium
-                                                    text-gray-500 uppercase tracking-wider"
+                                    class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white leading-4 font-medium
+                                           text-gray-500 uppercase tracking-wider"
                                 >
                                     Actions
                                 </div>
@@ -105,14 +108,14 @@
                     </tr>
                     </thead>
 
-                    <tbody class="bg-white divide-y divide-gray-200">
+                    <tbody class="bg-white divide-y divide-gray-200 dark:bg-slate-800 ">
 
                     @foreach ($articles as $article)
-                        <tr>
+                        <tr class="leading-5 text-gray-900  dark:text-white  font-normal">
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
                                 <div class="flex items-center">
                                     <div class="ml-4">
-                                        <div class="text-sm font-medium leading-5 text-gray-900">
+                                        <div class="">
                                             {{ $article->title_de }}
                                         </div>
                                     </div>
@@ -121,7 +124,7 @@
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
                                 <div class="flex items-center">
                                     <div class="ml-4">
-                                        <div class="text-sm font-medium leading-5 text-gray-900">
+                                        <div class="">
                                             {{ $article->title_en }}
                                         </div>
                                     </div>
@@ -130,7 +133,7 @@
                             <td class="w-4/12 px-6 py-4 whitespace-no-wrap">
                                 <div class="flex items-center">
                                     <div class="ml-4">
-                                        <div class="text-sm font-medium leading-5 text-gray-900">
+                                        <div class="">
                                             {{ str()->of($article->content_de)->limit(150, ' (...)')  }}
                                         </div>
                                     </div>
@@ -139,14 +142,14 @@
                             <td class="w-4/12 px-6 py-4 whitespace-no-wrap">
                                 <div class="flex items-center">
                                     <div class="ml-4">
-                                        <div class="text-sm font-medium leading-5 text-gray-900">
+                                        <div class="">
                                             {{ str()->of($article->content_en)->limit(150, ' (...)')  }}
                                         </div>
                                     </div>
                                 </div>
                             </td>
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
-                                <div class="text-sm leading-5 text-gray-900">
+                                <div class="text-sm">
                                     @if ($article->is_published)
                                         <x-heroicon-o-badge-check class="h-6 w-6" />
                                     @else

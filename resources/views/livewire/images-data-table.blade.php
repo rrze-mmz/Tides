@@ -1,4 +1,4 @@
-<div class="flex flex-col">
+<div class="flex flex-col  font-normal">
     <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
             <div class="flex items-center justify-between">
@@ -27,8 +27,8 @@
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
                                 <div
-                                    class="bg-gray-50 text-xs leading-4 font-medium
-                                                    text-gray-500 uppercase tracking-wider"
+                                    class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white leading-4 font-medium
+                                           text-gray-500 uppercase tracking-wider"
                                 >
                                     Image
                                 </div>
@@ -38,8 +38,8 @@
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
                                 <button wire:click="sortBy('description')"
-                                        class="bg-gray-50 text-xs leading-4 font-medium text-gray-500 uppercase
-                                        tracking-wider"
+                                        class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white leading-4
+                                        font-medium text-gray-500 uppercase tracking-wider"
                                 >
                                     Description
                                 </button>
@@ -52,8 +52,9 @@
                         <th
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
-                                <button wire:click="sortBy('file_name')" class="bg-gray-50 text-xs leading-4 font-medium
-                                                    text-gray-500 uppercase tracking-wider"
+                                <button wire:click="sortBy('file_name')"
+                                        class="bg-gray-50 leading-4 font-medium dark:bg-gray-900 text-xs dark:text-white
+                                               text-gray-500 uppercase tracking-wider"
                                 >
                                     File name
                                 </button>
@@ -67,8 +68,8 @@
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
                                 <div
-                                    class="bg-gray-50 text-xs leading-4 font-medium
-                                                    text-gray-500 uppercase tracking-wider"
+                                    class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white leading-4 font-medium
+                                           text-gray-500 uppercase tracking-wider"
                                 >
                                     File size
                                 </div>
@@ -78,8 +79,8 @@
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
                                 <button wire:click="sortBy('created_at')"
-                                        class="bg-gray-50 text-xs leading-4 font-medium
-                                                    text-gray-500 uppercase tracking-wider"
+                                        class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white leading-4
+                                        font-medium text-gray-500 uppercase tracking-wider"
                                 >
                                     Created at
                                 </button>
@@ -93,8 +94,8 @@
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
                                 <button wire:click="sortBy('updated_at')"
-                                        class="bg-gray-50 text-xs leading-4 font-medium
-                                                    text-gray-500 uppercase tracking-wider"
+                                        class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white leading-4 font-medium
+                                               text-gray-500 uppercase tracking-wider"
                                 >
                                     Updated at
                                 </button>
@@ -108,8 +109,8 @@
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
                                 <div
-                                    class="bg-gray-50 text-xs leading-4 font-medium
-                                                    text-gray-500 uppercase tracking-wider"
+                                    class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white leading-4 font-medium
+                                           text-gray-500 uppercase tracking-wider"
                                 >
                                     Actions
                                 </div>
@@ -118,10 +119,9 @@
                     </tr>
                     </thead>
 
-                    <tbody class="bg-white divide-y divide-gray-200">
-
+                    <tbody class="bg-white divide-y divide-gray-200 dark:bg-slate-800 ">
                     @forelse ($images as $image)
-                        <tr>
+                        <tr class="text-sm leading-5  dark:text-white ">
                             <td class="w-1/12 px-6 py-4 whitespace-no-wrap">
                                 <div class="flex items-center">
                                     <div class="flex-shrink-0">
@@ -134,7 +134,7 @@
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
                                 <div class="flex items-center">
                                     <div class="ml-4">
-                                        <div class="text-sm font-medium leading-5 text-gray-900">
+                                        <div class="text-sm font-medium leading-5 ">
                                             {{ $image->description }}
                                         </div>
                                     </div>
@@ -143,7 +143,7 @@
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
                                 <div class="flex items-center">
                                     <div class="ml-4">
-                                        <div class="text-sm font-medium leading-5 text-gray-900">
+                                        <div class="text-sm font-medium leading-5 ">
                                             {{ $image->file_name }}
                                         </div>
                                     </div>
@@ -152,19 +152,19 @@
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
                                 <div class="flex items-center">
                                     <div class="ml-4">
-                                        <div class="text-sm font-medium leading-5 text-gray-900">
+                                        <div class="text-sm font-medium leading-5 ">
                                             {{ humanFileSizeFormat($image->file_size ?? 'null') }}
                                         </div>
                                     </div>
                                 </div>
                             </td>
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
-                                <div class="text-sm leading-5 text-gray-900">
+                                <div class="text-sm leading-5 ">
                                     {{ $image->create_at?->diffForHumans() }}
                                 </div>
                             </td>
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
-                                <div class="text-sm leading-5 text-gray-900">
+                                <div class="text-sm leading-5 ">
                                     {{ $image->updated_at?->diffForHumans() }}
                                 </div>
                             </td>
@@ -191,13 +191,10 @@
                             </td>
                         </tr>
                     @empty
-                        <tr>
-                            <td class="w-full px-6 py-4 whitespace-no-wrap text-center
-                                        items-center place-content-center text-sm leading-5 font-medium "
-                                colspan="7"
-                            >
-                                <div class="flex">
-                                    No images found. Please create one
+                        <tr class="dark:bg-gray-800 dark:text-white">
+                            <td colspan="7" class="items-center w-full text-center">
+                                <div class="text-2xl m-4 p-4 ">
+                                    No images found
                                 </div>
                             </td>
                         </tr>
