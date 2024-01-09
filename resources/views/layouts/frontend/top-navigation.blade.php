@@ -8,7 +8,7 @@
     </div>
     <nav class="font-semibold space-x-4 text-md ">
         <span class="pl-10 no-underline ">
-            <a href="{{ route('frontend.faq') }}">
+            <a href="{{ route('frontend.channels.index') }}">
                 Channels
             </a>
         </span>

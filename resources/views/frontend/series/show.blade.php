@@ -67,6 +67,7 @@
                 </div>
             @endauth
         </div>
+
         <div class="flex justify-around border-b-2 border-gray-500 pt-8 pb-3">
 
             <div class="flex w-1/4 items-center">

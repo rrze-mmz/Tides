@@ -176,7 +176,7 @@ it('it validates a chapter id to assure that belongs to the series when updating
     patch(route('clips.edit', $series->latestClip), $attributes)->assertSessionHasErrors(['chapter_id']);
     assertDatabaseMissing('clips', $attributes);
 
-    $attributes['chapter_id'] = $series->chapters()->first();
+    $attributes['chapter_id'] = $series->chapters()->first()->id;
 
     patch(route('clips.edit', $series->latestClip), $attributes)->assertSessionDoesntHaveErrors();
 });

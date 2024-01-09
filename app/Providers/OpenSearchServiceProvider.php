@@ -47,9 +47,7 @@ class OpenSearchServiceProvider extends ServiceProvider
     {
         $setting = Setting::firstOrCreate(
             ['name' => 'openSearch'],
-            [
-                'data' => config('settings.openSearch'),
-            ]
+            ['data' => config('settings.openSearch')]
         );
 
         return $setting->data;

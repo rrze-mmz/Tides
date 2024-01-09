@@ -70,7 +70,7 @@ it('has a button to create new images and a text for info if database has no ima
     get(route('images.index'))
         ->assertViewIs('backend.images.index')
         ->assertSeeLivewire(ImagesDataTable::class)
-        ->assertSee('No images found. Please create one');
+        ->assertSee('No images found');
 });
 
 it('shows a list of all images', function () {

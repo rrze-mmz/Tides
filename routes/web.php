@@ -60,6 +60,10 @@ Route::redirect('/admin', '/admin/dashboard');
 //Quick __invoke
 Route::get('/search', ShowSearchResultsController::class)->name('search');
 
+//Channels routes
+Route::get('/channels', function () {
+    redirect('/');
+})->name('frontend.channels.index');
 //frontend series routes
 
 Route::controller(ShowSeriesController::class)->prefix('/series')->group(function () {

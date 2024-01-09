@@ -96,7 +96,7 @@ abstract class TestCase extends BaseTestCase
         ]);
 
         Semester::create([
-            'name' => 'Sommerstemester '.Carbon::now()->year,
+            'name' => 'Sommersemester '.Carbon::now()->year,
             'acronym' => 'S'.Carbon::now()->format('y'),
             'short_title' => Carbon::now()->year,
             'start_date' => Carbon::now()->year.'-04-01 00:00:00',
@@ -163,7 +163,7 @@ abstract class TestCase extends BaseTestCase
         }
     }
 
-    protected function signIn(User $user = null): User
+    protected function signIn(?User $user = null): User
     {
         $user = $user ?: User::factory()->create();
 
