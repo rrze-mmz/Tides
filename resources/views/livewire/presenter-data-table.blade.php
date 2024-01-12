@@ -45,8 +45,9 @@
                         <th
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
-                                <button wire:click="sortBy('last_name')" class="bg-gray-50 text-xs leading-4 font-medium
-                                                    text-gray-500 uppercase tracking-wider"
+                                <button wire:click="sortBy('last_name')"
+                                        class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white leading-4 font-medium
+                                           text-gray-500 uppercase tracking-wider"
                                 >
                                     Doc Title
                                 </button>
@@ -126,7 +127,7 @@
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200 dark:bg-slate-800 ">
                     @foreach ($presenters as $presenter)
-                        <tr class="text-sm leading-5 dark:text-white font-normal ">
+                        <tr class="text-sm leading-5 dark:text-white font-normal">
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
                                 <div class="flex items-center">
                                     <div class="ml-4">

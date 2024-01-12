@@ -1,5 +1,5 @@
 @foreach ($searchResults['series']['hits']['hits'] as $series)
-    <tr>
+    <tr class="text-sm leading-5 dark:text-white font-normal ">
         <td class="w-4/12 px-6 py-4 whitespace-no-wrap">
             <div class="flex items-center">
                 <div class="h-12 w-24 flex-shrink-0">
@@ -7,7 +7,7 @@
                          src="{{ $series['_source']['poster'] }}" alt="">
                 </div>
                 <div class="ml-4">
-                    <div class="text-sm font-medium leading-5 text-gray-900">
+                    <div class="">
                         {{ $series['_source']['title'].' |'.$series['_source']['semester'].' |  SeriesID:'.$series['_source']['id'] }}
                     </div>
                 </div>
@@ -16,7 +16,7 @@
         <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
             <div class="flex items-center">
                 <div class="ml-4">
-                    <div class="text-sm font-medium leading-5 text-gray-900">
+                    <div class="">
                         {{ $series['_source']['semester'] }}
                     </div>
                 </div>
@@ -25,7 +25,7 @@
         <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
             <div class="flex items-center">
                 <div class="ml-4">
-                    <div class="text-sm font-medium leading-5 text-gray-900">
+                    <div class="">
                         {{ $series['_source']['acls']  }}
                     </div>
                 </div>
@@ -34,7 +34,7 @@
         <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
             <div class="flex items-center">
                 <div class="ml-4">
-                    <div class="text-sm font-medium leading-5 text-gray-900">
+                    <div class="">
                         {{ ($series['_source']['organization']['org_name'])}}
                     </div>
                 </div>
@@ -43,7 +43,7 @@
         <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
             <div class="flex items-center">
                 <div class="ml-4">
-                    <div class="text-sm font-medium leading-5 text-gray-900">
+                    <div class="">
                         @if(collect($series['_source']['presenters'])->isNotEmpty())
                             <div class="flex items-center">
                                 <div class="flex pr-2 items-center">

@@ -1,7 +1,7 @@
 @extends('layouts.backend')
 
 @section('content')
-    <div class="flex border-b border-black pb-2 font-semibold font-2xl dark:text-white dark:border-white">
+    <div class="flex border-b border-black pb-2 font-semibold text-3xl dark:text-white dark:border-white">
         {{ __('dashboard.welcome to personal dashboard', ['fullName' => auth()->user()->getFullNameAttribute() ]) }}
         !
     </div>

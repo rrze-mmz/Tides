@@ -18,22 +18,22 @@ class AddClipRelationships extends Migration
                 ->default(1)
                 ->references('id')
                 ->on('languages')
-                ->cascadeOnDelete();
+                ->nullOnDelete();
             $table->foreignId('context_id')
                 ->default(1)
                 ->references('id')
                 ->on('contexts')
-                ->cascadeOnDelete();
+                ->nullOnDelete();
             $table->foreignId('format_id')
                 ->default(1)
                 ->references('id')
                 ->on('formats')
-                ->cascadeOnDelete();
+                ->nullOnDelete();
             $table->foreignId('type_id')
                 ->default(1)
                 ->references('id')
                 ->on('types')
-                ->cascadeOnDelete();
+                ->nullOnDelete();
         });
     }
 

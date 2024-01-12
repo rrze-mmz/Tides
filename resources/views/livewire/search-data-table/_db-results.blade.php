@@ -1,5 +1,5 @@
 @foreach ($searchResults['series'] as $series)
-    <tr>
+    <tr class="text-sm leading-5 dark:text-white font-normal">
         <td class="w-4/12 px-6 py-4 whitespace-no-wrap">
             <div class="flex items-center">
                 <div class="h-12 w-24 flex-shrink-0">
@@ -10,7 +10,7 @@
                          alt="">
                 </div>
                 <div class="ml-4">
-                    <div class="text-sm font-medium leading-5 text-gray-900">
+                    <div>
                         {{ $series->title. ' |'.$semester = 'SEMESTER' .' |  SeriesID:'.$series->id }}
                     </div>
                 </div>
@@ -19,7 +19,7 @@
         <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
             <div class="flex items-center">
                 <div class="ml-4">
-                    <div class="text-sm font-medium leading-5 text-gray-900">
+                    <div>
                         {{ $series->fetchClipsSemester()  }}
                     </div>
                 </div>
@@ -28,7 +28,7 @@
         <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
             <div class="flex items-center">
                 <div class="ml-4">
-                    <div class="text-sm font-medium leading-5 text-gray-900">
+                    <div>
                         <div class="flex items-center justify-content-between">
                             <div class="pr-2">
                                 @if($seriesAcls = $series->getSeriesACLSUpdated())
@@ -65,7 +65,7 @@
         <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
             <div class="flex items-center">
                 <div class="ml-4">
-                    <div class="text-sm font-medium leading-5 text-gray-900">
+                    <div>
                         {{ ($series->organization->name)}}
                     </div>
                 </div>
@@ -74,7 +74,7 @@
         <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
             <div class="flex items-center">
                 <div class="ml-4">
-                    <div class="text-sm font-medium leading-5 text-gray-900">
+                    <div>
                         @if($series->presenters->isNotEmpty())
                             <div class="flex items-center">
                                 <div class="flex pr-2 items-center">
