@@ -36,6 +36,7 @@ use App\Http\Controllers\Frontend\ApiController;
 use App\Http\Controllers\Frontend\AssetsDownloadController;
 use App\Http\Controllers\Frontend\FeedsController;
 use App\Http\Controllers\Frontend\HomeController;
+use App\Http\Controllers\Frontend\ShowChannelsController;
 use App\Http\Controllers\Frontend\ShowClipsController;
 use App\Http\Controllers\Frontend\ShowLivestreamsController;
 use App\Http\Controllers\Frontend\ShowOrganizationsController;
@@ -61,9 +62,9 @@ Route::redirect('/admin', '/admin/dashboard');
 Route::get('/search', ShowSearchResultsController::class)->name('search');
 
 //Channels routes
-Route::get('/channels', function () {
-    redirect('/');
-})->name('frontend.channels.index');
+Route::get('/channels', [ShowChannelsController::class, 'index'])->name('frontend.channels.index');
+Route::get('/channels/{handle}', [ShowChannelsController::class, 'show'])
+    ->where('handle', '[@a-zA-Z0-9_-]+')->name('frontend.channels.show');
 //frontend series routes
 
 Route::controller(ShowSeriesController::class)->prefix('/series')->group(function () {

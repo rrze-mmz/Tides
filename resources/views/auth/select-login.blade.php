@@ -3,7 +3,7 @@
         <div
             class="flex min-h-screen flex-col items-center bg-gray-300  dark:bg-slate-800 pt-6 sm:justify-center sm:pt-0">
             <div class="w-full max-w-sm rounded-md bg-gray px-4 py-6 space-y-6 dark:bg-darker">
-                <h1 class="text-center text-xl dark:text-white font-semibold ">Login</h1>
+                <h1 class="text-center text-xl dark:text-white font-semibold">Login</h1>
                 @if(!is_null($saml2TenantUUID))
                     <a
                         href="{{route('saml.login', $saml2TenantUUID)}}"
@@ -18,7 +18,7 @@
                     <!-- Or -->
                     <div class="flex flex-nowrap items-center justify-center space-x-2">
                         <span class="h-px w-20 bg-gray-300"></span>
-                        <span>OR</span>
+                        <span class="dark:text-white">OR</span>
                         <span class="h-px w-20 bg-gray-300"></span>
                     </div>
                 @endif

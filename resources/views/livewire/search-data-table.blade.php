@@ -26,8 +26,9 @@
                         <th
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
-                                <button wire:click="sortBy('name')" class="bg-gray-50 text-xs leading-4 font-medium
-                                                    text-gray-500 uppercase tracking-wider"
+                                <button wire:click="sortBy('name')"
+                                        class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white leading-4 font-medium
+                                           text-gray-500 uppercase tracking-wider"
                                 >
                                     Title
                                 </button>
@@ -40,13 +41,14 @@
                         <th
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
-                                <button wire:click="sortBy('location')" class="bg-gray-50 text-xs leading-4 font-medium
-                                                    text-gray-500 uppercase tracking-wider"
+                                <button wire:click="sortBy('semester')"
+                                        class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white leading-4 font-medium
+                                           text-gray-500 uppercase tracking-wider"
                                 >
                                     Semester
                                 </button>
                                 <x-sort-icon
-                                    field="location"
+                                    field="semester"
                                     :sortField="$sortField"
                                     :sortAsc="$sortAsc" />
                             </div>
@@ -54,13 +56,14 @@
                         <th
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
-                                <button wire:click="sortBy('faculty')" class="bg-gray-50 text-xs leading-4 font-medium
-                                                    text-gray-500 uppercase tracking-wider"
+                                <button wire:click="sortBy('acl')"
+                                        class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white leading-4 font-medium
+                                           text-gray-500 uppercase tracking-wider"
                                 >
                                     Acl
                                 </button>
                                 <x-sort-icon
-                                    field="faculty"
+                                    field="acl"
                                     :sortField="$sortField"
                                     :sortAsc="$sortAsc" />
                             </div>
@@ -68,13 +71,14 @@
                         <th
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
-                                <button wire:click="sortBy('faculty')" class="bg-gray-50 text-xs leading-4 font-medium
-                                                    text-gray-500 uppercase tracking-wider"
+                                <button wire:click="sortBy('organization')"
+                                        class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white leading-4 font-medium
+                                           text-gray-500 uppercase tracking-wider"
                                 >
                                     Organization
                                 </button>
                                 <x-sort-icon
-                                    field="faculty"
+                                    field="organization"
                                     :sortField="$sortField"
                                     :sortAsc="$sortAsc" />
                             </div>
@@ -82,13 +86,14 @@
                         <th
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
-                                <button wire:click="sortBy('faculty')" class="bg-gray-50 text-xs leading-4 font-medium
-                                                    text-gray-500 uppercase tracking-wider"
+                                <button wire:click="sortBy('presenters')"
+                                        class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white leading-4 font-medium
+                                           text-gray-500 uppercase tracking-wider"
                                 >
                                     Presenters
                                 </button>
                                 <x-sort-icon
-                                    field="faculty"
+                                    field="presenters"
                                     :sortField="$sortField"
                                     :sortAsc="$sortAsc" />
                             </div>
@@ -97,8 +102,8 @@
                             class="px-6 py-3 text-left">
                             <div class="flex items-center">
                                 <div
-                                    class="bg-gray-50 text-xs leading-4 font-medium
-                                                    text-gray-500 uppercase tracking-wider"
+                                    class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white leading-4 font-medium
+                                           text-gray-500 uppercase tracking-wider"
                                 >
                                     Actions
                                 </div>
@@ -106,10 +111,7 @@
                         </th>
                     </tr>
                     </thead>
-
-                    <tbody class="bg-white divide-y divide-gray-200">
-
-
+                    <tbody class="bg-white divide-y divide-gray-200 dark:bg-slate-800 ">
                     @if($searchResults['openSearch'])
                         @include('livewire.search-data-table._open-search-results')
                     @else

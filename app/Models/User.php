@@ -81,7 +81,7 @@ class User extends Authenticatable
         return $this->belongsToMany(Series::class, 'series_subscriptions');
     }
 
-    public function accessableSeries()
+    public function accessableSeries(): Builder|Series
     {
         return Series::where('owner_id', $this->id)
             ->orWhereHas('members', function ($query) {
@@ -117,6 +117,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Channels relationship
+     */
+    public function channels(): HasMany
+    {
+        return $this->hasMany(Channel::class);
+    }
+
+    /*
      * Assign a role to the current use
      *
      * @return User
