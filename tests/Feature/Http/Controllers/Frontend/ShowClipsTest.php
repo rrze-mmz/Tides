@@ -190,6 +190,26 @@ it('clip public page should display all alternative videos if a video has assets
         ->assertSee('composite video stream');
 });
 
+it('clip public page should not display alternative videos if user is not allowed to view the video', function () {
+    $this->mockHandler->append($this->mockCheckApiConnection(), $this->mockVodSecureUrls());
+    $this->clip->addAcls(collect([Acl::PORTAL()]));
+
+    Asset::factory()->create([
+        'original_file_name' => 'presentation.smil',
+        'type' => Content::SMIL,
+        'clip_id' => $this->clip->id,
+    ]);
+    Asset::factory()->create([
+        'original_file_name' => 'composite.smil',
+        'type' => Content::SMIL,
+        'clip_id' => $this->clip->id,
+    ]);
+    get(route('frontend.clips.show', $this->clip))
+        ->assertDontSee('presenter video stream')
+        ->assertDontSee('presentation video stream')
+        ->assertDontSee('composite video stream');
+});
+
 it('clip public page should display clip presenters if any ', function () {
     $this->mockHandler->append($this->mockCheckApiConnection(), $this->mockVodSecureUrls());
     $presenters = Presenter::factory(2)->create();
@@ -220,5 +240,10 @@ it('a signed in user can access frontend clip page if clip has a portal access',
     $this->mockHandler->append($this->mockCheckApiConnection(), $this->mockVodSecureUrls());
     $this->clip->addAcls(collect([Acl::PORTAL()]));
 
-    get($this->clip->path())->assertDontSee('plyr-player');
+    get($this->clip->path())->assertDontSee('data-plyr-provider="html5"', false);
+
+    $this->mockHandler->append($this->mockCheckApiConnection(), $this->mockVodSecureUrls());
+    signInRole(Role::STUDENT);
+
+    get($this->clip->path())->assertSee('data-plyr-provider="html5"', false);
 });

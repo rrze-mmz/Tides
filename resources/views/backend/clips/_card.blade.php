@@ -45,12 +45,12 @@
         </div>
 
         @if($clip->presenters->isNotEmpty())
-            <div class="flex items-center pt-2 justify-content-between">
-                <div class="pr-2">
+            <div class="flex items-center pt-2 justify-content-between ">
+                <div class="pr-2 dark:text-white">
                     <x-heroicon-o-user class="h-4 w-4" />
                 </div>
                 <div class="text-sm">
-                    <p class="italic text-gray-900 dark:text-white">
+                    <p class="italic text-gray-900 dark:text-white ">
                         {{ $clip->presenters
                             ->map(function($presenter){
                                 return $presenter->getFullNameAttribute();
