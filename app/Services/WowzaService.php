@@ -124,9 +124,6 @@ class WowzaService
                 'width' => '0',
                 'height' => '0',
             ]);
-            Log::info($xmlFile);
-        } else {
-            Log::info('Assets not found with type'.$type());
         }
     }
 

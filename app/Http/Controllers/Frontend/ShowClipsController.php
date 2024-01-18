@@ -6,7 +6,6 @@ use App\Enums\Content;
 use App\Http\Controllers\Controller;
 use App\Models\Clip;
 use App\Services\WowzaService;
-use Debugbar;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\View\View;
 
@@ -64,8 +63,6 @@ class ShowClipsController extends Controller
                 $defaultPlayerUrl = [];
             }
         }
-
-        Debugbar::info($defaultPlayerUrl);
 
         return view('frontend.clips.show', [
             'clip' => $clip,

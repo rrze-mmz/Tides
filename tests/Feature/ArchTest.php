@@ -1,6 +1,6 @@
 <?php
 
-it('does not use debugging functions')->expect(['dd', 'dump', 'ray'])->not->toBeUsed();
+it('does not use debugging functions')->expect(['dd', 'dump', 'ray', 'Debugbar'])->not->toBeUsed();
 
 test('app')
     ->expect('App\Enums')

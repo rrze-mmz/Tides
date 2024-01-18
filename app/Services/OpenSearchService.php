@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Http\Clients\OpenSearchClient;
 use App\Models\Setting;
-use Debugbar;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Database\Eloquent\Model;
@@ -219,7 +218,6 @@ class OpenSearchService
                     ],
                 ],
             ];
-            Debugbar::info($params);
             $this->response = collect($this->clientBuilder->build()->search($params));
         } catch (Exception $exception) {
             Log::error($exception->getMessage());
