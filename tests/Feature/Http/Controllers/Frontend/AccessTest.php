@@ -14,16 +14,16 @@ beforeEach(function () {
 
 it('a clip with a portal acl can be only be accessable for logged in users', function () {
     $this->clip->addAcls(collect([Acl::PORTAL()]));
-    get(route('frontend.clips.show', $this->clip))->assertDontSee('plyr-tides');
+    get(route('frontend.clips.show', $this->clip))->assertDontSee('player-container');
 
     signIn();
-    get(route('frontend.clips.show', $this->clip))->assertSee('plyr-tides');
+    get(route('frontend.clips.show', $this->clip))->assertSee('player-container');
 });
 
 it('a clip with lms acl can be only accessable for lms users', function () {
     $this->clip->addAcls(collect([Acl::LMS()]));
     $client = getUrlClientType(Acl::LMS->lower());
-    get(route('frontend.clips.show', $this->clip))->assertDontSee('plyr-tides');
+    get(route('frontend.clips.show', $this->clip))->assertDontSee('player-container');
 
     $time = dechex(time());
     $token = md5('clip'.'1'.$this->clip->password.'0.0.0.0'.$time.$client);
@@ -33,29 +33,29 @@ it('a clip with lms acl can be only accessable for lms users', function () {
     $token = md5('clip'.'1'.$this->clip->password.'127.0.0.1'.$time.$client);
     $link = '/protector/link/clip/1/'.$token.'/'.$time.'/'.$client;
     get($link)->assertStatus(302);
-    get(route('frontend.clips.show', $this->clip))->assertSee('plyr-tides');
+    get(route('frontend.clips.show', $this->clip))->assertSee('player-container');
 });
 
 it('a clip with lms acl can be accessable for clip admin', function () {
     $this->clip->addAcls(collect([Acl::LMS()]));
-    get(route('frontend.clips.show', $this->clip))->assertDontSee('plyr-tides');
+    get(route('frontend.clips.show', $this->clip))->assertDontSee('player-container');
 
     signIn($this->clip->owner);
-    get(route('frontend.clips.show', $this->clip))->assertSee('plyr-tides');
+    get(route('frontend.clips.show', $this->clip))->assertSee('player-container');
 });
 
 it('a clip with lms acl can be accessable for portal admin ', function () {
     $this->clip->addAcls(collect([Acl::LMS()]));
-    get(route('frontend.clips.show', $this->clip))->assertDontSee('plyr-tides');
+    get(route('frontend.clips.show', $this->clip))->assertDontSee('player-container');
 
     signInRole(Role::ADMIN);
-    get(route('frontend.clips.show', $this->clip))->assertSee('plyr-tides');
+    get(route('frontend.clips.show', $this->clip))->assertSee('player-container');
 });
 
 it('a clip with lms acl can be accessable for portal superadmin ', function () {
     $this->clip->addAcls(collect([Acl::LMS()]));
-    get(route('frontend.clips.show', $this->clip))->assertDontSee('plyr-tides');
+    get(route('frontend.clips.show', $this->clip))->assertDontSee('player-container');
 
     signInRole(Role::SUPERADMIN);
-    get(route('frontend.clips.show', $this->clip))->assertSee('plyr-tides');
+    get(route('frontend.clips.show', $this->clip))->assertSee('player-container');
 });

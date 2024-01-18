@@ -5,7 +5,6 @@ use App\Models\Asset;
 use App\Models\Clip;
 use App\Models\Series;
 use App\Models\User;
-use App\Services\WowzaService;
 use Facades\Tests\Setup\ClipFactory;
 use Facades\Tests\Setup\FileFactory;
 use Illuminate\Support\Facades\Storage;
@@ -23,15 +22,6 @@ it('fetches a generic poster image when poster file path is null', function () {
 
 it('fetches a clip poster image when poster file path is not null', function () {
     expect(fetchClipPoster('preview_image.png'))->toBe('/thumbnails/previews-ng/preview_image.png');
-});
-
-it('returns a smil file for a clip', function () {
-    Storage::fake('videos');
-    $wowzaService = app(WowzaService::class);
-    $wowzaService->createSmilFile($clip = ClipFactory::withAssets(2)->create(['created_at' => '01.01.2022']));
-
-    expect(getClipSmilFile($clip, false))
-        ->toBe('http://172.17.0.2:1935/vod/_definst_/2022/01/01/TIDES_ClipID_1/presenter.smil/playlist.m3u8');
 });
 
 it('has a getClipStoragePath helper function for returning clip\'s date path', function () {

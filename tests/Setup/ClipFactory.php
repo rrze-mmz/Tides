@@ -2,6 +2,7 @@
 
 namespace Tests\Setup;
 
+use App\Enums\Content;
 use App\Models\Asset;
 use App\Models\Clip;
 use App\Models\User;
@@ -33,9 +34,16 @@ class ClipFactory
             ]
         );
 
-        Asset::factory($this->assetsCount)->create([
-            'clip_id' => $clip->id,
-        ]);
+        if ($this->assetsCount > 0) {
+            Asset::factory($this->assetsCount)->create([
+                'clip_id' => $clip->id,
+            ]);
+            Asset::factory()->create([
+                'original_file_name' => 'presenter.smil',
+                'type' => Content::SMIL,
+                'clip_id' => $clip->id,
+            ]);
+        }
 
         return $clip;
     }

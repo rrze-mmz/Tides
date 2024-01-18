@@ -218,7 +218,7 @@
                     @forelse($clips as $clip)
                         <li class="mb-4 flex content-center items-center rounded
                         @if($clip->is_public) bg-gray-300 dark:bg-gray-700  @else bg-gray-500 dark:bg-blue-700  @endif
-                         p-2 text-center text-sm dark:text-white">
+                         p-2 text-center text-lg font-normal dark:text-white">
                             <div class="w-1/12">
                                 @if ($reorder)
                                     <label>

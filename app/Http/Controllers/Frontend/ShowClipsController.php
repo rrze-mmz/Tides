@@ -6,6 +6,7 @@ use App\Enums\Content;
 use App\Http\Controllers\Controller;
 use App\Models\Clip;
 use App\Services\WowzaService;
+use Debugbar;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\View\View;
 
@@ -45,9 +46,32 @@ class ShowClipsController extends Controller
                 return $value !== 'PDF/CC';
             });
 
+        $wowzaStatus = $wowzaService->getHealth();
+        $urls = collect([]);
+        $defaultPlayerUrl = '';
+        if ($wowzaStatus) {
+            $urls = $wowzaService->vodSecureUrls($clip);
+
+            if (empty($urls)) {
+                $defaultPlayerUrl = [];
+            } elseif ($urls->has('composite')) {
+                $defaultPlayerUrl = $urls['composite'];
+            } elseif ($urls->has('presenter')) {
+                $defaultPlayerUrl = $urls['presenter'];
+            } elseif ($urls->has('presentation')) {
+                $defaultPlayerUrl = $urls['presentation'];
+            } else {
+                $defaultPlayerUrl = [];
+            }
+        }
+
+        Debugbar::info($defaultPlayerUrl);
+
         return view('frontend.clips.show', [
             'clip' => $clip,
             'wowzaStatus' => $wowzaService->getHealth(),
+            'defaultVideoUrl' => $defaultPlayerUrl,
+            'alternativeVideoUrls' => $urls,
             'previousNextClipCollection' => $clip->previousNextClipCollection(),
             'assetsResolutions' => $assetsResolutions,
         ]);

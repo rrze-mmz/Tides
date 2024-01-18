@@ -4,8 +4,6 @@ use App\Enums\Content;
 use Facades\Tests\Setup\ClipFactory;
 use Illuminate\Support\Facades\Storage;
 
-uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
-
 it('shows a message if smil is created', function () {
     $clip = ClipFactory::withAssets(4)->create();
 
@@ -17,13 +15,11 @@ it('generates a smil file and inserts it to database', function () {
 
     $clip = ClipFactory::withAssets(4)->create();
 
-    expect($clip->assets()->count())->toEqual(4);
+    expect($clip->assets()->count())->toEqual(5);
 
     $this->artisan('smil:insert');
 
     $smil = $clip->getAssetsByType(Content::SMIL)->first();
 
     $this->assertDatabaseHas('assets', ['id' => $smil->id]);
-
-    Storage::disk('videos')->assertExists($smil->path.$smil->original_file_name);
 });

@@ -2,13 +2,55 @@
 
 <div class="flex flex-col">
 
-    <div class="flex content-center justify-center pt-6">
-        @if($clip->checkAcls())
-            <x-player :clip="$clip" :wowzaStatus="$wowzaStatus" />
-        @else
-            <p>{{ __('clip.frontend.not authorized to view video') }}</p>
-        @endif
+    <div class="flex  flex-col content-center justify-center pt-6">
+        <div>
+            @if($clip->checkAcls())
+                <x-player :clip="$clip" :wowzaStatus="$wowzaStatus" :default-video-url="$defaultVideoUrl" />
+            @else
+                <p class="dark:text-white text-2xl py-16">{{ __('clip.frontend.not authorized to view video') }}</p>
+            @endif
+        </div>
+        <div class="pb-5">
+            <div class="flex space-x-4 pt-10 dark:text-white">
+                @foreach($alternativeVideoUrls as $type=> $url)
+                    <div>
+                        @if($type === 'presenter')
+                            <a href="{{$url}}"
+                               class="video-link flex px-4 py-2 bg-blue-800 border border-transparent rounded-md
+                    font-semibold text-xs text-white uppercase tracking-widest
+                    hover:bg-blue-700 active:bg-blue-900 focus:outline-none focus:border-blue-900
+                    focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150"
+                               title="presenter video stream">
+                                <x-heroicon-o-user class="w-6 h-6 fill-white" />
+                            </a>
+                        @endif
+                        @if($type === 'presentation')
+                            <a href="{{$url}}"
+                               class="video-link flex px-4 py-2 bg-blue-800 border border-transparent rounded-md
+                    font-semibold text-xs text-white uppercase tracking-widest
+                    hover:bg-blue-700 active:bg-blue-900 focus:outline-none focus:border-blue-900
+                    focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150"
+                               title="presentation video stream">
+                                <x-heroicon-o-desktop-computer class="w-6 h-6 fill-white" />
+                            </a>
+                        @endif
+                        @if($type === 'composite')
+                            <a href="{{$url}}"
+                               class="video-link flex px-4 py-2 bg-blue-800 border border-transparent rounded-md
+                    font-semibold text-xs text-white uppercase tracking-widest
+                    hover:bg-blue-700 active:bg-blue-900 focus:outline-none focus:border-blue-900
+                    focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150"
+                               title="composite video stream">
+                                <x-heroicon-o-view-grid class="w-6 h-6 fill-white" />
+                            </a>
+                        @endif
+                    </div>
+                @endforeach
+            </div>
+
+        </div>
     </div>
+
 
     <div class="flex">
         <div x-data="{ open: false }">
