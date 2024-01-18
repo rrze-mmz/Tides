@@ -1,7 +1,6 @@
 <?php
 
 use App\Enums\Acl;
-use App\Enums\Content;
 use App\Models\Asset;
 use App\Models\Clip;
 use App\Models\User;
@@ -33,24 +32,6 @@ function getClipStoragePath(Clip $clip): string
         '/'.str_pad(Carbon::createFromFormat('Y-m-d', $clip->created_at->format('Y-m-d'))->month, 2, '0', STR_PAD_LEFT).
         '/'.str_pad(Carbon::createFromFormat('Y-m-d', $clip->created_at->format('Y-m-d'))->day, 2, '0', STR_PAD_LEFT).
         "/{$clip->folder_id}/";
-}
-
-function getClipSmilFile(Clip $clip, bool $checkFAUTVLinks = true): string
-{
-    if ($checkFAUTVLinks) {
-        return
-            config('wowza.stream_url').
-            config('wowza.content_path').
-            getClipStoragePath($clip).
-            'camera.smil/playlist.m3u8';
-    } else {
-        return
-            config('wowza.stream_url').
-            config('wowza.content_path').
-            getClipStoragePath($clip).
-            $clip->getAssetsByType(Content::SMIL)->first()?->original_file_name.
-            '/playlist.m3u8';
-    }
 }
 
 /*

@@ -32,7 +32,7 @@ class HomeController extends Controller
                 ->public()
                 ->whereHas('assets')
                 ->single()
-                ->orderByDesc('updated_at')
+                ->orderByDesc('recording_date')
                 ->limit(12)
                 ->get(),
         ]);

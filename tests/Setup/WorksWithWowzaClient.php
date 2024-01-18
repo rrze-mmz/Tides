@@ -31,4 +31,15 @@ trait WorksWithWowzaClient
             '0' => 'Wowza Streaming Engine X Perpetual Edition X.X.X.xxx buildYYYVERSION',
         ]));
     }
+
+    public function mockVodSecureUrls(): Response
+    {
+        $urls = collect([
+            'presenter' => 'localhost:9200/__def_inst/videoportal/presenter.smil',
+            'presentation' => 'localhost:9200/__def_inst/videoportal/presentation.smil',
+            'composite' => 'localhost:9200/__def_inst/videoportal/composite.smil',
+        ]);
+
+        return new Response(200, [], json_encode([$urls]));
+    }
 }

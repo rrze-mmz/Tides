@@ -84,8 +84,8 @@ class DashboardController
             'userSeries' => auth()->user()->getAllSeries()
                 ->CurrentSemester()
                 ->withLastPublicClip()
-                ->orderByDesc('updated_at')
-                ->simplePaginate(12),
+                ->orderBy('title')
+                ->simplePaginate(100),
             'userClips' => auth()->user()->clips()
                 ->whereNull('series_id')
                 ->orderByDesc('updated_at')

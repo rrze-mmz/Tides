@@ -32,16 +32,21 @@
             @if($opencastEvents->isNotEmpty())
                 @include('backend.dashboard._opencast-workflows',['opencastEvents' => $opencastEvents])
             @endif
-
-            @include('backend.users.series._layout',['layoutHeader' => __('dashboard.your last series'), 'series'=> $userSeries])
-
-            @include('backend.users.clips._layout',['layoutHeader' => __('dashboard.your last clips'), 'clips'=> $userClips])
         </div>
-
         @if(count($files) > 0 )
             <div class="w-1/3 pl-2">
                 @include('backend.dashboard._dropzone-files')
             </div>
         @endif
+    </div>
+    <div class="flex">
+        <div class="w-full">
+            @include('backend.users.series._layout',[
+            'layoutHeader' => __('dashboard.your last series'),
+            'series'=> $userSeries])
+            @include('backend.users.clips._layout',[
+            'layoutHeader' => __('dashboard.your last clips'),
+            'clips'=> $userClips])
+        </div>
     </div>
 @endsection

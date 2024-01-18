@@ -25,10 +25,10 @@ test('a moderator cannot delete an asset they do not own', function () {
 
 test('a moderator can delete an owned clip asset', function () {
     $clip = ClipFactory::withAssets(1)->ownedBy(signInRole(Role::MODERATOR))->create();
-    expect($clip->assets->count())->toBe(1);
+    expect($clip->assets->count())->toBe(2); // it will create also the smil file for the video
 
     delete(route('assets.destroy', $clip->assets()->first()))->assertRedirect(route('clips.edit', $clip));
-    expect($clip->assets()->count())->toBe(0);
+    expect($clip->assets()->count())->toBe(1);
 });
 
 test('deleting an asset should also delete the file from storage', function () {

@@ -193,27 +193,43 @@ class WowzaService
     /**
      * Generates a wowza streaming link with secure token settings
      */
-    public function vodSecureUrl(Clip $clip): bool|string
+    public function vodSecureUrls(Clip $clip): Collection
     {
+        $filePaths = collect();
         if ($clip->assets->count() > 0) {
-            $contentUrl = getClipSmilFile($clip, config('wowza.check_fautv_links'));
+            $clip->getAssetsByType(Content::SMIL)->each(function ($asset) use ($filePaths) {
+                $fileType = Str::before($asset->original_file_name, '.smil');
+                if (config('wowza.check_fautv_links')) {
+                    if (Str::contains($asset->original_file_name, 'composite')) {
+                        $asset->original_file_name = 'combined.smil';
+                    } elseif (Str::contains($asset->original_file_name, 'presenter')) {
+                        $asset->original_file_name = 'camera.smil';
+                    } else {
+                        $asset->original_file_name = 'slides.smil';
+                    }
+                }
 
-            $contentPath = (config('wowza.check_fautv_links'))
-                ? $this->streamingSettings->data['content_path'].getClipStoragePath($clip).'camera.smil'
-                : $this->streamingSettings->data['content_path'].getClipStoragePath($clip).'presenter.smil';
-            $secureToken = $this->streamingSettings->data['secure_token'];
-            $tokenPrefix = $this->streamingSettings->data['token_prefix'];
-            $tokenStartTime = $tokenPrefix.'starttime='.time();
-            $tokenEndTime = $tokenPrefix.'endTime='.(time() + 21600);
+                $url =
+                    config('wowza.stream_url').config('wowza.content_path').
+                    $asset->path.$asset->original_file_name.'/playlist.m3u8';
+                $wowzaContentPath =
+                    $this->streamingSettings->data['content_path'].
+                    $asset->path.
+                    $asset->original_file_name;
+                $secureToken = $this->streamingSettings->data['secure_token'];
+                $tokenPrefix = $this->streamingSettings->data['token_prefix'];
+                $tokenStartTime = $tokenPrefix.'starttime='.time();
+                $tokenEndTime = $tokenPrefix.'endTime='.(time() + 21600);
 
-            $userIP = (App::environment(['testing', 'local'])) ? env('FAUTV_USER_IP') : $_SERVER['REMOTE_ADDR'];
-            $hashStr = "{$contentPath}?{$userIP}&{$secureToken}&{$tokenEndTime}&{$tokenStartTime}";
-            $hash = hash('sha256', $hashStr, 1);
-            $usableHash = strtr(base64_encode($hash), '+/', '-_');
-
-            return "{$contentUrl}?{$tokenStartTime}&{$tokenEndTime}&{$tokenPrefix}hash={$usableHash}";
-        } else {
-            return false;
+                $userIP = (App::environment(['testing', 'local'])) ? env('FAUTV_USER_IP') : $_SERVER['REMOTE_ADDR'];
+                $hashStr = "{$wowzaContentPath}?{$userIP}&{$secureToken}&{$tokenEndTime}&{$tokenStartTime}";
+                $hash = hash('sha256', $hashStr, 1);
+                $usableHash = strtr(base64_encode($hash), '+/', '-_');
+                $urlWithToken = "{$url}?{$tokenStartTime}&{$tokenEndTime}&{$tokenPrefix}hash={$usableHash}";
+                $filePaths->put($fileType, $urlWithToken);
+            });
         }
+
+        return $filePaths;
     }
 }

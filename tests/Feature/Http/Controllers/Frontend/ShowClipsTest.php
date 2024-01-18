@@ -1,7 +1,9 @@
 <?php
 
 use App\Enums\Acl;
+use App\Enums\Content;
 use App\Enums\Role;
+use App\Models\Asset;
 use App\Models\Clip;
 use App\Models\Presenter;
 use App\Services\WowzaService;
@@ -41,12 +43,12 @@ it('a guest can view a clip', function () {
 });
 
 it('clip url should also work with clip id', function () {
-    $this->mockHandler->append($this->mockCheckApiConnection());
+    $this->mockHandler->append($this->mockCheckApiConnection(), $this->mockVodSecureUrls());
     get(route('frontend.clips.show', $this->clip->id))->assertOk()->assertSee($this->clip->title);
 });
 
 it('a guest cannot access frontend clip page if clip is not public', function () {
-    $this->mockHandler->append($this->mockCheckApiConnection());
+    $this->mockHandler->append($this->mockCheckApiConnection(), $this->mockVodSecureUrls());
     $this->clip->is_public = false;
     $this->clip->save();
 
@@ -67,7 +69,7 @@ it('a logged in user cannot access frontend clip page if clip has no assets', fu
 });
 
 it('a clip owner can access frontend clip page if clip has no assets', function () {
-    $this->mockHandler->append($this->mockCheckApiConnection());
+    $this->mockHandler->append($this->mockCheckApiConnection(), $this->mockVodSecureUrls());
     $emptyClip = ClipFactory::withAssets(0)->create();
     signIn($emptyClip->owner);
 
@@ -75,14 +77,14 @@ it('a clip owner can access frontend clip page if clip has no assets', function 
 });
 
 it('a portal admin can access frontend clip page if clip has no assets', function () {
-    $this->mockHandler->append($this->mockCheckApiConnection());
+    $this->mockHandler->append($this->mockCheckApiConnection(), $this->mockVodSecureUrls());
     signInRole(Role::ADMIN);
 
     get(route('frontend.clips.show', ClipFactory::withAssets(0)->create()))->assertOk();
 });
 
 it('a clip owner can access frontend clip page if clip is not public visible', function () {
-    $this->mockHandler->append($this->mockCheckApiConnection());
+    $this->mockHandler->append($this->mockCheckApiConnection(), $this->mockVodSecureUrls());
     $clip = ClipFactory::ownedBy(signIn())->create(['is_public' => false]);
     signIn($clip->owner);
 
@@ -90,7 +92,7 @@ it('a clip owner can access frontend clip page if clip is not public visible', f
 });
 
 it('a portal admin can access frontend clip page if clip is not public visible', function () {
-    $this->mockHandler->append($this->mockCheckApiConnection());
+    $this->mockHandler->append($this->mockCheckApiConnection(), $this->mockVodSecureUrls());
     $clip = ClipFactory::create(['is_public' => false]);
     signInRole(Role::ADMIN);
 
@@ -106,7 +108,7 @@ it('a guest cannot access frontend clip page that belongs to series that it is n
 });
 
 it('a clip owner can access frontend clip page that belongs to series that it is not public ', function () {
-    $this->mockHandler->append($this->mockCheckApiConnection());
+    $this->mockHandler->append($this->mockCheckApiConnection(), $this->mockVodSecureUrls());
     $user = signIn();
     $series = SeriesFactory::notPublic()->create();
     $this->clip->series_id = $series->id;
@@ -117,7 +119,7 @@ it('a clip owner can access frontend clip page that belongs to series that it is
 });
 
 it('player in clip public page is using wowza url if wowza server is available', function () {
-    $this->mockHandler->append($this->mockCheckApiConnection());
+    $this->mockHandler->append($this->mockCheckApiConnection(), $this->mockVodSecureUrls());
 
     get(route('frontend.clips.show', $this->clip))->assertSee(env('WOWZA_ENGINE_URL'));
 });
@@ -129,26 +131,26 @@ it('player tries to load the video file as html5 source dom element', function (
 });
 
 it('clip edit button in clip public page is hidden for guests', function () {
-    $this->mockHandler->append(new Response());
+    $this->mockHandler->append($this->mockCheckApiConnection(), $this->mockVodSecureUrls());
     signIn();
 
     get(route('frontend.clips.show', $this->clip))->assertDontSee('Back to edit page');
 });
 
 it('clip comments in clip public page are hidden for guests', function () {
-    $this->mockHandler->append(new Response());
+    $this->mockHandler->append($this->mockCheckApiConnection(), $this->mockVodSecureUrls());
 
     get(route('frontend.clips.show', $this->clip))->assertDontSee('Comments');
 });
 
 it('clip public page has a feeds button', function () {
-    $this->mockHandler->append(new Response());
+    $this->mockHandler->append($this->mockCheckApiConnection(), $this->mockVodSecureUrls());
 
     get(route('frontend.clips.show', $this->clip))->assertSee('Feeds');
 });
 
 it('clip public page should display tags if a clip has any', function () {
-    $this->mockHandler->append(new Response());
+    $this->mockHandler->append($this->mockCheckApiConnection(), $this->mockVodSecureUrls());
     get(route('frontend.clips.show', $this->clip))->assertDontSee('Tags');
 
     $this->clip->addTags(collect(['single tag', 'tides', 'testTags']));
@@ -156,7 +158,7 @@ it('clip public page should display tags if a clip has any', function () {
 });
 
 it('clip public page should display a series title and link if clip belongs to a series', function () {
-    $this->mockHandler->append(new Response(), new Response());
+    $this->mockHandler->append($this->mockCheckApiConnection(), $this->mockVodSecureUrls());
     $series = SeriesFactory::create();
 
     get(route('frontend.clips.show', $this->clip))->assertDontSee($series->title);
@@ -169,19 +171,39 @@ it('clip public page should display a series title and link if clip belongs to a
     get(route('frontend.clips.show', $this->clip))->assertSee(route('frontend.series.show', $series));
 });
 
+it('clip public page should display all alternative videos if a video has assets', function () {
+    $this->mockHandler->append($this->mockCheckApiConnection(), $this->mockVodSecureUrls());
+
+    Asset::factory()->create([
+        'original_file_name' => 'presentation.smil',
+        'type' => Content::SMIL,
+        'clip_id' => $this->clip->id,
+    ]);
+    Asset::factory()->create([
+        'original_file_name' => 'composite.smil',
+        'type' => Content::SMIL,
+        'clip_id' => $this->clip->id,
+    ]);
+    get(route('frontend.clips.show', $this->clip))
+        ->assertSee('presenter video stream')
+        ->assertSee('presentation video stream')
+        ->assertSee('composite video stream');
+});
+
 it('clip public page should display clip presenters if any ', function () {
-    $this->mockHandler->append(new Response(), new Response());
+    $this->mockHandler->append($this->mockCheckApiConnection(), $this->mockVodSecureUrls());
     $presenters = Presenter::factory(2)->create();
 
     get(route('frontend.clips.show', $this->clip))->assertDontSee('Tags');
 
+    $this->mockHandler->append($this->mockCheckApiConnection(), $this->mockVodSecureUrls());
     $this->clip->addPresenters($presenters);
     get(route('frontend.clips.show', $this->clip))
         ->assertSee(Presenter::find(1)->getFullNameAttribute(), Presenter::find(2)->getFullNameAttribute());
 });
 
 it('clip public page should have navidate to previous and next clips if a clip belongs to a series', function () {
-    $this->mockHandler->append(new Response());
+    $this->mockHandler->append($this->mockCheckApiConnection(), $this->mockVodSecureUrls());
     SeriesFactory::withClips(3)->withAssets(2)->create();
     $clip = Clip::find(3);
     $previousClip = Clip::find(2);
@@ -195,7 +217,7 @@ it('clip public page should have navidate to previous and next clips if a clip b
 });
 
 it('a signed in user can access frontend clip page if clip has a portal access', function () {
-    $this->mockHandler->append(new Response());
+    $this->mockHandler->append($this->mockCheckApiConnection(), $this->mockVodSecureUrls());
     $this->clip->addAcls(collect([Acl::PORTAL()]));
 
     get($this->clip->path())->assertDontSee('plyr-player');

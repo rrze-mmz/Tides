@@ -44,6 +44,7 @@ class ClipPolicy
         } elseif ($clip->is_public &&
             (is_null($clip->series->is_public) || $clip->series->is_public)
             && $clip->assets()->count() > 0) {
+
             return true;
         } else {
             return false;

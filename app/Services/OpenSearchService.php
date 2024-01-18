@@ -166,7 +166,7 @@ class OpenSearchService
         }
 
         $isPhrase = Str::contains($searchTerm, ' ');
-        Debugbar::info($isPhrase);
+
         $query = ($isPhrase) ?
             [
                 //                'multi_match' => [
