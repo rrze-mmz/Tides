@@ -50,7 +50,7 @@
         @if($series->presenters->isNotEmpty())
             <div class="flex items-center pt-2 justify-content-between">
                 <div class="pr-2">
-                    <x-heroicon-o-user class="h-4 w-4" />
+                    <x-heroicon-o-user class="h-4 w-4 dark:text-white" />
                 </div>
                 <div class="text-sm">
                     <p class="italic text-gray-900 dark:text-white">

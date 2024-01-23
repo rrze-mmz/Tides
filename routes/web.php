@@ -4,6 +4,7 @@ use App\Http\Controllers\Backend\AdminPortalApplicationController;
 use App\Http\Controllers\Backend\ArticlesController;
 use App\Http\Controllers\Backend\AssetDestroyController;
 use App\Http\Controllers\Backend\AssetsTransferController;
+use App\Http\Controllers\Backend\ChannelsController;
 use App\Http\Controllers\Backend\ChaptersController;
 use App\Http\Controllers\Backend\ClipsCollectionsController;
 use App\Http\Controllers\Backend\ClipsController;
@@ -202,6 +203,9 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
         ->name('user.notifications');
     Route::delete('/notifications', [UserNotificationsController::class, 'destroy'])
         ->name('user.notifications.delete');
+
+    //Channels routes
+    Route::resource('channels', ChannelsController::class)->except(['edit']);
 
     //Series routes
     Route::resource('series', SeriesController::class)->except(['show', 'edit']);

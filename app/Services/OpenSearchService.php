@@ -68,7 +68,7 @@ class OpenSearchService
             ];
             $this->response = collect($this->clientBuilder->build()->index($params));
         } catch (Exception $exception) {
-            Log::error($exception->getMessage());
+            Log::error($exception->getMessage().' SeriesID:'.$model->id);
         }
 
         return $this->response;

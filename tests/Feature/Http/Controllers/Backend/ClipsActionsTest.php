@@ -166,8 +166,8 @@ it('has a trigger smil file button if clip has assets', function () {
     get(route('clips.edit', $clip))->assertSee('Trigger smil files');
 });
 
-it('list smil files if any', function () {
-    $clip = ClipFactory::withAssets(2)->ownedBy(signInRole(Role::MODERATOR))->create();
+it('list smil files for admins if any', function () {
+    $clip = ClipFactory::withAssets(2)->ownedBy(signInRole(Role::ADMIN))->create();
     $clip->addAsset([
         'disk' => 'videos',
         'original_file_name' => 'camera.smil',
