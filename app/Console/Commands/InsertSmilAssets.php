@@ -6,6 +6,7 @@ use App\Models\Clip;
 use App\Services\WowzaService;
 use DOMException;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Cache;
 
 class InsertSmilAssets extends Command
 {
@@ -31,6 +32,7 @@ class InsertSmilAssets extends Command
      */
     public function handle(WowzaService $wowzaService): int
     {
+        Cache::put('insert_smil_command', true);
         $this->info('Counting clips...');
         $bar = $this->output->createProgressBar(Clip::count());
 
@@ -46,6 +48,8 @@ class InsertSmilAssets extends Command
         $bar->finish();
 
         $this->info('All smils generated!');
+
+        Cache::forget('your_command_running');
 
         return Command::SUCCESS;
     }

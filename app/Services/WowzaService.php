@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Enums\Content;
 use App\Http\Clients\WowzaClient;
+use App\Models\Asset;
 use App\Models\Clip;
 use App\Models\Setting;
 use DOMException;

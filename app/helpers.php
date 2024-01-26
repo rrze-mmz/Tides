@@ -114,7 +114,7 @@ function prepareFileForUpload($file, bool $isDropZoneFile, bool $ffmpegCheck = t
  */
 function setActiveLink(string $route): string
 {
-    return (Str::contains(url()->current(), $route)) ? 'active-nav-link opacity-100 font-bold' : '';
+    return (Str::contains(url()->current(), $route)) ? 'active-nav-link opacity-100 font-bold mx-2 rounded' : '';
 }
 
 /**

@@ -240,6 +240,7 @@ it('deletes all clip assets when the clip is deleted', function () {
     Storage::disk('videos')->assertExists($clip->assets->first()->path);
 
     delete(route('clips.destroy', $clip));
+
     Storage::disk('videos')->assertMissing($clip->assets->first()->path);
 });
 

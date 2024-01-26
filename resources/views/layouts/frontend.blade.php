@@ -12,7 +12,7 @@
     <!-- Styles -->
     <link rel="icon" href="{{ URL::asset('/css/favicon.ico') }}" type="image/x-icon" />
     @vite('resources/css/app.css')
-    @livewireStyles
+    {{--    @livewireStyles--}}
 </head>
 <body x-cloak
       x-data="{darkMode:  $persist(false)}"
@@ -42,6 +42,6 @@
     </footer>
 </div>
 @vite('resources/js/app.js')
-@livewireScriptConfig
+{{--@livewireScriptConfig--}}
 </body>
 </html>

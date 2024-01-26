@@ -5,6 +5,7 @@ namespace App\Models\Traits;
 use App\Models\Activity;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Cache;
 
 trait RecordsActivity
 {
@@ -31,11 +32,6 @@ trait RecordsActivity
         }
     }
 
-    protected function activityDescription($description): string
-    {
-        return "{$description} ".strtolower(class_basename($this));
-    }
-
     protected static function recordableEvents(): array
     {
         return (isset(static::$recordableEvents)) ? static::$recordableEvents : ['created', 'updated', 'deleted'];
@@ -48,23 +44,17 @@ trait RecordsActivity
     {
         $user = (auth()->user()) ?? $this->owner;
 
-        Activity::create([
-            'user_id' => ($user?->id) ?? 0,
-            'content_type' => lcfirst(class_basename(static::class)),
-            'object_id' => $this->id,
-            'change_message' => $description,
-            'action_flag' => 1,
-            'changes' => $this->activityChanges(),
-            'user_real_name' => ($user?->getFullNameAttribute()) ?? 'CRONJOB',
-        ]);
-    }
-
-    /**
-     * Fetch all activities for a given model
-     */
-    public function activities(): Builder
-    {
-        return Activity::where('object_id', $this->id)->where('content_type', lcfirst(class_basename(static::class)));
+        if (! Cache::has('insert_smil_command')) {
+            Activity::create([
+                'user_id' => ($user?->id) ?? 0,
+                'content_type' => lcfirst(class_basename(static::class)),
+                'object_id' => $this->id,
+                'change_message' => $description,
+                'action_flag' => 1,
+                'changes' => $this->activityChanges(),
+                'user_real_name' => ($user?->getFullNameAttribute()) ?? 'CRONJOB',
+            ]);
+        }
     }
 
     protected function activityChanges(): array
@@ -76,5 +66,18 @@ trait RecordsActivity
                 'after' => Arr::except($this->getChanges(), ['updated_at']),
             ]
             : [];
+    }
+
+    protected function activityDescription($description): string
+    {
+        return "{$description} ".strtolower(class_basename($this));
+    }
+
+    /**
+     * Fetch all activities for a given model
+     */
+    public function activities(): Builder
+    {
+        return Activity::where('object_id', $this->id)->where('content_type', lcfirst(class_basename(static::class)));
     }
 }

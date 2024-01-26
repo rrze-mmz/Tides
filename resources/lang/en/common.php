@@ -28,6 +28,7 @@ return [
         'portal settings' => 'Portal settings',
         'image' => 'Image|Images',
         'article' => 'Article|Articles',
+        'channel' => 'Channel|Channels',
     ],
     'heading' => [
         'create new series' => 'Create new series',

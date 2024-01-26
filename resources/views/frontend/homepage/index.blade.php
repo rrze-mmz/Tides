@@ -27,7 +27,9 @@
                                 'route' => 'admin'
                                 ])
                     @empty
-                        {{ __('homepage.series.You are not subscribed to any series') }}
+                        <div class="dark:text-white text-2xl">
+                            {{ __('homepage.series.You are not subscribed to any series') }}
+                        </div>
                     @endforelse
                 </div>
             @endif
@@ -45,14 +47,18 @@
 
         <div class="grid grid-cols-4 gap-4 pt-8 border-b-2 border-black dark:border-white ">
             @forelse($series as $single)
+
                 @include('backend.series._card',[
                         'series'=> $single,
                         'route' => 'admin'
                         ])
             @empty
-                {{ __('homepage.series.no series found' )}}
+                <div class="dark:text-white text-2xl pt-10">
+                    {{ __('homepage.series.no series found' )}}
+                </div>
             @endforelse
         </div>
+
 
         <div class="flex w-full items-end border-b justify-content-between pt-10 pb-4">
             <div class="flex w-full items-end justify-between pb-2">
@@ -72,7 +78,10 @@
                                 ])
                     </li>
                 @empty
-                    {{ __('homepage.clips.no clips found' )}}
+                    <div class="dark:text-white text-2xl">
+                        {{ __('homepage.clips.no clips found' )}}
+                    </div>
+
                 @endforelse
             </div>
         </ul>

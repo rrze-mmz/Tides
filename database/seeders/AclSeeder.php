@@ -16,6 +16,7 @@ class AclSeeder extends Seeder
     {
         DB::table('acls')->insert(
             [
+                'id' => 1,
                 'name' => 'public',
                 'description' => 'Material is public available',
                 'created_at' => date('Y-m-d H:i:s'),
@@ -24,6 +25,7 @@ class AclSeeder extends Seeder
         );
         DB::table('acls')->insert(
             [
+                'id' => 2,
                 'name' => 'portal',
                 'description' => 'Material is accessed via portal log in',
                 'created_at' => date('Y-m-d H:i:s'),
@@ -32,6 +34,7 @@ class AclSeeder extends Seeder
         );
         DB::table('acls')->insert(
             [
+                'id' => 3,
                 'name' => 'password',
                 'description' => 'Material is accessed via a secret password (moodle, Ilias, etc.) log in ',
                 'created_at' => date('Y-m-d H:i:s'),
@@ -40,6 +43,7 @@ class AclSeeder extends Seeder
         );
         DB::table('acls')->insert(
             [
+                'id' => 4,
                 'name' => 'lms',
                 'description' => 'Material is accessed via LMS (moodle, Ilias, etc.) log in',
                 'created_at' => date('Y-m-d H:i:s'),
@@ -48,6 +52,7 @@ class AclSeeder extends Seeder
         );
         DB::table('acls')->insert(
             [
+                'id' => 5,
                 'name' => 'other',
                 'description' => 'Other acls',
                 'created_at' => date('Y-m-d H:i:s'),

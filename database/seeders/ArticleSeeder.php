@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class ArticleSeeder extends Seeder
 {
@@ -11,7 +12,7 @@ class ArticleSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('article')->insert([
+        DB::table('articles')->insert([
             'title_en' => 'Contact',
             'content_en' => 'Contact page',
             'title_de' => 'Kontakt',
@@ -20,7 +21,7 @@ class ArticleSeeder extends Seeder
             'is_published' => true,
         ]);
 
-        DB::table('article')->insert([
+        DB::table('articles')->insert([
             'title_en' => 'FAQ',
             'content_en' => 'FAQ page',
             'title_de' => 'FAQ',

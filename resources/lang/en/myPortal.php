@@ -48,4 +48,12 @@ return [
     'subscriptions' => [
         'Your are subscribed to X Series' => 'Your are subscribed to :counter Series ',
     ],
+    'channels' => [
+        'introduction' => 'In an academic video portal, your channel serves as a curated space for aggregating and
+        organizing relevant videos. Customize your channel with a specific thematic focus, and arrange videos into
+        categorized playlists for efficient discovery. Engage with an academic community through commentary,
+        facilitating scholarly exchange and knowledge dissemination. This platform emphasizes content curation and
+        community interaction, rather than personal video uploads.',
+        'activate button' => 'Activate personal channel',
+    ],
 ];

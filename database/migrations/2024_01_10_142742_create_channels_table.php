@@ -14,7 +14,11 @@ return new class extends Migration
         Schema::create('channels', function (Blueprint $table) {
             $table->id();
             $table->string('url_handle')->unique(); // URL handle for the channel
-            $table->unsignedBigInteger('user_id'); // a channel belongs to a user
+            $table->unsignedBigInteger('user_id')
+                ->nullable()
+                ->references('id'
+                )->on('users')
+                ->nullOnDelete(); // a channel belongs to a user
             $table->string('name');
             $table->text('description')->nullable();
             $table->timestamps();
