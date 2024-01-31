@@ -1,17 +1,20 @@
-@extends('layouts.frontend')
+@php use Illuminate\Support\Str; @endphp
+@extends('layouts.backend')
 
 @section('content')
-    <main class="container mx-auto mt-32 h-auto md:mt-32">
-        <div class="pb-10">
-            @include('frontend.search._searchbar')
+    @if($channels->isEmpty())
+        @include('backend.channels.activate._form')
+    @else
+        <div class="flex items-center border-b border-black pb-2 font-semibold font-2xl align-items-center
+    dark:text-white dark:border-white">
+            <div class="pr-4">
+                Your channels
+            </div>
         </div>
 
-        <div class="flex flex-col place-content-center content-center items-center justify-center">
-            <h2 class="text-2xl font-bold dark:text-white"> Active channels </h2>
-        </div>
         <div class="grid gap-4 pt-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 font-normal
             dark:text-white">
-            @forelse($channels as $channel)
+            @foreach($channels as $channel)
                 <div class="m-2 rounded-lg border-2 border-solid border-black dark:border-white p-2">
                     <div class="flex place-content-around justify-between">
                         <div>
@@ -28,11 +31,11 @@
                         <span>{{ $channel->owner->getFullNameAttribute() }}</span>
                     </div>
                     <div class="pt-5">
-                        <a href="{{ route('frontend.channels.show', $channel) }}" class="flex flex-row">
+                        <a href="{{ route('channels.edit', $channel) }}" class="flex flex-row">
                             <x-button type="button"
                                       class="flex basis-1/2 content-center justify-between bg-blue-600 hover:bg-blue-700">
                                 <div>
-                                    Visit channel
+                                    Go to channel edit page
                                 </div>
                                 <div>
                                     <x-heroicon-o-arrow-circle-right class="w-6" />
@@ -41,11 +44,8 @@
                         </a>
                     </div>
                 </div>
-            @empty
-                <div class="flex justify-center">
-                    <div class="dark:text-white pt-10 text-2xl"> No channels available</div>
-                </div>
-            @endforelse
+            @endforeach
         </div>
-    </main>
+    @endif
+
 @endsection

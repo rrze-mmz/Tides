@@ -19,6 +19,7 @@ class Input extends Component
         public string $inputType,
         public bool $required = false,
         public bool $disabled = false,
+        public bool $readOnly = false,
         public bool $fullCol = true
     ) {
         //

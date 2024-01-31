@@ -3,11 +3,13 @@
 namespace App\Providers;
 
 use App\Models\Asset;
+use App\Models\Channel;
 use App\Models\Clip;
 use App\Models\Comment;
 use App\Models\Series;
 use App\Models\User;
 use App\Policies\AssetPolicy;
+use App\Policies\ChannelsPolicy;
 use App\Policies\ClipPolicy;
 use App\Policies\CommentPolicy;
 use App\Policies\SeriesPolicy;
@@ -28,6 +30,7 @@ class AuthServiceProvider extends ServiceProvider
         Series::class => SeriesPolicy::class,
         Comment::class => CommentPolicy::class,
         User::class => UserPolicy::class,
+        Channel::class => ChannelsPolicy::class,
     ];
 
     /**
@@ -68,5 +71,9 @@ class AuthServiceProvider extends ServiceProvider
         //comments
         Gate::define('create-comment', [CommentPolicy::class, 'create']);
         Gate::define('delete-comment', [CommentPolicy::class, 'delete']);
+
+        //channels
+        Gate::define('activate-channel', [ChannelsPolicy::class, 'create']);
+        Gate::define('edit-channel', [ChannelsPolicy::class, 'update']);
     }
 }

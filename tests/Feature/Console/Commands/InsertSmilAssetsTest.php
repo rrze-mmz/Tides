@@ -23,3 +23,9 @@ it('generates a smil file and inserts it to database', function () {
 
     $this->assertDatabaseHas('assets', ['id' => $smil->id]);
 });
+
+it('disables observers to avoid activity inserts', function () {
+    Storage::fake('videos');
+    $clip = ClipFactory::withAssets(4)->create();
+    expect($clip->assets()->count())->toEqual(5);
+});

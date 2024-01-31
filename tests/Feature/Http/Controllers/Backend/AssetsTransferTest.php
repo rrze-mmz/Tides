@@ -129,8 +129,7 @@ it('transfer files from dropzone to clip', function () {
 
     get($clip->adminPath())
         ->assertSee($files->first()['name'])
-        ->assertSee($files->last()['name'])
-        ->assertSee('presenter.smil');
+        ->assertSee($files->last()['name']);
 
     expect($clip->getAssetsByType(Content::PRESENTER)->first()->type)->toBe(Content::PRESENTER());
     expect($clip->getAssetsByType(Content::SMIL)->first()->type)->toBe(Content::SMIL());
@@ -265,7 +264,7 @@ it('transfers opencast event assets to clip', function () {
             "/archive/mh_default_org/{$opencastEventID}/{$archiveVersion}/{$videoHD_UID}.m4v"
         );
 
-    $clip = ClipFactory::ownedBy(signInRole(Role::MODERATOR))->create();
+    $clip = ClipFactory::ownedBy(signInRole(Role::ADMIN))->create();
     post(
         route('admin.clips.opencast.transfer', $clip),
         ['eventID' => $opencastEventID]

@@ -14,4 +14,9 @@ class ShowChannelsController extends Controller
 
         return view('frontend.channels.index', ['channels' => $channels]);
     }
+
+    public function show(Channel $channel)
+    {
+        return view('frontend.channels.show', compact('channel'));
+    }
 }

@@ -24,12 +24,13 @@
                id="{{ $fieldName }}"
                value="{{ $value }}"
             {{($required)?'required':''}}
+            {{($readOnly)?'readonly':''}}
             {{($disabled)?'disabled':''}}
         >
     </div>
     @error($fieldName)
     <div class="col-start-2 col-end-6">
-        <p class="mt-2 w-full text-xs text-red-500">{{ $message }}</p>
+        <p class="mt-2 w-full text-red-500 dark:text-red-200">{{ $message }}</p>
     </div>
     @enderror
 </div>

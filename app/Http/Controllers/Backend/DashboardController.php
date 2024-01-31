@@ -82,8 +82,8 @@ class DashboardController
 
         return view('backend.dashboard.index', [
             'userSeries' => auth()->user()->getAllSeries()
-                ->CurrentSemester()
                 ->withLastPublicClip()
+                ->CurrentSemester()
                 ->orderBy('title')
                 ->simplePaginate(100),
             'userClips' => auth()->user()->clips()

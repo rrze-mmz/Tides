@@ -4,6 +4,8 @@ use App\Http\Controllers\Backend\AdminPortalApplicationController;
 use App\Http\Controllers\Backend\ArticlesController;
 use App\Http\Controllers\Backend\AssetDestroyController;
 use App\Http\Controllers\Backend\AssetsTransferController;
+use App\Http\Controllers\Backend\ChannelsController;
+use App\Http\Controllers\Backend\ChannelsUploadBannerImageController;
 use App\Http\Controllers\Backend\ChaptersController;
 use App\Http\Controllers\Backend\ClipsCollectionsController;
 use App\Http\Controllers\Backend\ClipsController;
@@ -63,10 +65,9 @@ Route::get('/search', ShowSearchResultsController::class)->name('search');
 
 //Channels routes
 Route::get('/channels', [ShowChannelsController::class, 'index'])->name('frontend.channels.index');
-Route::get('/channels/{handle}', [ShowChannelsController::class, 'show'])
-    ->where('handle', '[@a-zA-Z0-9_-]+')->name('frontend.channels.show');
-//frontend series routes
+Route::get('/channels/{channel}', [ShowChannelsController::class, 'show'])->name('frontend.channels.show');
 
+//frontend series routes
 Route::controller(ShowSeriesController::class)->prefix('/series')->group(function () {
     Route::get('/index', 'index')->name('frontend.series.index');
     Route::get('/{series}', 'show')->name('frontend.series.show');
@@ -203,6 +204,10 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
     Route::delete('/notifications', [UserNotificationsController::class, 'destroy'])
         ->name('user.notifications.delete');
 
+    //Channels routes
+    Route::resource('channels', ChannelsController::class)->except(['show']);
+    Route::post('channel/{channel}/uploadChannelBannerImage', ChannelsUploadBannerImageController::class)
+        ->name('channels.uploadBannerImage');
     //Series routes
     Route::resource('series', SeriesController::class)->except(['show', 'edit']);
     Route::get('/series/{series}', [SeriesController::class, 'edit'])->name('series.edit');

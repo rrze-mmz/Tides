@@ -28,6 +28,7 @@ return [
         'portal settings' => 'Portal Einstellungen',
         'image' => 'Bild|Bilder',
         'article' => 'Artikel',
+        'channel' => 'Kanal|Kanäle',
     ],
 
     'heading' => [

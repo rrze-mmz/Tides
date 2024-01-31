@@ -6,7 +6,7 @@
     <div class="flex border-b border-black text-2xl flex-col dark:text-white dark:border-white font-normal">
         <div class="flex w-full items-center justify-between">
             <div class="">
-                <span class="text-2xl"> [ ID: {{ $clip->id }} ] {{ $clip->title }}</span>
+                <span class="text-3xl"> [ ID: {{ $clip->id }} ] {{ $clip->title }}</span>
             </div>
             <div class="flex space-x-2">
                 @if(!is_null($previousNextClipCollection->get('previousClip')))
@@ -24,7 +24,7 @@
                 @endif
             </div>
         </div>
-        <div class="flex pt-2 text-sm font-light italic">
+        <div class="flex pt-2 text-sm italic pb-2">
             <span
                 class="pl-2"> created
                 @if(!is_null($clip->owner_id))

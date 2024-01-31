@@ -166,8 +166,8 @@ it('has a trigger smil file button if clip has assets', function () {
     get(route('clips.edit', $clip))->assertSee('Trigger smil files');
 });
 
-it('list smil files if any', function () {
-    $clip = ClipFactory::withAssets(2)->ownedBy(signInRole(Role::MODERATOR))->create();
+it('list smil files for admins if any', function () {
+    $clip = ClipFactory::withAssets(2)->ownedBy(signInRole(Role::ADMIN))->create();
     $clip->addAsset([
         'disk' => 'videos',
         'original_file_name' => 'camera.smil',
@@ -240,6 +240,7 @@ it('deletes all clip assets when the clip is deleted', function () {
     Storage::disk('videos')->assertExists($clip->assets->first()->path);
 
     delete(route('clips.destroy', $clip));
+
     Storage::disk('videos')->assertMissing($clip->assets->first()->path);
 });
 
@@ -255,5 +256,4 @@ it('deletes all clip assets symbolic links', function () {
     Storage::disk('assetsSymLinks')->assertExists("{$asset->guid}.".getFileExtension($asset));
     delete(route('clips.destroy', $clip));
     Storage::disk('assetsSymLinks')->assertMissing("{$asset->guid}.".getFileExtension($asset));
-
 });

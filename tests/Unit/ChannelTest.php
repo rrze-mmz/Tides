@@ -11,5 +11,5 @@ beforeEach(function () {
 });
 
 it('belongs to a user', function () {
-    expect($this->channel->user())->toBeInstanceOf(BelongsTo::class);
+    expect($this->channel->owner())->toBeInstanceOf(BelongsTo::class);
 });

@@ -15,6 +15,7 @@ class HomeController extends Controller
      */
     public function __invoke(): View
     {
+
         return view('frontend.homepage.index', [
             'series' => Series::whereHas('clips.assets')->isPublic()
                 ->with(['owner', 'presenters', 'clips' => function (ContractsBuilder $query) {

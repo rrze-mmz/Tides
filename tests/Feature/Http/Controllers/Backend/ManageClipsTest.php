@@ -234,7 +234,6 @@ it('updates clip supervisor id if logged in user is admin and not the same as th
     $clip->refresh();
 
     expect($clip->supervisor_id)->toBe($admin->id);
-
 });
 
 it('denies access to moderators for editing a not owned clip', function () {
@@ -256,6 +255,17 @@ test('a superadmin can edit a not owned clip', function () {
     signInRole(Role::SUPERADMIN);
 
     get(route('clips.edit', $clip))->assertOk();
+});
+
+it('does not show smil files to moderators', function () {
+    $clip = ClipFactory::withAssets(2)->ownedBy(signInRole(Role::MODERATOR))->create();
+
+    get(route('clips.edit', $clip))->assertDontSee('presenter.smil');
+
+    auth()->logout();
+    signInRole(Role::ADMIN);
+
+    get(route('clips.edit', $clip))->assertSee('presenter.smil');
 });
 
 test('a clip with multiple tags can be created', function () {
