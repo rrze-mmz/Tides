@@ -4,13 +4,19 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Channel;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class ChannelsController extends Controller
 {
     public function index()
     {
-        $channels = (auth()->user()->can('administrate-admin-portal-pages')) ? Channel::all() : auth()->user()->channels;
+        $channels = (auth()->user()->can('administrate-admin-portal-pages'))
+            ? Channel::all()
+            : auth()->user()->channels;
 
         return view('backend.channels.index')->withChannels($channels);
     }
@@ -33,5 +39,25 @@ class ChannelsController extends Controller
         auth()->user()->channels()->create($validated);
 
         return to_route('channels.index');
+    }
+
+    public function edit(Channel $channel): Application|Factory|View
+    {
+        $this->authorize('edit-channel', $channel);
+
+        return view('backend.channels.edit', compact('channel'));
+    }
+
+    public function update(Channel $channel, Request $request): RedirectResponse
+    {
+        $this->authorize('edit-channel', $channel);
+        $validated = $request->validate([
+            'name' => ['required', 'string',  'max:255'],
+            'description' => ['max:1000'],
+        ]);
+
+        $channel->update($validated);
+
+        return to_route('channels.edit', $channel);
     }
 }

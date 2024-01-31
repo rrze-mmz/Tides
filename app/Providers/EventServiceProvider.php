@@ -14,12 +14,14 @@ use App\Listeners\DeleteSeriesResources;
 use App\Listeners\Saml2UserSignedIn;
 use App\Listeners\Saml2UserSignedOut;
 use App\Listeners\UpdateClipChapter;
+use App\Models\Channel;
 use App\Models\Clip;
 use App\Models\Collection;
 use App\Models\Presenter;
 use App\Models\Series;
 use App\Models\Setting;
 use App\Models\User;
+use App\Observers\ChannelObserver;
 use App\Observers\ClipObserver;
 use App\Observers\CollectionObserver;
 use App\Observers\PresenterObserver;
@@ -77,5 +79,6 @@ class EventServiceProvider extends ServiceProvider
         Presenter::observe(PresenterObserver::class);
         Collection::observe(CollectionObserver::class);
         Setting::observe(SettingObserver::class);
+        Channel::observe(ChannelObserver::class);
     }
 }

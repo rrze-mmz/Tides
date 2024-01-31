@@ -14,16 +14,17 @@ return new class extends Migration
         Schema::create('channels', function (Blueprint $table) {
             $table->id();
             $table->string('url_handle')->unique(); // URL handle for the channel
-            $table->unsignedBigInteger('user_id')
+            $table->unsignedBigInteger('owner_id')
                 ->nullable()
                 ->references('id'
                 )->on('users')
                 ->nullOnDelete(); // a channel belongs to a user
             $table->string('name');
             $table->text('description')->nullable();
+            $table->string('banner_url')->nullable();
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('owner_id')->references('id')->on('users')->onDelete('cascade');
         });
 
     }

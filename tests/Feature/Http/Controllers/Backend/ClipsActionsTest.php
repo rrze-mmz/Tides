@@ -256,5 +256,4 @@ it('deletes all clip assets symbolic links', function () {
     Storage::disk('assetsSymLinks')->assertExists("{$asset->guid}.".getFileExtension($asset));
     delete(route('clips.destroy', $clip));
     Storage::disk('assetsSymLinks')->assertMissing("{$asset->guid}.".getFileExtension($asset));
-
 });

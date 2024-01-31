@@ -74,5 +74,6 @@ class AuthServiceProvider extends ServiceProvider
 
         //channels
         Gate::define('activate-channel', [ChannelsPolicy::class, 'create']);
+        Gate::define('edit-channel', [ChannelsPolicy::class, 'update']);
     }
 }

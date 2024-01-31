@@ -115,7 +115,6 @@
                 </a>
             </div>
         </div>
-
         <div class="m-2 rounded-lg border-2 border-solid border-black  dark:border-white p-2 p-2">
             <div class="flex place-content-around justify-between">
                 <div>

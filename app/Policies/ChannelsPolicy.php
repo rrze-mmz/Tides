@@ -22,7 +22,7 @@ class ChannelsPolicy
      */
     public function update(User $user, Channel $channel): bool
     {
-        //
+        return $user->is($channel->owner) || ($user->isAdmin() || $user->isAssistant());
     }
 
     /**

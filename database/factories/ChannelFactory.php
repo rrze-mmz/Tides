@@ -19,10 +19,12 @@ class ChannelFactory extends Factory
      */
     public function definition(): array
     {
+        $user = User::factory()->create();
+
         return [
-            'name' => $name = $this->faker->sentence(),
-            'user_id' => User::factory()->create()->id,
-            'url_handle' => Str::slug($name),
+            'name' => $this->faker->sentence(),
+            'owner_id' => $user->id,
+            'url_handle' => '@'.Str::before($user->email, '@'),
             'description' => $this->faker->paragraph(),
         ];
     }

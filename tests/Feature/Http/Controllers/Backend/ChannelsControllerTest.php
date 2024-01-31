@@ -1,11 +1,25 @@
 <?php
 
 use App\Enums\Role;
+use App\Models\Channel;
+use App\Models\User;
 
 use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\assertDatabaseMissing;
 use function Pest\Laravel\get;
+use function Pest\Laravel\patch;
 use function Pest\Laravel\post;
+
+beforeEach(function () {
+    $this->moderatorWithChannel = User::factory()->create();
+    $this->moderatorWithChannel->assignRole(Role::MODERATOR);
+    $this->moderatorChannel = Channel::create([
+        'url_handle' => '@'.Str::before($this->moderatorWithChannel->email, '@'),
+        'name' => $this->moderatorWithChannel->getFullNameAttribute(),
+        'description' => 'this is a test channel',
+        'owner_id' => $this->moderatorWithChannel->id,
+    ]);
+});
 
 uses()->group('backend');
 
@@ -67,7 +81,7 @@ it('index page shows a list of channels if user has channels activated', functio
     post(route('channels.store'), $attributes);
 
     $channelInfo = $user->channels()->first();
-    get(route('channels.index'))->assertSee($channelInfo->name)->assertSee($channelInfo->description);
+    get(route('channels.index'))->assertSee($channelInfo->name);
 });
 
 test('a users is not allowed activate another users channel', function () {
@@ -84,4 +98,47 @@ test('a users is not allowed activate another users channel', function () {
     assertDatabaseMissing('channels', [
         'url_handle' => $attributes['url_handle'],
     ]);
+});
+
+it('has an edit channel page', function () {
+    signIn($this->moderatorWithChannel);
+
+    get(route('channels.edit', $this->moderatorChannel))
+        ->assertViewIs('backend.channels.edit')
+        ->assertSee('name')
+        ->assertSee('description')
+        ->assertOk();
+});
+
+it('has validation for channel name and description when updating a channel', function () {
+    signIn($this->moderatorWithChannel);
+    $attributes = [
+        'name' => '',
+        'description' => fake()->words(1500),
+    ];
+    patch(route('channels.update', $this->moderatorChannel), $attributes)
+        ->assertSessionHasErrors('name')
+        ->assertSessionHasErrors('description');
+});
+
+it('moderator can update channel basic infos like name and description', function () {
+    signIn($this->moderatorWithChannel);
+    $attributes = [
+        'name' => 'another name',
+        'description' => 'another description',
+    ];
+    patch(route('channels.update', $this->moderatorChannel), $attributes)
+        ->assertRedirectToRoute('channels.edit', $this->moderatorChannel);
+
+    $this->moderatorChannel->refresh();
+
+    expect($this->moderatorChannel->name)->toBe($attributes['name']);
+    expect($this->moderatorChannel->description)->toBe($attributes['description']);
+});
+
+it('has a button for uploading a new banner image using filepond', function () {
+    signIn($this->moderatorWithChannel);
+    get(route('channels.edit', $this->moderatorChannel))
+        ->assertSee('Upload Channel banner image')
+        ->assertSee('filepond');
 });

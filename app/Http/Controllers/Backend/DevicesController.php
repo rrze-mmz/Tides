@@ -29,6 +29,16 @@ class DevicesController extends Controller
     }
 
     /**
+     * Store a newly created resource in storage.
+     */
+    public function store(StoreDeviceRequest $request): RedirectResponse
+    {
+        $device = Device::create($request->validated());
+
+        return to_route('devices.edit', $device);
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      *
@@ -42,16 +52,6 @@ class DevicesController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreDeviceRequest $request): RedirectResponse
-    {
-        $device = Device::create($request->validated());
-
-        return to_route('devices.edit', $device);
-    }
-
-    /**
      * Show the form for editing the specified resource.
      */
     public function edit(Device $device): Application|Factory|View
@@ -59,8 +59,6 @@ class DevicesController extends Controller
         Gate::allowIf(fn ($user) => $user->isAdmin() || $user->isAssistant());
 
         return view('backend.devices.edit', compact('device'));
-
-        //
     }
 
     /**
