@@ -4,7 +4,8 @@
 @extends('layouts.backend')
 
 @section('content')
-    <div class="flex border-b border-black pb-2 text-2xl font-semibold">
+    <div class="mb-5 flex items-center border-b border-black pb-2 font-semibold text-2xl
+        dark:text-white dark:border-white">
         Notifications
     </div>
 
@@ -129,7 +130,7 @@
         </form>
     @else
         <div class="flex justify-center text-center">
-            <div class="mt-4 w-full overflow-hidden border-b border-gray-200 p-4 text-xl shadow sm:rounded-lg">
+            <div class="mt-4 w-full overflow-hidden border-gray-200 p-4 text-xl shadow dark:text-white">
                 You have no notifications
             </div>
         </div>

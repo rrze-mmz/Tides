@@ -1,7 +1,7 @@
 @extends('layouts.backend')
 
 @section('content')
-    <div class="flex border-b border-black pb-2 font-semibold font-2xl">
+    <div class="flex border-b border-black pb-2 font-semibold font-2xl dark:text-white dark:border-white">
         Create new user
     </div>
 
@@ -11,7 +11,7 @@
               class="w-4/5">
             @csrf
 
-            <div class="flex flex-col gap-6">
+            <div class="flex flex-col gap-6 space-y-4 pt-10">
 
                 <x-form.input field-name="first_name"
                               input-type="text"
@@ -46,7 +46,7 @@
                 />
 
                 <div class="col-span-7 w-4/5">
-                    <x-form.button :link="$link=false" type="submit" text="Create user"/>
+                    <x-form.button :link="$link=false" type="submit" text="Create user" />
                 </div>
             </div>
 

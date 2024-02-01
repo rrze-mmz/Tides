@@ -15,20 +15,21 @@ class HomeController extends Controller
      */
     public function __invoke(): View
     {
+        $series = Series::whereHas('clips.assets')->isPublic()
+            ->with(['owner', 'presenters', 'clips' => function (ContractsBuilder $query) {
+                $query->whereHas('assets');
+            }, 'clips.assets'])
+            ->withLastPublicClip()
+            ->orderByDesc(Clip::select('recording_date')
+                ->whereColumn('series_id', 'series.id')
+                ->has('assets')
+                ->limit(1)
+                ->orderByDesc('recording_date'))
+            ->limit(16)
+            ->get();
 
         return view('frontend.homepage.index', [
-            'series' => Series::whereHas('clips.assets')->isPublic()
-                ->with(['owner', 'presenters', 'clips' => function (ContractsBuilder $query) {
-                    $query->whereHas('assets');
-                }, 'clips.assets'])
-                ->withLastPublicClip()
-                ->orderByDesc(Clip::select('recording_date')
-                    ->whereColumn('series_id', 'series.id')
-                    ->has('assets')
-                    ->limit(1)
-                    ->orderByDesc('recording_date'))
-                ->limit(16)
-                ->get(),
+            'series' => $series,
             'clips' => Clip::with(['assets', 'presenters'])
                 ->public()
                 ->whereHas('assets')

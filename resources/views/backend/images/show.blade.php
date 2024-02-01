@@ -9,11 +9,14 @@
         </div>
     </div>
     <div class="">
-        <figure class="flex flex-wrap rounded-xl bg-slate-100 p-2 dark:bg-slate-800 md:p-0">
-            <img class="mr-10 h-24 w-24 rounded-[0.25rem] md:"
+        <figure
+            class="flex flex-wrap rounded-xl bg-slate-100 p-2 dark:bg-slate-800 md:p-0 dark:text-white
+             items-center content-center">
+            <img class="my-10 h-24 w-24 rounded-[0.25rem] "
                  src="{{ URL::asset('/images/'.$image->file_name) }}"
                  alt="{{ $image->description }}"
-                 width="384" height="512">
+                 width="384"
+                 height="512">
             <div class="flex flex-col pt-6 text-center space-y-4 md:p-8">
                 <div class="flex">
                     <div class="px-4">
@@ -65,7 +68,8 @@
         </figure>
     </div>
 
-    <div class="flex border-b-2 border-black pt-10">
+    <div class="mb-5 flex items-center border-b border-black font-semibold font-2xl
+        dark:text-white dark:border-white py-5">
         <h3 class="font-bold">Used in following lecturers</h3>
     </div>
     <div class="flex">
