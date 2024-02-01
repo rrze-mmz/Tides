@@ -126,7 +126,7 @@ class OpencastService
      */
     public function getEventsByStatus(
         OpencastWorkflowState $state,
-        Series $series = null,
+        ?Series $series = null,
         int $limit = 20,
     ): Collection {
         $runningWorkflows = collect();
@@ -213,7 +213,7 @@ class OpencastService
         return $events;
     }
 
-    public function getEventsWaitingForTrimming(Series $series = null)
+    public function getEventsWaitingForTrimming(?Series $series = null): Collection
     {
         $series = (is_null($series)) ? '' : $series->opencast_series_id;
         //     /admin-ng/event/events.json?filter=comments:OPEN,status:EVENTS.EVENTS.STATUS.PROCESSED&limit=10&offset=0&sort=start_date:ASC
@@ -230,6 +230,10 @@ class OpencastService
             $trimmingEvents = collect((json_decode((string) $this->response->getBody(), true)));
         } catch (GuzzleException $exception) {
             Log::error($exception);
+        }
+
+        if ($trimmingEvents->isEmpty()) {
+            $trimmingEvents['results'] = [];
         }
 
         return collect($trimmingEvents['results']);
