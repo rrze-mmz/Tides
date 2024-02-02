@@ -23,6 +23,10 @@ class SubscribeSection extends Component
     public function mount(): void
     {
         $this->user = auth()->user();
+        // If coming back from terms acceptance, directly attempt to subscribe
+        if (session()->has('redirect_back_to_subscribe')) {
+            $this->subscribe();
+        }
         $this->isUserSubscribed = $this->user->subscriptions()->where('series_id', $this->series->id)->exists();
         $this->formAction = ($this->isUserSubscribed) ? 'unsubscribe' : 'subscribe';
         $this->btnText = ($this->isUserSubscribed) ? 'Unsubscribe' : 'Subscribe';
@@ -31,21 +35,26 @@ class SubscribeSection extends Component
     /**
      * Subscribe logged-in user to series
      */
-    public function subscribe(): void
+    public function subscribe()
     {
+        if (! $this->user->settings->data['accept_use_terms']) {
+            session(['redirect_back_to_subscribe' => $this->series->id]);
+
+            return redirect()->to(route('frontend.userSettings.edit'));
+        }
         $delay = now()->addMinutes(1);
         $this->user->subscriptions()->attach($this->series);
         $this->isUserSubscribed = true;
         $this->formAction = 'unsubscribe';
         $this->btnText = 'unsubscribe';
-
+        session()->remove('redirect_back_to_subscribe');
         $this->user->notify((new UserSubscribed($this->series))->delay($delay));
     }
 
     /**
      * Unsubscribe logged-in user from series
      */
-    public function unsubscribe(): void
+    public function unsubscribe()
     {
         $this->user->subscriptions()->detach($this->series);
         $this->isUserSubscribed = false;
