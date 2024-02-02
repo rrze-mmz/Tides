@@ -5,7 +5,6 @@
                     hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900
                     focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">
         {{ $btnText }}
-        <x-heroicon-o-heart class="ml-4 h-4 w-4 fill-white"/>
+        <x-heroicon-o-heart class="ml-4 h-4 w-4 fill-white" />
     </button>
-
 </div>

@@ -25,6 +25,14 @@ class AcceptUseTermsController extends Controller
             $settings->save();
         }
 
+        // Check if we need to redirect back to subscription
+        if (session()->has('redirect_back_to_subscribe')) {
+            $seriesID = session('redirect_back_to_subscribe');
+
+            // Redirect back to the original page where Livewire component can complete the subscription process
+            return redirect()->route('frontend.series.show', $seriesID);
+        }
+
         return to_route('frontend.userSettings.edit');
     }
 }

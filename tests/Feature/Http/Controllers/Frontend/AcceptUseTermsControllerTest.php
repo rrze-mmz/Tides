@@ -22,6 +22,13 @@ it('shows myPortal index page if use terms are accepted', function () {
         ->assertSee(__('myPortal.myPortal Settings'));
 });
 
+it('redirects to series subscriptions if a session key is set', function () {
+    session(['redirect_back_to_subscribe' => 1]);
+
+    put(route('frontend.acceptUseTerms'), ['accept_use_terms' => 'on'])
+        ->assertRedirectToRoute('frontend.series.show', 1);
+});
+
 it('updates user settings when user accepts the use terms', function () {
     assertDatabaseHas('settings', [
         'name' => auth()->user()->username,

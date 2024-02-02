@@ -27,12 +27,26 @@ it('does contain subscribe section for logged in users', function () {
     get(route('frontend.series.show', $this->series))->assertSeeLivewire('subscribe-section');
 });
 
+it('user must first accept the use terms before subscribing to a series', function () {
+    Livewire::test(SubscribeSection::class, [
+        'series' => $this->series,
+    ])->call('subscribe')
+        ->assertRedirect(route('frontend.userSettings.edit'))
+        ->assertSessionHas('redirect_back_to_subscribe');
+
+    assertDatabaseMissing('series_subscriptions', [
+        'user_id' => auth()->user()->id,
+        'series_id' => $this->series->id,
+    ]);
+});
+
 it('can subscribe a user to a series', function () {
     assertDatabaseMissing('series_subscriptions', [
         'user_id' => auth()->user()->id,
         'series_id' => $this->series->id,
     ]);
 
+    acceptUseTerms();
     Livewire::test(SubscribeSection::class, [
         'series' => $this->series,
     ])->call('subscribe');
@@ -43,9 +57,9 @@ it('can subscribe a user to a series', function () {
     ]);
 });
 
-it('can unsubscribe a user from a serries', function () {
+it('can unsubscribe a user from a series', function () {
     auth()->user()->subscriptions()->attach($this->series);
-
+    acceptUseTerms();
     assertDatabaseHas('series_subscriptions', [
         'user_id' => auth()->user()->id,
         'series_id' => $this->series->id,

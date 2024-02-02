@@ -9,6 +9,7 @@ use Livewire\Livewire;
 
 it('sends a mail notification if user hits subscription button', function () {
     $user = signIn();
+    acceptUseTerms();
 
     Notification::fake();
     Queue::fake();
