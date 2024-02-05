@@ -18,7 +18,7 @@ return new class extends Migration
             $table->text('title')->nullable();
             $table->bigInteger('position')->nullable()->default(1);
             $table->bigInteger('parent_id')->nullable()->default(0);
-            $table->foreignId('series_id')->references('id')->on('series')->cascadeOnDelete();
+            $table->foreignId('series_id')->references('id')->on('series')->cascadeOnDelete()->index();
             $table->boolean('default')->nullable()->default(false);
             $table->timestamps();
         });
