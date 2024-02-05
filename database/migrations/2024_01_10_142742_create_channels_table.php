@@ -18,7 +18,8 @@ return new class extends Migration
                 ->nullable()
                 ->references('id'
                 )->on('users')
-                ->nullOnDelete(); // a channel belongs to a user
+                ->nullOnDelete()
+                ->index(); // a channel belongs to a user
             $table->string('name');
             $table->text('description')->nullable();
             $table->string('banner_url')->nullable();

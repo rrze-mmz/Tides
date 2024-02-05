@@ -199,6 +199,23 @@ it('requires a unique username for creating new user', function () {
         ->assertSessionDoesntHaveErrors('username');
 });
 
+it('has a button to enable user channel if user has a moderator role', function () {
+    $moderator = User::factory()->create();
+    $moderator->assignRole(Role::MODERATOR);
+
+    get(route('users.edit', $moderator))
+        ->assertSee('Enable user channel')
+        ->assertSee(route('channels.create'));
+});
+
+it('it hides the option to enable user channel if user is not a moderator', function () {
+    $student = User::factory()->create();
+
+    get(route('users.edit', $student))
+        ->assertDontSee('Enable user channel')
+        ->assertDontSee(route('channels.create'));
+});
+
 it('requires a unique and valid email for creating new user', function () {
     post(route('users.store'), ['email' => 'test'])
         ->assertSessionHasErrors('email');

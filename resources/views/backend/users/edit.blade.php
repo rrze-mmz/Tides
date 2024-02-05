@@ -1,3 +1,4 @@
+@use(App\Enums\Role)
 @use(App\Enums\ApplicationStatus)
 @use(Carbon\Carbon)
 
@@ -50,29 +51,36 @@
                                        :selectedItem="$user->roles->first()?->id"
                 />
 
-                <div class="col-span-7 mt-10 w-4/5">
+                <div class="col-span-7 mt-10 w-4/5 space-x-4">
                     <x-button class="bg-blue-600 hover:bg-blue700">
                         Update user
                     </x-button>
+                    @if($user->hasRole(Role::MODERATOR) && $user->channels->count() == 0)
+                        <a href="{{route('channels.create')}}">
+                            <x-button type="button" class="bg-fuchsia-600 hover:bg-fuchsia:700">
+                                Enable user channel
+                            </x-button>
+                        </a>
+                    @endif
                     <a href="{{route('users.index')}}">
                         <x-button type="button" class="bg-gray-600 hover:bg-gray:700">
                             Back to users list
                         </x-button>
                     </a>
+
                 </div>
             </div>
 
         </form>
     </div>
 
-    <div class="pt-10 mb-5 flex items-center justify-between border-b border-black pb-2 font-semibold font-2xl
-                dark:text-white dark:border-white"
-    >
-        Applications
-    </div>
-
     @if(isset($user->settings->data['admin_portal_application_status']))
         @if($user->settings->data['admin_portal_application_status'] === ApplicationStatus::IN_PROGRESS())
+            <div class="pt-10 mb-5 flex items-center justify-between border-b border-black pb-2 font-semibold font-2xl
+                dark:text-white dark:border-white"
+            >
+                Applications
+            </div>
             <div class="flex flex-row items-center pt-5">
                 <div class="pr-10 text-lg font-normal dark:text-white">
                     User requested access to admin portal

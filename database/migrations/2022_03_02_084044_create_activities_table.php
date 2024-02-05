@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('activities', function (Blueprint $table) {
             $table->bigInteger('id', true);
-            $table->bigInteger('user_id')->nullable();
+            $table->bigInteger('user_id')->nullable()->index();
             $table->text('content_type')->nullable();
             $table->bigInteger('object_id')->nullable();
             $table->integer('action_flag')->nullable();
