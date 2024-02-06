@@ -18,6 +18,16 @@ enum Role: int
     case STUDENT = 7;
     case USER = 8; //treated as local user
 
+    public static function rolesArray(): array
+    {
+        $result = [];
+        foreach (self::cases() as $case) {
+            $result[$case->value] = $case->lower();
+        }
+
+        return $result;
+    }
+
     public function lower(): string
     {
         return Str::lower($this->name);

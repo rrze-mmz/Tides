@@ -1,3 +1,4 @@
+@php use App\Enums\Role; @endphp
 <div class="grid grid-cols-8">
     <div class="mb-6 flex content-center items-center">
         <label class="mr-6 block py-2 font-bold text-gray-700 text-md dark:text-white"
@@ -13,7 +14,7 @@
                 multiple="multiple"
                 style="width: 100%"
         >
-            @if($fieldName== 'acls')
+            @if($fieldName == 'acls')
                 @forelse($items as $item)
                     <option value="{{ $item->id }}"
                     @if($model?->acls->contains($item->id))
@@ -28,6 +29,17 @@
                     <option value="{{$item->id }}" selected
                             class="h-4 p-4">{{$item->getFullNameAttribute() }}</option>
                 @endforeach
+            @elseif($fieldName=='roles')
+                @forelse($items as $item)
+                    <option value="{{ $item->id }}"
+                    @if($model?->roles->contains($item->id))
+                        {{'selected'}}
+                        @endif
+                    >{{ $item->name }}
+                    </option>
+                @empty
+                    <option value="{{ Role::USER }}"> {{ Role::USER->lower() }}</option>
+                @endforelse
             @else
                 @foreach($items as $item)
                     <option value="{{$item->name }}" selected>{{$item->name }}</option>

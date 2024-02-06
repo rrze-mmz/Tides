@@ -2,10 +2,8 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\Role;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules\Enum;
 
 class UpdateUserRequest extends FormRequest
 {
@@ -30,7 +28,8 @@ class UpdateUserRequest extends FormRequest
             'first_name' => ['alpha_dash', 'min:2', 'max:30'],
             'last_name' => ['string', 'min:2', 'max:100'],
             'email' => [Rule::unique('users', 'email')->ignore($this->user->id)],
-            'role_id' => [new Enum(Role::class)],
+            'roles' => ['array'],
+            'roles.*' => ['integer', 'nullable'],
         ];
     }
 }

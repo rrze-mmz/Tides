@@ -57,6 +57,13 @@ it('can assign a role', function () {
     expect($this->user->roles()->first()->name)->toEqual('admin');
 });
 
+it('can assign multiple roles', function () {
+    $this->user->assignRoles(collect([0 => Role::STUDENT(), 1 => Role::USER()]));
+    expect($this->user->hasRole(Role::STUDENT))->toBeTrue();
+
+    expect($this->user->assignRoles(collect([0 => Role::ADMIN()])))->toBeInstanceOf(User::class);
+});
+
 it('can check for a role', function () {
     $this->user->assignRole(Role::ADMIN);
 
