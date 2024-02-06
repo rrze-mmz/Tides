@@ -2,10 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Traits\Searchable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Role extends BaseModel
 {
+    use Searchable;
+
+    protected array $searchable = ['name'];
+
     /**
      * User relationship
      */

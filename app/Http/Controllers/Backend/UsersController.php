@@ -11,6 +11,7 @@ use App\Services\OpencastService;
 use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 
@@ -28,14 +29,6 @@ class UsersController extends Controller
         return view('backend.users.index', [
             'users' => User::paginate(10),
         ]);
-    }
-
-    /**
-     * Create form for a user
-     */
-    public function create(): View
-    {
-        return view('backend.users.create');
     }
 
     /**
@@ -57,6 +50,14 @@ class UsersController extends Controller
     }
 
     /**
+     * Create form for a user
+     */
+    public function create(): View
+    {
+        return view('backend.users.create');
+    }
+
+    /**
      * Edit form for a user
      */
     public function edit(User $user): View
@@ -71,17 +72,16 @@ class UsersController extends Controller
     {
         $validated = $request->validated();
 
-        $oldRole = $user->roles()->first()->name;
+        $user->update(Arr::except($validated, ['roles']));
 
-        $user->update($validated);
+        $roles = collect($validated['roles']);
 
-        $user->assignRole(Role::tryFrom($validated['role_id']));
+        $user->assignRoles($roles);
 
-        $newRole = $user->roles()->first()->name;
-
-        if ($oldRole !== $newRole && $newRole !== Role::USER->lower()) {
+        if ($roles->contains(fn ($value) => $value == Role::ASSISTANT->value)) {
             $this->opencastService->createUser($user);
         }
+
         session()->flash('flashMessage', "{$user->getFullNameAttribute()} ".__FUNCTION__.'d successfully');
 
         return to_route('users.edit', $user);

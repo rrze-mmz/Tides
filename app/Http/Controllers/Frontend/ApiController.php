@@ -8,6 +8,7 @@ use App\Models\Clip;
 use App\Models\Image;
 use App\Models\Organization;
 use App\Models\Presenter;
+use App\Models\Role;
 use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -36,6 +37,21 @@ class ApiController extends Controller
 
         return response()->json(
             Tag::select(['id', 'name'])
+                ->search($validated['query'])
+                ->get(),
+        );
+    }
+
+    /**
+     * Tags json response for select2 component
+     */
+    public function roles(ApiRequest $request): JsonResponse
+    {
+        $this->authorize('administrate-superadmin-portal-pages');
+        $validated = $request->validated();
+
+        return response()->json(
+            Role::select(['id', 'name'])
                 ->search($validated['query'])
                 ->get(),
         );

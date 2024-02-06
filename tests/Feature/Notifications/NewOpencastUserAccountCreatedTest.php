@@ -24,7 +24,7 @@ it('notifies user to opencast account creation if role changes', function () {
     $this->mockHandler->append($this->mockCreateAdminUserResponse());
 
     patch((route('users.update', $user = User::factory()->create())), [
-        'role_id' => Role::ASSISTANT(),
+        'roles' => [0 => Role::ASSISTANT()],
     ])->assertRedirect();
 
     Notification::assertSentTo([$user], NewOpencastUserAccountCreated::class);

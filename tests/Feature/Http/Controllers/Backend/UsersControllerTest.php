@@ -205,7 +205,7 @@ it('has a button to enable user channel if user has a moderator role', function 
 
     get(route('users.edit', $moderator))
         ->assertSee('Enable user channel')
-        ->assertSee(route('channels.create'));
+        ->assertSee(route('channels.activate'));
 });
 
 it('it hides the option to enable user channel if user is not a moderator', function () {
@@ -293,7 +293,7 @@ test('admin user can view edit user form', function () {
         ->assertSee('first_name')
         ->assertSee('last_name')
         ->assertSee('email')
-        ->assertSee('role_id');
+        ->assertSee('roles');
 });
 
 test('a moderator is not allowed to update user information', function () {
@@ -345,7 +345,7 @@ test('an admin can update user role', function () {
 
     signInRole(EnumRole::ADMIN);
     patch((route('users.update', $user)), [
-        'role_id' => EnumRole::MODERATOR(),
+        'roles' => [0 => EnumRole::MODERATOR()],
     ]);
 
     expect($user->isModerator())->toBeTrue();

@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable
@@ -148,6 +149,20 @@ class User extends Authenticatable
     public function roles(): BelongsToMany
     {
         return $this->belongsToMany(\App\Models\Role::class, 'role_user');
+    }
+
+    /**
+     * Assigns multiple roles to user
+     */
+    public function assignRoles(Collection $rolesCollection): User
+    {
+        if ($rolesCollection->isNotEmpty()) {
+            $this->roles()->sync(($rolesCollection));
+        } else {
+            $this->roles()->detach();
+        }
+
+        return $this;
     }
 
     /**

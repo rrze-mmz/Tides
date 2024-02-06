@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Backend\AdminPortalActivateChannelController;
 use App\Http\Controllers\Backend\AdminPortalApplicationController;
 use App\Http\Controllers\Backend\ArticlesController;
 use App\Http\Controllers\Backend\AssetDestroyController;
@@ -52,6 +53,7 @@ use App\Models\Activity;
 use App\Models\Article;
 use App\Models\Clip;
 use App\Models\Series;
+use App\Models\User;
 use App\Services\OpenSearchService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -160,6 +162,7 @@ Route::controller(ApiController::class)->prefix('/api')->group(function () {
     Route::get('/users', 'users')->name('api.users');
     Route::get('/organizations', 'organizations')->name('api.organizations');
     Route::get('/images', 'images')->name('api.images');
+    Route::get('/roles', 'roles')->name('api.roles');
 });
 
 //change portal language
@@ -347,6 +350,8 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
             ->name('settings.openSearch.update');
         Route::post('/adminPortal/application', AdminPortalApplicationController::class)
             ->name('admin.portal.application.grant');
+        Route::post('/users/activateChannel', AdminPortalActivateChannelController::class)
+            ->name('channels.activate');
     });
 });
 

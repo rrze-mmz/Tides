@@ -91,6 +91,33 @@ document.addEventListener(
       },
     });
 
+    $('.select2-tides-roles').select2({
+      allowClear: true,
+      placeholder: 'Add a role',
+      minimumInputLength: 2,
+      ajax: {
+        url: '/api/roles/',
+        delay: 250,
+        data: function (params) {
+          return {
+            query: params.term, // search term
+            page: params.page,
+          };
+        },
+        processResults: function (data, params) {
+          params.page = params.page || 1;
+          return {
+            results: $.map(data, function (obj) {
+              return { id: obj.id, text: obj.name };
+            }),
+            pagination: {
+              more: params.page * 30 < data.total_count,
+            },
+          };
+        },
+      },
+    });
+
     $('.select2-tides-presenters').select2({
       allowClear: true,
       placeholder: 'Add a presenter',
