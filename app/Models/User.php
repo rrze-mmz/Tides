@@ -109,6 +109,11 @@ class User extends Authenticatable
         return $this->belongsTo(Setting::class, 'username', 'name');
     }
 
+    public function presenter(): BelongsTo
+    {
+        return $this->belongsTo(Presenter::class);
+    }
+
     /**
      * Comments relationship
      */
@@ -274,7 +279,7 @@ class User extends Authenticatable
         });
     }
 
-    public function scopeRole($query, Role $role)
+    public function scopeByRole($query, Role $role)
     {
         return $query->whereHas('roles', function ($q) use ($role) {
             $q->where('name', $role->lower());

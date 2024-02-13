@@ -55,7 +55,7 @@ it('should be display an add clip button', function () {
 });
 
 it('should display an info text if no series existing for user', function () {
-    get(route('dashboard'))->assertSee('No series found');
+    get(route('dashboard'))->assertSee(__('homepage.series.no series found'));
 });
 
 it('should display an info text if no clip exists', function () {
@@ -64,7 +64,7 @@ it('should display an info text if no clip exists', function () {
 
 it('display\'s user series', function () {
     SeriesFactory::create();
-    get(route('dashboard'))->assertSee('No series found');
+    get(route('dashboard'))->assertSee(__('homepage.series.no series found'));
 
     $userSeries = SeriesFactory::ownedBy(auth()->user())->create();
     get(route('dashboard'))->assertSee($userSeries->title);

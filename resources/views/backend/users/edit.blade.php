@@ -1,4 +1,3 @@
-@use(App\Enums\Role)
 @use(App\Models\Role as ModelRole)
 @use(App\Enums\ApplicationStatus)
 @use(Carbon\Carbon)
@@ -74,61 +73,9 @@
         </form>
 
         <div class="space-y-5 w-1/5 h-full pr-4">
-            @if($user->hasRole(Role::MODERATOR) && $user->channels->count() == 0)
-                <div
-                    class="mx-4 h-full w-full rounded-md border bg-white px-4 py-4 font-normal dark:bg-gray-800 dark:border-blue-800">
-                    <h2 class="mb-3 -ml-5 border-l-4 border-blue-600 dark:border-blue-800 py-4 pl-4 text-xl
-    dark:text-white"
-                    >
-                        User Channel
-                    </h2>
-                    <form action="{{route('channels.activate')}}"
-                          method="POST">
-                        @csrf
-                        <input type="text"
-                               name="username"
-                               value="{{ $user->username}}"
-                               hidden
-                        />
-                        <x-button type="submit"
-                                  class="bg-fuchsia-600 hover:bg-fuchsia:700 w-full text-center content-center">
-                            Enable user channel
-                        </x-button>
-                    </form>
-                </div>
+            @include('backend.users.sidebar._channel')
+            @include('backend.users.sidebar._presenter')
         </div>
-
-        @elseif($user->channels()->count() > 0)
-            <div class="m-2 rounded-lg border-2 border-solid border-green-500 dark:border-green-950 p-2">
-                <div class="flex place-content-around justify-between">
-                    <div>
-                        <h3 class="pb-6 font-semibold dark:text-white">
-                            {{ $user->channels()->first()->name }} Channel
-                        </h3>
-                    </div>
-                    <div>
-                        <x-heroicon-o-check-circle class="h-6 w-6 rounded text-green-600" />
-                    </div>
-                </div>
-                <div class="flex items-center space-x-2">
-                    <x-heroicon-o-user class="h-6 w-5 dark:text-white" />
-                    <span>{{ $user->channels()->first()->owner->getFullNameAttribute() }}</span>
-                </div>
-                <div class="pt-5">
-                    <a href="{{ route('channels.edit', $user->channels()->first()) }}" class="flex flex-row">
-                        <x-button type="button"
-                                  class="flex w-full content-center justify-between bg-blue-600 hover:bg-blue-700">
-                            <div>
-                                Go to channel edit page
-                            </div>
-                            <div>
-                                <x-heroicon-o-arrow-circle-right class="w-6" />
-                            </div>
-                        </x-button>
-                    </a>
-                </div>
-            </div>
-        @endif
     </div>
 
 

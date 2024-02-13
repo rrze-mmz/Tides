@@ -28,8 +28,11 @@
         </div>
         <div>
             <figure class="md:flex bg-slate-100 rounded-xl p-8  md:p-0 dark:bg-slate-800">
-                <img class="w-24 h-24 rounded-full mx-auto mt-10"
-                     src="/images/DummyMann.png"
+                <img class="w-24 h-24 rounded-sm mx-auto mt-10"
+                     src="@if(!is_null($channel->owner->presenter))
+                                             {{ $channel->owner->presenter->getImageUrl() }}
+                                             @else/images/DummyMann.png>
+                                        @endif"
                      alt=""
                      width="384"
                      height="512"
@@ -48,17 +51,16 @@
                 </div>
             </figure>
         </div>
-        <div class="flex w-full items-end border-b justify-content-between pb-4
-            border-b-2 border-black dark:border-white "
+        <div class="flex w-full items-end border-b justify-content-between pb-4 border-black dark:border-white "
         >
-            <div class="flex w-full items-end justify-between pb-2">
+            <div class="flex w-full items-end justify-between pt-4 pb-2">
                 <div class="text-2xl dark:text-white">  {{  __('homepage.series.Recently added!') }} </div>
                 <a href="{{ route('frontend.series.index') }}"
                    class="text-sm underline dark:text-white ">{{__('homepage.series.more series') }}</a>
             </div>
         </div>
         <div class="grid grid-cols-4 gap-4 pt-8 border-b-2 border-black dark:border-white ">
-            @forelse($channel->owner->getAllSeries()->get() as $single)
+            @forelse($channel->owner->getAllSeries()->withLastPublicClip()->get() as $single)
 
                 @include('backend.series._card',[
                         'series'=> $single,

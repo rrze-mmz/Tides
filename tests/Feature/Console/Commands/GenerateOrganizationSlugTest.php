@@ -3,8 +3,6 @@
 use App\Models\Organization;
 use Illuminate\Support\Str;
 
-uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
-
 it('generates organization slug', function () {
     $organization = Organization::find(1);
 

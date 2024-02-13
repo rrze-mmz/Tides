@@ -62,7 +62,7 @@ class AdminPortalUseTermsController extends Controller
 
         Mail::to(env('support_mail_address'))->send(new NewApplicationForAdminPortal($user));
         //notify portal superadmins
-        Notification::send(User::role(Role::SUPERADMIN)->get(), new NewAdminPortalNotification($user));
+        Notification::send(User::byRole(Role::SUPERADMIN)->get(), new NewAdminPortalNotification($user));
 
         return to_route('frontend.userSettings.edit');
     }
