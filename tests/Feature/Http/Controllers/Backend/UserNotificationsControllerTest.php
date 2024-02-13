@@ -26,7 +26,7 @@ it('displays all unread notifications for a user', function () {
     [$userA, $userB] = User::factory(2)->create();
     $userA->assignRole(Role::SUPERADMIN);
     $userA->refresh();
-    Notification::send(User::role(Role::SUPERADMIN)->get(), new NewAdminPortalNotification($userB));
+    Notification::send(User::byRole(Role::SUPERADMIN)->get(), new NewAdminPortalNotification($userB));
 
     signIn($userA);
 

@@ -6,7 +6,7 @@
         @include('backend.series._card',['series'=> $single])
     @empty
         <div class="dark:text-white">
-            No series found
+            {{  __('homepage.series.no series found') }}
         </div>
     @endforelse
 </div>
@@ -14,3 +14,4 @@
 <div class="py-10">
     {{ $series->links() }}
 </div>
+

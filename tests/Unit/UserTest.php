@@ -98,3 +98,7 @@ it('check for assistant role', function () {
 it('has an admins scope', function () {
     expect(User::admins())->toBeInstanceOf(Builder::class);
 });
+
+it('has a scope to search by role', function () {
+    expect(User::byRole(Role::MODERATOR))->toBeInstanceOf(Builder::class);
+});

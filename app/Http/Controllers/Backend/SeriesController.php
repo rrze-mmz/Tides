@@ -75,7 +75,7 @@ class SeriesController extends Controller
 
         $chapters = $series->chapters()->orderBy('position')->get();
         if ($opencastSeriesInfo->get('health')) {
-            $assistants = User::role(Role::ASSISTANT)->get();
+            $assistants = User::byRole(Role::ASSISTANT)->get();
             //reject all assistants that are already in opencast series acl
             $availableAssistants = $assistants->reject(function ($admin) use ($opencastSeriesInfo) {
                 if (! empty($opencastSeriesInfo->get('metadata'))) {

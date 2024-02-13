@@ -119,7 +119,10 @@
                                 <div class="flex items-center">
                                     <div class="h-10 w-10 flex-shrink-0">
                                         <img class="h-10 w-10 rounded-full"
-                                             src="https://www.gravatar.com/avatar/?d=mp&f=y" alt="">
+                                             src="@if(!is_null($user->presenter))
+                                             {{ $user->presenter->getImageUrl() }}
+                                             @else https://www.gravatar.com/avatar/?d=mp&f=y>
+                                        @endif" alt="">
                                     </div>
                                     <div class="ml-4">
                                         <div class="">
