@@ -1,3 +1,4 @@
+@php use App\Enums\Acl; @endphp
 @use(App\Models\Series)
 
 <div class="flex flex-col">
@@ -48,9 +49,45 @@
                 </div>
             @endif
         @else
-            <div class="flex content-center justify-center">
-                <p class="dark:text-white text-3xl py-16">{{ __('clip.frontend.not authorized to view video') }}</p>
+            @php
+                $acls = $clip->acls->pluck('id');
+            @endphp
+
+            <div class="flex flex-col items-center justify-center space-y-4 py-16">
+                {{-- Display all text messages --}}
+                @foreach($acls as $acl)
+                    @if($acl == Acl::PORTAL())
+                        <p class="dark:text-white text-3xl">{{ __('clip.frontend.this clip is exclusively accessible to logged-in users') }}</p>
+                    @elseif($acl == Acl::LMS())
+                        <p class="dark:text-white text-3xl">{{ __('clip.frontend.access to this clip is restricted to LMS course participants') }}</p>
+                    @elseif($acl == Acl::PASSWORD())
+                        <p class="dark:text-white text-3xl">{{ __('clip.frontend.this clip requires a password for access') }}</p>
+                    @endif
+                @endforeach
             </div>
+
+            <div class="w-full flex justify-center items-center space-x-6 px-16">
+                {{-- Adjust this section if you expect exactly two buttons. Otherwise, consider a different layout for more buttons. --}}
+                @foreach($acls as $acl)
+                    @if($acl == Acl::PORTAL())
+                        <a href="{{route('login')}}">
+                            <x-button class='flex items-center bg-blue-600 hover:bg-blue-700'>
+                                Login
+                                <x-heroicon-o-arrow-circle-right class="w-6 ml-4" />
+                            </x-button>
+                        </a>
+                    @endif
+                    @if($acl == Acl::LMS())
+                        <a href="{{$clip->series->lms_link}}">
+                            <x-button class='flex items-center bg-blue-600 hover:bg-blue-700'>
+                                Go to LMS Course
+                                <x-heroicon-o-arrow-circle-right class="w-6 ml-4" />
+                            </x-button>
+                        </a>
+                    @endif
+                @endforeach
+            </div>
+
         @endif
     </div>
 

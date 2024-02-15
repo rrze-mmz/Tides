@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Models\User;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -58,6 +59,10 @@ class Saml2UserSignedIn
         Auth::login($user);
         session()->put('locale', $lang);
 
-        return to_route('home');
+        if (session()->has('url.intended')) {
+            return redirect()->intended(session('url.intended'));
+        } else {
+            return redirect()->intended(RouteServiceProvider::HOME);
+        }
     }
 }
