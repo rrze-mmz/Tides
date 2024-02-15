@@ -8,6 +8,7 @@ return [
         'feeds_default_owner_email' => 'itunes@tides.com',
         'default_image_id' => env('DEFAULT_IMAGE_ID', 1),
         'support_email_address' => env('SUPPORT_MAIL_ADDRESS', 'support@tides.com'),
+        'saml_tenant_uuid' => env('SAML2_TENANT_UUID', null),
     ],
     'user' => [
         'accept_use_terms' => false,

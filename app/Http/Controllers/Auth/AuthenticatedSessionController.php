@@ -39,17 +39,20 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        $setting = Setting::firstOrCreate(
+        Setting::firstOrCreate(
             ['name' => auth()->user()->username],
             [
                 'data' => config('settings.user'),
             ]
         );
         $lang = auth()->user()->settings->data['language'];
-
         $request->session()->put('locale', $lang);
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        if (session()->has('url.intended')) {
+            return redirect()->intended(session('url.intended'));
+        } else {
+            return redirect()->intended(RouteServiceProvider::HOME);
+        }
     }
 
     /**
@@ -64,6 +67,6 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerateToken();
 
         //        return to_route('saml.logout');
-        return redirect('/');
+        return redirect()->intended(RouteServiceProvider::HOME);
     }
 }

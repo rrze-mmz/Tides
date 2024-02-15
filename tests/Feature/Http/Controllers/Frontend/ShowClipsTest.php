@@ -6,6 +6,7 @@ use App\Enums\Role;
 use App\Models\Asset;
 use App\Models\Clip;
 use App\Models\Presenter;
+use App\Models\User;
 use App\Services\WowzaService;
 use Facades\Tests\Setup\ClipFactory;
 use Facades\Tests\Setup\SeriesFactory;
@@ -210,7 +211,7 @@ it('clip public page should not display alternative videos if user is not allowe
         ->assertDontSee('composite video stream');
 });
 
-it('clip public page should display clip presenters if any ', function () {
+it('clip public page should display clip presenters if any', function () {
     $this->mockHandler->append($this->mockCheckApiConnection(), $this->mockVodSecureUrls());
     $presenters = Presenter::factory(2)->create();
 
@@ -222,7 +223,7 @@ it('clip public page should display clip presenters if any ', function () {
         ->assertSee(Presenter::find(1)->getFullNameAttribute(), Presenter::find(2)->getFullNameAttribute());
 });
 
-it('clip public page should have navidate to previous and next clips if a clip belongs to a series', function () {
+it('clip public page should have navigate to previous and next clips if a clip belongs to a series', function () {
     $this->mockHandler->append($this->mockCheckApiConnection(), $this->mockVodSecureUrls());
     SeriesFactory::withClips(3)->withAssets(2)->create();
     $clip = Clip::find(3);
@@ -240,10 +241,44 @@ it('a signed in user can access frontend clip page if clip has a portal access',
     $this->mockHandler->append($this->mockCheckApiConnection(), $this->mockVodSecureUrls());
     $this->clip->addAcls(collect([Acl::PORTAL()]));
 
-    get($this->clip->path())->assertDontSee('data-plyr-provider="html5"', false);
+    get(route('frontend.clips.show', $this->clip))->assertDontSee('data-plyr-provider="html5"', false);
 
     $this->mockHandler->append($this->mockCheckApiConnection(), $this->mockVodSecureUrls());
     signInRole(Role::STUDENT);
 
-    get($this->clip->path())->assertSee('data-plyr-provider="html5"', false);
+    get(route('frontend.clips.show', $this->clip))->assertSee('data-plyr-provider="html5"', false);
+});
+
+it('shows a login url and acl info if a clip has portal, password, or lms acl ', function () {
+    $this->mockHandler->append($this->mockCheckApiConnection(), $this->mockVodSecureUrls());
+    $this->clip->addAcls(collect([Acl::PORTAL()]));
+
+    get(route('frontend.clips.show', $this->clip))
+        ->assertSee(__('clip.frontend.this clip is exclusively accessible to logged-in users'));
+
+    $this->clip->addAcls(collect([Acl::LMS()]));
+    $this->mockHandler->append($this->mockCheckApiConnection(), $this->mockVodSecureUrls());
+
+    get(route('frontend.clips.show', $this->clip))
+        ->assertSee(__('clip.frontend.access to this clip is restricted to LMS course participants'));
+
+    $this->clip->addAcls(collect([Acl::PASSWORD()]));
+    $this->mockHandler->append($this->mockCheckApiConnection(), $this->mockVodSecureUrls());
+
+    get(route('frontend.clips.show', $this->clip))
+        ->assertSee(__('clip.frontend.this clip requires a password for access'));
+});
+
+it('redirects to clip page after user login, if a clip has a portal acl', function () {
+    $this->mockHandler->append($this->mockCheckApiConnection(), $this->mockVodSecureUrls());
+    // Simulate logging in
+    $user = User::factory()->create(); // Ensure you have a User factory set up
+    $user->assignRole(Role::MEMBER);
+    $protectedPageUrl = route('frontend.clips.show', $this->clip);
+    get($protectedPageUrl)->assertSessionHas(['url.intended']);
+    $this->mockHandler->append($this->mockCheckApiConnection(), $this->mockVodSecureUrls());
+    post(route('login'), [
+        'username' => $user->username,
+        'password' => 'password', // The password used when creating the user
+    ])->assertRedirect($protectedPageUrl);
 });
