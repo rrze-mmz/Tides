@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Clip;
 use App\Models\Series;
 use Illuminate\Contracts\Database\Eloquent\Builder as ContractsBuilder;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
 class HomeController extends Controller
@@ -15,6 +16,7 @@ class HomeController extends Controller
      */
     public function __invoke(): View
     {
+        Log::info('Previous URL in home controller is: '.session('url.intended'));
         $series = Series::whereHas('clips.assets')->isPublic()
             ->with(['owner', 'presenters', 'clips' => function (ContractsBuilder $query) {
                 $query->whereHas('assets');

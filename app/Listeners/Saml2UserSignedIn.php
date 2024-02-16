@@ -39,8 +39,8 @@ class Saml2UserSignedIn
             'nameId' => $samlUser->getNameId(),
         ];
 
-        Log::info($messageId);
-        Log::info($samlUser);
+        //        Log::info($messageId);
+        //        Log::info($samlUser);
         //check if email already exists and fetch user
         $user = User::firstOrCreate(
             [

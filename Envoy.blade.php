@@ -49,7 +49,7 @@ clean_old_releases
 @endstory
 
 @task('git-develop')
-{{ logMessage("Cloning repository in develop branch") }}
+{{ logMessage("Cloning repository in {$branch} branch") }}
 
 git clone {{ $repo }} --branch={{ $branch }} --depth=1 -q {{ $currentReleaseDir }}
 @endtask

@@ -54,6 +54,7 @@ use App\Models\Article;
 use App\Models\Clip;
 use App\Models\Series;
 use App\Models\User;
+use App\Providers\RouteServiceProvider;
 use App\Services\OpenSearchService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -355,6 +356,11 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
     });
 });
 
+Route::get('/saml2Login', function () {
+    $redirectUrl = (session()->has('url.intended')) ? session('url.intended') : RouteServiceProvider::HOME;
+
+    return redirect()->to($redirectUrl);
+});
 Route::get('/test/{series}/elk', function (Series $series, OpenSearchService $elkService) {
     $elkService->createIndex($series);
 })->name('opensearch.test');

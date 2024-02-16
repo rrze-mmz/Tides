@@ -1,14 +1,15 @@
-<nav class="container mx-auto flex items-center justify-between px-6">
-    <div>
+<nav class="container mx-auto flex items-center justify-between px-2">
+    <div class="text-lg">
         <a href="{{ url('/') }}"
-           class="text-lg font-bold  no-underline"
+           class="font-bold  no-underline text-ur"
         >
             {{ config('app.name', 'Laravel') }}
             @env('local')
                 [{{ config('settings.portal.deploy_branch') }}]
             @endenv
             @auth()
-                @if(auth()->user()->email === config('settings.portal.admin_main_address'))
+                @if(auth()->user()->email === config('settings.portal.admin_main_address')
+                    && app()->env !== 'local')
                     [{{ config('settings.portal.deploy_branch') }}]
                 @endif
             @endauth
