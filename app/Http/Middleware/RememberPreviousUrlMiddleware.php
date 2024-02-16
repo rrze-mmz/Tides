@@ -4,7 +4,6 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 class RememberPreviousUrlMiddleware
@@ -16,8 +15,7 @@ class RememberPreviousUrlMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (! $request->is('login', 'logout', 'register', 'password/*', 'verify-email/*', 'verified/*')) {
-            Log::info('Current URL in Middleware is:'.url()->current());
+        if (! $request->is('login', 'logout', 'register', 'password/*', 'verify-email/*', 'verified/*', 'saml2Login')) {
             session(['url.intended' => url()->current()]);
         }
 

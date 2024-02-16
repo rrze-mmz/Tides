@@ -3,8 +3,6 @@
 namespace App\Listeners;
 
 use App\Models\User;
-use App\Providers\RouteServiceProvider;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -25,10 +23,8 @@ class Saml2UserSignedIn
     /**
      * Handle the event.
      */
-    public function handle(SignedIn $event): RedirectResponse
+    public function handle(SignedIn $event): void
     {
-        $messageId = $event->getAuth()->getLastMessageId();
-
         // your own code preventing reuse of a $messageId to stop replay attacks
         $samlUser = $event->getSaml2User();
 
@@ -58,11 +54,6 @@ class Saml2UserSignedIn
         $lang = $user->settings->data['language'];
         Auth::login($user);
         session()->put('locale', $lang);
-
-        if (session()->has('url.intended')) {
-            return redirect()->intended(session('url.intended'));
-        } else {
-            return redirect()->intended(RouteServiceProvider::HOME);
-        }
+        session()->put('url.intended', session('url.intended'));
     }
 }

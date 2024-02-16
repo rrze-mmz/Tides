@@ -356,11 +356,12 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
     });
 });
 
+//redirect the saml2 logged-in user to previous page e.g. a clip with portal acl
 Route::get('/saml2Login', function () {
     $redirectUrl = (session()->has('url.intended')) ? session('url.intended') : RouteServiceProvider::HOME;
 
-    return redirect()->to($redirectUrl);
-});
+    return redirect($redirectUrl);
+})->name('saml2.redirect');
 Route::get('/test/{series}/elk', function (Series $series, OpenSearchService $elkService) {
     $elkService->createIndex($series);
 })->name('opensearch.test');
