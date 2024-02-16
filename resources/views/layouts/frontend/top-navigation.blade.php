@@ -4,6 +4,14 @@
            class="text-lg font-bold  no-underline"
         >
             {{ config('app.name', 'Laravel') }}
+            @env('local')
+                [{{ config('settings.portal.deploy_branch') }}]
+            @endenv
+            @auth()
+                @if(auth()->user()->email === config('settings.portal.admin_main_address'))
+                    [{{ config('settings.portal.deploy_branch') }}]
+                @endif
+            @endauth
         </a>
     </div>
     <nav class="font-semibold space-x-4 text-md ">

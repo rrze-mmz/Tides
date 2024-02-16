@@ -13,6 +13,7 @@ echo $e->getMessage();
 $user = env('DEPLOY_USER');
 $group = env('DEPLOY_GROUP');
 $repo = env('DEPLOY_REPO');
+$branch = env('DEPLOY_BRANCH');
 
 if (!isset($baseDir)) {
 $baseDir = env('DEPLOY_BASE_DIR');
@@ -50,7 +51,7 @@ clean_old_releases
 @task('git-develop')
 {{ logMessage("Cloning repository in develop branch") }}
 
-git clone {{ $repo }} --branch=develop --depth=1 -q {{ $currentReleaseDir }}
+git clone {{ $repo }} --branch={{ $branch }} --depth=1 -q {{ $currentReleaseDir }}
 @endtask
 
 @task('composer')

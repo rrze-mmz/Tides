@@ -9,6 +9,10 @@ return [
         'default_image_id' => env('DEFAULT_IMAGE_ID', 1),
         'support_email_address' => env('SUPPORT_MAIL_ADDRESS', 'support@tides.com'),
         'saml_tenant_uuid' => env('SAML2_TENANT_UUID', null),
+        'deploy_server' => env('DEPLOY_SERVER', 'localhost'),
+        'deploy_repo' => env('DEPLOY_REPO', 'git@github.com/mmz/tides'),
+        'deploy_branch' => env('DEPLOY_BRANCH', 'main'),
+        'admin_main_address' => env('ADMIN_MAIL_ADDRESS', 'admin@tides.org'),
     ],
     'user' => [
         'accept_use_terms' => false,
