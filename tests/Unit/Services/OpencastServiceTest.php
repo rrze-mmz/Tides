@@ -152,7 +152,7 @@ it('fetch failed events for a given series', function () {
         $series,
         OpencastWorkflowState::FAILED
     ));
-    $response = $this->opencastService->getFailedEventsBySeries($series);
+    $response = $this->opencastService->getEventsBySeries($series, OpencastWorkflowState::FAILED);
 
     expect($response->pluck('processing_state')->contains('FAILED'))->toBeTrue();
     expect($response->first()['is_part_of'])->toEqual($series->opencast_series_id);
@@ -161,7 +161,7 @@ it('fetch failed events for a given series', function () {
 it('fetches an empty collection for failed events if no opencast server is available', function () {
     $series = SeriesFactory::create();
     $this->mockHandler->append($this->mockServerNotAvailable());
-    $seriesInfo = $this->opencastService->getFailedEventsBySeries($series);
+    $seriesInfo = $this->opencastService->getEventsBySeries($series, OpencastWorkflowState::FAILED);
 
     expect($seriesInfo->isEmpty())->toBeTrue();
 });
@@ -246,7 +246,7 @@ it('formats data for opencast create series post request', function () {
         ],
     ];
 
-    expect($this->opencastService->createOpencastSeriesFormData($series))->toEqual($data);
+    expect($this->opencastService->createSeriesFormData($series))->toEqual($data);
 });
 
 it('formats data for opencast ingest media package request', function () {

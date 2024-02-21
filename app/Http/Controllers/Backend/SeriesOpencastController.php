@@ -74,4 +74,30 @@ class SeriesOpencastController extends Controller
 
         return to_route('series.edit', $series);
     }
+
+    public function updateEventsTitle(Series $series, Request $request, OpencastService $opencastService)
+    {
+        $this->authorize('administrate-admin-portal-pages');
+
+        $request->validate([
+            'opencastSeriesID' => [
+                'required',
+                function ($attribute, $value, $fail) use ($series) {
+                    if ($value !== $series->opencast_series_id) {
+                        return $fail($attribute.' must match the current series opencast series ID.');
+                    }
+                },
+            ],
+        ]);
+
+        $events = $opencastService->getEventsBySeries($series);
+
+        $events->each(function ($event) use ($opencastService) {
+            $opencastService->updateEvent($event);
+        });
+
+        session()->flash('flashMessage', "{$events->count()} Opencast events updated successfully");
+
+        return to_route('series.edit', $series);
+    }
 }

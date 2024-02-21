@@ -103,11 +103,11 @@ class OpencastService
     /**
      * @return array|mixed
      */
-    public function getSeries(Series $series)
+    public function getSeries(Series $series): mixed
     {
         $opencastSeries = [];
 
-        if (is_null($series->opencast_series_id)) {
+        if (is_null($series->opencast_series_id) || $series->opencast_series_id === '') {
             return $opencastSeries;
         }
 
@@ -129,7 +129,7 @@ class OpencastService
         ?Series $series = null,
         int $limit = 20,
     ): Collection {
-        $runningWorkflows = collect();
+        $events = collect();
 
         $filter = (is_null($series))
             ? 'status:'.$state->value
@@ -143,7 +143,7 @@ class OpencastService
                     'limit' => $limit,
                 ],
             ]);
-            $runningWorkflows = collect((json_decode((string) $this->response->getBody(), true)));
+            $events = collect((json_decode((string) $this->response->getBody(), true)));
         } catch (RequestException $e) {
             if ($e->hasResponse()) {
                 $status = $e->getResponse()->getStatusCode();
@@ -164,7 +164,7 @@ class OpencastService
             }
         }
 
-        return $runningWorkflows;
+        return $events;
     }
 
     public function getEventsByStatusAndByDate(
@@ -282,7 +282,7 @@ class OpencastService
     public function createSeries(Series $series): Response|ResponseInterface
     {
         try {
-            $this->response = $this->client->post('api/series', $this->createOpencastSeriesFormData($series));
+            $this->response = $this->client->post('api/series', $this->createSeriesFormData($series));
         } catch (GuzzleException $exception) {
             Log::error($exception);
         }
@@ -291,9 +291,9 @@ class OpencastService
     }
 
     /**
-     * forms the data to to create a new series
+     * forms the data to create a new series
      */
-    public function createOpencastSeriesFormData(Series $series): array
+    public function createSeriesFormData(Series $series): array
     {
         $title = "{$series->title} / tidesSeriesID: {$series->id}";
 
@@ -321,6 +321,83 @@ class OpencastService
 				    {"allow": true,"role": "ROLE_USER_ADMIN","action": "write"},
 			    ]',
                 'theme' => config('opencast.default_theme_id'),
+            ],
+        ];
+    }
+
+    public function updateEvent(array $event): Response|ResponseInterface
+    {
+        try {
+            $this->response =
+                $this->client->put(
+                    "api/events/{$event['identifier']}/metadata?type=dublincore/episode",
+                    $this->updateEventsFormData($event)
+                );
+        } catch (GuzzleException $exception) {
+            Log::error($exception);
+        }
+
+        return $this->response;
+    }
+
+    /**
+     * forms the data to update an existing series
+     */
+    public function updateEventsFormData(array $event): array
+    {
+        $title = removeTrailingNumbers($event['title']);
+
+        return [
+            'headers' => [
+                'Content-Type' => 'application/x-www-form-urlencoded',
+            ],
+            'form_params' => [
+                'metadata' => ' [{
+                                     "id": "title",
+                                     "value": "'.$title.'",
+                                 }]',
+            ],
+        ];
+    }
+
+    public function updateSeries(Series $series): Response|ResponseInterface
+    {
+        try {
+            $this->response =
+                $this->client->put(
+                    "api/series/{$series->opencast_series_id}",
+                    $this->updateSeriesFormData($series)
+                );
+        } catch (GuzzleException $exception) {
+            Log::error($exception);
+        }
+
+        return $this->response;
+    }
+
+    /**
+     * forms the data to update an existing series
+     */
+    public function updateSeriesFormData(Series $series): array
+    {
+        $title = "{$series->title} / tidesSeriesID: {$series->id}";
+
+        return [
+            'headers' => [
+                'Content-Type' => 'application/x-www-form-urlencoded',
+            ],
+            'form_params' => [
+                'type' => 'dublincore/series',
+                'metadata' => '[{
+                        "flavor": "dublincore/series",
+                        "title": "Opencast Series DublinCore",
+                        "fields": [
+                                {
+                                     "id": "title",
+                                     "value": "'.$title.'",
+                                 },
+                              ]
+                       }]',
             ],
         ];
     }
@@ -616,22 +693,27 @@ class OpencastService
         return $processedEvents;
     }
 
-    public function getFailedEventsBySeries(Series $series): Collection
+    public function getEventsBySeries(Series $series, ?OpencastWorkflowState $state = null): Collection
     {
-        $failedEvents = collect();
+        $status = '';
+
+        if (! is_null($state)) {
+            $status = ",status:{$state->value}";
+        }
+        $events = collect();
         try {
             $this->response = $this->client->get('api/events', [
                 'query' => [
-                    'filter' => "series:{$series->opencast_series_id},status:".OpencastWorkflowState::FAILED(),
+                    'filter' => "series:{$series->opencast_series_id}{$status}",
                     'sort' => 'start_date:ASC',
                 ],
             ]);
-            $failedEvents = collect(json_decode((string) $this->response->getBody(), true));
+            $events = collect(json_decode((string) $this->response->getBody(), true));
         } catch (GuzzleException $exception) {
             Log::error($exception);
         }
 
-        return $failedEvents;
+        return $events;
     }
 
     /**

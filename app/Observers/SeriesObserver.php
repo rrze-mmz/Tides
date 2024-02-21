@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Events\SeriesTitleUpdated;
 use App\Http\Resources\SeriesResource;
 use App\Models\Series;
 use App\Services\OpenSearchService;
@@ -21,6 +22,13 @@ class SeriesObserver
         session()->flash('flashMessage', "{$series->title} ".__FUNCTION__.' successfully');
 
         $this->openSearchService->createIndex(new SeriesResource($series));
+    }
+
+    public function updating(Series $series): void
+    {
+        if ($series->isDirty('title')) {
+            SeriesTitleUpdated::dispatch($series);
+        }
     }
 
     /**

@@ -221,6 +221,8 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
         ->name('series.opencast.createSeries');
     Route::post('/series/{series}/updateOpencastSeriesAcl}', [SeriesOpencastController::class, 'updateAcl'])
         ->name('series.opencast.updateSeriesAcl');
+    Route::post('/series/{series}/updateScheduledEventsTitle', [SeriesOpencastController::class, 'updateEventsTitle'])
+        ->name('series.opencast.updateEventsTitle');
 
     Route::controller(SeriesClipsController::class)->prefix('/series')->group(function () {
         // Create a clip for a certain series.

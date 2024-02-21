@@ -9,7 +9,6 @@
      <span
          class="text-sm font-normal italic"> created at {{$series->created_at }} </span>
         </div>
-
     </div>
 
     <div class="flex justify-center content-center  py-2 px-2">
@@ -91,8 +90,34 @@
         <div x-data="{
             activeTab:1,
             activeClass: 'inline-block px-4 py-2 bg-blue-800  rounded-lg font-bold',
-            inactiveClass : 'inline-block px-4 py-2 bg-blue-500  rounded-lg'
-         }" class="w-full">
+            inactiveClass : 'inline-block px-4 py-2 bg-blue-500  rounded-lg',
+            init(){
+             this.updateActiveTabFromURL();
+            window.addEventListener('hashchange', () => this.updateActiveTabFromURL());
+            },
+            updateActiveTabFromURL() {
+            const hash = window.location.hash;
+            switch(hash) {
+                case '#clips':
+                    this.activeTab = 1;
+                    break;
+                case '#opencast':
+                    this.activeTab = 2;
+                    break;
+                case '#actions':
+                    this.activeTab = 3;
+                    break;
+                case '#comments-section':
+                    this.activeTab = 4;
+                    break;
+                case '#logs':
+                    this.activeTab = 5;
+                    break;
+                default:
+                    this.activeTab = 1; // Default to the first tab if no matching hash
+            }
+        }
+    }" class="w-full">
             <ul class="flex space-x-4  pt-8 pb-2 text-white border-b border-black dark:border-white ">
                 <li>
                     <a href="#clips"
@@ -168,4 +193,6 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
 @endsection

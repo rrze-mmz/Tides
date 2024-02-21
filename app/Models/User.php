@@ -6,6 +6,8 @@ use App\Enums\Role;
 use App\Models\Traits\RecordsActivity;
 use App\Models\Traits\Searchable;
 use App\Notifications\MailResetPasswordToken;
+use App\Observers\UserObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -17,6 +19,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
 
+#[ObservedBy(UserObserver::class)]
 class User extends Authenticatable
 {
     use HasFactory;

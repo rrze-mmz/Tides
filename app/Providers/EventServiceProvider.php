@@ -7,6 +7,7 @@ use App\Events\ChapterDeleted;
 use App\Events\ClipDeleting;
 use App\Events\DocumentDeleted;
 use App\Events\SeriesDeleted;
+use App\Events\SeriesTitleUpdated;
 use App\Listeners\DeleteAssetFile;
 use App\Listeners\DeleteClipResources;
 use App\Listeners\DeleteDocumentFile;
@@ -14,20 +15,7 @@ use App\Listeners\DeleteSeriesResources;
 use App\Listeners\Saml2UserSignedIn;
 use App\Listeners\Saml2UserSignedOut;
 use App\Listeners\UpdateClipChapter;
-use App\Models\Channel;
-use App\Models\Clip;
-use App\Models\Collection;
-use App\Models\Presenter;
-use App\Models\Series;
-use App\Models\Setting;
-use App\Models\User;
-use App\Observers\ChannelObserver;
-use App\Observers\ClipObserver;
-use App\Observers\CollectionObserver;
-use App\Observers\PresenterObserver;
-use App\Observers\SeriesObserver;
-use App\Observers\SettingObserver;
-use App\Observers\UserObserver;
+use App\Listeners\UpdateOpencastSeriesTitle;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -66,6 +54,9 @@ class EventServiceProvider extends ServiceProvider
         SeriesDeleted::class => [
             DeleteSeriesResources::class,
         ],
+        SeriesTitleUpdated::class => [
+            UpdateOpencastSeriesTitle::class,
+        ],
     ];
 
     /**
@@ -73,12 +64,5 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Series::observe(SeriesObserver::class);
-        Clip::observe(ClipObserver::class);
-        User::observe(UserObserver::class);
-        Presenter::observe(PresenterObserver::class);
-        Collection::observe(CollectionObserver::class);
-        Setting::observe(SettingObserver::class);
-        Channel::observe(ChannelObserver::class);
     }
 }

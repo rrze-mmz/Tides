@@ -173,3 +173,15 @@ it('has a findUserByOpencastRole function', function () {
 it('has a humanFileSizeFormat function ', function () {
     expect(humanFileSizeFormat('1024'))->toBe('1.00 kB');
 });
+
+it('has a removeTrailNumbers function', function () {
+    $string = 'Mathematics for engineering 01';
+    $newString = removeTrailingNumbers($string);
+
+    expect($newString)->toBe('Mathematics for engineering');
+
+    $string = 'Mathematics for engineering 1 01';
+    $newString = removeTrailingNumbers($string);
+
+    expect($newString)->toBe('Mathematics for engineering 1');
+});

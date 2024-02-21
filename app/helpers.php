@@ -237,3 +237,14 @@ function zuluToCEST($zuluTime): string
 
     return $carbon->format('Y-m-d H:i:s');
 }
+
+function removeTrailingNumbers($string)
+{
+    // This regex matches a trailing space followed by numbers at the end of the string
+    $pattern = '/\s+\d+$/';
+
+    // Replace the matched pattern with an empty string
+    $cleanedString = preg_replace($pattern, '', $string);
+
+    return $cleanedString;
+}

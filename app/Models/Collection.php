@@ -3,10 +3,13 @@
 namespace App\Models;
 
 use App\Models\Traits\RecordsActivity;
+use App\Observers\CollectionObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Collection as LCollection;
 
+#[ObservedBy(CollectionObserver::class)]
 class Collection extends BaseModel
 {
     use HasFactory;
@@ -17,16 +20,16 @@ class Collection extends BaseModel
      *
      * @return BelongsToMany
      */
-    public function clips(): BelongsToMany
-    {
-        return $this->belongsToMany(Clip::class);
-    }
-
     /**
      * Add/remove clips for the given collection
      */
     public function toggleClips(LCollection $ids): void
     {
         $this->clips()->toggle($ids);
+    }
+
+    public function clips(): BelongsToMany
+    {
+        return $this->belongsToMany(Clip::class);
     }
 }
