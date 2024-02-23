@@ -8,16 +8,23 @@
                   method="POST"
                   class="flex"
             >
-                <input hidden readonly type="text" name="opencastSeriesID" value="{{$series->opencast_series_id}}">
                 @csrf
+                <input hidden readonly type="text" name="opencastSeriesID" value="{{$series->opencast_series_id}}">
                 <x-button type="link" class="bg-green-700 hover:bg-green-800">
                     Remove numbers from title
                 </x-button>
             </form>
+            <form action="{{ route('series.opencast.addScheduledEventsAsClips', $series) }}"
+                  method="POST"
+                  class="flex"
+            >
+                @csrf
+                <input hidden readonly type="text" name="opencastSeriesID" value="{{$series->opencast_series_id}}">
+                <x-button class="bg-green-700 hover:bg-green-800">
+                    Add all planned recordings as clips
+                </x-button>
+            </form>
 
-            <x-button class="bg-green-700 hover:bg-green-800">
-                Add all planned recordings as clips
-            </x-button>
         </div>
     </div>
 @endcan

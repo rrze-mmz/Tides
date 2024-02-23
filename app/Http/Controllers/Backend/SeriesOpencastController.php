@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Enums\Acl;
+use App\Enums\OpencastWorkflowState;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SeriesOpencastActionsRequest;
+use App\Models\Clip;
+use App\Models\Semester;
 use App\Models\Series;
 use App\Services\OpencastService;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 use function PHPUnit\Framework\isEmpty;
 
@@ -20,12 +23,9 @@ class SeriesOpencastController extends Controller
      *
      * @throws AuthorizationException
      */
-    public function createSeries(Series $series, Request $request, OpencastService $opencastService): RedirectResponse
+    public function createSeries(Series $series, OpencastService $opencastService): RedirectResponse
     {
-        $this->authorize('administrate-portal-pages', $series);
-
         $opencastSeriesInfo = $opencastService->getSeriesInfo($series);
-
         if (isEmpty($opencastSeriesInfo->get('metadata'))) {
             $opencastSeriesId = $opencastService->createSeries($series);
             $series->updateOpencastSeriesId($opencastSeriesId);
@@ -39,10 +39,11 @@ class SeriesOpencastController extends Controller
     /**
      * @throws AuthorizationException
      */
-    public function updateAcl(Series $series, Request $request, OpencastService $opencastService)
-    {
-        $this->authorize('administrate-admin-portal-pages');
-
+    public function updateAcl(
+        Series $series,
+        SeriesOpencastActionsRequest $request,
+        OpencastService $opencastService
+    ): RedirectResponse {
         $opencastSeriesInfo = $opencastService->getSeriesInfo($series);
 
         //Opencast doesn't allow to update a series when a workflow is running
@@ -52,10 +53,7 @@ class SeriesOpencastController extends Controller
             return to_route('series.edit', $series);
         }
 
-        $validated = $request->validate([
-            'username' => ['required', 'exists:users'],
-            'action' => ['required', Rule::in(['addUser', 'removeUser'])],
-        ]);
+        $validated = $request->validated();
 
         $response =
             $opencastService->updateSeriesAcl(
@@ -75,20 +73,12 @@ class SeriesOpencastController extends Controller
         return to_route('series.edit', $series);
     }
 
-    public function updateEventsTitle(Series $series, Request $request, OpencastService $opencastService)
-    {
-        $this->authorize('administrate-admin-portal-pages');
-
-        $request->validate([
-            'opencastSeriesID' => [
-                'required',
-                function ($attribute, $value, $fail) use ($series) {
-                    if ($value !== $series->opencast_series_id) {
-                        return $fail($attribute.' must match the current series opencast series ID.');
-                    }
-                },
-            ],
-        ]);
+    public function updateEventsTitle(
+        Series $series,
+        SeriesOpencastActionsRequest $request,
+        OpencastService $opencastService
+    ): RedirectResponse {
+        $request->validated();
 
         $events = $opencastService->getEventsBySeries($series);
 
@@ -97,6 +87,48 @@ class SeriesOpencastController extends Controller
         });
 
         session()->flash('flashMessage', "{$events->count()} Opencast events updated successfully");
+
+        return to_route('series.edit', $series);
+    }
+
+    public function addScheduledEventsAsClips(
+        Series $series,
+        SeriesOpencastActionsRequest $request,
+        OpencastService $opencastService
+    ): RedirectResponse {
+        $request->validated();
+
+        $events = $opencastService->getEventsByStatus(OpencastWorkflowState::SCHEDULED, $series);
+        $clipIdentifiers = $series->clips->pluck('opencast_event_id');
+        $events->each(function (array $event, int $key) use ($series, $clipIdentifiers) {
+            //search if a clip exists for an event. If so then don't insert to avoid duplicates
+            if ($clipIdentifiers->doesntContain($event['identifier'])) {
+                $clip = Clip::create([
+                    'owner_id' => $series->owner_id,
+                    'semester_id' => Semester::current(zuluToCEST($event['start']))->first()->id,
+                    'organization_id' => $series->organization_id,
+                    'language_id' => 4,
+                    'context_id' => 22,
+                    'format_id' => 11,
+                    'type_id' => 11,
+                    'series_id' => $series->id,
+                    'supervisor_id' => auth()->user()->id,
+                    'title' => $event['title'],
+                    'password' => $series->password,
+                    'episode' => $key + 1,
+                    'is_public' => true,
+                    'recording_date' => zuluToCEST($event['start']),
+                    'opencast_event_id' => $event['identifier'],
+                ]);
+                if (! is_null($series->lms_link)) {
+                    $clip->addAcls(collect([Acl::LMS()]));
+
+                } else {
+                    $clip->addAcls(collect([Acl::PORTAL()]));
+                }
+            }
+        });
+        session()->flash('flashMessage', "{$events->count()} Clips created");
 
         return to_route('series.edit', $series);
     }

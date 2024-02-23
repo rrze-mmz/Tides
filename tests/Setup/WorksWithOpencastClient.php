@@ -49,7 +49,7 @@ trait WorksWithOpencastClient
     public function mockServerNotAvailable(): RequestException
     {
         return new RequestException(
-            'Failed to connect to localhost port 8080 after 0 ms: Connection refused ',
+            'cURL error 6: Could not resolve host',
             new Request('GET', 'localhost:8080')
         );
     }
@@ -219,6 +219,45 @@ trait WorksWithOpencastClient
     }
 
     /**
+     * Opencast update series acls response
+     */
+    public function mockUpdateAclResponse(): Response
+    {
+        return new Response(201, [], json_encode([
+            0 => [
+                'allow' => true,
+                'role' => 'ROLE_ADMIN',
+                'action' => 'read',
+            ],
+            1 => [
+                'allow' => true,
+                'role' => 'ROLE_ADMIN',
+                'action' => 'write',
+            ],
+            2 => [
+                'allow' => true,
+                'role' => 'ROLE_USER_ADMIN',
+                'action' => 'read',
+            ],
+            3 => [
+                'allow' => true,
+                'role' => 'ROLE_USER_ADMIN',
+                'action' => 'write',
+            ],
+            4 => [
+                'allow' => true,
+                'role' => 'ROLE_USER_TEST00',
+                'action' => 'read',
+            ],
+            5 => [
+                'allow' => true,
+                'role' => 'ROLE_USER_TEST00',
+                'action' => 'write',
+            ],
+        ]));
+    }
+
+    /**
      * @throws DOMException
      */
     public function mockEventAssets($videoHDAssetID, $audioAssetID): Response
@@ -267,6 +306,46 @@ trait WorksWithOpencastClient
         return new Response(200, [], (
             $output->toXml()
         ));
+    }
+
+    public function mockCreateMediaPackageResponse(): Response
+    {
+        $mp = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
+        $mp .= '<mediapackage xmlns="http://mediapackage.opencastproject.org"';
+        $mp .= 'id="7a0a936a-3d7f-4700-881a-7c05e83d91be" start="2024-02-22T13:50:26Z">';
+        $mp .= '<media/><metadata/><attachments/><publications/></mediapackage>';
+
+        return new Response(201, [], json_encode($mp));
+    }
+
+    public function mockAddCatalogResponse(): Response
+    {
+        $mp = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
+        $mp .= '<mediapackage xmlns="http://mediapackage.opencastproject.org"';
+        $mp .= 'id="5e4cca0e-2f7e-4e38-a86e-ce9092ea74ac" start="2024-02-22T14:03:42Z"><media/><metadata>';
+        $mp .= '<catalog id="a1fe2d1a-1b04-4c1f-a4fd-5ee4b3916202" type="dublincore/episode"><mimetype>';
+        $mp .= 'text/xml</mimetype><tags/>';
+        $mp .= '<url>http://localhost/files/mediapackage/5e4cca0e-2f7ec/a1fe2d16202/dublincore.xml</url>';
+        $mp .= '</catalog></metadata><attachments/><publications/></mediapackage>';
+
+        return new Response(201, [], json_encode($mp));
+    }
+
+    public function mockAddTrackResponse(): Response
+    {
+        $mp = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
+        $mp .= '<mediapackage id="e95c7170-9f79-4b13-bba4-413d45e1e2df" start="2024-02-22T14:20:24Z" ';
+        $mp .= 'xmlns="http://mediapackage.opencastproject.org"><media>';
+        $mp .= '<track id="2761918a-9cde-4d8e-bd4f-ebdb1f1bed4e" type="presenter/source">';
+        $mp .= '<mimetype>video/mp4</mimetype>';
+        $mp .= '<tags/><url>http://localhost/files/mediapackage/e95c2df/2761918e/presenter.mp4</url><live>false</live>';
+        $mp .= '</track></media><metadata>';
+        $mp .= '<catalog id="76a91c39-0692-401d-9caa-b3715d9a12db" type="dublincore/episode">';
+        $mp .= '<mimetype>text/xml</mimetype><tags/><url>';
+        $mp .= 'http://localhost/files/mediapackage/e95c71df/7612db/dublincore.xml</url></catalog></metadata>';
+        $mp .= '<attachments/><publications/></mediapackage>';
+
+        return new Response(201, [], json_encode($mp));
     }
 
     public function mockTrimmingEventsResponse(Series $series): Response

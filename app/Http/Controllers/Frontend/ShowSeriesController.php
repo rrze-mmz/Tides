@@ -26,8 +26,7 @@ class ShowSeriesController extends Controller
     }
 
     /**
-     * Series main page
-     *
+     * Series public page
      *
      * @throws AuthorizationException
      */

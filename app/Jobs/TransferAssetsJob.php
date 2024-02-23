@@ -53,7 +53,6 @@ class TransferAssetsJob implements ShouldQueue
                 ? Storage::disk($this->sourceDisk)->readStream('/'.$settingData['archive_path'].
                     "/$this->eventID/{$file['version']}/{$file['name']}")
                 : Storage::disk($this->sourceDisk)->readStream($file['name']);
-
             try {
                 Storage::disk('videos')->makeDirectory($clipStoragePath);
                 Storage::disk('videos')->writeStream("{$clipStoragePath}/{$file['name']}", $storageDisk);

@@ -244,7 +244,5 @@ function removeTrailingNumbers($string)
     $pattern = '/\s+\d+$/';
 
     // Replace the matched pattern with an empty string
-    $cleanedString = preg_replace($pattern, '', $string);
-
-    return $cleanedString;
+    return preg_replace($pattern, '', $string);
 }

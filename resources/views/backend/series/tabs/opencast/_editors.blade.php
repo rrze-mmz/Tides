@@ -94,6 +94,7 @@
               class="flex flex-1 items-center"
         >
             @csrf
+            <input hidden readonly type="text" name="opencastSeriesID" value="{{$series->opencast_series_id}}">
             <label class="font-normal mr-4 dark:text-white" for="username">Add assistant to opencast series:</label>
             <select name="username"
                     id="username"
