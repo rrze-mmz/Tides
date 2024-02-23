@@ -177,7 +177,7 @@ it('should show an empty list if no opencast events found', function () {
         ->assertSee('no events found for this series');
 });
 
-test('opencast transfer view sjould list all events with event uid', function () {
+test('opencast transfer view should list all events with event uid', function () {
     $series = SeriesFactory::withClips(2)
         ->ownedBy(signInRole(Role::MODERATOR))
         ->withOpencastID()
@@ -207,12 +207,12 @@ it('should queue the transfer opencast assets job', function () {
     $audioUID = $this->faker->uuid();
     $videoHD_UID = $this->faker->uuid();
     $mockHandler = $this->swapOpencastClient();
-    $opencastService = app(OpencastService::class);
+    app(OpencastService::class);
     $mockHandler->append(
+        $this->mockEventAssets($videoHD_UID, $audioUID),
         $this->mockEventByEventID($opencastEventID, OpencastWorkflowState::SUCCEEDED, $archiveVersion),
-        $this->mockEventAssets($videoHD_UID, $audioUID)
     );
-    $opencastService = app(OpencastService::class);
+    app(OpencastService::class);
 
     post(route(
         'admin.clips.opencast.transfer',
@@ -245,10 +245,10 @@ it('transfers opencast event assets to clip', function () {
     $videoHD_UID = $this->faker->uuid();
 
     $mockHandler = $this->swapOpencastClient();
-    $opencastService = app(OpencastService::class);
+    app(OpencastService::class);
     $mockHandler->append(
+        $this->mockEventAssets($videoHD_UID, $audioUID),
         $this->mockEventByEventID($opencastEventID, OpencastWorkflowState::SUCCEEDED, $archiveVersion),
-        $this->mockEventAssets($videoHD_UID, $audioUID)
     );
 
     $fakeStorage

@@ -3,6 +3,7 @@
 use App\Enums\Acl;
 use App\Enums\OpencastWorkflowState;
 use App\Enums\Role;
+use App\Events\SeriesTitleUpdated;
 use App\Livewire\ActivitiesDataTable;
 use App\Livewire\CommentsSection;
 use App\Models\Clip;
@@ -13,6 +14,7 @@ use App\Services\OpencastService;
 use Facades\Tests\Setup\SeriesFactory;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Event;
 use Livewire\Livewire;
 use Tests\Setup\WorksWithOpencastClient;
 
@@ -510,6 +512,21 @@ it('updates opencast series id if is null', function () {
     $series = $series->refresh();
 
     expect($series->opencast_series_id)->not->toBeNull();
+});
+
+it('it updates opencast series title when title is changed', function () {
+    Event::fake([
+        SeriesTitleUpdated::class,
+    ]);
+    $series = SeriesFactory::ownedBy(signInRole(Role::MODERATOR))->create();
+    $this->mockHandler->append($this->mockCreateSeriesResponse());
+    $this->patch(route('series.edit', $series), [
+        'title' => 'changed',
+        'description' => 'changed',
+        'organization_id' => '1',
+    ]);
+    Event::assertDispatched(SeriesTitleUpdated::class);
+
 });
 
 it('shows create oc series button if no series exist in opencast', function () {

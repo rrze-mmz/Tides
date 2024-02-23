@@ -72,13 +72,12 @@ class SeriesController extends Controller
 
         $availableAssistants = collect();
         $opencastSeriesInfo = $opencastService->getSeriesInfo($series);
-
         $chapters = $series->chapters()->orderBy('position')->get();
-        if ($opencastSeriesInfo->get('health')) {
+        if ($opencastSeriesInfo->get('health') && $series->opencast_series_id !== '') {
             $assistants = User::byRole(Role::ASSISTANT)->get();
             //reject all assistants that are already in opencast series acl
             $availableAssistants = $assistants->reject(function ($admin) use ($opencastSeriesInfo) {
-                if (! empty($opencastSeriesInfo->get('metadata'))) {
+                if ($opencastSeriesInfo->get('metadata')->isNotEmpty()) {
                     foreach ($opencastSeriesInfo['metadata']['acl'] as $acl) {
                         //Opencast return Roles as ROLE_USER_USERNAME, so filter users based on this string
                         if (Str::contains($acl['role'], Str::of($admin->username)->upper())) {

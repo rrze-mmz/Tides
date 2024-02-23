@@ -216,12 +216,6 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
     Route::resource('series', SeriesController::class)->except(['show', 'edit']);
     Route::get('/series/{series}', [SeriesController::class, 'edit'])->name('series.edit');
 
-    //Series Opencast routes
-    Route::post('/series/{series}/createOpencastSeries/', [SeriesOpencastController::class, 'createSeries'])
-        ->name('series.opencast.createSeries');
-    Route::post('/series/{series}/updateOpencastSeriesAcl}', [SeriesOpencastController::class, 'updateAcl'])
-        ->name('series.opencast.updateSeriesAcl');
-
     Route::controller(SeriesClipsController::class)->prefix('/series')->group(function () {
         // Create a clip for a certain series.
         Route::get('/{series}/addClip', 'create')->name('series.clips.create');
@@ -331,6 +325,18 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
 
         //Articles
         Route::resource('articles', ArticlesController::class)->except(['show']);
+
+        //Series Opencast routes
+        Route::post('/series/{series}/createOpencastSeries/', [SeriesOpencastController::class, 'createSeries'])
+            ->name('series.opencast.createSeries');
+        Route::post('/series/{series}/updateOpencastSeriesAcl}', [SeriesOpencastController::class, 'updateAcl'])
+            ->name('series.opencast.updateSeriesAcl');
+        Route::post('/series/{series}/updateScheduledEventsTitle', [
+            SeriesOpencastController::class, 'updateEventsTitle',
+        ])->name('series.opencast.updateEventsTitle');
+        Route::post('/series/{series}/addScheduledEventsAsClips', [
+            SeriesOpencastController::class, 'addScheduledEventsAsClips',
+        ])->name('series.opencast.addScheduledEventsAsClips');
     });
 
     //Superadmin routes

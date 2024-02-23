@@ -26,6 +26,17 @@ trait Transferable
         $this->uploadAssets($clip, $deliveryAssets, $eventID, $sourceDisk);
     }
 
+    private function uploadAssets(Clip $clip, Collection $assets, string $eventID = '', string $sourceDisk = '')
+    {
+        Bus::chain([
+            new TransferAssetsJob($clip, $assets, $eventID, $sourceDisk),
+            new CreateWowzaSmilFile($clip),
+        ])->dispatch();
+
+        //mail can be chained inside anonymous function bus parameter but then the test  fails
+        Mail::to($clip->owner->email)->queue(new AssetsTransferred($clip));
+    }
+
     public function checkDropzoneFilesForClipUpload(Clip $clip, array $validatedFiles)
     {
         $sourceDisk = 'video_dropzone';
@@ -36,16 +47,5 @@ trait Transferable
         });
 
         $this->uploadAssets($clip, $assets, '', $sourceDisk);
-    }
-
-    private function uploadAssets(Clip $clip, Collection $assets, string $eventID = '', string $sourceDisk = '')
-    {
-        Bus::chain([
-            new TransferAssetsJob($clip, $assets, $eventID, $sourceDisk),
-            new CreateWowzaSmilFile($clip),
-        ])->dispatch();
-
-        //mail can be chained inside anonymous function bus parameter but then the test  fails
-        Mail::to($clip->owner->email)->queue(new AssetsTransferred($clip));
     }
 }

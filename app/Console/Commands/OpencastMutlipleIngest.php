@@ -5,8 +5,8 @@ namespace App\Console\Commands;
 use App\Enums\Content;
 use App\Models\Clip;
 use App\Services\OpencastService;
-use Illuminaqte\Support\Facades\Log;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class OpencastMutlipleIngest extends Command
 {
@@ -15,7 +15,7 @@ class OpencastMutlipleIngest extends Command
      *
      * @var string
      */
-    protected $signature = 'opencast:mutliple-ingest';
+    protected $signature = 'opencast:multiple-ingest';
 
     /**
      * The console command description.

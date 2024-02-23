@@ -347,7 +347,7 @@
 @endif
 
 @if(isset($opencastEvents['upcoming']) && $opencastEvents['upcoming']->isNotEmpty())
-    <div class="mb-3 border-b border-black pt-10 pb-2 font-semibold font-2xl">
+    <div class="mb-3 border-b border-black pt-10 pb-2 font-semibold font-2x dark:text-white dark:border-white">
         {{ $opencastEvents['upcoming']->count() }} upcoming Opencast events
     </div>
     <div class="flex flex-col">
@@ -367,9 +367,11 @@
                             <th scope="col" class="px-6 py-4">
                                 Presenter
                             </th>
-
                             <th scope="col" class="px-6 py-4">
                                 Start time
+                            </th>
+                            <th scope="col" class="px-6 py-4">
+                                End time
                             </th>
                             <th scope="col" class="px-6 py-4">
                                 Location
@@ -400,12 +402,15 @@
                                     @endif
                                 </td>
                                 <td class="px-6 py-4 ">
-                                    {{ zuluToCEST($event['start']) }}
+                                    {{ zuluToCEST($event['scheduling']['start']) }}
+                                </td>
+                                <td class="px-6 py-4 ">
+                                    {{ zuluToCEST($event['scheduling']['end']) }}
                                 </td>
                                 <td class="px-6 py-4 ">
                                     {{ $event['location'] }}
                                 </td>
-                                <td class="px-6 py-4 text-sm font-light text-green-700">
+                                <td class="px-6 py-4 text-sm font-light text-green-300">
                                     {{ OpencastWorkflowState::tryFrom($event['status'])->lower() }}
                                 </td>
                             </tr>

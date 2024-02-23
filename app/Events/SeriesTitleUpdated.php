@@ -7,7 +7,7 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class SeriesDeleted
+class SeriesTitleUpdated
 {
     use Dispatchable;
     use InteractsWithSockets;
@@ -15,8 +15,6 @@ class SeriesDeleted
 
     /**
      * Create a new event instance.
-     *
-     * @return void
      */
     public function __construct(public Series $series)
     {

@@ -4,11 +4,14 @@ namespace App\Models;
 
 use App\Models\Traits\RecordsActivity;
 use App\Models\Traits\Searchable;
+use App\Observers\PresenterObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
+#[ObservedBy(PresenterObserver::class)]
 class Presenter extends BaseModel
 {
     use HasFactory;

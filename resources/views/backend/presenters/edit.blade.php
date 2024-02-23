@@ -55,16 +55,12 @@
                     />
 
                     <div class="col-span-7 w-4/5 space-x-4">
-                        <x-form.button :link="$link=false"
-                                       type="submit"
-                                       text="Update presenter"
-                        />
-
-                        <x-form.button :link="route('presenters.index')"
-                                       type="back"
-                                       text="Back to presenters index"
-                                       color="green"
-                        />
+                        <x-button class="bg-blue-600 hover:bg-blue-700">
+                            Update Presenter
+                        </x-button>
+                        <x-back-button :url="route('presenters.index')" class="bg-green-600 hove:bg-green-700">
+                            Back to presenters index
+                        </x-back-button>
                     </div>
                 </div>
             </form>

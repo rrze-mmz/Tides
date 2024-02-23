@@ -11,6 +11,8 @@ use App\Models\Traits\Presentable;
 use App\Models\Traits\RecordsActivity;
 use App\Models\Traits\Searchable;
 use App\Models\Traits\Slugable;
+use App\Observers\ClipObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -26,6 +28,7 @@ use Illuminate\Support\Facades\Storage;
  * @method static first()
  * @method static find(int $int)
  */
+#[ObservedBy(ClipObserver::class)]
 class Clip extends BaseModel
 {
     use Accessable;

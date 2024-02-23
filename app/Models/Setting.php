@@ -3,10 +3,13 @@
 namespace App\Models;
 
 use App\Enums\ApplicationStatus;
+use App\Observers\SettingObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\DB;
 
+#[ObservedBy(SettingObserver::class)]
 class Setting extends BaseModel
 {
     use HasFactory;

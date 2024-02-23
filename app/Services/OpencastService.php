@@ -10,7 +10,6 @@ use App\Models\Setting;
 use App\Models\User;
 use App\Notifications\NewOpencastUserAccountCreated;
 use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -94,31 +93,28 @@ class OpencastService
                 $response = collect(json_decode((string) $this->response->getBody(), true));
             }
         } catch (GuzzleException $exception) {
-            Log::error($exception);
+            Log::error($exception->getMessage());
         }
 
         return $response;
     }
 
-    /**
-     * @return array|mixed
-     */
-    public function getSeries(Series $series)
+    public function getSeries(Series $series): Collection
     {
-        $opencastSeries = [];
+        $seriesInfo = collect();
 
-        if (is_null($series->opencast_series_id)) {
-            return $opencastSeries;
+        if (is_null($series->opencast_series_id) || $series->opencast_series_id === '') {
+            return $seriesInfo;
         }
 
         try {
             $this->response = $this->client->get("api/series/{$series->opencast_series_id}?withacl=true");
-            $opencastSeries = json_decode((string) $this->response->getBody(), true);
+            $seriesInfo = collect(json_decode((string) $this->response->getBody(), true));
         } catch (GuzzleException $exception) {
-            Log::error($exception);
+            Log::error($exception->getMessage());
         }
 
-        return $opencastSeries;
+        return $seriesInfo;
     }
 
     /**
@@ -129,7 +125,7 @@ class OpencastService
         ?Series $series = null,
         int $limit = 20,
     ): Collection {
-        $runningWorkflows = collect();
+        $events = collect();
 
         $filter = (is_null($series))
             ? 'status:'.$state->value
@@ -143,28 +139,12 @@ class OpencastService
                     'limit' => $limit,
                 ],
             ]);
-            $runningWorkflows = collect((json_decode((string) $this->response->getBody(), true)));
-        } catch (RequestException $e) {
-            if ($e->hasResponse()) {
-                $status = $e->getResponse()->getStatusCode();
-                $body = $e->getResponse()->getBody();
-                Log::error("status {$status}");
-                Log::error("Error response body {$body}");
-            } else {
-                Log::error("error {$e->getMessage()}");
-            }
-        } catch (GuzzleException $e) {
-            if ($e->hasResponse()) {
-                $status = $e->getResponse()->getStatusCode();
-                $body = $e->getResponse()->getBody();
-                Log::error("status {$status}");
-                Log::error("Error response body {$body}");
-            } else {
-                Log::error("error {$e->getMessage()}");
-            }
+            $events = collect((json_decode((string) $this->response->getBody(), true)));
+        } catch (GuzzleException $exception) {
+            Log::error($exception->getMessage());
         }
 
-        return $runningWorkflows;
+        return $events;
     }
 
     public function getEventsByStatusAndByDate(
@@ -190,24 +170,8 @@ class OpencastService
                 ],
             ]);
             $events = collect((json_decode((string) $this->response->getBody(), true)));
-        } catch (RequestException $e) {
-            if ($e->hasResponse()) {
-                $status = $e->getResponse()->getStatusCode();
-                $body = $e->getResponse()->getBody();
-                Log::error("status {$status}");
-                Log::error("Error response body {$body}");
-            } else {
-                Log::error("error {$e->getMessage()}");
-            }
-        } catch (GuzzleException $e) {
-            if ($e->hasResponse()) {
-                $status = $e->getResponse()->getStatusCode();
-                $body = $e->getResponse()->getBody();
-                Log::error("status {$status}");
-                Log::error("Error response body {$body}");
-            } else {
-                Log::error("error {$e->getMessage()}");
-            }
+        } catch (GuzzleException $exception) {
+            Log::error($exception->getMessage());
         }
 
         return $events;
@@ -216,7 +180,8 @@ class OpencastService
     public function getEventsWaitingForTrimming(?Series $series = null): Collection
     {
         $series = (is_null($series)) ? '' : $series->opencast_series_id;
-        //     /admin-ng/event/events.json?filter=comments:OPEN,status:EVENTS.EVENTS.STATUS.PROCESSED&limit=10&offset=0&sort=start_date:ASC
+        //     /admin-ng/event/events.json
+        //      ?filter=comments:OPEN,status:EVENTS.EVENTS.STATUS.PROCESSED&limit=10&offset=0&sort=start_date:ASC
         $trimmingEvents = collect();
 
         try {
@@ -229,7 +194,7 @@ class OpencastService
             ]);
             $trimmingEvents = collect((json_decode((string) $this->response->getBody(), true)));
         } catch (GuzzleException $exception) {
-            Log::error($exception);
+            Log::error($exception->getMessage());
         }
 
         if ($trimmingEvents->isEmpty()) {
@@ -251,7 +216,7 @@ class OpencastService
                 $this->opencastSettings->data['url']
             ));
         } catch (GuzzleException $exception) {
-            Log::error($exception);
+            Log::error($exception->getMessage());
         }
 
         return $this->response;
@@ -282,18 +247,18 @@ class OpencastService
     public function createSeries(Series $series): Response|ResponseInterface
     {
         try {
-            $this->response = $this->client->post('api/series', $this->createOpencastSeriesFormData($series));
+            $this->response = $this->client->post('api/series', $this->createSeriesFormData($series));
         } catch (GuzzleException $exception) {
-            Log::error($exception);
+            Log::error($exception->getMessage());
         }
 
         return $this->response;
     }
 
     /**
-     * forms the data to to create a new series
+     * forms the data to create a new series
      */
-    public function createOpencastSeriesFormData(Series $series): array
+    public function createSeriesFormData(Series $series): array
     {
         $title = "{$series->title} / tidesSeriesID: {$series->id}";
 
@@ -325,6 +290,83 @@ class OpencastService
         ];
     }
 
+    public function updateSeries(Series $series): Response|ResponseInterface
+    {
+        try {
+            $this->response =
+                $this->client->put(
+                    "api/series/{$series->opencast_series_id}",
+                    $this->updateSeriesFormData($series)
+                );
+        } catch (GuzzleException $exception) {
+            Log::error($exception->getMessage());
+        }
+
+        return $this->response;
+    }
+
+    /**
+     * forms the data to update an existing series
+     */
+    public function updateSeriesFormData(Series $series): array
+    {
+        $title = "{$series->title} / tidesSeriesID: {$series->id}";
+
+        return [
+            'headers' => [
+                'Content-Type' => 'application/x-www-form-urlencoded',
+            ],
+            'form_params' => [
+                'type' => 'dublincore/series',
+                'metadata' => '[{
+                        "flavor": "dublincore/series",
+                        "title": "Opencast Series DublinCore",
+                        "fields": [
+                                {
+                                     "id": "title",
+                                     "value": "'.$title.'",
+                                 },
+                              ]
+                       }]',
+            ],
+        ];
+    }
+
+    public function updateEvent(array $event): Response|ResponseInterface
+    {
+        try {
+            $this->response =
+                $this->client->put(
+                    "api/events/{$event['identifier']}/metadata?type=dublincore/episode",
+                    $this->updateEventsFormData($event)
+                );
+        } catch (GuzzleException $exception) {
+            Log::error($exception->getMessage());
+        }
+
+        return $this->response;
+    }
+
+    /**
+     * forms the data to update an existing series
+     */
+    public function updateEventsFormData(array $event): array
+    {
+        $title = removeTrailingNumbers($event['title']);
+
+        return [
+            'headers' => [
+                'Content-Type' => 'application/x-www-form-urlencoded',
+            ],
+            'form_params' => [
+                'metadata' => ' [{
+                                     "id": "title",
+                                     "value": "'.$title.'",
+                                 }]',
+            ],
+        ];
+    }
+
     public function updateSeriesAcl(
         Series $series,
         Collection $opencastSeriesInfo,
@@ -337,7 +379,7 @@ class OpencastService
                 $this->updateSeriesAclFormData($opencastSeriesInfo, $username, $action)
             );
         } catch (GuzzleException $exception) {
-            Log::error($exception);
+            Log::error($exception->getMessage());
         }
 
         return $this->response;
@@ -345,6 +387,9 @@ class OpencastService
 
     public function updateSeriesAclFormData(Collection $opencastSeriesInfo, string $username, string $action): array
     {
+        if ($opencastSeriesInfo->isEmpty()) {
+            return [];
+        }
         $acls = $opencastSeriesInfo->map(function ($item, $key) {
             if ($key === 'metadata') {
                 return $item['acl'];
@@ -394,7 +439,7 @@ class OpencastService
                 $this->ingestMediaPackageFormData($clip, $videoFile)
             );
         } catch (GuzzleException $exception) {
-            Log::error($exception);
+            Log::error($exception->getMessage());
         }
         //TODO
         // Create upload file table, store upload information and re-ingest if failed before deleting
@@ -441,12 +486,12 @@ class OpencastService
 
     public function createMediaPackage(): string
     {
-        $mediaPackage = [];
+        $mediaPackage = '';
         try {
             $this->response = $this->client->get('/ingest/createMediaPackage');
             $mediaPackage = ((string) $this->response->getBody());
         } catch (GuzzleException $exception) {
-            Log::error($exception);
+            Log::error($exception->getMessage());
         }
 
         return $mediaPackage;
@@ -460,8 +505,9 @@ class OpencastService
                 $this->addDCCatalogFormData($mediaPackage, $clip)
             );
             $mediaPackage = ((string) $this->response->getBody());
+            Log::info($mediaPackage);
         } catch (GuzzleException $exception) {
-            Log::error($exception);
+            Log::error($exception->getMessage());
         }
 
         return $mediaPackage;
@@ -530,7 +576,7 @@ class OpencastService
             );
             $mediaPackage = ((string) $this->response->getBody());
         } catch (GuzzleException $exception) {
-            Log::error($exception);
+            Log::error($exception->getMessage());
         }
 
         return $mediaPackage;
@@ -580,7 +626,7 @@ class OpencastService
             );
             $mediaPackage = collect((json_decode((string) $this->response->getBody(), true)));
         } catch (GuzzleException $exception) {
-            Log::error($exception);
+            Log::error($exception->getMessage());
         }
 
         return $mediaPackage;
@@ -610,28 +656,33 @@ class OpencastService
 
             $processedEvents = $collection->merge(collect(json_decode((string) $canceled->getBody(), true)));
         } catch (GuzzleException $exception) {
-            Log::error($exception);
+            Log::error($exception->getMessage());
         }
 
         return $processedEvents;
     }
 
-    public function getFailedEventsBySeries(Series $series): Collection
+    public function getEventsBySeries(Series $series, ?OpencastWorkflowState $state = null): Collection
     {
-        $failedEvents = collect();
+        $status = '';
+
+        if (! is_null($state)) {
+            $status = ",status:{$state->value}";
+        }
+        $events = collect();
         try {
             $this->response = $this->client->get('api/events', [
                 'query' => [
-                    'filter' => "series:{$series->opencast_series_id},status:".OpencastWorkflowState::FAILED(),
+                    'filter' => "series:{$series->opencast_series_id}{$status}",
                     'sort' => 'start_date:ASC',
                 ],
             ]);
-            $failedEvents = collect(json_decode((string) $this->response->getBody(), true));
+            $events = collect(json_decode((string) $this->response->getBody(), true));
         } catch (GuzzleException $exception) {
-            Log::error($exception);
+            Log::error($exception->getMessage());
         }
 
-        return $failedEvents;
+        return $events;
     }
 
     /**
@@ -639,16 +690,18 @@ class OpencastService
      */
     public function getAssetsByEventID($eventID): Collection
     {
-        $version = $this->getEventByEventID($eventID)->get('archive_version');
-
         try {
-            $this->response = $this->client->get("assets/episode/{$eventID}");
+            $response = $this->client->get("assets/episode/{$eventID}");
         } catch (GuzzleException $exception) {
-            Log::error($exception);
+            Log::error($exception->getMessage());
+
+            return collect();
         }
 
+        $version = $this->getEventByEventID($eventID)->get('archive_version');
+
         // change the xml response to xml object
-        $xmlResponse = simplexml_load_string((string) $this->response->getBody());
+        $xmlResponse = simplexml_load_string((string) $response->getBody());
 
         //format the response and include the created/modified date
         $dateCreated = (string) $xmlResponse->attributes()->start;
@@ -687,7 +740,7 @@ class OpencastService
         try {
             $this->response = $this->client->get("api/events/{$eventID}");
         } catch (GuzzleException $exception) {
-            Log::error($exception);
+            Log::error($exception->getMessage());
         }
 
         return collect(json_decode((string) $this->response->getBody(), true));

@@ -6,13 +6,16 @@ use App\Services\OpencastService;
 use Facades\Tests\Setup\ClipFactory;
 use Facades\Tests\Setup\FileFactory;
 use Facades\Tests\Setup\SeriesFactory;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Storage;
+use Tests\Setup\WorksWithOpencastClient;
 
-uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
+uses(RefreshDatabase::class);
 
-uses(\Illuminate\Foundation\Testing\WithFaker::class);
+uses(WithFaker::class);
 
-uses(\Tests\Setup\WorksWithOpencastClient::class);
+uses(WorksWithOpencastClient::class);
 
 beforeEach(function () {
     $this->mockHandler = $this->swapOpencastClient();
@@ -54,10 +57,10 @@ it('fetches opencast events for a given series', function () {
     $seriesWithoutAssets = SeriesFactory::withClips(1)->withOpencastID()->create();
 
     $this->mockHandler->append(
+        $this->mockEventAssets($videoHD_UID, $audioUID),
         $this->mockEventResponse($seriesWithoutAssets, OpencastWorkflowState::SUCCEEDED, 4, $opencastEventID),
         $this->mockEventAssets($videoHD_UID, $audioUID),
         $this->mockEventByEventID($opencastEventID, OpencastWorkflowState::SUCCEEDED, $archiveVersion),
-        $this->mockEventAssets($videoHD_UID, $audioUID),
     );
 
     $fakeStorage

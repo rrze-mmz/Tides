@@ -1,8 +1,8 @@
-<div class="flex-row my-10 px-3 py-4 bg-white mt-10 font-normal dark:text-white dark:border-white dark:bg-gray-900">
-    <div class="font-medium w-full">
+<div class="flex-row my-10 px-3 py-2 bg-white mt-10 text-lg dark:text-white dark:border-white dark:bg-gray-900">
+    <div class="font-normal w-full">
         Series chapters
     </div>
-    
+
     @if($series->chapters()->count() > 0)
         <form action="{{route('series.chapters.update',$series)}}"
               method="POST"
@@ -51,12 +51,9 @@
                 {{ 'No chapters found for '.$series->title }}
             </div>
             <div class="pt-8">
-                <x-form.button :link="route('series.edit',$series)"
-                               color="green"
-                               type="back"
-                               text="Back to series"
-
-                />
+                <x-back-button :url="route('series.edit', $series)" class="bg-green-600 hover:bg-green-700">
+                    Back to series
+                </x-back-button>
             </div>
 
         </div>

@@ -309,7 +309,12 @@
                     @endforelse
                     @if($reorder)
                         <div class="pt-10">
-                            <x-form.button :link="$link=false" type="submit" text="Reorder Series clips" />
+                            <x-button class="bg-blue-600 hover:bg-blue-700">
+                                Reorder Series clips
+                            </x-button>
+                            <x-back-button :url="route('series.edit',$series)" class="bg-green-600 hover:bg-green-700">
+                                Go Back
+                            </x-back-button>
                         </div>
                 </ul>
             </form>

@@ -1,4 +1,4 @@
-<div class="flex-row my-10 px-3 py-2 bg-white mt-10 font-normal dark:text-white dark:border-white dark:bg-gray-900">
+<div class="flex-row my-10 px-3 py-2 bg-white mt-10 text-lg dark:text-white dark:border-white dark:bg-gray-900">
     <div class="font-normal w-full">
         New chapter
     </div>
@@ -9,7 +9,7 @@
     >
         @csrf
 
-        <div class="flex space-x-2 content-center w-full">
+        <div class="flex space-x-2 content-center w-full dark:text-black">
             <input type="number"
                    min="0"
                    name="position"
@@ -18,6 +18,7 @@
             >
             <input type="text"
                    name="title"
+                   placeholder="Chapter title"
                    class="grow w-1/2"
             >
             <div class="mt-1">

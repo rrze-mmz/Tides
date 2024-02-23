@@ -1,5 +1,5 @@
 @can('administrate-admin-portal-pages')
-    <div class="flex flex-col font-normal">
+    <div class="flex flex-col font-normal py-4">
         <h4 class="mt-4 mb-4 text-green-700  dark:text-green-400">
             <span class="text-xl font-bold">Opencast access policy</span>
         </h4>
@@ -76,7 +76,7 @@
 
                 @empty
                     <tr>
-                        <td class="font-bold italic dark:bg-slate-800 dark:text-white" colspan="4">
+                        <td class="font-bold italic dark:bg-slate-800 dark:text-white py-4" colspan="4">
                             Series in Opencast has no Tides editors
                         </td>
                     </tr>
@@ -94,6 +94,7 @@
               class="flex flex-1 items-center"
         >
             @csrf
+            <input hidden readonly type="text" name="opencastSeriesID" value="{{$series->opencast_series_id}}">
             <label class="font-normal mr-4 dark:text-white" for="username">Add assistant to opencast series:</label>
             <select name="username"
                     id="username"
