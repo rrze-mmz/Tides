@@ -13,9 +13,22 @@
     <div class="flex w-full pt-4">
         @if ($model->image?->id != (int)config('settings.portal.default_image_id'))
             <div>
-                <x-button class="bg-blue-600 hover:bg-blue-700">
-                    Set Default image
-                </x-button>
+                <form
+                    method="POST"
+                    class="w-full px-2 pt-4"
+                    action="{{ route('update.'.$type.'.image', $model) }}"
+                >
+                    @method('PUT')
+                    @csrf
+                    <input type="number"
+                           hidden="hidden"
+                           name="imageID"
+                           readonly
+                           value="{{config('settings.portal.default_image_id')}}">
+                    <x-button class="bg-blue-600 hover:bg-blue-700">
+                        Set Default image
+                    </x-button>
+                </form>
             </div>
         @endif
     </div>

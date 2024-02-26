@@ -9,6 +9,7 @@ use Facades\Tests\Setup\SeriesFactory;
 use Illuminate\Support\Str;
 use Tests\Setup\WorksWithOpencastClient;
 
+use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\post;
 use function PHPUnit\Framework\assertNotSame;
 
@@ -205,8 +206,9 @@ it('validates add scheduled events as clips form data', function () {
 });
 
 it('adds scheduled events as clips for a specific series', function () {
+    $event_identifier = Str::uuid();
     $this->mockHandler->append(
-        $this->mockEventResponse($this->series, OpencastWorkflowState::SCHEDULED),
+        $this->mockEventResponse($this->series, OpencastWorkflowState::SCHEDULED, 2, $event_identifier),
     );
     $this->signInRole(Role::SUPERADMIN);
 
@@ -217,6 +219,7 @@ it('adds scheduled events as clips for a specific series', function () {
     $this->series->refresh();
 
     expect($this->series->clips->count())->toBe(1);
+    assertDatabaseHas('clips', ['opencast_event_id' => $event_identifier]);
 });
 
 it('clips from scheduled events would have an lms acl if series has an lms link', function () {
