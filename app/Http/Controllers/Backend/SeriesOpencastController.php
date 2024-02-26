@@ -116,6 +116,7 @@ class SeriesOpencastController extends Controller
                     'title' => $event['title'],
                     'password' => $series->password,
                     'episode' => $key + 1,
+                    'image_id' => config('settings.portal.default_image_id'),
                     'is_public' => true,
                     'recording_date' => zuluToCEST($event['start']),
                     'opencast_event_id' => $event['identifier'],
