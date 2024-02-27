@@ -20,10 +20,8 @@ class AssetFactory extends Factory
 
     /**
      * Define the model's default state.
-     *
-     * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         $uploadedFile = UploadedFile::fake()->create('video.mp4', '10000', 'video/mp4');
 

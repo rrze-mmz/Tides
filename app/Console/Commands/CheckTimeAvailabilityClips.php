@@ -74,19 +74,15 @@ class CheckTimeAvailabilityClips extends Command
                         "ClipID: {$clip->id} / Title:{$clip->episode} {$clip->title} is still available for users"
                     );
                 }
-            } elseif ($now->lessThan($clip->time_availability_start)) {
-                if ($clip->is_public) {
-                    $clip->is_public = false;
-                    $this->info(
-                        "ClipID: {$clip->id} / Title:{$clip->episode} {$clip->title} will be withdrawn for users"
-                    );
-                } else {
-                    $this->info("ClipID: {$clip->id} / Title:{$clip->episode} {$clip->title} should remain offline");
-                }
+            } elseif ($now->lessThan($clip->time_availability_start) && $clip->is_public) {
+                $clip->is_public = false;
+                $this->info(
+                    "ClipID: {$clip->id} / Title:{$clip->episode} {$clip->title} will be withdrawn for users"
+                );
             } else {
                 $this
-                    ->info("ClipID: {$clip->id} / Title:{$clip->episode} {$clip->title} does not
-                        met the criteria for checks");
+                    ->info("ClipID: {$clip->id} / Title:{$clip->episode} {$clip->title} does not met the criteria".
+                    'for checks');
             }
 
             $clip->save();

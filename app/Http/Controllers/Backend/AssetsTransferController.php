@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Backend\Traits\Transferable;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UploadAssetRequest;
 use App\Models\Clip;
+use App\Models\Traits\UploadAssetRequest;
 use App\Services\OpencastService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;

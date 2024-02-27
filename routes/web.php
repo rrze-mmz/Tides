@@ -278,10 +278,6 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
             Route::get('/{clip}/opencast/list', 'listOpencastEvents')->name('admin.clips.opencast.listEvents');
             Route::post('/{clip}/opencast/transfer', 'transferOpencastFiles')->name('admin.clips.opencast.transfer');
         });
-
-        // Create SMIL files for WOWZA hls streaming
-        Route::get('/clips/{clip}/triggerSmilFiles', TriggerSmilFilesController::class)
-            ->name('admin.clips.triggerSmilFiles');
     });
 
     //Clips Images
@@ -337,6 +333,9 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
         Route::post('/series/{series}/addScheduledEventsAsClips', [
             SeriesOpencastController::class, 'addScheduledEventsAsClips',
         ])->name('series.opencast.addScheduledEventsAsClips');
+
+        Route::get('/clips/{clip}/triggerSmilFiles', TriggerSmilFilesController::class)
+            ->name('admin.clips.triggerSmilFiles');
     });
 
     //Superadmin routes

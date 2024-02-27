@@ -2,6 +2,7 @@
 
 use App\Enums\ApplicationStatus;
 use App\Enums\Role;
+use App\Models\Presenter;
 use App\Models\User;
 
 use function Pest\Laravel\assertDatabaseHas;
@@ -77,6 +78,15 @@ it('creates a presenter with the same name as the user', function () {
     assertDatabaseHas('presenters', [
         'username' => $this->appliedUser->username,
     ]);
+});
+
+it('updates a presenter if a user with same username is found', function () {
+    signIn($this->superadminA);
+    $presenter = Presenter::factory()->create(['username' => $this->appliedUser->username]);
+    post(route('admin.portal.application.grant', ['username' => $this->appliedUser->username]));
+
+    expect($presenter->refresh()->first_name)->toBe($this->appliedUser->first_name);
+    expect($presenter->refresh()->last_name)->toBe($this->appliedUser->last_name);
 });
 
 it('applied user get\'s a moderator role if application is accepted ', function () {

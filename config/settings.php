@@ -13,6 +13,8 @@ return [
         'deploy_repo' => env('DEPLOY_REPO', 'git@github.com/mmz/tides'),
         'deploy_branch' => env('DEPLOY_BRANCH', 'main'),
         'admin_main_address' => env('ADMIN_MAIL_ADDRESS', 'admin@tides.org'),
+        'cdn_server_url' => env('CDN_SERVER_URL', 'http://localhost/'),
+        'cdn_server_secret' => env('CDN_SERVER_SECRET', 'dsnJ23fjeq!'),
     ],
     'user' => [
         'accept_use_terms' => false,

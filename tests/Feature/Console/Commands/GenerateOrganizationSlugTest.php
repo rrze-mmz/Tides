@@ -16,3 +16,15 @@ it('generates organization slug', function () {
 
     expect(Str::slug($organization->name))->toEqual($organization->slug);
 });
+
+it('generates a slug with an asc number if two organizations have the same name', function () {
+    Organization::factory()->create();
+    $this->artisan('organizations:slugs');
+
+    $organizationA = Organization::find(1);
+    $organizationB = Organization::find(2);
+
+    expect($organizationA->name)->toBe($organizationB->name);
+    expect($organizationA->slug)->not()->toBe($organizationB->slug);
+
+});

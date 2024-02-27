@@ -19,8 +19,6 @@ class TriggerSmilFilesController extends Controller
      */
     public function __invoke(Clip $clip, WowzaService $wowzaService): RedirectResponse
     {
-        $this->authorize('edit', $clip);
-
         $wowzaService->createSmilFile($clip);
 
         session()->flash('flashMessage', "{$clip->title} smil files created successfully");

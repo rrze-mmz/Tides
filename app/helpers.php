@@ -206,8 +206,8 @@ function findUserByOpencastRole(string $opencastRole): User|string
 function getProtectedUrl(string $filePath): string
 {
     $filePath = '/'.$filePath;
-    $secret = 'emsJue5Rtv7';
-    $cdn = 'https://vp-cdn-balance.rrze.de/media_bu/';
+    $secret = config('settings.portal.cdn_server_secret');
+    $cdn = config('settings.portal.cdn_server_url');
     $hexTime = dechex(time());
     $userIP = (App::environment(['testing', 'local'])) ? env('FAUTV_USER_IP') : $_SERVER['REMOTE_ADDR'];
     $token = md5($secret.$filePath.$hexTime.$userIP);

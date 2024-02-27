@@ -495,7 +495,7 @@ trait WorksWithOpencastClient
                 'contributor' => [],
                 'series' => ($series) ? $series->title : $this->faker->sentence,
                 'scheduling' => [
-                    'agent_id' => 'test-lecture-hall',
+                    'agent_id' => 'test_lecture_hall',
                     'inputs' => [
                         'Channel A',
                         'Channel B',

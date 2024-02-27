@@ -18,8 +18,13 @@ class LivestreamFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->title,
-            'url' => $this->faker->url,
+            'clip_id' => null,
+            'name' => 'test-lecture-hall',
+            'url' => 'wowza_livestream_url',
+            'content_path' => 'wowza_content_path',
+            'file_path' => 'wowza_file_path',
+            'active' => false,
+            'app_name' => 'test-lecture-hall',
         ];
     }
 }

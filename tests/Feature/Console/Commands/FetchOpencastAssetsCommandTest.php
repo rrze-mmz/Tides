@@ -55,6 +55,9 @@ it('fetches opencast events for a given series', function () {
     $opencastEventID = $this->faker->uuid();
 
     $seriesWithoutAssets = SeriesFactory::withClips(1)->withOpencastID()->create();
+    $clip = $seriesWithoutAssets->clips()->first();
+    $clip->opencast_event_id = $opencastEventID;
+    $clip->save();
 
     $this->mockHandler->append(
         $this->mockEventAssets($videoHD_UID, $audioUID),
@@ -77,5 +80,24 @@ it('fetches opencast events for a given series', function () {
         );
 
     $this->artisan('opencast:finished-events')
-        ->expectsOutput("Videos from Clip {$seriesWithoutAssets->clips()->first()->title} is online");
+        ->expectsOutput("Videos from Clip {$clip->title} is online");
+});
+
+it('output a console message do nothing if no opencast event id found for an empty clip', function () {
+    Storage::fake('videos');
+    $audioUID = $this->faker->uuid();
+    $videoHD_UID = $this->faker->uuid();
+
+    $seriesWithoutAssets = SeriesFactory::withClips(1)->withOpencastID()->create();
+    $clip = $seriesWithoutAssets->clips()->first();
+
+    $this->mockHandler->append(
+        $this->mockEventAssets($videoHD_UID, $audioUID),
+        $this->mockEventResponse($seriesWithoutAssets, OpencastWorkflowState::SUCCEEDED),
+        $this->mockEventAssets($videoHD_UID, $audioUID),
+        $this->mockEventResponse($seriesWithoutAssets, OpencastWorkflowState::SUCCEEDED),
+    );
+
+    $this->artisan('opencast:finished-events')
+        ->expectsOutput("No Opencast Event found for Clip {$clip->title} | [ID]:{$clip->id}");
 });

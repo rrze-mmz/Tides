@@ -5,7 +5,6 @@ namespace App\Console\Commands;
 use App\Http\Controllers\Backend\Traits\Transferable;
 use App\Models\Clip;
 use App\Services\OpencastService;
-use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 
@@ -63,7 +62,7 @@ class FetchOpencastAssets extends Command
                 $events = $opencastService->getProcessedEventsBySeriesID($clip->series->opencast_series_id);
 
                 $events->each(function ($event) use ($clip, $opencastService) {
-                    if ($clip->created_at->format('Y-m-d') === Carbon::parse($event['created'])->format('Y-m-d')) {
+                    if ($clip->opencast_event_id === $event['identifier']) {
                         $this->checkOpencastAssetsForClipUpload($clip, $event['identifier'], $opencastService);
                         $this->info("Videos from Clip {$clip->title} is online");
                     } else {
