@@ -90,6 +90,33 @@ it('will disable time availability for clips with end date of null', function ()
     expect($clip->has_time_availability)->toBe(0);
 });
 
+it('will disable the clip if current time is earlier that the start time and clip is public', function () {
+    $clip = Clip::factory()->create([
+        'is_public' => true,
+        'has_time_availability' => true,
+        'time_availability_start' => Carbon::now()->addDays(10),
+        'time_availability_end' => null,
+    ]);
+
+    artisan('app:check-time-availability-clips')
+        ->expectsOutput("ClipID: {$clip->id} / Title:{$clip->episode} $clip->title will be withdrawn for users");
+    $clip->refresh();
+    expect($clip->is_public)->toBe(0);
+});
+
+it('does nothing for clips that are in the past and disabled', function () {
+    $clip = Clip::factory()->create([
+        'is_public' => false,
+        'has_time_availability' => true,
+        'time_availability_start' => Carbon::now()->addDays(10),
+        'time_availability_end' => Carbon::now()->addDays(15),
+    ]);
+
+    artisan('app:check-time-availability-clips')
+        ->expectsOutput("ClipID: {$clip->id} / Title:{$clip->episode} {$clip->title} does not met the criteria".
+            'for checks');
+});
+
 it('will do nothing if start date is in the future', function () {
     $clip = Clip::factory()->create([
         'is_public' => false,
@@ -98,6 +125,6 @@ it('will do nothing if start date is in the future', function () {
         'time_availability_end' => null,
     ]);
 
-    artisan('app:check-time-availability-clips')
-        ->expectsOutput("ClipID: {$clip->id} / Title:{$clip->episode} {$clip->title} should remain offline");
+    artisan('app:check-time-availability-clips');
+    expect($clip->has_time_availability)->toBe(1);
 });

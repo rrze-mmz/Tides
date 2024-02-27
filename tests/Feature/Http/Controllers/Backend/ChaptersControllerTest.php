@@ -51,6 +51,14 @@ it('has an index page for series chapters', function () {
         ->assertSee($this->series->title);
 });
 
+it('set the first chapter as default if series has no chapters', function () {
+    post(route('series.chapters.create', $this->series), [
+        'position' => 1,
+        'title' => fake()->sentence(),
+    ])->assertRedirect(route('series.chapters.index', $this->series));
+
+    expect($this->series->chapters()->first()->default)->toBe(1);
+});
 it('can store a new chapter for a series', function () {
     post(route('series.chapters.create', $this->series), [
         'position' => 1,

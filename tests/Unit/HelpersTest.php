@@ -170,7 +170,12 @@ it('has a findUserByOpencastRole function', function () {
     expect(findUserByOpencastRole($opencastUserRole))->toBe($opencastUserRole);
 });
 
+it('returns the protected url for a clip file path', function () {
+    expect(getProtectedUrl('/data/2022/10/12/test.mp4'))->toBeString()->toContain('/data/2022/10/12/test.mp4');
+});
+
 it('has a humanFileSizeFormat function ', function () {
+    expect(humanFileSizeFormat('null'))->toBe('0 B');
     expect(humanFileSizeFormat('1024'))->toBe('1.00 kB');
 });
 

@@ -8,10 +8,10 @@ use App\Services\OpencastService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 
-class OpencastMutlipleIngest extends Command
+class OpencastMultipleIngest extends Command
 {
     /**
-     * The name and signature of the consoleq command.
+     * The name and signature of the console command.
      *
      * @var string
      */

@@ -29,6 +29,30 @@ it('denies access to simple user to create a channel', function () {
     get(route('channels.index'))->assertForbidden();
 });
 
+it('lists all channels to portal admins in index page', function () {
+    $this->signInRole(Role::ADMIN);
+    $channel = Channel::factory()->create();
+    get(route('channels.index'))->assertSee(route('channels.edit', $channel));
+});
+
+it('lists only moderator channels in index page for a moderator', function () {
+    $channel = Channel::factory()->create();
+    signIn($this->moderatorWithChannel);
+
+    get(route('channels.index'))
+        ->assertSee(route('channels.edit', $this->moderatorChannel))
+        ->assertDontSee(route('channels.edit', $channel));
+});
+
+it('validates the input to activate a channel', function () {
+    $this->signInRole(Role::ADMIN);
+
+    post(route('channels.store', [
+        'url_handle' => '',
+        'name' => fake()->sentence(256),
+        'description' => fake()->sentence(1001),
+    ]))->assertSessionHasErrors(['url_handle', 'name', 'description']);
+});
 it('allows access to moderators to create a channel', function () {
     signInRole(Role::MODERATOR);
 
