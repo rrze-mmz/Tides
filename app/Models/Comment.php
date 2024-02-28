@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
@@ -21,5 +22,15 @@ class Comment extends BaseModel
     public function owner(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function scopeBackend(Builder $query): void
+    {
+        $query->where('type', 'backend');
+    }
+
+    public function scopeFrontend(Builder $query): void
+    {
+        $query->where('type', 'frontend');
     }
 }

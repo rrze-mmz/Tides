@@ -7,7 +7,16 @@
             Presenters Index
         </div>
         <div class="flex">
-            <x-form.button :link="route('presenters.create')" type="submit" text="Create a new presenter" />
+            <a href="{{route('presenters.create')}}">
+                <x-button class="flex items-center bg-blue-600 hover:bg-blue-700">
+                    <div class="pr-2">
+                        Create a new presenter
+                    </div>
+                    <div>
+                        <x-heroicon-o-plus-circle class="h-6 w-6" />
+                    </div>
+                </x-button>
+            </a>
         </div>
     </div>
     <livewire:presenter-data-table />

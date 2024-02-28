@@ -199,61 +199,168 @@
         </div>
     </div>
 
-    <div class="flex border-b border-black pt-8 pb-2 font-semibold font-2xl dark:text-white dark:border-white ">
-        More actions
-    </div>
-    <div class="flex items-center pt-3 space-x-6">
-        <a href="{{route('frontend.clips.show', $clip)}}">
-            <x-button type='button' class="bg-blue-600 hover:bg-blue-700">
-                Go to public page
-            </x-button>
-        </a>
 
-        @if ($clip->assets()->count())
-            <a href="{{route('admin.clips.triggerSmilFiles', $clip)}}">
-                <x-button type='button' class="bg-blue-600 hover:bg-blue-700">
-                    Trigger smil files
-                </x-button>
-            </a>
-        @endif
+    <div
+        class="pt-10">
+        <div x-data="{
+            activeTab:1,
+            activeClass: 'inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500',
+            inactiveClass : 'inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300',
+            init(){
+             this.updateActiveTabFromURL();
+            window.addEventListener('hashchange', () => this.updateActiveTabFromURL());
+            },
+            updateActiveTabFromURL() {
+            const hash = window.location.hash;
+            switch(hash) {
+                case '#assets':
+                    this.activeTab = 1;
+                    break;
+                case '#opencast':
+                    this.activeTab = 2;
+                    break;
+                case '#actions':
+                    this.activeTab = 3;
+                    break;
+                case '#comments-section':
+                    this.activeTab = 4;
+                    break;
+                case '#logs':
+                    this.activeTab = 5;
+                    break;
+                default:
+                    this.activeTab = 1; // Default to the first tab if no matching hash
+            }
+        }
+    }" class="w-full">
+            <div class="text-md font-medium text-center text-gray-500 border-b border-gray-200
+        dark:text-gray-400 dark:border-gray-700">
+                <ul class="flex flex-wrap -mb-px">
+                    <li class="me-2">
+                        <a href="#assets"
+                           x-on:click="activeTab = 1"
+                           :class="activeTab === 1 ? activeClass : inactiveClass"
+                           aria-current="page"
+                        >
+                            Assets
+                        </a>
+                    </li>
+                    @if(isset($opencastSeriesInfo['health']) && $opencastSeriesInfo['health'])
+                        <li class="me-2">
+                            <a href="#opencast"
+                               x-on:click="activeTab = 2"
+                               :class="activeTab === 2 ? activeClass : inactiveClass"
+                            >
+                                Opencast
+                            </a>
+                        </li>
+                    @endif
+                    <li class="me-2">
+                        <a href="#actions"
+                           x-on:click="activeTab = 3"
+                           :class="activeTab === 3 ? activeClass : inactiveClass"
+                        >
+                            {{ __('series.common.actions') }}
+                        </a>
+                    </li>
+                    <li class="me-2">
+                        <a href="#comments-section"
+                           x-on:click="activeTab = 4"
+                           :class="activeTab === 4 ? activeClass : inactiveClass"
+                        >
+                            <div class="flex items-center">
+                                <div>
+                                    {{__('clip.frontend.comments')}}
+                                </div>
+                                @if($count  = $clip->comments()->backend()->count() > 0)
+                                    <span
+                                        class="inline-flex items-center justify-center w-4 h-4 ms-2 text-xs
+                                    font-semibold text-white bg-blue-500 rounded-full">
+                                        {{ $count }}
+                                    </span>
+                                @endif
+                            </div>
 
-        @if(!$clip->is_livestream)
-            <a href="{{route('admin.clips.dropzone.listFiles', $clip)}}">
-                <x-button type='button' class="bg-blue-600 hover:bg-blue-700">
-                    Transfer files from drop zone
-                </x-button>
-            </a>
-        @endif
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#logs"
+                           x-on:click="activeTab = 5"
+                           :class="activeTab === 5 ? activeClass : inactiveClass"
+                        >
+                            Activities
+                        </a>
+                    </li>
+                </ul>
+            </div>
 
-        @if($opencastConnectionCollection['status']==='pass' && !$clip->is_livestream)
-            <a href="{{route('admin.clips.opencast.listEvents', $clip)}}">
-                <x-button type='button' class="bg-blue-600 hover:bg-blue-700">
-                    Transfer files from Opencast
-                </x-button>
-            </a>
-        @endif
+            <div class="mt-6">
+                <div x-show="activeTab === 1" id="clips" class="w-full ">
+                    {{--                    @include('backend.series.buttons.actions')--}}
+                    @include('backend.assets.list', ['assets'=>$clip->assets])
+                </div>
+                <div x-show="activeTab === 2" id="opencast">
+                    {{--                    @include('backend.series.tabs.opencast.index')--}}
 
-        <form action="{{ route('clips.destroy',$clip) }}"
-              method="POST"
-        >
-            @csrf
-            @method('DELETE')
-            <x-button type='submit' class="bg-red-600 hover:bg-red-700">
-                Delete Clip
-            </x-button>
-        </form>
-    </div>
+                </div>
+                <div x-show="activeTab === 3" id="actions">
+                    <div class="flex items-center pt-3 space-x-6 pb-10">
+                        <a href="{{route('frontend.clips.show', $clip)}}">
+                            <x-button type='button' class="bg-blue-600 hover:bg-blue-700">
+                                Go to public page
+                            </x-button>
+                        </a>
 
-    <div x-show="activeTab === 4" id="comments">
-        <div class="flex flex-col pt-10">
-            <h2 class="border-b-2 border-black pb-2 text-2xl font-semibold">
-                Backend {{ __('clip.frontend.comments') }}
-            </h2>
-            <livewire:comments-section :model="$clip" :type="'backend'" />
+                        @if ($clip->assets()->count())
+                            <a href="{{route('admin.clips.triggerSmilFiles', $clip)}}">
+                                <x-button type='button' class="bg-blue-600 hover:bg-blue-700">
+                                    Trigger smil files
+                                </x-button>
+                            </a>
+                        @endif
 
+                        @if(!$clip->is_livestream)
+                            <a href="{{route('admin.clips.dropzone.listFiles', $clip)}}">
+                                <x-button type='button' class="bg-blue-600 hover:bg-blue-700">
+                                    Transfer files from drop zone
+                                </x-button>
+                            </a>
+                        @endif
+
+                        @if($opencastConnectionCollection['status']==='pass' && !$clip->is_livestream)
+                            <a href="{{route('admin.clips.opencast.listEvents', $clip)}}">
+                                <x-button type='button' class="bg-blue-600 hover:bg-blue-700">
+                                    Transfer files from Opencast
+                                </x-button>
+                            </a>
+                        @endif
+
+                        <form action="{{ route('clips.destroy',$clip) }}"
+                              method="POST"
+                        >
+                            @csrf
+                            @method('DELETE')
+                            <x-button type='submit' class="bg-red-600 hover:bg-red-700">
+                                Delete Clip
+                            </x-button>
+                        </form>
+                    </div>
+
+                </div>
+                <div x-show="activeTab === 4" id="comments-section">
+                    <div class="flex flex-col pt-5 font-normal dark:text-white">
+                        <div class="w-2/3">
+                            <livewire:comments-section :model="$clip" :type="'backend'" />
+                        </div>
+                    </div>
+                </div>
+                <div x-show="activeTab === 5" id="logs">
+                    <div class="flex flex-col pt-10">
+                        <livewire:activities-data-table :model="'clip'" :object-i-d="$clip->id" />
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-
-    @include('backend.assets.list', ['assets'=>$clip->assets])
 
 @endsection
