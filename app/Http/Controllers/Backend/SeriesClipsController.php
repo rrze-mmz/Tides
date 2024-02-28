@@ -94,7 +94,7 @@ class SeriesClipsController extends Controller
 
     public function listClips(Series $series): Factory|View|Application
     {
-        $clips = Clip::select('id', 'title', 'slug', 'episode')
+        $clips = Clip::select('id', 'title', 'slug', 'episode', 'is_public')
             ->where('series_id', $series->id)
             ->addSelect(
                 [
