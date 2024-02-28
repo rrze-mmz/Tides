@@ -11,7 +11,7 @@
             <div class="flex">
                 <div>
                     <a href="{{ route('images.create') }}">
-                        <x-button class="flex items-center bg-blue-700 hover:bg-blue-700">
+                        <x-button class="flex items-center bg-blue-600 hover:bg-blue-700">
                             <div class="pr-2">
                                 Create a new image
                             </div>

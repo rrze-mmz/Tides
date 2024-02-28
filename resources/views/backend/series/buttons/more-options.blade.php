@@ -1,4 +1,4 @@
-<div class="flex items-center pt-3 space-x-2">
+<div class="flex items-center py-4 space-x-2">
     <a href="{{ route('series.clips.changeEpisode', $series) }}">
         <x-button class="bg-green-600 hover:bg-green-700">
             Reorder clips

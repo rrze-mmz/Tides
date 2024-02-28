@@ -2,6 +2,7 @@
 
 use App\Enums\Acl;
 use App\Enums\Role;
+use App\Livewire\ActivitiesDataTable;
 use App\Models\Chapter;
 use App\Models\Clip;
 use App\Models\Image;
@@ -11,6 +12,7 @@ use App\Models\Tag;
 use Carbon\Carbon;
 use Facades\Tests\Setup\ClipFactory;
 use Facades\Tests\Setup\SeriesFactory;
+use Livewire\Livewire;
 
 use function Pest\Faker\fake;
 use function Pest\Laravel\assertDatabaseCount;
@@ -637,6 +639,16 @@ test('a moderator cannot delete an not owned clip', function () {
 
     delete(route('clips.edit', $clip))->assertForbidden();
     assertDatabaseHas('clips', $clip->only('id'));
+});
+
+it('shows clip activities in clip edit page', function () {
+    $clip = ClipFactory::create();
+    signInRole(Role::ADMIN);
+
+    get(route('clips.edit', $clip))->assertSee('Activities');
+
+    Livewire::test(ActivitiesDataTable::class)
+        ->assertSee('created clip');
 });
 
 test('an admin user can delete a not owned clip', function () {

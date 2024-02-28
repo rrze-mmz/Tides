@@ -11,7 +11,7 @@
         </div>
     </div>
 
-    <div class="flex justify-center content-center  py-2 px-2">
+    <div class="flex justify-center content-center py-2 px-2">
         <form action="{{ route('series.update',$series) }}"
               method="POST"
               class=" @if(auth()->user()->isAdmin()) w-4/5 @else w-full @endif"
@@ -86,11 +86,13 @@
         </div>
     </div>
 
-    <div class="flex pt-8 pb-2  font-2xl w-full  font-normal">
+
+    <div
+        class="">
         <div x-data="{
             activeTab:1,
-            activeClass: 'inline-block px-4 py-2 bg-blue-800  rounded-lg font-bold',
-            inactiveClass : 'inline-block px-4 py-2 bg-blue-500  rounded-lg',
+            activeClass: 'inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500',
+            inactiveClass : 'inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300',
             init(){
              this.updateActiveTabFromURL();
             window.addEventListener('hashchange', () => this.updateActiveTabFromURL());
@@ -118,50 +120,55 @@
             }
         }
     }" class="w-full">
-            <ul class="flex space-x-4  pt-8 pb-2 text-white border-b border-black dark:border-white ">
-                <li>
-                    <a href="#clips"
-                       x-on:click="activeTab = 1"
-                       :class="activeTab === 1 ? activeClass : inactiveClass"
-                    >
-                        Clips
-                    </a>
-                </li>
-                @if(isset($opencastSeriesInfo['health']) && $opencastSeriesInfo['health'])
-                    <li>
-                        <a href="#opencast"
-                           x-on:click="activeTab = 2"
-                           :class="activeTab === 2 ? activeClass : inactiveClass"
+            <div class="text-md font-medium text-center text-gray-500 border-b border-gray-200
+        dark:text-white dark:border-gray-700">
+                <ul class="flex flex-wrap -mb-px">
+                    <li class="me-2">
+                        <a href="#clips"
+                           x-on:click="activeTab = 1"
+                           :class="activeTab === 1 ? activeClass : inactiveClass"
+                           aria-current="page"
                         >
-                            Opencast
+                            Clips
                         </a>
                     </li>
-                @endif
-                <li>
-                    <a href="#actions"
-                       x-on:click="activeTab = 3"
-                       :class="activeTab === 3 ? activeClass : inactiveClass"
-                    >
-                        {{ __('series.common.actions') }}
-                    </a>
-                </li>
-                <li>
-                    <a href="#comments-section"
-                       x-on:click="activeTab = 4"
-                       :class="activeTab === 4 ? activeClass : inactiveClass"
-                    >
-                        Comments
-                    </a>
-                </li>
-                <li>
-                    <a href="#logs"
-                       x-on:click="activeTab = 5"
-                       :class="activeTab === 5 ? activeClass : inactiveClass"
-                    >
-                        Activities
-                    </a>
-                </li>
-            </ul>
+                    @if(isset($opencastSeriesInfo['health']) && $opencastSeriesInfo['health'])
+                        <li class="me-2">
+                            <a href="#opencast"
+                               x-on:click="activeTab = 2"
+                               :class="activeTab === 2 ? activeClass : inactiveClass"
+                            >
+                                Opencast
+                            </a>
+                        </li>
+                    @endif
+                    <li class="me-2">
+                        <a href="#actions"
+                           x-on:click="activeTab = 3"
+                           :class="activeTab === 3 ? activeClass : inactiveClass"
+                        >
+                            {{ __('series.common.actions') }}
+                        </a>
+                    </li>
+                    <li class="me-2">
+                        <a href="#comments-section"
+                           x-on:click="activeTab = 4"
+                           :class="activeTab === 4 ? activeClass : inactiveClass"
+                        >
+                            {{__('clip.frontend.comments')}}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#logs"
+                           x-on:click="activeTab = 5"
+                           :class="activeTab === 5 ? activeClass : inactiveClass"
+                        >
+                            Activities
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
             <div class="mt-6">
                 <div x-show="activeTab === 1" id="clips" class="w-full ">
                     @include('backend.series.buttons.actions')
@@ -176,18 +183,12 @@
                 </div>
                 <div x-show="activeTab === 4" id="comments-section">
                     <div class="flex flex-col pt-5 font-normal dark:text-white">
-                        <h2 class="text-2xl font-semibold pb-2 border-b-2 border-black">
-                            Backend {{ __('clip.frontend.comments') }}
-                        </h2>
-                        <livewire:comments-section :model="$series" :type="'backend'" />
+                        <div class="w-2/3">
+                            <livewire:comments-section :model="$series" :type="'backend'" />
+                        </div>
                     </div>
                 </div>
                 <div x-show="activeTab === 5" id="logs">
-                    <div class="flex flex-col pt-5 font-normal dark:text-white">
-                        <h2 class="text-2xl font-semibold pb-2 border-b-2 border-black dark:border-white">
-                            {{ $series->title }} - Activities
-                        </h2>
-                    </div>
                     <div class="flex flex-col pt-10">
                         <livewire:activities-data-table :model="'series'" :object-i-d="$series->id" />
                     </div>
@@ -195,4 +196,5 @@
             </div>
         </div>
     </div>
+
 @endsection

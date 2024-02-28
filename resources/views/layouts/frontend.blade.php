@@ -30,14 +30,19 @@
         </div>
     </main>
 
-    <footer
-        class="grid h-16 grid-cols-3 gap-2 items-center justify-between bg-gray-100 dark:bg-sky-950
-        text-dark dark:text-gray-200">
-        <div class="col-span-2 items-center text-center text-sm text-gray-300 dark:text-white sm:text-base">
-            Copyright @ {{ Illuminate\Support\Carbon::now()->year }} MIT Licence
-        </div>
-        <div class="text-sm">
-            @include('layouts.frontend.bottom-navigation')
+
+    <footer class="bg-gray-100 dark:bg-sky-950">
+        <div
+            class="flex w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between text-dark
+                dark:text-white">
+            <div class="text-sm sm:text-center grow">
+                Copyright @ {{ Illuminate\Support\Carbon::now()->year }} MIT Licence
+            </div>
+
+            <div>
+                @include('layouts.frontend.bottom-navigation')
+            </div>
+
         </div>
     </footer>
 </div>

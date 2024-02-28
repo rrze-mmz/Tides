@@ -61,25 +61,25 @@ it('has an faq menu item,', function () {
 });
 
 it('has a contact menu item,', function () {
-    $menuItem = '<a href="'.route('frontend.contact').'" class="text-white">';
+    $menuItem = '<a href="'.route('frontend.contact').'">';
 
     get(route('home'))->assertSee($menuItem, false);
 });
 
 it('has an imprint menu item,', function () {
-    $menuItem = '<a href="'.route('frontend.contact').'" class="text-white">';
+    $menuItem = '<a href="'.route('frontend.contact').'">';
 
     get(route('home'))->assertSee($menuItem, false);
 });
 
 it('has a privacy menu item,', function () {
-    $menuItem = '<a href="'.route('frontend.privacy').'" class="text-white">';
+    $menuItem = '<a href="'.route('frontend.privacy').'">';
 
     get(route('home'))->assertSee($menuItem, false);
 });
 
 it('has an accessibility menu item,', function () {
-    $menuItem = '<a href="'.route('frontend.accessibility').'" class="text-white">';
+    $menuItem = '<a href="'.route('frontend.accessibility').'">';
 
     get(route('home'))->assertSee($menuItem, false);
 });
