@@ -222,8 +222,14 @@
                             <div class="w-1/12">
                                 @if ($reorder)
                                     <label>
-                                        <input class="w-1/2" type="number" name="episodes[{{$clip->id}}]"
-                                               value="{{$clip->episode}}">
+                                        <input class="w-1/2 dark:text-black" type="number"
+                                               name="episodes[{{$clip->id}}]"
+                                               value="{{$loop->index + 1}}"
+                                        >
+                                        <div class="col-start-2 col-end-6">
+                                            <p class="mt-2 w-full text-sm text-green-500 dark:text-green-200">
+                                                Actual episode: {{ $clip->episode }}</p>
+                                        </div>
                                     </label>
                                     @error('episodes')
                                     <p class="mt-2 w-full text-xs text-red-500">{{ $message }}</p>
@@ -308,7 +314,7 @@
                         </div>
                     @endforelse
                     @if($reorder)
-                        <div class="pt-10">
+                        <div class="pt-10 space-x-4">
                             <x-button class="bg-blue-600 hover:bg-blue-700">
                                 Reorder Series clips
                             </x-button>
