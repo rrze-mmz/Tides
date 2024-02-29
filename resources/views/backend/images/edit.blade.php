@@ -187,7 +187,7 @@
         </div>
     @endif
     @if($image->clips()->count() > 0)
-        <div class="flex items-center border-b-2 border-black pt-10">
+        <div class="flex items-center border-b-2 border-black pt-10 dark:text-white dark:border-white">
             <div class="pr-2">
                 <x-heroicon-o-user-group class="h-6 w-6" />
             </div>
@@ -198,7 +198,7 @@
             <div class="mt-3 w-full py-3">
                 <ul>
                     @foreach($image->clips->take(5) as $clip)
-                        <li class="mt-2 mb-2 w-full p-2">
+                        <li class="mt-2 mb-2 w-full p-2 dark:text-white">
                             <div class="flex items-center align-middle">
                                 <div>
                                     {{  $clip->title }}

@@ -12,6 +12,8 @@ return [
         'update' => 'aktualisieren',
         'delete' => 'löschen',
         'show' => 'anzeigen',
+        'upload' => 'hochladen',
+        'download' => 'herunterladen',
     ],
     'menu' => [
         'dashboard' => 'Dashboard',
@@ -48,6 +50,7 @@ return [
         'width' => 'Breite',
         'height' => 'Höhe',
         'mime type' => 'Media Type',
+        'decline' => 'Ablehnen',
     ],
     'language' => [
         'English' => 'Englisch',

@@ -334,16 +334,14 @@
                                 </x-button>
                             </a>
                         @endif
-
-                        <form action="{{ route('clips.destroy',$clip) }}"
-                              method="POST"
-                        >
-                            @csrf
-                            @method('DELETE')
-                            <x-button type='submit' class="bg-red-600 hover:bg-red-700">
-                                Delete Clip
-                            </x-button>
-                        </form>
+                        <x-modals.delete :route="route('clips.destroy', $clip)">
+                            <x-slot:title>
+                                {{__('clip.backend.delete.modal title',['clip_title'=>$clip->title])}}
+                            </x-slot:title>
+                            <x-slot:body>
+                                {{__('clip.backend.delete.modal body')}}
+                            </x-slot:body>
+                        </x-modals.delete>
                     </div>
 
                 </div>
