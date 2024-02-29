@@ -174,21 +174,23 @@
                                 <div>{{ $presenter->email }}</div>
                             </td>
                             <td class="w-2/12 px-6 py-4 text-right text-sm font-medium leading-5 whitespace-no-wrap">
-                                <div class="flex space-x-2">
-                                    <x-form.button :link="route('presenters.edit',$presenter)"
-                                                   type="submit"
-                                                   text="Edit"
-                                    />
-                                    <form action="{{ route('presenters.destroy', $presenter) }}"
-                                          method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <x-form.button :link="$link=false"
-                                                       type="delete"
-                                                       text="Delete"
-                                                       color="red"
-                                        />
-                                    </form>
+                                <div class="flex space-x-2 justify-center content-center text-center ">
+                                    <a href="{{route('presenters.edit',$presenter)}}">
+                                        <x-button class="bg-blue-600 hover:bg-blue-700">
+                                            {{__('common.actions.edit')}}
+                                        </x-button>
+                                    </a>
+                                    <x-modals.delete
+                                        :route="route('presenters.destroy', $presenter)"
+                                        class="w-full justify-center"
+                                    >
+                                        <x-slot:title>
+                                            Remove Presenter {{ $presenter->getFullNameAttribute() }} ?
+                                        </x-slot:title>
+                                        <x-slot:body>
+                                            All presenters clips and series will remain intact
+                                        </x-slot:body>
+                                    </x-modals.delete>
                                 </div>
                             </td>
                         </tr>

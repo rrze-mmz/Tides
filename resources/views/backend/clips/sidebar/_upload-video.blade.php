@@ -10,12 +10,9 @@
         @csrf
         <input type="file" id="asset" name="asset" class="dark:text-white">
 
-        <x-form.button link="$link=false"
-                       type="submit"
-                       text="Upload"
-                       color="green"
-                       additional-classes="w-full mt-6"
-        />
+        <x-button class="bg-green-600 hover:bg-green-700 w-full mt-6 justify-center">
+            Video {{__('common.actions.upload')}}
+        </x-button>
 
         @error('asset')
         <p class="mt-2 text-xs text-red-500">{{ $message }}</p>

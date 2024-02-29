@@ -12,6 +12,8 @@ return [
         'update' => 'update',
         'delete' => 'delete',
         'show' => 'show',
+        'upload' => 'upload',
+        'download' => 'download',
     ],
     'menu' => [
         'dashboard' => 'Dashboard',
@@ -46,6 +48,7 @@ return [
         'width' => 'width',
         'height' => 'height',
         'mime type' => 'Mime Type',
+        'decline' => 'Decline',
     ],
     'language' => [
         'English' => 'English',

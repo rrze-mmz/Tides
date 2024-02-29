@@ -25,6 +25,12 @@ return [
         'Set a series owner' => 'Set a series owner',
         'Update Series' => 'Update series',
         'Add a series member' => 'Add a series member',
+        'delete' => [
+            'modal title' => 'Are you certain you wish to delete the series titled ":series_title"?',
+            'modal body' => 'Please proceed with caution. Deleting this series will permanently remove all associated '.
+                'clips and all their assets, including video files and transcriptions. Once deleted, the series will '.
+                'no longer be accessible to users.',
 
+        ],
     ],
 ];

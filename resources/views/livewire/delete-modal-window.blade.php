@@ -2,12 +2,12 @@
     <x-button class="static bg-red-600 hover:bg-red-700"
               wire:click="$set('showModal',true)">
         Delete
-        <x-heroicon-o-document-remove class="ml-2 h-4 w-4"/>
+        <x-heroicon-o-document-remove class="ml-2 h-4 w-4" />
     </x-button>
 
     <x-modal wire:model="showModal">
         <x-slot name="title">
-            Are you sure you want to delete Image: {{ $model->description }} ?
+            Are you sure you want to delete Image: {]{ $model->description }} ?
         </x-slot>
         <x-slot name="body">
             <form

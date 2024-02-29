@@ -1,7 +1,7 @@
 @extends('layouts.backend')
 
 @section('content')
-    <div class="flex pb-2 font-semibold border-b border-black font-2xl">
+    <div class="flex pb-2 font-semibold border-b border-black font-2xl  dark:text-white dark:border-white">
         {{ __('common.heading.create new series') }}
     </div>
     <div class="flex py-2 px-2">

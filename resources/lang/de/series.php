@@ -25,6 +25,12 @@ return [
         'Set a series owner' => 'Serien-Besitzer einsetzen',
         'Update Series' => 'Serien aktualisieren',
         'Add a series member' => 'Neue Serien-Teilnehmer hinzufügen',
+        'delete' => [
+            'modal title' => 'Sind Sie sicher, dass Sie den Serien „:clip_title“ löschen möchten?',
+            'modal body' => 'Bitte vorsichtig vorgehen. Das Löschen dieses Serien wird alle zugehörigen Clips sowie '.
+                            'die  Ressourcen, einschließlich Videodateien und Transkriptionen, dauerhaft entfernen. '.
+                            'Nach dem Löschen ist die Serien für Benutzer nicht mehr zugänglich.',
 
+        ],
     ],
 ];
