@@ -7,7 +7,7 @@
     @else
         <div class="flex items-center border-b border-black pb-2 font-semibold font-2xl align-items-center
     dark:text-white dark:border-white">
-            <div class="pr-4">
+            <div class="flex text-2xl">
                 Your channels
             </div>
         </div>

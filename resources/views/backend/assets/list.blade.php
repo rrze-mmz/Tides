@@ -30,14 +30,22 @@
                 <div class="w-2/12"> {{ $asset->durationToHours() }}</div>
                 <div class="w-2/12"> {{ $asset->width }} x {{ $asset->height }}</div>
                 <div class="flex w-2/12 items-center align-items-center space-x-2">
-                    <x-form.button :link="route('assets.download',$asset)" type="submit" text="Download" />
-                    <form method="POST"
-                          action="{{$asset->path() }}"
+                    <x-button class="bg-blue-600 hover:bg-blue-700">
+                        {{ __('common.actions.download') }}
+                    </x-button>
+                    <x-modals.delete
+                        :route="route('assets.destroy', $asset)"
+                        class="w-full justify-center"
                     >
-                        @csrf
-                        @method('DELETE')
-                        <x-form.button :link="$link=false" type="delete" text="Delete" color="red" />
-                    </form>
+                        <x-slot:title>
+                            {{ __('asset.backend.delete.modal title',[
+                            'asset_original_file_name'=>$asset->original_file_name
+                            ]) }}
+                        </x-slot:title>
+                        <x-slot:body>
+                            {{ __('asset.backend.delete.modal body') }}
+                        </x-slot:body>
+                    </x-modals.delete>
                 </div>
             </li>
         @empty

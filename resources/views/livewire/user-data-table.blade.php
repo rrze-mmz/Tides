@@ -171,13 +171,24 @@
                                                       wire:click="route('users.destroy', $user)">Edit
                                             </x-button>
                                         </a>
-
-                                        <form action="{{ route('users.destroy', $user) }}"
-                                              method="POST">
-                                            @csrf
-                                            @method('DELETE')
-                                            <x-button class="bg-red-500 hover:bg-red-700"> Delete</x-button>
-                                        </form>
+                                        @can('administrate-superadmin-portal-pages')
+                                            <x-modals.delete
+                                                :route="route('users.destroy', $user)"
+                                                class="w-full justify-center"
+                                            >
+                                                <x-slot:title>
+                                                    {{ __('user.backend.delete.modal title',[
+                                                    'user_fullname'=>$user->getFullNameAttribute()
+                                                    ]) }}
+                                                </x-slot:title>
+                                                <x-slot:body>
+                                                    {{ __('user.backend.delete.modal body', [
+                                                        'series_counter' => $user->series()->count(),
+                                                        'clips_counter'  => $user->clips()->count(),
+                                                    ]) }}
+                                                </x-slot:body>
+                                            </x-modals.delete>
+                                        @endcan
                                     </div>
                                 @endif
                             </td>

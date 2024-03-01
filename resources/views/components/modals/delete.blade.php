@@ -1,23 +1,15 @@
-@php use Illuminate\Support\Str; @endphp
+@use('Illuminate\Support\Str')
 @props(['route','btn_text'=> Str::ucfirst(__('common.actions.delete'))])
 <div x-data="{ open: false }">
     <!-- Modal toggle -->
     <x-button @click="open = !open" type="button" {{ $attributes->merge(['class'=> 'bg-red-600 hover:bg-red-700']) }}>
         {{ $btn_text }}
     </x-button>
-    {{--    <button @click="open = !open"--}}
-    {{--            class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300--}}
-    {{--        font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700--}}
-    {{--        dark:focus:ring-blue-800"--}}
-    {{--            type="button"--}}
-    {{--    >--}}
-    {{--        Toggle modal--}}
-    {{--    </button>--}}
-
     <div x-show="open" @click.away="open = false" @keydown.escape.window="open = false"
-         class="absolute inset-0 m-auto h-64 max-w-lg rounded-md dark:bg-slate-800">
+         class="absolute inset-0 m-auto h-64 max-w-full sm:max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg
+        xl:max-w-2/3 2xl:max-w-screen-2/3 rounded-md dark:bg-slate-800">
         <!-- Modal content -->
-        <div class="bg-white rounded-lg shadow dark:bg-gray-700">
+        <div class="bg-gray-100 rounded-lg shadow dark:bg-gray-700">
             <!-- Modal header -->
             <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                 <h3 class="text-xl font-se text-gray-900 dark:text-white">
@@ -41,7 +33,7 @@
                 @csrf
                 <!-- Modal body -->
                 <div class="p-4 md:p-5 space-y-4">
-                    <p class="text-base leading-relaxed text-gray-500 dark:text-white">
+                    <p class="text-base leading-relaxed text-gray-500 dark:text-white text-left">
                         {{ $body }}
                     </p>
                 </div>
@@ -55,10 +47,10 @@
                         {{  $btn_text }}
                     </button>
                     <button @click="open = false" data-modal-hide="static-modal" type="button"
-                            class="py-2.5 px-5 ms-3 text-sm font-medium text-white focus:outline-none bg-white
-                            rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10
+                            class="py-2.5 px-5 ms-3 text-sm font-medium text-white focus:outline-none bg-blue-600
+                            rounded-lg border border-gray-200 hover:bg-blue-700  focus:z-10
                             focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800
-                            dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                            dark:text-white dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
                         {{__('common.forms.decline')}}
                     </button>
                 </div>

@@ -27,7 +27,7 @@
             </div>
             @enderror
 
-            <x-button class="bg-blue-600 hover:bg-blue-700">
+            <x-button class="bg-green-600 hover:bg-green-700">
                 Upload file
             </x-button>
         </form>
@@ -39,25 +39,30 @@
             <div class="flex py-6 pl-4">
                 <ul class="list-disc">
                     @foreach($resource->documents()->get() as $document)
-                        <li>
+                        <li class="py-4">
                             {{ str($document->name)->limit(30,'...')}}
-                            <div class="flex"
+                            <div class="flex text-xl space-x-4 pt-4"
                             >
                                 <a data-message="view-document"
                                    href="{{ route('document.'.str(class_basename($resource))->lower().'.view',[$resource, $document]) }}">
-                                    <x-heroicon-o-eye class="h-6 w-6" />
+                                    <x-button class="bg-green-600 hover:bg-green-700">
+                                        Anschauen
+                                    </x-button>
                                 </a>
                                 <div>
-                                    <form action="{{route('documents.destroy',$document)}}"
-                                          method="POST"
+                                    <x-modals.delete
+                                        :route="route('documents.destroy', $document)"
+                                        class="w-full justify-center"
                                     >
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" data-message="delete-document">
-                                            <x-heroicon-o-x-circle class="h-6 w-6" />
-                                        </button>
-
-                                    </form>
+                                        <x-slot:title>
+                                            {{ __('article.backend.delete.modal title',[
+                                            'document_name'=>$document->name
+                                            ]) }}
+                                        </x-slot:title>
+                                        <x-slot:body>
+                                            {{ __('document.backend.delete.modal body') }}
+                                        </x-slot:body>
+                                    </x-modals.delete>
                                 </div>
                             </div>
                         </li>

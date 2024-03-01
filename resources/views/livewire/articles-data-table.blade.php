@@ -164,15 +164,19 @@
                                             {{__('common.actions.edit')}}
                                         </x-button>
                                     </a>
-                                    <form action="{{ route('articles.destroy', $article) }}"
-                                          method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <x-button class="bg-red-600 hover:bg-red-700">
-                                            {{__('common.actions.delete')}}
-                                        </x-button>
-
-                                    </form>
+                                    <x-modals.delete
+                                        :route="route('articles.destroy', $article)"
+                                        class="w-full justify-center"
+                                    >
+                                        <x-slot:title>
+                                            {{ __('article.backend.delete.modal title',[
+                                            'article_title'=>$article->title_de
+                                            ]) }}
+                                        </x-slot:title>
+                                        <x-slot:body>
+                                            {{ __('article.backend.delete.modal body') }}
+                                        </x-slot:body>
+                                    </x-modals.delete>
                                 </div>
                             </td>
                         </tr>

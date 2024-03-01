@@ -3,7 +3,7 @@
 @section('content')
     <div class="mb-5 flex items-center justify-between border-b border-black pb-2 font-semibold font-2xl
     dark:text-white dark:border-white">
-        <div class="flex">
+        <div class="flex text-2xl">
             Presenters Index
         </div>
         <div class="flex">
