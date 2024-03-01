@@ -133,10 +133,11 @@ it('lists all documents with options in series edit page', function () {
         'id' => $series->id,
     ]);
 
+    $document = Document::all()->first();
     get(route('series.edit', $series))
         ->assertSee('document.pdf')
         ->assertSee('view-document')
-        ->assertSee('delete-document');
+        ->assertSee(route('documents.destroy', $document));
 });
 
 it('denies documents uploads to non clip members', function () {

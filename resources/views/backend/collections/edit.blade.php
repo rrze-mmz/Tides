@@ -40,17 +40,13 @@
                                       label="Public available"
                                       field-name="is_public"
                 />
-                <div class="col-span-7 w-4/5">
-                    <x-form.button :link="$link=false"
-                                   type="submit"
-                                   text="Update collection"
-                    />
-
-                    <x-form.button :link="route('collections.index')"
-                                   type="back"
-                                   text="Back to collections index"
-                                   color="green"
-                    />
+                <div class="col-span-7 w-4/5 space-x-4">
+                    <x-button class="bg-blue-600 hover:bg-blue-700">
+                        Update collection
+                    </x-button>
+                    <x-back-button :url="route('collections.index')" class="bg-green-600 hover:bg-green-700">
+                        Back to collections index
+                    </x-back-button>
                 </div>
             </div>
         </form>

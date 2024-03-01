@@ -13,6 +13,13 @@
     {{ __('common.menu.series') }}
 </a>
 <a
+    href="{{route('clips.index')}}"
+    class="flex items-left text-white hover:opacity-100 hover:mx-2 hover:rounded py-4
+        pl-6 nav-item {{ setActiveLink(route('clips.index')) }}"
+>
+    {{ trans_choice('common.menu.clip', 2)}}
+</a>
+<a
     href="{{route('channels.index')}}"
     class="flex items-left text-white hover:opacity-100 hover:mx-2 hover:rounded py-4
         pl-6 nav-item {{ setActiveLink(route('channels.index')) }}"

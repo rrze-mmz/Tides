@@ -1,6 +1,6 @@
 @use(App\Enums\Acl)
 @if(method_exists($series, 'chapters') && $series->chapters()->count() > 0)
-    <div class="mt-5 flex border-t-2 border-black dark:border-white " x-data="{selected: 0 }">
+    <div class="mt-5 flex" x-data="{selected: 0 }">
         <ul class="shadow-box mb-4 flex flex-col w-full text-center text-lg dark:bg-gray-900 dark:text-white">
             @foreach($chapters as $chapter)
                 <li class="relative flex w-full rounded-lg pb-5">
@@ -209,7 +209,7 @@
         </ul>
     </div>
 @else
-    <div class="mt-5 flex border-t-2 border-black dark:border-white">
+    <div class="mt-5 flex">
         @if($reorder)
             <form class="w-full" action="{{route('series.clips.reorder', $series)}}" method="POST">
                 @csrf

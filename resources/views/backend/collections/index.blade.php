@@ -2,13 +2,21 @@
 
 @section('content')
     <div class="mb-5 flex items-center justify-between border-b border-black pb-2 font-semibold font-2xl
-                dark:text-white dark:border-white"
-    >
-        <div class="flex">
+    dark:text-white dark:border-white">
+        <div class="flex text-2xl">
             Collections Index
         </div>
         <div class="flex">
-            <x-form.button :link="route('collections.create')" type="submit" text="Create a new collection" />
+            <a href="{{route('collections.create')}}">
+                <x-button class="flex items-center bg-blue-600 hover:bg-blue-700">
+                    <div class="pr-2">
+                        Create a new collection
+                    </div>
+                    <div>
+                        <x-heroicon-o-plus-circle class="h-6 w-6" />
+                    </div>
+                </x-button>
+            </a>
         </div>
     </div>
     @if ($collections->count() > 0 )
@@ -55,21 +63,24 @@
                                     </td>
                                     <td class="whitespace-nowrap px-6 py-4 text-sm font-light">
                                         <div class="flex space-x-2">
-                                            <x-form.button :link="route('collections.edit',$collection)"
-                                                           type="submit"
-                                                           text="Edit"
-                                            />
-                                            <form action="{{ route('collections.destroy', $collection) }}"
-                                                  method="POST"
+                                            <a href="{{ route('collections.edit', $collection)  }}">
+                                                <x-button class="bg-blue-600 hover:bg-blue-700">
+                                                    {{ __('common.actions.edit') }}
+                                                </x-button>
+                                            </a>
+                                            <x-modals.delete
+                                                :route="route('collections.destroy', $collection)"
+                                                class="w-full justify-center"
                                             >
-                                                @csrf
-                                                @method('DELETE')
-                                                <x-form.button :link="$link=false"
-                                                               type="delete"
-                                                               color="red"
-                                                               text="Delete Collection"
-                                                />
-                                            </form>
+                                                <x-slot:title>
+                                                    {{ __('collection.backend.delete.modal title',[
+                                                    'collection_title'=>$collection->title
+                                                    ]) }}
+                                                </x-slot:title>
+                                                <x-slot:body>
+                                                    {{ __('presenter.backend.delete.modal body') }}
+                                                </x-slot:body>
+                                            </x-modals.delete>
                                         </div>
                                     </td>
                                 </tr>

@@ -4,11 +4,12 @@
 @extends('layouts.backend')
 
 @section('content')
-    <div class="mb-5 flex items-center border-b border-black pb-2 font-semibold text-2xl
-        dark:text-white dark:border-white">
-        Notifications
+    <div class="mb-5 flex items-center justify-between border-b border-black pb-2 font-semibold font-2xl
+    dark:text-white dark:border-white">
+        <div class="flex text-2xl">
+            Series Index
+        </div>
     </div>
-
     @if(auth()->user()->notifications->count() > 0)
         <form action="{{ route('user.notifications.delete') }}" method="POST">
             @csrf

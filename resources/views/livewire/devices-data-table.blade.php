@@ -244,15 +244,19 @@
                                             {{__('common.actions.edit')}}
                                         </x-button>
                                     </a>
-                                    <form action="{{ route('devices.destroy', $device) }}"
-                                          method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <x-button class="bg-red-600 hover:bg-red-700">
-                                            {{__('common.actions.delete')}}
-                                        </x-button>
-
-                                    </form>
+                                    <x-modals.delete
+                                        :route="route('devices.destroy', $device)"
+                                        class="w-full justify-center"
+                                    >
+                                        <x-slot:title>
+                                            {{ __('device.backend.delete.modal title',[
+                                            'device_name'=>$device->name
+                                            ]) }}
+                                        </x-slot:title>
+                                        <x-slot:body>
+                                            {{ __('device.backend.delete.modal body') }}
+                                        </x-slot:body>
+                                    </x-modals.delete>
                                 </div>
                             </td>
                         </tr>

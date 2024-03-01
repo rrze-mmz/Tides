@@ -185,10 +185,15 @@
                                         class="w-full justify-center"
                                     >
                                         <x-slot:title>
-                                            Remove Presenter {{ $presenter->getFullNameAttribute() }} ?
+                                            {{ __('presenter.backend.delete.modal title',[
+                                            'presenter_fullname'=>$presenter->getFullNameAttribute()
+                                            ]) }}
                                         </x-slot:title>
                                         <x-slot:body>
-                                            All presenters clips and series will remain intact
+                                            {{ __('presenter.backend.delete.modal body', [
+                                                'series_counter' => $presenter->series()->count(),
+                                                'clips_counter'  => $presenter->clips()->count(),
+                                            ]) }}
                                         </x-slot:body>
                                     </x-modals.delete>
                                 </div>

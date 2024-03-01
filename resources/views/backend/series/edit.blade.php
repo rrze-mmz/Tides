@@ -171,7 +171,6 @@
 
             <div class="mt-6">
                 <div x-show="activeTab === 1" id="clips" class="w-full ">
-                    @include('backend.series.buttons.actions')
                     @include('backend.clips.list')
                 </div>
                 <div x-show="activeTab === 2" id="opencast">
@@ -179,7 +178,7 @@
 
                 </div>
                 <div x-show="activeTab === 3" id="actions">
-                    @include('backend.series.buttons.more-options')
+                    @include('backend.series.buttons.actions')
                 </div>
                 <div x-show="activeTab === 4" id="comments-section">
                     <div class="flex flex-col pt-5 font-normal dark:text-white">
