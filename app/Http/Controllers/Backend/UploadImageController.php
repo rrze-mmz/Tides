@@ -30,16 +30,16 @@ class UploadImageController extends Controller
 
         $uploadedImage = new File(Storage::path($validated['image']));
         $newImage = pathinfo($image->file_name, PATHINFO_FILENAME).'.'.$uploadedImage->extension();
-        // Copy the file from a temporary location to a permanent location.
-        $fileLocation = Storage::putFileAs(
+        // Copy the file from a temporary location to a permanent location and keep the old file name.
+        $fileLocation = Storage::disk('local')->putFileAs(
             path: 'images',
             file: $uploadedImage,
             name: $newImage
         );
 
         $image->file_name = $newImage;
-        $image->file_size = Storage::disk('images')->size($newImage);
-        $image->mime_type = Storage::disk('images')->mimeType($newImage);
+        $image->file_size = Storage::disk('local')->size('images/'.$newImage);
+        $image->mime_type = Storage::disk('local')->mimeType('images/'.$newImage);
         $image->save();
 
         session()->flash('flashMessage', 'Image replaced successfully');

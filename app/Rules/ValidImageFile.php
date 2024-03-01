@@ -18,11 +18,11 @@ class ValidImageFile implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        if (! Storage::exists($value)) {
+        if (! Storage::disk('local')->exists($value)) {
             $fail('The file does not exist.');
         }
 
-        if (! in_array(Storage::mimeType($value), $this->validMimeTypes, true)) {
+        if (! in_array(Storage::disk('local')->mimeType($value), $this->validMimeTypes, true)) {
             $fail('The file is not a valid mime type.');
         }
     }
