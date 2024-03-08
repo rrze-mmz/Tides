@@ -122,8 +122,8 @@
 
                 <x-form.select2-multiple field-name="presenters"
                                          :model="$clip"
-                                         label="Presenters"
-                                         select-class="select2-tides"
+                                         label="{{trans_choice('common.menu.presenter',2)}}"
+                                         select-class="select2-tides-presenters"
                                          :items="$clip->presenters" />
 
                 <x-form.select2-multiple field-name="tags"

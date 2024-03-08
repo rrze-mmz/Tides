@@ -224,6 +224,10 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
         Route::get('/{series}/reorder', 'listClips')->name('series.clips.changeEpisode');
         Route::post('/{series}/reorder', 'reorder')->name('series.clips.reorder');
 
+        Route::get('/{series}/clipsMetadata', 'showClipsMetadata')->name('series.clips.batch.show.clips.metadata');
+        Route::patch('/{series}/updateClipsMetadata', 'updateClipsMetadata')
+            ->name('series.clips.batch.update.clips.metadata');
+
         //add/remove an existing clip to selected series
         Route::get('/listSeries/{clip}', 'listSeries')->name('series.clips.listSeries');
         Route::post('/{series}/assignSeries/{clip}', 'assign')->name('series.clips.assign');

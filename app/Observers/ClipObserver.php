@@ -75,6 +75,13 @@ class ClipObserver
     {
         session()->flash('flashMessage', "{$clip->title} ".__FUNCTION__.' successfully');
 
+        if ($clip->series()->exists()) {
+            $clip->series->recordActivity(
+                "ClipID:{$clip->id}/{$clip->title}/{$clip->recording_date} deleted",
+                ['before' => [], 'after' => []]
+            );
+        }
+
         $this->openSearchService->deleteIndex($clip);
     }
 

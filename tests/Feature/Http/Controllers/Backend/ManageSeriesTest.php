@@ -337,6 +337,48 @@ test('edit series should display series image information', function () {
         ->assertSee($series->image->description);
 });
 
+test('edit series page should display all series buttons for actions', function () {
+    $series = SeriesFactory::ownedBy(signInRole(Role::MODERATOR))->withClips(3)->create();
+    $this->mockHandler->append(
+        $this->mockHealthResponse(), //health
+        $this->mockSeriesMetadata($series), // seriesInfo
+        $this->mockNoResultsResponse(), //recording
+        $this->mockNoResultsResponse(), //running
+        $this->mockNoResultsResponse(), //scheduled
+        $this->mockNoResultsResponse(), //failed
+        $this->mockNoTrimmingResultsResponse(), //trimming
+        $this->mockNoResultsResponse(), //upcoming
+    );
+    get(route('series.edit', $series))
+        ->assertSee(route('series.clips.create', $series))
+        ->assertSee(route('frontend.series.show', $series))
+        ->assertSee(route('series.clips.reorder', $series))
+        ->assertSee(route('series.clips.batch.show.clips.metadata', $series))
+        ->assertSee(route('series.chapters.index', $series))
+        ->assertSee(route('series.destroy', $series));
+});
+
+test('edit series page should hide some action buttons if series has no clips', function () {
+    $series = SeriesFactory::ownedBy(signInRole(Role::MODERATOR))->create();
+    $this->mockHandler->append(
+        $this->mockHealthResponse(), //health
+        $this->mockSeriesMetadata($series), // seriesInfo
+        $this->mockNoResultsResponse(), //recording
+        $this->mockNoResultsResponse(), //running
+        $this->mockNoResultsResponse(), //scheduled
+        $this->mockNoResultsResponse(), //failed
+        $this->mockNoTrimmingResultsResponse(), //trimming
+        $this->mockNoResultsResponse(), //upcoming
+    );
+    get(route('series.edit', $series))
+        ->assertSee(route('series.clips.create', $series))
+        ->assertSee(route('frontend.series.show', $series))
+        ->assertDontSee(route('series.clips.reorder', $series))
+        ->assertDontSee(route('series.clips.batch.show.clips.metadata', $series))
+        ->assertSee(route('series.chapters.index', $series))
+        ->assertSee(route('series.destroy', $series));
+});
+
 test('edit series should allow user to switch to default image if one is set', function () {
     Image::factory(2)->create();
     $series = SeriesFactory::ownedBy(signInRole(Role::MODERATOR))->create();

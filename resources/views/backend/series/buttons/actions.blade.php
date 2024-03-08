@@ -9,11 +9,18 @@
             Go to public page
         </x-button>
     </a>
-    <a href="{{ route('series.clips.changeEpisode', $series) }}">
-        <x-button class="bg-green-600 hover:bg-green-700">
-            Reorder clips
-        </x-button>
-    </a>
+    @if($series->clips->count()> 0 )
+        <a href="{{ route('series.clips.batch.show.clips.metadata', $series) }}">
+            <x-button class="bg-green-600 hover:bg-green-700">
+                Edit metadata of multiple clips
+            </x-button>
+        </a>
+        <a href="{{ route('series.clips.changeEpisode', $series) }}">
+            <x-button class="bg-green-600 hover:bg-green-700">
+                Reorder clips
+            </x-button>
+        </a>
+    @endif
     <a href="{{ route('series.chapters.index', $series) }}">
         <x-button class="bg-green-600 hover:bg-green-700">
             Manage chapters
