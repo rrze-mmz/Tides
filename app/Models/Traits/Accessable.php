@@ -2,6 +2,7 @@
 
 namespace App\Models\Traits;
 
+use App\Enums\Acl as AclEnum;
 use App\Models\Acl;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Collection;
@@ -17,16 +18,24 @@ trait Accessable
      */
     public function addAcls(Collection $aclsCollection): void
     {
-        /*
-         * Check for tags collection from post request.
-         * The closure returns a tag model, where the model is either selected or created.
-         * The acl model is synchronized with the type acls.
-         */
-
-        if ($aclsCollection->isNotEmpty()) {
-            $this->acls()->sync($aclsCollection);
-        } else {
+        if ($aclsCollection->isEmpty()) {
             $this->acls()->detach();
+            $this->recordActivity('All ACLs detached.');
+
+            return;
+        }
+        $existingACLS = $this->acls()->get()->pluck('id')->sort()->values();
+        $newACLS = $aclsCollection->sort()->values();
+        if (! $existingACLS->diff($newACLS)->isEmpty() || ! $newACLS->diff($existingACLS)->isEmpty()) {
+            $this->acls()->sync($aclsCollection);
+            $this->recordActivity('ACL changed! ', [
+                'before' => $existingACLS->map(function ($value) {
+                    return AclEnum::from($value)->lower();
+                })->toArray(),
+                'after' => $newACLS->map(function ($value) {
+                    return AclEnum::from($value)->lower();
+                })->toArray(),
+            ]);
         }
     }
 
@@ -46,19 +55,19 @@ trait Accessable
     {
         $acls = $this->acls;
 
-        if ($acls->isEmpty() || $acls->pluck('id')->contains(\App\Enums\Acl::PUBLIC())) {
+        if ($acls->isEmpty() || $acls->pluck('id')->contains(AclEnum::PUBLIC())) {
             return true;
         }
 
         if (auth()->user()?->isAdmin()) {
             return true;
         }
-        if ($acls->pluck('id')->contains(\App\Enums\Acl::PORTAL()) && auth()->check()) {
+        if ($acls->pluck('id')->contains(AclEnum::PORTAL()) && auth()->check()) {
             return ($this->assets()->count() > 0 && $this->is_public)
                 || auth()->user()->can('view-video', $this);
         }
-        if ($acls->pluck('id')->contains(\App\Enums\Acl::LMS())
-            || $acls->pluck('id')->contains(\App\Enums\Acl::PASSWORD())) {
+        if ($acls->pluck('id')->contains(AclEnum::LMS())
+            || $acls->pluck('id')->contains(AclEnum::PASSWORD())) {
             return
                  checkAccessToken($this)
                  || ((auth()->check() && auth()->user()->can('view-video', $this)))

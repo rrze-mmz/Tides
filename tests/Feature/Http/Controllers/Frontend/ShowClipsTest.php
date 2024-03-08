@@ -218,7 +218,7 @@ it('clip public page should display clip presenters if any', function () {
     get(route('frontend.clips.show', $this->clip))->assertDontSee('Tags');
 
     $this->mockHandler->append($this->mockCheckApiConnection(), $this->mockVodSecureUrls());
-    $this->clip->addPresenters($presenters);
+    $this->clip->addPresenters(collect($presenters->pluck('id')));
     get(route('frontend.clips.show', $this->clip))
         ->assertSee(Presenter::find(1)->getFullNameAttribute(), Presenter::find(2)->getFullNameAttribute());
 });

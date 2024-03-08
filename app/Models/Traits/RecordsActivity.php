@@ -14,21 +14,36 @@ trait RecordsActivity
      */
     public array $oldAttributes = [];
 
+    public array $checkedAttributes = [
+        'title', 'episode', 'name', 'organization_id', 'language_id', 'context_id', 'format_id', 'type_id', 'password',
+        'allow_comments', 'is_public', 'is_livestream', 'academic_degree_id', 'first_name', 'last_name', 'username',
+        'email', 'title_en', 'title_de', 'is_published',
+    ]; //a  list for attributes to check in updated event
+
     /**
      * Boot the trait
      */
     public static function bootRecordsActivity(): void
     {
         foreach (self::recordableEvents() as $event) {
-            static::$event(function ($model) use ($event) {
-                $model->recordActivity($model->activityDescription($event));
-            });
-
             if ($event === 'updated') {
                 static::updating(function ($model) {
                     $model->oldAttributes = $model->getOriginal();
                 });
             }
+            static::$event(function ($model) use ($event) {
+
+                $attributes = ($event === 'updated')
+                    ? [
+                        'before' => '',
+                        'after' => '',
+                    ]
+                    : [
+                        'before' => '',
+                        'after' => $model->getOriginal(),
+                    ];
+                $model->recordActivity($model->activityDescription($event, $attributes));
+            });
         }
     }
 
@@ -40,10 +55,11 @@ trait RecordsActivity
     /**
      * Record activity for the given model
      */
-    public function recordActivity($description): void
+    public function recordActivity($description, array $changes = []): void
     {
         $user = (auth()->user()) ?? $this->owner;
 
+        $changes = (empty($changes['before']) && empty($changes['after'])) ? $this->activityChanges() : $changes;
         if (! Cache::has('insert_smil_command')) {
             Activity::create([
                 'user_id' => ($user?->id) ?? 0,
@@ -51,7 +67,7 @@ trait RecordsActivity
                 'object_id' => $this->id,
                 'change_message' => $description,
                 'action_flag' => 1,
-                'changes' => $this->activityChanges(),
+                'changes' => $changes,
                 'user_real_name' => ($user?->getFullNameAttribute()) ?? 'CRONJOB',
             ]);
         }
@@ -59,13 +75,17 @@ trait RecordsActivity
 
     protected function activityChanges(): array
     {
-        return ($this->wasChanged())
+        return ($this->wasChanged($this->checkedAttributes))
             ?
             [
-                'before' => Arr::except(array_diff($this->oldAttributes, $this->getAttributes()), ['updated_at']),
-                'after' => Arr::except($this->getChanges(), ['updated_at']),
+                'before' => Arr::except(array_diff($this->oldAttributes, $this->getAttributes()), [
+                    'updated_at', 'slug',
+                ]),
+                'after' => Arr::except($this->getChanges(), [
+                    'updated_at', 'slug',
+                ]),
             ]
-            : [];
+            : ['before' => [''], 'after' => ['']];
     }
 
     protected function activityDescription($description): string

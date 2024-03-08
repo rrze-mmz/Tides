@@ -224,7 +224,7 @@ it('allows creating a presenter to an admin', function () {
 it('shows all presenter series in presenter edit page', function () {
     $presenter = Presenter::factory()->create();
     $series = Series::factory()->create();
-    $series->addPresenters($presenter->get());
+    $series->addPresenters(collect($presenter->id));
     session()->flush();
 
     get(route('presenters.edit', $presenter))
@@ -235,7 +235,7 @@ it('shows all presenter clips in presenter edit page', function () {
     $presenter = Presenter::factory()->create();
     $clip = Clip::factory()->create();
 
-    $clip->addPresenters($presenter->get());
+    $clip->addPresenters(collect($presenter->id));
 
     //flush session data to remove the update clip model message
     session()->flush();

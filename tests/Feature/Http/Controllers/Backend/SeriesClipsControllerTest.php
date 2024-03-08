@@ -8,6 +8,7 @@ use Facades\Tests\Setup\SeriesFactory;
 
 use function Pest\Laravel\delete;
 use function Pest\Laravel\get;
+use function Pest\Laravel\patch;
 use function Pest\Laravel\post;
 
 uses()->group('backend');
@@ -214,4 +215,53 @@ it('changes clips episodes for a series', function () {
     expect(Clip::find(1)->episode)->toBe(3);
     expect(Clip::find(2)->episode)->toBe(1);
     expect(Clip::find(3)->episode)->toBe(2);
+});
+
+test('mass update clips metadata form is available only to series owner ', function () {
+    $series = SeriesFactory::withClips(3)->create();
+    signInRole(Role::MODERATOR);
+
+    get(route('series.clips.batch.show.clips.metadata', $series))->assertForbidden();
+
+    auth()->logout();
+    signInRole(Role::STUDENT);
+
+    get(route('series.clips.batch.show.clips.metadata', $series))->assertForbidden();
+});
+
+test('mass update clips metadata form is also available to series members', function () {
+    $series = SeriesFactory::withClips(3)->create();
+    $user = signInRole(Role::MODERATOR);
+    $series->addMember($user);
+
+    get(route('series.clips.batch.show.clips.metadata', $series))->assertOk();
+});
+
+it('shows a clip metadata form and all clips for a certain series', function () {
+    $series = SeriesFactory::withClips(3)->ownedBy(signInRole(Role::MODERATOR))->create();
+
+    get(route('series.clips.batch.show.clips.metadata', $series))->assertOk();
+});
+
+it('validates mass updates all series clips metadata', function () {
+    $series = SeriesFactory::withClips(3)->ownedBy(signInRole(Role::MODERATOR))->create();
+
+    patch(route('series.clips.batch.update.clips.metadata', $series), [])->assertSessionHasErrors();
+});
+
+it('updates all clips metadata for a certain series', function () {
+    $series = SeriesFactory::withClips(3)->ownedBy(signInRole(Role::MODERATOR))->create();
+    $lastClip = $series->latestClip()->first();
+    $attributes = [
+        'title' => 'Series title',
+        'organization_id' => '1',
+        'language_id' => '1',
+        'context_id' => '1',
+        'format_id' => '1',
+        'type_id' => '1',
+        'semester_id' => '1',
+    ];
+    patch(route('series.clips.batch.update.clips.metadata', $series), $attributes)->assertSessionDoesntHaveErrors();
+
+    expect($lastClip->title)->not->toBe($series->latestClip()->first()->title);
 });

@@ -41,7 +41,7 @@ class SeriesController extends Controller
         $series->updateOpencastSeriesId($opencastSeriesId);
         $series->addPresenters(collect($validated['presenters']));
 
-        session()->flash('flashMessage', 'Clip created successfully');
+        session()->flash('flashMessage', 'Series created successfully');
 
         return to_route('series.edit', $series);
     }
