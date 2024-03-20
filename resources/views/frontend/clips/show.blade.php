@@ -26,7 +26,7 @@
             @endif
         </div>
 
-        <div class="flex justify-between py-2">
+        <div class="flex justify-between py-4">
             @if(!is_null($previousNextClipCollection->get('previousClip')))
                 <a class="flex max-w-lg flex-row items-center justify-between"
                    href="{{ $previousNextClipCollection->get('previousClip')->path() }}">

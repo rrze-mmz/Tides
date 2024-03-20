@@ -7,6 +7,7 @@ use App\Events\AssetDeleted;
 use App\Models\Traits\RecordsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Storage;
 
 class Asset extends BaseModel
@@ -45,12 +46,14 @@ class Asset extends BaseModel
         return $this->belongsTo(Clip::class);
     }
 
-    /**
-     * Asset backend link
-     */
-    public function path(): string
+    public function statsLogs(): HasMany
     {
-        return "/admin/assets/{$this->id}";
+        return $this->setConnection('statistics')->hasMany(StatsModel::class, 'id', 'resource_id');
+    }
+
+    public function statsCounter(): HasMany
+    {
+        return $this->setConnection('statistics')->hasMany(StatsCounter::class, 'resourceid');
     }
 
     /**
@@ -59,6 +62,14 @@ class Asset extends BaseModel
     public function downloadPath(): string
     {
         return Storage::disk('videos')->path($this->path);
+    }
+
+    /**
+     * Asset backend link
+     */
+    public function path(): string
+    {
+        return "/admin/assets/{$this->id}";
     }
 
     /**

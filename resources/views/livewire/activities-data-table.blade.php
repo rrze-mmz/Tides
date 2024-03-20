@@ -1,3 +1,4 @@
+@php use Illuminate\Support\Str; @endphp
 <div class="flex flex-col font-normal">
     <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
@@ -162,8 +163,9 @@
                                 <div class="flex items-center">
                                     <div class="ml-2">
                                         <div class="text-sm font-normal leading-5 text-gray-900 dark:text-white">
-                                            <a href="{{ '/admin/'.$activity->content_type.'/'.$activity->object_id}}">
-                                                {{ $activity->content_type }} - ID {{ $activity->object_id }}
+                                            <a href="{{ '/admin/'.Str::plural($activity->content_type).'/'.$activity->object_id}}">
+                                                {{ Str::plural($activity->content_type) }} -
+                                                ID {{ $activity->object_id }}
                                             </a>
                                         </div>
                                     </div>

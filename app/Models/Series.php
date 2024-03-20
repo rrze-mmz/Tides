@@ -33,7 +33,7 @@ class Series extends BaseModel
 
     protected $dispatchesEvents = ['deleted' => SeriesDeleted::class];
 
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
         static::creating(function ($series) {

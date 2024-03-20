@@ -4,6 +4,7 @@ use App\Events\AssetDeleted;
 use App\Models\Asset;
 use App\Models\Clip;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Event;
 
 uses()->group('unit');
@@ -19,6 +20,14 @@ it('has a path', function () {
 
 it('belongs to a clip', function () {
     expect($this->asset->clip)->toBeInstanceOf(Clip::class);
+});
+
+it('has many statistics logs', function () {
+    expect($this->asset->statsLogs())->toBeInstanceOf(HasMany::class);
+});
+
+it('has many statistic counter', function () {
+    expect($this->asset->statsCounter())->toBeInstanceOf(HasMany::class);
 });
 
 test('delete an asset will fire an event', function () {

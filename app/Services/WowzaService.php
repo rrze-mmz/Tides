@@ -4,9 +4,9 @@ namespace App\Services;
 
 use App\Enums\Content;
 use App\Http\Clients\WowzaClient;
-use App\Models\Asset;
 use App\Models\Clip;
 use App\Models\Setting;
+use Debugbar;
 use DOMException;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Response;
@@ -220,6 +220,7 @@ class WowzaService
                 $tokenEndTime = $tokenPrefix.'endTime='.(time() + 21600);
 
                 $userIP = (App::environment(['testing', 'local'])) ? env('FAUTV_USER_IP') : $_SERVER['REMOTE_ADDR'];
+                Debugbar::info($userIP);
                 $hashStr = "{$wowzaContentPath}?{$userIP}&{$secureToken}&{$tokenEndTime}&{$tokenStartTime}";
                 $hash = hash('sha256', $hashStr, 1);
                 $usableHash = strtr(base64_encode($hash), '+/', '-_');
