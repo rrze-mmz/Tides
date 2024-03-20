@@ -434,6 +434,10 @@ test('series admin can select another image', function () {
         ->assertSee('Assign selected image');
 });
 
+it('hides ope', function () {
+
+});
+
 test('edit series page should display opencast users rights', function () {
     $series = SeriesFactory::ownedBy(signInRole(Role::MODERATOR))->create();
     $this->mockHandler->append(

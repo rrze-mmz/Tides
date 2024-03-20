@@ -165,6 +165,14 @@ it('can fetch previous and nect clip models if clip belongs to a series', functi
     expect($secondClip->previousNextClipCollection()->get('nextClip'))->toBeInstanceOf(Clip::class);
 });
 
+it('can return the closed captions asset', function () {
+    expect($this->clip->getCaptionAsset())->toBeNull();
+});
+
+it('can return the total asset views', function () {
+    expect($this->clip->views())->toBe(0);
+});
+
 it('has a public scope', function () {
     expect(Clip::public())->toBeInstanceOf(Builder::class);
 });

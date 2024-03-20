@@ -166,7 +166,7 @@
 
         <div class="flex items-center dark:text-white">
             <x-heroicon-o-eye class="h-6 w-6" />
-            <span class="pl-3"> 0 Views </span>
+            <span class="pl-3"> {{$clip->views()}} Views </span>
         </div>
 
     </div>

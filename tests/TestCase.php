@@ -155,6 +155,7 @@ abstract class TestCase extends BaseTestCase
             'mime_type' => 'image/png',
             'file_size' => '300',
         ]);
+
         foreach (\App\Enums\Role::cases() as $role) {
             Role::create([
                 'id' => $role->value,

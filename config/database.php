@@ -43,6 +43,14 @@ return [
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
         ],
 
+        'sqlite_stats' => [
+            'driver' => 'sqlite',
+            'url' => env('DATABASE_URL'),
+            'database' => env('DB_STATS_DATABASE', database_path('database.sqlite')),
+            'prefix' => '',
+            'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
+        ],
+
         'mysql' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
@@ -75,6 +83,21 @@ return [
             'prefix' => '',
             'prefix_indexes' => true,
             'schema' => 'public',
+            'sslmode' => 'prefer',
+        ],
+
+        'pgsql_stats' => [
+            'driver' => 'pgsql',
+            'url' => env('DATABASE_URL'),
+            'host' => env('DB_STATS_HOST', '127.0.0.1'),
+            'port' => env('DB_STATS_PORT', '5432'),
+            'database' => env('DB_STATS_DATABASE', 'forge'),
+            'username' => env('DB_STATS_USERNAME', 'forge'),
+            'password' => env('DB_STATS_PASSWORD', ''),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'schema' => env('DB_STATS_SCHEMA', 'public'),
             'sslmode' => 'prefer',
         ],
 

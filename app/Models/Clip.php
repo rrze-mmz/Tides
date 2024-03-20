@@ -309,6 +309,15 @@ class Clip extends BaseModel
         })->first();
     }
 
+    // Function to calculate total views for all assets' stats
+    public function views(): int
+    {
+        return $this->assets->load('statsCounter')->sum(function ($asset) {
+            // Sum the views for each asset from its multiple statsCounter entries
+            return $asset->statsCounter->sum('counter'); // Assuming 'views' is the column where views are stored
+        });
+    }
+
     /**
      *  Scope a query to only include public clips
      */
@@ -317,11 +326,17 @@ class Clip extends BaseModel
         return $query->where('is_public', 1);
     }
 
+    /**
+     *  Scope a query to only include clips without series
+     */
     public function scopeSingle($query): mixed
     {
         return $query->whereNull('series_id');
     }
 
+    /**
+     *  Scope a query to only include the semester name of the clip
+     */
     public function scopeWithSemester($query)
     {
         return $query->addSelect(

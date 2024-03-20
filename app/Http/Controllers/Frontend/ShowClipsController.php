@@ -30,7 +30,6 @@ class ShowClipsController extends Controller
     public function show(Clip $clip, WowzaService $wowzaService): View
     {
         $this->authorize('view-clips', $clip);
-
         $assetsResolutions = $clip->assets->map(function ($asset) {
             return match (true) {
                 $asset->width >= 1920 => 'QHD',
