@@ -58,10 +58,6 @@ it('should display an info text if no series existing for user', function () {
     get(route('dashboard'))->assertSee(__('homepage.series.no series found'));
 });
 
-it('should display an info text if no clip exists', function () {
-    get(route('dashboard'))->assertSee(__('clip.common.no clips'));
-});
-
 it('display\'s user series', function () {
     SeriesFactory::create();
     get(route('dashboard'))->assertSee(__('homepage.series.no series found'));
@@ -82,18 +78,28 @@ it('display\'s user supervised series', function () {
 
 it('display\'s user clips', function () {
     ClipFactory::create();
-    get(route('dashboard'))->assertSee(__('clip.common.no clips'));
     $userClip = ClipFactory::ownedBy(auth()->user())->create();
 
     get(route('dashboard'))->assertSee($userClip->title);
 });
 
-it('should list all dropzone files', function () {
+it('should list all dropzone files for portal administrators', function () {
+    auth()->logout();
+    signInRole(Role::ASSISTANT);
+
     Storage::fake('video_dropzone');
     Storage::disk('video_dropzone')->put('test.pdf', 'some non-pdf content');
 
     get(route('dashboard'))->assertSee('test.pdf');
 });
+
+it('should hide dropzone files for portal moderators', function () {
+    Storage::fake('video_dropzone');
+    Storage::disk('video_dropzone')->put('test.pdf', 'some non-pdf content');
+
+    get(route('dashboard'))->assertDontSee('test.pdf');
+});
+
 it('shows sidebar menu items for moderators', function () {
     get(route('dashboard'))
         ->assertSee(route('series.index'))

@@ -36,7 +36,7 @@
             class="flex w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between text-dark
                 dark:text-white">
             <div class="text-sm sm:text-center grow">
-                Copyright @ {{ Illuminate\Support\Carbon::now()->year }} MIT Licence
+                Copyright @ {{ Illuminate\Support\Carbon::now()->year }} MIT Licence [ v. {{ getCurrentGitBranch() }}]
             </div>
 
             <div>

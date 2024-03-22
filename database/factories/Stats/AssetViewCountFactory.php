@@ -1,17 +1,17 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Stats;
 
 use App\Enums\Acl;
 use App\Models\Asset;
-use App\Models\StatsCounter;
+use App\Models\Stats\AssetViewCount;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
 /**
- * @extends Factory<StatsCounter>
+ * @extends Factory<AssetViewCount>
  */
-class StatsCounterFactory extends Factory
+class AssetViewCountFactory extends Factory
 {
     /**
      * Define the model's default state.

@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Stats;
 
+use App\Models\Asset;
+use App\Models\StatsModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class StatsLog extends StatsModel
+class AssetViewLog extends StatsModel
 {
     use HasFactory;
 

@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Enums\Content;
 use App\Events\AssetDeleted;
+use App\Models\Stats\AssetViewCount;
+use App\Models\Stats\AssetViewLog;
 use App\Models\Traits\RecordsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -46,14 +48,14 @@ class Asset extends BaseModel
         return $this->belongsTo(Clip::class);
     }
 
-    public function statsLogs(): HasMany
+    public function viewLog(): HasMany
     {
-        return $this->setConnection('statistics')->hasMany(StatsModel::class, 'id', 'resource_id');
+        return $this->setConnection('statistics')->hasMany(AssetViewLog::class, 'id', 'resource_id');
     }
 
-    public function statsCounter(): HasMany
+    public function viewCount(): HasMany
     {
-        return $this->setConnection('statistics')->hasMany(StatsCounter::class, 'resourceid');
+        return $this->setConnection('statistics')->hasMany(AssetViewCount::class, 'resourceid');
     }
 
     /**

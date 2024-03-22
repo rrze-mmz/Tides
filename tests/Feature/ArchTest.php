@@ -13,5 +13,6 @@ it('expect some models to extend Base model')
     ->ignoring('App\Models\User')
     ->ignoring('App\Models\Traits')
     ->ignoring('App\Models\StatsModel')
-    ->ignoring('App\Models\StatsCounter')
-    ->ignoring('App\Models\StatsLog');
+    ->ignoring('App\Models\Stats\AssetViewCount')
+    ->ignoring('App\Models\Stats\AssetViewLog')
+    ->ignoring('App\Models\Stats\AssetGeoCount');

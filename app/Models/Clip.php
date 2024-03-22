@@ -312,9 +312,9 @@ class Clip extends BaseModel
     // Function to calculate total views for all assets' stats
     public function views(): int
     {
-        return $this->assets->load('statsCounter')->sum(function ($asset) {
+        return $this->assets->load('viewCount')->sum(function ($asset) {
             // Sum the views for each asset from its multiple statsCounter entries
-            return $asset->statsCounter->sum('counter'); // Assuming 'views' is the column where views are stored
+            return $asset->viewCount->sum('counter'); // Assuming 'views' is the column where views are stored
         });
     }
 

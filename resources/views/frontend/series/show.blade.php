@@ -95,7 +95,7 @@
 
             <div class="flex w-1/4 items-center">
                 <x-heroicon-o-eye class='h-6 w-6' />
-                <span class="pl-3"> {{ __('series.frontend.show.views', ['counter' => 10]) }} </span>
+                <span class="pl-3"> {{ __('series.frontend.show.views', ['counter' => $series->views()]) }} </span>
             </div>
 
         </div>

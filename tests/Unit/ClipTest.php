@@ -173,6 +173,10 @@ it('can return the total asset views', function () {
     expect($this->clip->views())->toBe(0);
 });
 
+it('has a views method for clip views returning the number of the views', function () {
+    expect($this->clip->views())->toBeInt();
+});
+
 it('has a public scope', function () {
     expect(Clip::public())->toBeInstanceOf(Builder::class);
 });

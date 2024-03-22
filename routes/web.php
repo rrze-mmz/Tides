@@ -25,6 +25,7 @@ use App\Http\Controllers\Backend\SeriesController;
 use App\Http\Controllers\Backend\SeriesMembershipController;
 use App\Http\Controllers\Backend\SeriesOpencastController;
 use App\Http\Controllers\Backend\SeriesOwnership;
+use App\Http\Controllers\Backend\StatisticsController;
 use App\Http\Controllers\Backend\StreamingSettingsController;
 use App\Http\Controllers\Backend\SystemsCheckController;
 use App\Http\Controllers\Backend\TriggerSmilFilesController;
@@ -246,6 +247,8 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
             Route::patch('/{series}/chapters/{chapter}/removeClips', 'removeClips')
                 ->name('series.chapters.removeClips');
             Route::delete('/{series}/chapters/{chapter}', 'destroy')->name('series.chapters.delete');
+            // Series Statistic
+            Route::get('{series}/statistics', [StatisticsController::class, 'series'])->name('statistics.series');
         });
 
     //Series invitations - Invite a user to be a member of a Series
@@ -254,8 +257,7 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
         ->name('series.membership.addUser');
     Route::post('/series/{series}/membership/removeUser', [SeriesMembershipController::class, 'remove'])
         ->name('series.membership.removeUser');
-
-    //Series Images
+    // Series Images
     Route::put('/series/{series}/updateImage/', UpdateSeriesImage::class)->name('update.series.image');
 
     //Clip routes
@@ -282,6 +284,9 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
             Route::get('/{clip}/opencast/list', 'listOpencastEvents')->name('admin.clips.opencast.listEvents');
             Route::post('/{clip}/opencast/transfer', 'transferOpencastFiles')->name('admin.clips.opencast.transfer');
         });
+
+        // Clip Statistic
+        Route::get('clip/{clip}/statistics', [StatisticsController::class, 'clip'])->name('statistics.clip');
     });
 
     //Clips Images

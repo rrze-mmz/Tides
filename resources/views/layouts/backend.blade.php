@@ -48,11 +48,18 @@
                 </div>
             </div>
             <div x-data="{ isOpen: false }" class="flex relative justify-end dark:bg-slate-800 z-10">
-                <x-heroicon-o-user @click="isOpen = !isOpen"
-                                   class="relative w-8 h-8 rounded-full overflow-hidden border-2 border-gray-400
+                @if(!is_null(auth()->user()->presenter))
+                    <img @click="isOpen = !isOpen" class="h-10 w-10 rounded-full"
+                         src="{{ auth()->user()->presenter->getImageUrl() }}"
+                         alt="{{ auth()->user()->getFullNameAttribute() }} image">
+                @else
+                    <x-heroicon-o-user @click="isOpen = !isOpen"
+                                       class="relative w-8 h-8 rounded-full overflow-hidden border-2 border-gray-400
                                             hover:border-gray-300 focus:border-gray-300
                                             focus:outline-none dark:text-white"
-                />
+                    />
+                @endif
+
                 <button x-show="isOpen"
                         @click="isOpen = false"
                         class="fixed inset-0 cursor-default">
@@ -61,7 +68,7 @@
                      class="absolute mt-12 w-48 items-center rounded-lg bg-white
                      dark:bg-sky-950 py-2 align-middle shadow-lg dark:text-white font-normal">
                     <a href="#" class="block px-4 py-2 hover:text-gray-400">Settings</a>
-                    <a href="{{ route('user.notifications') }}" class="block px-4 py-2 hover:text-gray-400">
+                    <a href="{){ route('user.notifications') }}" class="block px-4 py-2 hover:text-gray-400">
                         Notifications
                         @if (($counter = auth()->user()->unreadNotifications->count()) > 0)
                             <span
@@ -166,7 +173,7 @@
                 </div>
             </main>
             <footer class="w-full bg-white p-4 text-center dark:bg-sky-950 dark:text-white">
-                Copyright @ {{ Illuminate\Support\Carbon::now()->year }} MIT Licence
+                Copyright @ {{ Illuminate\Support\Carbon::now()->year }} MIT Licence [ v. {{ getCurrentGitBranch() }}]
             </footer>
         </div>
     </div>

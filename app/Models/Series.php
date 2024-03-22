@@ -214,6 +214,17 @@ class Series extends BaseModel
         }
     }
 
+    public function views(): int
+    {
+        return $this->clips->load('assets.viewCount')->sum(function ($clip) {
+            // For each clip, sum the views of all its assets
+            return $clip->assets->sum(function ($asset) {
+                // Sum the views for each asset from its statsCounter entries
+                return $asset->viewCount->sum('counter'); // 'counter' is the column for the views
+            });
+        });
+    }
+
     /**
      * Returns a comma seperated acls list for all clips
      *
