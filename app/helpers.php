@@ -246,3 +246,15 @@ function removeTrailingNumbers($string)
     // Replace the matched pattern with an empty string
     return preg_replace($pattern, '', $string);
 }
+
+function getCurrentGitBranch()
+{
+    try {
+        $branch = exec('git rev-parse --abbrev-ref HEAD');
+
+        return $branch;
+    } catch (Exception $e) {
+        // Handle exceptions or errors as needed
+        return 'unknown';
+    }
+}

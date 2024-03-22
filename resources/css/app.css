@@ -30,11 +30,20 @@
 }
 
 .select2-selection--single {
-    @apply h-8 !important;
+    @apply h-10 !important;
+    @apply align-middle !important;
+    @apply py-1 !important;
+
+}
+
+.select2-selection__arrow {
+    @apply my-1 !important;
 }
 
 .select2-search__field {
-    @apply h-6 !important;
+    @apply h-8 !important;
+    @apply align-middle !important;
+    @apply py-1 !important;
 }
 
 

@@ -262,6 +262,7 @@ test('a series member can view edit form fields and owner name and username', fu
 });
 
 test('a moderator cannot view edit clip form for not owned series', function () {
+    $this->mockHandler->append($this->mockServerNotAvailable());
     $series = SeriesFactory::create();
     signInRole(Role::MODERATOR);
 
@@ -305,33 +306,34 @@ test('a superadmin can edit a not owned series', function () {
 });
 
 it('has an add clips button', function () {
+    $this->mockHandler->append($this->mockServerNotAvailable());
     get(route('series.edit', SeriesFactory::ownedBy(signInRole(Role::MODERATOR))->create()))
         ->assertSee('Add new clip');
 });
 
 it('has go to public page button', function () {
+    $this->mockHandler->append($this->mockServerNotAvailable());
     get(route('series.edit', SeriesFactory::ownedBy(signInRole(Role::MODERATOR))->create()))
         ->assertSee('Go to public page');
 });
 
+it('has a series statistics button', function () {
+    $this->mockHandler->append($this->mockServerNotAvailable());
+    $series = SeriesFactory::ownedBy(signInRole(Role::MODERATOR))->create();
+    get(route('series.edit', $series))
+        ->assertSee('Statistics')->assertSee(route('statistics.series', $series));
+});
+
 test('edit series page should display belonging clips', function () {
+    $this->mockHandler->append($this->mockServerNotAvailable());
     $series = SeriesFactory::ownedBy(signInRole(Role::MODERATOR))->withClips(2)->create();
 
     get(route('series.edit', $series))->assertSee($series->clips()->first()->title);
 });
 
 test('edit series should display series image information', function () {
+    $this->mockHandler->append($this->mockServerNotAvailable());
     $series = SeriesFactory::ownedBy(signInRole(Role::MODERATOR))->create();
-    $this->mockHandler->append(
-        $this->mockHealthResponse(), //health
-        $this->mockSeriesMetadata($series), // seriesInfo
-        $this->mockNoResultsResponse(), //recording
-        $this->mockNoResultsResponse(), //running
-        $this->mockNoResultsResponse(), //scheduled
-        $this->mockNoResultsResponse(), //failed
-        $this->mockNoTrimmingResultsResponse(), //trimming
-        $this->mockNoResultsResponse(), //upcoming
-    );
 
     get(route('series.edit', $series))
         ->assertSee($series->image->description);

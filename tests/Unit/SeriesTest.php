@@ -119,6 +119,10 @@ it('updates opencast series id', function () {
     expect($series->opencast_series_id)->not->toBeNull();
 });
 
+it('has a views method for series views returning the number of the views', function () {
+    expect($this->series->views())->toBeInt();
+});
+
 it('has a public scope', function () {
     expect(Series::isPublic())->toBeInstanceOf(Builder::class);
 });

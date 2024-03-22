@@ -33,11 +33,14 @@
                 @include('backend.dashboard._opencast-workflows',['opencastEvents' => $opencastEvents])
             @endif
         </div>
-        @if(count($files) > 0 )
-            <div class="w-1/3 pl-2">
-                @include('backend.dashboard._dropzone-files')
-            </div>
-        @endif
+        @can('administrate-portal-pages')
+            @if(count($files) > 0 )
+                <div class="w-1/3 pl-4">
+                    @include('backend.dashboard._dropzone-files')
+                    @include('backend.dashboard._trending-clips')
+                </div>
+            @endif
+        @endcan
     </div>
     <div class="flex">
         <div class="w-full">

@@ -9,6 +9,11 @@
             Go to public page
         </x-button>
     </a>
+    <a href="{{ route('statistics.series', $series) }}">
+        <x-button class="bg-blue-600 hover:bg-blue-700">
+            Statistics
+        </x-button>
+    </a>
     @if($series->clips->count()> 0 )
         <a href="{{ route('series.clips.batch.show.clips.metadata', $series) }}">
             <x-button class="bg-green-600 hover:bg-green-700">

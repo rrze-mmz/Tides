@@ -1,17 +1,16 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Stats;
 
 use App\Enums\Acl;
 use App\Models\Asset;
-use App\Models\StatsLog;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
 /**
- * @extends Factory<StatsLog>
+ * @extends Factory<VideoViewLog>
  */
-class StatsLogFactory extends Factory
+class AssetViewLogFactory extends Factory
 {
     /**
      * Define the model's default state.

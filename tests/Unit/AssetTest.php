@@ -23,11 +23,11 @@ it('belongs to a clip', function () {
 });
 
 it('has many statistics logs', function () {
-    expect($this->asset->statsLogs())->toBeInstanceOf(HasMany::class);
+    expect($this->asset->viewLog())->toBeInstanceOf(HasMany::class);
 });
 
 it('has many statistic counter', function () {
-    expect($this->asset->statsCounter())->toBeInstanceOf(HasMany::class);
+    expect($this->asset->viewCount())->toBeInstanceOf(HasMany::class);
 });
 
 test('delete an asset will fire an event', function () {
