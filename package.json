@@ -39,7 +39,7 @@
         "popper.js": "^1.16.1",
         "select2": "^4.1.0-rc.0",
         "tw-elements": "^1.0.0-alpha10",
-        "vite": "^4.5.1",
+        "vite": "^4.5.3",
         "vue": "^2.6.12"
     },
     "type": "module"
