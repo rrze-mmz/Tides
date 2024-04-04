@@ -318,6 +318,30 @@ class Clip extends BaseModel
         });
     }
 
+    // Method to sum all geo location data across assets associated with this clip
+    public function sumGeoLocationData()
+    {
+        return $this->assets()->with(['geoCount' => function ($query) {
+            $query->select(
+                'asset_id',
+                DB::raw('SUM(world) AS total_world'),
+                DB::raw('SUM(bavaria) AS total_bavaria'),
+                DB::raw('SUM(germany) AS total_germany')
+            )->groupBy('asset_id');
+        }])
+            ->get()
+            ->flatMap(function ($asset) {
+                return $asset->geoCount;
+            })
+            ->reduce(function ($carry, $item) {
+                return [
+                    'total_world' => $carry['total_world'] + $item->total_world,
+                    'total_bavaria' => $carry['total_bavaria'] + $item->total_bavaria,
+                    'total_germany' => $carry['total_germany'] + $item->total_germany,
+                ];
+            }, ['total_world' => 0, 'total_bavaria' => 0, 'total_germany' => 0]);
+    }
+
     /**
      *  Scope a query to only include public clips
      */

@@ -13,6 +13,7 @@ import 'filepond/dist/filepond.min.css';
 import select2 from 'select2';
 import Plyr from 'plyr';
 import 'plyr/dist/plyr.css';
+import { generateChart } from './chartSetup.js';
 
 Livewire.start();
 
@@ -372,3 +373,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+
+// Assuming the data passed from the Blade template
+window.generateChart = generateChart;

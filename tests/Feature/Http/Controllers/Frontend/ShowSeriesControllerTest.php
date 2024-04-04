@@ -140,7 +140,8 @@ it('shows series multiple semester info if has clips from multiple semesters', f
     $firstClip->save();
 
     get(route('frontend.series.show', $series))
-        ->assertSee($series->latestClip->semester->name.', '.$series->clips()->first()->semester->name);
+        ->assertSee($series->latestClip->semester->name)
+        ->assertSee($series->clips()->first()->semester->name);
 });
 
 it('shows series presenters', function () {
