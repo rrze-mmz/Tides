@@ -18,7 +18,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Psr\Http\Message\ResponseInterface;
 
@@ -223,6 +225,58 @@ class Series extends BaseModel
                 return $asset->viewCount->sum('counter'); // 'counter' is the column for the views
             });
         });
+    }
+
+    // Method to sum all geo location data across clips' assets associated with this series, grouped by month
+    public function sumGeoLocationDataGroupedByMonth(): array
+    {
+        $clips = $this->clips()->with(['assets.geoCount' => function ($query) {
+            $query->select(
+                'resourceid',
+                'month',
+                DB::raw('SUM(world) AS total_world'),
+                DB::raw('SUM(bavaria) AS total_bavaria'),
+                DB::raw('SUM(germany) AS total_germany')
+            )->groupBy('resourceid', 'month')->orderBy('month', 'desc');
+        }])->get();
+
+        $monthlyData = [];
+
+        foreach ($clips as $clip) {
+            foreach ($clip->assets as $asset) {
+                foreach ($asset->geoCount as $geo) {
+                    $month = Carbon::parse($geo->month)->format('Y - F');
+                    if (! isset($monthlyData[$month])) {
+                        $monthlyData[$month] = ['total_world' => 0, 'total_bavaria' => 0, 'total_germany' => 0];
+                    }
+                    $monthlyData[$month]['total_world'] += $geo->total_world;
+                    $monthlyData[$month]['total_bavaria'] += $geo->total_bavaria;
+                    $monthlyData[$month]['total_germany'] += $geo->total_germany;
+                }
+            }
+        }
+
+        krsort($monthlyData);
+        // Aggregate totals
+        $total = ['total_world' => 0, 'total_bavaria' => 0, 'total_germany' => 0];
+        foreach ($monthlyData as $month => $data) {
+            $total['total_world'] += $data['total_world'];
+            $total['total_bavaria'] += $data['total_bavaria'];
+            $total['total_germany'] += $data['total_germany'];
+        }
+
+        // Optionally, add the total as a separate entry if needed
+        //        $monthlyData['Total'] = $total;
+
+        // If you don't want to modify the original monthly data but still need the total,
+        // you can return both separately
+        return [
+            'monthlyData' => $monthlyData,
+            'total' => $total,
+        ];
+
+        // Or simply return the monthly data if the total should be calculated/displayed differently
+        // return $monthlyData;
     }
 
     /**

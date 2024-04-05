@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\Content;
 use App\Events\AssetDeleted;
+use App\Models\Stats\AssetGeoCount;
 use App\Models\Stats\AssetViewCount;
 use App\Models\Stats\AssetViewLog;
 use App\Models\Traits\RecordsActivity;
@@ -50,12 +51,17 @@ class Asset extends BaseModel
 
     public function viewLog(): HasMany
     {
-        return $this->setConnection('statistics')->hasMany(AssetViewLog::class, 'id', 'resource_id');
+        return $this->hasMany(AssetViewLog::class, 'id', 'resource_id');
     }
 
     public function viewCount(): HasMany
     {
-        return $this->setConnection('statistics')->hasMany(AssetViewCount::class, 'resourceid');
+        return $this->hasMany(AssetViewCount::class, 'resourceid');
+    }
+
+    public function geoCount(): HasMany
+    {
+        return $this->hasMany(AssetGeoCount::class, 'resourceid');
     }
 
     /**
