@@ -7,14 +7,15 @@
       ];
     @endphp
     document.addEventListener('DOMContentLoaded', function() {
-        const id = 'clips-bar';
-        const data = @json($transformedArray);
-        const mainLabel = 'Geolocation Stats';
-        const type = 'bar';
-        window.generateChart(id, type, data, mainLabel);
+
+        const data = @json($obj['clipsViews']);
+        window.generateBarChart(data);
     });
 </script>
 
-<div style="width: 800px;">
-    <canvas id="clips-bar"></canvas>
+<div class="flex w-full">
+    <div style="position: relative; height:80vh; width:120vw">
+        <canvas id="tides-bar"></canvas>
+    </div>
 </div>
+

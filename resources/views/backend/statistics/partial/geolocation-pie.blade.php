@@ -8,12 +8,10 @@
     @endphp
     document.addEventListener('DOMContentLoaded', function() {
         const data = @json($transformedArray);
-        const mainLabel = 'Geolocation Stats';
-        const type = 'pie';
-        window.generateChart(type, data, mainLabel);
+        window.generatePieChart(data);
     });
 </script>
 
-<div style="width: 800px;">
+<div style="position: relative; height:40vh; width:80vw">
     <canvas id="tides-pie"></canvas>
 </div>

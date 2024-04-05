@@ -12,17 +12,19 @@ class StatisticsController extends Controller
     public function series(Series $series)
     {
         $statistics = ['another' => 'one'];
-        $clipViews = $series->clips()->orderBy('episode')->get()->mapWithKeys(function ($clip) {
+        $clipsViews = $series->clips()->where('is_livestream', false)->orderBy('episode')->get()->map(function ($clip) {
             $views = $clip->views();
 
             return [
-                $clip->episode.'-'.$clip->title.'['.Carbon::parse($clip->recording_date)->format('Y-m-d').']' => $views,
+                'name' => $clip->episode.'-'.$clip->title.'['.Carbon::parse($clip->recording_date)->format('Y-m-d').']',
+                'count' => $views,
             ];
         });
+
         $obj = collect([
             'info' => $series,
             'geoLocationStats' => $series->sumGeoLocationDataGroupedByMonth(),
-            'clipsViews' => $clipViews,
+            'clipsViews' => $clipsViews,
         ]);
 
         return view('backend.statistics.index', [

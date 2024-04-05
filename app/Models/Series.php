@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -244,7 +245,7 @@ class Series extends BaseModel
         foreach ($clips as $clip) {
             foreach ($clip->assets as $asset) {
                 foreach ($asset->geoCount as $geo) {
-                    $month = $geo->month;
+                    $month = Carbon::parse($geo->month)->format('Y - F');
                     if (! isset($monthlyData[$month])) {
                         $monthlyData[$month] = ['total_world' => 0, 'total_bavaria' => 0, 'total_germany' => 0];
                     }
