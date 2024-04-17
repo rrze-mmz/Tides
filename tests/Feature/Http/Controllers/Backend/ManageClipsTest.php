@@ -523,6 +523,20 @@ test('a moderator can update his clip', function () {
     get(route('clips.edit', $clip))->assertSee($attributes['description']);
 });
 
+it('has a go to public page button', function () {
+    $clip = ClipFactory::ownedBy($this->signInRole(Role::MODERATOR))->create();
+
+    get(route('clips.edit', $clip))
+        ->assertSee(route('frontend.clips.show', $clip))
+        ->assertSee('Go to public page');
+});
+
+it('has a clip statistics button', function () {
+    $clip = ClipFactory::ownedBy($this->signInRole(Role::MODERATOR))->create();
+
+    get(route('clips.edit', $clip))->assertSee('Statistics')->assertSee(route('statistics.clip', $clip));
+});
+
 it('denies access to a moderator when updating a not owned clip', function () {
     $clip = ClipFactory::create();
     signInRole(Role::MODERATOR);

@@ -1,14 +1,8 @@
 <script>
-    @php
-        $transformedArray = [
-          ['name' => 'Bayern', 'count' => $obj['geoLocationStats']['total']['total_bavaria']],
-          ['name' => 'Germany', 'count' => $obj['geoLocationStats']['total']['total_germany']],
-          ['name' => 'World', 'count' => $obj['geoLocationStats']['total']['total_world']],
-      ];
-    @endphp
     document.addEventListener('DOMContentLoaded', function() {
 
         const data = @json($obj['clipsViews']);
+        console.log(data);
         window.generateBarChart(data);
     });
 </script>
