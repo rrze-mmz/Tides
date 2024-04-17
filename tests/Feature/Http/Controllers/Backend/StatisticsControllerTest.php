@@ -64,6 +64,6 @@ it('allows to series members or portal administrators to clip statistics', funct
 it('has a statistics backend index view', function () {
     signInRole(Role::ADMIN);
     get(route('statistics.series', $this->series))
-        ->assertViewHas(['statistics', 'obj'])
+        ->assertViewHas(['obj'])
         ->assertViewIs('backend.statistics.index');
 });

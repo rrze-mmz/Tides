@@ -21,7 +21,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Http\File;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -180,14 +182,6 @@ class Clip extends BaseModel
     }
 
     /**
-     * A clip belongs to format
-     */
-    public function format(): BelongsTo
-    {
-        return $this->BelongsTo(Format::class);
-    }
-
-    /**
      * A clip belongs to type
      */
     public function type(): BelongsTo
@@ -295,10 +289,6 @@ class Clip extends BaseModel
         });
     }
 
-    /*
-     * Return next and previous Models based on current Model episode attribute
-     */
-
     /**
      * Return caption asset for the clip
      */
@@ -309,7 +299,10 @@ class Clip extends BaseModel
         })->first();
     }
 
-    // Function to calculate total views for all assets' stats
+    /*
+     * Return next and previous Models based on current Model episode attribute
+     */
+
     public function views(): int
     {
         return $this->assets->load('viewCount')->sum(function ($asset) {
@@ -318,28 +311,117 @@ class Clip extends BaseModel
         });
     }
 
-    // Method to sum all geo location data across assets associated with this clip
+    // Function to calculate total views for all assets' stats
+
     public function sumGeoLocationData()
     {
         return $this->assets()->with(['geoCount' => function ($query) {
             $query->select(
-                'asset_id',
+                'resourceid',
                 DB::raw('SUM(world) AS total_world'),
                 DB::raw('SUM(bavaria) AS total_bavaria'),
                 DB::raw('SUM(germany) AS total_germany')
-            )->groupBy('asset_id');
+            )->groupBy('resourceid');
         }])
             ->get()
             ->flatMap(function ($asset) {
                 return $asset->geoCount;
             })
             ->reduce(function ($carry, $item) {
-                return [
+                return ['total' => [
                     'total_world' => $carry['total_world'] + $item->total_world,
                     'total_bavaria' => $carry['total_bavaria'] + $item->total_bavaria,
                     'total_germany' => $carry['total_germany'] + $item->total_germany,
+                ],
                 ];
             }, ['total_world' => 0, 'total_bavaria' => 0, 'total_germany' => 0]);
+    }
+
+    // Method to sum all geo location data across assets associated with this clip
+
+    public function sumViewsDataGroupedByMonth(): array
+    {
+        $data = $this->assets->flatMap(function ($asset) {
+            // Return the collection of view counts grouped by 'doa' with their sums
+            return $asset->viewCount->groupBy('doa')
+                ->map(function ($doaGroup, $doa) {
+                    // Return sum of 'counter' for this 'doa' group
+                    return [$doa => $doaGroup->sum('counter')];
+                })->all();
+        });
+
+        // Aggregate sums from all assets by 'doa'
+        $groupedData = collect($data)->reduce(function ($carry, $item) {
+            foreach ($item as $doa => $sum) {
+                if (! isset($carry[$doa])) {
+                    $carry[$doa] = 0;
+                }
+                $carry[$doa] += $sum;
+            }
+
+            return $carry;
+        }, []);
+
+        // Sort by 'doa' in descending order
+        $sortedData = collect($groupedData)->sortByDesc(function ($value, $key) {
+            return $key;
+        })->all();
+
+        return $sortedData;
+    }
+
+    public function sumGeoLocationDataGroupedByMonth(): array
+    {
+        $monthlyData = [];
+
+        $assets = $this->assets()->with(['geoCount' => function ($query) {
+            $query->select(
+                'resourceid',
+                'month',
+                DB::raw('SUM(world) AS total_world'),
+                DB::raw('SUM(bavaria) AS total_bavaria'),
+                DB::raw('SUM(germany) AS total_germany')
+            )->groupBy('resourceid', 'month')->orderBy('month', 'desc');
+        }])
+            ->get();
+        foreach ($assets as $asset) {
+            foreach ($asset->geoCount as $geo) {
+                $month = Carbon::parse($geo->month)->format('Y - F');
+                if (! isset($monthlyData[$month])) {
+                    $monthlyData[$month] = ['total_world' => 0, 'total_bavaria' => 0, 'total_germany' => 0];
+                }
+                $monthlyData[$month]['total_world'] += $geo->total_world;
+                $monthlyData[$month]['total_bavaria'] += $geo->total_bavaria;
+                $monthlyData[$month]['total_germany'] += $geo->total_germany;
+            }
+        }
+        krsort($monthlyData);
+
+        // Aggregate totals
+        $total = ['total_world' => 0, 'total_bavaria' => 0, 'total_germany' => 0];
+        foreach ($monthlyData as $month => $data) {
+            $total['total_world'] += $data['total_world'];
+            $total['total_bavaria'] += $data['total_bavaria'];
+            $total['total_germany'] += $data['total_germany'];
+        }
+
+        // Optionally, add the total as a separate entry if needed
+        //        $monthlyData['Total'] = $total;
+
+        // If you don't want to modify the original monthly data but still need the total,
+        // you can return both separately
+        return [
+            'monthlyData' => $monthlyData,
+            'total' => $total,
+        ];
+    }
+
+    /**
+     * A clip belongs to format
+     */
+    public function format(): BelongsTo
+    {
+        return $this->BelongsTo(Format::class);
     }
 
     /**

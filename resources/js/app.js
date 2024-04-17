@@ -13,9 +13,12 @@ import 'filepond/dist/filepond.min.css';
 import select2 from 'select2';
 import Plyr from 'plyr';
 import 'plyr/dist/plyr.css';
-import { generatePieChart } from './chartsSetup.js';
-import { generateBarChart } from './chartsSetup.js';
-import { generateLineChart } from './chartsSetup.js';
+import {
+  generateGeolocationLineChart,
+  generatePieChart,
+  generateBarChart,
+  generateClipViewsLineChart,
+} from './chartsSetup.js';
 
 Livewire.start();
 
@@ -379,4 +382,5 @@ document.addEventListener('DOMContentLoaded', () => {
 // Assuming the data passed from the Blade template
 window.generatePieChart = generatePieChart;
 window.generateBarChart = generateBarChart;
-window.generateLineChart = generateLineChart;
+window.generateGeolocationLineChart = generateGeolocationLineChart;
+window.generateClipViewsLineChart = generateClipViewsLineChart;

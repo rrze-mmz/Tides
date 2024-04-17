@@ -26,7 +26,7 @@ expect()->extend('toBeOn1e', function () {
 * @param User|null $user
 * @return User
 */
-function signIn(User $user = null): User
+function signIn(?User $user = null): User
 {
     $user = $user ?: User::factory()->create();
     actingAs($user);

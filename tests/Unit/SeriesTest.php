@@ -161,3 +161,11 @@ it('fetches clip acls as comma seperated string', function () {
 it('returns bool for clips acls check', function () {
     expect($this->series->checkAcls())->toBeBool();
 });
+
+it('returns an integer with the counter of the clips views', function () {
+    expect($this->series->views())->toBeInt();
+});
+
+it('returns an array with geolocation views and counters', function () {
+    expect($this->series->sumGeoLocationDataGroupedByMonth())->toBeArray();
+});

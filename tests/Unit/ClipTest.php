@@ -212,3 +212,15 @@ it('creates a folder id after model save', function () {
 it('has a method for returning caption assets', function () {
     expect($this->clip->getCaptionAsset())->toBeNull();
 });
+
+it('has a method for returning an integer for views for a clip', function () {
+    expect($this->clip->views())->toBeInt();
+});
+
+it('returns an array with geolocation views and counters ', function () {
+    expect($this->clip->sumGeoLocationDataGroupedByMonth())->toBeArray();
+});
+
+it('returns an array with views per month for a clip', function () {
+    expect($this->clip->sumViewsDataGroupedByMonth())->toBeArray();
+});

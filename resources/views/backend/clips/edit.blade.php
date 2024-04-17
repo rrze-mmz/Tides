@@ -310,7 +310,11 @@
                                 Go to public page
                             </x-button>
                         </a>
-
+                        <a href="{{ route('statistics.clip', $clip) }}">
+                            <x-button class="bg-blue-600 hover:bg-blue-700">
+                                Statistics
+                            </x-button>
+                        </a>
                         @if ($clip->assets()->count())
                             <a href="{{route('admin.clips.triggerSmilFiles', $clip)}}">
                                 <x-button type='button' class="bg-blue-600 hover:bg-blue-700">
