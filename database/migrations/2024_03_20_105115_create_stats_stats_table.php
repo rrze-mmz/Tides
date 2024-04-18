@@ -6,14 +6,12 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    protected $connection = 'sqlite_stats';
-
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        if (App::environment('testing')) {
+        if (app()->environment('testing')) {
             Schema::create('stats', function (Blueprint $table) {
                 $table->bigIncrements('stats_id');
                 $table->smallInteger('version');

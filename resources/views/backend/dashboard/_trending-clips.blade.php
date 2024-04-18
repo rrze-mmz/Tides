@@ -7,7 +7,7 @@
         @foreach(AssetViewCount::trendingClips(Carbon::now()->subMonth()) as $clip)
             <li class="mt-2 mb-2 w-full p-2 font-normal flex items-center space-x-2">
                 <div>
-                    <x-heroicon-o-arrow-circle-right class="h-6" />
+                    <x-heroicon-o-arrow-right-circle class="h-6" />
                 </div>
                 <div>
                     <a href="{{ route('clips.edit', $clip['info']) }}">

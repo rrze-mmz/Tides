@@ -19,6 +19,10 @@ class AssetViewLog extends StatsModel
 
     public function asset(): BelongsTo
     {
-        return $this->setConnection('pgsql')->belongsTo(Asset::class, 'resource_id');
+        if (app()->environment('testing')) {
+            return $this->belongsTo(Asset::class, 'resource_id');
+        } else {
+            return $this->setConnection('pgsql')->belongsTo(Asset::class, 'resource_id');
+        }
     }
 }

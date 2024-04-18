@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 
 class DeleteTempUploadedFiles extends Command
@@ -27,10 +27,20 @@ class DeleteTempUploadedFiles extends Command
      */
     public function handle(): void
     {
-        foreach (Storage::directories('tmp') as $directory) {
-            $directoryLastModified = Carbon::createFromTimestamp(Storage::lastModified($directory));
+        $directories = Storage::directories('tmp');
 
-            if (now()->diffInHours($directoryLastModified) > 24) {
+        foreach ($directories as $directory) {
+            $files = Storage::allFiles($directory);
+            $directoryLastModified = collect($files)->reduce(function ($carry, $file) {
+                $fileModified = Storage::lastModified($file);
+
+                return $fileModified > $carry ? $fileModified : $carry;
+            }, 0);
+
+            $directoryLastModified = Carbon::createFromTimestamp($directoryLastModified);
+            $hoursDifference = floor(abs(now()->floatDiffInHours($directoryLastModified)));
+
+            if ($hoursDifference > 24) {
                 Storage::deleteDirectory($directory);
             }
         }

@@ -89,7 +89,7 @@
             </div>
 
             <div class="flex w-1/4 items-center">
-                <x-heroicon-o-upload class="h-6 w-6" />
+                <x-heroicon-o-arrow-up-circle class="h-6 w-6" />
                 <span class="pl-3"> {{ $series->latestClip?->updated_at }} </span>
             </div>
 

@@ -30,7 +30,7 @@
                     hover:bg-blue-700 active:bg-blue-900 focus:outline-none focus:border-blue-900
                     focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150"
                                        title="presentation video stream">
-                                        <x-heroicon-o-desktop-computer class="w-6 h-6 fill-white" />
+                                        <x-heroicon-o-computer-desktop class="w-6 h-6 fill-white" />
                                     </a>
                                 @endif
                                 @if($type === 'composite')
@@ -40,7 +40,7 @@
                     hover:bg-blue-700 active:bg-blue-900 focus:outline-none focus:border-blue-900
                     focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150"
                                        title="composite video stream">
-                                        <x-heroicon-o-view-grid class="w-6 h-6 fill-white" />
+                                        <x-heroicon-o-view-columns class="w-6 h-6 fill-white" />
                                     </a>
                                 @endif
                             </div>
@@ -73,7 +73,7 @@
                         <a href="{{route('login')}}">
                             <x-button class='flex items-center bg-blue-600 hover:bg-blue-700'>
                                 Login
-                                <x-heroicon-o-arrow-circle-right class="w-6 ml-4" />
+                                <x-heroicon-o-arrow-right class="w-6 ml-4" />
                             </x-button>
                         </a>
                     @endif
@@ -81,7 +81,7 @@
                         <a href="{{$clip->series->lms_link}}">
                             <x-button class='flex items-center bg-blue-600 hover:bg-blue-700'>
                                 Go to LMS Course
-                                <x-heroicon-o-arrow-circle-right class="w-6 ml-4" />
+                                <x-heroicon-o-arrow-right class="w-6 ml-4" />
                             </x-button>
                         </a>
                     @endif
@@ -160,7 +160,7 @@
         </div>
 
         <div class="flex items-center dark:text-white">
-            <x-heroicon-o-upload class="h-6 w-6" />
+            <x-heroicon-o-arrow-up-circle class="h-6 w-6" />
             <span class="pl-3"> {{ $clip->assets->first()?->updated_at }}</span>
         </div>
 

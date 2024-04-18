@@ -11,7 +11,7 @@ use function Pest\Laravel\withoutVite;
 
 uses(
     Tests\TestCase::class,
-    RefreshDatabase::class
+    RefreshDatabase::class,
 )->beforeEach(function () {
     withoutVite();
     Config::set('logging.channels.single.path', storage_path('logs/laravel.log'));

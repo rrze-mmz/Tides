@@ -16,7 +16,7 @@ class StatsModel extends Model
         parent::__construct($attributes);
 
         if (app()->environment('testing')) {
-            $this->connection = 'sqlite_stats';
+            $this->connection = 'sqlite';
         } else {
             $this->connection = 'pgsql_stats';
         }
