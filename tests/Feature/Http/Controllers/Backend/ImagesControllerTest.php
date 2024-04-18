@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Storage;
 
 use function Pest\Laravel\get;
 use function Pest\Laravel\patch;
-use function Pest\Laravel\withoutExceptionHandling;
 
 uses()->group('backend')->beforeEach(function () {
     $disk = Storage::fake('images');
@@ -116,7 +115,6 @@ it('denies access to image create form for portal assistants', function () {
 });
 
 it('allows access to image create for a minimum role of portal admin', function () {
-    withoutExceptionHandling();
     signInRole(Role::ADMIN);
 
     get(route('images.create'))
@@ -124,7 +122,7 @@ it('allows access to image create for a minimum role of portal admin', function 
         ->assertViewIs('backend.images.create');
 });
 
-it('hasa show page for an image with information about it', function () {
+it('has a show page for an image with information about it', function () {
     signInRole(Role::MODERATOR);
 
     get(route('images.show', $this->image))

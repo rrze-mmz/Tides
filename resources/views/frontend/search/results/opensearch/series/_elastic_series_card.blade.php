@@ -77,7 +77,7 @@
                 @endif
                 <div class="flex items-center">
                     <div class="pr-2">
-                        <x-heroicon-o-office-building class="h-4" />
+                        <x-heroicon-o-building-office class="h-4" />
                     </div>
                     <div class="">
                         <p class="text-gray-900 dark:text-white">
