@@ -38,7 +38,7 @@
                             Settings
                         </div>
                         <div>
-                            <x-heroicon-o-arrow-circle-right class="w-6" />
+                            <x-heroicon-o-arrow-right class="w-6" />
                         </div>
                     </x-button>
                 </a>
@@ -75,7 +75,7 @@
                             Settings
                         </div>
                         <div>
-                            <x-heroicon-o-arrow-circle-right class="w-6" />
+                            <x-heroicon-o-arrow-right class="w-6" />
                         </div>
                     </x-button>
                 </a>
@@ -109,7 +109,7 @@
                             Settings
                         </div>
                         <div>
-                            <x-heroicon-o-arrow-circle-right class="w-6" />
+                            <x-heroicon-o-arrow-right class="w-6" />
                         </div>
                     </x-button>
                 </a>
@@ -157,7 +157,7 @@
                             Settings
                         </div>
                         <div>
-                            <x-heroicon-o-arrow-circle-right class="w-6" />
+                            <x-heroicon-o-arrow-right class="w-6" />
                         </div>
                     </x-button>
                 </a>

@@ -45,7 +45,7 @@
                 @if(!is_null($series['owner']))
                     <div class="flex items-center">
                         <div class="pr-2">
-                            <x-heroicon-o-upload class="h-4" />
+                            <x-heroicon-o-arrow-up-circle class="h-4" />
                         </div>
                         <div class="">
                             <p class="text-gray-900 dark:text-white">

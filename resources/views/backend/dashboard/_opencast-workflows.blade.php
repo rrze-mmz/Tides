@@ -55,7 +55,7 @@
                                             @if ( Request::segment(1) === 'admin')
                                                 <div class="pl-2">
                                                     <a href="{{ route('series.edit', str($event['series'])->after('courseID:'))}}">
-                                                        <x-heroicon-o-arrow-circle-right class="h-6" />
+                                                        <x-heroicon-o-arrow-right-circle class="h-6" />
                                                     </a>
                                                 </div>
                                             @endif

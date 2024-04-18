@@ -2,9 +2,11 @@
 
 use App\Enums\OpencastWorkflowState;
 use App\Enums\Role;
+use App\Models\Stats\AssetViewCount;
 use App\Services\OpencastService;
 use Facades\Tests\Setup\ClipFactory;
 use Facades\Tests\Setup\SeriesFactory;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
 use Tests\Setup\WorksWithOpencastClient;
 
@@ -16,6 +18,12 @@ uses(WorksWithOpencastClient::class);
 
 uses()->beforeEach(function () {
     signInRole(Role::MODERATOR);
+    AssetViewCount::factory()->create();
+});
+
+uses()->afterEach(function () {
+    Artisan::call('config:clear');
+    Artisan::call('cache:clear');
 });
 
 it('should not be accessed by a visitor', function () {

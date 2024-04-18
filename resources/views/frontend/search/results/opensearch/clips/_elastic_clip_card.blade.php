@@ -1,4 +1,4 @@
-@use(Illuminate\Support\Carbon)
+@use(Illuminate\Support\Carbon;use Illuminate\Support\Str)
 <figure class="my-2 flex w-full align-middle bg-indigo-200 dark:bg-indigo-800 rounded-2xl">
     <div class="flex w-full flex-col justify-between p-4">
         <div class="mb-1">
@@ -46,7 +46,7 @@
                 @if(!is_null($clip['owner']))
                     <div class="flex items-center">
                         <div class="pr-2">
-                            <x-heroicon-o-upload class="h-4 dark:text-white" />
+                            <x-heroicon-o-arrow-up-circle class="h-4 dark:text-white" />
                         </div>
                         <div class="">
                             <p class="text-gray-900 dark:text-white">
@@ -95,7 +95,7 @@
                             <div class="flex items-center align-middle italic dark:text-white">
                                 <a href="{{ route('frontend.series.show', $clip['series']['series_slug']) }}">
                                     @php
-                                        if(\Illuminate\Support\Str::length($clip['series']['series_semester']) > 50) {
+                                        if(Str::length($clip['series']['series_semester']) > 50) {
                                                 $semester = 'Multiple Semesters';
                                             }
                                         else {

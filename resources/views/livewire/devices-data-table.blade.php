@@ -6,7 +6,7 @@
                     <label for="search" class="sr-only">Search</label>
                     <div class="relative">
                         <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                            <x-heroicon-o-search class="h-5 w-5 text-gray-400" />
+                            <x-heroicon-o-magnifying-glass class="h-5 w-5 text-gray-400" />
                         </div>
                         <input wire:model.live="search"
                                id="search"
@@ -204,7 +204,7 @@
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
                                 <div>
                                     @if ($device->has_recording_func)
-                                        <x-heroicon-o-badge-check class="h-6 w-6" />
+                                        <x-heroicon-o-check-badge class="h-6 w-6" />
                                     @else
                                         <x-heroicon-o-x-circle class="h-6 w-6" />
                                     @endif
@@ -213,7 +213,7 @@
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
                                 <div>
                                     @if ($device->has_livestream_func)
-                                        <x-heroicon-o-badge-check class="h-6 w-6" />
+                                        <x-heroicon-o-check-badge class="h-6 w-6" />
                                     @else
                                         <x-heroicon-o-x-circle class="h-6 w-6" />
                                     @endif
@@ -222,7 +222,7 @@
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
                                 <div>
                                     @if ($device->operational)
-                                        <x-heroicon-o-badge-check class="h-6 w-6" />
+                                        <x-heroicon-o-check-badge class="h-6 w-6" />
                                     @else
                                         <x-heroicon-o-x-circle class="h-6 w-6" />
                                     @endif
@@ -231,7 +231,7 @@
                             <td class="w-2/12 px-6 py-4 whitespace-no-wrap">
                                 <div>
                                     @if ($device->is_hybrid)
-                                        <x-heroicon-o-badge-check class="h-6 w-6" />
+                                        <x-heroicon-o-check-badge class="h-6 w-6" />
                                     @else
                                         <x-heroicon-o-x-circle class="h-6 w-6" />
                                     @endif

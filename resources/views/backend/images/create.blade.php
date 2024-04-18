@@ -9,7 +9,7 @@
             <a href="{{ route('images.index') }}">
                 <x-button class="flex items-center bg-blue-700 hover:bg-blue-700">
                     <div class="pr-2">
-                        <x-heroicon-o-arrow-circle-left class="h-6 w-6" />
+                        <x-heroicon-o-arrow-left-circle class="h-6 w-6" />
                     </div>
                     <div>
                         Back to images list
@@ -45,7 +45,7 @@
             @enderror
             <x-button class="bg-blue-600 hover:bg-blue-700">
                 <div class="flex">
-                    <x-heroicon-o-upload class="h-6 w-6" />
+                    <x-heroicon-o-arrow-up-circle class="h-6 w-6" />
                     <span class="pl-4">
                         Upload file
                     </span>
