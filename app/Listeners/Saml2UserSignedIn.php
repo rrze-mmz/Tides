@@ -63,6 +63,7 @@ class Saml2UserSignedIn
                 'name' => $user->username,
                 'data' => config('settings.user'), ]);
         }
+        $user->refresh(); //refresh the user otherwise the settings value would be null
 
         return $user->settings;
     }
