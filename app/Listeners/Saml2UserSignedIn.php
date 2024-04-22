@@ -34,9 +34,7 @@ class Saml2UserSignedIn
             'sessionIndex' => $samlUser->getSessionIndex(),
             'nameId' => $samlUser->getNameId(),
         ];
-
-        //        Log::info($messageId);
-        //        Log::info($samlUser);
+        Log::info($samlUser);
         //check if email already exists and fetch user
         $user = User::firstOrCreate(
             [
@@ -51,9 +49,21 @@ class Saml2UserSignedIn
             ]
         );
         // Login a user
-        $lang = $user->settings->data['language'];
+        $userSettings = $this->checkUserSettings($user);
+        $lang = $userSettings->data['language'];
         Auth::login($user);
         session()->put('locale', $lang);
         session()->put('url.intended', session('url.intended'));
+    }
+
+    private function checkUserSettings(User $user): mixed
+    {
+        if (is_null($user->settings)) {
+            $user->settings()->create([
+                'name' => $user->username,
+                'data' => config('settings.user'), ]);
+        }
+
+        return $user->settings;
     }
 }
