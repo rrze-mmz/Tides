@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\ApplicationStatus;
+use App\Models\Traits\RecordsActivity;
 use App\Observers\SettingObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 class Setting extends BaseModel
 {
     use HasFactory;
+    use RecordsActivity;
 
     public function scopeOpenAdminPortalApplications(): \Illuminate\Support\Collection
     {

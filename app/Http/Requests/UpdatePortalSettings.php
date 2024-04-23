@@ -7,14 +7,6 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class UpdatePortalSettings extends FormRequest
 {
-    protected function prepareForValidation()
-    {
-        $this->merge([
-            'maintenance_mode' => $this->maintenance_mode === 'on',
-            'allow_user_registration' => $this->allow_user_registration === 'on',
-        ]);
-    }
-
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -35,6 +27,21 @@ class UpdatePortalSettings extends FormRequest
             'allow_user_registration' => ['required', 'boolean'],
             'feeds_default_owner_name' => ['required', 'string'],
             'feeds_default_owner_email' => ['required', 'email'],
+            'show_dropbox_files_in_dashboard' => ['required', 'boolean'],
+            'player_show_article_link_in_player' => ['required', 'boolean'],
+            'player_article_link_url' => ['required', 'url'],
+            'player_article_link_text' => ['required', 'string'],
+            'clip_generic_poster_image_name' => ['required', 'string'],
         ];
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'maintenance_mode' => $this->maintenance_mode === 'on',
+            'allow_user_registration' => $this->allow_user_registration === 'on',
+            'show_dropbox_files_in_dashboard' => $this->show_dropbox_files_in_dashboard == 'on',
+            'player_show_article_link_in_player' => $this->player_show_article_link_in_player === 'on',
+        ]);
     }
 }

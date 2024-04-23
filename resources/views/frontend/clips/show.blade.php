@@ -1,3 +1,4 @@
+@php use App\Models\Setting; @endphp
 @extends('layouts.frontend')
 
 @section('content')
@@ -5,6 +6,9 @@
         <div class="pb-10">
             @include('frontend.search._searchbar')
         </div>
+        @if($playerSetting->data['player_show_article_link_in_player'])
+            @include('frontend.clips._article_section')
+        @endif
         <div class="flex items-center border-b-2 border-black pb-2 dark:border-white">
             <div class="flex-grow">
                 <h2 class="text-2xl font-bold dark:text-white">{{ $clip->title }} [ID: {{ $clip->id }}]</h2>

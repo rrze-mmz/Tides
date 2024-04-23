@@ -65,7 +65,7 @@
                           label="Theme ID top right"
                           :fullCol="false"
                           :required="true" />
-            <div class="mb-5 border-b-2 border-black py-4 pb-2 text-xl  dark:text-white dark:border-white">
+            <div class="mb-5 border-b border-black py-4 pb-2 text-xl  dark:text-white dark:border-white">
                 Archive Settings
             </div>
             <x-form.input field-name="archive_path"

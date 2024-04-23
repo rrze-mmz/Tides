@@ -15,10 +15,8 @@ class UserObserver
 
     /**
      * Handle the User "created" event.
-     *
-     * @return void
      */
-    public function created(User $user)
+    public function created(User $user): void
     {
         $user->assignRole(Role::USER);
         $user->settings()->create([
@@ -32,10 +30,8 @@ class UserObserver
 
     /**
      * Handle the User "updated" event.
-     *
-     * @return void
      */
-    public function updated(User $user)
+    public function updated(User $user): void
     {
         session()->flash('flashMessage', "{$user->getFullNameAttribute()} ".__FUNCTION__.' successfully');
 
@@ -44,10 +40,8 @@ class UserObserver
 
     /**
      * Handle the User "deleted" event.
-     *
-     * @return void
      */
-    public function deleted(User $user)
+    public function deleted(User $user): void
     {
         Setting::where('name', $user->username)->delete();
         session()->flash('flashMessage', "{$user->getFullNameAttribute()} ".__FUNCTION__.' successfully');

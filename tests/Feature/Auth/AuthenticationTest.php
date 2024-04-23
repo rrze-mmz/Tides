@@ -2,10 +2,11 @@
 
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Slides\Saml2\Models\Tenant;
 
-uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
+uses(RefreshDatabase::class);
 
 it('has a login selection page with options', function () {
     Tenant::create([

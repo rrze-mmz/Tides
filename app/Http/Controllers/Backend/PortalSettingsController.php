@@ -9,7 +9,6 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Artisan;
 
 class PortalSettingsController extends Controller
 {
@@ -22,12 +21,7 @@ class PortalSettingsController extends Controller
             ['name' => 'portal'],
             [
                 'name' => 'portal',
-                'data' => [
-                    'maintenance_mode' => config('tides.maintenance_mode'),
-                    'allow_user_registration' => config('tides.allow_user_registration'),
-                    'feeds_default_owner_name' => config('tides.feeds_default_owner_name'),
-                    'feeds_default_owner_email' => config('tides.feeds_default_owner_email'),
-                ],
+                'data' => [config('settings.portal')],
             ]
         );
 
@@ -36,6 +30,11 @@ class PortalSettingsController extends Controller
             'allow_user_registration' => $setting->data['allow_user_registration'] ?? false,
             'feeds_default_owner_name' => $setting->data['feeds_default_owner_name'] ?? 'Tides',
             'feeds_default_owner_email' => $setting->data['feeds_default_owner_email'] ?? 'itunes@tides.com',
+            'player_show_article_link_in_player' => $setting->data['player_show_article_link_in_player'] ?? false,
+            'player_article_link_url' => $setting->data['player_article_link_url'] ?? 1,
+            'player_article_link_text' => $setting->data['player_article_link_text'] ?? '',
+            'clip_generic_poster_image_name' => $setting->data['clip_generic_poster_image_name'] ?? '',
+            'show_dropbox_files_in_dashboard' => $setting->data['show_dropbox_files_in_dashboard'] ?? true,
         ];
 
         return view('backend.settings.portal', ['setting' => $setting->data]);
@@ -51,13 +50,6 @@ class PortalSettingsController extends Controller
         //existing setting
         $setting = Setting::portal();
         $validated = $request->validated();
-
-        //user updated setting
-        //        if ($setting->data['maintenance_mode'] !== $validated['maintenance_mode']) {
-        //            //temporary disabled because not working as expected
-        //            $call = $validated['maintenance_mode'] ? 'down' : 'up';
-        //            Artisan::call($call);
-        //        }
 
         $setting->data = $validated;
         $setting->save();

@@ -6,6 +6,7 @@ use App\Enums\Role;
 use App\Models\Asset;
 use App\Models\Clip;
 use App\Models\Presenter;
+use App\Models\Setting;
 use App\Models\User;
 use App\Services\WowzaService;
 use Facades\Tests\Setup\ClipFactory;
@@ -281,4 +282,16 @@ it('redirects to clip page after user login, if a clip has a portal acl', functi
         'username' => $user->username,
         'password' => 'password', // The password used when creating the user
     ])->assertRedirect($protectedPageUrl);
+});
+
+it('displays a ads text if the portal setting is set', function () {
+    $setting = Setting::portal();
+    $portalSetting = $setting->data;
+    $portalSetting['player_show_article_link_in_player'] = true;
+    $portalSetting['player_article_link_text'] = 'This is an ad text';
+    $setting->data = $portalSetting;
+    $setting->save();
+
+    expect(Setting::portal()->data['player_show_article_link_in_player'])->toBeTrue();
+    get(route('frontend.clips.show', $this->clip))->assertSee($portalSetting['player_article_link_text']);
 });
