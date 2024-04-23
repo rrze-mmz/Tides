@@ -41,7 +41,7 @@ it('search presenters', function () {
         ]);
 });
 
-it('it is not allowed for a guest to use the user api', function () {
+it('is not allowed for a guest to use the user api', function () {
     get(route('api.users').'?query=john')->assertForbidden();
 });
 

@@ -4,6 +4,7 @@ return [
     'portal' => [
         'maintenance_mode' => false,
         'allow_user_registration' => false,
+        'show_dropbox_files_in_dashboard' => true,
         'feeds_default_owner_name' => 'Tides',
         'feeds_default_owner_email' => 'itunes@tides.com',
         'default_image_id' => env('DEFAULT_IMAGE_ID', 1),
@@ -15,6 +16,10 @@ return [
         'admin_main_address' => env('ADMIN_MAIL_ADDRESS', 'admin@tides.org'),
         'cdn_server_url' => env('CDN_SERVER_URL', 'http://localhost/'),
         'cdn_server_secret' => env('CDN_SERVER_SECRET', 'dsnJ23fjeq!'),
+        'player_show_article_link_in_player' => false,
+        'player_article_link_id' => 1,
+        'player_article_link_text' => '',
+        'clip_generic_poster_image_name' => 'generic_clip_poster_image.png',
     ],
     'user' => [
         'accept_use_terms' => false,

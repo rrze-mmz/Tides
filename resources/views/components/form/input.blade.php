@@ -16,7 +16,7 @@
         </div>
     </div>
     <div class="{{($fullCol)?'col-start-2 col-end-8':'w-full'}}">
-        <input class="py-2 px-4 w-full leading-tight text-gray-700 bg-white rounded border-2
+        <input class="py-2 px-4 w-full leading-tight  bg-white rounded border-2
                                             border-gray-200 appearance-none focus:outline-none focus:bg-white
                                             focus:border-blue-500 "
                type="{{ $inputType }}"

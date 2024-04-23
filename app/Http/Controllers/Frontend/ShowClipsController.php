@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Enums\Content;
 use App\Http\Controllers\Controller;
 use App\Models\Clip;
+use App\Models\Setting;
 use App\Services\WowzaService;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\View\View;
@@ -50,17 +51,13 @@ class ShowClipsController extends Controller
         if ($wowzaStatus) {
             $urls = $wowzaService->vodSecureUrls($clip);
 
-            if (empty($urls)) {
-                $defaultPlayerUrl = [];
-            } elseif ($urls->has('composite')) {
-                $defaultPlayerUrl = $urls['composite'];
-            } elseif ($urls->has('presenter')) {
-                $defaultPlayerUrl = $urls['presenter'];
-            } elseif ($urls->has('presentation')) {
-                $defaultPlayerUrl = $urls['presentation'];
-            } else {
-                $defaultPlayerUrl = [];
-            }
+            $defaultPlayerUrl = match (true) {
+                empty($urls) => [],
+                $urls->has('composite') => $urls['composite'],
+                $urls->has('presenter') => $urls['presenter'],
+                $urls->has('presentation') => $urls['presentation'],
+                default => []
+            };
         }
 
         return view('frontend.clips.show', [
@@ -70,6 +67,7 @@ class ShowClipsController extends Controller
             'alternativeVideoUrls' => $urls,
             'previousNextClipCollection' => $clip->previousNextClipCollection(),
             'assetsResolutions' => $assetsResolutions,
+            'playerSetting' => Setting::portal(),
         ]);
     }
 }

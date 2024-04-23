@@ -1,3 +1,4 @@
+@php use App\Models\Setting; @endphp
 @extends('layouts.backend')
 
 @section('content')
@@ -28,13 +29,14 @@
         </div>
     </div>
     <div class="flex">
-        <div class="@if(count($files) > 0)) w-2/3 @else w-full @endif">
+        @php $dropBoxFilesCheck = count($files) > 0 && Setting::portal()->data['show_dropbox_files_in_dashboard'];  @endphp
+        <div class="@if($dropBoxFilesCheck)) w-2/3 @else w-full @endif">
             @if($opencastEvents->isNotEmpty())
                 @include('backend.dashboard._opencast-workflows',['opencastEvents' => $opencastEvents])
             @endif
         </div>
         @can('administrate-portal-pages')
-            @if(count($files) > 0 )
+            @if($dropBoxFilesCheck)
                 <div class="w-1/3 pl-4">
                     @include('backend.dashboard._dropzone-files')
                     @include('backend.dashboard._trending-clips')

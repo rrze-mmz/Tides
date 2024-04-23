@@ -3,6 +3,7 @@
 use App\Enums\Acl;
 use App\Models\Asset;
 use App\Models\Clip;
+use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -18,9 +19,13 @@ use Psr\Container\NotFoundExceptionInterface;
  */
 function fetchClipPoster(?string $player_preview): string
 {
-    return (is_null($player_preview))
-        ? '/images/generic_clip_poster_image.png'
-        : "/thumbnails/previews-ng/{$player_preview}";
+    if (is_null($player_preview)) {
+        $portalSettings = Setting::portal();
+
+        return '/images/'.$portalSettings->data['clip_generic_poster_image_name'];
+    } else {
+        return "/thumbnails/previews-ng/{$player_preview}";
+    }
 }
 
 /**
