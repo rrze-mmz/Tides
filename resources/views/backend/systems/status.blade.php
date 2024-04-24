@@ -47,7 +47,7 @@
         <div class="m-2 rounded-lg border-2 border-solid border-black  dark:border-white p-2 p-2">
             <div class="flex place-content-around justify-between">
                 <div>
-                    <h3 class="pb-6 font-semibold text-green-500">Opencast
+                    <h3 class="pb-6 font-semibold text-green-500"> Video workflow
                     </h3>
                 </div>
                 <div>
@@ -84,7 +84,7 @@
         <div class="m-2 rounded-lg border-2 border-solid border-black  dark:border-white p-2 p-2">
             <div class="flex place-content-around justify-between">
                 <div>
-                    <h3 class="pb-6 font-semibold text-orange-500">Wowza
+                    <h3 class="pb-6 font-semibold text-orange-500">Video Streaming
                     </h3>
                 </div>
                 <div>
@@ -118,7 +118,7 @@
         <div class="m-2 rounded-lg border-2 border-solid border-black  dark:border-white p-2 p-2">
             <div class="flex place-content-around justify-between">
                 <div>
-                    <h3 class="pb-6 font-semibold  text-blue-500">OpenSearch
+                    <h3 class="pb-6 font-semibold  text-blue-500">Search
                     </h3>
                 </div>
                 <div>

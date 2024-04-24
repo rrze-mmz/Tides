@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UpdateOpenSearchSettings;
+use App\Http\Requests\UpdateSearchSettings;
 use App\Models\Setting;
 use Illuminate\Http\RedirectResponse;
 
-class OpenSearchSettingsController extends Controller
+class SearchSettingsController extends Controller
 {
     public function show()
     {
@@ -21,10 +21,10 @@ class OpenSearchSettingsController extends Controller
             'prefix' => $setting->data['prefix'] ?? 'tides_',
         ];
 
-        return view('backend.settings.openSearch', ['setting' => $setting->data]);
+        return view('backend.settings.search', ['setting' => $setting->data]);
     }
 
-    public function update(UpdateOpenSearchSettings $request): RedirectResponse
+    public function update(UpdateSearchSettings $request): RedirectResponse
     {
         $setting = Setting::openSearch();
 

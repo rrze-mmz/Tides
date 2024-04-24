@@ -33,11 +33,11 @@ class WowzaServiceProvider extends ServiceProvider
             $authType = config('app.env') === 'local' ? 'basic' : 'digest';
 
             return new WowzaClient([
-                'base_uri' => $settingsData['api_url'],
+                'base_uri' => $settingsData['wowza_api_url'],
                 'verify' => config('app.env') === 'production',
                 'auth' => [
-                    $settingsData['username'],
-                    $settingsData['password'],
+                    $settingsData['wowza_username'],
+                    $settingsData['wowza_password'],
                     $authType,
                 ],
             ]);

@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UpdateOpencastSettings;
+use App\Http\Requests\UpdateVideoWorkflowSettings;
 use App\Models\Setting;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 
-class OpencastSettingsController extends Controller
+class VideoWorkflowSettingsController extends Controller
 {
     /**
      * Display Opencast settings
@@ -33,13 +33,13 @@ class OpencastSettingsController extends Controller
             'assistant_group_name' => $setting->data['assistant_group_name'] ?? 'ROLE_GROUP_TIDES_ASSISTANTS',
         ];
 
-        return view('backend.settings.opencast', ['setting' => $setting->data]);
+        return view('backend.settings.workflow', ['setting' => $setting->data]);
     }
 
     /**
      * Update Opencast settings
      */
-    public function update(UpdateOpencastSettings $request): RedirectResponse
+    public function update(UpdateVideoWorkflowSettings $request): RedirectResponse
     {
         $setting = Setting::opencast();
 

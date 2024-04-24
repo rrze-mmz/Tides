@@ -18,16 +18,6 @@ class StreamingSettingsController extends Controller
     {
         $setting = Setting::streaming();
 
-        $setting->data = [
-            'engine_url' => $setting->data['engine_url'] ?? 'localhost:1935',
-            'api_url' => $setting->data['api_url'] ?? 'localhost:8087',
-            'username' => $setting->data['username'] ?? 'admin',
-            'password' => $setting->data['password'] ?? 'username',
-            'content_path' => $setting->data['content_path'] ?? '/content/videoportal',
-            'secure_token' => $setting->data['secure_token'] ?? 'awsTides12tvv10',
-            'token_prefix' => $setting->data['token_prefix'] ?? 'tides',
-        ];
-
         return view('backend.settings.streaming', ['setting' => $setting->data]);
     }
 

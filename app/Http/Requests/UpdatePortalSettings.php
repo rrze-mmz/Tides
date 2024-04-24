@@ -26,11 +26,15 @@ class UpdatePortalSettings extends FormRequest
             'maintenance_mode' => ['required', 'boolean'],
             'allow_user_registration' => ['required', 'boolean'],
             'feeds_default_owner_name' => ['required', 'string'],
+            'protected_files_string' => ['required', 'string'],
             'feeds_default_owner_email' => ['required', 'email'],
+            'support_email_address' => ['required', 'email'],
+            'admin_main_address' => ['required', 'email'],
             'show_dropbox_files_in_dashboard' => ['required', 'boolean'],
             'player_show_article_link_in_player' => ['required', 'boolean'],
             'player_article_link_url' => ['required', 'url'],
             'player_article_link_text' => ['required', 'string'],
+            'player_enable_adaptive_streaming' => ['required', 'boolean'],
             'clip_generic_poster_image_name' => ['required', 'string'],
         ];
     }
@@ -42,6 +46,8 @@ class UpdatePortalSettings extends FormRequest
             'allow_user_registration' => $this->allow_user_registration === 'on',
             'show_dropbox_files_in_dashboard' => $this->show_dropbox_files_in_dashboard == 'on',
             'player_show_article_link_in_player' => $this->player_show_article_link_in_player === 'on',
+            'player_enable_adaptive_streaming' => $this->player_enable_adaptive_streaming === 'on',
+
         ]);
     }
 }
