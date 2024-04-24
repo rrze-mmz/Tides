@@ -132,16 +132,6 @@
                             Clips
                         </a>
                     </li>
-                    @if(isset($opencastSeriesInfo['health']) && $opencastSeriesInfo['health'])
-                        <li class="me-2">
-                            <a href="#opencast"
-                               x-on:click="activeTab = 2"
-                               :class="activeTab === 2 ? activeClass : inactiveClass"
-                            >
-                                Opencast
-                            </a>
-                        </li>
-                    @endif
                     <li class="me-2">
                         <a href="#actions"
                            x-on:click="activeTab = 3"
@@ -150,6 +140,16 @@
                             {{ __('series.common.actions') }}
                         </a>
                     </li>
+                    @if(isset($opencastSeriesInfo['health']) && $opencastSeriesInfo['health'])
+                        <li class="me-2">
+                            <a href="#opencast"
+                               x-on:click="activeTab = 2"
+                               :class="activeTab === 2 ? activeClass : inactiveClass"
+                            >
+                                Video Workflow
+                            </a>
+                        </li>
+                    @endif
                     <li class="me-2">
                         <a href="#comments-section"
                            x-on:click="activeTab = 4"

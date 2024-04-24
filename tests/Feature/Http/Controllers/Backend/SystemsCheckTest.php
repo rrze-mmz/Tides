@@ -102,7 +102,7 @@ it('should check for OpenSearch server', function () {
     $this->mockWowzaHandler->append($this->mockServerNotAvailable());
     $this->mockOpenSearchHandler->append($this->mockClusterHealthResponse());
 
-    get(route('systems.status'))->assertSee('OpenSearch');
+    get(route('systems.status'))->assertSee('Search');
 });
 
 afterEach(function () {

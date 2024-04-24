@@ -31,7 +31,7 @@ it('denies opencast settings page in roles other than superadmin', function () {
 it('shows opencast settings page', function () {
     get(route('settings.opencast.show'))
         ->assertOk()
-        ->assertViewIs('backend.settings.opencast')
+        ->assertViewIs('backend.settings.workflow')
         ->assertSee('localhost:8080')
         ->assertSee('admin')
         ->assertSee('Admin password');

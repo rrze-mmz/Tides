@@ -21,10 +21,11 @@ function fetchClipPoster(?string $player_preview): string
 {
     if (is_null($player_preview)) {
         $portalSettings = Setting::portal();
+        $img = $portalSettings->data['clip_generic_poster_image_name'] ?? 'generic_poster_image.png';
 
-        return '/images/'.$portalSettings->data['clip_generic_poster_image_name'];
+        return "/images/$img";
     } else {
-        return "/thumbnails/previews-ng/{$player_preview}";
+        return "/thumbnails/previews-ng/$player_preview";
     }
 }
 

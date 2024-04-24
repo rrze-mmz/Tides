@@ -30,7 +30,7 @@ it('allows viewing openSearch settings page only to superadmins', function () {
 it('displays OpenSearch settings page', function () {
     get(route('settings.openSearch.show'))
         ->assertOk()
-        ->assertViewIs('backend.settings.openSearch')
+        ->assertViewIs('backend.settings.search')
         ->assertSee('URL')
         ->assertSee('port')
         ->assertSee('username')

@@ -16,10 +16,9 @@ use App\Http\Controllers\Backend\DevicesController;
 use App\Http\Controllers\Backend\DocumentController;
 use App\Http\Controllers\Backend\FileUploadController;
 use App\Http\Controllers\Backend\ImagesController;
-use App\Http\Controllers\Backend\OpencastSettingsController;
-use App\Http\Controllers\Backend\OpenSearchSettingsController;
 use App\Http\Controllers\Backend\PortalSettingsController;
 use App\Http\Controllers\Backend\PresentersController;
+use App\Http\Controllers\Backend\SearchSettingsController;
 use App\Http\Controllers\Backend\SeriesClipsController;
 use App\Http\Controllers\Backend\SeriesController;
 use App\Http\Controllers\Backend\SeriesMembershipController;
@@ -34,6 +33,7 @@ use App\Http\Controllers\Backend\UpdateSeriesImage;
 use App\Http\Controllers\Backend\UploadImageController;
 use App\Http\Controllers\Backend\UserNotificationsController;
 use App\Http\Controllers\Backend\UsersController;
+use App\Http\Controllers\Backend\VideoWorkflowSettingsController;
 use App\Http\Controllers\Frontend\AcceptUseTermsController;
 use App\Http\Controllers\Frontend\AdminPortalUseTermsController;
 use App\Http\Controllers\Frontend\ApiController;
@@ -352,16 +352,16 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
         Route::get('/systems', SystemsCheckController::class)->name('systems.status');
         Route::get('/settings/portal', [PortalSettingsController::class, 'show'])->name('settings.portal.show');
         Route::put('/settings/portal', [PortalSettingsController::class, 'update'])->name('settings.portal.update');
-        Route::get('/settings/opencast', [OpencastSettingsController::class, 'show'])->name('settings.opencast.show');
-        Route::put('/settings/opencast', [OpencastSettingsController::class, 'update'])
+        Route::get('/settings/opencast', [VideoWorkflowSettingsController::class, 'show'])->name('settings.opencast.show');
+        Route::put('/settings/opencast', [VideoWorkflowSettingsController::class, 'update'])
             ->name('settings.opencast.update');
         Route::get('/settings/streaming', [StreamingSettingsController::class, 'show'])
             ->name('settings.streaming.show');
         Route::put('/settings/streaming', [StreamingSettingsController::class, 'update'])
             ->name('settings.streaming.update');
-        Route::get('/settings/openSearch', [OpenSearchSettingsController::class, 'show'])
+        Route::get('/settings/openSearch', [SearchSettingsController::class, 'show'])
             ->name('settings.openSearch.show');
-        Route::put('/settings/openSearch', [OpenSearchSettingsController::class, 'update'])
+        Route::put('/settings/openSearch', [SearchSettingsController::class, 'update'])
             ->name('settings.openSearch.update');
         Route::post('/adminPortal/application', AdminPortalApplicationController::class)
             ->name('admin.portal.application.grant');
