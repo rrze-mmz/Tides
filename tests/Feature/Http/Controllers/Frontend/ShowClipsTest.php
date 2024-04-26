@@ -123,7 +123,7 @@ it('a clip owner can access frontend clip page that belongs to series that it is
 it('player in clip public page is using wowza url if wowza server is available', function () {
     $this->mockHandler->append($this->mockCheckApiConnection(), $this->mockVodSecureUrls());
 
-    get(route('frontend.clips.show', $this->clip))->assertSee(env('WOWZA_ENGINE_URL'));
+    get(route('frontend.clips.show', $this->clip))->assertSee(config('settings.streaming.wowza_vod_engine_url'));
 });
 
 it('player tries to load the video file as html5 source dom element', function () {

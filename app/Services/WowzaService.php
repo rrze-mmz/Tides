@@ -207,14 +207,16 @@ class WowzaService
                 }
 
                 $url =
-                    config('wowza.stream_url').config('wowza.content_path').
+                    $this->streamingSettings->data['wowza_vod_engine_url'].
+                    $this->streamingSettings->data['wowza_vod_content_path'].
                     $asset->path.$asset->original_file_name.'/playlist.m3u8';
+
                 $wowzaContentPath =
-                    $this->streamingSettings->data['wowza_content_path'].
+                    $this->streamingSettings->data['wowza_vod_content_path'].
                     $asset->path.
                     $asset->original_file_name;
-                $secureToken = $this->streamingSettings->data['wowza_secure_token'];
-                $tokenPrefix = $this->streamingSettings->data['wowza_token_prefix'];
+                $secureToken = $this->streamingSettings->data['wowza_vod_secure_token'];
+                $tokenPrefix = $this->streamingSettings->data['wowza_vod_token_prefix'];
                 $tokenStartTime = $tokenPrefix.'starttime='.time();
                 $tokenEndTime = $tokenPrefix.'endTime='.(time() + 21600);
 

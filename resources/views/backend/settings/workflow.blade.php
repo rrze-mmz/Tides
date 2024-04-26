@@ -1,3 +1,4 @@
+@use(Carbon\Carbon)
 @extends('layouts.backend')
 
 @section('content')
@@ -34,9 +35,9 @@
                               label="Admin password"
                               :fullCol="true"
                               :required="true" />
-                <x-form.input field-name="default_workflow_id"
+                <x-form.input field-name="default_workflow"
                               input-type="text"
-                              :value="$setting['default_workflow_id']"
+                              :value="$setting['default_workflow']"
                               label="Default workflow ID"
                               :fullCol="true"
                               :required="true" />
@@ -82,12 +83,29 @@
                               label="Archive path"
                               :fullCol="true"
                               :required="true" />
-                <x-form.input field-name="assistant_group_name"
+                <x-form.input field-name="assistants_group_name"
                               input-type="text"
-                              :value="$setting['assistant_group_name']"
+                              :value="$setting['assistants_group_name']"
                               label="Opencast assistants group name"
                               :fullCol="true"
                               :required="true" />
+                <div
+                    class="mb-5 border-b border-black py-4 pb-2 text-base font-medium dark:text-white
+                    dark:border-white"
+                >
+                    Opencast purge old events
+                </div>
+                <x-form.datepicker field-name="opencast_purge_end_date"
+                                   label="Date for the last event to be deleted "
+                                   :full-col="true"
+                                   :value="old('opencast_purge_end_date', Carbon::now())" />
+                <x-form.input field-name="opencast_purge_events_per_minute"
+                              input-type="number"
+                              :value="old('opencast_purge_events_per_minute', '20')"
+                              label="Events per minute"
+                              :full-col="true"
+                              :required="false" />
+
             </div>
             <div class="mt-10 space-x-4 pt-10">
                 <x-button class="bg-blue-600 hover:bg-blue-700">

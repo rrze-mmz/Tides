@@ -41,31 +41,31 @@ it('shows streaming settings page', function () {
 
 it('requires an streaming engine url for streaming settings page', function () {
     $attributes = [
-        'api_url' => 'http://localost:8087',
+        'wowza_vod_api_url' => 'http://localost:8087',
         'username' => 'admin',
         'password' => '1234',
     ];
 
     put(route('settings.streaming.update', $this->setting), $attributes)
-        ->assertSessionHasErrors('engine_url');
+        ->assertSessionHasErrors('wowza_vod_engine_url');
 });
 
 it('requires an streaming api url for streaming settings page', function () {
     $attributes = [
-        'engine_url' => 'http://localost:1935',
+        'wowza_vod_engine_url' => 'http://localost:1935',
         'username' => 'admin',
         'password' => '1234',
     ];
 
     put(route('settings.streaming.update', $this->setting), $attributes)
-        ->assertSessionHasErrors('api_url');
+        ->assertSessionHasErrors('wowza_vod_api_url');
 });
 
 it('denies updating streaming settings in roles other than superadmin', function () {
     auth()->logout();
     $attributes = [
-        'engine_url' => 'test.com',
-        'api_url' => 'test.com',
+        'wowza_vod_engine_url' => 'test.com',
+        'wowza_vod_api_url' => 'test.com',
         'username' => 'test',
         'password' => 1234,
     ];
@@ -87,18 +87,10 @@ it('denies updating streaming settings in roles other than superadmin', function
 });
 
 it('updates streaming settings page', function () {
-    $attributes = [
-        'engine_url' => 'http://test.com',
-        'api_url' => 'http://test.com',
-        'username' => 'test',
-        'password' => 1234,
-        'content_path' => '/content/videoportal',
-        'secure_token' => 'awsTides12tvv10',
-        'token_prefix' => 'tides',
-    ];
+    $attributes = config('settings.streaming');
     put(route('settings.streaming.update', $this->setting), $attributes);
 
-    expect($this->setting->streaming()->data['engine_url'])->toEqual($attributes['engine_url']);
+    expect($this->setting->streaming()->data['wowza_vod_engine_url'])->toEqual($attributes['wowza_vod_engine_url']);
 });
 
 afterEach(function () {
