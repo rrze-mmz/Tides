@@ -1,3 +1,4 @@
+@php use Barryvdh\Debugbar\Facades\Debugbar;use Barryvdh\Debugbar\Twig\Extension\Debug; @endphp
 <div id="player" data-plyr-provider="html5" data-plyr-embed-id="video">
     <video id="video" class="player-container" playsinline controls
            data-poster="{{ fetchClipPoster($clip->latestAsset?->player_preview)  }}">

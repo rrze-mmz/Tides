@@ -14,29 +14,29 @@
                 <div
                     class="flex border-b border-black pb-1 text-xl font-semibold text-indigo-800
                     dark:text-indigo-400 dark:border-white mb-4 ">
-                    Wowza Streaming Engine Settings
+                    VOD Server settings
                 </div>
-                <x-form.input field-name="wowza_engine_url"
+                <x-form.input field-name="wowza_vod_engine_url"
                               input-type="url"
-                              :value="$setting['wowza_engine_url']"
-                              label="Engine URL"
+                              :value="old('wowza_vod_engine_url',$setting['wowza_vod_engine_url'])"
+                              label="VOD Engine URL"
                               :fullCol="true"
                               :required="true" />
-                <x-form.input field-name="wowza_api_url"
+                <x-form.input field-name="wowza_vod_api_url"
                               input-type="url"
-                              :value="$setting['wowza_api_url']"
-                              label="Wowza API URL"
+                              :value="old('wowza_vod_api_url',$setting['wowza_vod_api_url'])"
+                              label="VOD Wowza API URL"
                               :fullCol="true"
                               :required="true" />
-                <x-form.input field-name="wowza_username"
+                <x-form.input field-name="wowza_vod_username"
                               input-type="text"
-                              :value="$setting['wowza_username']"
+                              :value="old('wowza_vod_username',$setting['wowza_vod_username'])"
                               label="Digest username"
                               :fullCol="true"
                               :required="true" />
-                <x-form.input field-name="wowza_password"
+                <x-form.input field-name="wowza_vod_password"
                               input-type="password"
-                              :value="$setting['wowza_password']"
+                              :value="old('wowza_vod_password',$setting['wowza_vod_password'])"
                               label="Digest password"
                               :fullCol="true"
                               :required="true" />
@@ -44,22 +44,95 @@
                     class="mb-5 border-b border-black py-4 pb-2 text-base  dark:text-white  font-medium dark:border-white">
                     App Settings
                 </div>
-                <x-form.input field-name="wowza_content_path"
+                <x-form.input field-name="wowza_vod_content_path"
                               input-type="text"
-                              :value="$setting['wowza_content_path']"
+                              :value="old('wowza_vod_content_path',$setting['wowza_vod_content_path'])"
                               label="Content path"
                               :fullCol="true"
                               :required="true" />
-                <x-form.input field-name="wowza_secure_token"
+                <x-form.input field-name="wowza_vod_secure_token"
                               input-type="text"
-                              :value="$setting['wowza_secure_token']"
+                              :value="old('wowza_vod_secure_token',$setting['wowza_vod_secure_token'])"
                               label="Secure token"
                               :fullCol="true"
                               :required="true" />
-                <x-form.input field-name="wowza_token_prefix"
+                <x-form.input field-name="wowza_vod_token_prefix"
                               input-type="text"
-                              :value="$setting['wowza_token_prefix']"
+                              :value="old('wowza_vod_token_prefix',$setting['wowza_vod_token_prefix'])"
                               label="Token prefix"
+                              :fullCol="true"
+                              :required="true" />
+            </div>
+            <div class="bg-gray-200 border-2 rounded-2xl p-4 my-4 dark:bg-slate-800 dark:border-indigo-950 space-y-4">
+                <div
+                    class="flex border-b border-black pb-1 text-xl font-semibold text-indigo-800
+                    dark:text-indigo-400 dark:border-white mb-4 ">
+                    Livestream Server settings
+                </div>
+                <x-form.input field-name="wowza_livestream_engine_url"
+                              input-type="url"
+                              :value="old('wowza_livestream_engine_url',$setting['wowza_livestream_engine_url'])"
+                              label="Engine URL"
+                              :fullCol="true"
+                              :required="true" />
+                <x-form.input field-name="wowza_livestream_api_url"
+                              input-type="url"
+                              :value="old('wowza_livestream_api_url',$setting['wowza_livestream_api_url'])"
+                              label="Wowza API URL"
+                              :fullCol="true"
+                              :required="true" />
+                <x-form.input field-name="wowza_livestream_username"
+                              input-type="text"
+                              :value="old('wowza_livestream_username',$setting['wowza_livestream_username'])"
+                              label="Digest username"
+                              :fullCol="true"
+                              :required="true" />
+                <x-form.input field-name="wowza_livestream_password"
+                              input-type="password"
+                              :value="old('wowza_livestream_password',$setting['wowza_livestream_password'])"
+                              label="Digest password"
+                              :fullCol="true"
+                              :required="true" />
+                <div
+                    class="mb-5 border-b border-black py-4 pb-2 text-base  dark:text-white  font-medium dark:border-white">
+                    App Settings
+                </div>
+                <x-form.input field-name="wowza_livestream_content_path"
+                              input-type="text"
+                              :value="old('wowza_livestream_content_path',$setting['wowza_livestream_content_path'])"
+                              label="Content path"
+                              :fullCol="true"
+                              :required="true" />
+                <x-form.input field-name="wowza_livestream_secure_token"
+                              input-type="text"
+                              :value="old('wowza_livestream_secure_token',$setting['wowza_livestream_secure_token'])"
+                              label="Secure token"
+                              :fullCol="true"
+                              :required="true" />
+                <x-form.input field-name="wowza_livestream_token_prefix"
+                              input-type="text"
+                              :value="old('wowza_livestream_token_prefix',$setting['wowza_livestream_token_prefix'])"
+                              label="Token prefix"
+                              :fullCol="true"
+                              :required="true" />
+            </div>
+
+            <div class="bg-gray-200 border-2 rounded-2xl p-4 my-4 dark:bg-slate-800 dark:border-indigo-950 space-y-4">
+                <div
+                    class="flex border-b border-black pb-1 text-xl font-semibold text-indigo-800
+                    dark:text-indigo-400 dark:border-white mb-4 ">
+                    CDN Server settings
+                </div>
+                <x-form.input field-name="cdn_server_url"
+                              input-type="text"
+                              :value="old('cdn_server_url',$setting['cdn_server_url'])"
+                              label="CDN Server URL"
+                              :fullCol="true"
+                              :required="true" />
+                <x-form.input field-name="cdn_server_secret"
+                              input-type="text"
+                              :value="old('cdn_server_secret',$setting['cdn_server_secret'])"
+                              label="CDN Secret hash"
                               :fullCol="true"
                               :required="true" />
             </div>

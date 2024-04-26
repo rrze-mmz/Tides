@@ -6,6 +6,7 @@ use App\Models\Setting;
 use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\get;
 use function Pest\Laravel\put;
+use function Pest\Laravel\withoutExceptionHandling;
 
 uses()->group('backend');
 
@@ -29,6 +30,7 @@ it('denies opencast settings page in roles other than superadmin', function () {
 });
 
 it('shows opencast settings page', function () {
+    withoutExceptionHandling();
     get(route('settings.opencast.show'))
         ->assertOk()
         ->assertViewIs('backend.settings.workflow')

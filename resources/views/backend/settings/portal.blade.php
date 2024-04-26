@@ -66,7 +66,7 @@
                 </div>
             </div>
 
-            <div class="bg-gray-200 border-2 rounded-2xl p-4 my-4 dark:bg-slate-800 dark:border-indigo-950">
+            <div class="bg-gray-200 border-2 rounded-2xl p-4 my-4 dark:bg-slate-800 dark:border-indigo-950 space-y-2">
                 <div
                     class="flex border-b border-black pb-1 text-xl font-semibold text-indigo-800
                     dark:text-indigo-400 dark:border-white mb-4 pb-2">
@@ -82,6 +82,7 @@
                               label="Link article URL"
                               :fullCol="true"
                               :required="true" />
+
                 <x-form.input field-name="player_article_link_text"
                               input-type="text"
                               :value="$setting['player_article_link_text']"

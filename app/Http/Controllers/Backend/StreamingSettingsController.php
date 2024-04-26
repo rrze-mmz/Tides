@@ -26,7 +26,6 @@ class StreamingSettingsController extends Controller
         $setting = Setting::streaming();
 
         $setting->data = $request->validated();
-
         $setting->save();
 
         return to_route('settings.streaming.show');

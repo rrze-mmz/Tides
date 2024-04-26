@@ -11,7 +11,6 @@
             @csrf
 
             <div class="flex flex-col gap-3">
-
                 <x-form.input field-name="title"
                               input-type="text"
                               :value="old('title')"

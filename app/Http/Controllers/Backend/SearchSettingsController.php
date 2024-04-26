@@ -13,14 +13,6 @@ class SearchSettingsController extends Controller
     {
         $setting = Setting::openSearch();
 
-        $setting->data = [
-            'url' => $setting->data['url'] ?? 'localhost',
-            'port' => $setting->data['port'] ?? 9200,
-            'username' => $setting->data['username'] ?? 'admin',
-            'password' => $setting->data['password'] ?? 'admin',
-            'prefix' => $setting->data['prefix'] ?? 'tides_',
-        ];
-
         return view('backend.settings.search', ['setting' => $setting->data]);
     }
 

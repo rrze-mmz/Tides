@@ -28,6 +28,14 @@ class UpdateSearchSettings extends FormRequest
             'username' => ['required', 'string'],
             'password' => ['required'],
             'prefix' => ['required'],
+            'search_frontend_enable_open_search' => ['required', 'boolean'],
         ];
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'search_frontend_enable_open_search' => $this->search_frontend_enable_open_search === 'on',
+        ]);
     }
 }
