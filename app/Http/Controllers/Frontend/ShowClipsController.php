@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Clip;
 use App\Models\Setting;
 use App\Services\WowzaService;
-use Debugbar;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\View\View;
 
@@ -47,7 +46,6 @@ class ShowClipsController extends Controller
             });
 
         $wowzaStatus = $wowzaService->getHealth();
-        Debugbar::info($wowzaStatus);
         $urls = collect([]);
         $defaultPlayerUrl = '';
         if ($wowzaStatus) {

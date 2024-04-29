@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Enums\Content;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreClipRequest;
 use App\Http\Requests\UpdateClipRequest;
 use App\Models\Acl;
 use App\Models\Clip;
 use App\Services\OpencastService;
+use App\Services\WowzaService;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
@@ -55,13 +57,37 @@ class ClipsController extends Controller
 
     /**
      * Edit form for a single clip
-     *
-     *
-     * @throws AuthorizationException
      */
-    public function edit(Clip $clip, OpencastService $opencastService): Application|Factory|View
+    public function edit(Clip $clip, OpencastService $opencastService, WowzaService $wowzaService): Application|Factory|View
     {
         $this->authorize('edit', $clip);
+        $assetsResolutions = $clip->assets->map(function ($asset) {
+            return match (true) {
+                $asset->width >= 1920 => 'QHD',
+                $asset->width >= 720 && $asset->width < 1920 => 'HD',
+                $asset->width >= 10 && $asset->width < 720 => 'SD',
+                $asset->type == Content::AUDIO() => 'Audio',
+                default => 'PDF/CC'
+            };
+        })
+            ->unique()
+            ->filter(function ($value, $key) {
+                return $value !== 'PDF/CC';
+            });
+        $wowzaStatus = $wowzaService->getHealth();
+        $urls = collect([]);
+        $defaultPlayerUrl = '';
+        if ($wowzaStatus) {
+            $urls = $wowzaService->vodSecureUrls($clip);
+
+            $defaultPlayerUrl = match (true) {
+                empty($urls) => [],
+                $urls->has('composite') => $urls['composite'],
+                $urls->has('presenter') => $urls['presenter'],
+                $urls->has('presentation') => $urls['presentation'],
+                default => []
+            };
+        }
 
         return view(
             'backend.clips.edit',
@@ -70,6 +96,10 @@ class ClipsController extends Controller
                 'acls' => Acl::all(),
                 'previousNextClipCollection' => $clip->previousNextClipCollection(),
                 'opencastConnectionCollection' => $opencastService->getHealth(),
+                'wowzaStatus' => $wowzaService->getHealth(),
+                'defaultVideoUrl' => $defaultPlayerUrl,
+                'assetsResolutions' => $assetsResolutions,
+                'alternativeVideoUrls' => $urls,
             ]
         );
     }
