@@ -665,6 +665,12 @@ it('shows clip activities in clip edit page', function () {
         ->assertSee('created clip');
 });
 
+it('load the video player if clip has assets', function () {
+    $clip = ClipFactory::withAssets(2)->ownedBy(signInRole(Role::MODERATOR))->create();
+
+    get(route('clips.edit', $clip))->assertSee('data-plyr-provider="html5"', false);
+});
+
 test('an admin user can delete a not owned clip', function () {
     $clip = ClipFactory::create();
     signInRole(Role::ADMIN);
