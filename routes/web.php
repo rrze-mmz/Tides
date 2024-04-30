@@ -352,9 +352,10 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
         Route::get('/systems', SystemsCheckController::class)->name('systems.status');
         Route::get('/settings/portal', [PortalSettingsController::class, 'show'])->name('settings.portal.show');
         Route::put('/settings/portal', [PortalSettingsController::class, 'update'])->name('settings.portal.update');
-        Route::get('/settings/opencast', [VideoWorkflowSettingsController::class, 'show'])->name('settings.opencast.show');
-        Route::put('/settings/opencast', [VideoWorkflowSettingsController::class, 'update'])
-            ->name('settings.opencast.update');
+        Route::get('/settings/workflow', [VideoWorkflowSettingsController::class, 'show'])
+            ->name('settings.workflow.show');
+        Route::put('/settings/workflow', [VideoWorkflowSettingsController::class, 'update'])
+            ->name('settings.workflow.update');
         Route::get('/settings/streaming', [StreamingSettingsController::class, 'show'])
             ->name('settings.streaming.show');
         Route::put('/settings/streaming', [StreamingSettingsController::class, 'update'])

@@ -1,5 +1,7 @@
 <?php
 
+use Carbon\Carbon;
+
 return [
     'portal' => [
         'maintenance_mode' => false,
@@ -28,13 +30,15 @@ return [
         'username' => 'admin',
         'password' => 'opencast',
         'archive_path' => 'archive/mh_default_org',
-        'default_workflow' => 'fast',
+        'default_workflow_id' => 'fast',
         'upload_workflow_id' => 'fast',
         'theme_id_top_right' => '500',
         'theme_id_top_left' => '501',
         'theme_id_bottom_left' => '502',
         'theme_id_bottom_right' => '503',
         'assistants_group_name' => 'ROLE_GROUP_TIDES_ASSISTANTS',
+        'opencast_purge_end_date' => Carbon::now(),
+        'opencast_purge_events_per_minute' => '20',
     ],
     'streaming' => [
         'wowza_vod_engine_url' => 'localhost:1935',
