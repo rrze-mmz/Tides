@@ -68,7 +68,7 @@
                 </div>
             </div>
             <div class="pt-5">
-                <a href="{{ route('settings.opencast.show') }}" class="flex flex-row">
+                <a href="{{ route('settings.workflow.show') }}" class="flex flex-row">
                     <x-button type="button"
                               class="flex basis-1/2 content-center justify-center justify-between bg-blue-600 hover:bg-blue-700">
                         <div>

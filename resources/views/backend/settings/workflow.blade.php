@@ -6,7 +6,10 @@
         Video workflow settings
     </div>
     <div class="flex px-2 py-2">
-        <form action="{{ route('settings.opencast.update') }}"
+        @php
+            echo session()->get('errors');
+        @endphp
+        <form action="{{ route('settings.workflow.update') }}"
               method="POST"
               class="w-4/5 space-y-4">
             @csrf
@@ -35,9 +38,9 @@
                               label="Admin password"
                               :fullCol="true"
                               :required="true" />
-                <x-form.input field-name="default_workflow"
+                <x-form.input field-name="default_workflow_id"
                               input-type="text"
-                              :value="$setting['default_workflow']"
+                              :value="$setting['default_workflow_id']"
                               label="Default workflow ID"
                               :fullCol="true"
                               :required="true" />

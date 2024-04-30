@@ -129,14 +129,14 @@
     </div>
 
     @if($image->presenters()->count() > 0)
-        <div class="flex items-center border-b-2 border-black pt-10">
+        <div class="flex items-center border-b-2 border-black pt-10 dark:text-white">
             <div class="pr-2">
                 <x-heroicon-o-user-group class="h-6 w-6" />
             </div>
             <h3 class="font-bold">Used in {{$image->presenters()->count()}} lecturers
             </h3>
         </div>
-        <div class="flex">
+        <div class="flex dark:text-white">
             <div class="mt-3 w-full py-3">
                 <ul>
                     @foreach($image->presenters as $presenter)
@@ -158,14 +158,14 @@
         </div>
     @endif
     @if($image->series()->count() > 0)
-        <div class="flex items-center border-b-2 border-black pt-10">
+        <div class="flex items-center border-b-2 border-black pt-10 dark:text-white">
             <div class="pr-2">
                 <x-heroicon-o-user-group class="h-6 w-6" />
             </div>
             <h3 class="font-bold">Used in {{$image->series()->count()}} series
             </h3>
         </div>
-        <div class="flex">
+        <div class="flex dark:text-white">
             <div class="mt-3 w-full py-3">
                 <ul>
                     @foreach($image->series->take(5) as $clip)

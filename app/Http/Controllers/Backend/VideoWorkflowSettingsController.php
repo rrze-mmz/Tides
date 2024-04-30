@@ -27,12 +27,12 @@ class VideoWorkflowSettingsController extends Controller
      */
     public function update(UpdateVideoWorkflowSettings $request): RedirectResponse
     {
+
         $setting = Setting::opencast();
 
         $setting->data = $request->validated();
-
         $setting->save();
 
-        return to_route('settings.opencast.show');
+        return to_route('settings.workflow.show');
     }
 }
