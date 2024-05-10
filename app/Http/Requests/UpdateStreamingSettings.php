@@ -24,22 +24,22 @@ class UpdateStreamingSettings extends FormRequest
     public function rules()
     {
         return [
-            'wowza_vod_engine_url' => ['required', 'url'],
-            'wowza_vod_api_url' => ['required', 'url'],
-            'wowza_vod_username' => ['required', 'string'],
-            'wowza_vod_password' => ['required'],
-            'wowza_vod_content_path' => ['required', 'string'],
-            'wowza_vod_secure_token' => ['required', 'string'],
-            'wowza_vod_token_prefix' => ['required', 'string'],
-            'wowza_livestream_engine_url' => ['required', 'url'],
-            'wowza_livestream_api_url' => ['required', 'url'],
-            'wowza_livestream_username' => ['required', 'string'],
-            'wowza_livestream_password' => ['required'],
-            'wowza_livestream_content_path' => ['required', 'string'],
-            'wowza_livestream_secure_token' => ['required', 'string'],
-            'wowza_livestream_token_prefix' => ['required', 'string'],
-            'cdn_server_url' => ['required', 'url'],
-            'cdn_server_secret' => ['required'],
+            'wowza_server1_engine_url' => ['required', 'url'],
+            'wowza_server1_api_url' => ['required', 'url'],
+            'wowza_server1_api_username' => ['required', 'string'],
+            'wowza_server1_api_password' => ['required'],
+            'wowza_server1_content_path' => ['required', 'string'],
+            'wowza_server1_secure_token' => ['required', 'string'],
+            'wowza_server1_token_prefix' => ['required', 'string'],
+            'wowza_server2_engine_url' => ['required', 'url'],
+            'wowza_server2_api_url' => ['required', 'url'],
+            'wowza_server2_api_username' => ['required', 'string'],
+            'wowza_server2_api_password' => ['required'],
+            'wowza_server2_content_path' => ['required', 'string'],
+            'wowza_server2_secure_token' => ['required', 'string'],
+            'wowza_server2_token_prefix' => ['required', 'string'],
+            'cdn_server1_url' => ['required', 'url'],
+            'cdn_server1_secret' => ['required'],
         ];
     }
 }

@@ -22,6 +22,7 @@ use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\followingRedirects;
 use function Pest\Laravel\get;
 use function Pest\Laravel\post;
+use function Pest\Laravel\withoutExceptionHandling;
 
 uses()->beforeEach(function () {
     Storage::fake('videos');
@@ -112,6 +113,7 @@ test('a moderator cannot transfer dropzone files for a not owned clip', function
 });
 
 it('transfer files from dropzone to clip', function () {
+    withoutExceptionHandling();
     $fakeStorage = Storage::fake('video_dropzone');
     $fakeStorage->putFileAs('', FileFactory::videoFile(), 'export_video_1080.mp4');
     $fakeStorage->putFileAs('', FileFactory::videoFile(), 'export_video_720.mp4');

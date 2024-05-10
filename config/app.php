@@ -175,7 +175,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\OpencastServiceProvider::class,
-        App\Providers\WowzaServiceProvider::class,
+        App\Providers\StreamingServiceProvider::class,
         App\Providers\OpenSearchServiceProvider::class,
     ],
 

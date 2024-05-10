@@ -2,7 +2,7 @@
 
 namespace Tests\Setup;
 
-use App\Http\Clients\WowzaClient;
+use App\Http\Clients\StreamingClient;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
@@ -16,11 +16,11 @@ trait WorksWithWowzaClient
     {
         $mockHandler = new MockHandler();
 
-        $client = new WowzaClient([
+        $client = new StreamingClient([
             'handler' => HandlerStack::create($mockHandler),
         ]);
 
-        $this->app->instance(WowzaClient::class, $client);
+        $this->app->instance(StreamingClient::class, $client);
 
         return $mockHandler;
     }
