@@ -46,7 +46,10 @@ class CheckAndCreateSettings extends Command
     protected function processSettings(string $settingsType): void
     {
         // Retrieve specific settings based on type
-        $settingModel = Setting::{$settingsType}();  // Using dynamic method names
+        $settingModel = Setting::firstOrCreate(
+            ['name' => $settingsType],
+            ['data' => config("settings.$settingsType")]
+        );  // Using dynamic method names
         $defaultSettings = config("settings.{$settingsType}");
 
         // Calculate new keys and merge with existing data

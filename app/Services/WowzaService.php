@@ -3,17 +3,21 @@
 namespace App\Services;
 
 use App\Enums\Content;
-use App\Http\Clients\WowzaClient;
+use App\Http\Clients\LiveStreamingClient;
+use App\Http\Clients\StreamingClient;
 use App\Models\Clip;
+use App\Models\Livestream;
 use App\Models\Setting;
 use DOMException;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Response;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use InvalidArgumentException;
 use Spatie\ArrayToXml\ArrayToXml;
 
 class WowzaService
@@ -22,8 +26,14 @@ class WowzaService
 
     private Setting $streamingSettings;
 
-    public function __construct(private WowzaClient $client)
-    {
+    public function __construct(
+        private StreamingClient $streamingClient,
+        private LiveStreamingClient $liveStreamingClient
+    ) {
+        $this->clients = [
+            'stream' => $streamingClient,
+            'livestream' => $liveStreamingClient,
+        ];
         $this->response = new Response(200, []);
         $this->streamingSettings = Setting::streaming();
     }
@@ -31,15 +41,18 @@ class WowzaService
     /**
      * Check whether Wowza Server is online
      */
-    public function getHealth(): Collection
+    public function getHealth(string $connection = 'stream'): Collection
     {
+        if (! isset($this->clients[$connection])) {
+            throw new InvalidArgumentException("The connection [$connection] is not defined.");
+        }
         $response = collect([
             'releaseId' => 'Wowza server not available',
             'status' => 'failed',
         ]);
 
         try {
-            $this->response = $this->client->get('/');
+            $this->response = $this->clients[$connection]->get('/');
             if (! empty(json_encode((string) $this->response->getBody(), true))) {
                 $response->put('releaseId', json_encode((string) $this->response->getBody(), true))
                     ->put('status', 'pass');
@@ -51,15 +64,19 @@ class WowzaService
         return $response;
     }
 
-    public function getAllApplications(): Collection
+    public function getAllApplications(string $connection = 'stream'): Collection
     {
+        if (! isset($this->clients[$connection])) {
+            throw new InvalidArgumentException("The connection [$connection] is not defined.");
+        }
         $response = collect([
             'releaseId' => 'Wowza server not available',
             'status' => 'failed',
         ]);
 
         try {
-            $this->response = $this->client->get('/v2/servers/_defaultServer_/vhosts/_defaultVHost_/applications');
+            $this->response = $this->clients[$connection]
+                ->get('/v2/servers/_defaultServer_/vhosts/_defaultVHost_/applications');
             if (! empty((string) $this->response->getBody())) {
                 $response->put('applications', json_encode(simplexml_load_string((string) $this->response->getBody())));
             }
@@ -205,18 +222,17 @@ class WowzaService
                         $asset->original_file_name = 'slides.smil';
                     }
                 }
-
                 $url =
-                    $this->streamingSettings->data['wowza_vod_engine_url'].
-                    $this->streamingSettings->data['wowza_vod_content_path'].
+                    $this->streamingSettings->data['wowza']['server1']['engine_url'].
+                    $this->streamingSettings->data['wowza']['server1']['content_path'].
                     $asset->path.$asset->original_file_name.'/playlist.m3u8';
 
                 $wowzaContentPath =
-                    $this->streamingSettings->data['wowza_vod_content_path'].
+                    $this->streamingSettings->data['wowza']['server1']['content_path'].
                     $asset->path.
                     $asset->original_file_name;
-                $secureToken = $this->streamingSettings->data['wowza_vod_secure_token'];
-                $tokenPrefix = $this->streamingSettings->data['wowza_vod_token_prefix'];
+                $secureToken = $this->streamingSettings->data['wowza']['server1']['secure_token'];
+                $tokenPrefix = $this->streamingSettings->data['wowza']['server1']['token_prefix'];
                 $tokenStartTime = $tokenPrefix.'starttime='.time();
                 $tokenEndTime = $tokenPrefix.'endTime='.(time() + 21600);
 
@@ -230,5 +246,20 @@ class WowzaService
         }
 
         return $filePaths;
+    }
+
+    public function reserveLivestreamRoom(Clip $livestreamClip, string $opencastAgentID): Livestream
+    {
+        $livestream = Livestream::search($opencastAgentID)->first();
+        //livestream is matching with opencast capture agent
+        if ($livestream) {
+            //reserve the livestream for this clipID
+            $livestream->clip_id = $livestreamClip->id;
+            $livestream->time_availability_start = Carbon::now();
+            $livestream->time_availability_end = Carbon::now()->addHours(2); // needs to be calculated properly
+            $livestream->save();
+        }
+
+        return $livestream;
     }
 }

@@ -3,9 +3,9 @@
 namespace App\Console\Commands;
 
 use App\Enums\OpencastWorkflowState;
-use App\Models\Livestream;
 use App\Models\Series;
 use App\Services\OpencastService;
+use App\Services\WowzaService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
@@ -29,7 +29,7 @@ class EnableLivestreams extends Command
     /**
      * Execute the console command.
      */
-    public function handle(OpencastService $opencastService)
+    public function handle(OpencastService $opencastService, WowzaService $wowzaService)
     {
         if ($opencastService->getHealth()->get('status') === 'failed') {
             $this->info('No Opencast server found or server is offline!');
@@ -56,7 +56,7 @@ class EnableLivestreams extends Command
             return Command::SUCCESS;
         }
 
-        $events->each(function ($event) {
+        $events->each(function ($event) use ($wowzaService) {
             $series = Series::where('opencast_series_id', $event['is_part_of'])->first();
             $seriesLivestreamClip = $series->fetchLivestreamClip();
 
@@ -65,15 +65,7 @@ class EnableLivestreams extends Command
                     "Series '{$series->title}' has a livestream clip now try to enable"
                     ." wowza app {$event['scheduling']['agent_id']} for this clip"
                 );
-                $livestream = Livestream::search($event['scheduling']['agent_id'])->first();
-                //livestream is matching with opencast capture agent
-                if ($livestream) {
-                    //reserve the livestream for this clipID
-                    $livestream->clip_id = $seriesLivestreamClip->id;
-                    $livestream->time_availability_start = Carbon::now();
-                    $livestream->time_availability_end = Carbon::now()->addHours(2); // needs to be calculated properly
-                    $livestream->save();
-                }
+                $wowzaService->reserveLivestreamRoom($seriesLivestreamClip, $event['scheduling']['agent_id']);
             }
         });
     }
