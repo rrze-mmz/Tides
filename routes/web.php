@@ -18,6 +18,7 @@ use App\Http\Controllers\Backend\FileUploadController;
 use App\Http\Controllers\Backend\ImagesController;
 use App\Http\Controllers\Backend\PortalSettingsController;
 use App\Http\Controllers\Backend\PresentersController;
+use App\Http\Controllers\Backend\ReserveLivestreamRoom;
 use App\Http\Controllers\Backend\SearchSettingsController;
 use App\Http\Controllers\Backend\SeriesClipsController;
 use App\Http\Controllers\Backend\SeriesController;
@@ -98,7 +99,8 @@ Route::get('/organizations/', [ShowOrganizationsController::class, 'index'])
 Route::get('/organizations/{organization:slug}', [ShowOrganizationsController::class, 'show'])
     ->name('frontend.organizations.show');
 
-Route::get('/live-now', ShowLivestreamsController::class)->name('live-now');
+Route::get('/live-now', [ShowLivestreamsController::class, 'index'])->name('livestreams.index');
+//Route::get('/livestreams/{livestream:id}', [ShowLivestreamsController::class, 'show'])->name('livestreams.show');
 
 //static pages
 Route::get('/faq', function () {
@@ -318,6 +320,7 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
     Route::resource('devices', DevicesController::class)->except(['show']);
     Route::post('images/import/', UploadImageController::class)->name('images.import');
     Route::post('/uploads/process', [FileUploadController::class, 'process'])->name('uploads.process');
+    Route::post('/reserveLivestreamRoom', ReserveLivestreamRoom::class)->name('reserveLivestreamRoom');
 
     // Portal admin resources (portal assistants are not included)
     Route::middleware(['user.admin'])->group(function () {

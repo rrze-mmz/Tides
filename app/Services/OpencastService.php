@@ -133,7 +133,7 @@ class OpencastService
         try {
             $this->response = $this->client->get('api/events', [
                 'query' => [
-
+                    'withscheduling' => 'true',
                     'filter' => $filter,
                     'sort' => 'start_date:ASC',
                     'limit' => $limit,

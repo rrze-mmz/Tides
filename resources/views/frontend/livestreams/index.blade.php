@@ -7,12 +7,18 @@
                 <h2 class="text-2xl font-bold dark:text-white">Active livestreams</h2>
             </div>
         </div>
-        @forelse ($livestreams as $livestream)
-
-        @empty
-            <div class="pt-10 dark:text-white">
-                No active livestreams found atm
+        <ul class="flex-row">
+            <div class="grid grid-cols-4 gap-4">
+                @forelse ($livestreams as $livestream)
+                    <li class="my-2 w-full rounded bg-white dark:bg-gray-900 p-4">
+                        @include('backend.clips._card',['clip'=> $livestream->clip])
+                    </li>
+                @empty
+                    <div class="pt-10 dark:text-white">
+                        No active livestreams found atm
+                    </div>
+                @endforelse
             </div>
-        @endforelse
+        </ul>
     </main>
 @endsection

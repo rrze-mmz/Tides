@@ -11,8 +11,13 @@ class ShowLivestreamsController extends Controller
     /**
      * Handle the incoming request.
      */
-    public function __invoke(Request $request)
+    public function index()
     {
         return view('frontend.livestreams.index')->withLivestreams(Livestream::active()->get());
+    }
+
+    public function show(Livestream $livestream)
+    {
+        return view('frontend.livestreams.show', compact('livestream'));
     }
 }

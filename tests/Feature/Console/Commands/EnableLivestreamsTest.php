@@ -23,7 +23,11 @@ it('outputs a message and skip checks if Opencast server is not available', func
 });
 
 it('outputs a message and skip checks if no Opencast scheduled events found for the next 10 minutes', function () {
-    $this->mockHandler->append($this->mockHealthResponse(), $this->mockNoResultsResponse());
+    $this->mockHandler->append(
+        $this->mockHealthResponse(),
+        $this->mockNoResultsResponse(),
+        $this->mockNoResultsResponse()
+    );
 
     artisan('app:enable-livestreams')->expectsOutput('No Opencast scheduled events found for the next 10 minutes');
 });
@@ -37,6 +41,7 @@ it('outputs a message if Opencast scheduled events found for the next 10 minutes
 
     $this->mockHandler->append(
         $this->mockHealthResponse(),
+        $this->mockNoResultsResponse(),
         $this->mockScheduledEvents($series, 1, Carbon::now()->addMinutes(6), Carbon::now()->addMinutes(26))
     );
 
@@ -54,6 +59,7 @@ it('updates clip metadata and set the livestream start and end times', function 
 
     $this->mockHandler->append(
         $this->mockHealthResponse(),
+        $this->mockNoResultsResponse(),
         $this->mockScheduledEvents($series, 1, Carbon::now()->addMinutes(6), Carbon::now()->addMinutes(26))
     );
 

@@ -49,7 +49,7 @@ it('has a faculties top menu item', function () {
 });
 
 it('has a live now menu item,', function () {
-    $menuItem = '<a href="'.route('live-now').'">';
+    $menuItem = '<a href="'.route('livestreams.index').'">';
 
     get(route('home'))->assertSee($menuItem, false);
 });

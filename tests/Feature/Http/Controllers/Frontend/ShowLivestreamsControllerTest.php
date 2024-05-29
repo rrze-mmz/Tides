@@ -3,9 +3,9 @@
 use function Pest\Laravel\get;
 
 it('gives back successful response for livestreams page', function () {
-    get(route('live-now'))->assertOk();
+    get(route('livestreams.index'))->assertOk();
 });
 
 it('displays an info message if no active livestreams found', function () {
-    get(route('live-now'))->assertSee('No active livestreams found');
+    get(route('livestreams.index'))->assertSee('No active livestreams found');
 });
