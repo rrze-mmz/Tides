@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Enums\OpencastWorkflowState;
+use App\Models\Livestream;
 use App\Models\Series;
 use App\Services\OpencastService;
 use App\Services\WowzaService;
@@ -50,6 +51,21 @@ class EnableLivestreams extends Command
             $endDate
         );
 
+        $recordingEvents = $opencastService->getEventsByStatus(OpencastWorkflowState::RECORDING);
+        if ($recordingEvents->isEmpty()) {
+            $this->info('No active recording events found');
+        }
+        $recordingEvents->each(function ($event) use ($wowzaService) {
+            $series = Series::where('opencast_series_id', $event['is_part_of'])->first();
+            $seriesLivestreamClip = $series->fetchLivestreamClip();
+            if (! is_null($seriesLivestreamClip) && ! is_null(Livestream::where('clip_id', $seriesLivestreamClip->id))) {
+                $this->info(
+                    "Series '{$series->title}' has a livestream clip now try to enable"
+                    ." wowza app {$event['scheduling']['agent_id']} for this clip"
+                );
+                $wowzaService->reserveLivestreamRoom($seriesLivestreamClip, $event['scheduling']['agent_id']);
+            }
+        });
         if ($events->isEmpty()) {
             $this->info('No Opencast scheduled events found for the next 10 minutes');
 

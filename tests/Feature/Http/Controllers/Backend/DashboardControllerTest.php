@@ -2,6 +2,8 @@
 
 use App\Enums\OpencastWorkflowState;
 use App\Enums\Role;
+use App\Models\Clip;
+use App\Models\Livestream;
 use App\Models\Stats\AssetViewCount;
 use App\Services\OpencastService;
 use Facades\Tests\Setup\ClipFactory;
@@ -262,4 +264,13 @@ it('hides opencast events for unauthorized moderators', function () {
     );
 
     get(route('dashboard'))->assertDontSee('Opencast running workflows')->assertOk();
+});
+
+it('should display all active livestreams for portal admins', function () {
+    auth()->logout();
+    $clip = Clip::factory()->create(['is_livestream' => true]);
+    $this->signInRole(Role::ADMIN);
+    $activeLivestream = Livestream::factory()->create(['clip_id' => $clip->id, 'active' => true]);
+
+    get(route('dashboard'))->assertSee($activeLivestream->name);
 });

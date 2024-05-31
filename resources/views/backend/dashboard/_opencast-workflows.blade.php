@@ -87,9 +87,32 @@
                                 </span>
                                 @if(Str::contains(url()->current(),'dashboard'))
                                     <a href="">
-                                        <x-button class="bg-blue-600 hover:bg-blue-700">
-                                            Livestream reservieren
-                                        </x-button>
+                                        <form action="{{ route('reserveLivestreamRoom') }}" method="POST">
+                                            @csrf
+                                            <input id="location"
+                                                   type="text"
+                                                   name="location"
+                                                   value="{{$event['location']}}"
+                                                   class="@error('location') is-invalid @enderror hidden">
+                                            @error('location')
+                                            <div class="alert alert-danger">{{ $message }}</div>
+                                            @enderror
+                                            @if($activeLivestreams->get()->pluck('name')->contains($event['location']))
+                                                <span class="bg-gray-600 inline-flex items-center px-4 py-2 border uppercase
+                                        border-transparent font-medium text-base text-white tracking-wider
+                                        active:bg-white-900 focus:outline-none focus:border-white-900 focus:ring
+                                        ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150"
+                                                >
+                                                    Livestream existiert
+                                                </span>
+                                            @else
+                                                <x-button type="submit" class="bg-blue-600 hover:bg-blue-700">
+                                                    Livestream reservieren
+                                                </x-button>
+                                            @endif
+
+                                        </form>
+
                                     </a>
                                 @endif
                             </div>
@@ -234,11 +257,9 @@
                             {{ $event['location'] }}
                         </td>
                         <td class="px-6 py-3 text-sm font-light text-green-700">
-                            <x-heroicon-c-scissors class="h-6">
-                                <a href="">
-
-                                </a>
-                            </x-heroicon-c-scissors>
+                            <a href="{{ $opencastSettings['url'].'/editor-ui/index.html?id='.$event['id'] }}">
+                                <x-heroicon-c-scissors class="h-6" />
+                            </a>
                         </td>
                     </tr>
                 @endforeach

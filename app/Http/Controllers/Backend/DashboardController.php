@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Enums\OpencastWorkflowState;
+use App\Models\Livestream;
+use App\Models\Setting;
 use App\Services\OpencastService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -17,6 +19,7 @@ class DashboardController
     public function __invoke(OpencastService $opencastService): Application|Factory|View
     {
         $opencastEvents = collect();
+        $opencastSettings = Setting::opencast();
 
         //fetch all available opencast events
         if ($opencastService->getHealth()->contains('pass')) {
@@ -80,6 +83,8 @@ class DashboardController
             }
         }
 
+        $livestreams = Livestream::active();
+
         return view('backend.dashboard.index', [
             'userSeries' => auth()->user()->getAllSeries()
                 ->withLastPublicClip()
@@ -93,6 +98,8 @@ class DashboardController
                 ->get(),
             'files' => fetchDropZoneFiles(false),
             'opencastEvents' => $opencastEvents,
+            'opencastSettings' => $opencastSettings->data,
+            'activeLivestreams' => $livestreams,
         ]);
     }
 }

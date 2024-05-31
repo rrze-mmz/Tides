@@ -8,6 +8,7 @@ use App\Http\Clients\StreamingClient;
 use App\Models\Clip;
 use App\Models\Livestream;
 use App\Models\Setting;
+use Composer\Pcre\UnexpectedNullMatchException;
 use DOMException;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Response;
@@ -250,16 +251,31 @@ class WowzaService
 
     public function reserveLivestreamRoom(Clip $livestreamClip, string $opencastAgentID): Livestream
     {
+        $opencastAgentID = match ($opencastAgentID) {
+            'rrze-ingest' => 'rrze_ingest',
+            'SMP_Ulmenweg ' => 'UK_Ulmenweg',
+            'EWF-1041' => 'EWF',
+            'Phil-Gr-HS' => 'Phil_Gr_HS',
+            '2049Tagungsraum' => 'rrze2049',
+            'H-Physiologie-2' => 'HPhysio2',
+            'H-Anatomie' => 'HAnatomie',
+            default => $opencastAgentID,
+        };
+
         $livestream = Livestream::search($opencastAgentID)->first();
         //livestream is matching with opencast capture agent
-        if ($livestream) {
-            //reserve the livestream for this clipID
-            $livestream->clip_id = $livestreamClip->id;
-            $livestream->time_availability_start = Carbon::now();
-            $livestream->time_availability_end = Carbon::now()->addHours(2); // needs to be calculated properly
-            $livestream->save();
-        }
+        try {
+            if ($livestream) {
+                //reserve the livestream for this clipID
+                $livestream->clip_id = $livestreamClip->id;
+                $livestream->time_availability_start = Carbon::now();
+                $livestream->time_availability_end = Carbon::now()->addHours(2); // needs to be calculated properly
+                $livestream->save();
+            }
 
-        return $livestream;
+            return $livestream;
+        } catch (UnexpectedNullMatchException $exception) {
+            Log::error($exception);
+        }
     }
 }

@@ -37,7 +37,7 @@
             </a>
         </span>
         <span class="no-underline ">
-            <a href="{{ route('live-now') }}">
+            <a href="{{ route('livestreams.index') }}">
                 Live now!
             </a>
         </span>

@@ -33,6 +33,9 @@
     <div class="flex">
         @php $dropBoxFilesCheck = count($files) > 0 && Setting::portal()->data['show_dropbox_files_in_dashboard'];  @endphp
         <div class="@if($dropBoxFilesCheck)) w-2/3 @else w-full @endif">
+            @if($activeLivestreams->count()>0)
+                @include('backend.dashboard._active-livestreams',['activeLivestreams' => $activeLivestreams])
+            @endif
             @if($opencastEvents->isNotEmpty())
                 @include('backend.dashboard._opencast-workflows',['opencastEvents' => $opencastEvents])
             @endif
