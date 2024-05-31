@@ -17,7 +17,7 @@ return new class extends Migration
             $table->text('url')->nullable();
             $table->text('content_path')->nullable();
             $table->string('file_path')->nullable();
-            $table->boolean('active')->default(true);
+            $table->boolean('active')->default(false);
             $table->foreignId('clip_id')->nullable()->references('id')->on('clips')->nullOnDelete();
             $table->string('app_name', 128)->nullable();
             $table->boolean('has_transcoder')->default(false);

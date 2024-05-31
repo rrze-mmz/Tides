@@ -51,6 +51,7 @@ use App\Http\Controllers\Frontend\UserApplicationsController;
 use App\Http\Controllers\Frontend\UserCommentsController;
 use App\Http\Controllers\Frontend\UserSettingsController;
 use App\Http\Controllers\Frontend\UserSubscriptionsController;
+use App\Http\Controllers\LivestreamsController;
 use App\Models\Activity;
 use App\Models\Article;
 use App\Models\Clip;
@@ -59,7 +60,6 @@ use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use App\Services\OpenSearchService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 
 Route::get('/', HomeController::class)->name('home');
 Route::redirect('/home', '/');
@@ -99,8 +99,9 @@ Route::get('/organizations/', [ShowOrganizationsController::class, 'index'])
 Route::get('/organizations/{organization:slug}', [ShowOrganizationsController::class, 'show'])
     ->name('frontend.organizations.show');
 
-Route::get('/live-now', [ShowLivestreamsController::class, 'index'])->name('livestreams.index');
-//Route::get('/livestreams/{livestream:id}', [ShowLivestreamsController::class, 'show'])->name('livestreams.show');
+Route::get('/live-now', [ShowLivestreamsController::class, 'index'])->name('frontend.livestreams.index');
+Route::get('/livestreams/{livestream:id}', [ShowLivestreamsController::class, 'show'])
+    ->name('frontend.livestreams.show');
 
 //static pages
 Route::get('/faq', function () {
@@ -308,14 +309,6 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
     //Presenter routes
     Route::resource('presenters', PresentersController::class)->except(['show']);
 
-    Route::get('/activities', function () {
-        Gate::allowIf(fn ($user) => $user->isAdmin() || $user->isAssistant());
-
-        return view('backend.activities.index', [
-            'activities' => Activity::paginate(20),
-        ]);
-    })->name('activities.index');
-
     Route::resource('images', ImagesController::class);
     Route::resource('devices', DevicesController::class)->except(['show']);
     Route::post('images/import/', UploadImageController::class)->name('images.import');
@@ -348,6 +341,16 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
 
         Route::get('/clips/{clip}/triggerSmilFiles', TriggerSmilFilesController::class)
             ->name('admin.clips.triggerSmilFiles');
+    });
+
+    //Admin and portal assistants routes
+    Route::middleware('can:administrate-portal-pages')->group(function () {
+        Route::get('/activities', function () {
+            return view('backend.activities.index', [
+                'activities' => Activity::paginate(20),
+            ]);
+        })->name('activities.index');
+        Route::resource('livestreams', LivestreamsController::class)->except(['show']);
     });
 
     //Superadmin routes

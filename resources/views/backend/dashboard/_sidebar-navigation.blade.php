@@ -49,9 +49,13 @@
     >
         {{ trans_choice('common.menu.activity', 2)  }}
     </a>
-@endcan
-
-@can('administrate-admin-portal-pages')
+    <a
+        href="{{ route('livestreams.index') }}"
+        class="flex items-left text-white hover:opacity-100 hover:mx-2 hover:rounded py-4
+        pl-6 nav-item {{ setActiveLink(route('livestreams.index')) }}"
+    >
+        Livestreams
+    </a>
     <a
         href="{{ route('devices.index') }}"
         class="flex items-left text-white hover:opacity-100 hover:mx-2 hover:rounded py-4
@@ -59,7 +63,9 @@
     >
         {{ trans_choice('common.menu.device', 2) }}
     </a>
+@endcan
 
+@can('administrate-admin-portal-pages')
     <a
         href="{{ route('articles.index') }}"
         class="flex items-left text-white hover:opacity-100 hover:mx-2 hover:rounded py-4

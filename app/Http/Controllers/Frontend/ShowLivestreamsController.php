@@ -18,6 +18,10 @@ class ShowLivestreamsController extends Controller
 
     public function show(Livestream $livestream)
     {
-        return view('frontend.livestreams.show', compact('livestream'));
+        if ($livestream->clip) {
+            return view('frontend.clips.show', $livestream->clip);
+        } else {
+            return view('backend.livestreams.edit', compact('livestream'));
+        }
     }
 }

@@ -120,6 +120,19 @@ it('shows sidebar menu items for moderators', function () {
         ->assertSee('images');
 });
 
+it('shows sidebar menu items for portal assistants', function () {
+    auth()->logout();
+    signInRole(Role::ASSISTANT);
+
+    get(route('dashboard'))
+        ->assertSee(trans_choice('common.menu.activity', 2))
+        ->assertSee(route('activities.index'))
+        ->assertSee(trans_choice('common.menu.device', 2))
+        ->assertSee(route('devices.index'))
+        ->assertSee('Livestreams')
+        ->assertSee(route('livestreams.index'));
+});
+
 it('shows sidebar menu items for admins', function () {
     auth()->logout();
     signInRole(Role::ADMIN);

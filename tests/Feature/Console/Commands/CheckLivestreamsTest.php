@@ -41,6 +41,7 @@ it('it outputs a message if a livestream exists and it is still active', functio
         'clip_id' => $clip->id,
         'time_availability_start' => Carbon::now()->subMinutes(10),
         'time_availability_end' => Carbon::now()->addHour(),
+        'active' => true,
     ]);
 
     artisan('app:check-livestreams')->expectsOutput("Livestream {$livestream->name} is still active.");
@@ -48,6 +49,7 @@ it('it outputs a message if a livestream exists and it is still active', functio
 
     expect($livestream->clip_id)->toBe($clip->id);
 });
+
 it('disables a livestream if the end availability timestamp is equal or less than the current timestamp', function () {
 
     $this->mockHandler->append($this->mockHealthResponse(), $this->mockNoResultsResponse());
@@ -57,6 +59,7 @@ it('disables a livestream if the end availability timestamp is equal or less tha
         'clip_id' => $clip->id,
         'time_availability_start' => Carbon::now()->subMinutes(10),
         'time_availability_end' => Carbon::now()->addHour(),
+        'active' => true,
     ]);
 
     travelTo(now()->addHours(2), function () use ($livestream) {

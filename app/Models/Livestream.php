@@ -25,6 +25,6 @@ class Livestream extends BaseModel
 
     public function scopeActive($query): mixed
     {
-        return $query->whereNotNull('clip_id');
+        return $query->where('active', 1);
     }
 }
