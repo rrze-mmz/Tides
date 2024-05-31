@@ -118,10 +118,15 @@
                               :required="false"
                 />
 
-                <div class="col-span-7 w-4/5 pt-10">
+                <div class="col-span-7 mt-10 w-4/5 space-x-4">
                     <x-button class="bg-blue-600 hover:bg-blue-700">
                         Update device
                     </x-button>
+                    <a href="{{route('devices.index')}}">
+                        <x-button type="button" class="bg-gray-600 hover:bg-gray:700">
+                            Back to devices list
+                        </x-button>
+                    </a>
                 </div>
             </div>
 

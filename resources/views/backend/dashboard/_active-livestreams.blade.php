@@ -61,12 +61,12 @@
                     </td>
                     <td class="px-6 py-4 text-sm flex space-x-2 items-center">
                         <div>
-                            <a href="{{ route('clips.edit', $activeLivestream->clip) }}">
+                            <a href="{{ route('livestreams.edit', $activeLivestream) }}">
                                 <x-heroicon-c-pencil class="h-6" />
                             </a>
                         </div>
                         <div>
-                            <a href="{{ route('frontend.clips.show', $activeLivestream->clip) }}">
+                            <a href="{{ route('frontend.livestreams.show', $activeLivestream) }}">
                                 <x-heroicon-c-eye class="h-6" />
                             </a>
                         </div>

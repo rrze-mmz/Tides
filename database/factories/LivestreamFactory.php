@@ -25,6 +25,7 @@ class LivestreamFactory extends Factory
             'file_path' => 'wowza_file_path',
             'active' => false,
             'app_name' => 'test-lecture-hall',
+            'opencast_location_name' => 'test-lecture-hall',
         ];
     }
 }
