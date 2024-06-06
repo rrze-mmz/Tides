@@ -74,7 +74,7 @@ class ClipsController extends Controller
             };
         })
             ->unique()
-            ->filter(function ($value, $key) {
+            ->filter(function ($value) {
                 return $value !== 'PDF/CC';
             });
         $wowzaStatus = $wowzaService->getHealth();
