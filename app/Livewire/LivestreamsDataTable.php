@@ -13,9 +13,9 @@ class LivestreamsDataTable extends Component
 
     public $search;
 
-    public $sortField;
+    public $sortField = 'active';
 
-    public $sortAsc = true;
+    public $sortAsc = false;
 
     public function sortBy($field): void
     {
@@ -36,7 +36,11 @@ class LivestreamsDataTable extends Component
     {
         $search = trim(Str::lower($this->search));
 
-        $livestreams = Livestream::search($search)->paginate(40);
+        $livestreams = Livestream::search($search)
+            ->when($this->sortField, function ($query) {
+                $query->orderBy($this->sortField, $this->sortAsc ? 'asc' : 'desc');
+            })
+            ->paginate(40);
 
         return view('livewire.livestreams-data-table', ['livestreams' => $livestreams]);
     }

@@ -21,7 +21,7 @@ class LivestreamFactory extends Factory
             'clip_id' => null,
             'name' => 'test-lecture-hall',
             'url' => 'wowza_livestream_url',
-            'content_path' => 'wowza_content_path',
+            'content_path' => 'wowza_content_path/',
             'file_path' => 'wowza_file_path',
             'active' => false,
             'app_name' => 'test-lecture-hall',

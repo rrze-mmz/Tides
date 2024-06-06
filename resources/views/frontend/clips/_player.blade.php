@@ -8,7 +8,7 @@
             <div>
                 <x-player :clip="$clip" :wowzaStatus="$wowzaStatus" :default-video-url="$defaultVideoUrl" />
             </div>
-            @if ($alternativeVideoUrls->count() > 1)
+            @if (count($alternativeVideoUrls) > 1)
                 <div class="pb-5">
                     <div class="flex space-x-4 pt-10 dark:text-white">
                         @foreach($alternativeVideoUrls as $type=> $url)

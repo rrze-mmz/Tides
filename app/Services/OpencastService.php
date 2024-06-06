@@ -738,7 +738,7 @@ class OpencastService
     public function getEventByEventID($eventID): Collection
     {
         try {
-            $this->response = $this->client->get("api/events/{$eventID}");
+            $this->response = $this->client->get("api/events/{$eventID}/?withscheduling=true");
         } catch (GuzzleException $exception) {
             Log::error($exception->getMessage());
         }

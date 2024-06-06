@@ -174,6 +174,12 @@ trait WorksWithOpencastClient
                 'license' => '',
                 'archive_version' => $archiveVersion,
                 'contributor' => [],
+                'scheduling' => [
+                    'agent_id' => 'test-lecture-hall',
+                    'inputs' => [],
+                    'start' => Carbon::now()->toIso8601ZuluString(),
+                    'end' => Carbon::now()->addMinutes(90)->toIso8601ZuluString(),
+                ],
                 'series' => $series->title,
                 'has_previews' => false,
                 'location' => '',
@@ -209,6 +215,12 @@ trait WorksWithOpencastClient
             'license' => '',
             'archive_version' => $archiveVersion,
             'contributor' => [],
+            'scheduling' => [
+                'agent_id' => 'test-lecture-hall',
+                'inputs' => [],
+                'start' => Carbon::now()->toIso8601ZuluString(),
+                'end' => Carbon::now()->addMinutes(90)->toIso8601ZuluString(),
+            ],
             'series' => $this->faker->sentence(10),
             'has_previews' => false,
             'location' => '',
@@ -358,7 +370,7 @@ trait WorksWithOpencastClient
             'results' => [
                 0 => [
                     'end_date' => '2023-05-31T07:05:00Z',
-                    'agent_id' => 'SMP_Ulmenweg ',
+                    'agent_id' => 'test-lecture-hall ',
                     'displayable_status' => 'EVENTS.EVENTS.STATUS.PROCESSED',
                     'needs_cutting' => true,
                     'source' => 'ARCHIVE',
@@ -495,7 +507,7 @@ trait WorksWithOpencastClient
                 'contributor' => [],
                 'series' => ($series) ? $series->title : $this->faker->sentence,
                 'scheduling' => [
-                    'agent_id' => 'test_lecture_hall',
+                    'agent_id' => 'test-lecture-hall',
                     'inputs' => [
                         'Channel A',
                         'Channel B',

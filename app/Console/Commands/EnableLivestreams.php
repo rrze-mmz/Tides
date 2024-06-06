@@ -58,12 +58,17 @@ class EnableLivestreams extends Command
         $recordingEvents->each(function ($event) use ($wowzaService) {
             $series = Series::where('opencast_series_id', $event['is_part_of'])->first();
             $seriesLivestreamClip = $series->fetchLivestreamClip();
-            if (! is_null($seriesLivestreamClip) && ! is_null(Livestream::where('clip_id', $seriesLivestreamClip->id))) {
+            if (! is_null($seriesLivestreamClip)
+                && ! is_null(Livestream::where('clip_id', $seriesLivestreamClip->id))) {
                 $this->info(
                     "Series '{$series->title}' has a livestream clip now try to enable"
                     ." wowza app {$event['scheduling']['agent_id']} for this clip"
                 );
-                $wowzaService->reserveLivestreamRoom($seriesLivestreamClip, $event['scheduling']['agent_id']);
+                $wowzaService->reserveLivestreamRoom(
+                    $event['scheduling']['agent_id'],
+                    $seriesLivestreamClip,
+                    $event['scheduling']['end']
+                );
             }
         });
         if ($events->isEmpty()) {
@@ -81,7 +86,7 @@ class EnableLivestreams extends Command
                     "Series '{$series->title}' has a livestream clip now try to enable"
                     ." wowza app {$event['scheduling']['agent_id']} for this clip"
                 );
-                $wowzaService->reserveLivestreamRoom($seriesLivestreamClip, $event['scheduling']['agent_id']);
+                $wowzaService->reserveLivestreamRoom($event['scheduling']['agent_id'], $seriesLivestreamClip);
             }
         });
     }

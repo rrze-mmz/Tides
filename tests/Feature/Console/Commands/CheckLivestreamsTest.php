@@ -67,6 +67,7 @@ it('disables a livestream if the end availability timestamp is equal or less tha
         $livestream->refresh();
 
         expect($livestream->clip_id)->toBeNull();
+        expect($livestream->active)->toBe(0);
     });
 
 });

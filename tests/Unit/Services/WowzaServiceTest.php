@@ -1,8 +1,11 @@
 <?php
 
 use App\Enums\Content;
+use App\Models\Clip;
+use App\Models\Livestream;
 use App\Services\WowzaService;
 use Facades\Tests\Setup\ClipFactory;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Tests\Setup\WorksWithOpencastClient;
@@ -153,4 +156,40 @@ it('returns wowza smil file bitrate', function () {
     expect($this->wowzaService->findWowzaAssetBitrate(1080))->toEqual(1500000);
     expect($this->wowzaService->findWowzaAssetBitrate(720))->toEqual(1100000);
     expect($this->wowzaService->findWowzaAssetBitrate(360))->toEqual(450000);
+});
+
+it('generates secure VOD URLs for a clip', function () {
+    $clip = ClipFactory::withAssets(3)->create();
+    expect($this->wowzaService->vodSecureUrls($clip))->toBeInstanceOf(Collection::class);
+    expect($this->wowzaService->vodSecureUrls($clip))->toHaveKey('presenter');
+    expect($this->wowzaService->vodSecureUrls($clip)->first())
+        ->toContain(config('settings.streaming.wowza.server1.engine_url'));
+});
+
+it('generates secure livestream URLs for a livestream room', function () {
+    $livestream = Livestream::factory()->create();
+
+    expect($this->wowzaService->livestreamSecureUrls($livestream))->toBeInstanceOf(Collection::class);
+    expect($this->wowzaService->livestreamSecureUrls($livestream)->first())
+        ->toContain(config('settings.streaming.wowza.server2.engine_url'));
+});
+
+it('reserves a livestream room for a given Opencast agent ID', function () {
+    $livestream = Livestream::factory()->create();
+    expect($livestream->refresh()->active)->toBe(0);
+
+    $this->wowzaService->reserveLivestreamRoom($livestream->opencast_location_name);
+    expect($livestream->refresh()->active)->toBe(1);
+});
+
+it('reserves a livestream for a given location', function () {
+    $livestream = Livestream::factory()->create();
+    $clip = Clip::factory()->create(['is_livestream' => true]);
+    expect($livestream->refresh()->active)->toBe(0);
+    expect($livestream->refresh()->clip_id)->toBeNull();
+
+    $this->wowzaService->reserveLivestreamRoom('', $clip, null, $livestream->name);
+
+    expect($livestream->refresh()->active)->toBe(1);
+    expect($livestream->refresh()->clip_id)->toBe($clip->id);
 });

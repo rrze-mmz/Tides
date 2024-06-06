@@ -58,8 +58,11 @@ class ClipsController extends Controller
     /**
      * Edit form for a single clip
      */
-    public function edit(Clip $clip, OpencastService $opencastService, WowzaService $wowzaService): Application|Factory|View
-    {
+    public function edit(
+        Clip $clip,
+        OpencastService $opencastService,
+        WowzaService $wowzaService
+    ): Application|Factory|View {
         $this->authorize('edit', $clip);
         $assetsResolutions = $clip->assets->map(function ($asset) {
             return match (true) {
@@ -71,23 +74,11 @@ class ClipsController extends Controller
             };
         })
             ->unique()
-            ->filter(function ($value, $key) {
+            ->filter(function ($value) {
                 return $value !== 'PDF/CC';
             });
         $wowzaStatus = $wowzaService->getHealth();
-        $urls = collect([]);
-        $defaultPlayerUrl = '';
-        if ($wowzaStatus) {
-            $urls = $wowzaService->vodSecureUrls($clip);
-
-            $defaultPlayerUrl = match (true) {
-                empty($urls) => [],
-                $urls->has('composite') => $urls['composite'],
-                $urls->has('presenter') => $urls['presenter'],
-                $urls->has('presentation') => $urls['presentation'],
-                default => []
-            };
-        }
+        $urls = ($wowzaStatus) ? $wowzaService->getDefaultPlayerURL($clip) : collect([]);
 
         return view(
             'backend.clips.edit',
@@ -97,9 +88,9 @@ class ClipsController extends Controller
                 'previousNextClipCollection' => $clip->previousNextClipCollection(),
                 'opencastConnectionCollection' => $opencastService->getHealth(),
                 'wowzaStatus' => $wowzaService->getHealth(),
-                'defaultVideoUrl' => $defaultPlayerUrl,
+                'defaultVideoUrl' => $urls['defaultPlayerUrl'],
                 'assetsResolutions' => $assetsResolutions,
-                'alternativeVideoUrls' => $urls,
+                'alternativeVideoUrls' => isset($urls['urls']) ? $urls['urls'] : [],
             ]
         );
     }
