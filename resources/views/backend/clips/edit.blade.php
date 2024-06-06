@@ -36,8 +36,8 @@
     <div class="flex px-2 py-2">
         <div class="w-4/5">
 
-            @if($clip->assets()->formatVideo()->count() > 0)
-                @include('backend.clips.sidebar._player')
+            @if($clip->assets()->formatVideo()->count() > 0 || $clip->is_livestream)
+                @include('backend.clips.main._player')
             @endif
             <form action="{{ route('clips.update', $clip) }}"
                   method="POST"

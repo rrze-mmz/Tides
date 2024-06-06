@@ -42,12 +42,12 @@ it('outputs a message if Opencast scheduled events found for the next 10 minutes
     $this->mockHandler->append(
         $this->mockHealthResponse(),
         $this->mockNoResultsResponse(),
-        $this->mockScheduledEvents($series, 1, Carbon::now()->addMinutes(6), Carbon::now()->addMinutes(26))
+        $this->mockScheduledEvents($series, 1, Carbon::now()->addMinutes(5), Carbon::now()->addMinutes(26))
     );
 
     artisan('app:enable-livestreams')
         ->expectsOutput("Series '{$series->title}' has a livestream clip now try to enable".
-            ' wowza app test_lecture_hall for this clip');
+            ' wowza app test-lecture-hall for this clip');
 });
 
 it('updates clip metadata and set the livestream start and end times', function () {
@@ -56,11 +56,12 @@ it('updates clip metadata and set the livestream start and end times', function 
     $livestreamClip = $series->clips()->first();
     $livestreamClip->is_livestream = true;
     $livestreamClip->save();
+    $endTime = Carbon::now()->addMinutes(26);
 
     $this->mockHandler->append(
         $this->mockHealthResponse(),
         $this->mockNoResultsResponse(),
-        $this->mockScheduledEvents($series, 1, Carbon::now()->addMinutes(6), Carbon::now()->addMinutes(26))
+        $this->mockScheduledEvents($series, 1, Carbon::now()->addMinutes(6), $endTime)
     );
 
     artisan('app:enable-livestreams');

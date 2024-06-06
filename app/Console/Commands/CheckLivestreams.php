@@ -44,6 +44,7 @@ class CheckLivestreams extends Command
             //TODO insert livestream stats from wowza api and update (?) the app names
             if ($livestream->time_availability_end->isPast()) {
                 $livestream->clip_id = null;
+                $livestream->active = false;
                 $livestream->save();
                 $this->info("Disable livestream {$livestream->name}.");
             } else {

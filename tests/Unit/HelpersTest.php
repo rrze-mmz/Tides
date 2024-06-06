@@ -3,6 +3,7 @@
 use App\Enums\Acl;
 use App\Models\Asset;
 use App\Models\Clip;
+use App\Models\Livestream;
 use App\Models\Series;
 use App\Models\User;
 use Facades\Tests\Setup\ClipFactory;
@@ -189,4 +190,12 @@ it('has a removeTrailNumbers function', function () {
     $newString = removeTrailingNumbers($string);
 
     expect($newString)->toBe('Mathematics for engineering 1');
+});
+
+it('has a check opencast livestream room function', function () {
+    $location = 'test-location';
+    expect(checkOpencastLivestreamRoom($location))->toBeNull();
+    Livestream::factory()->create(['name' => $location, 'opencast_location_name' => 'test-location']);
+
+    expect(checkOpencastLivestreamRoom($location))->toBeInstanceOf(Livestream::class);
 });

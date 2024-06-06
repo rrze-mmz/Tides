@@ -3,6 +3,7 @@
 use App\Enums\Acl;
 use App\Models\Asset;
 use App\Models\Clip;
+use App\Models\Livestream;
 use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Support\Carbon;
@@ -263,4 +264,10 @@ function getCurrentGitBranch()
         // Handle exceptions or errors as needed
         return 'unknown';
     }
+}
+
+function checkOpencastLivestreamRoom(string $opencastLocation): ?Livestream
+{
+    //find the exact livestream with the given opencast location name
+    return Livestream::where('opencast_location_name', '=', $opencastLocation)->get()->first();
 }

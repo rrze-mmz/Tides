@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Backend;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\LivestreamRequest;
 use App\Models\Livestream;
+use App\Services\WowzaService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -37,9 +39,12 @@ class LivestreamsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Livestream $livestream): Application|Factory|View
+    public function edit(Livestream $livestream, WowzaService $wowzaService): Application|Factory|View
     {
-        return view('backend.livestreams.edit')->with('livestream', $livestream);
+        return view('backend.livestreams.edit')->with([
+            'livestream' => $livestream,
+            'livestreamURL' => $wowzaService->livestreamSecureUrls($livestream)->first(),
+        ]);
     }
 
     public function update(LivestreamRequest $request, Livestream $livestream): RedirectResponse

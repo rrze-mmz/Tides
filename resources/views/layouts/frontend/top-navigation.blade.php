@@ -37,7 +37,7 @@
             </a>
         </span>
         <span class="no-underline ">
-            <a href="{{ route('livestreams.index') }}">
+            <a href="{{ route('frontend.livestreams.index') }}">
                 Live now!
             </a>
         </span>

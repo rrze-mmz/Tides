@@ -86,34 +86,32 @@
                                    {{ OpencastWorkflowState::tryFrom($event['status'])->lower() }}
                                 </span>
                                 @if(Str::contains(url()->current(),'dashboard'))
-                                    <a href="">
-                                        <form action="{{ route('reserveLivestreamRoom') }}" method="POST">
-                                            @csrf
-                                            <input id="location"
-                                                   type="text"
-                                                   name="location"
-                                                   value="{{$event['location']}}"
-                                                   class="@error('location') is-invalid @enderror hidden">
-                                            @error('location')
-                                            <div class="alert alert-danger">{{ $message }}</div>
-                                            @enderror
-                                            @if($activeLivestreams->get()->pluck('name')->contains($event['location']))
-                                                <span class="bg-gray-600 inline-flex items-center px-4 py-2 border uppercase
+                                    @if($activeLivestreams->get()->pluck('opencast_location_name')->contains($event['location']))
+                                        <span class="bg-gray-600 inline-flex items-center px-4 py-2 border uppercase
                                         border-transparent font-medium text-base text-white tracking-wider
                                         active:bg-white-900 focus:outline-none focus:border-white-900 focus:ring
                                         ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150"
-                                                >
+                                        >
                                                     Livestream existiert
                                                 </span>
-                                            @else
+                                    @else
+                                        <a href="">
+                                            <form action="{{ route('livestreams.makeReservation') }}" method="POST">
+                                                @csrf
+                                                <input id="event_{{$loop->index}}"
+                                                       type="text"
+                                                       name="event_{{$loop->index}}"
+                                                       value="{{$event['identifier']}}"
+                                                       class="@error('event_'.$loop->index) is-invalid @enderror hidden">
+                                                @error('event_'.$loop->index)
+                                                <div class="alert alert-danger">{{ $message }}</div>
+                                                @enderror
                                                 <x-button type="submit" class="bg-blue-600 hover:bg-blue-700">
                                                     Livestream reservieren
                                                 </x-button>
-                                            @endif
-
-                                        </form>
-
-                                    </a>
+                                            </form>
+                                        </a>
+                                    @endif
                                 @endif
                             </div>
                         </td>

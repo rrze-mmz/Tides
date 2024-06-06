@@ -61,7 +61,7 @@ return [
     'streaming' => [
         'wowza' => [
             'server1' => [
-                'engine_url' => 'localhost:1935',
+                'engine_url' => 'localhost:1935/',
                 'api_url' => 'localhost:8087',
                 'api_username' => 'digest_user',
                 'api_password' => 'digest_password',
@@ -70,7 +70,7 @@ return [
                 'token_prefix' => 'tides',
             ],
             'server2' => [
-                'engine_url' => 'localhost:1935',
+                'engine_url' => 'localhost:1935/',
                 'api_url' => 'localhost:8087',
                 'api_username' => 'digest_user',
                 'api_password' => 'digest_password',

@@ -16,9 +16,10 @@ use App\Http\Controllers\Backend\DevicesController;
 use App\Http\Controllers\Backend\DocumentController;
 use App\Http\Controllers\Backend\FileUploadController;
 use App\Http\Controllers\Backend\ImagesController;
+use App\Http\Controllers\Backend\LivestreamsController;
+use App\Http\Controllers\Backend\ManageLivestreamRoom;
 use App\Http\Controllers\Backend\PortalSettingsController;
 use App\Http\Controllers\Backend\PresentersController;
-use App\Http\Controllers\Backend\ReserveLivestreamRoom;
 use App\Http\Controllers\Backend\SearchSettingsController;
 use App\Http\Controllers\Backend\SeriesClipsController;
 use App\Http\Controllers\Backend\SeriesController;
@@ -51,12 +52,10 @@ use App\Http\Controllers\Frontend\UserApplicationsController;
 use App\Http\Controllers\Frontend\UserCommentsController;
 use App\Http\Controllers\Frontend\UserSettingsController;
 use App\Http\Controllers\Frontend\UserSubscriptionsController;
-use App\Http\Controllers\LivestreamsController;
 use App\Models\Activity;
 use App\Models\Article;
 use App\Models\Clip;
 use App\Models\Series;
-use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use App\Services\OpenSearchService;
 use Illuminate\Http\Request;
@@ -313,7 +312,6 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
     Route::resource('devices', DevicesController::class)->except(['show']);
     Route::post('images/import/', UploadImageController::class)->name('images.import');
     Route::post('/uploads/process', [FileUploadController::class, 'process'])->name('uploads.process');
-    Route::post('/reserveLivestreamRoom', ReserveLivestreamRoom::class)->name('reserveLivestreamRoom');
 
     // Portal admin resources (portal assistants are not included)
     Route::middleware(['user.admin'])->group(function () {
@@ -351,6 +349,10 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
             ]);
         })->name('activities.index');
         Route::resource('livestreams', LivestreamsController::class)->except(['show']);
+        Route::post('/livestreams/makeReservation', [ManageLivestreamRoom::class, 'reserve'])
+            ->name('livestreams.makeReservation');
+        Route::post('/livestreams/{livestream}/cancelReservation', [ManageLivestreamRoom::class, 'cancel'])
+            ->name('livestreams.cancelReservation');
     });
 
     //Superadmin routes

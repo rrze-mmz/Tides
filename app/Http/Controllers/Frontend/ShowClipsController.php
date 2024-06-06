@@ -46,25 +46,13 @@ class ShowClipsController extends Controller
             });
 
         $wowzaStatus = $wowzaService->getHealth();
-        $urls = collect([]);
-        $defaultPlayerUrl = '';
-        if ($wowzaStatus) {
-            $urls = $wowzaService->vodSecureUrls($clip);
-
-            $defaultPlayerUrl = match (true) {
-                empty($urls) => [],
-                $urls->has('composite') => $urls['composite'],
-                $urls->has('presenter') => $urls['presenter'],
-                $urls->has('presentation') => $urls['presentation'],
-                default => []
-            };
-        }
+        $urls = ($wowzaStatus) ? $wowzaService->getDefaultPlayerURL($clip) : collect([]);
 
         return view('frontend.clips.show', [
             'clip' => $clip,
             'wowzaStatus' => $wowzaService->getHealth(),
-            'defaultVideoUrl' => $defaultPlayerUrl,
-            'alternativeVideoUrls' => $urls,
+            'defaultVideoUrl' => $urls['defaultPlayerUrl'],
+            'alternativeVideoUrls' => isset($urls['urls']) ? $urls['urls'] : [],
             'previousNextClipCollection' => $clip->previousNextClipCollection(),
             'assetsResolutions' => $assetsResolutions,
             'playerSetting' => Setting::portal(),

@@ -4,7 +4,7 @@
            data-poster="{{ fetchClipPoster($clip->latestAsset?->player_preview)  }}">
         @if($clip->is_livestream)
             <source
-                src="http://172.17.0.2:1935/live/hstream/playlist.m3u8"
+                src="{{ $defaultVideoUrl }}"
                 type="video/mp4"
             />
         @elseif(Illuminate\Support\Facades\Storage::disk('streamable_videos')

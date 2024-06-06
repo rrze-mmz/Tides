@@ -205,6 +205,59 @@ class WowzaService
         };
     }
 
+    public function getDefaultPlayerURL(Clip $clip): array
+    {
+        $urls = [];
+        if ($clip->is_livestream) {
+            if ($clip->livestream) {
+                $urls['defaultPlayerUrl'] = $this->livestreamSecureUrls($clip->livestream)->first();
+            } else {
+                $urls['defaultPlayerUrl'] = 'http://172.17.0.2:1935/live/hstream/playlist.m3u8';
+            }
+        } else {
+            $urls['urls'] = $this->vodSecureUrls($clip);
+
+            $urls['defaultPlayerUrl'] = match (true) {
+                empty($urls['urls']) => [],
+                $urls['urls']->has('composite') => $urls['urls']['composite'],
+                $urls['urls']->has('presenter') => $urls['urls']['presenter'],
+                $urls['urls']->has('presentation') => $urls['urls']['presentation'],
+                default => []
+            };
+        }
+
+        return $urls;
+    }
+
+    public function livestreamSecureUrls(Livestream $livestream): Collection
+    {
+        $url =
+            $this->streamingSettings->data['wowza']['server2']['engine_url'].
+            $livestream->content_path.
+            $livestream->file_path.'/playlist.m3u8';
+
+        $wowzaContentPath = $livestream->content_path.$livestream->file_path;
+        $secureToken = $this->streamingSettings->data['wowza']['server2']['secure_token'];
+        $tokenPrefix = $this->streamingSettings->data['wowza']['server2']['token_prefix'];
+        $urlWithToken = $this->genToken($tokenPrefix, $wowzaContentPath, $secureToken, $url);
+
+        return collect($urlWithToken);
+    }
+
+    private function genToken(mixed $tokenPrefix, string $wowzaContentPath, mixed $secureToken, string $url): string
+    {
+        $tokenStartTime = $tokenPrefix.'starttime='.time();
+        $tokenEndTime = $tokenPrefix.'endTime='.(time() + 21600);
+
+        $userIP = (App::environment(['testing', 'local'])) ? env('FAUTV_USER_IP') : $_SERVER['REMOTE_ADDR'];
+        $hashStr = "{$wowzaContentPath}?{$userIP}&{$secureToken}&{$tokenEndTime}&{$tokenStartTime}";
+        $hash = hash('sha256', $hashStr, 1);
+        $usableHash = strtr(base64_encode($hash), '+/', '-_');
+        $urlWithToken = "{$url}?{$tokenStartTime}&{$tokenEndTime}&{$tokenPrefix}hash={$usableHash}";
+
+        return $urlWithToken;
+    }
+
     /**
      * Generates a wowza streaming link with secure token settings
      */
@@ -234,14 +287,7 @@ class WowzaService
                     $asset->original_file_name;
                 $secureToken = $this->streamingSettings->data['wowza']['server1']['secure_token'];
                 $tokenPrefix = $this->streamingSettings->data['wowza']['server1']['token_prefix'];
-                $tokenStartTime = $tokenPrefix.'starttime='.time();
-                $tokenEndTime = $tokenPrefix.'endTime='.(time() + 21600);
-
-                $userIP = (App::environment(['testing', 'local'])) ? env('FAUTV_USER_IP') : $_SERVER['REMOTE_ADDR'];
-                $hashStr = "{$wowzaContentPath}?{$userIP}&{$secureToken}&{$tokenEndTime}&{$tokenStartTime}";
-                $hash = hash('sha256', $hashStr, 1);
-                $usableHash = strtr(base64_encode($hash), '+/', '-_');
-                $urlWithToken = "{$url}?{$tokenStartTime}&{$tokenEndTime}&{$tokenPrefix}hash={$usableHash}";
+                $urlWithToken = $this->genToken($tokenPrefix, $wowzaContentPath, $secureToken, $url);
                 $filePaths->put($fileType, $urlWithToken);
             });
         }
@@ -249,27 +295,32 @@ class WowzaService
         return $filePaths;
     }
 
-    public function reserveLivestreamRoom(Clip $livestreamClip, string $opencastAgentID): Livestream
-    {
-        $opencastAgentID = match ($opencastAgentID) {
-            'rrze-ingest' => 'rrze_ingest',
-            'SMP_Ulmenweg ' => 'UK_Ulmenweg',
-            'EWF-1041' => 'EWF',
-            'Phil-Gr-HS' => 'Phil_Gr_HS',
-            '2049Tagungsraum' => 'rrze2049',
-            'H-Physiologie-2' => 'HPhysio2',
-            'H-Anatomie' => 'HAnatomie',
-            default => $opencastAgentID,
-        };
+    public function reserveLivestreamRoom(
+        ?string $opencastAgentID = '',
+        ?Clip $livestreamClip = null,
+        ?string $endTime = null,
+        ?string $livestreamRoomName = '',
+    ): ?Livestream {
 
-        $livestream = Livestream::search($opencastAgentID)->first();
+        $livestream = $this->findLivestream($opencastAgentID, $livestreamRoomName);
+        if (is_null($livestream)) {
+            Log::error('No livestream room found for opencast location-> '.$opencastAgentID);
+
+            return null;
+        }
+
+        $time_availability_end = is_null($endTime) ? Carbon::now()->addHours(2)
+            : Carbon::createFromFormat('Y-m-d\TH:i:s\Z', $endTime)->add('2 hours');
+
         //livestream is matching with opencast capture agent
+
         try {
             if ($livestream) {
                 //reserve the livestream for this clipID
-                $livestream->clip_id = $livestreamClip->id;
+                $livestream->clip_id = (isset($livestreamClip)) ? $livestreamClip->id : null;
                 $livestream->time_availability_start = Carbon::now();
-                $livestream->time_availability_end = Carbon::now()->addHours(2); // needs to be calculated properly
+                $livestream->time_availability_end = $time_availability_end;
+                $livestream->active = true;
                 $livestream->save();
             }
 
@@ -277,5 +328,17 @@ class WowzaService
         } catch (UnexpectedNullMatchException $exception) {
             Log::error($exception);
         }
+    }
+
+    private function findLivestream(?string $opencastAgentID, ?string $livestreamRoomName): ?Livestream
+    {
+        if (! empty($opencastAgentID)) {
+            return checkOpencastLivestreamRoom($opencastAgentID);
+        }
+        if (! empty($livestreamRoomName)) {
+            return Livestream::where('name', 'like', '%'.$livestreamRoomName.'%')->first();
+        }
+
+        return null;
     }
 }
