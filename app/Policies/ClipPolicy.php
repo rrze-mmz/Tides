@@ -39,12 +39,12 @@ class ClipPolicy
 
     public function view(?User $user, Clip $clip): bool
     {
+
         if (optional($user)->is($clip->owner) || optional($user)->isAdmin() || optional($user)->isAssistant()) {
             return true;
         } elseif ($clip->is_public &&
             (is_null($clip->series->is_public) || $clip->series->is_public)
-            && $clip->assets()->count() > 0) {
-
+            && ($clip->assets()->count() > 0 || $clip->is_livestream)) {
             return true;
         } else {
             return false;

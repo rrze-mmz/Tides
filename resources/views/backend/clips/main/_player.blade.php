@@ -77,6 +77,85 @@
                         </div>
                     </x-button>
                 </a>
+                @if($clip->is_livestream)
+                    @if($clip->livestream)
+                        <div class="flex flex-col space-y-4 dark:text-white w-full ">
+                            <form action="{{route('livestreams.cancelReservation', $clip->livestream->id)}}"
+                                  method="POST">
+                                @csrf
+                                <div class="mx-4 ">
+                                    <div class="border-b mb-4">Active livestream room
+                                        : {{ $clip->livestream->name }}
+                                        <span class="italic text-sm"
+                                        >
+                                                                        since {{ $clip->livestream->time_availability_start }}
+                                                                    </span>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col dark:text-white w-full ">
+                                    <div class="items-center px-4">
+                                        <x-button type="submit" class="bg-blue-600 hover:bg-blue-700 w-full">
+                                            Stop reservation
+                                        </x-button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    @else
+                        @can('administrate-portal-pages')
+                            <div class="flex flex-col space-y-4 dark:text-white w-full ">
+                                <form action="{{ route('livestreams.makeReservation') }}"
+                                      method="POST"
+                                >
+                                    @csrf
+                                    <div class="mx-4 items-center ">
+                                        <div class="flex flex-col border-b">
+                                            <div class="text-lg font-bold">
+                                                Livestream room reservation options *
+                                            </div>
+                                            <span class="py-1 italic text-sm">
+                                             *If a room is already reserved is not going to be listed
+                                        </span>
+                                        </div>
+                                        <div>
+
+                                        </div>
+                                        <input id="clipID"
+                                               type="text"
+                                               name="clipID"
+                                               value="{{ old('clipID',$clip->id) }}"
+                                               class="@error('clipID') is-invalid @enderror hidden">
+                                        @error('clipID')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                        @enderror
+                                        <x-form.select2-single field-name="livestreamID"
+                                                               label="Room name"
+                                                               select-class="select2-tides"
+                                                               model="livestream"
+                                                               columns="4"
+                                                               column-start="2"
+                                                               column-end="4"
+                                                               :selectedItem="old('livestreamID')"
+                                        />
+                                    </div>
+
+                                    <div class="flex flex-col dark:text-white w-full ">
+                                        <div class="items-center px-4">
+                                            <x-button type="submit"
+                                                      class="bg-blue-600 hover:bg-blue-700 w-full"
+                                            >
+                                                <x-heroicon-o-arrow-right-circle class="w-6 h-6" />
+                                                <div class="pl-2">
+                                                    Livestream reservieren
+                                                </div>
+                                            </x-button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        @endcan
+                    @endif
+                @endif
             </div>
         </div>
     </div>

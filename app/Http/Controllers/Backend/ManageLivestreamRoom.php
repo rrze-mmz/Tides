@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Clip;
 use App\Models\Livestream;
 use App\Models\Series;
 use App\Services\OpencastService;
@@ -28,9 +29,12 @@ class ManageLivestreamRoom extends Controller
         // Iterate over the inputs and add rules for each location field
         foreach ($inputs as $key => $value) {
             if (str_starts_with($key, 'event_')) {
-                $rules[$key] = 'required|uuid';
+                $rules[$key] = 'sometimes|uuid';
             }
         }
+
+        $rules['clipID'] = 'sometimes|exists:clips,id';
+        $rules['livestreamID'] = 'sometimes|exists:livestreams,id';
 
         // Validate the request
         $validator = Validator::make($inputs, $rules);
@@ -38,26 +42,45 @@ class ManageLivestreamRoom extends Controller
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
-        $validated = $validator->validated();
+        $validated = collect($validator->validated());
 
-        $eventID = $validated[array_key_first($validated)];
-        $event = $opencastService->getEventByEventID($eventID);
         $livestreamClip = null;
 
-        //now check if a livestream clip for this series exists
-        $series = Series::where('opencast_series_id', $event['is_part_of'])->first();
+        $containsEventID = $validated->keys()->contains(function ($key) {
+            return str_starts_with($key, 'event_');
+        });
+        //reserve the livestream based on an opencast event
+        if ($containsEventID) {
+            $eventID = $validated->first();
+            $event = $opencastService->getEventByEventID($eventID);
+            //now check if a livestream clip for this series exists
+            $series = Series::where('opencast_series_id', $event['is_part_of'])->first();
 
-        if (! is_null($series)) {
-            $livestreamClip = $series->fetchLivestreamClip();
-        }
-        if (is_null($wowzaService->reserveLivestreamRoom(
-            $event['scheduling']['agent_id'],
-            $livestreamClip,
-            $event['scheduling']['end']
-        ))) {
-            session()->flash(
-                'errorMessage',
-                'No livestream room found for Opencast location:'.$event['scheduling']['agent_id']
+            if (! is_null($series)) {
+                $livestreamClip = $series->fetchLivestreamClip();
+            }
+            if (is_null($wowzaService->reserveLivestreamRoom(
+                $event['scheduling']['agent_id'],
+                $livestreamClip,
+                $event['scheduling']['end']
+            ))) {
+                session()->flash(
+                    'errorMessage',
+                    'No livestream room found for Opencast location:'.$event['scheduling']['agent_id']
+                );
+            }
+        } else {
+            $livestreamClip = Clip::find($validated->get('clipID'));
+            $livestream = Livestream::find($validated->get('livestreamID'));
+            if ($livestream->active) {
+                session()->flash(
+                    'errorMessage',
+                    'The room is currently in use by another clip, so the reservation cannot be made.'
+                );
+            }
+            $wowzaService->reserveLivestreamRoom(
+                livestreamClip: $livestreamClip,
+                livestreamRoomName: $livestream->name
             );
         }
 
@@ -66,10 +89,12 @@ class ManageLivestreamRoom extends Controller
 
     public function cancel(Livestream $livestream)
     {
+        $livestream->clip->recordActivity('Disabled livestream room - '.$livestream->name);
         $livestream->clip_id = null;
         $livestream->time_availability_end = Carbon::now(); // needs to be calculated properly
         $livestream->active = false;
         $livestream->save();
+        $livestream->recordActivity('Disabled livestream room - '.$livestream->name);
 
         return redirect()->back();
     }

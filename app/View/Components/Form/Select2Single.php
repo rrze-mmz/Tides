@@ -8,6 +8,7 @@ use App\Models\Context;
 use App\Models\DeviceLocation;
 use App\Models\Format;
 use App\Models\Language;
+use App\Models\Livestream;
 use App\Models\Organization;
 use App\Models\Role;
 use App\Models\Semester;
@@ -28,6 +29,9 @@ class Select2Single extends Component
         public string $fieldName,
         public $selectClass,
         public $selectedItem,
+        public $columns = 8,
+        public $columnStart = 2,
+        public $columnEnd = 6,
         public $whereID = null,
     ) {
         //
@@ -44,6 +48,7 @@ class Select2Single extends Component
                     ->orderBy('id', 'desc')
                     ->get(),
                 'language' => Language::select(['id', 'code as name'])->get(),
+                'livestream' => Livestream::select(['id', 'name'])->where('active', false)->get(),
                 'location' => DeviceLocation::select(['id', 'name'])->get(),
                 'context' => Context::select(['id', 'de_name as name'])->get(),
                 'format' => Format::select(['id', 'de_name as name'])->get(),

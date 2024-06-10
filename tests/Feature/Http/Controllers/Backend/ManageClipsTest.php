@@ -671,6 +671,30 @@ it('load the video player if clip has assets', function () {
     get(route('clips.edit', $clip))->assertSee('data-plyr-provider="html5"', false);
 });
 
+it('loads the video player if clip is a livestream', function () {
+    $clip = ClipFactory::ownedBy(signInRole(Role::MODERATOR))->create();
+    $clip->is_livestream = true;
+    $clip->save();
+
+    get(route('clips.edit', $clip))->assertSee('data-plyr-provider="html5"', false);
+});
+
+it('hides livestream reservation dialog from moderators', function () {
+    $clip = ClipFactory::ownedBy(signInRole(Role::MODERATOR))->create();
+    $clip->is_livestream = true;
+    $clip->save();
+
+    get(route('clips.edit', $clip))->assertDontSee(route('livestreams.makeReservation'));
+});
+
+it('loads the video player if clip is a livestream for portal admins', function () {
+    $clip = ClipFactory::create(['is_livestream' => true]);
+
+    signInRole(Role::ADMIN);
+
+    get(route('clips.edit', $clip))->assertSee('data-plyr-provider="html5"', false);
+});
+
 test('an admin user can delete a not owned clip', function () {
     $clip = ClipFactory::create();
     signInRole(Role::ADMIN);

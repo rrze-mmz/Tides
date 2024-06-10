@@ -50,6 +50,24 @@ it('outputs a message if Opencast scheduled events found for the next 10 minutes
             ' wowza app test-lecture-hall for this clip');
 });
 
+it('notifies the admins if a livestream room is enables via cronjob', function () {
+    $series = SeriesFactory::withClips(3)->withOpencastID()->create();
+    Livestream::factory()->create();
+    $livestreamClip = $series->clips()->first();
+    $livestreamClip->is_livestream = true;
+    $livestreamClip->save();
+
+    $this->mockHandler->append(
+        $this->mockHealthResponse(),
+        $this->mockNoResultsResponse(),
+        $this->mockScheduledEvents($series, 1, Carbon::now()->addMinutes(5), Carbon::now()->addMinutes(26))
+    );
+
+    artisan('app:enable-livestreams')
+        ->expectsOutput("Series '{$series->title}' has a livestream clip now try to enable".
+            ' wowza app test-lecture-hall for this clip');
+});
+
 it('updates clip metadata and set the livestream start and end times', function () {
     $series = SeriesFactory::withClips(3)->withOpencastID()->create();
     $livestreamRoom = Livestream::factory()->create();
@@ -66,5 +84,7 @@ it('updates clip metadata and set the livestream start and end times', function 
 
     artisan('app:enable-livestreams');
 
-    expect($livestreamRoom->refresh()->clip_id)->toBe($livestreamClip->id);
+    expect($livestreamRoom->refresh()->clip_id)
+        ->toBe($livestreamClip->id);
+    expect($livestreamRoom->active)->toBe(1);
 });

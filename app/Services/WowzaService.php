@@ -322,6 +322,10 @@ class WowzaService
                 $livestream->time_availability_end = $time_availability_end;
                 $livestream->active = true;
                 $livestream->save();
+                if (isset($livestreamClip)) {
+                    $livestream->clip->recordActivity('Enabled livestream room - '.$livestream->name);
+                }
+                $livestream->recordActivity('Enabled livestream room - '.$livestream->name);
             }
 
             return $livestream;
