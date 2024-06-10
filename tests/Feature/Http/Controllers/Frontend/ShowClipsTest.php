@@ -40,8 +40,16 @@ it('a guest cannot manage clips', function () {
     delete(route('clips.destroy', $this->clip))->assertRedirectToRoute('login');
 });
 
-it('a guest can view a clip', function () {
+it('a guest can view a clip page if clip has assets', function () {
     get(route('frontend.clips.show', $this->clip))->assertSee($this->clip->title);
+});
+
+it('a guest can view a livestream clip page if clip is a livestream', function () {
+    $clip = ClipFactory::create();
+    $clip->is_livestream = true;
+    $clip->save();
+
+    get(route('frontend.clips.show', $clip))->assertSee($this->clip->title);
 });
 
 it('clip url should also work with clip id', function () {

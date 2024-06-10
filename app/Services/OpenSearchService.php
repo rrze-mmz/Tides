@@ -93,7 +93,6 @@ class OpenSearchService
             //avoid error messages if it is running on console command
             if (! App::runningInConsole()) {
                 Log::error($exception->getMessage());
-                Log::info($model->toJson());
             }
         }
 

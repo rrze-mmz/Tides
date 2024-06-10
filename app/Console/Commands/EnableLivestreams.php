@@ -41,19 +41,17 @@ class EnableLivestreams extends Command
         $startDate = (Carbon::now()->isDST()) ? Carbon::now()->subMinutes(120) : Carbon::now()->subMinutes(60);
         $endDate = (Carbon::now()->isDST()) ? Carbon::now()->subMinutes(110) : Carbon::now()->subMinutes(50);
         //        $endDate = (Carbon::now()->isDST()) ? Carbon::now()->addMinutes(110) : Carbon::now()->subMinutes(50);
-        Log::info('Check for Opencast scheduled events for the next 10 Minutes');
-        $this->info("Finding opencast scheduled events between {$startDate->addMinutes(120)}
-        and {$endDate->addMinutes(120)}");
-        $events = $opencastService->getEventsByStatusAndByDate(
-            OpencastWorkflowState::SCHEDULED,
-            null,
-            $startDate,
-            $endDate
-        );
+        Log::info('Searching for active Opencast recording events without active livestream room reservation');
+        $this->info('Searching for active Opencast recording events');
 
         $recordingEvents = $opencastService->getEventsByStatus(OpencastWorkflowState::RECORDING);
+
         if ($recordingEvents->isEmpty()) {
             $this->info('No active recording events found');
+        } else {
+            $counter = $recordingEvents->count();
+            $eventsName = $recordingEvents->pluck('title');
+            $this->info("Find $counter recording events: $eventsName");
         }
         $recordingEvents->each(function ($event) use ($wowzaService) {
             $series = Series::where('opencast_series_id', $event['is_part_of'])->first();
@@ -71,6 +69,16 @@ class EnableLivestreams extends Command
                 );
             }
         });
+        Log::info('Check for Opencast scheduled events for the next 10 Minutes');
+        $this->info("Searching for Opencast scheduled events between {$startDate->addMinutes(120)}
+        and {$endDate->addMinutes(120)}");
+        $events = $opencastService->getEventsByStatusAndByDate(
+            OpencastWorkflowState::SCHEDULED,
+            null,
+            $startDate,
+            $endDate
+        );
+
         if ($events->isEmpty()) {
             $this->info('No Opencast scheduled events found for the next 10 minutes');
 

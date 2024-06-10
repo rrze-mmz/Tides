@@ -49,7 +49,7 @@ class InsertSmilAssets extends Command
 
         $this->info('All smils generated!');
 
-        Cache::forget('your_command_running');
+        Cache::forget('insert_smil_command');
 
         return Command::SUCCESS;
     }

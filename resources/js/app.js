@@ -20,11 +20,12 @@ import {
   generateClipViewsLineChart,
 } from './chartsSetup.js';
 
-Livewire.start();
-
 window.jQuery = window.$ = jQuery;
 window.Pikaday = Pikaday;
 window.select2 = select2();
+
+//import Livewire after the above .js libraries
+Livewire.start();
 
 $('.solution-trix-field-wrapper')
   .find($('trix-editor'))

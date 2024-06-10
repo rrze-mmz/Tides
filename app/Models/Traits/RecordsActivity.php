@@ -57,8 +57,9 @@ trait RecordsActivity
      */
     public function recordActivity($description, array $changes = []): void
     {
-        $user = (auth()->user()) ?? $this->owner;
 
+        $user = (auth()->user()) ?? $this->owner;
+        Cache::forget('insert_smil_command');
         $changes = (empty($changes['before']) && empty($changes['after'])) ? $this->activityChanges() : $changes;
         if (! Cache::has('insert_smil_command')) {
             Activity::create([
