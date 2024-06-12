@@ -72,7 +72,12 @@ class EnableLivestreams extends Command
                     livestreamClip: $seriesLivestreamClip,
                     endTime: $event['scheduling']['end']
                 );
-                Notification::sendNow(User::admins()->get(), new LivestreamRoomEnabled($seriesLivestreamClip));
+                if (app()->environment('production')) {
+                    Notification::sendNow(User::admins()->get(), new LivestreamRoomEnabled($seriesLivestreamClip));
+
+                } else {
+                    Notification::sendNow(env('DEV_MAIL_ADDRESS'), new LivestreamRoomEnabled($seriesLivestreamClip));
+                }
             }
         });
 
@@ -107,7 +112,12 @@ class EnableLivestreams extends Command
                     opencastAgentID: $event['scheduling']['agent_id'],
                     livestreamClip: $seriesLivestreamClip
                 );
-                Notification::sendNow(User::admins()->get(), new LivestreamRoomEnabled($seriesLivestreamClip));
+                if (app()->environment('production')) {
+                    Notification::sendNow(User::admins()->get(), new LivestreamRoomEnabled($seriesLivestreamClip));
+                } else {
+                    Notification::sendNow(env('DEV_MAIL_ADDRESS'), new LivestreamRoomEnabled($seriesLivestreamClip));
+
+                }
             }
         });
     }
