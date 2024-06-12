@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Livestream;
+use App\Models\User;
 use App\Services\OpencastService;
 use Facades\Tests\Setup\SeriesFactory;
 use Illuminate\Support\Carbon;
@@ -14,6 +15,7 @@ uses(WorksWithOpencastClient::class);
 beforeEach(function () {
     $this->mockHandler = $this->swapOpencastClient();
     $this->opencastService = app(OpencastService::class);
+    User::factory()->create(['email' => env('DEV_MAIL_ADDRESS')]);
 });
 
 it('outputs a message and skip checks if Opencast server is not available', function () {

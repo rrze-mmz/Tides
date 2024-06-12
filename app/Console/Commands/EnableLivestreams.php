@@ -76,7 +76,8 @@ class EnableLivestreams extends Command
                     Notification::sendNow(User::admins()->get(), new LivestreamRoomEnabled($seriesLivestreamClip));
 
                 } else {
-                    Notification::sendNow(env('DEV_MAIL_ADDRESS'), new LivestreamRoomEnabled($seriesLivestreamClip));
+                    $user = User::search(env('DEV_MAIL_ADDRESS'))->first();
+                    Notification::sendNow($user, new LivestreamRoomEnabled($seriesLivestreamClip));
                 }
             }
         });
@@ -115,8 +116,8 @@ class EnableLivestreams extends Command
                 if (app()->environment('production')) {
                     Notification::sendNow(User::admins()->get(), new LivestreamRoomEnabled($seriesLivestreamClip));
                 } else {
-                    Notification::sendNow(env('DEV_MAIL_ADDRESS'), new LivestreamRoomEnabled($seriesLivestreamClip));
-
+                    $user = User::search(env('DEV_MAIL_ADDRESS'))->first();
+                    Notification::sendNow($user, new LivestreamRoomEnabled($seriesLivestreamClip));
                 }
             }
         });
