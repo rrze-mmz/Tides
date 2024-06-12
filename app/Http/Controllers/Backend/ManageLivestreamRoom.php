@@ -60,9 +60,9 @@ class ManageLivestreamRoom extends Controller
                 $livestreamClip = $series->fetchLivestreamClip();
             }
             if (is_null($wowzaService->reserveLivestreamRoom(
-                $event['scheduling']['agent_id'],
-                $livestreamClip,
-                $event['scheduling']['end']
+                opencastAgentID: $event['scheduling']['agent_id'],
+                livestreamClip: $livestreamClip,
+                endTime: $event['scheduling']['end']
             ))) {
                 session()->flash(
                     'errorMessage',

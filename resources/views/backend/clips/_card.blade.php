@@ -1,5 +1,5 @@
 @use(App\Enums\Acl)
-<div class="relative my-2 bg-gray-50 dark:bg-slate-900 rounded-md dark:border-white font-normal">
+<div class="relative my-2 bg-gray-50 dark:bg-slate-800 rounded-md dark:border-white font-normal">
     <div class="relative h-15 overflow-hidden">
         <a href="@if (str_contains(url()->current(), 'admin')) {{route('clips.edit', $clip)}}
                 @else {{route('frontend.clips.show', $clip) }} @endif">
@@ -17,7 +17,7 @@
         </div>
     </div>
 
-    <div class="flex-row justify-between p-2 mb-6 w-full bg-gray-50 dark:bg-slate-900        pb-7">
+    <div class="flex-row justify-between p-2 mb-6 w-full bg-gray-50 dark:bg-slate-800        pb-7">
         <div class="mb-1">
             <div class="text-md font-bold text-gray-900 dark:text-white">
                 <a

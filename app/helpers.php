@@ -269,5 +269,6 @@ function getCurrentGitBranch()
 function checkOpencastLivestreamRoom(string $opencastLocation): ?Livestream
 {
     //find the exact livestream with the given opencast location name
-    return Livestream::where('opencast_location_name', '=', $opencastLocation)->get()->first();
+    //use squish to remove any empty chars from opencast agent till the bug in opencast api is fixed
+    return Livestream::where('opencast_location_name', '=', Str::squish($opencastLocation))->get()->first();
 }

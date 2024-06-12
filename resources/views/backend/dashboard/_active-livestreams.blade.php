@@ -2,11 +2,11 @@
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <caption
-                class="p-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-red-400 dark:text-white
-                    dark:bg-red-700">
+                class="p-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-gray-200 dark:text-white
+                    dark:bg-gray-800">
                 {{ $activeLivestreams->count() }} Livestream rooms
             </caption>
-            <thead class="text-xs text-gray-700 uppercase bg-red-400 dark:bg-red-700 dark:text-white">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-white">
             <tr>
                 <th scope="col"
                     class="px-6 py-3 ">
@@ -40,7 +40,7 @@
             </thead>
             <tbody>
             @foreach($activeLivestreams->get() as $activeLivestream)
-                <tr class="border-b bg-white font-normal text-gray-900 dark:bg-gray-800 dark:text-white">
+                <tr class="border-b bg-green-200 font-normal text-gray-900 dark:bg-green-800 dark:text-white">
                     <td class="px-6 py-4 text-sm ">
                         @if($activeLivestream->clip_id)
                             {{ $activeLivestream->clip->title }}
