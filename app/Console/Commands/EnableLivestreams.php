@@ -96,7 +96,9 @@ class EnableLivestreams extends Command
             $series = Series::where('opencast_series_id', $event['is_part_of'])->first();
             $seriesLivestreamClip = $series->fetchLivestreamClip();
 
-            if ($seriesLivestreamClip) {
+            if ($seriesLivestreamClip &&
+                is_null(Livestream::where('clip_id', $seriesLivestreamClip->id)->first())
+            ) {
                 $this->info(
                     "Series '{$series->title}' has a livestream clip now try to enable"
                     ." wowza app {$event['scheduling']['agent_id']} for this clip"
