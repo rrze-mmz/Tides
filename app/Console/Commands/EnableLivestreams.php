@@ -5,11 +5,14 @@ namespace App\Console\Commands;
 use App\Enums\OpencastWorkflowState;
 use App\Models\Livestream;
 use App\Models\Series;
+use App\Models\User;
+use App\Notifications\LivestreamRoomEnabled;
 use App\Services\OpencastService;
 use App\Services\WowzaService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 
 class EnableLivestreams extends Command
 {
@@ -56,19 +59,23 @@ class EnableLivestreams extends Command
         $recordingEvents->each(function ($event) use ($wowzaService) {
             $series = Series::where('opencast_series_id', $event['is_part_of'])->first();
             $seriesLivestreamClip = $series->fetchLivestreamClip();
+
             if (! is_null($seriesLivestreamClip)
-                && ! is_null(Livestream::where('clip_id', $seriesLivestreamClip->id))) {
+                &&
+                is_null(Livestream::where('clip_id', $seriesLivestreamClip->id)->first())) {
                 $this->info(
                     "Series '{$series->title}' has a livestream clip now try to enable"
                     ." wowza app {$event['scheduling']['agent_id']} for this clip"
                 );
                 $wowzaService->reserveLivestreamRoom(
-                    $event['scheduling']['agent_id'],
-                    $seriesLivestreamClip,
-                    $event['scheduling']['end']
+                    opencastAgentID: $event['scheduling']['agent_id'],
+                    livestreamClip: $seriesLivestreamClip,
+                    endTime: $event['scheduling']['end']
                 );
+                Notification::sendNow(User::admins()->get(), new LivestreamRoomEnabled($seriesLivestreamClip));
             }
         });
+
         Log::info('Check for Opencast scheduled events for the next 10 Minutes');
         $this->info("Searching for Opencast scheduled events between {$startDate->addMinutes(120)}
         and {$endDate->addMinutes(120)}");
@@ -94,7 +101,11 @@ class EnableLivestreams extends Command
                     "Series '{$series->title}' has a livestream clip now try to enable"
                     ." wowza app {$event['scheduling']['agent_id']} for this clip"
                 );
-                $wowzaService->reserveLivestreamRoom($event['scheduling']['agent_id'], $seriesLivestreamClip);
+                $wowzaService->reserveLivestreamRoom(
+                    opencastAgentID: $event['scheduling']['agent_id'],
+                    livestreamClip: $seriesLivestreamClip
+                );
+                Notification::sendNow(User::admins()->get(), new LivestreamRoomEnabled($seriesLivestreamClip));
             }
         });
     }

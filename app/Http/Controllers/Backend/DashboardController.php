@@ -83,7 +83,7 @@ class DashboardController
             }
         }
 
-        $livestreams = Livestream::active();
+        $livestreams = Livestream::active()->orderBy('clip_id');
 
         return view('backend.dashboard.index', [
             'userSeries' => auth()->user()->getAllSeries()

@@ -100,8 +100,6 @@ class WowzaService
             $this->generateSmilFile($clip, Content::PRESENTER);
             $this->generateSmilFile($clip, Content::PRESENTATION);
             $this->generateSmilFile($clip, Content::COMPOSITE);
-        } else {
-            Log::info('Clip has no assets');
         }
     }
 
