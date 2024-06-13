@@ -47,12 +47,12 @@ class EnableLivestreams extends Command
         //        $startDate = (Carbon::now()->isDST()) ? Carbon::now()->subMinutes(120) : Carbon::now()->subMinutes(120);
         //        $endDate = (Carbon::now()->isDST()) ? Carbon::now()->subMinutes(110) : Carbon::now()->subMinutes(110);
         $startDate = Carbon::now()->subMinutes(120);
-        $endDate = Carbon::now()->subMinutes(110);
+        $endDate = Carbon::now()->subMinutes(119);
         //        $endDate = (Carbon::now()->isDST()) ? Carbon::now()->addMinutes(110) : Carbon::now()->subMinutes(50);
         Log::info('Searching for active Opencast recording events without active livestream room reservation');
         $this->info('Searching for active Opencast recording events');
 
-        $recordingEvents = $opencastService->getEventsByStatus(OpencastWorkflowState::RECORDING);
+        $recordingEvents = $opencastService->getEventsByStatus(state: OpencastWorkflowState::RECORDING);
 
         if ($recordingEvents->isEmpty()) {
             $this->info('No active recording events found');
@@ -91,10 +91,10 @@ class EnableLivestreams extends Command
         $this->info("Searching for Opencast scheduled events between {$startDate->addMinutes(120)}
         and {$endDate->addMinutes(120)}");
         $events = $opencastService->getEventsByStatusAndByDate(
-            OpencastWorkflowState::SCHEDULED,
-            null,
-            $startDate,
-            $endDate
+            state: OpencastWorkflowState::SCHEDULED,
+            series: null,
+            startDate: $startDate,
+            endDate: $endDate
         );
 
         if ($events->isEmpty()) {

@@ -35,15 +35,19 @@ class LivestreamRoomEnabled extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         $url = route('clips.edit', $this->clip);
-        $livestreamName = $this->clip->livestream->name;
+        $livestreamName = $this->clip?->livestream->name;
         $seriesTitle = $this->clip->series->title;
+
+        if (is_null($livestreamName)) {
+            $livestreamName = 'Hidden livestream';
+        }
 
         return (new MailMessage())
             ->subject("[VideoBot] - A livestream room : $livestreamName is for series: $seriesTitle reserved")
-            ->line('Hi Admins,')
+            ->greeting('Hello '.$notifiable->getFullNameAttribute())
             ->line("The link for the livestream backend is: $url")
             ->action('View livestream', url($url))
-            ->line('Thanks');
+            ->salutation('Thanks');
     }
 
     /**

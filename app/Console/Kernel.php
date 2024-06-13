@@ -37,8 +37,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('opencast:finished-events')->everyFiveMinutes()->withoutOverlapping();
         $schedule->command('app:update-assets-symbolic-links')->everyFiveMinutes();
         $schedule->command('app:check-time-availability-clips')->everyFiveMinutes();
-        $schedule->command('app:enable-livestreams')->everyFiveMinutes();
         $schedule->command('app:check-livestreams')->everyFiveMinutes();
+        $schedule->command('app:enable-livestreams')->cron('*/6 * * * *');
         $schedule->command(DeleteTempUploadedFiles::class)->hourly();
     }
 }
