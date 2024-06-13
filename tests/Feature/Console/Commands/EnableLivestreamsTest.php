@@ -15,7 +15,7 @@ uses(WorksWithOpencastClient::class);
 beforeEach(function () {
     $this->mockHandler = $this->swapOpencastClient();
     $this->opencastService = app(OpencastService::class);
-    User::factory()->create(['email' => env('DEV_MAIL_ADDRESS')]);
+    User::factory()->create(['email' => 'admin@test.com']);
 });
 
 it('outputs a message and skip checks if Opencast server is not available', function () {

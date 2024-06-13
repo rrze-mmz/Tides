@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Enums\OpencastWorkflowState;
 use App\Models\Livestream;
 use App\Models\Series;
+use App\Models\Setting;
 use App\Models\User;
 use App\Notifications\LivestreamRoomEnabled;
 use App\Services\OpencastService;
@@ -35,14 +36,18 @@ class EnableLivestreams extends Command
      */
     public function handle(OpencastService $opencastService, WowzaService $wowzaService)
     {
+        $settings = Setting::portal();
+
         if ($opencastService->getHealth()->get('status') === 'failed') {
             $this->info('No Opencast server found or server is offline!');
 
             return Command::SUCCESS;
         }
 
-        $startDate = (Carbon::now()->isDST()) ? Carbon::now()->subMinutes(120) : Carbon::now()->subMinutes(60);
-        $endDate = (Carbon::now()->isDST()) ? Carbon::now()->subMinutes(110) : Carbon::now()->subMinutes(50);
+        //        $startDate = (Carbon::now()->isDST()) ? Carbon::now()->subMinutes(120) : Carbon::now()->subMinutes(120);
+        //        $endDate = (Carbon::now()->isDST()) ? Carbon::now()->subMinutes(110) : Carbon::now()->subMinutes(110);
+        $startDate = Carbon::now()->subMinutes(120);
+        $endDate = Carbon::now()->subMinutes(110);
         //        $endDate = (Carbon::now()->isDST()) ? Carbon::now()->addMinutes(110) : Carbon::now()->subMinutes(50);
         Log::info('Searching for active Opencast recording events without active livestream room reservation');
         $this->info('Searching for active Opencast recording events');
@@ -56,7 +61,7 @@ class EnableLivestreams extends Command
             $eventsName = $recordingEvents->pluck('title');
             $this->info("Find $counter recording events: $eventsName");
         }
-        $recordingEvents->each(function ($event) use ($wowzaService) {
+        $recordingEvents->each(function ($event) use ($wowzaService, $settings) {
             $series = Series::where('opencast_series_id', $event['is_part_of'])->first();
             $seriesLivestreamClip = $series->fetchLivestreamClip();
 
@@ -76,7 +81,7 @@ class EnableLivestreams extends Command
                     Notification::sendNow(User::admins()->get(), new LivestreamRoomEnabled($seriesLivestreamClip));
 
                 } else {
-                    $user = User::search(env('DEV_MAIL_ADDRESS'))->first();
+                    $user = User::search($settings->data['admin_main_address'])->first();
                     Notification::sendNow($user, new LivestreamRoomEnabled($seriesLivestreamClip));
                 }
             }
@@ -98,7 +103,7 @@ class EnableLivestreams extends Command
             return Command::SUCCESS;
         }
 
-        $events->each(function ($event) use ($wowzaService) {
+        $events->each(function ($event) use ($wowzaService, $settings) {
             $series = Series::where('opencast_series_id', $event['is_part_of'])->first();
             $seriesLivestreamClip = $series->fetchLivestreamClip();
 
@@ -116,7 +121,7 @@ class EnableLivestreams extends Command
                 if (app()->environment('production')) {
                     Notification::sendNow(User::admins()->get(), new LivestreamRoomEnabled($seriesLivestreamClip));
                 } else {
-                    $user = User::search(env('DEV_MAIL_ADDRESS'))->first();
+                    $user = User::search($settings->data['admin_main_address'])->first();
                     Notification::sendNow($user, new LivestreamRoomEnabled($seriesLivestreamClip));
                 }
             }
