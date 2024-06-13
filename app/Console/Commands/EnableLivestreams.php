@@ -47,7 +47,7 @@ class EnableLivestreams extends Command
         //        $startDate = (Carbon::now()->isDST()) ? Carbon::now()->subMinutes(120) : Carbon::now()->subMinutes(120);
         //        $endDate = (Carbon::now()->isDST()) ? Carbon::now()->subMinutes(110) : Carbon::now()->subMinutes(110);
         $startDate = Carbon::now()->subMinutes(120);
-        $endDate = Carbon::now()->subMinutes(119);
+        $endDate = Carbon::now()->subMinutes(111);
         //        $endDate = (Carbon::now()->isDST()) ? Carbon::now()->addMinutes(110) : Carbon::now()->subMinutes(50);
         Log::info('Searching for active Opencast recording events without active livestream room reservation');
         $this->info('Searching for active Opencast recording events');
