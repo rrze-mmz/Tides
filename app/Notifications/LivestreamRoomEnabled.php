@@ -43,9 +43,9 @@ class LivestreamRoomEnabled extends Notification
         }
 
         return (new MailMessage())
-            ->subject("[VideoBot] - A livestream room : $livestreamName is for series: $seriesTitle reserved")
+            ->subject("[VideoBot] - A livestream room : $livestreamName  reserved")
             ->greeting('Hello '.$notifiable->getFullNameAttribute())
-            ->line("The link for the livestream backend is: $url")
+            ->line("The livestream for the series : $seriesTitle")
             ->action('View livestream', url($url))
             ->salutation('Thanks');
     }

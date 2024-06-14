@@ -159,6 +159,8 @@ class OpencastService
             ? 'status:'.$state->value
             : 'status:'.$state->value.',is_part_of:'.$series->opencast_series_id;
 
+        //        dd('start:'.$startDate->isoFormat('YYYY-MM-DD[T]HH:mm:ss[Z]').'/'.
+        //            $endDate->isoFormat('YYYY-MM-DD[T]HH:mm:ss[Z]').','.$filter);
         try {
             $this->response = $this->client->get('api/events', [
                 'query' => [
