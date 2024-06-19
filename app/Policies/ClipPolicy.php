@@ -34,7 +34,7 @@ class ClipPolicy
      */
     public function edit(User $user, Clip $clip): bool
     {
-        return $user->is($clip->owner) || ($user->isAdmin() || $user->isAssistant());
+        return $user->is($clip->owner) || $user->is($clip->series->owner) || ($user->isAdmin() || $user->isAssistant());
     }
 
     public function view(?User $user, Clip $clip): bool

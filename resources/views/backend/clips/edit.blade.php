@@ -173,7 +173,7 @@
 
                 <div class="pt-10">
                     <x-button type="submit" class="bg-blue-600 hover:bg-blue-700">
-                        Save
+                        Update
                     </x-button>
                 </div>
             </form>
