@@ -3,8 +3,8 @@
 @section('content')
     <main class="container mx-auto mt-6 md:mt-12">
         @if($livestreams->count() == 0)
-            <div>
-                No active livestreams found
+            <div class="dark:text-white text-2xl">
+                Sorry... no active livestreams found
             </div>
         @else
             @php
