@@ -9,6 +9,7 @@ use App\Http\Requests\UpdateSeriesRequest;
 use App\Models\Clip;
 use App\Models\Semester;
 use App\Models\Series;
+use App\Models\Setting;
 use App\Models\User;
 use App\Services\OpencastService;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -63,7 +64,7 @@ class SeriesController extends Controller
     public function edit(Series $series, OpencastService $opencastService): View
     {
         $this->authorize('edit', $series);
-
+        $opencastSettings = Setting::opencast();
         $availableAssistants = collect();
         $opencastSeriesInfo = $opencastService->getSeriesInfo($series);
         $chapters = $series->chapters()->orderBy('position')->get();
@@ -95,7 +96,7 @@ class SeriesController extends Controller
             ->get();
 
         return view('backend.series.edit', compact([
-            'series', 'clips', 'chapters', 'opencastSeriesInfo', 'availableAssistants',
+            'series', 'clips', 'chapters', 'opencastSeriesInfo', 'availableAssistants', 'opencastSettings',
         ]));
     }
 

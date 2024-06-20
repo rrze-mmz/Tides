@@ -7,5 +7,5 @@ it('gives back successful response for livestreams page', function () {
 });
 
 it('displays an info message if no active livestreams found', function () {
-    get(route('frontend.livestreams.index'))->assertSee('No active livestreams found');
+    get(route('frontend.livestreams.index'))->assertSee('no active livestreams found');
 });

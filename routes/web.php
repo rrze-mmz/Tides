@@ -10,6 +10,7 @@ use App\Http\Controllers\Backend\ChannelsUploadBannerImageController;
 use App\Http\Controllers\Backend\ChaptersController;
 use App\Http\Controllers\Backend\ClipsCollectionsController;
 use App\Http\Controllers\Backend\ClipsController;
+use App\Http\Controllers\Backend\ClipsPlayerActionsController;
 use App\Http\Controllers\Backend\CollectionsController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\DevicesController;
@@ -276,6 +277,12 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
          * the encoding is performed by the HPC cluster
          */
         Route::controller(AssetsTransferController::class)->prefix('/clips')->group(function () {
+            Route::post('/{clip}/generatePreviewImageFromFrame', [
+                ClipsPlayerActionsController::class, 'generatePreviewImageFromFrame',
+            ])->name('clips.generatePreviewImageFromFrame');
+            Route::post('/{clip}/generatePreviewImageFromUser', [
+                ClipsPlayerActionsController::class, 'generatePreviewImageFromUser',
+            ])->name('clips.generatePreviewImageFromUser');
             Route::post('/{clip}/transferSingle', 'transferSingleAsset')->name('admin.clips.asset.transferSingle');
 
             Route::get('/{clip}/dropzone/list', 'listDropzoneFiles')->name('admin.clips.dropzone.listFiles');

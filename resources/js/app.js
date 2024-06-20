@@ -258,9 +258,7 @@ document.addEventListener(
 
     const video = document.querySelector('video');
 
-    if (video === null) {
-      console.log('Video element not found');
-    } else {
+    if (video !== null) {
       const source = video.getElementsByTagName('source')[0].src;
 
       // For more options see: https://github.com/sampotts/plyr/#options
@@ -334,7 +332,16 @@ FilePond.create(inputElement).setOptions({
 });
 
 document.addEventListener('DOMContentLoaded', () => {
+  const video = document.querySelector('video');
   const player = new Plyr('#video');
+  if (video) {
+    console.log(player);
+    const currentTimeInput = document.getElementById('currentTime');
+    currentTimeInput.value = 0;
+    player.on('timeupdate', () => {
+      currentTimeInput.value = Math.floor(player.currentTime);
+    });
+  }
 
   // Function to change video source
   function changeVideoSource(newSource) {

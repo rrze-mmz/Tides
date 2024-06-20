@@ -8,7 +8,7 @@
                         <button type="button" class="w-full px-8 py-6 text-left  border-2 border-gray-600 py-4"
                                 @click="selected !==  {{ $chapter->id }}? selected = {{ $chapter->id }} : selected = null">
                             <div class="flex items-center justify-between">
-                                <span>1
+                                <span>
                                    {{$chapter->position}} -  {{$chapter->title}}
                                 </span>
                                 <x-heroicon-o-plus-circle class="h-6 w-6" />
