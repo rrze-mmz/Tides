@@ -30,9 +30,11 @@
                 <div class="w-2/12"> {{ $asset->durationToHours() }}</div>
                 <div class="w-2/12"> {{ $asset->width }} x {{ $asset->height }}</div>
                 <div class="flex w-2/12 items-center align-items-center space-x-2">
-                    <x-button class="bg-blue-600 hover:bg-blue-700">
-                        {{ __('common.actions.download') }}
-                    </x-button>
+                    <a href="{{ route('assets.download',$asset) }}">
+                        <x-button class="bg-blue-600 hover:bg-blue-700">
+                            {{ __('common.actions.download') }}
+                        </x-button>
+                    </a>
                     <x-modals.delete
                         :route="route('assets.destroy', $asset)"
                         class="w-full justify-center"

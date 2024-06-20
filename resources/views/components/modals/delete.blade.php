@@ -7,12 +7,12 @@
     </x-button>
     <div x-show="open" @click.away="open = false" @keydown.escape.window="open = false"
          class="absolute inset-0 m-auto h-64 max-w-full sm:max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg
-        xl:max-w-2/3 2xl:max-w-screen-2/3 rounded-md dark:bg-slate-800">
+        xl:max-w-2/3 2xl:max-w-screen-2/3 rounded-md bg-gray-200 dark:bg-slate-600">
         <!-- Modal content -->
-        <div class="bg-gray-100 rounded-lg shadow dark:bg-gray-700">
+        <div class="rounded-lg">
             <!-- Modal header -->
-            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                <h3 class="text-xl font-se text-gray-900 dark:text-white">
+            <div class="flex items-center justify-between p-4 md:p-5 rounded-t dark:border-gray-600">
+                <h3 class="text-xl font-se text-gray-700 dark:text-white">
                     {{ $title }}
                 </h3>
                 <button @click="open = false" type="button"
@@ -33,13 +33,13 @@
                 @csrf
                 <!-- Modal body -->
                 <div class="p-4 md:p-5 space-y-4">
-                    <p class="text-base leading-relaxed text-gray-500 dark:text-white text-left">
+                    <p class="text-base leading-relaxed dark:text-white text-left">
                         {{ $body }}
                     </p>
                 </div>
                 <!-- Modal footer -->
                 <div
-                    class="flex justify-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+                    class="flex justify-center p-4 md:p-5 ">
                     <button type="submit"
                             class="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none
                             focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center

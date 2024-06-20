@@ -44,7 +44,7 @@ class ClipsPlayerActionsController extends Controller
         return back();
     }
 
-    private function updateAssetPreviewFromUploadFile(Clip $clip, $image)
+    private function updateAssetPreviewFromUploadFile(Clip $clip, $image): void
     {
         $clip->assets->filter(function ($asset) {
             return $asset->type == Content::PRESENTER()
