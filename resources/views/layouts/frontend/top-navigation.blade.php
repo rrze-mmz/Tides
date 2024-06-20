@@ -4,9 +4,6 @@
            class="font-bold  no-underline text-ur"
         >
             {{ config('app.name', 'Laravel') }}
-            @env('local')
-                [{{ config('settings.portal.deploy_branch') }}]
-            @endenv
             @auth()
                 @if(auth()->user()->email === config('settings.portal.admin_main_address')
                     && app()->env !== 'local')
