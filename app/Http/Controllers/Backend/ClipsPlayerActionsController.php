@@ -20,7 +20,7 @@ class ClipsPlayerActionsController extends Controller
             'recentFrame' => 'required|integer',
         ]);
         $frame = $validated['recentFrame'];
-        $this->updateAssetPreview(clip: $clip, framePosition: $frame);
+        $this->updateAssetPreviewFromFrame(clip: $clip, framePosition: $frame);
 
         //create the clip log
         //set a flash message
@@ -29,6 +29,27 @@ class ClipsPlayerActionsController extends Controller
         $clip->recordActivity(description: 'Generate Player preview from frame at second: '.$frame);
 
         return back();
+    }
+
+    private function updateAssetPreviewFromFrame(Clip $clip, $framePosition): void
+    {
+        $clip->assets->filter(function ($asset) {
+            return $asset->type == Content::PRESENTER()
+                || $asset->type == Content::COMPOSITE()
+                || $asset->type == Content::PRESENTATION();
+        })->each(function ($asset) use ($framePosition) {
+            $ulid = Str::ulid();
+            $posterName = "resID_{$asset->id}_{$ulid}.png";
+            $oldPreview = $asset->player_preview;
+            $ffmpeg = FFMpeg::fromDisk('videos')->open($asset->path);
+            $ffmpeg->getFrameFromSeconds($framePosition)
+                ->export()
+                ->toDisk('thumbnails')
+                ->save("previews-ng/{$posterName}");
+            $asset->player_preview = $posterName;
+            $asset->save();
+            Storage::disk('thumbnails')->delete('previews-ng/'.$oldPreview);
+        });
     }
 
     public function generatePreviewImageFromUser(Clip $clip, Request $request)
@@ -59,27 +80,6 @@ class ClipsPlayerActionsController extends Controller
                 file: $image,
                 name: $posterName
             );
-            $asset->player_preview = $posterName;
-            $asset->save();
-            Storage::disk('thumbnails')->delete('previews-ng/'.$oldPreview);
-        });
-    }
-
-    private function updateAssetPreviewFromFrame(Clip $clip, $framePosition): void
-    {
-        $clip->assets->filter(function ($asset) {
-            return $asset->type == Content::PRESENTER()
-                || $asset->type == Content::COMPOSITE()
-                || $asset->type == Content::PRESENTATION();
-        })->each(function ($asset) use ($framePosition) {
-            $ulid = Str::ulid();
-            $posterName = "resID_{$asset->id}_{$ulid}.png";
-            $oldPreview = $asset->player_preview;
-            $ffmpeg = FFMpeg::fromDisk('videos')->open($asset->path);
-            $ffmpeg->getFrameFromSeconds($framePosition)
-                ->export()
-                ->toDisk('thumbnails')
-                ->save("previews-ng/{$posterName}");
             $asset->player_preview = $posterName;
             $asset->save();
             Storage::disk('thumbnails')->delete('previews-ng/'.$oldPreview);
