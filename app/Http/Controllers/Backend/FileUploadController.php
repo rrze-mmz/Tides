@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use Debugbar;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
@@ -12,7 +13,7 @@ final class FileUploadController extends Controller
     public function process(Request $request): string
     {
         //disable debugbar otherwise all debugbar output from it will be passed as a form input
-        app('debugbar')->disable();
+        Debugbar::disable();
 
         // We don't know the name of the file input, so we need to grab
         // all the files from the request and grab the first file.

@@ -31,49 +31,58 @@ class ClipsPlayerActionsController extends Controller
         return back();
     }
 
-    private function updateAssetPreview(Clip $clip, $framePosition = null, $image = null): void
-    {
-        $clip->assets->filter(function ($asset) {
-            return $asset->type == Content::PRESENTER()
-                || $asset->type == Content::COMPOSITE()
-                || $asset->type == Content::PRESENTATION();
-        })->each(function ($asset) use ($framePosition, $image) {
-            $ulid = Str::ulid();
-            $posterName = "resID_{$asset->id}_{$ulid}.png";
-            $oldPreview = $asset->player_preview;
-            if ($framePosition) {
-                $ffmpeg = FFMpeg::fromDisk('videos')->open($asset->path);
-                $ffmpeg->getFrameFromSeconds($framePosition)
-                    ->export()
-                    ->toDisk('thumbnails')
-                    ->save("previews-ng/{$posterName}");
-                $asset->player_preview = $posterName;
-                $asset->save();
-            } elseif ($image) {
-                Storage::putFileAs(
-                    path: 'thumbnails/previews-ng/',
-                    file: $image,
-                    name: $posterName
-                );
-                $asset->player_preview = $posterName;
-                $asset->save();
-            } else {
-                echo 'nothing to do';
-            }
-            Storage::disk('thumbnails')->delete('previews-ng/'.$oldPreview);
-        });
-    }
-
     public function generatePreviewImageFromUser(Clip $clip, Request $request)
     {
         $validated = $request->validate([
             'image' => ['required', 'string', new ValidImageFile(['image/png', 'image/jpeg'])],
         ]);
         $uploadedImage = new File(Storage::path($validated['image']));
-        $this->updateAssetPreview($clip, image: $uploadedImage);
+        $this->updateAssetPreviewFromUploadFile(clip: $clip, image: $uploadedImage);
         //update the search index?
         $clip->recordActivity(description: 'Create player preview from user uploaded file');
 
         return back();
+    }
+
+    private function updateAssetPreviewFromUploadFile(Clip $clip, $image)
+    {
+        $clip->assets->filter(function ($asset) {
+            return $asset->type == Content::PRESENTER()
+                || $asset->type == Content::COMPOSITE()
+                || $asset->type == Content::PRESENTATION();
+        })->each(function ($asset) use ($image) {
+            $ulid = Str::ulid();
+            $posterName = "resID_{$asset->id}_{$ulid}.png";
+            $oldPreview = $asset->player_preview;
+            Storage::putFileAs(
+                path: 'thumbnails/previews-ng/',
+                file: $image,
+                name: $posterName
+            );
+            $asset->player_preview = $posterName;
+            $asset->save();
+            Storage::disk('thumbnails')->delete('previews-ng/'.$oldPreview);
+        });
+    }
+
+    private function updateAssetPreviewFromFrame(Clip $clip, $framePosition): void
+    {
+        $clip->assets->filter(function ($asset) {
+            return $asset->type == Content::PRESENTER()
+                || $asset->type == Content::COMPOSITE()
+                || $asset->type == Content::PRESENTATION();
+        })->each(function ($asset) use ($framePosition) {
+            $ulid = Str::ulid();
+            $posterName = "resID_{$asset->id}_{$ulid}.png";
+            $oldPreview = $asset->player_preview;
+            $ffmpeg = FFMpeg::fromDisk('videos')->open($asset->path);
+            $ffmpeg->getFrameFromSeconds($framePosition)
+                ->export()
+                ->toDisk('thumbnails')
+                ->save("previews-ng/{$posterName}");
+            $asset->player_preview = $posterName;
+            $asset->save();
+            Storage::disk('thumbnails')->delete('previews-ng/'.$oldPreview);
+        });
     }
 }
