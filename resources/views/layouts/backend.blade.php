@@ -21,11 +21,20 @@
       class="antialiased">
 <div class="flex bg-gray-100">
     <aside class="relative hidden h-screen w-[18rem] shadow-xl bg-sidebar dark:bg-sky-950 sm:block items-center ">
-        <div class="p-6 text-center align-center">
-            <a href="{{route('home')}}"
-               class="text-3xl font-semibold text-white hover:text-gray-300">
-                {{ config('app.name', 'Laravel') }}
-            </a>
+        <div class="flex flex-col p-6 text-center align-center">
+            <div>
+                <a href="{{route('home')}}"
+                   class="text-3xl font-semibold text-white hover:text-gray-300">
+                    {{ config('app.name', 'Laravel') }}
+                </a>
+            </div>
+            @env('local')
+                <div class="text-fuchsia-900 dark:text-white italic">
+                    {{getCurrentGitBranch()}}
+                </div>
+
+            @endenv
+
         </div>
         <nav class="pt-3 text-base font-semibold text-white text-center items-center">
             @include('backend.dashboard._sidebar-navigation')
