@@ -47,6 +47,7 @@ use App\Http\Controllers\Frontend\ShowChannelsController;
 use App\Http\Controllers\Frontend\ShowClipsController;
 use App\Http\Controllers\Frontend\ShowLivestreamsController;
 use App\Http\Controllers\Frontend\ShowOrganizationsController;
+use App\Http\Controllers\Frontend\ShowPodcastsController;
 use App\Http\Controllers\Frontend\ShowSearchResultsController;
 use App\Http\Controllers\Frontend\ShowSeriesController;
 use App\Http\Controllers\Frontend\UserApplicationsController;
@@ -93,6 +94,8 @@ Route::controller(ShowClipsController::class)->prefix('/clips')->group(function 
 
 Route::get('/clips/{clip}/feed/{assetsResolution}', [FeedsController::class, 'clips'])
     ->name('frontend.clips.feed');
+
+Route::get('/podcasts', [ShowPodcastsController::class, 'index'])->name('frontend.podcasts.index');
 
 Route::get('/organizations/', [ShowOrganizationsController::class, 'index'])
     ->name('frontend.organizations.index');
