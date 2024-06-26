@@ -5,7 +5,7 @@
 
     <div class="flex flex-col content-center justify-center pt-6">
         @if($clip->checkAcls())
-            <div>
+            <div class="">
                 <x-player :clip="$clip" :wowzaStatus="$wowzaStatus" :default-video-url="$defaultVideoUrl" />
             </div>
             @if (count($alternativeVideoUrls) > 1)

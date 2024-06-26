@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('podcast_episodes', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('podcast_id');
+            $table->integer('episode_number');
             $table->string('title');
             $table->string('slug')->unique();
             $table->text('description')->nullable();

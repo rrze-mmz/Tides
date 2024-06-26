@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Podcast;
+
 use function Pest\Laravel\get;
 
 uses()->group('frontend');
@@ -10,8 +12,12 @@ it('shows all public podcasts to visitors', function () {
         ->assertViewHas(['podcasts']);
 });
 
-test('example', function () {
-    $response = $this->get('/');
+it('shows no podcasts found if podcasts list is empty', function () {
+    get(route('frontend.podcasts.index'))->assertSee('No podcasts found or published');
+});
 
-    $response->assertStatus(200);
+it('lists all published podcasts with episodes to visitors', function () {
+    $podcast = Podcast::factory()->create();
+
+    get(route('frontend.podcasts.index'))->assertDontSee($podcast->title);
 });

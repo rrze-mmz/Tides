@@ -82,7 +82,29 @@
 .plyr-tides {
     max-height: 640px;
     max-height: 480px;
+}
 
+.plyr__video-wrapper {
+    position: relative;
+    padding-bottom: 56.25%; /* Default 16:9 aspect ratio */
+    height: 0;
+    overflow: hidden;
+    max-width: 100%;
+    background: #000;
+}
+
+.plyr__video-wrapper video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+@media (orientation: portrait) {
+    .plyr__video-wrapper {
+        padding-bottom: 125%; /* Adjust this value based on your video's aspect ratio */
+    }
 }
 
 article ol li {

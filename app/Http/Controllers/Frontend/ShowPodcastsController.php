@@ -12,8 +12,18 @@ class ShowPodcastsController extends Controller
      */
     public function index()
     {
-        $podcasts = Podcast::all();
+        //for visitors show only the published podcasts with episodes containing audio files
+        $podcasts = Podcast::where('is_published', true)
+            ->whereHas('episodes', function ($query) {
+                $query->where('audio_url', '!=', '');
+            })
+            ->orderBy('updated_at', 'desc')->paginate(12);
 
         return view('frontend.podcasts.index', compact('podcasts'));
+    }
+
+    public function show(Podcast $podcast)
+    {
+        return view('frontend.podcasts.show', compact('podcast'));
     }
 }

@@ -96,6 +96,8 @@ Route::get('/clips/{clip}/feed/{assetsResolution}', [FeedsController::class, 'cl
     ->name('frontend.clips.feed');
 
 Route::get('/podcasts', [ShowPodcastsController::class, 'index'])->name('frontend.podcasts.index');
+Route::get('/podcasts/{podcast:slug}', [ShowPodcastsController::class, 'show'])
+    ->name('frontend.podcasts.show');
 
 Route::get('/organizations/', [ShowOrganizationsController::class, 'index'])
     ->name('frontend.organizations.index');

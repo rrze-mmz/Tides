@@ -20,6 +20,7 @@ class PodcastEpisodeFactory extends Factory
     {
         return [
             'podcast_id' => Podcast::factory(),
+            'episode_number' => $this->faker->randomDigit(),
             'title' => $this->faker->sentence(),
             'slug' => $this->faker->slug(),
             'description' => $this->faker->paragraph(),
@@ -27,8 +28,8 @@ class PodcastEpisodeFactory extends Factory
             'notes' => $this->faker->paragraph(),
             'transcription' => $this->faker->paragraph(),
             'spotify_url' => $this->faker->url(),
-            'apple_podcast_url' => $this->faker->url(),
-            'google_podcast_url' => $this->faker->url(),
+            'apple_podcasts_url' => $this->faker->url(),
+            'google_podcasts_url' => $this->faker->url(),
         ];
     }
 }
