@@ -28,7 +28,7 @@ class ClipsPlayerActionsController extends Controller
         //update the search index?
         $clip->recordActivity(description: 'Generate Player preview from frame at second: '.$frame);
 
-        return back();
+        return to_route('clips.edit', $clip);
     }
 
     private function updateAssetPreviewFromFrame(Clip $clip, $framePosition): void
@@ -62,7 +62,7 @@ class ClipsPlayerActionsController extends Controller
         //update the search index?
         $clip->recordActivity(description: 'Create player preview from user uploaded file');
 
-        return back();
+        return to_route('clips.edit', $clip);
     }
 
     private function updateAssetPreviewFromUploadFile(Clip $clip, $image): void

@@ -37,6 +37,7 @@ class ClipFactory
         if ($this->assetsCount > 0) {
             Asset::factory($this->assetsCount)->create([
                 'clip_id' => $clip->id,
+                'path' => $clip->folder_id.'/video.mp4',
             ]);
             Asset::factory()->create([
                 'original_file_name' => 'presenter.smil',

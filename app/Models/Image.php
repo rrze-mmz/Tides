@@ -35,4 +35,14 @@ class Image extends BaseModel
     {
         return $this->hasMany(Presenter::class);
     }
+
+    public function podcasts(): HasMany
+    {
+        return $this->hasMany(Podcast::class);
+    }
+
+    public function podcastsEpisodes(): HasMany
+    {
+        return $this->hasMany(PodcastEpisode::class);
+    }
 }

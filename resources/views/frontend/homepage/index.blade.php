@@ -54,16 +54,16 @@
         @endauth
 
         <div class="flex w-full items-end border-b justify-content-between pb-4
-            border-b-2 border-black dark:border-white "
+            border-b-2 border-black dark:border-white"
         >
             <div class="flex w-full items-end justify-between pb-2">
-                <div class="text-2xl dark:text-white">  {{  __('homepage.series.Recently added!') }} </div>
+                <div class="text-2xl dark:text-white font-bold">  {{  __('homepage.series.Recently added!') }} </div>
                 <a href="{{ route('frontend.series.index') }}"
                    class="text-sm underline dark:text-white ">{{__('homepage.series.more series') }}</a>
             </div>
         </div>
 
-        <div class="grid grid-cols-4 gap-4 pt-8 border-b-2 border-black dark:border-white ">
+        <div class="grid grid-cols-4 gap-4 pt-8">
             @forelse($series as $single)
 
                 @include('backend.series._card',[
@@ -78,9 +78,11 @@
         </div>
 
 
-        <div class="flex w-full items-end border-b justify-content-between pt-10 pb-4">
+        <div class="flex w-full items-end border-b justify-content-between py-4
+            border-b-2 border-black dark:border-white"
+        >
             <div class="flex w-full items-end justify-between pb-2">
-                <div class="text-2xl dark:text-white"> {{  __('homepage.clips.Recently added!') }}</div>
+                <div class="text-2xl dark:text-white font-bold"> {{  __('homepage.clips.Recently added!') }}</div>
                 <a href="{{ route('frontend.clips.index') }}"
                    class="text-sm underline dark:text-white">{{__('homepage.clips.more clips')}}</a>
             </div>

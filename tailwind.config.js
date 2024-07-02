@@ -1,20 +1,86 @@
-const defaultTheme = require("tailwindcss/defaultTheme");
+const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
-    darkMode: "class",
-    important: "#app",
-    content: [
-        "./resources/**/*.blade.php",
-        "./resources/**/*.js",
-        "./resources/**/*.vue",
-        "./vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php",
-    ],
-    theme: {
-        extend: {
-            fontFamily: {
-                sans: ["Nunito", ...defaultTheme.fontFamily.sans],
+  darkMode: 'class', // Enable class-based dark mode
+  important: '#app', // Ensure styles are scoped to the #app element
+  content: [
+    './resources/**/*.blade.php',
+    './resources/**/*.js',
+    './resources/**/*.vue',
+    './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
+  ],
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['Nunito', ...defaultTheme.fontFamily.sans],
+      },
+      typography: (theme) => ({
+        DEFAULT: {
+          css: {
+            color: theme('colors.gray.900'),
+            a: {
+              color: theme('colors.blue.600'),
+              '&:hover': {
+                color: theme('colors.blue.700'),
+              },
             },
+            'b, strong': {
+              color: theme('colors.gray.900'),
+            },
+            h1: {
+              color: theme('colors.gray.900'),
+            },
+            h2: {
+              color: theme('colors.gray.900'),
+            },
+            h3: {
+              color: theme('colors.gray.900'),
+            },
+            h4: {
+              color: theme('colors.gray.900'),
+            },
+            h5: {
+              color: theme('colors.gray.900'),
+            },
+            h6: {
+              color: theme('colors.gray.900'),
+            },
+          },
         },
+        invert: {
+          css: {
+            color: theme('colors.gray.100'),
+            a: {
+              color: theme('colors.blue.400'),
+              '&:hover': {
+                color: theme('colors.blue.500'),
+              },
+            },
+            'b, strong': {
+              color: theme('colors.gray.100'),
+            },
+            h1: {
+              color: theme('colors.gray.100'),
+            },
+            h2: {
+              color: theme('colors.gray.100'),
+            },
+            h3: {
+              color: theme('colors.gray.100'),
+            },
+            h4: {
+              color: theme('colors.gray.100'),
+            },
+            h5: {
+              color: theme('colors.gray.100'),
+            },
+            h6: {
+              color: theme('colors.gray.100'),
+            },
+          },
+        },
+      }),
     },
-    plugins: [require("@tailwindcss/forms")],
+  },
+  plugins: [require('@tailwindcss/forms'), require('@tailwindcss/typography')],
 };

@@ -29,6 +29,11 @@
             </a>
         </span>
         <span class="no-underline ">
+            <a href="{{ route('frontend.podcasts.index') }}">
+                Podcasts
+            </a>
+        </span>
+        <span class="no-underline ">
             <a href="{{ route('frontend.organizations.index') }}">
                 Organizations
             </a>

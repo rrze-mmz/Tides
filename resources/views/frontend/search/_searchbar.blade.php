@@ -45,21 +45,38 @@
                             </label>
                         </div>
                     </div>
-                    <div class="p-4">
-                        <div class="flex items-center">
-                            <input type="checkbox"
-                                   id="search-clips-checkbox"
-                                   class="form-checkbox h-5 w-5 text-blue-600"
-                                   name="clips"
-                                @checked(old('channels', ))
-                            />
-                            <label for="search-clips-checkbox"
-                                   class="ml-2 text-black dark:text-white"
-                            >
-                                Channels
-                            </label>
+                    @can('administrate-portal-pages')
+                        <div class="p-4">
+                            <div class="flex items-center">
+                                <input type="checkbox"
+                                       id="search-clips-checkbox"
+                                       class="form-checkbox h-5 w-5 text-blue-600"
+                                       name="clips"
+                                    @checked(old('channels', ))
+                                />
+                                <label for="search-clips-checkbox"
+                                       class="ml-2 text-black dark:text-white"
+                                >
+                                    Channels
+                                </label>
+                            </div>
                         </div>
-                    </div>
+                        <div class="p-4">
+                            <div class="flex items-center">
+                                <input type="checkbox"
+                                       id="search-clips-checkbox"
+                                       class="form-checkbox h-5 w-5 text-blue-600"
+                                       name="podcasts"
+                                    @checked(old('podcasts', ))
+                                />
+                                <label for="search-clips-checkbox"
+                                       class="ml-2 text-black dark:text-white"
+                                >
+                                    Podcasts
+                                </label>
+                            </div>
+                        </div>
+                    @endcan
                     <div class="p-4">
                         <button class="flex justify-center items-center p-2 w-8 h-8 text-white bg-gray-600
                                             rounded-full hover:bg-gray-500 focus:outline-none"

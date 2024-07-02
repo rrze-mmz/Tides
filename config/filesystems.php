@@ -86,6 +86,12 @@ return [
             'url' => env('APP_URL').'/images',
             'visibility' => 'public',
         ],
+        'podcasts' => [
+            'driver' => 'local',
+            'root' => env('IMAGES_PATH', storage_path('app/podcast-files')),
+            'url' => env('APP_URL').'/podcast-files',
+            'visibility' => 'public',
+        ],
     ],
 
     /*
@@ -103,9 +109,9 @@ return [
         public_path('storage') => storage_path('app/public'),
         public_path('streamable_videos') => storage_path('app/streamable_videos'),
         public_path('thumbnails') => storage_path('app/thumbnails'),
-        public_path('documents') => storage_path('app/documents'),
         public_path('links') => storage_path('app/assetsSymLinks'),
         public_path('images') => storage_path('app/images'),
+        public_path('podcast-files') => storage_path('app/podcast-files'),
     ],
 
 ];
