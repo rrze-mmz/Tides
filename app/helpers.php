@@ -272,3 +272,17 @@ function checkOpencastLivestreamRoom(string $opencastLocation): ?Livestream
     //use squish to remove any empty chars from opencast agent till the bug in opencast api is fixed
     return Livestream::where('opencast_location_name', '=', Str::squish($opencastLocation))->get()->first();
 }
+
+function removeHtmlElements(?string $text): string
+{
+    if (is_null($text)) {
+        return '';
+    }
+    $decodedText = html_entity_decode($text, ENT_QUOTES, 'UTF-8');
+    $decodedText = html_entity_decode($decodedText, ENT_QUOTES, 'UTF-8');
+
+    // Ensure any remaining entities are decoded
+    $plainText = strip_tags($decodedText);
+
+    return html_entity_decode($plainText, ENT_QUOTES, 'UTF-8');
+}

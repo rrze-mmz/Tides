@@ -20,7 +20,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->text('notes')->nullable();
             $table->longText('transcription')->nullable();
-            $table->string('cover_image_url')->nullable();
+            $table->integer('image_id')->nullable()->references('id')->on('images')->nullOndelete();
             $table->string('audio_url');
             $table->string('spotify_url')->nullable();
             $table->string('apple_podcasts_url')->nullable();

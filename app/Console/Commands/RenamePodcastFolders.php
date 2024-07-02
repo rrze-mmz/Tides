@@ -27,19 +27,22 @@ class RenamePodcastFolders extends Command
         $this->info('Looking for podcast files...');
 
         $podcasts->each(function ($podcast) {
-            if (Storage::exists('podcasts-files/covers/courseID_'.$podcast->old_podcast_id)) {
-                $oldFolderPath = 'podcasts-files/covers/courseID_'.$podcast->old_podcast_id;
-                $newFolderPath = 'podcasts-files/covers/podcastID_'.$podcast->id;
-                $this->info("Renamed {$oldFolderPath} to {$newFolderPath}");
-                Storage::move($oldFolderPath, $newFolderPath);
+            if (! is_null($podcast->image_id)) {
+                $oldFilePath = 'podcast-files/courseID_'.$podcast->old_podcast_id.'/'.$podcast->cover->file_name;
+                if (Storage::exists($oldFilePath)) {
+                    Storage::move($oldFilePath, 'images/'.$podcast->cover->file_name);
+                    $this->info('Moving file from podcast folder to images folder');
+                }
             }
             $podcast->episodes->each(function ($episode) {
-                if (Storage::exists('podcasts-files/covers/clipID_'.$episode->old_episode_id)) {
-                    $oldFolderPath = 'podcasts-files/covers/clipID_'.$episode->old_episode_id;
-                    $newFolderPath =
-                        'podcasts-files/covers/podcastID_'.$episode->podcast->id.'/episodeID_'.$episode->id;
-                    $this->info("Renamed {$oldFolderPath} to {$newFolderPath}");
-                    Storage::move($oldFolderPath, $newFolderPath);
+
+                if (! is_null($episode->image_id)) {
+                    $this->info($episode->id);
+                    $oldFilePath = 'podcast-files/clipID_'.$episode->old_episode_id.'/'.$episode->cover->file_name;
+                    if (Storage::exists($oldFilePath)) {
+                        Storage::move($oldFilePath, 'images/'.$episode->cover->file_name);
+                        $this->info('Moving file from podcast episode folder to images folder');
+                    }
                 }
             });
         });

@@ -24,12 +24,14 @@ class PodcastEpisodeFactory extends Factory
             'title' => $this->faker->sentence(),
             'slug' => $this->faker->slug(),
             'description' => $this->faker->paragraph(),
+            'image_id' => null,
             'audio_url' => $this->faker->url(),
             'notes' => $this->faker->paragraph(),
             'transcription' => $this->faker->paragraph(),
             'spotify_url' => $this->faker->url(),
             'apple_podcasts_url' => $this->faker->url(),
             'google_podcasts_url' => $this->faker->url(),
+            'old_episode_id' => $this->faker->numberBetween(100, 300),
         ];
     }
 }

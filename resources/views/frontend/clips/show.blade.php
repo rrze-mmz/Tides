@@ -61,10 +61,13 @@
 
         @if($clip->description !== null && $clip->description !=='')
             <h2 class="py-2 text-2xl font-semibold dark:text-white">{{ __('common.description') }}</h2>
-            <div class="flex flex-col pt-4 dark:bg-slate-800 p-6">
-                <p class="pt-4 leading-loose dark:text-white">
-                    {{ $clip->description }}
-                </p>
+            <div class="w-full">
+                <div class="prose-lg dark:prose-invert dark:text-white">
+                    <p>
+                        {!! $clip->description  !!}
+                    </p>
+                </div>
+
             </div>
         @endif
 

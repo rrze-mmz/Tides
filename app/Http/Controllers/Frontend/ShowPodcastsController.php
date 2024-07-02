@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Podcast;
+use App\Models\PodcastEpisode;
+use Debugbar;
 
 class ShowPodcastsController extends Controller
 {
@@ -24,6 +26,13 @@ class ShowPodcastsController extends Controller
 
     public function show(Podcast $podcast)
     {
+        Debugbar::info($podcast);
+
         return view('frontend.podcasts.show', compact('podcast'));
+    }
+
+    public function episode(Podcast $podcast, PodcastEpisode $episode)
+    {
+        return view('frontend.podcasts.episode.show', compact('podcast', 'episode'));
     }
 }

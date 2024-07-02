@@ -21,7 +21,6 @@ class PodcastFactory extends Factory
             'title' => $this->faker->sentence(),
             'slug' => $this->faker->slug(),
             'description' => $this->faker->paragraph(),
-            'cover_image_url' => 'podcast-cover.png',
             'is_published' => true,
             'website_url' => 'https:///www.podcasts.com/tides-podcast',
             'spotify_url' => 'https://www.spotify.com/podcast/tides-podcast',

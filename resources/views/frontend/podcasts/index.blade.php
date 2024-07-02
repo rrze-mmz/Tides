@@ -20,27 +20,34 @@
                         Einen Überblick über das Podcast-Angebot der FAU finden Sie auf dieser Seite.
                     </p>
                 </div>
+                @include('layouts.breadcrumbs')
                 <div class="grid gap-8 mb-6 lg:mb-16 md:grid-cols-2 grid-cols-2">
                     @forelse($podcasts as $podcast)
                         <div
                             class="items-center bg-gray-50 rounded-lg shadow sm:flex dark:bg-gray-800 dark:border-gray-700">
                             <a href="{{ route('frontend.podcasts.show', $podcast) }}">
                                 <img class="max-w-fit w-48 rounded-lg sm:rounded-none sm:rounded-l-lg px-2"
-                                     src="{{ 'podcasts-files/'.$podcast->cover_image_url}}"
+                                     @if(!is_null($podcast->image_id))
+                                         src="{{ asset('images/'.$podcast->cover->file_name) }}"
+                                     @else
+                                         src="/podcast-files/covers/PodcastDefaultFAU.png"
+                                     @endif
                                      alt="{{ $podcast->title }} cover image">
                             </a>
                             <div class="p-4">
                                 <h3 class="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
                                     <a href="{{ route('frontend.podcasts.show', $podcast) }}">{{ $podcast->title }}</a>
                                 </h3>
-                                <p class="mt-3 mb-4 font-light text-gray-500 dark:text-white">
-                                    @if($podcast->description==='')
-                                        {{  Str::limit(' Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab, assumenda atque beatae deserunt dolorem ducimus enim error illo incidunt odio pariatur, possimus quaerat quasi quidem quos temporibus unde vero. Quo?', 120, ' (...)') }}
-                                    @else
-                                        {{  Str::limit($podcast->description, 120, ' (...)') }}
-                                    @endif
+                                <div class="">
+                                    <p class="mt-3 mb-4 font-light text-gray-500 dark:text-white">
+                                        @if($podcast->description==='')
+                                            <span class="italic">No description available</span>
+                                        @else
+                                            {{ Str::limit(removeHtmlElements($podcast->description), 250, ' (...)') }}
+                                        @endif
+                                    </p>
+                                </div>
 
-                                </p>
                                 <ul class="flex space-x-4 sm:mt-0">
                                     <li>
                                         <a href="#" class="text-gray-500 hover:text-gray-900 dark:hover:text-white">

@@ -86,7 +86,8 @@ Route::get('/series/{series}/feed/{assetsResolution}', [FeedsController::class, 
 Route::get('/course/id/{series}', function (Series $series) {
     return to_route('frontend.series.show', $series);
 });
-//Frontend clip routes·
+
+//Frontend clip routes
 Route::controller(ShowClipsController::class)->prefix('/clips')->group(function () {
     Route::get('/', 'index')->name('frontend.clips.index');
     Route::get('/{clip}', 'show')->name('frontend.clips.show');
@@ -95,9 +96,13 @@ Route::controller(ShowClipsController::class)->prefix('/clips')->group(function 
 Route::get('/clips/{clip}/feed/{assetsResolution}', [FeedsController::class, 'clips'])
     ->name('frontend.clips.feed');
 
-Route::get('/podcasts', [ShowPodcastsController::class, 'index'])->name('frontend.podcasts.index');
-Route::get('/podcasts/{podcast:slug}', [ShowPodcastsController::class, 'show'])
-    ->name('frontend.podcasts.show');
+//Frontend podcast routes
+Route::controller(ShowPodcastsController::class)->prefix('/podcasts')->group(function () {
+    Route::get('/', [ShowPodcastsController::class, 'index'])->name('frontend.podcasts.index');
+    Route::get('/{podcast:slug}', [ShowPodcastsController::class, 'show'])->name('frontend.podcasts.show');
+    Route::get('/{podcast:slug}/episodes/{episode:slug}', [ShowPodcastsController::class, 'episode'])
+        ->name('frontend.podcasts.episode.show');
+});
 
 Route::get('/organizations/', [ShowOrganizationsController::class, 'index'])
     ->name('frontend.organizations.index');

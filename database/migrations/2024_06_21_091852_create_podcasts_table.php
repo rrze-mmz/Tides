@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('slug')->unique();
             $table->text('description')->nullable();
-            $table->string('cover_image_url')->nullable();
+            $table->integer('image_id')->nullable()->references('id')->on('images')->nullOndelete();
             $table->boolean('is_published')->default(true);
             $table->string('website_url')->nullable();
             $table->string('spotify_url')->nullable();

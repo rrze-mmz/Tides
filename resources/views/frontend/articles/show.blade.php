@@ -9,7 +9,7 @@
         </div>
 
         <div class="flex pt-10">
-            <div class="">
+            <div class="prose-sm dark:prose-invert dark:text-white">
                 <article class=" mx-auto dark:text-white">
                     {!! $article->content_de !!}
                 </article>
