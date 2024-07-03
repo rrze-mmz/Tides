@@ -6,6 +6,7 @@ use App\Enums\Content;
 use App\Events\ClipDeleting;
 use App\Models\Collection as TCollection;
 use App\Models\Traits\Accessable;
+use App\Models\Traits\Assetable;
 use App\Models\Traits\Documentable;
 use App\Models\Traits\Presentable;
 use App\Models\Traits\RecordsActivity;
@@ -17,9 +18,9 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Http\File;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -33,9 +34,10 @@ use Illuminate\Support\Facades\Storage;
 #[ObservedBy(ClipObserver::class)]
 class Clip extends BaseModel
 {
-    use Accessable;
-    use Documentable;
-    use Presentable;
+    use Accessable; //can have multiple acls
+    use Assetable; // can have multiple assets
+    use Documentable; // can have multiple documents
+    use Presentable; // can have multiple presenters
     use RecordsActivity;
     use Searchable;
     use Slugable;
@@ -114,9 +116,12 @@ class Clip extends BaseModel
         return $this->belongsTo(User::class);
     }
 
-    public function latestAsset(): HasOne
+    public function latestAsset(): Model|MorphToMany|null
     {
-        return $this->hasOne(Asset::class)->ofMany('duration', 'max');
+        return $this->assets()
+            ->orderByDesc('width', 'type')
+            ->limit(1)->first();
+        //        return $this->assets()->first();
     }
 
     public function collections(): BelongsToMany
@@ -187,22 +192,6 @@ class Clip extends BaseModel
     public function type(): BelongsTo
     {
         return $this->BelongsTo(Type::class);
-    }
-
-    /**
-     * Adds an asset to clip
-     */
-    public function addAsset(array $attributes = []): Asset
-    {
-        return $this->assets()->firstOrCreate($attributes);
-    }
-
-    /**
-     * Asset relationship
-     */
-    public function assets(): HasMany
-    {
-        return $this->hasMany(Asset::class);
     }
 
     /**
@@ -282,7 +271,7 @@ class Clip extends BaseModel
     /**
      * Fetch all assets for a clip by type
      */
-    public function getAssetsByType(Content $content): HasMany
+    public function getAssetsByType(Content $content): MorphToMany
     {
         return $this->assets()->where(function ($q) use ($content) {
             $q->where('type', $content());

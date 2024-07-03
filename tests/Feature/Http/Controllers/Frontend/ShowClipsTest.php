@@ -184,16 +184,14 @@ it('clip public page should display a series title and link if clip belongs to a
 it('clip public page should display all alternative videos if a video has assets', function () {
     $this->mockHandler->append($this->mockCheckApiConnection(), $this->mockVodSecureUrls());
 
-    Asset::factory()->create([
+    $this->clip->addAsset(Asset::factory()->create([
         'original_file_name' => 'presentation.smil',
         'type' => Content::SMIL,
-        'clip_id' => $this->clip->id,
-    ]);
-    Asset::factory()->create([
+    ]));
+    $this->clip->addAsset(Asset::factory()->create([
         'original_file_name' => 'composite.smil',
         'type' => Content::SMIL,
-        'clip_id' => $this->clip->id,
-    ]);
+    ]));
     get(route('frontend.clips.show', $this->clip))
         ->assertSee('presenter video stream')
         ->assertSee('presentation video stream')
@@ -204,16 +202,15 @@ it('clip public page should not display alternative videos if user is not allowe
     $this->mockHandler->append($this->mockCheckApiConnection(), $this->mockVodSecureUrls());
     $this->clip->addAcls(collect([Acl::PORTAL()]));
 
-    Asset::factory()->create([
+    $this->clip->addAsset(Asset::factory()->create([
         'original_file_name' => 'presentation.smil',
         'type' => Content::SMIL,
-        'clip_id' => $this->clip->id,
-    ]);
-    Asset::factory()->create([
+    ]));
+    $this->clip->addAsset(Asset::factory()->create([
         'original_file_name' => 'composite.smil',
         'type' => Content::SMIL,
-        'clip_id' => $this->clip->id,
-    ]);
+    ]));
+
     get(route('frontend.clips.show', $this->clip))
         ->assertDontSee('presenter video stream')
         ->assertDontSee('presentation video stream')

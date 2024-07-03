@@ -4,7 +4,6 @@ namespace Database\Factories;
 
 use App\Enums\Content;
 use App\Models\Asset;
-use App\Models\Clip;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
@@ -32,7 +31,6 @@ class AssetFactory extends Factory
             'width' => '1920',
             'height' => '1080',
             'duration' => '720',
-            'clip_id' => Clip::factory(),
             'guid' => Str::uuid(),
             'type' => Content::PRESENTER,
             'player_preview' => '1_preview.png',

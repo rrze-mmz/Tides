@@ -21,7 +21,6 @@ class CreateAssetsTable extends Migration
             $table->integer('width');
             $table->integer('height');
             $table->integer('duration');
-            $table->foreignId('clip_id')->references('id')->on('clips')->cascadeOnDelete()->index();
             $table->smallInteger('type')->nullable();
             $table->uuid('guid')->unique();
             $table->string('player_preview')->nullable();

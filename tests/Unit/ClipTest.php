@@ -10,7 +10,6 @@ use Facades\Tests\Setup\FileFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Collection;
@@ -57,10 +56,8 @@ it('belongs to a series', function () {
     expect($this->clip->series())->toBeInstanceOf(BelongsTo::class);
 });
 
-it('has many assets', function () {
-    Asset::factory(2)->create(['clip_id' => $this->clip->id]);
-
-    expect($this->clip->assets()->count())->toBe(2);
+it('has many assets using assetable trait', function () {
+    expect($this->clip->assets())->toBeInstanceOf(MorphToMany::class);
 });
 
 it('has many collections', function () {
@@ -112,7 +109,7 @@ it('has many comments', function () {
 });
 
 it('can add an asset', function () {
-    $asset = $this->clip->addAsset([
+    $asset = $this->clip->addAsset(Asset::create([
         'disk' => 'videos',
         'original_file_name' => 'video.mp4',
         'path' => '/videos/',
@@ -121,7 +118,7 @@ it('can add an asset', function () {
         'width' => '1920',
         'height' => '1080',
         'type' => 'video',
-    ]);
+    ]));
 
     expect($asset)->toBeInstanceOf(Asset::class);
 });
@@ -201,7 +198,7 @@ it('resolves also an id in route', function () {
 });
 
 it('fetches assets by type', function () {
-    expect($this->clip->getAssetsByType(Content::PRESENTER))->toBeInstanceOf(HasMany::class);
+    expect($this->clip->getAssetsByType(Content::PRESENTER))->toBeInstanceOf(MorphToMany::class);
 });
 
 it('creates a folder id after model save', function () {

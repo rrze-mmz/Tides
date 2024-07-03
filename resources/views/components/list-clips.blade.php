@@ -32,7 +32,7 @@
                                     @else {{ $clip->path() }}
                                     @endif">
                                                         <img
-                                                            src="{{ fetchClipPoster($clip->latestAsset?->player_preview) }}"
+                                                            src="{{ fetchClipPoster($clip->latestAsset()?->player_preview) }}"
                                                             alt="preview image"
                                                         >
                                                     </a>
@@ -65,7 +65,7 @@
                                             <div class="w-2/12">{{ $clip->semester->acronym }}</div>
                                             <div class="w-1/12">
                                                 {{
-                                                (is_null($clip->latestAsset)?'00:00:00':gmdate('H:i:s', $clip->latestAsset->duration))
+                                                (is_null($clip->latestAsset())?'00:00:00':gmdate('H:i:s', $clip->latestAsset()->duration))
                                                 }}
                                             </div>
                                             <div class="w-1/12">
@@ -134,7 +134,7 @@
                                     @else {{ $clip->path() }}
                                     @endif">
                                                         <img
-                                                            src="{{ fetchClipPoster($clip->latestAsset?->player_preview) }}"
+                                                            src="{{ fetchClipPoster($clip->latestAsset()?->player_preview) }}"
                                                             alt="preview image"
                                                         >
                                                     </a>
@@ -166,7 +166,7 @@
                                             <div class="w-2/12">{{ $clip->semester->acronym }}</div>
                                             <div class="w-1/12">
                                                 {{
-                                                (is_null($clip->latestAsset)?'00:00:00':gmdate('H:i:s', $clip->latestAsset->duration))
+                                                (is_null($clip->latestAsset())?'00:00:00':gmdate('H:i:s', $clip->latestAsset()->duration))
                                                 }}
                                             </div>
                                             <div class="w-1/12">
@@ -246,7 +246,7 @@
                                     @else {{ $clip->path() }}
                                     @endif">
                                         <img
-                                            src="{{ fetchClipPoster($clip->latestAsset?->player_preview) }}"
+                                            src="{{ fetchClipPoster($clip->latestAsset()?->player_preview) }}"
                                             alt="preview image"
                                         >
                                     </a>
@@ -279,7 +279,7 @@
                             <div class="w-2/12">{{ $clip->semester }}</div>
                             <div class="w-1/12">
                                 {{
-                                (is_null($clip->latestAsset)?'00:00:00':gmdate('H:i:s', $clip->latestAsset->duration))
+                                (is_null($clip->latestAsset())?'00:00:00':gmdate('H:i:s', $clip->latestAsset()->duration))
                                 }}
                             </div>
                             <div class="w-1/12">

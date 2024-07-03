@@ -2,9 +2,9 @@
 
 use App\Events\AssetDeleted;
 use App\Models\Asset;
-use App\Models\Clip;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Facades\Event;
 
 uses()->group('unit');
@@ -18,8 +18,8 @@ it('has a path', function () {
     expect($this->asset->path())->toEqual('/admin/assets/'.$this->asset->id);
 });
 
-it('belongs to a clip', function () {
-    expect($this->asset->clip)->toBeInstanceOf(Clip::class);
+it('may have many clips', function () {
+    expect($this->asset->clips())->toBeInstanceOf(MorphToMany::class);
 });
 
 it('has many statistics logs', function () {

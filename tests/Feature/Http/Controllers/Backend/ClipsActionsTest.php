@@ -4,6 +4,7 @@ use App\Enums\Acl;
 use App\Enums\Content;
 use App\Enums\Role;
 use App\Livewire\CommentsSection;
+use App\Models\Asset;
 use App\Models\Clip;
 use App\Services\OpencastService;
 use Facades\Tests\Setup\ClipFactory;
@@ -168,7 +169,7 @@ it('has a trigger smil file button if clip has assets', function () {
 
 it('list smil files for admins if any', function () {
     $clip = ClipFactory::withAssets(2)->ownedBy(signInRole(Role::ADMIN))->create();
-    $clip->addAsset([
+    $clip->addAsset(Asset::create([
         'disk' => 'videos',
         'original_file_name' => 'camera.smil',
         'type' => Content::SMIL(),
@@ -177,14 +178,14 @@ it('list smil files for admins if any', function () {
         'duration' => '0',
         'width' => '0',
         'height' => '0',
-    ]);
+    ]));
 
     get(route('clips.edit', $clip))->assertSee('camera.smil');
 });
 
 it('list audio files if any', function () {
     $clip = ClipFactory::withAssets(2)->ownedBy(signInRole(Role::MODERATOR))->create();
-    $clip->addAsset([
+    $clip->addAsset(Asset::create([
         'disk' => 'videos',
         'original_file_name' => 'audio.mp3',
         'type' => Content::AUDIO(),
@@ -193,7 +194,7 @@ it('list audio files if any', function () {
         'duration' => '120',
         'width' => '0',
         'height' => '0',
-    ]);
+    ]));
 
     get(route('clips.edit', $clip))->assertSee('audio.mp3');
 });

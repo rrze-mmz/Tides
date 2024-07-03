@@ -9,8 +9,8 @@ use App\Models\Stats\AssetViewCount;
 use App\Models\Stats\AssetViewLog;
 use App\Models\Traits\RecordsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Facades\Storage;
 
 class Asset extends BaseModel
@@ -21,7 +21,7 @@ class Asset extends BaseModel
     protected $guarded = [];
 
     //this will update clips timestamp
-    protected $touches = ['clip'];
+    protected $touches = ['clips'];
 
     //remove asset from disk on delete
     protected $dispatchesEvents = [
@@ -44,9 +44,14 @@ class Asset extends BaseModel
     /**
      *  Clip relationship
      */
-    public function clip(): BelongsTo
+    public function clips(): MorphToMany
     {
-        return $this->belongsTo(Clip::class);
+        return $this->morphedByMany(Clip::class, 'assetable');
+    }
+
+    public function podcastEpisodes(): MorphToMany
+    {
+        return $this->morphedByMany(PodcastEpisode::class, 'assetable');
     }
 
     public function viewLog(): HasMany

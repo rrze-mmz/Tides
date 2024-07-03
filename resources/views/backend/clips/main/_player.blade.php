@@ -169,7 +169,7 @@
                                     <div class="flex flex-row w-full">
                                         <div class="flex flex-row w-1/3">
                                             <div class="w-48 h-48 overflow-hidden">
-                                                <img src="{{ fetchClipPoster($clip->latestAsset?->player_preview)  }}"
+                                                <img src="{{ fetchClipPoster($clip->latestAsset()->player_preview)  }}"
                                                      alt="poster image" class="object-contain w-full h-full">
                                             </div>
                                         </div>

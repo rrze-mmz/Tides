@@ -20,10 +20,11 @@ class AssetDestroyController extends Controller
     {
         $this->authorize('edit', $asset);
 
+        $clip = $asset->clips->first();
         $asset->delete();
 
-        $asset->clip->updatePosterImage();
+        $clip->updatePosterImage();
 
-        return to_route('clips.edit', $asset->clip);
+        return to_route('clips.edit', $clip);
     }
 }

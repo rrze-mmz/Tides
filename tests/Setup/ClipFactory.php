@@ -35,15 +35,17 @@ class ClipFactory
         );
 
         if ($this->assetsCount > 0) {
-            Asset::factory($this->assetsCount)->create([
-                'clip_id' => $clip->id,
+            $assets = Asset::factory($this->assetsCount)->create([
                 'path' => $clip->folder_id.'/video.mp4',
             ]);
-            Asset::factory()->create([
+            $assets->each(function ($asset) use ($clip) {
+                $clip->addAsset($asset);
+            });
+            $smilFile = Asset::factory()->create([
                 'original_file_name' => 'presenter.smil',
                 'type' => Content::SMIL,
-                'clip_id' => $clip->id,
             ]);
+            $clip->addAsset($smilFile);
         }
 
         return $clip;

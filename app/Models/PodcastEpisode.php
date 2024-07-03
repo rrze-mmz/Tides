@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\Assetable;
 use App\Models\Traits\Presentable;
 use App\Models\Traits\RecordsActivity;
 use App\Models\Traits\Searchable;
@@ -12,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PodcastEpisode extends BaseModel
 {
+    use Assetable;
     use HasFactory;
     use Presentable;
     use RecordsActivity;

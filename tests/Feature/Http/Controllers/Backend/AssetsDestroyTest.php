@@ -18,8 +18,9 @@ uses()->beforeEach(function () {
 
 test('a moderator cannot delete an asset they do not own', function () {
     $asset = Asset::factory()->create();
+    $clip = ClipFactory::create();
+    $clip->addAsset($asset);
     signInRole(Role::MODERATOR);
-
     delete(route('assets.destroy', $asset))->assertForbidden();
 });
 
@@ -46,6 +47,8 @@ test('deleting an asset should also delete the file from storage', function () {
 
 test('an admin can delete a not owned clip asset', function () {
     $asset = Asset::factory()->create();
+    $clip = ClipFactory::create();
+    $clip->addAsset($asset);
     signInRole(Role::ADMIN);
     delete(route('assets.destroy', $asset));
 

@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Enums\Content;
 use App\Http\Clients\LiveStreamingClient;
 use App\Http\Clients\StreamingClient;
+use App\Models\Asset;
 use App\Models\Clip;
 use App\Models\Livestream;
 use App\Models\Setting;
@@ -130,7 +131,7 @@ class WowzaService
                 ->put(getClipStoragePath($clip)."/{$original_file_name}", $xmlFile = $result->prettify()->toXml());
 
             //save or update the smil file in db
-            $clip->addAsset([
+            $clip->addAsset(Asset::create([
                 'disk' => 'videos',
                 'original_file_name' => $original_file_name,
                 'type' => Content::SMIL(),
@@ -139,7 +140,7 @@ class WowzaService
                 'duration' => '0',
                 'width' => '0',
                 'height' => '0',
-            ]);
+            ]));
         }
     }
 

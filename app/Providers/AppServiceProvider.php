@@ -32,6 +32,7 @@ class AppServiceProvider extends ServiceProvider
             'image' => 'App\Models\Image',
             'semester' => 'App\Models\Semester',
             'podcast' => 'App\Models\Podcast',
+            'podcast_episode' => 'App\Models\PodcastEpisode',
         ]);
     }
 }

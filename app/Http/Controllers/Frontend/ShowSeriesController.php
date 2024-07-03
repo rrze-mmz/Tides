@@ -72,7 +72,7 @@ class ShowSeriesController extends Controller
                 Clip::select(['id', 'title', 'slug', 'episode', 'is_public'])
                     ->where('series_id', $series->id)
                     ->WithSemester()
-                    ->with('assets:id,clip_id,width,height,type')
+                    ->with('assets:id,width,height,type')
                     ->orderBy('episode')->get()
                 :
                 Clip::select(['id', 'title', 'slug', 'episode', 'is_public'])
@@ -82,7 +82,7 @@ class ShowSeriesController extends Controller
                     ->where('series_id', $series->id)
                     ->where('is_public', true)
                     ->WithSemester()
-                    ->with('assets:id,clip_id,width,height,type')
+                    ->with('assets:id,width,height,type')
                     ->orderBy('episode')->get();
             $assetsResolutions = $clips
                 ->map(function ($clip) {
