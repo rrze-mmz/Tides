@@ -4,6 +4,7 @@ namespace Database\Factories\Stats;
 
 use App\Enums\Acl;
 use App\Models\Asset;
+use App\Models\Clip;
 use App\Models\Stats\AssetViewCount;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
@@ -20,11 +21,15 @@ class AssetViewCountFactory extends Factory
      */
     public function definition(): array
     {
+        $asset = Asset::factory()->create();
+        $clip = Clip::Factory()->create();
+        $clip->addAsset($asset);
+
         return [
             'version' => '0',
             'counter' => '20',
             'doa' => Carbon::now(),
-            'resourceid' => Asset::factory()->create()->id,
+            'resourceid' => $asset->id,
             'serviceid' => Acl::PORTAL,
         ];
     }

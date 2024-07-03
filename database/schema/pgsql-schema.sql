@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 15.4
--- Dumped by pg_dump version 15.4
+-- Dumped from database version 16.3
+-- Dumped by pg_dump version 16.3
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -21,6 +21,13 @@ SET row_security = off;
 --
 
 -- *not* creating schema, since initdb creates it
+
+
+--
+-- Name: stats; Type: SCHEMA; Schema: -; Owner: -
+--
+
+CREATE SCHEMA stats;
 
 
 SET default_tablespace = '';
@@ -179,6 +186,19 @@ ALTER SEQUENCE public.articles_id_seq OWNED BY public.articles.id;
 
 
 --
+-- Name: assetables; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.assetables (
+    asset_id bigint NOT NULL,
+    assetable_id bigint NOT NULL,
+    assetable_type character varying(255) NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone
+);
+
+
+--
 -- Name: assets; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -190,7 +210,6 @@ CREATE TABLE public.assets (
     width integer NOT NULL,
     height integer NOT NULL,
     duration integer NOT NULL,
-    clip_id bigint NOT NULL,
     type smallint,
     guid uuid NOT NULL,
     player_preview character varying(255),
@@ -703,6 +722,40 @@ ALTER SEQUENCE public.images_id_seq OWNED BY public.images.id;
 
 
 --
+-- Name: jobs; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.jobs (
+    id bigint NOT NULL,
+    queue character varying(255) NOT NULL,
+    payload text NOT NULL,
+    attempts smallint NOT NULL,
+    reserved_at integer,
+    available_at integer NOT NULL,
+    created_at integer NOT NULL
+);
+
+
+--
+-- Name: jobs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.jobs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: jobs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.jobs_id_seq OWNED BY public.jobs.id;
+
+
+--
 -- Name: languages; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -753,7 +806,8 @@ CREATE TABLE public.livestreams (
     time_availability_start timestamp(0) without time zone,
     time_availability_end timestamp(0) without time zone,
     created_at timestamp(0) without time zone,
-    updated_at timestamp(0) without time zone
+    updated_at timestamp(0) without time zone,
+    opencast_location_name text
 );
 
 
@@ -872,6 +926,90 @@ CREATE TABLE public.password_resets (
     token character varying(255) NOT NULL,
     created_at timestamp(0) without time zone
 );
+
+
+--
+-- Name: podcast_episodes; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.podcast_episodes (
+    id bigint NOT NULL,
+    podcast_id bigint NOT NULL,
+    episode_number integer NOT NULL,
+    title character varying(255) NOT NULL,
+    slug character varying(255) NOT NULL,
+    description text,
+    notes text,
+    transcription text,
+    image_id integer,
+    audio_url character varying(255) NOT NULL,
+    spotify_url character varying(255),
+    apple_podcasts_url character varying(255),
+    google_podcasts_url character varying(255),
+    old_episode_id bigint,
+    published_at timestamp(0) without time zone,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone
+);
+
+
+--
+-- Name: podcast_episodes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.podcast_episodes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: podcast_episodes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.podcast_episodes_id_seq OWNED BY public.podcast_episodes.id;
+
+
+--
+-- Name: podcasts; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.podcasts (
+    id bigint NOT NULL,
+    title character varying(255) NOT NULL,
+    slug character varying(255) NOT NULL,
+    description text,
+    image_id integer,
+    is_published boolean DEFAULT true NOT NULL,
+    website_url character varying(255),
+    spotify_url character varying(255),
+    apple_podcasts_url character varying(255),
+    google_podcasts_url character varying(255),
+    old_podcast_id bigint,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone
+);
+
+
+--
+-- Name: podcasts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.podcasts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: podcasts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.podcasts_id_seq OWNED BY public.podcasts.id;
 
 
 --
@@ -1317,6 +1455,361 @@ ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 
 
 --
+-- Name: botname; Type: TABLE; Schema: stats; Owner: -
+--
+
+CREATE TABLE stats.botname (
+    botname_id bigint NOT NULL,
+    name character varying(255) NOT NULL
+);
+
+
+--
+-- Name: botname_seq; Type: SEQUENCE; Schema: stats; Owner: -
+--
+
+CREATE SEQUENCE stats.botname_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: clip; Type: TABLE; Schema: stats; Owner: -
+--
+
+CREATE TABLE stats.clip (
+    clip_id bigint NOT NULL,
+    course_id bigint
+);
+
+
+--
+-- Name: course; Type: TABLE; Schema: stats; Owner: -
+--
+
+CREATE TABLE stats.course (
+    course_id bigint NOT NULL
+);
+
+
+--
+-- Name: geoloc; Type: TABLE; Schema: stats; Owner: -
+--
+
+CREATE TABLE stats.geoloc (
+    geoloc_id bigint NOT NULL,
+    version bigint NOT NULL,
+    bavaria bigint NOT NULL,
+    germany bigint NOT NULL,
+    month timestamp without time zone NOT NULL,
+    resourceid bigint NOT NULL,
+    world bigint NOT NULL
+);
+
+
+--
+-- Name: geoloc_id_seq; Type: SEQUENCE; Schema: stats; Owner: -
+--
+
+CREATE SEQUENCE stats.geoloc_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: hourstats; Type: TABLE; Schema: stats; Owner: -
+--
+
+CREATE TABLE stats.hourstats (
+    hour bigint NOT NULL,
+    counter bigint NOT NULL,
+    version bigint
+);
+
+
+--
+-- Name: TABLE hourstats; Type: COMMENT; Schema: stats; Owner: -
+--
+
+COMMENT ON TABLE stats.hourstats IS 'Kann eigentlich weg, muss aber in vpmig entfernt werden';
+
+
+--
+-- Name: log_seq; Type: SEQUENCE; Schema: stats; Owner: -
+--
+
+CREATE SEQUENCE stats.log_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: logs; Type: TABLE; Schema: stats; Owner: -
+--
+
+CREATE TABLE stats.logs (
+    log_id bigint DEFAULT nextval('stats.log_seq'::regclass) NOT NULL,
+    resource_id bigint DEFAULT 0 NOT NULL,
+    service_id smallint DEFAULT 0 NOT NULL,
+    access_date date DEFAULT now(),
+    access_time timestamp without time zone DEFAULT now(),
+    remote_addr character varying(255),
+    remote_host text,
+    remote_user text,
+    script_name text,
+    is_counted boolean DEFAULT true NOT NULL,
+    created_at timestamp without time zone DEFAULT now(),
+    created_from text,
+    is_valid boolean DEFAULT false NOT NULL,
+    in_range boolean DEFAULT false NOT NULL,
+    referer text,
+    query text,
+    is_akami boolean DEFAULT false NOT NULL,
+    server character varying(10),
+    range character varying(128),
+    response character varying(128),
+    real_ip character varying(128),
+    num_ip bigint,
+    last_modified_at timestamp without time zone DEFAULT now(),
+    last_modified_from character varying(18),
+    bot_name character varying(255),
+    city character varying(255),
+    country character varying(255),
+    country3 character varying(255),
+    country_name character varying(255),
+    is_bot boolean DEFAULT false,
+    is_get boolean DEFAULT true,
+    region character varying(255),
+    region_name character varying(255)
+);
+
+
+--
+-- Name: lastmonth_hour_stats; Type: VIEW; Schema: stats; Owner: -
+--
+
+CREATE VIEW stats.lastmonth_hour_stats AS
+ SELECT date_part('hour'::text, access_time) AS stunde,
+    count(*) AS anz
+   FROM stats.logs
+  WHERE (access_date > (now() - '1 mon'::interval))
+  GROUP BY (date_part('hour'::text, access_time))
+  ORDER BY (date_part('hour'::text, access_time));
+
+
+--
+-- Name: lastmonth_weekhour_stats; Type: VIEW; Schema: stats; Owner: -
+--
+
+CREATE VIEW stats.lastmonth_weekhour_stats AS
+ SELECT date_part('isodow'::text, access_time) AS day,
+    date_part('hour'::text, access_time) AS hour,
+    count(*) AS value
+   FROM stats.logs
+  WHERE (access_time > (now() - '1 mon'::interval))
+  GROUP BY (date_part('isodow'::text, access_time)), (date_part('hour'::text, access_time))
+  ORDER BY (date_part('isodow'::text, access_time)), (date_part('hour'::text, access_time));
+
+
+--
+-- Name: lastweek_hour_stats; Type: VIEW; Schema: stats; Owner: -
+--
+
+CREATE VIEW stats.lastweek_hour_stats AS
+ SELECT date_part('hour'::text, access_time) AS stunde,
+    count(*) AS anz
+   FROM stats.logs
+  WHERE (access_date > (now() - '7 days'::interval))
+  GROUP BY (date_part('hour'::text, access_time))
+  ORDER BY (date_part('hour'::text, access_time));
+
+
+--
+-- Name: lastweek_weekhour_stats; Type: VIEW; Schema: stats; Owner: -
+--
+
+CREATE VIEW stats.lastweek_weekhour_stats AS
+ SELECT date_part('isodow'::text, access_time) AS day,
+    date_part('hour'::text, access_time) AS hour,
+    count(*) AS value
+   FROM stats.logs
+  WHERE (access_time > (now() - '7 days'::interval))
+  GROUP BY (date_part('isodow'::text, access_time)), (date_part('hour'::text, access_time))
+  ORDER BY (date_part('isodow'::text, access_time)), (date_part('hour'::text, access_time));
+
+
+--
+-- Name: month_hours; Type: TABLE; Schema: stats; Owner: -
+--
+
+CREATE TABLE stats.month_hours (
+    stunde double precision,
+    anz bigint
+);
+
+
+--
+-- Name: month_weekhours; Type: TABLE; Schema: stats; Owner: -
+--
+
+CREATE TABLE stats.month_weekhours (
+    day double precision,
+    hour double precision,
+    value bigint
+);
+
+
+--
+-- Name: monthly_requests; Type: TABLE; Schema: stats; Owner: -
+--
+
+CREATE TABLE stats.monthly_requests (
+    month date NOT NULL,
+    counter bigint
+);
+
+
+--
+-- Name: resource; Type: TABLE; Schema: stats; Owner: -
+--
+
+CREATE TABLE stats.resource (
+    resource_id bigint NOT NULL,
+    clip_id bigint NOT NULL,
+    resolution_id integer
+);
+
+
+--
+-- Name: stats; Type: TABLE; Schema: stats; Owner: -
+--
+
+CREATE TABLE stats.stats (
+    stats_id bigint NOT NULL,
+    version bigint NOT NULL,
+    counter bigint NOT NULL,
+    doa timestamp without time zone NOT NULL,
+    resourceid bigint NOT NULL,
+    serviceid bigint NOT NULL
+);
+
+
+--
+-- Name: monthly_stats_per_resolution; Type: VIEW; Schema: stats; Owner: -
+--
+
+CREATE VIEW stats.monthly_stats_per_resolution AS
+ SELECT sum,
+    doa,
+    resolution_id
+   FROM ( SELECT sum(s.counter) AS sum,
+            date_trunc('month'::text, s.doa) AS doa,
+            r.resolution_id
+           FROM (stats.stats s
+             JOIN stats.resource r ON ((s.resourceid = r.resource_id)))
+          WHERE (r.resolution_id <> '-1'::integer)
+          GROUP BY (date_trunc('month'::text, s.doa)), r.resolution_id
+        UNION ALL
+         SELECT sum(s.counter) AS sum,
+            date_trunc('month'::text, s.doa) AS doa,
+            '-1'::integer AS resolution_id
+           FROM (stats.stats s
+             JOIN stats.resource r ON ((s.resourceid = r.resource_id)))
+          WHERE (r.resolution_id <> '-1'::integer)
+          GROUP BY (date_trunc('month'::text, s.doa))) alldata
+  ORDER BY doa, resolution_id;
+
+
+--
+-- Name: monthly_stats_per_service; Type: VIEW; Schema: stats; Owner: -
+--
+
+CREATE VIEW stats.monthly_stats_per_service AS
+ SELECT sum,
+    doa,
+    serviceid
+   FROM ( SELECT sum(stats.counter) AS sum,
+            date_trunc('month'::text, stats.doa) AS doa,
+            stats.serviceid
+           FROM stats.stats
+          GROUP BY (date_trunc('month'::text, stats.doa)), stats.serviceid
+        UNION ALL
+         SELECT sum(stats.counter) AS sum,
+            date_trunc('month'::text, stats.doa) AS doa,
+            '-1'::integer AS serviceid
+           FROM stats.stats
+          GROUP BY (date_trunc('month'::text, stats.doa))) alldata
+  ORDER BY doa, serviceid;
+
+
+--
+-- Name: monthly_stats_per_service_and_resource; Type: VIEW; Schema: stats; Owner: -
+--
+
+CREATE VIEW stats.monthly_stats_per_service_and_resource AS
+ SELECT sum,
+    doa,
+    serviceid,
+    resourceid
+   FROM ( SELECT sum(stats.counter) AS sum,
+            date_trunc('month'::text, stats.doa) AS doa,
+            stats.serviceid,
+            stats.resourceid
+           FROM stats.stats
+          GROUP BY stats.resourceid, (date_trunc('month'::text, stats.doa)), stats.serviceid
+        UNION ALL
+         SELECT sum(stats.counter) AS sum,
+            date_trunc('month'::text, stats.doa) AS doa,
+            '-1'::integer AS serviceid,
+            stats.resourceid
+           FROM stats.stats
+          GROUP BY stats.resourceid, (date_trunc('month'::text, stats.doa))) alldata
+  ORDER BY doa, serviceid;
+
+
+--
+-- Name: stats_seq; Type: SEQUENCE; Schema: stats; Owner: -
+--
+
+CREATE SEQUENCE stats.stats_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: week_hours; Type: TABLE; Schema: stats; Owner: -
+--
+
+CREATE TABLE stats.week_hours (
+    stunde double precision,
+    anz bigint
+);
+
+
+--
+-- Name: week_weekhours; Type: TABLE; Schema: stats; Owner: -
+--
+
+CREATE TABLE stats.week_weekhours (
+    day double precision,
+    hour double precision,
+    value bigint
+);
+
+
+--
 -- Name: academic_degrees id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1436,6 +1929,13 @@ ALTER TABLE ONLY public.images ALTER COLUMN id SET DEFAULT nextval('public.image
 
 
 --
+-- Name: jobs id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.jobs ALTER COLUMN id SET DEFAULT nextval('public.jobs_id_seq'::regclass);
+
+
+--
 -- Name: languages id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1461,6 +1961,20 @@ ALTER TABLE ONLY public.migrations ALTER COLUMN id SET DEFAULT nextval('public.m
 --
 
 ALTER TABLE ONLY public.organizations ALTER COLUMN org_id SET DEFAULT nextval('public.organizations_org_id_seq'::regclass);
+
+
+--
+-- Name: podcast_episodes id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.podcast_episodes ALTER COLUMN id SET DEFAULT nextval('public.podcast_episodes_id_seq'::regclass);
+
+
+--
+-- Name: podcasts id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.podcasts ALTER COLUMN id SET DEFAULT nextval('public.podcasts_id_seq'::regclass);
 
 
 --
@@ -1594,6 +2108,14 @@ ALTER TABLE ONLY public.articles
 
 ALTER TABLE ONLY public.articles
     ADD CONSTRAINT articles_slug_unique UNIQUE (slug);
+
+
+--
+-- Name: assetables assetables_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.assetables
+    ADD CONSTRAINT assetables_pkey PRIMARY KEY (asset_id, assetable_id, assetable_type);
 
 
 --
@@ -1757,6 +2279,14 @@ ALTER TABLE ONLY public.images
 
 
 --
+-- Name: jobs jobs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.jobs
+    ADD CONSTRAINT jobs_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: languages languages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1802,6 +2332,38 @@ ALTER TABLE ONLY public.organizations
 
 ALTER TABLE ONLY public.organizations
     ADD CONSTRAINT organizations_slug_unique UNIQUE (slug);
+
+
+--
+-- Name: podcast_episodes podcast_episodes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.podcast_episodes
+    ADD CONSTRAINT podcast_episodes_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: podcast_episodes podcast_episodes_slug_unique; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.podcast_episodes
+    ADD CONSTRAINT podcast_episodes_slug_unique UNIQUE (slug);
+
+
+--
+-- Name: podcasts podcasts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.podcasts
+    ADD CONSTRAINT podcasts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: podcasts podcasts_slug_unique; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.podcasts
+    ADD CONSTRAINT podcasts_slug_unique UNIQUE (slug);
 
 
 --
@@ -1973,6 +2535,85 @@ ALTER TABLE ONLY public.users
 
 
 --
+-- Name: botname botname_pkey; Type: CONSTRAINT; Schema: stats; Owner: -
+--
+
+ALTER TABLE ONLY stats.botname
+    ADD CONSTRAINT botname_pkey PRIMARY KEY (botname_id);
+
+
+--
+-- Name: clip clip_pkey; Type: CONSTRAINT; Schema: stats; Owner: -
+--
+
+ALTER TABLE ONLY stats.clip
+    ADD CONSTRAINT clip_pkey PRIMARY KEY (clip_id);
+
+
+--
+-- Name: course course_pkey; Type: CONSTRAINT; Schema: stats; Owner: -
+--
+
+ALTER TABLE ONLY stats.course
+    ADD CONSTRAINT course_pkey PRIMARY KEY (course_id);
+
+
+--
+-- Name: geoloc geoloc_pkey; Type: CONSTRAINT; Schema: stats; Owner: -
+--
+
+ALTER TABLE ONLY stats.geoloc
+    ADD CONSTRAINT geoloc_pkey PRIMARY KEY (geoloc_id);
+
+
+--
+-- Name: hourstats hourstats_pk; Type: CONSTRAINT; Schema: stats; Owner: -
+--
+
+ALTER TABLE ONLY stats.hourstats
+    ADD CONSTRAINT hourstats_pk PRIMARY KEY (hour);
+
+
+--
+-- Name: logs logs_pkey; Type: CONSTRAINT; Schema: stats; Owner: -
+--
+
+ALTER TABLE ONLY stats.logs
+    ADD CONSTRAINT logs_pkey PRIMARY KEY (log_id);
+
+
+--
+-- Name: monthly_requests monthly_requests_pk; Type: CONSTRAINT; Schema: stats; Owner: -
+--
+
+ALTER TABLE ONLY stats.monthly_requests
+    ADD CONSTRAINT monthly_requests_pk PRIMARY KEY (month);
+
+
+--
+-- Name: resource resource_pkey; Type: CONSTRAINT; Schema: stats; Owner: -
+--
+
+ALTER TABLE ONLY stats.resource
+    ADD CONSTRAINT resource_pkey PRIMARY KEY (resource_id);
+
+
+--
+-- Name: stats stats_pkey; Type: CONSTRAINT; Schema: stats; Owner: -
+--
+
+ALTER TABLE ONLY stats.stats
+    ADD CONSTRAINT stats_pkey PRIMARY KEY (stats_id);
+
+
+--
+-- Name: assetables_assetable_id_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX assetables_assetable_id_index ON public.assetables USING btree (assetable_id);
+
+
+--
 -- Name: assets_clip_id_index; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1991,6 +2632,13 @@ CREATE INDEX clips_series_id_index ON public.clips USING btree (series_id);
 --
 
 CREATE INDEX clips_supervisor_id_index ON public.clips USING btree (supervisor_id);
+
+
+--
+-- Name: jobs_queue_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX jobs_queue_index ON public.jobs USING btree (queue);
 
 
 --
@@ -2033,6 +2681,70 @@ CREATE INDEX series_owner_id_index ON public.series USING btree (owner_id);
 --
 
 CREATE INDEX trix_rich_texts_model_type_model_id_index ON public.trix_rich_texts USING btree (model_type, model_id);
+
+
+--
+-- Name: accessDate; Type: INDEX; Schema: stats; Owner: -
+--
+
+CREATE INDEX "accessDate" ON stats.logs USING btree (access_date);
+
+
+--
+-- Name: accessTime; Type: INDEX; Schema: stats; Owner: -
+--
+
+CREATE INDEX "accessTime" ON stats.logs USING btree (access_time);
+
+
+--
+-- Name: idx_geoloc_resourceid; Type: INDEX; Schema: stats; Owner: -
+--
+
+CREATE INDEX idx_geoloc_resourceid ON stats.geoloc USING hash (resourceid);
+
+
+--
+-- Name: idx_res_month; Type: INDEX; Schema: stats; Owner: -
+--
+
+CREATE INDEX idx_res_month ON stats.geoloc USING btree (resourceid, month);
+
+
+--
+-- Name: idx_stats_resourceid; Type: INDEX; Schema: stats; Owner: -
+--
+
+CREATE INDEX idx_stats_resourceid ON stats.stats USING hash (resourceid);
+
+
+--
+-- Name: monthly_requests_month_uindex; Type: INDEX; Schema: stats; Owner: -
+--
+
+CREATE UNIQUE INDEX monthly_requests_month_uindex ON stats.monthly_requests USING btree (month);
+
+
+--
+-- Name: remoteaddr; Type: INDEX; Schema: stats; Owner: -
+--
+
+CREATE INDEX remoteaddr ON stats.logs USING btree (remote_addr);
+
+
+--
+-- Name: stats_doa_index; Type: INDEX; Schema: stats; Owner: -
+--
+
+CREATE INDEX stats_doa_index ON stats.stats USING btree (doa);
+
+
+--
+-- Name: assetables 1; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.assetables
+    ADD CONSTRAINT "1" FOREIGN KEY (asset_id) REFERENCES public.assets(id) ON DELETE CASCADE;
 
 
 --
@@ -2188,6 +2900,14 @@ ALTER TABLE ONLY public.livestreams
 
 
 --
+-- Name: podcast_episodes podcast_episodes_podcast_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.podcast_episodes
+    ADD CONSTRAINT podcast_episodes_podcast_id_foreign FOREIGN KEY (podcast_id) REFERENCES public.podcasts(id) ON DELETE CASCADE;
+
+
+--
 -- Name: presentables presentables_presenter_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2268,6 +2988,22 @@ ALTER TABLE ONLY public.series_subscriptions
 
 
 --
+-- Name: clip fk2ea350dafac5f8; Type: FK CONSTRAINT; Schema: stats; Owner: -
+--
+
+ALTER TABLE ONLY stats.clip
+    ADD CONSTRAINT fk2ea350dafac5f8 FOREIGN KEY (course_id) REFERENCES stats.course(course_id);
+
+
+--
+-- Name: resource fkebabc40eb860ed58; Type: FK CONSTRAINT; Schema: stats; Owner: -
+--
+
+ALTER TABLE ONLY stats.resource
+    ADD CONSTRAINT fkebabc40eb860ed58 FOREIGN KEY (clip_id) REFERENCES stats.clip(clip_id);
+
+
+--
 -- PostgreSQL database dump complete
 --
 
@@ -2275,8 +3011,8 @@ ALTER TABLE ONLY public.series_subscriptions
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 15.4
--- Dumped by pg_dump version 15.4
+-- Dumped from database version 16.3
+-- Dumped by pg_dump version 16.3
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -2354,6 +3090,13 @@ COPY public.migrations (id, migration, batch) FROM stdin;
 60	2024_01_10_142742_create_channels_table	2
 62	2024_02_07_111845_add_users_presenter_id	3
 63	2024_02_20_094838_add_clips_opencast_event_id	4
+64	2024_03_20_104014_create_stats_logs_table	5
+65	2024_03_20_105115_create_stats_stats_table	5
+66	2024_04_08_103929_create_jobs_table	5
+67	2024_05_31_092642_add_livestreams_opencast_location_name	5
+68	2024_06_21_091852_create_podcasts_table	5
+69	2024_06_21_091859_create_podcast_episodes_table	5
+70	2024_07_02_145743_create_assetables_table	5
 \.
 
 
@@ -2361,7 +3104,7 @@ COPY public.migrations (id, migration, batch) FROM stdin;
 -- Name: migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.migrations_id_seq', 63, true);
+SELECT pg_catalog.setval('public.migrations_id_seq', 70, true);
 
 
 --

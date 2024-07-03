@@ -1,7 +1,7 @@
 @php use Barryvdh\Debugbar\Facades\Debugbar;use Barryvdh\Debugbar\Twig\Extension\Debug; @endphp
 <div id="player" data-plyr-provider="html5" data-plyr-embed-id="video">
     <video id="video" class="plyr__video" playsinline controls
-           data-poster="{{ fetchClipPoster($clip->latestAsset?->player_preview)  }}">
+           data-poster="{{ fetchClipPoster($clip->latestAsset()?->player_preview)  }}">
         @if($clip->is_livestream)
             <source
                 src="{{ $defaultVideoUrl }}"
@@ -26,7 +26,7 @@
                 />
             @endisset
         @else
-            <source src="{{ '/videos/'.$clip->assets->first()->path  }}"
+            <source src="{{ '/videos/'.$clip->assets()->first()->path  }}"
                     type="video/mp4"
             />
         @endif

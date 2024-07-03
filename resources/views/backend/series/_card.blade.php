@@ -12,7 +12,7 @@
         <a href="{{ $url }}">
             <img
                 src="{{ ($series->lastPublicClip)
-                    ? fetchClipPoster($series->lastPublicClip?->latestAsset?->player_preview)
+                    ? fetchClipPoster($series->lastPublicClip?->latestAsset()?->player_preview)
                     : "/images/generic_clip_poster_image.png" }}"
                 alt="preview image"
                 class="object-cover w-full h-full" />
@@ -20,7 +20,7 @@
         <div
             class="absolute w-full py-2.5 bottom-0 inset-x-0 bg-blue-600  text-white
                     text-xs text-right pr-2 pb-2 leading-4 ">
-            {{ $series->latestClip?->latestAsset?->durationToHours() }}
+            {{ $series->latestClip?->latestAsset()?->durationToHours() }}
         </div>
     </div>
 

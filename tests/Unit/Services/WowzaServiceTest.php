@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\Content;
+use App\Models\Asset;
 use App\Models\Clip;
 use App\Models\Livestream;
 use App\Services\WowzaService;
@@ -32,7 +33,7 @@ it('returns default values if guzzle response is empty', function () {
 
 it('creates a wowza presenter smil file', function () {
     Storage::fake('videos');
-    $this->clip->addAsset([
+    $this->clip->addAsset(Asset::create([
         'disk' => 'videos',
         'original_file_name' => 'test.mp4',
         'path' => '/2021/01/01/TEST/',
@@ -41,7 +42,7 @@ it('creates a wowza presenter smil file', function () {
         'width' => 1920,
         'height' => 1080,
         'type' => Content::PRESENTER(),
-    ]);
+    ]));
     $this->wowzaService->createSmilFile($this->clip);
     Storage::disk('videos')->assertExists(getClipStoragePath($this->clip).'/presenter.smil');
     Storage::disk('videos')->assertMissing(getClipStoragePath($this->clip).'/composite.smil');
@@ -51,7 +52,7 @@ it('creates a wowza presenter smil file', function () {
 
 it('creates a wowza presentation smil file', function () {
     Storage::fake('videos');
-    $this->clip->addAsset([
+    $this->clip->addAsset(Asset::create([
         'disk' => 'videos',
         'original_file_name' => 'presentation.mp4',
         'path' => '/2021/01/01/TEST/',
@@ -60,7 +61,7 @@ it('creates a wowza presentation smil file', function () {
         'guid' => Str::uuid(),
         'height' => 1080,
         'type' => Content::PRESENTATION(),
-    ]);
+    ]));
     $this->wowzaService->createSmilFile($this->clip);
     Storage::disk('videos')->assertExists(getClipStoragePath($this->clip).'/presentation.smil');
 
@@ -72,7 +73,7 @@ it('creates a wowza presentation smil file', function () {
 
 it('creates a wowza composite smil file', function () {
     Storage::fake('videos');
-    $this->clip->addAsset([
+    $this->clip->addAsset(Asset::create([
         'disk' => 'videos',
         'original_file_name' => 'composite.mp4',
         'path' => '/2021/01/01/TEST/',
@@ -81,7 +82,7 @@ it('creates a wowza composite smil file', function () {
         'guid' => Str::uuid(),
         'height' => 1080,
         'type' => Content::COMPOSITE(),
-    ]);
+    ]));
     $this->wowzaService->createSmilFile($this->clip);
 
     Storage::disk('videos')->assertExists(getClipStoragePath($this->clip).'/composite.smil');
@@ -99,7 +100,7 @@ it('fetch wowza server status', function () {
 });
 
 it('generates array for smil file based on asset', function () {
-    $this->clip->addAsset([
+    $this->clip->addAsset(Asset::create([
         'disk' => 'videos',
         'original_file_name' => 'test.mp4',
         'path' => '/2021/01/01/TEST/',
@@ -108,7 +109,7 @@ it('generates array for smil file based on asset', function () {
         'guid' => Str::uuid(),
         'height' => 1080,
         'type' => Content::PRESENTER(),
-    ]);
+    ]));
     $expectedArray = [
         'video' => [
             '_attributes' => [

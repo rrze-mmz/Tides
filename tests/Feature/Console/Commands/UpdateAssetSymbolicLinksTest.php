@@ -21,7 +21,7 @@ beforeEach(function () {
 
 it('outputs audio and video assets count', function () {
     $clip = ClipFactory::withAssets(3)->create();
-    Asset::factory()->create(['type' => 5, 'clip_id' => $clip->id]);
+    $clip->addAsset(Asset::factory()->create(['type' => 5]));
 
     artisan('app:update-assets-symbolic-links')->expectsOutput('Processing 3 Audio/Video assets');
 });
@@ -58,6 +58,6 @@ it('does not create a symbolic link if a clip is protected', function () {
     $asset = $clip->assets()->first();
 
     artisan('app:update-assets-symbolic-links')
-        ->expectsOutput("Clip:{$asset->clip->title} is protected. Moving to the next one");
+        ->expectsOutput("Clip:{$asset->clips()->first()->title} is protected. Moving to the next one");
     Storage::disk('assetsSymLinks')->assertMissing($asset->guid.'.'.getFileExtension($asset));
 });

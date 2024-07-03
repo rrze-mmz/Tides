@@ -109,9 +109,10 @@ class SeriesFactory
 
                     if ($this->assetsCount > 0) {
                         $series->clips()->each(function ($clip) {
-                            Asset::factory($this->assetsCount)->create([
-                                'clip_id' => $clip->id,
-                            ]);
+                            $assets = Asset::factory($this->assetsCount)->create();
+                            $assets->each(function ($asset) use ($clip) {
+                                $clip->assets()->save($asset);
+                            });
                         });
                     }
                 }
@@ -138,9 +139,10 @@ class SeriesFactory
 
                 if ($this->assetsCount > 0) {
                     $series->clips()->each(function ($clip) {
-                        Asset::factory($this->assetsCount)->create([
-                            'clip_id' => $clip->id,
-                        ]);
+                        $assets = Asset::factory($this->assetsCount)->create();
+                        $assets->each(function ($asset) use ($clip) {
+                            $clip->assets()->save($asset);
+                        });
                     });
                 }
             }

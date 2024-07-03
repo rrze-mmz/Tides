@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Enums\Content;
+use App\Models\Asset;
 use App\Models\Clip;
 use App\Models\Setting;
 use Illuminate\Bus\Queueable;
@@ -33,8 +34,7 @@ class TransferAssetsJob implements ShouldQueue
         protected Collection $files,
         protected string $eventID = '',
         protected string $sourceDisk = ''
-    ) {
-    }
+    ) {}
 
     /**
      * Copy a collection of video files to clip path
@@ -63,7 +63,7 @@ class TransferAssetsJob implements ShouldQueue
             $storedFile = "{$clipStoragePath}/{$file['name']}";
             $ffmpeg = FFMpeg::fromDisk('videos')->open($storedFile);
 
-            $asset = [
+            $asset = Asset::create([
                 'disk' => 'videos',
                 'original_file_name' => $file['name'],
                 'path' => $storedFile,
@@ -76,7 +76,7 @@ class TransferAssetsJob implements ShouldQueue
                     ? $ffmpeg->getVideoStream()->getDimensions()->getHeight()
                     : 0,
                 'type' => ($isVideo) ? Content::PRESENTER() : Content::AUDIO(),
-            ];
+            ]);
 
             $this->clip->addAsset($asset);
 

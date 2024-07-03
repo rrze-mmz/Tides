@@ -5,7 +5,7 @@
                 <div class="h-12 w-24 flex-shrink-0">
                     <img class="h-12 w-24 "
                          src="{{ ($series->lastPublicClip)
-                    ? fetchClipPoster($series->lastPublicClip?->latestAsset?->player_preview)
+                    ? fetchClipPoster($series->lastPublicClip?->latestAsset()?->player_preview)
                     : "/images/generic_clip_poster_image.png" }}"
                          alt="">
                 </div>

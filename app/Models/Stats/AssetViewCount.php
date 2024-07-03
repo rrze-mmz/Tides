@@ -29,7 +29,7 @@ class AssetViewCount extends StatsModel
             ->get()
             ->map(function ($stat) {
                 return [
-                    'info' => $stat->asset->clip,
+                    'info' => $stat->asset->clips()->first(),
                     'counter' => $stat->total_counter,
                 ];
             });

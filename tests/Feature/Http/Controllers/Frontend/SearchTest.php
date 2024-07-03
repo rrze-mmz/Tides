@@ -27,7 +27,7 @@ beforeEach(function () {
         'owner_id' => User::factory()->create(['first_name' => 'John', 'last_name' => 'Doe']),
     ]);
 
-    Asset::factory()->create(['clip_id' => $this->clip]);
+    $this->clip->addAsset(Asset::factory()->create());
 
     $this->mockHandler = $this->swapOpenSearchGuzzleClient();
     $this->openSearchService = app(OpenSearchService::class);
@@ -103,7 +103,7 @@ it('searches for multiple owners', function () {
         'description' => 'Dolor sit amet for testing the search function',
         'owner_id' => User::factory()->create(['first_name' => 'Bob', 'last_name' => 'Doe']),
     ]);
-    Asset::factory()->create(['clip_id' => $secondClip]);
+    $secondClip->addAsset(Asset::factory()->create());
 
     searchFor('doe')
         ->assertSee($this->clip->title)

@@ -129,7 +129,7 @@ it('transfer files from dropzone to clip', function () {
         ['files' => [$videoHashHD, $videoHashSD]]
     )->assertOk();
 
-    get($clip->adminPath())
+    get(route('clips.edit', $clip))
         ->assertSee($files->first()['name'])
         ->assertSee($files->last()['name']);
 
@@ -274,7 +274,7 @@ it('transfers opencast event assets to clip', function () {
 
     $mockHandler->append($this->mockHealthResponse());
 
-    get($clip->adminPath())
+    get(route('clips.edit', $clip))
         ->assertSee($videoHD_UID)
         ->assertSee($audioUID)
         ->assertSee('presenter.smil');

@@ -183,7 +183,7 @@
                                 <div class="flex items-center">
                                     <div class="h-12 w-24 flex-shrink-0">
                                         <img class="h-12 w-24 "
-                                             src="{{fetchClipPoster($clip->latestAsset?->player_preview) }}" alt="">
+                                             src="{{fetchClipPoster($clip->latestAsset()?->player_preview) }}" alt="">
                                     </div>
                                     <div class="ml-4">
                                         <div class="">

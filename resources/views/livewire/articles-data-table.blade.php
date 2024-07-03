@@ -134,7 +134,7 @@
                                 <div class="flex items-center">
                                     <div class="ml-4">
                                         <div class="">
-                                            {{ str()->of($article->content_de)->limit(150, ' (...)')  }}
+                                            {{ str()->of(removeHtmlElements($article->content_de))->limit(150, ' (...)')  }}
                                         </div>
                                     </div>
                                 </div>
@@ -143,7 +143,7 @@
                                 <div class="flex items-center">
                                     <div class="ml-4">
                                         <div class="">
-                                            {{ str()->of($article->content_en)->limit(150, ' (...)')  }}
+                                            {{ str()->of(removeHtmlElements($article->content_en))->limit(150, ' (...)')  }}
                                         </div>
                                     </div>
                                 </div>

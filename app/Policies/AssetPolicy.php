@@ -15,6 +15,6 @@ class AssetPolicy
      */
     public function edit(User $user, Asset $asset): bool
     {
-        return $user->is($asset->clip->owner) || $user->isAdmin();
+        return $user->is($asset->clips()->first()->owner) || $user->isAdmin();
     }
 }
