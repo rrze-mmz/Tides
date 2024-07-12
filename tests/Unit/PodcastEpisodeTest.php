@@ -15,10 +15,10 @@ test('example', function () {
     $response->assertStatus(200);
 });
 
-it('belongs to a podcast', function () {
+it('belongs to a podcasts', function () {
     expect($this->podcastEpisode->podcast())->toBeInstanceOf(BelongsTo::class);
 });
 
-it('belongs to an image with the attribute of podcast cover', function () {
+it('belongs to an image with the attribute of podcasts cover', function () {
     expect($this->podcastEpisode->cover())->toBeInstanceOf(BelongsTo::class);
 });

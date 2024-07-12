@@ -9,14 +9,15 @@ uses()->group('unit');
 beforeEach(function () {
     $this->podcast = Podcast::factory()->create();
 });
-test('example', function () {
-    expect(true)->toBeTrue();
+
+it('belongs to an user', function () {
+    expect($this->podcast->owner())->toBeInstanceOf(BelongsTo::class);
 });
 
-it('has many podcast episodes', function () {
+it('has many podcasts episodes', function () {
     expect($this->podcast->episodes())->toBeInstanceOf(HasMany::class);
 });
 
-it('belogns to an image with the attribute of podcast cover', function () {
+it('belogns to an image with the attribute of podcasts cover', function () {
     expect($this->podcast->cover())->toBeInstanceOf(BelongsTo::class);
 });

@@ -20,7 +20,7 @@
       :class="{'dark': darkMode === true }"
       class="antialiased">
 <div class="flex bg-gray-100">
-    <aside class="relative hidden h-screen w-[18rem] shadow-xl bg-sidebar dark:bg-sky-950 sm:block items-center ">
+    <aside class="relative hidden  w-[20rem] shadow-xl bg-sidebar dark:bg-sky-950 sm:block items-center">
         <div class="flex flex-col p-6 text-center align-center">
             <div>
                 <a href="{{route('home')}}"
@@ -53,14 +53,14 @@
                         </svg>
                     </div>
                     <div>
-                        - {{getCurrentGitBranch()}}
+                        {{getCurrentGitBranch()}}
                     </div>
                 </div>
 
             @endenv
 
         </div>
-        <nav class="pt-3 text-base font-semibold text-white text-center items-center">
+        <nav class="pt-3 text-base font-semibold text-white text-center items-center ">
             @include('backend.dashboard._sidebar-navigation')
         </nav>
         <a href="#"
@@ -101,7 +101,7 @@
                      class="absolute mt-12 w-48 items-center rounded-lg bg-white
                      dark:bg-sky-950 py-2 align-middle shadow-lg dark:text-white font-normal">
                     <a href="#" class="block px-4 py-2 hover:text-gray-400">Settings</a>
-                    <a href="{){ route('user.notifications') }}" class="block px-4 py-2 hover:text-gray-400">
+                    <a href="{{ route('user.notifications') }}" class="block px-4 py-2 hover:text-gray-400">
                         Notifications
                         @if (($counter = auth()->user()->unreadNotifications->count()) > 0)
                             <span

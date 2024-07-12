@@ -1,10 +1,13 @@
 <a
     href="{{route('dashboard')}}"
     class="flex items-left text-white {{ setActiveLink(route('dashboard')) }}   hover:opacity-100 hover:mx-2
-    hover:rounded py-4 pl-6 nav-item "
+    hover:rounded py-4 pl-6 my-4 nav-item "
 >
     {{ __('common.menu.dashboard') }}
 </a>
+<div class="flex items-left py-4 pl-4 italic font-extrabold text-lg">
+    Main Objects
+</div>
 <a
     href="{{route('series.index')}}"
     class="flex items-left text-white hover:opacity-100 hover:mx-2 hover:rounded py-4
@@ -20,12 +23,23 @@
     {{ trans_choice('common.menu.clip', 2)}}
 </a>
 <a
+    href="{{route('podcasts.index')}}"
+    class="flex items-left text-white hover:opacity-100 hover:mx-2 hover:rounded py-4
+        pl-6 nav-item {{ setActiveLink(route('podcasts.index')) }}"
+>
+    {{ trans_choice('common.menu.podcast', 2)}}
+</a>
+<a
     href="{{route('channels.index')}}"
     class="flex items-left text-white hover:opacity-100 hover:mx-2 hover:rounded py-4
         pl-6 nav-item {{ setActiveLink(route('channels.index')) }}"
 >
     {{ trans_choice('common.menu.channel', 2) }}
 </a>
+
+<div class="flex items-left py-4 pl-4 italic font-extrabold text-lg">
+    Portal resources
+</div>
 <a
     href="{{route('images.index')}}"
     class="flex items-left text-white hover:opacity-100 hover:mx-2 hover:rounded py-4
@@ -81,6 +95,9 @@
     >
         {{ trans_choice('common.menu.collection', 2) }}
     </a>
+    <div class="flex items-left py-4 pl-4 italic font-extrabold text-lg w-full pr-2">
+        Portal Administration
+    </div>
     <a
         href="{{ route('users.index') }}"
         class="flex items-left text-white hover:opacity-100 hover:mx-2 hover:rounded py-4
@@ -90,6 +107,7 @@
     </a>
 @endcan
 @can('administrate-superadmin-portal-pages')
+
     <a
         href="{{route('systems.status')}}"
         class="flex items-left text-white hover:opacity-100 hover:mx-2 hover:rounded py-4
@@ -97,24 +115,4 @@
     >
         {{ __('common.menu.portal settings') }}
     </a>
-@endcan
-@can('administrate-superadmin-portal-pages')
-    <div class="pt-5">
-        <div class="flex items-left text-black font-light py-4 px-2
-          placeholder-black">
-            <form action="{{route('goto.series')}}" method="POST">
-                @csrf
-                <input class="mt-2 w-full rounded" type="text" name="seriesID" placeholder="Series ID" />
-            </form>
-        </div>
-
-        <div class="flex items-left text-black  font-light py-4 px-2
-          placeholder-black">
-            <form action="{{route('goto.clip')}}" method="POST">
-                @csrf
-                <input class="mt-2 w-full rounded" type="text" name="clipID" placeholder="Clip ID" />
-            </form>
-        </div>
-    </div>
-
 @endcan

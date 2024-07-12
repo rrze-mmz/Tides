@@ -6,6 +6,10 @@ use App\Enums\Role;
 use App\Livewire\CommentsSection;
 use App\Models\Asset;
 use App\Models\Clip;
+use App\Models\Context;
+use App\Models\Format;
+use App\Models\Language;
+use App\Models\Type;
 use App\Services\OpencastService;
 use Facades\Tests\Setup\ClipFactory;
 use Facades\Tests\Setup\FileFactory;
@@ -113,10 +117,10 @@ it('can toggle comments', function () {
         'episode' => $clip->episode,
         'recording_date' => now(),
         'organization_id' => '1',
-        'language_id' => '1',
-        'context_id' => '1',
-        'format_id' => '1',
-        'type_id' => '1',
+        'language_id' => Language::all()->first()->id,
+        'context_id' => Context::all()->first()->id,
+        'format_id' => Format::all()->first()->id,
+        'type_id' => Type::all()->first()->id,
         'semester_id' => '1',
         'allow_comments' => 'on',
     ]);

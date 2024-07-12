@@ -103,7 +103,7 @@ class SeriesOpencastController extends Controller
         $events->each(function (array $event, int $key) use ($series, $clipIdentifiers) {
             //search if a clip exists for an event. If so then don't insert to avoid duplicates
             if ($clipIdentifiers->doesntContain($event['identifier'])) {
-                $clip = Clip::create([
+                $attributes = [
                     'owner_id' => $series->owner_id,
                     'semester_id' => Semester::current(zuluToCEST($event['start']))->first()->id,
                     'organization_id' => $series->organization_id,
@@ -120,7 +120,8 @@ class SeriesOpencastController extends Controller
                     'is_public' => true,
                     'recording_date' => zuluToCEST($event['start']),
                     'opencast_event_id' => $event['identifier'],
-                ]);
+                ];
+                $clip = Clip::create($attributes);
                 if (! is_null($series->lms_link)) {
                     $clip->addAcls(collect([Acl::LMS()]));
 

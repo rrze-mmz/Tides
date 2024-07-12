@@ -30,7 +30,7 @@
                 />
 
                 <x-form.textarea field-name="description"
-                                 :value="strip_tags($series->description)"
+                                 :value="($series->description)"
                                  label="{{__('common.forms.description')}}"
                 />
 

@@ -31,6 +31,7 @@ beforeEach(function () {
 
     $this->mockHandler = $this->swapOpenSearchGuzzleClient();
     $this->openSearchService = app(OpenSearchService::class);
+
 });
 
 function searchFor($term): TestResponse

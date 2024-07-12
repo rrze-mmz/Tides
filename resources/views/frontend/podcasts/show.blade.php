@@ -6,7 +6,23 @@
         <div class="pb-10">
             @include('frontend.search._searchbar')
         </div>
-        @include('layouts.breadcrumbs')
+        <div class="flex justify-between">
+            <div>
+                @include('layouts.breadcrumbs')
+            </div>
+            @can('edit-podcast', $podcast)
+                <div>
+                    <a href="{{ route('podcasts.edit', $podcast) }}"
+                    >
+                        <x-button class="bg-green-500 hover:bg-green-700"
+                        >
+                            Edit podcast
+                        </x-button>
+                    </a>
+                </div>
+            @endcan
+        </div>
+
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <!-- Podcast Information -->
             <div class="p-6 rounded-lg  h-200 dark:text-white">
@@ -32,12 +48,28 @@
                 </div>
 
                 <div class="dark:text-white">
-                    <span class="text-gray-600 dark:text-white">
+                    @if($podcast->getPrimaryPresenters()->count() > 0 )
+                        <span class="text-gray-600 dark:text-white">
                         Hosted by:
                     </span>
-                    <span class="text-gray-800 font-semibold dark:text-white">
-                      Max Mustermann
+                        <span class="text-gray-800 font-semibold dark:text-white">
+                     {{ $podcast->getPrimaryPresenters()->map(fn($presenter) => $presenter->full_name)->join(', ') }}
                     </span>
+                    @endif
+                </div>
+                <div class="dark:text-white">
+                    @if($podcast->getPrimaryPresenters(primary: false)->count() > 0 )
+                        <span class="text-gray-600 dark:text-white">
+                        Guests:
+                    </span>
+                        <span class="text-gray-800 font-semibold dark:text-white">
+                    {{
+                                $podcast->getPrimaryPresenters(primary: false)
+                                ->map(fn($presenter) => $presenter->full_name)
+                                ->join(', ')
+                     }}
+                    </span>
+                    @endif
                 </div>
                 <div class="mt-4">
                     <span class="text-gray-600 dark:text-white">Categories:</span>

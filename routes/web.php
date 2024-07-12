@@ -19,6 +19,7 @@ use App\Http\Controllers\Backend\FileUploadController;
 use App\Http\Controllers\Backend\ImagesController;
 use App\Http\Controllers\Backend\LivestreamsController;
 use App\Http\Controllers\Backend\ManageLivestreamRoom;
+use App\Http\Controllers\Backend\PodcastsController;
 use App\Http\Controllers\Backend\PortalSettingsController;
 use App\Http\Controllers\Backend\PresentersController;
 use App\Http\Controllers\Backend\SearchSettingsController;
@@ -96,7 +97,7 @@ Route::controller(ShowClipsController::class)->prefix('/clips')->group(function 
 Route::get('/clips/{clip}/feed/{assetsResolution}', [FeedsController::class, 'clips'])
     ->name('frontend.clips.feed');
 
-//Frontend podcast routes
+//Frontend podcasts routes
 Route::controller(ShowPodcastsController::class)->prefix('/podcasts')->group(function () {
     Route::get('/', [ShowPodcastsController::class, 'index'])->name('frontend.podcasts.index');
     Route::get('/{podcast:slug}', [ShowPodcastsController::class, 'show'])->name('frontend.podcasts.show');
@@ -274,8 +275,11 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
     Route::put('/series/{series}/updateImage/', UpdateSeriesImage::class)->name('update.series.image');
 
     //Clip routes
-    Route::resource('clips', ClipsController::class)->except(['show', 'edit']);
-    Route::get('/clips/{clip}/', [ClipsController::class, 'edit'])->name('clips.edit');
+    Route::resource('clips', ClipsController::class)->except(['show']);
+    //    Route::get('/clips/{clip}/', [ClipsController::class, 'edit'])->name('clips.edit');
+
+    //Podcast routes
+    Route::resource('podcasts', PodcastsController::class)->except(['show']);
     /*
      * A group of clip assets functions
      */

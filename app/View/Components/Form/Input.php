@@ -17,6 +17,7 @@ class Input extends Component
         public string $fieldName,
         public string $label,
         public string $inputType,
+        public string $placeholder = '',
         public bool $required = false,
         public bool $disabled = false,
         public bool $readOnly = false,

@@ -23,7 +23,7 @@ class OpenSearchRebuildIndexes extends Command
      *
      * @var string
      */
-    protected $description = 'Rebuild OpenSearch indexes ';
+    protected $description = 'Rebuild OpenSearch indexes';
 
     /**
      * Execute the console command.
@@ -33,7 +33,7 @@ class OpenSearchRebuildIndexes extends Command
 
         $modelName = select(
             label: 'Which search index do you want to rebuild?',
-            options: ['Series', 'Clip'],
+            options: ['Series', 'Clip', 'Podcast'],
             default: 'Series',
             hint: 'Clips may take longer as expected'
         );
@@ -41,6 +41,8 @@ class OpenSearchRebuildIndexes extends Command
         $modelClass = "App\\Models\\{$modelName}";
         $modelResource = "App\\Http\\Resources\\{$modelName}Resource";
 
+        $this->info('Staring rebuild of model '.$modelName);
+        $this->newLine(2);
         if (! class_exists($modelClass)) {
             $this->error("Model doesn't exists");
 
@@ -50,16 +52,21 @@ class OpenSearchRebuildIndexes extends Command
         $openSearchService->deleteIndexes(Str::plural($modelName));
 
         $this->info($modelName.' Indexes deleted successfully');
-
-        $modelClass::chunk(200, function (Collection $models) use ($openSearchService, $modelResource) {
-            $models->each(function ($model) use ($openSearchService, $modelResource) {
+        $counter = $modelClass::count();
+        $bar = $this->output->createProgressBar($counter);
+        $bar->start();
+        $modelClass::chunk(200, function (Collection $models) use ($openSearchService, $modelResource, $bar) {
+            $models->each(function ($model) use ($openSearchService, $modelResource, $bar) {
                 //create the necessary json resource
                 if ($model) {
                     $openSearchService->createIndex(new $modelResource($model));
                 }
+                $bar->advance();
             });
         });
 
+        $bar->finish();
+        $this->newLine(2);
         $this->info("{$modelClass::count()} ".Str::plural($modelName).' Indexes created successfully');
 
         return Command::SUCCESS;

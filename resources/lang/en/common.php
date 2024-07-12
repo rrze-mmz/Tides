@@ -9,6 +9,7 @@ return [
     'actions' => [
         'save' => 'save',
         'edit' => 'edit',
+        'cancel' => 'cancel',
         'update' => 'update',
         'delete' => 'delete',
         'show' => 'show',
@@ -19,6 +20,7 @@ return [
         'dashboard' => 'Dashboard',
         'series' => 'Series',
         'clip' => 'Clip|Clips',
+        'podcast' => 'Podcast|Podcasts',
         'presenter' => 'Presenter|Presenters',
         'member' => 'Member|Members',
         'activity' => 'Activity|Activities',
@@ -34,6 +36,7 @@ return [
     ],
     'heading' => [
         'create new series' => 'Create new series',
+        'create new podcast' => 'Create new podcast',
     ],
     'forms' => [
         'title' => 'title',
@@ -41,7 +44,11 @@ return [
         'description' => 'Description',
         'organization' => 'Organization',
         'create series' => 'Create series',
+        'create podcast' => 'Create podcast',
         'Opencast series ID' => 'Opencast series ID',
+        'website url' => 'Website URL',
+        'apple podcasts url' => 'Apple Podcasts URL',
+        'spotify url' => 'Spotify URL',
         'public' => 'Public',
         'Upload a document' => 'Document upload',
         'size' => 'size',

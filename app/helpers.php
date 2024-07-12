@@ -212,9 +212,10 @@ function findUserByOpencastRole(string $opencastRole): User|string
 
 function getProtectedUrl(string $filePath): string
 {
+    $settingsData = Setting::streaming();
     $filePath = '/'.$filePath;
-    $secret = config('settings.portal.cdn_server_secret');
-    $cdn = config('settings.portal.cdn_server_url');
+    $secret = $settingsData->data['cdn']['server1']['secret'];
+    $cdn = $settingsData->data['cdn']['server1']['url'];
     $hexTime = dechex(time());
     $userIP = (App::environment(['testing', 'local'])) ? env('FAUTV_USER_IP') : $_SERVER['REMOTE_ADDR'];
     $token = md5($secret.$filePath.$hexTime.$userIP);

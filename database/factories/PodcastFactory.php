@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Podcast;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -22,11 +23,12 @@ class PodcastFactory extends Factory
             'slug' => $this->faker->slug(),
             'description' => $this->faker->paragraph(),
             'is_published' => true,
-            'website_url' => 'https:///www.podcasts.com/tides-podcast',
+            'website_url' => 'https://www.podcasts.com/tides-podcast',
             'spotify_url' => 'https://www.spotify.com/podcast/tides-podcast',
             'apple_podcasts_url' => 'https://www.apple.podcasts.com/tides-podcast',
             'google_podcasts_url' => 'https://www.google.com/podcast/tides-podcast',
             'old_podcast_id' => $this->faker->numberBetween(100, 300),
+            'owner_id' => User::factory()->create()->id,
         ];
     }
 }

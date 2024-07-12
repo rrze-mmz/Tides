@@ -79,7 +79,7 @@ class ClipResource extends JsonResource
                 'image_path' => $this->image->file_name,
             ] : [],
             'poster' => ($this->assets()->count() > 0)
-                ? fetchClipPoster($this->latestAsset?->player_preview)
+                ? fetchClipPoster($this->latestAsset()?->player_preview)
                 : '/images/generic_clip_poster_image.png',
         ];
     }

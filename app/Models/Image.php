@@ -4,9 +4,12 @@ namespace App\Models;
 
 use App\Models\Traits\RecordsActivity;
 use App\Models\Traits\Searchable;
+use App\Observers\ImagesObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+#[ObservedBy(ImagesObserver::class)]
 class Image extends BaseModel
 {
     use HasFactory;

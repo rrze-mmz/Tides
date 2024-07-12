@@ -114,6 +114,7 @@ it('shows sidebar menu items for moderators', function () {
     get(route('dashboard'))
         ->assertSee(route('series.index'))
         ->assertSee('Clips')
+        ->assertSee('Podcasts')
         ->assertDontSee('Activities')
         ->assertDontSee('Opencast')
         ->assertDontSee('Users')
@@ -156,17 +157,6 @@ it('shows sidebar menu items for superadmins', function () {
     get(route('dashboard'))
         ->assertSee(route('systems.status'))
         ->assertSee(__('common.menu.portal settings'));
-});
-
-it('has a go to series or clip input fields', function () {
-    auth()->logout();
-    signInRole(Role::SUPERADMIN);
-
-    get(route('dashboard'))
-        ->assertSee('Series ID')
-        ->assertSee(route('goto.series'))
-        ->assertSee('Clip ID')
-        ->assertSee(route('goto.clip'));
 });
 
 it('hides the go to series or clip inputs for moderators', function () {

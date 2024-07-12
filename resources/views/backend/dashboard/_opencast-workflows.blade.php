@@ -129,7 +129,7 @@
                 <caption
                     class="p-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-gray-200 dark:text-white
                     dark:bg-gray-800">
-                    {{ $opencastEvents['recording']->count() }} Scheduled events
+                    {{ $opencastEvents['scheduled']->count() }} Scheduled events
                 </caption>
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>

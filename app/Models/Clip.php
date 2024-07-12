@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Enums\Content;
 use App\Events\ClipDeleting;
 use App\Models\Collection as TCollection;
 use App\Models\Traits\Accessable;
@@ -20,7 +19,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Http\File;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -114,14 +112,6 @@ class Clip extends BaseModel
     public function owner(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function latestAsset(): Model|MorphToMany|null
-    {
-        return $this->assets()
-            ->orderByDesc('width', 'type')
-            ->limit(1)->first();
-        //        return $this->assets()->first();
     }
 
     public function collections(): BelongsToMany
@@ -266,26 +256,6 @@ class Clip extends BaseModel
                 return (int) $value->episode == (int) $this->episode + 1;
             })->first(),
         ]);
-    }
-
-    /**
-     * Fetch all assets for a clip by type
-     */
-    public function getAssetsByType(Content $content): MorphToMany
-    {
-        return $this->assets()->where(function ($q) use ($content) {
-            $q->where('type', $content());
-        });
-    }
-
-    /**
-     * Return caption asset for the clip
-     */
-    public function getCaptionAsset(): ?Asset
-    {
-        return $this->assets->filter(function ($asset) {
-            return $asset->type == Content::CC() && ! $asset->is_deleted;
-        })->first();
     }
 
     /*

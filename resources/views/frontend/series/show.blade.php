@@ -21,9 +21,6 @@
 
         </div>
         @if($series->description!=='')
-            <h2 class="py-2 text-2xl font-semibold dark:text-white">
-                {{ __('common.description') }}
-            </h2>
             <div class="prose-lg dark:prose-invert dark:text-white">
                 <p class="leading-loose">
                     {!! $series->description !!}

@@ -24,7 +24,7 @@
                 @empty
                     <option value="1"></option>
                 @endforelse
-            @elseif($fieldName=='presenters')
+            @elseif($fieldName=='presenters' || $fieldName =='guests' || $fieldName =='hosts')
                 @foreach($items as $item)
                     <option value="{{$item->id }}" selected
                             class="h-4 p-4">{{$item->getFullNameAttribute() }}</option>

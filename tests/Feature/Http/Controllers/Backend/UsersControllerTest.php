@@ -388,7 +388,7 @@ it('updates clip supervisor id if a portal admin updates a clip', function () {
 
     auth()->logout();
     signInRole(Role::ADMIN);
-    patch(route('clips.edit', $clip), [
+    patch(route('clips.update', $clip), [
         'episode' => '1',
         'title' => 'changed',
         'description' => 'changed',

@@ -1,4 +1,4 @@
-@php use App\Models\Setting; @endphp
+@php use App\Enums\Content;use App\Models\Setting; @endphp
 @extends('layouts.frontend')
 
 @section('content')
@@ -22,18 +22,19 @@
                         alt="Podcast Cover"
                         class="w-full h-auto rounded-md">
                 </div>
-                <div class=" space-y-4  dark:bg-gray-400 ">
-                    <div class="mt-4 dark:text-white ">
-                        <audio id="player" class="w-full" controls>
-                            <source
-                                src="https://vp-cdn-balance.rrze.de/media/0ec53740e089a060b80405bc5b40e5a3/667be7ff/2022/07/12/FAU_S22_ALGOKS_ClipID_43322/20220712-ALGOKS-Ruede-OC.mp3"
-                                type="audio/mp3" />
-                            <source src="/path/to/audio.ogg" type="audio/ogg" />
-                        </audio>
+                @if($episode->getAssetsByType(Content::AUDIO)->first())
+                    <div class=" space-y-4  dark:bg-gray-400 ">
+                        <div class="mt-4 dark:text-white ">
+                            <audio id="player" class="w-full" controls>
+                                <source
+                                    src="{{ getProtectedUrl($episode->getAssetsByType(Content::AUDIO)->first()->path) }}"
+                                    type="audio/mp3" />
+                                <source src="/path/to/audio.ogg" type="audio/ogg" />
+                            </audio>
+                        </div>
+                        <!-- Add more episodes as needed -->
                     </div>
-                    <!-- Add more episodes as needed -->
-                </div>
-
+                @endif
             </div>
 
             <!-- Podcast Episodes -->
@@ -49,22 +50,26 @@
                     </p>
                 </div>
 
-                <div>
-                    <span class="text-gray-600 dark:text-white">
+                @if($episode->presenters()->first())
+                    <div>
+                        <span class="text-gray-600 dark:text-white">
                         Hosted by:
                     </span>
-                    <span class="text-gray-800 font-semibold dark:text-white">
-                        Max Musterman
+                        <span class="text-gray-800 font-semibold dark:text-white">
+                        {{ $episode->presenters->first()->getFullNameAttribute() }}
                     </span>
-                </div>
-                <div>
+                    </div>
+                @endif
+                @if($episode->presenters()->first())
+                    <div>
                     <span class="text-gray-600 dark:text-white">
                         Guests:
                     </span>
-                    <span class="text-gray-800 font-semibold dark:text-white">
-                        John Doe
+                        <span class="text-gray-800 font-semibold dark:text-white">
+                            Max Mustermann, John Doe
                     </span>
-                </div>
+                    </div>
+                @endif
                 <div class="mt-4">
                     <span class="text-gray-600 dark:text-white">Categories:</span>
                     <span
@@ -85,15 +90,17 @@
 
         @endif
         @if($episode->transcription)
-            <div class="dark:text-white">
-                <div class="flex pb-4">
+            <div class="">
+                <div class="flex pb-4 dark:text-white">
                     <h3 class="text-2xl font-semibold"> Show Transcript</h3>
                 </div>
                 <div class="w-full">
-                    <div class="w-full">
-                        <article class="w-full">
-                            {!! $episode->transcription !!}
-                        </article>
+                    <div class="w-full prose-lg dark:prose-invert">
+                        <span class="w-full ">
+                            <div class="prose-lg dark:prose-invert dark:text-white">
+                                {!! $episode->transcription !!}
+                            </div>
+                        </span>
                     </div>
                 </div>
             </div>

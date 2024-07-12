@@ -1,7 +1,7 @@
-<nav class="container mx-auto flex items-center justify-between px-2">
-    <div class="text-lg">
+<nav class="container mx-auto flex items-center justify-between px-2 w-full">
+    <div class="text-2xl">
         <a href="{{ url('/') }}"
-           class="font-bold  no-underline text-ur"
+           class="font-bold  no-underline text-ur "
         >
             {{ config('app.name', 'Laravel') }}
             @auth()
@@ -12,7 +12,7 @@
             @endauth
         </a>
     </div>
-    <nav class="font-semibold space-x-4 text-md ">
+    <nav class="font-semibold space-x-4  text-lg">
         <span class="pl-10 no-underline ">
             <a href="{{ route('frontend.channels.index') }}">
                 Channels

@@ -12,13 +12,12 @@
                 name="{{ $fieldName }}"
                 style="width: 100%"
         >
-
+            <option value="0" selected> Select a {{ $fieldName }} if there is one</option>
             @forelse($items as $item)
                 <option value="{{$item->id }}" {{ $isSelected($item->id) ? 'selected' : '' }}>
                     {{$item->name }}
                 </option>
             @empty
-                <option value="1"></option>
             @endforelse
         </select>
     </div>

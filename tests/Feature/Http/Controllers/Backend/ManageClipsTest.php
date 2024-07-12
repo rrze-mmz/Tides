@@ -175,12 +175,12 @@ it('it validates a chapter id to assure that belongs to the series when updating
         'semester_id' => '1',
     ];
 
-    patch(route('clips.edit', $series->latestClip), $attributes)->assertSessionHasErrors(['chapter_id']);
+    patch(route('clips.update', $series->latestClip), $attributes)->assertSessionHasErrors(['chapter_id']);
     assertDatabaseMissing('clips', $attributes);
 
     $attributes['chapter_id'] = $series->chapters()->first()->id;
 
-    patch(route('clips.edit', $series->latestClip), $attributes)->assertSessionDoesntHaveErrors();
+    patch(route('clips.update', $series->latestClip), $attributes)->assertSessionDoesntHaveErrors();
 });
 
 it('shows a flash message when a clip is created', function () {
@@ -220,7 +220,7 @@ it('updates clip supervisor id if logged in user is admin and not the same as th
     auth()->logout();
     $admin = signInRole(Role::ADMIN);
 
-    patch(route('clips.edit', $clip), [
+    patch(route('clips.update', $clip), [
         'episode' => '1',
         'title' => 'changed',
         'description' => 'changed',
@@ -342,7 +342,7 @@ test('a clip with acls can be created', function () {
 test('clip tags can be removed', function () {
     $clip = ClipFactory::ownedBy(signInRole(Role::MODERATOR))->create();
     $clip->tags()->sync(Tag::factory()->create());
-    patch(route('clips.edit', $clip), [
+    patch(route('clips.update', $clip), [
         'episode' => '1',
         'title' => 'changed',
         'description' => 'changed',
@@ -363,7 +363,7 @@ test('clip tags can be updated', function () {
     $clip = ClipFactory::ownedBy(signInRole(Role::MODERATOR))->create();
     $tag = Tag::factory()->create();
     $clip->tags()->sync(Tag::factory()->create());
-    patch(route('clips.edit', $clip), [
+    patch(route('clips.update', $clip), [
         'episode' => '1',
         'title' => 'changed',
         'description' => 'changed',
@@ -383,7 +383,7 @@ test('clip tags can be updated', function () {
 test('clip can updated to be a livestream clip', function () {
     $clip = ClipFactory::ownedBy(signInRole(Role::MODERATOR))->create();
 
-    patch(route('clips.edit', $clip), [
+    patch(route('clips.update', $clip), [
         'episode' => '1',
         'title' => 'changed',
         'description' => 'changed',
@@ -405,7 +405,7 @@ test('clip can updated to be a livestream clip', function () {
 test('clip can updated to be a clip with time availability', function () {
     $clip = ClipFactory::ownedBy(signInRole(Role::MODERATOR))->create();
 
-    patch(route('clips.edit', $clip), [
+    patch(route('clips.update', $clip), [
         'episode' => '1',
         'title' => 'changed',
         'description' => 'changed',
@@ -497,7 +497,7 @@ test('a moderator can update his clip', function () {
 
     get(route('clips.edit', $clip))->assertSee($clip->title);
 
-    patch(route('clips.edit', $clip), $attributes = [
+    patch(route('clips.update', $clip), $attributes = [
         'episode' => '1',
         'title' => 'changed',
         'description' => 'changed',
@@ -552,7 +552,7 @@ it('denies access to a moderator when updating a not owned clip', function () {
         'type_id' => '1',
         'semester_id' => '1',
     ];
-    patch(route('clips.edit', $clip), $attributes)->assertForbidden();
+    patch(route('clips.update', $clip), $attributes)->assertForbidden();
     $clip->refresh();
 
     assertDatabaseMissing('clips', $attributes);
@@ -573,7 +573,7 @@ it('allows updating a not owned clip for admin users', function () {
         'type_id' => '1',
         'semester_id' => '1',
     ];
-    followingRedirects()->patch(route('clips.edit', $clip), $attributes)->assertOk();
+    followingRedirects()->patch(route('clips.update', $clip), $attributes)->assertOk();
     $clip->refresh();
 
     assertDatabaseHas('clips', $attributes);
@@ -581,7 +581,7 @@ it('allows updating a not owned clip for admin users', function () {
 
 it('updates clip slug if title is changed', function () {
     $clip = ClipFactory::ownedBy($this->signInRole(Role::MODERATOR))->create();
-    patch(route('clips.edit', $clip), [
+    patch(route('clips.update', $clip), [
         'episode' => '1',
         'title' => 'Title changed',
         'recording_date' => now(),
@@ -601,37 +601,25 @@ it('updates clip slug if title is changed', function () {
 });
 
 it('keeps the same slug if title is not changed', function () {
+    $clip = ClipFactory::ownedBy($this->signInRole(Role::MODERATOR))->create();
 
-    signInRole(Role::MODERATOR);
-
-    post(route('clips.store'), [
-        'episode' => '1',
-        'title' => 'Test clip',
-        'recording_date' => now(),
+    $assertedClipSlug = $clip->slug;
+    patch(route('clips.update', $clip), [
+        'episode' => '2',
+        'title' => $clip->title,
+        'recording_date' => $clip->recording_date,
         'description' => 'test',
-        'organization_id' => '1',
-        'language_id' => '1',
-        'context_id' => '1',
-        'format_id' => '1',
-        'type_id' => '1',
-        'image_id' => Image::factory()->create()->id,
-        'semester_id' => Semester::current()->first()->id,
     ]);
-
-    $clip = Clip::find(1);
-    patch(route('clips.edit', $clip), ['episode' => '2', 'title' => 'Test clip', 'description' => 'test']);
     $clip->refresh();
-    $semester = str($clip->semester->acronym)->lower();
-    $assertedClipTitle = "{$clip->episode}-test-clip-{$semester}";
 
-    expect($clip->slug)->toBe($assertedClipTitle);
+    expect($clip->slug)->toBe($assertedClipSlug->value);
 
 });
 
 it('shows a flash message when a clip is updated', function () {
     $clip = ClipFactory::ownedBy(signInRole(Role::MODERATOR))->create();
 
-    patch(route('clips.edit', $clip), [
+    patch(route('clips.update', $clip), [
         'episode' => '1',
         'title' => 'changed',
         'recording_date' => Carbon::now(),
@@ -651,7 +639,7 @@ test('a moderator cannot delete an not owned clip', function () {
     $clip = ClipFactory::create();
     signInRole(Role::MODERATOR);
 
-    delete(route('clips.edit', $clip))->assertForbidden();
+    delete(route('clips.destroy', $clip))->assertForbidden();
     assertDatabaseHas('clips', $clip->only('id'));
 });
 
@@ -699,7 +687,7 @@ test('an admin user can delete a not owned clip', function () {
     $clip = ClipFactory::create();
     signInRole(Role::ADMIN);
 
-    followingRedirects()->delete(route('clips.edit', $clip))->assertOk();
+    followingRedirects()->delete(route('clips.destroy', $clip))->assertOk();
     assertDatabaseMissing('clips', $clip->only('id'));
 });
 
