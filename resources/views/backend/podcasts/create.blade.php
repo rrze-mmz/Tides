@@ -26,16 +26,14 @@
                                          label="{{ __('common.forms.description') }}"
                         />
 
-                        <x-form.select2-single field-name="host"
-                                               label="Host"
-                                               select-class="select2-tides"
-                                               model="presenter"
-                                               :where-i-d="old('host_id', '')"
-                                               :selectedItem="old('host_id', '')"
+                        <x-form.select2-multiple field-name="hosts"
+                                                 label="Host(s)"
+                                                 select-class="select2-tides-presenters"
+                                                 :model="null"
+                                                 :items="[]"
                         />
-
                         <x-form.select2-multiple field-name="guests"
-                                                 label="Guests"
+                                                 label="Guest(s)"
                                                  select-class="select2-tides-presenters"
                                                  :model="null"
                                                  :items="[]"

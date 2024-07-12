@@ -51,8 +51,8 @@ it('shows podcast create page a moderator user with all podcast page fields', fu
         ->assertOk()
         ->assertSee(__('common.forms.title'))
         ->assertSee(__('common.forms.description'))
-        ->assertSee('Host')
-        ->assertSee('Guests')
+        ->assertSee('Host(s)')
+        ->assertSee('Guest(s)')
         ->assertViewIs('backend.podcasts.create');
 });
 

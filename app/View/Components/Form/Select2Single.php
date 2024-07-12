@@ -10,12 +10,9 @@ use App\Models\Format;
 use App\Models\Language;
 use App\Models\Livestream;
 use App\Models\Organization;
-use App\Models\Presenter;
 use App\Models\Role;
 use App\Models\Semester;
 use App\Models\Type;
-use App\Models\User;
-use Illuminate\Support\Facades\DB;
 use Illuminate\View\Component;
 use Illuminate\View\View;
 
@@ -47,14 +44,6 @@ class Select2Single extends Component
     {
         return view('components.form.select2-single', [
             'items' => match ($this->model) {
-                'user' => User::select([
-                    'id',
-                    DB::raw('RTRIM(CONCAT(LTRIM(RTRIM(first_name)),
-                     \' \',
-                      LTRIM(RTRIM(last_name)),
-                       \' | \',
-                      LTRIM(RTRIM(username)))) AS name'),
-                ])->whereId($this->selectedItem)->get(),
                 'semester' => Semester::where('id', '>', 1)
                     ->orderBy('id', 'desc')
                     ->get(),
@@ -62,10 +51,6 @@ class Select2Single extends Component
                 'livestream' => Livestream::select(['id', 'name'])->where('active', false)->get(),
                 'location' => DeviceLocation::select(['id', 'name'])->get(),
                 'context' => Context::select(['id', 'de_name as name'])->get(),
-                'presenter' => Presenter::select([
-                    'id',
-                    DB::raw('RTRIM(CONCAT(LTRIM(RTRIM(first_name)), \' \', LTRIM(RTRIM(last_name)))) AS name'),
-                ])->orderBy('last_name')->orderBy('first_name')->get(),
                 'format' => Format::select(['id', 'de_name as name'])->get(),
                 'type' => Type::select(['id', 'de_name as name'])->get(),
                 'academicDegree' => AcademicDegree::select(['id', 'title as name'])->get(),
