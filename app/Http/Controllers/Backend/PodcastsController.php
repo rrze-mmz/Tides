@@ -2,65 +2,79 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Backend\Traits\HandlesFilePondFiles;
+use App\Http\Requests\StorePodcastRequest;
+use App\Models\Image;
 use App\Models\Podcast;
-use Illuminate\Http\Request;
+use Barryvdh\Debugbar\Controllers\BaseController;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Arr;
+use Illuminate\View\View;
 
-class PodcastsController extends Controller
+class PodcastsController extends BaseController
 {
-    /**
-     * Display a listing of the resource.
-     */
+    use AuthorizesRequests;
+    use HandlesFilePondFiles;
+
     public function index()
     {
-        //
+        $podcasts = Podcast::all();
+
+        return view('backend.podcasts.index', compact('podcasts'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('backend.podcasts.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(StorePodcastRequest $request)
     {
-        //
+        $validated = $request->validated();
+
+        if (is_null($validated['image'])) {
+            $validated['image_id'] = Image::find(config('settings.portal.default_image_id'))->id;
+        } else {
+            $imageDescription = 'Podcast '.$validated['title'].' cover image';
+            $image = $this->uploadAndCreateImage(filePath: $validated['image'], description: $imageDescription);
+            $validated['image_id'] = $image->id;
+        }
+
+        $validated['owner_id'] = auth()->id();
+        $podcast = Podcast::create(Arr::except($validated, ['hosts', 'guests', 'image']));
+        $podcast->prepareAndSyncPodcastPresenters($validated['hosts'], $validated['guests']);
+
+        return to_route('podcasts.edit', $podcast);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Podcast $podcast)
+    public function edit(Podcast $podcast): View
     {
-        //
+        $this->authorize('edit-podcast', $podcast);
+
+        return view('backend.podcasts.edit', compact(['podcast']));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Podcast $podcast)
+    public function update(StorePodcastRequest $request, Podcast $podcast)
     {
-        //
+
+        $this->authorize('edit-podcast', $podcast);
+        $validated = $request->validated();
+        if (! is_null($validated['image'])) {
+            $imageDescription = 'Podcast '.$validated['title'].' cover image';
+            $image = $this->uploadAndCreateImage(filePath: $validated['image'], description: $imageDescription);
+            $validated['image_id'] = $image->id;
+        }
+
+        $podcast->update(Arr::except($validated, ['hosts', 'guests', 'image']));
+        $podcast->prepareAndSyncPodcastPresenters($validated['hosts'], $validated['guests']);
+
+        return to_route('podcasts.edit', $podcast);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Podcast $podcast)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Podcast $podcast)
     {
-        //
+        $podcast->delete();
+
+        return to_route('podcasts.index');
     }
 }

@@ -15,9 +15,9 @@ trait RecordsActivity
     public array $oldAttributes = [];
 
     public array $checkedAttributes = [
-        'title', 'episode', 'name', 'organization_id', 'language_id', 'context_id', 'format_id', 'type_id', 'password',
-        'allow_comments', 'is_public', 'is_livestream', 'academic_degree_id', 'first_name', 'last_name', 'username',
-        'email', 'title_en', 'title_de', 'is_published',
+        'title', 'description', 'image_id', 'episode', 'name', 'organization_id', 'language_id', 'context_id',
+        'format_id', 'type_id', 'password', 'owner_id',  'allow_comments', 'is_public', 'is_livestream',
+        'academic_degree_id', 'first_name', 'last_name', 'username', 'email', 'title_en', 'title_de', 'is_published',
     ]; //a  list for attributes to check in updated event
 
     /**
@@ -73,6 +73,14 @@ trait RecordsActivity
         }
     }
 
+    /**
+     * Fetch all activities for a given model
+     */
+    public function activities(): Builder
+    {
+        return Activity::where('object_id', $this->id)->where('content_type', lcfirst(class_basename(static::class)));
+    }
+
     protected function activityChanges(): array
     {
         return ($this->wasChanged($this->checkedAttributes))
@@ -91,13 +99,5 @@ trait RecordsActivity
     protected function activityDescription($description): string
     {
         return "{$description} ".strtolower(class_basename($this));
-    }
-
-    /**
-     * Fetch all activities for a given model
-     */
-    public function activities(): Builder
-    {
-        return Activity::where('object_id', $this->id)->where('content_type', lcfirst(class_basename(static::class)));
     }
 }

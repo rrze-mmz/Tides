@@ -5,12 +5,15 @@ namespace Tests;
 use App\Models\AcademicDegree;
 use App\Models\Acl;
 use App\Models\Article;
+use App\Models\Context;
+use App\Models\Format;
 use App\Models\Image;
 use App\Models\Language;
 use App\Models\Organization;
 use App\Models\Role;
 use App\Models\Semester;
 use App\Models\Setting;
+use App\Models\Type;
 use App\Models\User;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Http\UploadedFile;
@@ -29,6 +32,42 @@ abstract class TestCase extends BaseTestCase
         $this->withoutVite();
         //set log file to app folder to bypass any failures in docker containers
         Config::set('logging.channels.single.path', storage_path('logs/laravel.log'));
+
+        Type::create([
+            'id' => 1,
+            'de_name' => 'Typ',
+            'en_name' => 'Type',
+        ]);
+
+        Type::create([
+            'id' => 11,
+            'de_name' => 'Vorlesung',
+            'en_name' => 'lecture',
+        ]);
+
+        Format::create([
+            'id' => 1,
+            'de_name' => 'Format',
+            'en_name' => 'format',
+        ]);
+
+        Format::create([
+            'id' => 11,
+            'de_name' => 'Format',
+            'en_name' => 'format',
+        ]);
+
+        Context::create([
+            'id' => 1,
+            'de_name' => 'Kontext',
+            'en_name' => 'Context',
+        ]);
+
+        Context::create([
+            'id' => 22,
+            'de_name' => 'Verteilung',
+            'en_name' => 'lecture',
+        ]);
 
         AcademicDegree::create([
             'title' => 'Dr.',
@@ -78,7 +117,13 @@ abstract class TestCase extends BaseTestCase
             'long_code' => 'de-DE',
             'order_int' => 1,
         ]);
-
+        Language::create([
+            'id' => '4',
+            'code' => 'de',
+            'name' => 'Deutsch',
+            'long_code' => 'de-DE',
+            'order_int' => 1,
+        ]);
         Language::create([
             'id' => '2',
             'code' => 'en',

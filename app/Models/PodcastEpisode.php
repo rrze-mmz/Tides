@@ -20,6 +20,8 @@ class PodcastEpisode extends BaseModel
     use Searchable;
     use Slugable;
 
+    protected $touches = ['podcast'];
+
     public function podcast(): BelongsTo
     {
         return $this->belongsTo(Podcast::class);

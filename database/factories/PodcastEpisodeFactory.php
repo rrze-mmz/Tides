@@ -19,7 +19,7 @@ class PodcastEpisodeFactory extends Factory
     public function definition(): array
     {
         return [
-            'podcast_id' => Podcast::factory(),
+            'podcast_id' => Podcast::factory()->create()->id,
             'episode_number' => $this->faker->randomDigit(),
             'title' => $this->faker->sentence(),
             'slug' => $this->faker->slug(),

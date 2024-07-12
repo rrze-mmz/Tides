@@ -6,7 +6,14 @@
     <form wire:submit="postComment" action="#" method="PATCH" class="my-12 w-full">
         @csrf
         <div class="flex">
-            <img class="h-10 w-10 rounded-full" src="{{ URL::asset('/images/none.jpg') }}" alt="avatar">
+
+            <img class="h-10 w-10 rounded-full"
+                 @if(auth()->user()->presenter)
+                     src="{{ asset(auth()->user()->presenter->getImageUrl()) }}"
+                 @else
+                     src="{{ URL::asset('/images/none.jpg') }}"
+                 @endif
+                 alt="avatar">
             <div class="ml-4 flex-1">
                 <textarea wire:model="content"
                           name="content"
@@ -56,7 +63,11 @@
             @foreach ($comments->sortDesc() as $comment)
                 <div class="my-10 flex justify-between">
                     <img class="h-10 w-10 flex-none rounded-full"
-                         src="{{ URL::asset('/images/none.jpg') }}"
+                         @if(auth()->user()->presenter)
+                             src="{{ asset(auth()->user()->presenter->getImageUrl()) }}"
+                         @else
+                             src="{{ URL::asset('/images/none.jpg') }}"
+                         @endif
                          alt="avatar">
                     <div class="ml-4 flex-grow">
                         <div class="flex items-center dark:text-white">

@@ -11,6 +11,7 @@ use Tests\Setup\WorksWithOpencastClient;
 
 use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\post;
+use function Pest\Laravel\withoutExceptionHandling;
 use function PHPUnit\Framework\assertNotSame;
 
 uses(WorksWithOpencastClient::class);
@@ -206,6 +207,7 @@ it('validates add scheduled events as clips form data', function () {
 });
 
 it('adds scheduled events as clips for a specific series', function () {
+    withoutExceptionHandling();
     $event_identifier = Str::uuid();
     $this->mockHandler->append(
         $this->mockEventResponse($this->series, OpencastWorkflowState::SCHEDULED, 2, $event_identifier),

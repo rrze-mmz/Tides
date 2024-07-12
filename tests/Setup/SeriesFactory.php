@@ -76,9 +76,6 @@ class SeriesFactory
         return $this;
     }
 
-    /**
-     * @return $this
-     */
     public function ownedBy($user): static
     {
         $this->user = $user;
@@ -111,7 +108,7 @@ class SeriesFactory
                         $series->clips()->each(function ($clip) {
                             $assets = Asset::factory($this->assetsCount)->create();
                             $assets->each(function ($asset) use ($clip) {
-                                $clip->assets()->save($asset);
+                                $clip->addAsset($asset);
                             });
                         });
                     }
@@ -141,7 +138,7 @@ class SeriesFactory
                     $series->clips()->each(function ($clip) {
                         $assets = Asset::factory($this->assetsCount)->create();
                         $assets->each(function ($asset) use ($clip) {
-                            $clip->assets()->save($asset);
+                            $clip->addAsset($asset);
                         });
                     });
                 }

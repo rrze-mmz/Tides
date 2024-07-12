@@ -3,7 +3,7 @@
 @extends('layouts.backend')
 
 @section('content')
-    <div class="flex border-b border-black pb-2 text-2xl font-semibold">
+    <div class="flex border-b border-black text-2xl flex-col dark:text-white dark:border-white font-normal">
         Add clip to {{ $series->title }}
     </div>
     <div class="flex px-2 py-4">
@@ -64,7 +64,9 @@
                                        :selectedItem="$series->latestClip?->language_id"
                 />
 
-                <div class="mb-2 border-b border-solid border-b-black pb-2 text-left text-xl font-bold">
+                <div class="mb-2 border-b border-solid border-b-black pb-2 text-left text-xl font-bold
+                            dark:text-white dark:border-white"
+                >
                     Metadata
                 </div>
 
@@ -110,10 +112,11 @@
                                          :items="[]"
                 />
 
-                <div class="mb-2 border-b border-solid border-b-black pb-2 text-left text-xl font-bold">
+                <div class="mb-2 border-b border-solid border-b-black pb-2 text-left text-xl font-bold
+                            dark:text-white dark:border-white"
+                >
                     Access
                 </div>
-
                 <x-form.select2-multiple field-name="acls"
                                          label="Accessible via"
                                          :model="$series->latestClip"

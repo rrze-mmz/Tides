@@ -18,9 +18,9 @@ beforeEach(function () {
             'image_id' => Image::factory()->create(['file_name' => 'avatar.png']),
         ]);
     // Create dummy folders for testing
-    Storage::makeDirectory('podcast-files/courseID_'.$this->podcast->old_podcast_id);
+    Storage::makeDirectory('podcasts-files/courseID_'.$this->podcast->old_podcast_id);
     $this->disk->putFileAs(
-        'podcast-files/courseID_'.$this->podcast->old_podcast_id,
+        'podcasts-files/courseID_'.$this->podcast->old_podcast_id,
         FileFactory::imageFile(),
         'avatar.png'
     );
@@ -30,9 +30,9 @@ beforeEach(function () {
 });
 
 it('renames folders correctly when matching old  pattern', function () {
-    $oldFolderPath = 'podcast-files/courseID_'.$this->podcast->old_podcast_id;
+    $oldFolderPath = 'podcasts-files/courseID_'.$this->podcast->old_podcast_id;
     artisan('podcasts:rename-folders')
-        ->expectsOutput('Moving file from podcast folder to images folder')
+        ->expectsOutput('Moving file from podcasts folder to images folder')
         ->assertExitCode(0);
 
     Storage::assertMissing($oldFolderPath.'/'.$this->podcast->cover->file_name);
@@ -40,28 +40,29 @@ it('renames folders correctly when matching old  pattern', function () {
 });
 
 it('skips folders that do not match the pattern', function () {
-    Storage::makeDirectory('podcast-files/covers/invalid_folder');
+    Storage::makeDirectory('podcasts-files/covers/invalid_folder');
     artisan('podcasts:rename-folders')
-        ->doesntExpectOutput('Renamed podcast-files/covers/invalid_folder to')
+        ->doesntExpectOutput('Renamed podcasts-files/covers/invalid_folder to')
         ->assertExitCode(0);
 
-    Storage::assertExists('podcast-files/covers/invalid_folder');
+    Storage::assertExists('podcasts-files/covers/invalid_folder');
 });
 
-it('moves and renames also episode files inside the podcast directory', function () {
+it('moves and renames also episode files inside the podcasts directory', function () {
     $episode = PodcastEpisode::factory()->create([
         'image_id' => Image::factory()->create(['file_name' => 'avatar.png']),
-        'podcast_id' => $this->podcast->id]);
-    Storage::makeDirectory('podcast-files/clipID_'.$episode->old_episode_id);
+        'podcast_id' => $this->podcast->id,
+    ]);
+    Storage::makeDirectory('podcasts-files/clipID_'.$episode->old_episode_id);
     $this->disk->putFileAs(
-        'podcast-files/clipID_'.$episode->old_episode_id,
+        'podcasts-files/clipID_'.$episode->old_episode_id,
         FileFactory::imageFile(),
         'avatar.png'
     );
-    $oldFolderPath = 'podcast-files/clipID_'.$episode->old_episode_id;
+    $oldFolderPath = 'podcasts-files/clipID_'.$episode->old_episode_id;
 
     artisan('podcasts:rename-folders')
-        ->expectsOutput('Moving file from podcast episode folder to images folder')
+        ->expectsOutput('Moving file from podcasts episode folder to images folder')
         ->assertExitCode(0);
 
     Storage::assertMissing($oldFolderPath.'/'.$episode->cover->file_name);

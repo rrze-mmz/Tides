@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Http\Resources\ClipResource;
 use App\Models\Clip;
 use App\Services\OpenSearchService;
 
@@ -9,24 +10,13 @@ class ClipObserver
 {
     public function __construct(
         private OpenSearchService $openSearchService
-    ) {
-    }
+    ) {}
 
     public function creating(Clip $clip): void
     {
         if ($clip->time_availability_start !== null) {
             $this->setTimestampsToNearest5thMinute($clip);
         }
-    }
-
-    private function setTimestampsToNearest5thMinute(Clip $clip): void
-    {
-        $time_availability_start_rounded = $clip->time_availability_start->roundMinute(5);
-        $time_availability_end_rounded =
-            ($clip->time_availability_end) ? $clip->time_availability_end->roundMinute(5) : null;
-
-        $clip->time_availability_start = $time_availability_start_rounded;
-        $clip->time_availability_end = $time_availability_end_rounded;
     }
 
     /**
@@ -40,10 +30,11 @@ class ClipObserver
         if (auth()->user()?->isAdmin()) {
             $clip->supervisor_id = auth()->user()->id;
         }
+
         $clip->save();
         session()->flash('flashMessage', $clip->title.' '.__FUNCTION__.' successfully');
 
-        $this->openSearchService->createIndex($clip);
+        $this->openSearchService->createIndex(new ClipResource($clip));
     }
 
     public function updating(Clip $clip): void
@@ -65,7 +56,7 @@ class ClipObserver
 
         session()->flash('flashMessage', "{$clip->title} ".__FUNCTION__.' successfully');
 
-        $this->openSearchService->updateIndex($clip);
+        $this->openSearchService->updateIndex(new ClipResource($clip));
     }
 
     /**
@@ -99,5 +90,15 @@ class ClipObserver
     public function forceDeleted(Clip $clip): void
     {
         session()->flash('flashMessage', "{$clip->title} ".__FUNCTION__.' successfully');
+    }
+
+    private function setTimestampsToNearest5thMinute(Clip $clip): void
+    {
+        $time_availability_start_rounded = $clip->time_availability_start->roundMinute(5);
+        $time_availability_end_rounded =
+            ($clip->time_availability_end) ? $clip->time_availability_end->roundMinute(5) : null;
+
+        $clip->time_availability_start = $time_availability_start_rounded;
+        $clip->time_availability_end = $time_availability_end_rounded;
     }
 }

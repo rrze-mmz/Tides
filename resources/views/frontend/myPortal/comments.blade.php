@@ -13,8 +13,13 @@
         </div>
         <div class="my-10 flex justify-between">
             <img class="h-10 w-10 flex-none rounded-full"
-                 src="{{ URL::asset('/images/none.jpg') }}"
+                 @if(auth()->user()->presenter)
+                     src="{{ asset(auth()->user()->presenter->getImageUrl()) }}"
+                 @else
+                     src="{{ URL::asset('/images/none.jpg') }}"
+                 @endif
                  alt="avatar">
+
             <div class="ml-4 flex-grow">
                 <div class="flex items-center">
                     <div class="dark:text-white"> You</div>

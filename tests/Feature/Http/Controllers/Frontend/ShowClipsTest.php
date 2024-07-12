@@ -36,7 +36,7 @@ beforeEach(function () {
 it('a guest cannot manage clips', function () {
     post(route('clips.store'), [])->assertRedirectToRoute('login');
     get(route('clips.create'))->assertRedirectToRoute('login');
-    patch(route('clips.edit', $this->clip))->assertRedirectToRoute('login');
+    patch(route('clips.update', $this->clip))->assertRedirectToRoute('login');
     delete(route('clips.destroy', $this->clip))->assertRedirectToRoute('login');
 });
 

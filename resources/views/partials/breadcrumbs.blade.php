@@ -7,7 +7,6 @@
             @else
                 <li class="breadcrumb-item active">{{ $breadcrumb->title }}</li>
             @endif
-
         @endforeach
     </ol>
 @endunless

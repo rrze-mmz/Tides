@@ -11,7 +11,7 @@
                            id="term"
                            type="text"
                            name="term"
-                           placeholder="{{ __('homepage.Search form placeholder') }}">
+                           placeholder="{{ __('homepage.Search form placeholder') }} also search patterns like s:, c:, pd:, i:">
 
                     <div class="p-4">
                         <button class="flex justify-center items-center p-2 w-8 h-8 text-white bg-gray-600 dark:bg-white

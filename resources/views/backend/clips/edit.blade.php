@@ -92,7 +92,7 @@
                     />
 
                     <div class="mb-2 border-b border-solid border-b-black pb-2 text-left text-xl font-bold
-                            dark:text-white dark:border-white "
+                            dark:text-white dark:border-white"
                     >
                         Metadata
                     </div>

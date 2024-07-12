@@ -6,12 +6,14 @@ use App\Models\Asset;
 use App\Models\Channel;
 use App\Models\Clip;
 use App\Models\Comment;
+use App\Models\Podcast;
 use App\Models\Series;
 use App\Models\User;
 use App\Policies\AssetPolicy;
 use App\Policies\ChannelsPolicy;
 use App\Policies\ClipPolicy;
 use App\Policies\CommentPolicy;
+use App\Policies\PodcastPolicy;
 use App\Policies\SeriesPolicy;
 use App\Policies\UserPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -31,6 +33,7 @@ class AuthServiceProvider extends ServiceProvider
         Comment::class => CommentPolicy::class,
         User::class => UserPolicy::class,
         Channel::class => ChannelsPolicy::class,
+        Podcast::class => PodcastPolicy::class,
     ];
 
     /**
@@ -75,5 +78,9 @@ class AuthServiceProvider extends ServiceProvider
         //channels
         Gate::define('activate-channel', [ChannelsPolicy::class, 'create']);
         Gate::define('edit-channel', [ChannelsPolicy::class, 'update']);
+
+        //podcasts
+        Gate::define('edit-podcast', [PodcastPolicy::class, 'update']);
+        Gate::define('create-podcasts', [PodcastPolicy::class, 'create']);
     }
 }

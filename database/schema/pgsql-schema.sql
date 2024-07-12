@@ -354,7 +354,7 @@ CREATE TABLE public.clips (
     updated_at timestamp(0) without time zone,
     organization_id bigint DEFAULT '1'::bigint NOT NULL,
     folder_id character varying(128),
-    recording_date date DEFAULT '2024-01-26'::date,
+    recording_date date DEFAULT '2024-07-08'::date,
     acronym character varying(10),
     opencast_logo_pos character varying(2) DEFAULT 'TR'::character varying,
     uploaded_at timestamp(0) without time zone,
@@ -799,7 +799,7 @@ CREATE TABLE public.livestreams (
     url text,
     content_path text,
     file_path character varying(255),
-    active boolean DEFAULT true NOT NULL,
+    active boolean DEFAULT false NOT NULL,
     clip_id bigint,
     app_name character varying(128),
     has_transcoder boolean DEFAULT false NOT NULL,
@@ -949,7 +949,8 @@ CREATE TABLE public.podcast_episodes (
     old_episode_id bigint,
     published_at timestamp(0) without time zone,
     created_at timestamp(0) without time zone,
-    updated_at timestamp(0) without time zone
+    updated_at timestamp(0) without time zone,
+    owner_id bigint
 );
 
 
@@ -989,7 +990,8 @@ CREATE TABLE public.podcasts (
     google_podcasts_url character varying(255),
     old_podcast_id bigint,
     created_at timestamp(0) without time zone,
-    updated_at timestamp(0) without time zone
+    updated_at timestamp(0) without time zone,
+    owner_id bigint
 );
 
 
@@ -2607,6 +2609,13 @@ ALTER TABLE ONLY stats.stats
 
 
 --
+-- Name: activities_user_id_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX activities_user_id_index ON public.activities USING btree (user_id);
+
+
+--
 -- Name: assetables_assetable_id_index; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2614,10 +2623,10 @@ CREATE INDEX assetables_assetable_id_index ON public.assetables USING btree (ass
 
 
 --
--- Name: assets_clip_id_index; Type: INDEX; Schema: public; Owner: -
+-- Name: channels_owner_id_index; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX assets_clip_id_index ON public.assets USING btree (clip_id);
+CREATE INDEX channels_owner_id_index ON public.channels USING btree (owner_id);
 
 
 --
@@ -2625,13 +2634,6 @@ CREATE INDEX assets_clip_id_index ON public.assets USING btree (clip_id);
 --
 
 CREATE INDEX clips_series_id_index ON public.clips USING btree (series_id);
-
-
---
--- Name: clips_supervisor_id_index; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX clips_supervisor_id_index ON public.clips USING btree (supervisor_id);
 
 
 --
@@ -2656,24 +2658,10 @@ CREATE INDEX password_resets_email_index ON public.password_resets USING btree (
 
 
 --
--- Name: series_image_id_index; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX series_image_id_index ON public.series USING btree (image_id);
-
-
---
 -- Name: series_members_series_id_user_id_index; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX series_members_series_id_user_id_index ON public.series_members USING btree (series_id, user_id);
-
-
---
--- Name: series_owner_id_index; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX series_owner_id_index ON public.series USING btree (owner_id);
 
 
 --
@@ -2740,11 +2728,59 @@ CREATE INDEX stats_doa_index ON stats.stats USING btree (doa);
 
 
 --
+-- Name: clips 1; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.clips
+    ADD CONSTRAINT "1" FOREIGN KEY (owner_id) REFERENCES public.users(id) ON DELETE SET NULL;
+
+
+--
+-- Name: series 1; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.series
+    ADD CONSTRAINT "1" FOREIGN KEY (owner_id) REFERENCES public.users(id) ON DELETE SET NULL;
+
+
+--
+-- Name: comments 1; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.comments
+    ADD CONSTRAINT "1" FOREIGN KEY (owner_id) REFERENCES public.users(id) ON DELETE CASCADE;
+
+
+--
+-- Name: chapters 1; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chapters
+    ADD CONSTRAINT "1" FOREIGN KEY (series_id) REFERENCES public.series(id) ON DELETE CASCADE;
+
+
+--
 -- Name: assetables 1; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.assetables
     ADD CONSTRAINT "1" FOREIGN KEY (asset_id) REFERENCES public.assets(id) ON DELETE CASCADE;
+
+
+--
+-- Name: podcasts 1; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.podcasts
+    ADD CONSTRAINT "1" FOREIGN KEY (owner_id) REFERENCES public.users(id) ON DELETE SET NULL;
+
+
+--
+-- Name: podcast_episodes 1; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.podcast_episodes
+    ADD CONSTRAINT "1" FOREIGN KEY (owner_id) REFERENCES public.users(id) ON DELETE SET NULL;
 
 
 --
@@ -2756,27 +2792,11 @@ ALTER TABLE ONLY public.accessables
 
 
 --
--- Name: assets assets_clip_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.assets
-    ADD CONSTRAINT assets_clip_id_foreign FOREIGN KEY (clip_id) REFERENCES public.clips(id) ON DELETE CASCADE;
-
-
---
 -- Name: channels channels_owner_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.channels
     ADD CONSTRAINT channels_owner_id_foreign FOREIGN KEY (owner_id) REFERENCES public.users(id) ON DELETE CASCADE;
-
-
---
--- Name: chapters chapters_series_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.chapters
-    ADD CONSTRAINT chapters_series_id_foreign FOREIGN KEY (series_id) REFERENCES public.series(id) ON DELETE CASCADE;
 
 
 --
@@ -2844,14 +2864,6 @@ ALTER TABLE ONLY public.clips
 
 
 --
--- Name: clips clips_owner_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.clips
-    ADD CONSTRAINT clips_owner_id_foreign FOREIGN KEY (owner_id) REFERENCES public.users(id) ON DELETE SET NULL;
-
-
---
 -- Name: clips clips_semester_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2873,14 +2885,6 @@ ALTER TABLE ONLY public.clips
 
 ALTER TABLE ONLY public.clips
     ADD CONSTRAINT clips_type_id_foreign FOREIGN KEY (type_id) REFERENCES public.types(id) ON DELETE SET NULL;
-
-
---
--- Name: comments comments_owner_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.comments
-    ADD CONSTRAINT comments_owner_id_foreign FOREIGN KEY (owner_id) REFERENCES public.users(id) ON DELETE CASCADE;
 
 
 --
@@ -2961,14 +2965,6 @@ ALTER TABLE ONLY public.series_members
 
 ALTER TABLE ONLY public.series
     ADD CONSTRAINT series_organization_id_foreign FOREIGN KEY (organization_id) REFERENCES public.organizations(org_id) ON DELETE CASCADE;
-
-
---
--- Name: series series_owner_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.series
-    ADD CONSTRAINT series_owner_id_foreign FOREIGN KEY (owner_id) REFERENCES public.users(id) ON DELETE SET NULL;
 
 
 --
@@ -3087,16 +3083,18 @@ COPY public.migrations (id, migration, batch) FROM stdin;
 55	2023_09_11_132445_add_clips_time_availability	1
 56	2023_09_25_113353_create_articles_table	1
 57	2023_12_04_144627_add_persenters_slug	1
-60	2024_01_10_142742_create_channels_table	2
-62	2024_02_07_111845_add_users_presenter_id	3
-63	2024_02_20_094838_add_clips_opencast_event_id	4
-64	2024_03_20_104014_create_stats_logs_table	5
-65	2024_03_20_105115_create_stats_stats_table	5
-66	2024_04_08_103929_create_jobs_table	5
-67	2024_05_31_092642_add_livestreams_opencast_location_name	5
-68	2024_06_21_091852_create_podcasts_table	5
-69	2024_06_21_091859_create_podcast_episodes_table	5
-70	2024_07_02_145743_create_assetables_table	5
+58	2024_01_10_142742_create_channels_table	1
+59	2024_02_07_111845_add_users_presenter_id	1
+60	2024_02_20_094838_add_clips_opencast_event_id	1
+61	2024_03_20_104014_create_stats_logs_table	1
+62	2024_03_20_105115_create_stats_stats_table	1
+63	2024_04_08_103929_create_jobs_table	1
+64	2024_05_31_092642_add_livestreams_opencast_location_name	1
+65	2024_06_21_091852_create_podcasts_table	1
+66	2024_06_21_091859_create_podcast_episodes_table	1
+67	2024_07_02_145743_create_assetables_table	1
+68	2024_07_08_145312_add_podcasts_owner	2
+69	2024_07_08_145321_add_podcast_episode_owner	2
 \.
 
 
@@ -3104,7 +3102,7 @@ COPY public.migrations (id, migration, batch) FROM stdin;
 -- Name: migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.migrations_id_seq', 70, true);
+SELECT pg_catalog.setval('public.migrations_id_seq', 69, true);
 
 
 --

@@ -2,39 +2,27 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Http\Controllers\Backend\Traits\HandlesFilePondFiles;
 use App\Http\Controllers\Controller;
 use App\Models\Image;
 use App\Rules\ValidImageFile;
 use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Http\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
-use Intervention\Image\ImageManagerStatic;
 use Mhor\MediaInfo\Exception\UnknownTrackTypeException;
 use Mhor\MediaInfo\MediaInfo;
 
 class ImagesController extends Controller
 {
+    use HandlesFilePondFiles;
+
     /**
      * Display a listing of the resource.
      */
     public function index(): View
     {
         return view('backend.images.index');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @throws AuthorizationException
-     */
-    public function create()
-    {
-        //Only portal admins can create new images.
-        $this->authorize('administrate-admin-portal-pages');
-
-        return view('backend.images.create');
     }
 
     /**
@@ -49,28 +37,22 @@ class ImagesController extends Controller
             'image' => ['required', 'string', new ValidImageFile(['image/png', 'image/jpeg'])],
         ]);
 
-        $uploadedImage = new File(Storage::path($validated['image']));
-
-        $fileName = Storage::disk('images')->putFile(
-            path: '',
-            file: $uploadedImage,
-        );
-
-        ImageManagerStatic::make(Storage::disk('images')
-            ->get($fileName))
-            ->resize(300, 200)
-            ->save('images/Thumbnails/'.$fileName);
-
-        $image = Image::create([
-            'file_name' => $fileName,
-            'description' => $validated['description'],
-            'file_path' => 'images/'.$fileName,
-            'thumbnail_path' => 'images/Thumbnails/'.$fileName,
-            'file_size' => Storage::disk('images')->size($fileName),
-            'mime_type' => Storage::disk('images')->mimeType($fileName),
-        ]);
+        $image = $this->uploadAndCreateImage(filePath: $validated['image'], description: $validated['description']);
 
         return to_route('images.edit', $image);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @throws AuthorizationException
+     */
+    public function create()
+    {
+        //Only portal admins can create new images.
+        $this->authorize('administrate-admin-portal-pages');
+
+        return view('backend.images.create');
     }
 
     /**
@@ -126,8 +108,6 @@ class ImagesController extends Controller
         //Only portal admins can delete images.
         $this->authorize('administrate-admin-portal-pages');
 
-        Storage::disk('images')->delete($image->file_name);
-        Storage::disk('images')->delete('Thumbnails/'.$image->file_name);
         $image->delete();
 
         return to_route('images.index');

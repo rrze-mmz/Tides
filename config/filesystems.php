@@ -88,8 +88,8 @@ return [
         ],
         'podcasts' => [
             'driver' => 'local',
-            'root' => env('IMAGES_PATH', storage_path('app/podcast-files')),
-            'url' => env('APP_URL').'/podcast-files',
+            'root' => env('IMAGES_PATH', storage_path('app/podcasts-files')),
+            'url' => env('APP_URL').'/podcasts-files',
             'visibility' => 'public',
         ],
     ],
@@ -111,7 +111,7 @@ return [
         public_path('thumbnails') => storage_path('app/thumbnails'),
         public_path('links') => storage_path('app/assetsSymLinks'),
         public_path('images') => storage_path('app/images'),
-        public_path('podcast-files') => storage_path('app/podcast-files'),
+        public_path('podcasts-files') => storage_path('app/podcasts-files'),
     ],
 
 ];
