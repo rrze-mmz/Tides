@@ -55,7 +55,7 @@ class ClipsController extends Controller
         return view('backend.clips.create');
     }
 
-    /**
+    /**1
      * Edit form for a single clip
      */
     public function edit(
@@ -63,6 +63,7 @@ class ClipsController extends Controller
         OpencastService $opencastService,
         WowzaService $wowzaService
     ): Application|Factory|View {
+
         $this->authorize('edit', $clip);
         $assetsResolutions = $clip->assets->map(function ($asset) {
             return match (true) {

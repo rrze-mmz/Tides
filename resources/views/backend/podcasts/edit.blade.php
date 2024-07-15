@@ -174,7 +174,7 @@
         }
     }" class="w-full">
             <div
-                class="text-md font-medium text-center text-gray-500 border-b border-gray-200 dark:text-white dark:border-gray-700">
+                class="text-lg font-medium text-center text-gray-500 border-b border-gray-200 dark:text-white dark:border-gray-700">
                 <ul class="flex flex-wrap -mb-px">
                     <li class="me-2">
                         <a href="#episodes"

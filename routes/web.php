@@ -19,6 +19,7 @@ use App\Http\Controllers\Backend\FileUploadController;
 use App\Http\Controllers\Backend\ImagesController;
 use App\Http\Controllers\Backend\LivestreamsController;
 use App\Http\Controllers\Backend\ManageLivestreamRoom;
+use App\Http\Controllers\Backend\PodcastEpisodesController;
 use App\Http\Controllers\Backend\PodcastsController;
 use App\Http\Controllers\Backend\PortalSettingsController;
 use App\Http\Controllers\Backend\PresentersController;
@@ -280,6 +281,9 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
 
     //Podcast routes
     Route::resource('podcasts', PodcastsController::class)->except(['show']);
+
+    Route::get('/podcasts/{podcast}/episodes/{episode}', [PodcastEpisodesController::class, 'edit'])
+        ->name('podcasts.episodes.edit');
     /*
      * A group of clip assets functions
      */

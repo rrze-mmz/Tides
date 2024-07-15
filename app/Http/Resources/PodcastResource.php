@@ -34,7 +34,8 @@ class PodcastResource extends JsonResource
             'google_podcasts_url' => $this->google_podcasts_url,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'hosts' => $this->splitPresenters()->get('host')->getFullNameAttribute,
+            'hosts' => $this->splitPresenters()->get('hosts')
+                ->map(fn ($presenter) => $presenter->full_name)->join(', '),
             'guests' => $this->splitPresenters()->get('guests')
                 ->map(fn ($presenter) => $presenter->full_name)->join(', '),
         ];

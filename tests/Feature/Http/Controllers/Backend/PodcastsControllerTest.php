@@ -2,6 +2,7 @@
 
 use App\Enums\Role;
 use App\Models\Podcast;
+use App\Models\PodcastEpisode;
 use Facades\Tests\Setup\PodcastFactory;
 
 use function Pest\Laravel\assertDatabaseHas;
@@ -81,4 +82,11 @@ it('denies updating a podcast to a non privileged moderator', function () {
     signInRole(Role::MODERATOR);
 
     patch(route('podcasts.update', $this->podcast), ['title' => 'title_changed'])->assertForbidden();
+});
+
+it('lists all podcast episodes in podcast edit page', function () {
+    $this->podcast->episodes()->save(PodcastEpisode::factory()->create());
+    $podcastEpisode = $this->podcast->episodes()->first();
+
+    get(route('podcasts.edit', $this->podcast))->assertSee($podcastEpisode->title);
 });
