@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="flex border-b border-black text-2xl flex-col dark:text-white dark:border-white font-normal pb-2">
-        {{ $podcast->title }} [ ID : {{ $podcast->id }}]
+        {{ $podcast->title }} [ PodcastID : {{ $podcast->id }}]
     </div>
     <div class="flex">
         <form action="{{ route('podcasts.update', $podcast) }}"
@@ -174,7 +174,7 @@
         }
     }" class="w-full">
             <div
-                class="text-md font-medium text-center text-gray-500 border-b border-gray-200 dark:text-white dark:border-gray-700">
+                class="text-lg font-medium text-center text-gray-500 border-b border-gray-200 dark:text-white dark:border-gray-700">
                 <ul class="flex flex-wrap -mb-px">
                     <li class="me-2">
                         <a href="#episodes"
@@ -222,7 +222,7 @@
                      x-transition:leave="transition ease-in duration-300"
                      x-transition:leave-start="opacity-100 max-h-screen" x-transition:leave-end="opacity-0 max-h-0"
                      id="clips" class="w-full overflow-hidden" x-ref="container0">
-                    @include('backend.podcastEpisodes.list')
+                    @include('backend.podcasts.episode.list')
                 </div>
                 <div x-show="activeTab === 2" x-transition:enter="transition ease-out duration-300"
                      x-transition:enter-start="opacity-0 max-h-0" x-transition:enter-end="opacity-100 max-h-screen"

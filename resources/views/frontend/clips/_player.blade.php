@@ -20,7 +20,7 @@
                     hover:bg-blue-700 active:bg-blue-900 focus:outline-none focus:border-blue-900
                     focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150"
                                        title="presenter video stream">
-                                        <x-heroicon-o-user class="w-6 h-6 fill-white" />
+                                        <x-iconoir-video-camera class="w-6 h-6 " />
                                     </a>
                                 @endif
                                 @if($type === 'presentation')
@@ -30,7 +30,7 @@
                     hover:bg-blue-700 active:bg-blue-900 focus:outline-none focus:border-blue-900
                     focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150"
                                        title="presentation video stream">
-                                        <x-heroicon-o-computer-desktop class="w-6 h-6 fill-white" />
+                                        <x-iconoir-video-projector class="w-6 h-6 " />
                                     </a>
                                 @endif
                                 @if($type === 'composite')
@@ -40,7 +40,7 @@
                     hover:bg-blue-700 active:bg-blue-900 focus:outline-none focus:border-blue-900
                     focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150"
                                        title="composite video stream">
-                                        <x-heroicon-o-view-columns class="w-6 h-6 fill-white" />
+                                        <x-iconoir-view-columns-2 class="w-6 h-6 " />
                                     </a>
                                 @endif
                             </div>

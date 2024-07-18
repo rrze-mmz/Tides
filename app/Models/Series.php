@@ -68,22 +68,6 @@ class Series extends BaseModel
     }
 
     /**
-     * Series public url
-     */
-    public function path(): string
-    {
-        return "/series/{$this->slug}";
-    }
-
-    /**
-     * Series admin edit url
-     */
-    public function adminPath(): string
-    {
-        return "/admin/series/{$this->slug}";
-    }
-
-    /**
      * A series belongs to a user
      */
     public function owner(): BelongsTo

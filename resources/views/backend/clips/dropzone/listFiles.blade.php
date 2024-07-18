@@ -6,7 +6,7 @@
     </div>
 
     <div class="flex py-2">
-        <x-form.button :link="$clip->adminPath()"
+        <x-form.button :link="route('clips.edit', $clip)"
                        type="submit"
                        text="Go back to clip"
         />

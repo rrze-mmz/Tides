@@ -40,7 +40,7 @@
                        type="submit"
                        text="Transfer the selected Event assets"
         />
-        <a href="{{$clip->adminPath()}}">
+        <a href="{{ route('clips.edit', $clip) }}">
             <span class="rounded-md font-normal bg-green-700 px-8 py-2 text-white hover:shadow-lg focus:outline-noe">
                 Back to clip
             </span>

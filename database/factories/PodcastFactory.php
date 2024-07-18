@@ -26,7 +26,6 @@ class PodcastFactory extends Factory
             'website_url' => 'https://www.podcasts.com/tides-podcast',
             'spotify_url' => 'https://www.spotify.com/podcast/tides-podcast',
             'apple_podcasts_url' => 'https://www.apple.podcasts.com/tides-podcast',
-            'google_podcasts_url' => 'https://www.google.com/podcast/tides-podcast',
             'old_podcast_id' => $this->faker->numberBetween(100, 300),
             'owner_id' => User::factory()->create()->id,
         ];

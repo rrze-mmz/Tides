@@ -27,10 +27,13 @@
                                             <div class="w-2/12">
                                                 <div
                                                     class="mx-2 flex h-full w-48 place-items-center justify-center justify-items-center">
-                                                    <a
-                                                        href="@if(str_contains(url()->current(), 'admin')) {{$clip->adminPath()}}
-                                    @else {{ $clip->path() }}
-                                    @endif">
+                                                    <a href="
+                                                        @if(str_contains(url()->current(), 'admin'))
+                                                            {{ route('clips.edit', $clip) }}
+                                                        @else
+                                                            {{  route('frontend.clips.show', $clip)}}
+                                                        @endif
+                                                       ">
                                                         <img
                                                             src="{{ fetchClipPoster($clip->latestAsset()?->player_preview) }}"
                                                             alt="preview image"
@@ -38,6 +41,7 @@
                                                     </a>
                                                 </div>
                                             </div>
+
                                             <div class="w-3/12"> {{ $clip->title }}</div>
                                             <div class="w-2/12 flex justify-center items-center
                         ">
@@ -77,7 +81,7 @@
                                                     </a>
                                                 @else
                                                     <form method="GET"
-                                                          action="{{$clip->Path() }}"
+                                                          action="{{ route('clips.edit', $clip)  }}"
                                                     >
                                                         <button type="submit"
                                                                 class="focus:outline-none text-white text-sm py-1.5 px-5 rounded-md bg-blue-700
@@ -130,9 +134,13 @@
                                                 <div
                                                     class="mx-2 flex h-full w-48 place-items-center justify-center justify-items-center">
                                                     <a
-                                                        href="@if(str_contains(url()->current(), 'admin')) {{$clip->adminPath()}}
-                                    @else {{ $clip->path() }}
-                                    @endif">
+                                                        href="
+                                                        @if(str_contains(url()->current(), 'admin'))
+                                                            {{ route('clips.edit', $clip) }}
+                                                        @else
+                                                            {{ route('frontend.clips.show', $clip) }}
+                                                        @endif
+                                    ">
                                                         <img
                                                             src="{{ fetchClipPoster($clip->latestAsset()?->player_preview) }}"
                                                             alt="preview image"
@@ -178,7 +186,7 @@
                                                     </a>
                                                 @else
                                                     <form method="GET"
-                                                          action="{{$clip->Path() }}"
+                                                          action="{{ route('clips.edit', $clip)  }}"
                                                     >
                                                         <button type="submit"
                                                                 class="focus:outline-none text-white text-sm py-1.5 px-5 rounded-md bg-blue-700
@@ -242,9 +250,13 @@
                                 <div
                                     class="mx-2 flex h-full w-48 place-items-center justify-center justify-items-center">
                                     <a
-                                        href="@if(str_contains(url()->current(), 'admin')) {{$clip->adminPath()}}
-                                    @else {{ $clip->path() }}
-                                    @endif">
+                                        href="
+                                                        @if(str_contains(url()->current(), 'admin'))
+                                                            {{ route('clips.edit', $clip) }}
+                                                        @else
+                                                            {{ route('frontend.clips.show', $clip) }}
+                                                        @endif
+                                    ">
                                         <img
                                             src="{{ fetchClipPoster($clip->latestAsset()?->player_preview) }}"
                                             alt="preview image"
@@ -291,7 +303,7 @@
                                     </a>
                                 @else
                                     <form method="GET"
-                                          action="{{$clip->Path() }}"
+                                          action="{{ route('frontend.clips.show', $clip) }}"
                                     >
                                         <button type="submit"
                                                 class="focus:outline-none text-white text-sm py-1.5 px-5 rounded-md

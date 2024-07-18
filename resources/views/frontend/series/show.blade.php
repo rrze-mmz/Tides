@@ -16,7 +16,7 @@
                 @endif
             @endcannot
             @can('edit-series', $series)
-                <x-form.button :link="$series->adminPath()" type="submit" text="Edit series" />
+                <x-form.button :link="route('series.edit', $series)" type="submit" text="Edit series" />
             @endcan
 
         </div>

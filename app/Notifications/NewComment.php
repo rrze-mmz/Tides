@@ -43,10 +43,10 @@ class NewComment extends Notification
     {
         $url =
             ($this->comment->type === 'frontend')
-                ? $this->comment->commentable->path()
-                : $this->comment->commentable->adminPath();
+                ? route('frontend.clips.show', $this->comment->commentable)
+                : route('clips.edit', $this->comment->commentable);
 
-        return (new MailMessage)
+        return (new MailMessage())
             ->greeting("Hi {$this->comment->commentable->owner?->getFullNameAttribute()}")
             ->line('There is a new comment on your'
             .Str::ucfirst($this->comment->commentable_type).":{$this->comment->commentable->title}")

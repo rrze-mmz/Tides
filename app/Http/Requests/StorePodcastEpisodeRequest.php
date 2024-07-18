@@ -1,0 +1,55 @@
+<?php
+
+namespace App\Http\Requests;
+
+use App\Rules\ValidImageFile;
+use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Str;
+
+class StorePodcastEpisodeRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
+    {
+        return Gate::allows('edit-podcast', $this->route('podcast'));
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, ValidationRule|array|string>
+     */
+    public function rules(): array
+    {
+        return [
+            'title' => ['required', 'string', 'max:255'],
+            'slug' => ['required'],
+            'episode_number' => ['required', 'integer'],
+            'recording_date' => ['required', 'date'],
+            'description' => ['nullable', 'string', 'max:40000'],
+            'notes' => ['nullable', 'string', 'max:40000'],
+            'transcription' => ['nullable', 'string', 'max:40000'],
+            'image' => ['string', 'nullable', new ValidImageFile(['image/png', 'image/jpeg'])],
+            'website_url' => ['nullable', 'url'],
+            'spotify_url' => ['nullable', 'url'],
+            'apple_podcasts_url' => ['nullable', 'url'],
+            'hosts' => ['array'],
+            'guests' => ['array'],
+        ];
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'image_id' => (isset($this->image_id)) ? $this->image_id : config('settings.portal.default_image_id'),
+            'hosts' => $this->hosts = $this->hosts ?? [],
+            'guests' => $this->guests = $this->guests ?? [],
+            'is_published' => $this->is_public === 'on',
+            'slug' => Str::slug($this->title),
+        ]);
+    }
+}

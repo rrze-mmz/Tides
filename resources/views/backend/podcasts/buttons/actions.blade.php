@@ -1,5 +1,5 @@
 <div class="flex items-center py-4 space-x-4 ">
-    <a href="#">
+    <a href="{{ route('podcasts.episodes.create', $podcast) }}">
         <x-button class="bg-blue-600 hover:bg-blue-700">
             Add new episode
         </x-button>

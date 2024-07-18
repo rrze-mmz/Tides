@@ -12,7 +12,7 @@
         <div class="rounded-lg">
             <!-- Modal header -->
             <div class="flex items-center justify-between p-4 md:p-5 rounded-t dark:border-gray-600">
-                <h3 class="text-xl font-se text-gray-700 dark:text-white">
+                <h3 class="text-base leading-relaxed dark:text-white">
                     {{ $title }}
                 </h3>
                 <button @click="open = false" type="button"

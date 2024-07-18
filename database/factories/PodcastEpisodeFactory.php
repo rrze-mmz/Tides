@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\Podcast;
 use App\Models\PodcastEpisode;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -19,18 +18,19 @@ class PodcastEpisodeFactory extends Factory
     public function definition(): array
     {
         return [
-            'podcast_id' => Podcast::factory()->create()->id,
+            'podcast_id' => 1,
             'episode_number' => $this->faker->randomDigit(),
             'title' => $this->faker->sentence(),
+            'recording_date' => $this->faker->dateTime()->format('d-m-Y H:i:s'),
             'slug' => $this->faker->slug(),
             'description' => $this->faker->paragraph(),
             'image_id' => null,
-            'audio_url' => $this->faker->url(),
+            'is_published' => true,
             'notes' => $this->faker->paragraph(),
             'transcription' => $this->faker->paragraph(),
+            'website_url' => $this->faker->url(),
             'spotify_url' => $this->faker->url(),
             'apple_podcasts_url' => $this->faker->url(),
-            'google_podcasts_url' => $this->faker->url(),
             'old_episode_id' => $this->faker->numberBetween(100, 300),
         ];
     }

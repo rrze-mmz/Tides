@@ -55,8 +55,17 @@ class UnlockObject extends Component
         if ($this->model->password === $this->password) {
             $client = 'password';
 
-            $token = getAccessToken($this->model, $time = dechex(time()), $client);
-            setSessionAccessToken($this->model, $token, $time, $client);
+            $token = getAccessToken(
+                obj: $this->model,
+                time: $time = dechex(time()),
+                client: $client
+            );
+            setSessionAccessToken(
+                obj: $this->model,
+                token: $token,
+                time: $time,
+                client: $client
+            );
 
             return redirect(route('frontend.series.show', $this->model));
         } else {

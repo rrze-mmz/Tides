@@ -3,6 +3,7 @@
 use App\Models\Podcast;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 uses()->group('unit');
 
@@ -16,6 +17,10 @@ it('belongs to an user', function () {
 
 it('has many podcasts episodes', function () {
     expect($this->podcast->episodes())->toBeInstanceOf(HasMany::class);
+});
+
+it('has many comments', function () {
+    expect($this->podcast->comments())->toBeInstanceOf(MorphMany::class);
 });
 
 it('belogns to an image with the attribute of podcasts cover', function () {

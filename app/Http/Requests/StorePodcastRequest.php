@@ -17,7 +17,7 @@ class StorePodcastRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string', 'max:255'],
-            'description' => ['string', 'max:40000'],
+            'description' => ['nullable', 'string', 'max:40000'],
             'hosts' => ['array'],
             'guests' => ['array'],
             'is_published' => ['boolean'],
