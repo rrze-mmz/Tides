@@ -8,6 +8,7 @@ use App\Models\Image;
 use App\Models\Podcast;
 use Barryvdh\Debugbar\Controllers\BaseController;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Arr;
 use Illuminate\View\View;
 
@@ -16,19 +17,19 @@ class PodcastsController extends BaseController
     use AuthorizesRequests;
     use HandlesFilePondFiles;
 
-    public function index()
+    public function index(): View
     {
         $podcasts = Podcast::all();
 
         return view('backend.podcasts.index', compact('podcasts'));
     }
 
-    public function create()
+    public function create(): View
     {
         return view('backend.podcasts.create');
     }
 
-    public function store(StorePodcastRequest $request)
+    public function store(StorePodcastRequest $request): RedirectResponse
     {
         $validated = $request->validated();
 
@@ -54,10 +55,10 @@ class PodcastsController extends BaseController
         return view('backend.podcasts.edit', compact(['podcast']));
     }
 
-    public function update(StorePodcastRequest $request, Podcast $podcast)
+    public function update(StorePodcastRequest $request, Podcast $podcast): RedirectResponse
     {
-
         $this->authorize('edit-podcast', $podcast);
+
         $validated = $request->validated();
         if (! is_null($validated['image'])) {
             $imageDescription = 'Podcast '.$validated['title'].' cover image';
@@ -71,8 +72,10 @@ class PodcastsController extends BaseController
         return to_route('podcasts.edit', $podcast);
     }
 
-    public function destroy(Podcast $podcast)
+    public function destroy(Podcast $podcast): RedirectResponse
     {
+        $this->authorize('edit-podcast', $podcast);
+
         $podcast->delete();
 
         return to_route('podcasts.index');

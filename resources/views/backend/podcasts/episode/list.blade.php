@@ -17,7 +17,6 @@
         <thead class="text-sm text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
         <tr>
             <th scope="col" class="px-6 py-3">
-                Episode number
             </th>
             <th scope="col" class="px-6 py-3">
                 Title
@@ -46,7 +45,25 @@
                     {{$episode->episode_number}}
                 </th>
                 <td class="px-6 py-4  text-gray-900 whitespace-nowrap dark:text-white">
-                    {{ $episode->title }}
+                    <div class="flex items-center space-x-2">
+                        <div>
+                            <img
+                                @if(!is_null($episode->image_id))
+                                    src="{{ asset('images/'.$episode->cover->file_name) }}"
+                                alt="{{$episode->title }} podcast cover"
+                                class="w-24"
+                                @elseif(!is_null($episode->podcast->image_id))
+                                    src="{{ asset('images/'.$episode->podcast->cover->file_name) }}"
+                                alt="{{ $episode->podcast->title }} podcast cover"
+                                class="w-24"
+                                @else
+                                    src="/podcast-files/covers/PodcastDefaultFAU.png" alt="Podcast Cover 3"
+                                @endif
+                            />
+                        </div>
+                        <div>{{ $episode->title }}</div>
+                    </div>
+
                 </td>
                 <td class="px-6 py-4  text-gray-900  dark:text-white">
                     <p class=" mb-2 text-black dark:text-white">

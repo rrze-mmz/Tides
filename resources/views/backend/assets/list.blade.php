@@ -2,12 +2,12 @@
 <div
     class="flex border-b border-black py-4 text-lg font-semibold dark:text-white dark:border-white"
 >
-    Assets / FolderID: {{ $clip->folder_id }}
+    Assets / FolderID: {{ $obj->folder_id }}
 </div>
 <div class="flex">
     <ul class="w-full pt-3">
         @php
-            $assetsList = $assets->filter(function ($item) use ($clip) {
+            $assetsList = $assets->filter(function ($item){
                     // If the item is a SMIL asset, check if the user is an admin
                     if ($item->type == Content::SMIL->value) {
                         return Gate::allows('administrate-admin-portal-pages');

@@ -1,14 +1,14 @@
 @component('mail::message')
-# Video upload completed
+    # Video upload completed
 
-Hi {{ $clip->owner->name }},
+    Hi {{ $clip->owner->name }},
 
-Your Video "{{ $clip->title }}" is online
+    Your Video "{{ $clip->title }}" is online
 
-@component('mail::button', ['url' =>'https://tides.test'.$clip->path()])
-Watch the video
-@endcomponent
+    @component('mail::button', ['url' => route('frontend.clips.show', $clip)])
+        Watch the video
+    @endcomponent
 
-Thanks,<br>
-{{ config('app.name') }}
+    Thanks,<br>
+    {{ config('app.name') }}
 @endcomponent

@@ -78,14 +78,6 @@ class Clip extends BaseModel
     }
 
     /**
-     * Clip backend link
-     */
-    public function adminPath(): string
-    {
-        return "/admin/clips/{$this->slug}";
-    }
-
-    /**
      * Clip routes should work with slug and with id to ensure backward compatibility
      */
     public function resolveRouteBinding($value, $field = null): ?Model
@@ -201,14 +193,6 @@ class Clip extends BaseModel
             $this->posterImage = null;
         }
         $this->save();
-    }
-
-    /**
-     * Clip frontend link
-     */
-    public function path(): string
-    {
-        return "/clips/{$this->slug}";
     }
 
     /**

@@ -25,16 +25,8 @@ beforeEach(function () {
     Storage::fake('thumbnails');
 });
 
-it('has a path', function () {
-    expect($this->clip->path())->toBe('/clips/'.$this->clip->slug);
-});
-
-it('has an admin path', function () {
-    expect($this->clip->adminPath())->toBe('/admin/clips/'.$this->clip->slug);
-});
-
 it('has a slug route', function () {
-    expect($this->clip->path())->toBe('/clips/'.Str::slug(
+    expect(route('frontend.clips.show', $this->clip))->toBe(route('home').'/clips/'.Str::slug(
         $this->clip->episode.'-'.$this->clip->title.'-'.Semester::current()->get()->first()->acronym
     ));
 });

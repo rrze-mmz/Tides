@@ -15,9 +15,7 @@ class ShowPodcastsController extends Controller
     {
         //for visitors show only the published podcasts with episodes containing audio files
         $podcasts = Podcast::where('is_published', true)
-            ->whereHas('episodes', function ($query) {
-                $query->where('audio_url', '!=', '');
-            })
+            ->whereHas('episodes.assets')
             ->orderBy('updated_at', 'desc')->paginate(12);
 
         return view('frontend.podcasts.index', compact('podcasts'));

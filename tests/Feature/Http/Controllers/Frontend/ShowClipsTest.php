@@ -239,8 +239,8 @@ it('clip public page should have navigate to previous and next clips if a clip b
     get(route('frontend.clips.show', $clip))
         ->assertSee(__('common.previous'))
         ->assertSee(__('common.next'))
-        ->assertSee($previousClip->path())
-        ->assertSee($nextClip->path());
+        ->assertSee(route('frontend.clips.show', $previousClip))
+        ->assertSee(route('frontend.clips.show', $nextClip));
 });
 
 it('a signed in user can access frontend clip page if clip has a portal access', function () {

@@ -9,6 +9,7 @@ import Hls from 'hls.js';
 import Pikaday from 'pikaday';
 import * as FilePond from 'filepond';
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
+import FilePondPluginMediaPreview from 'filepond-plugin-media-preview';
 import 'filepond/dist/filepond.min.css';
 import select2 from 'select2';
 import Plyr from 'plyr';
@@ -29,7 +30,7 @@ Livewire.start();
 
 $('.solution-trix-field-wrapper')
   .find($('trix-editor'))
-  .css('min-height', '350px');
+  .css('min-height', '100px');
 
 document.addEventListener('alpine:init', () => {
   Alpine.store('darkMode', {
@@ -317,6 +318,7 @@ document.addEventListener(
 );
 
 FilePond.registerPlugin(FilePondPluginImagePreview);
+FilePond.registerPlugin(FilePondPluginMediaPreview);
 
 const inputElement = document.querySelector('input[type="file"].filepond');
 const csrfToken = document
@@ -327,6 +329,36 @@ FilePond.create(inputElement).setOptions({
     process: '/admin/uploads/process',
     headers: {
       'X-CSRF-TOKEN': csrfToken,
+    },
+  },
+});
+
+const inputElement1 = document.querySelector(
+  'input[type="file"].filepond-input1'
+);
+const csrfToken1 = document
+  .querySelector('meta[name="csrf-token"]')
+  .getAttribute('content');
+FilePond.create(inputElement1).setOptions({
+  server: {
+    process: '/admin/uploads/process',
+    headers: {
+      'X-CSRF-TOKEN': csrfToken1,
+    },
+  },
+});
+
+const inputElement2 = document.querySelector(
+  'input[type="file"].filepond-input2'
+);
+const csrfToken2 = document
+  .querySelector('meta[name="csrf-token"]')
+  .getAttribute('content');
+FilePond.create(inputElement2).setOptions({
+  server: {
+    process: '/admin/uploads/process',
+    headers: {
+      'X-CSRF-TOKEN': csrfToken2,
     },
   },
 });

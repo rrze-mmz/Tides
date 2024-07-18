@@ -6,6 +6,7 @@ use App\Models\PodcastEpisode;
 use Facades\Tests\Setup\PodcastFactory;
 
 use function Pest\Laravel\assertDatabaseHas;
+use function Pest\Laravel\assertDatabaseMissing;
 use function Pest\Laravel\delete;
 use function Pest\Laravel\get;
 use function Pest\Laravel\patch;
@@ -89,4 +90,27 @@ it('lists all podcast episodes in podcast edit page', function () {
     $podcastEpisode = $this->podcast->episodes()->first();
 
     get(route('podcasts.edit', $this->podcast))->assertSee($podcastEpisode->title);
+});
+
+it('denies a non authorized user to delete a podcast', function () {
+    auth()->logout();
+
+    signInRole(Role::MODERATOR);
+
+    delete(route('podcasts.destroy', $this->podcast))->assertForbidden();
+});
+
+it('allows deleting a podcast to podcast owner', function () {
+    delete(route('podcasts.destroy', $this->podcast))->assertRedirectToRoute('podcasts.index');
+
+    assertDatabaseMissing('podcasts', ['id' => $this->podcast->id]);
+});
+
+test('deleting a podcast will also delete all it\'s episodes', function () {
+    $episode = PodcastEpisode::factory()->create();
+    $this->podcast->episodes()->save($episode);
+    delete(route('podcasts.destroy', $this->podcast));
+
+    assertDatabaseMissing('podcasts', ['id' => $this->podcast->id]);
+    assertDatabaseMissing('podcast_episodes', ['id' => $episode->id, 'podcast_id' => $this->podcast->id]);
 });

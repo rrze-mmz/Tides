@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Services\OpenSearchService;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Str;
@@ -11,29 +12,19 @@ use function Laravel\Prompts\select;
 
 class OpenSearchRebuildIndexes extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
     protected $signature = 'opensearch:rebuild-indexes';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
     protected $description = 'Rebuild OpenSearch indexes';
 
     /**
-     * Execute the console command.
+     * @throws GuzzleException
      */
-    public function handle(OpenSearchService $openSearchService)
+    public function handle(OpenSearchService $openSearchService): int
     {
 
         $modelName = select(
             label: 'Which search index do you want to rebuild?',
-            options: ['Series', 'Clip', 'Podcast'],
+            options: ['Series', 'Clip', 'Podcast', 'PodcastEpisode'],
             default: 'Series',
             hint: 'Clips may take longer as expected'
         );
@@ -49,7 +40,11 @@ class OpenSearchRebuildIndexes extends Command
             return Command::FAILURE;
         }
 
-        $openSearchService->deleteIndexes(Str::plural($modelName));
+        if ($modelName === 'PodcastEpisode') {
+            $openSearchService->deleteIndexes('podcast_episodes');
+        } else {
+            $openSearchService->deleteIndexes(Str::plural($modelName));
+        }
 
         $this->info($modelName.' Indexes deleted successfully');
         $counter = $modelClass::count();

@@ -277,13 +277,19 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
 
     //Clip routes
     Route::resource('clips', ClipsController::class)->except(['show']);
-    //    Route::get('/clips/{clip}/', [ClipsController::class, 'edit'])->name('clips.edit');
 
     //Podcast routes
     Route::resource('podcasts', PodcastsController::class)->except(['show']);
+    Route::controller(PodcastEpisodesController::class)->prefix('/podcasts')
+        ->middleware('can:edit-podcast,podcast')
+        ->group(function () {
+            Route::get('/{podcast}/episodes', 'create')->name('podcasts.episodes.create');
+            Route::post('{podcast}/episodes', 'store')->name('podcasts.episodes.store');
+            Route::get('/{podcast}/episodes/{episode:slug}', 'edit')->name('podcasts.episodes.edit');
+            Route::put('/{podcast}/episodes/{episode:slug}', 'update')->name('podcasts.episodes.update');
+            Route::delete('/{podcast}/episodes/{episode:slug}', 'destroy')->name('podcasts.episodes.destroy');
+        });
 
-    Route::get('/podcasts/{podcast}/episodes/{episode}', [PodcastEpisodesController::class, 'edit'])
-        ->name('podcasts.episodes.edit');
     /*
      * A group of clip assets functions
      */

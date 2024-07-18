@@ -33,7 +33,7 @@
         <div class="flex justify-between py-4">
             @if(!is_null($previousNextClipCollection->get('previousClip')))
                 <a class="flex max-w-lg flex-row items-center justify-between"
-                   href="{{ $previousNextClipCollection->get('previousClip')->path() }}">
+                   href="{{ route('frontend.clips.show',$previousNextClipCollection->get('previousClip')) }}">
                     <x-button class="bg-blue-600 hover:bg-blue-700 text-sm">
                         <div class="mr-4">
                             <x-heroicon-o-arrow-left class="w-6" />
@@ -46,7 +46,7 @@
             @endif
             @if(!is_null($previousNextClipCollection->get('nextClip')))
                 <a class="flex max-w-lg flex-row items-center justify-between"
-                   href="{{ $previousNextClipCollection->get('nextClip')->path() }}">
+                   href="{{ route('frontend.clips.show', $previousNextClipCollection->get('nextClip')) }}">
                     <x-button class="bg-blue-600 hover:bg-blue-700 text-sm">
                         <div>
                             {{ __('common.next').'-'.$previousNextClipCollection->get('nextClip')->title }}

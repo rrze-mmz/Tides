@@ -5,12 +5,16 @@
 @extends('layouts.backend')
 
 @section('content')
-    <div class="mb-5 flex items-center justify-between border-b border-black pb-2 font-semibold font-2xl
-                dark:text-white dark:border-white"
-    >
-        Edit user
+    <div class="flex border-b border-black text-2xl flex-col dark:text-white dark:border-white font-normal pb-2">
+        <div class="flex w-full items-center">
+            <span>
+                Edit user
+            </span>
+            <span class="px-2 italic">
+                {{ $user->getFullNameAttribute() }}
+            </span>| UserID: {{ $user->id }}
+        </div>
     </div>
-
     <div class="flex justify-center content-center  py-2 px-2">
         <form action="{{ route('users.update',$user) }}"
               method="POST"
@@ -79,7 +83,6 @@
     </div>
 
 
-
     @if(isset($user->settings->data['admin_portal_application_status']))
         @if($user->settings->data['admin_portal_application_status'] === ApplicationStatus::IN_PROGRESS())
             <div class="pt-10 mb-5 flex items-center justify-between border-b border-black pb-2 font-semibold font-2xl
@@ -111,7 +114,8 @@
             <div class="flex flex-row items-center pt-5 dark:text-white">
                 <div class="pr-10 text-lg">
                     User admin portal application processed by
-                    <span class="italic"> {{ $user->settings->data['admin_portal_application_processed_by'] }} </span>
+                    <span
+                        class="italic"> {{ $user->settings->data['admin_portal_application_processed_by'] }} </span>
                     <span class="text-sm">
                     {{ Carbon::createFromFormat(
                     'Y-m-d H-i-s',$user->settings->data['admin_portal_application_processed_at']

@@ -1,116 +1,111 @@
 @extends('layouts.backend')
 
 @section('content')
-    <div class="flex border-b border-black text-2xl flex-col dark:text-white dark:border-white font-normal pb-2">
-        {{ $episode->title }} [ ID : {{ $episode->id }}]
+    <div class="flex border-b border-black text-2xl flex-col dark:text-white dark:border-white font-normal">
+        {{ __('common.heading.create new podcast') }}
     </div>
     <div class="flex">
-        <form action="{{ route('podcasts.update', $episode) }}"
+        <form action="{{ route('podcasts.episodes.create', $podcast) }}"
               method="POST"
               class="w-full">
-            @method('PATCH')
             @csrf
             <div class="grid grid-cols-3">
                 <div class="col-span-2">
                     <div class="flex flex-col gap-3 space-y-4 pt-4">
+                        <x-form.input field-name="episode_number"
+                                      input-type="number"
+                                      :value="$podcast->latestEpisode?->episode_number + 1"
+                                      label="Episode"
+                                      :full-col="false"
+                                      :required="false"
+                        />
+
+                        <x-form.datepicker field-name="recording_date"
+                                           label="Recording Date"
+                                           :full-col="false"
+                                           :value="now()" />
+
                         <x-form.input field-name="title"
                                       input-type="text"
-                                      :value="$episode->title"
+                                      :value="old('title','')"
+                                      :placeholder="'My new podcast episode'"
                                       label="{{ __('common.forms.title') }}"
                                       :full-col="true"
                                       :required="true"
                         />
 
                         <x-form.textarea field-name="description"
-                                         :value="$episode->description"
+                                         :value="old('description')"
                                          label="{{ __('common.forms.description') }}"
+                        />
+
+                        <x-form.textarea field-name="notes"
+                                         :value="old('notes')"
+                                         label="Notes"
+                        />
+
+                        <x-form.textarea field-name="transcription"
+                                         :value="old('transcription')"
+                                         label="Transcript"
                         />
 
                         <x-form.select2-multiple field-name="hosts"
                                                  label="Host(s)"
                                                  select-class="select2-tides-presenters"
-                                                 :model="$episode"
-                                                 :items="$episode->getPrimaryPresenters()"
+                                                 :model="null"
+                                                 :items="[]"
                         />
 
                         <x-form.select2-multiple field-name="guests"
                                                  label="Guest(s)"
                                                  select-class="select2-tides-presenters"
-                                                 :model="$episode"
-                                                 :items="$episode->getPrimaryPresenters(primary: false)"
+                                                 :model="null"
+                                                 :items="[]"
                         />
 
-                        <x-form.toggle-button :value="$episode->is_published"
+                        <x-form.toggle-button :value="true"
                                               label="Is public"
                                               field-name="is_published"
                         />
                         <x-form.input field-name="website_url"
                                       input-type="url"
-                                      :value="$episode->website_url"
+                                      :value="old('website_url')"
                                       label="{{ __('common.forms.website url') }}"
                                       :full-col="true"
                                       :required="false"
                         />
                         <x-form.input field-name="apple_podcasts_url"
                                       input-type="url"
-                                      :value="$episode->apple_podcasts_url"
+                                      :value="old('apple_podcasts_url')"
                                       label="{{ __('common.forms.apple podcasts url') }}"
                                       :full-col="true"
                                       :required="false"
                         />
                         <x-form.input field-name="spotify_url"
                                       input-type="url"
-                                      :value="$episode->spotify_url"
+                                      :value="old('spotify_url')"
                                       label="{{ __('common.forms.spotify url') }}"
                                       :full-col="true"
                                       :required="false"
                         />
                     </div>
                 </div>
-                <div class="row-span-4 pr-4">
-                    <div class="flex-row">
-                        <div class="text-lg  dark:text-white pt-4 ">
-                            <span class="font-bold">Podcast Owner:</span>
-                            <span class="italic">
-                                       @if(is_null($episode->owner))
-                                    Podcast has no owner yet
-                                @else
-                                    {{$episode->owner?->getFullNameAttribute().'-'.$episode->owner?->username}}
-                                @endif
-
-                                </span>
-                        </div>
-                        @can('change-series-owner')
-                            <div class="w-full pt-6 dark:text-white">
-                                <div class="w-full pb-6">
-                                    <label>
-                                        <select
-                                            class="p-2 w-full select2-tides-users
-                                        focus:outline-none focus:bg-white focus:border-blue-500 "
-                                            name="owner_id"
-                                            style="width: 100%"
-                                        >
-                                        </select>
-                                    </label>
-                                </div>
-                            </div>
-                        @endcan
-                    </div>
+                <div class="row-span-4">
                     <div class="flex w-full">
                         <img
-                            @if(!is_null($episode->cover))
-                                src="{{ asset('images/'.$episode->cover->file_name) }}"
-                            alt="{{ $episode->cover->description }}"
-                            @else
+                            @if(!is_null($podcast->cover))
                                 src="{{ asset('images/'.$podcast->cover->file_name) }}"
+                            alt="{{ $podcast->cover->description }}"
+                            @else
+                                src="{{ asset('images/') }}"
                             alt="{{ $podcast->cover->description }}"
                             @endif
 
                             class="w-full h-auto rounded-md">
                     </div>
-                    @if(is_null($episode->cover))
+                    @if(!is_null($podcast->cover))
                         <div class="text-lg dark:text-white italic">
-                            *inherited from podcast
+                            *inherited from podcast*
                         </div>
                     @endif
                     <div class="flex flex-col items-center place-content-center text-lg pt-8 pb-4 border-b border-black
@@ -126,7 +121,7 @@
 
                     <input type="file"
                            name="image"
-                           class="filepond"
+                           class="filepond-input1"
                            data-max-file-size="10MB"
                     />
 
@@ -139,7 +134,7 @@
                 <div class="col-span-3 pt-10">
                     <div class="">
                         <x-button :type="'submit'" class="bg-blue-600 hover:bg-blue-700">
-                            Podcast {{ __('common.actions.update') }}
+                            Episode {{ __('common.actions.save') }}
                         </x-button>
                         <a href="{{route('podcasts.index')}}">
                             <x-button type="button" class="ml-3 bg-green-600 hover:bg-green-700">

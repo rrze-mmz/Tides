@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('asset_id')->references('id')->on('assets')->onDelete('cascade')->index();
             $table->foreignId('assetable_id')->index();
             $table->string('assetable_type');
+            $table->boolean('primary')->default('true');
             $table->timestamps();
         });
     }

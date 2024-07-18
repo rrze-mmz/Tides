@@ -31,6 +31,17 @@ trait Assetable
         });
     }
 
+    public function hasVideoAsset(): bool
+    {
+        return $this->assets->filter(function ($asset) {
+            return ($asset->type == Content::PRESENTATION() ||
+                    $asset->type == Content::PRESENTER() ||
+                    $asset->type == Content::COMPOSITE() ||
+                    $asset->type == Content::SLIDES()
+            ) && ! $asset->is_deleted;
+        })->isNotEmpty();
+    }
+
     /**
      * Return caption asset for the clip
      */
@@ -44,7 +55,8 @@ trait Assetable
     public function latestAsset(): Model|MorphToMany|null
     {
         return $this->assets()
-            ->orderByDesc('width', 'type')
+            ->orderByDesc('width')
+            ->orderByDesc('type')
             ->limit(1)->first();
         //        return $this->assets()->first();
     }

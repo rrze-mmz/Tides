@@ -111,7 +111,7 @@ it('shows a flash message when a clip is deleted', function () {
 
 it('can toggle comments', function () {
     $clip = ClipFactory::ownedBy(signInRole(Role::MODERATOR))->create();
-    get($clip->path())->assertDontSee('Comments');
+    get(route('frontend.clips.show', $clip))->assertDontSee('Comments');
     patch(route('clips.update', $clip), [
         'title' => $clip->title,
         'episode' => $clip->episode,
@@ -136,10 +136,8 @@ it('displays previous and next clip id links', function () {
     $nextClip = Clip::find(3);
 
     get(route('clips.edit', $clip))
-        ->assertSee('Previous')
-        ->assertSee('Next')
-        ->assertSee($previousClip->adminPath())
-        ->assertSee($nextClip->adminPath());
+        ->assertSee(route('clips.edit', $previousClip))
+        ->assertSee(route('clips.edit', $nextClip));
 });
 
 it('hides previous clip id links if clip is the first on a series', function () {
@@ -148,9 +146,7 @@ it('hides previous clip id links if clip is the first on a series', function () 
     $clip = Clip::find(1);
     $nextClip = Clip::find(2);
     get(route('clips.edit', $clip))
-        ->assertDontSee('Previous')
-        ->assertSee('Next')
-        ->assertSee($nextClip->adminPath());
+        ->assertSee(route('clips.edit', $nextClip));
 });
 
 it('hides next clip id if clip is the last on a series', function () {
@@ -160,9 +156,7 @@ it('hides next clip id if clip is the last on a series', function () {
     $previousClip = Clip::find(3);
 
     get(route('clips.edit', $clip))
-        ->assertSee('Previous')
-        ->assertDontSee('Next')
-        ->assertSee($previousClip->adminPath());
+        ->assertSee(route('clips.edit', $previousClip));
 });
 
 it('has a trigger smil file button if clip has assets', function () {

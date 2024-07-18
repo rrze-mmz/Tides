@@ -4,23 +4,43 @@
 
 @section('content')
     <div class="flex border-b border-black text-2xl flex-col dark:text-white dark:border-white font-normal">
-        <div class="flex w-full items-center justify-between">
+        <div class="flex w-full items-center">
             <div class="">
                 <span class="text-3xl"> [ ID: {{ $clip->id }} ] {{ $clip->title }}</span>
             </div>
-            <div class="flex space-x-2">
+            <div class="flex space-x-2 pl-4">
                 @if(!is_null($previousNextClipCollection->get('previousClip')))
-                    <x-form.button :link="$previousNextClipCollection->get('previousClip')->adminPath()"
-                                   type="submit"
-                                   text="Previous"
-                    />
+                    @php
+                        $previousClip = $previousNextClipCollection->get('previousClip');
+                    @endphp
+                    <a href="{{ route('clips.edit', $previousClip) }}">
+                        <x-button
+                            :tooltip="true"
+                            :tooltip-text="$previousClip->episode.' - '. $previousClip->title"
+                            class="flex items-center bg-blue-600 hover:bg-blue-700 space-x-2  text-sm"
+                        >
+                            <div>
+                                <x-heroicon-c-arrow-left class="w-4" />
+                            </div>
+                        </x-button>
+                    </a>
                 @endif
 
                 @if(!is_null($previousNextClipCollection->get('nextClip')))
-                    <x-form.button :link="$previousNextClipCollection->get('nextClip')->adminPath()"
-                                   type="submit"
-                                   text="Next"
-                    />
+                    @php
+                        $nextClip = $previousNextClipCollection->get('nextClip');
+                    @endphp
+                    <a href="{{ route('clips.edit',$nextClip) }}">
+                        <x-button
+                            :tooltip="true"
+                            :tooltip-text="$nextClip->episode.' - '. $nextClip->title"
+                            class="flex items-center bg-blue-600 hover:bg-blue-700 space-x-2  text-sm"
+                        >
+                            <div>
+                                <x-heroicon-c-arrow-right class="w-4" />
+                            </div>
+                        </x-button>
+                    </a>
                 @endif
             </div>
         </div>
@@ -302,7 +322,7 @@
             <div class="mt-6">
                 <div x-show="activeTab === 1" id="clips" class="w-full ">
                     {{--                    @include('backend.series.buttons.actions')--}}
-                    @include('backend.assets.list', ['assets'=>$clip->assets])
+                    @include('backend.assets.list', ['assets'=>$clip->assets,'obj'=> $clip])
                 </div>
                 <div x-show="activeTab === 2" id="opencast">
                     {{--                    @include('backend.series.tabs.opencast.index')--}}

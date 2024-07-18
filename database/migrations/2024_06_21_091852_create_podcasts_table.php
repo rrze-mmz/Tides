@@ -21,8 +21,8 @@ return new class extends Migration
             $table->string('website_url')->nullable();
             $table->string('spotify_url')->nullable();
             $table->string('apple_podcasts_url')->nullable();
-            $table->string('google_podcasts_url')->nullable();
             $table->bigInteger('old_podcast_id')->nullable();
+            $table->foreignId('owner_id')->nullable()->references('id')->on('users')->nullOnDelete()->index();
             $table->timestamps();
         });
     }

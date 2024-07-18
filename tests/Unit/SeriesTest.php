@@ -24,16 +24,11 @@ beforeEach(function () {
     $this->series = Series::factory()->create();
 });
 
-it('has a path', function () {
-    expect($this->series->path())->toEqual('/series/'.$this->series->slug);
-});
-
-it('has an admin path', function () {
-    expect($this->series->adminPath())->toEqual('/admin/series/'.$this->series->slug);
-});
-
 it('has a slug route', function () {
-    expect($this->series->path())->toEqual('/series/'.Str::slug($this->series->title.'-'.Semester::current()->get()->first()->acronym));
+    expect(route('frontend.series.show', $this->series))
+        ->toEqual(
+            route('home').'/series/'.Str::slug($this->series->title.'-'.Semester::current()->get()->first()->acronym)
+        );
 });
 
 it('has a unique slug', function () {

@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 #[ObservedBy(PodcastsObserver::class)]
@@ -67,6 +68,14 @@ class Podcast extends BaseModel
     public function comments(): MorphMany
     {
         return $this->morphMany(Comment::class, 'commentable');
+    }
+
+    /**
+     * Fetch the latest clip from a series based on episode
+     */
+    public function latestEpisode(): HasOne
+    {
+        return $this->hasOne(PodcastEpisode::class)->latestOfMany('episode_number');
     }
 
     protected function description(): Attribute
