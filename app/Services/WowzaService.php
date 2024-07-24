@@ -13,6 +13,7 @@ use Composer\Pcre\UnexpectedNullMatchException;
 use DOMException;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Response;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
@@ -94,22 +95,22 @@ class WowzaService
      *
      * @throws DOMException
      */
-    public function createSmilFile(Clip $clip): void
+    public function createSmilFile(Model $model): void
     {
         // select all clip video assets, iterate them and create an array for array to xml package
-        if ($clip->assets->isNotEmpty()) {
-            $this->generateSmilFile($clip, Content::PRESENTER);
-            $this->generateSmilFile($clip, Content::PRESENTATION);
-            $this->generateSmilFile($clip, Content::COMPOSITE);
+        if ($model->assets->isNotEmpty()) {
+            $this->generateSmilFile($model, Content::PRESENTER);
+            $this->generateSmilFile($model, Content::PRESENTATION);
+            $this->generateSmilFile($model, Content::COMPOSITE);
         }
     }
 
     /**
      * @throws DOMException
      */
-    public function generateSmilFile(Clip $clip, Content $type): void
+    public function generateSmilFile(Model $model, Content $type): void
     {
-        $assetsCollection = $clip->getAssetsByType($type)->get();
+        $assetsCollection = $model->getAssetsByType($type)->get();
         if ($assetsCollection->isNotEmpty()) {
             $xmlArray['body']['switch'] = $assetsCollection
                 ->sortByDesc('height')
@@ -121,22 +122,22 @@ class WowzaService
             $result = new ArrayToXml($xmlArray, [
                 'rootElementName' => 'smil',
                 '_attributes' => [
-                    'title' => 'Clip ID:'.$clip->id,
+                    'title' => 'Clip ID:'.$model->id,
                 ],
             ], true, 'UTF-8', '1.0', []);
 
             $original_file_name = str($type->name)->lower().'.smil';
             //store the generated file to clip path
             Storage::disk('videos')
-                ->put(getClipStoragePath($clip)."/{$original_file_name}", $xmlFile = $result->prettify()->toXml());
+                ->put(getClipStoragePath($model)."/{$original_file_name}", $xmlFile = $result->prettify()->toXml());
 
             //save or update the smil file in db
-            $clip->addAsset(Asset::create([
+            $model->addAsset(Asset::create([
                 'disk' => 'videos',
                 'original_file_name' => $original_file_name,
                 'type' => Content::SMIL(),
                 'guid' => Str::uuid(),
-                'path' => getClipStoragePath($clip),
+                'path' => getClipStoragePath($model),
                 'duration' => '0',
                 'width' => '0',
                 'height' => '0',
@@ -243,20 +244,6 @@ class WowzaService
         return collect($urlWithToken);
     }
 
-    private function genToken(mixed $tokenPrefix, string $wowzaContentPath, mixed $secureToken, string $url): string
-    {
-        $tokenStartTime = $tokenPrefix.'starttime='.time();
-        $tokenEndTime = $tokenPrefix.'endTime='.(time() + 21600);
-
-        $userIP = (App::environment(['testing', 'local'])) ? env('FAUTV_USER_IP') : $_SERVER['REMOTE_ADDR'];
-        $hashStr = "{$wowzaContentPath}?{$userIP}&{$secureToken}&{$tokenEndTime}&{$tokenStartTime}";
-        $hash = hash('sha256', $hashStr, 1);
-        $usableHash = strtr(base64_encode($hash), '+/', '-_');
-        $urlWithToken = "{$url}?{$tokenStartTime}&{$tokenEndTime}&{$tokenPrefix}hash={$usableHash}";
-
-        return $urlWithToken;
-    }
-
     /**
      * Generates a wowza streaming link with secure token settings
      */
@@ -331,6 +318,20 @@ class WowzaService
         } catch (UnexpectedNullMatchException $exception) {
             Log::error($exception);
         }
+    }
+
+    private function genToken(mixed $tokenPrefix, string $wowzaContentPath, mixed $secureToken, string $url): string
+    {
+        $tokenStartTime = $tokenPrefix.'starttime='.time();
+        $tokenEndTime = $tokenPrefix.'endTime='.(time() + 21600);
+
+        $userIP = (App::environment(['testing', 'local'])) ? env('FAUTV_USER_IP') : $_SERVER['REMOTE_ADDR'];
+        $hashStr = "{$wowzaContentPath}?{$userIP}&{$secureToken}&{$tokenEndTime}&{$tokenStartTime}";
+        $hash = hash('sha256', $hashStr, 1);
+        $usableHash = strtr(base64_encode($hash), '+/', '-_');
+        $urlWithToken = "{$url}?{$tokenStartTime}&{$tokenEndTime}&{$tokenPrefix}hash={$usableHash}";
+
+        return $urlWithToken;
     }
 
     private function findLivestream(?string $opencastAgentID, ?string $livestreamRoomName): ?Livestream

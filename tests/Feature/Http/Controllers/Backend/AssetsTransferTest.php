@@ -9,12 +9,14 @@ use App\Mail\AssetsTransferred;
 use App\Services\OpencastService;
 use Facades\Tests\Setup\ClipFactory;
 use Facades\Tests\Setup\FileFactory;
+use Facades\Tests\Setup\PodcastFactory;
 use Facades\Tests\Setup\SeriesFactory;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
 use Tests\Setup\WorksWithOpencastClient;
 
@@ -28,6 +30,11 @@ uses()->beforeEach(function () {
     Storage::fake('videos');
     Storage::fake('local');
     Storage::fake('thumbnails');
+    $audioFile = FileFactory::audioFile();
+    $randomString = Str::random(10); // Use Laravel's Str helper
+    $this->filePath = "/tmp/{$randomString}/Sample_Audio_file.mp3";
+    //create two test images in the disks
+    Storage::disk('local')->put($this->filePath, $audioFile->getContent());
 });
 
 uses(WorksWithOpencastClient::class);
@@ -278,4 +285,24 @@ it('transfers opencast event assets to clip', function () {
         ->assertSee($videoHD_UID)
         ->assertSee($audioUID)
         ->assertSee('presenter.smil');
+});
+
+it('validates audio files to upload to a podcast', function () {
+    $podcast = PodcastFactory::withEpisodes(1)->ownedBy(signInRole(Role::MODERATOR))->create();
+    $episode = $podcast->episodes()->first();
+
+    post(route('admin.podcasts.episode.transferPodcastAudioFile', compact('podcast', 'episode')), [])
+        ->assertSessionHasErrors();
+});
+
+test('a moderator can upload an audio file to a podcast episode', function () {
+    $podcast = PodcastFactory::withEpisodes(1)->ownedBy(signInRole(Role::MODERATOR))->create();
+    $episode = $podcast->episodes()->first();
+
+    post(route('admin.podcasts.episode.transferPodcastAudioFile', compact('podcast', 'episode')), [
+        'asset' => $this->filePath,
+    ])
+        ->assertStatus(302);
+
+    expect($episode->assets()->count())->toBe(1);
 });

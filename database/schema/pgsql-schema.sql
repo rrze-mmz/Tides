@@ -193,6 +193,7 @@ CREATE TABLE public.assetables (
     asset_id bigint NOT NULL,
     assetable_id bigint NOT NULL,
     assetable_type character varying(255) NOT NULL,
+    "primary" boolean DEFAULT true NOT NULL,
     created_at timestamp(0) without time zone,
     updated_at timestamp(0) without time zone
 );
@@ -354,7 +355,7 @@ CREATE TABLE public.clips (
     updated_at timestamp(0) without time zone,
     organization_id bigint DEFAULT '1'::bigint NOT NULL,
     folder_id character varying(128),
-    recording_date date DEFAULT '2024-07-08'::date,
+    recording_date date DEFAULT '2024-07-22'::date,
     acronym character varying(10),
     opencast_logo_pos character varying(2) DEFAULT 'TR'::character varying,
     uploaded_at timestamp(0) without time zone,
@@ -934,23 +935,25 @@ CREATE TABLE public.password_resets (
 
 CREATE TABLE public.podcast_episodes (
     id bigint NOT NULL,
-    podcast_id bigint NOT NULL,
     episode_number integer NOT NULL,
+    recording_date date DEFAULT '2024-07-22'::date,
     title character varying(255) NOT NULL,
     slug character varying(255) NOT NULL,
+    podcast_id bigint NOT NULL,
     description text,
     notes text,
     transcription text,
     image_id integer,
-    audio_url character varying(255) NOT NULL,
+    is_published boolean DEFAULT true NOT NULL,
+    website_url character varying(255),
     spotify_url character varying(255),
     apple_podcasts_url character varying(255),
-    google_podcasts_url character varying(255),
     old_episode_id bigint,
     published_at timestamp(0) without time zone,
+    folder_id character varying(128),
+    owner_id bigint,
     created_at timestamp(0) without time zone,
-    updated_at timestamp(0) without time zone,
-    owner_id bigint
+    updated_at timestamp(0) without time zone
 );
 
 
@@ -987,11 +990,10 @@ CREATE TABLE public.podcasts (
     website_url character varying(255),
     spotify_url character varying(255),
     apple_podcasts_url character varying(255),
-    google_podcasts_url character varying(255),
     old_podcast_id bigint,
+    owner_id bigint,
     created_at timestamp(0) without time zone,
-    updated_at timestamp(0) without time zone,
-    owner_id bigint
+    updated_at timestamp(0) without time zone
 );
 
 
@@ -2658,6 +2660,13 @@ CREATE INDEX password_resets_email_index ON public.password_resets USING btree (
 
 
 --
+-- Name: podcast_episodes_podcast_id_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX podcast_episodes_podcast_id_index ON public.podcast_episodes USING btree (podcast_id);
+
+
+--
 -- Name: series_members_series_id_user_id_index; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2760,14 +2769,6 @@ ALTER TABLE ONLY public.chapters
 
 
 --
--- Name: assetables 1; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.assetables
-    ADD CONSTRAINT "1" FOREIGN KEY (asset_id) REFERENCES public.assets(id) ON DELETE CASCADE;
-
-
---
 -- Name: podcasts 1; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2781,6 +2782,14 @@ ALTER TABLE ONLY public.podcasts
 
 ALTER TABLE ONLY public.podcast_episodes
     ADD CONSTRAINT "1" FOREIGN KEY (owner_id) REFERENCES public.users(id) ON DELETE SET NULL;
+
+
+--
+-- Name: assetables 1; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.assetables
+    ADD CONSTRAINT "1" FOREIGN KEY (asset_id) REFERENCES public.assets(id) ON DELETE CASCADE;
 
 
 --
@@ -2901,14 +2910,6 @@ ALTER TABLE ONLY public.documentables
 
 ALTER TABLE ONLY public.livestreams
     ADD CONSTRAINT livestreams_clip_id_foreign FOREIGN KEY (clip_id) REFERENCES public.clips(id) ON DELETE SET NULL;
-
-
---
--- Name: podcast_episodes podcast_episodes_podcast_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.podcast_episodes
-    ADD CONSTRAINT podcast_episodes_podcast_id_foreign FOREIGN KEY (podcast_id) REFERENCES public.podcasts(id) ON DELETE CASCADE;
 
 
 --
@@ -3093,8 +3094,6 @@ COPY public.migrations (id, migration, batch) FROM stdin;
 65	2024_06_21_091852_create_podcasts_table	1
 66	2024_06_21_091859_create_podcast_episodes_table	1
 67	2024_07_02_145743_create_assetables_table	1
-68	2024_07_08_145312_add_podcasts_owner	2
-69	2024_07_08_145321_add_podcast_episode_owner	2
 \.
 
 
@@ -3102,7 +3101,7 @@ COPY public.migrations (id, migration, batch) FROM stdin;
 -- Name: migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.migrations_id_seq', 69, true);
+SELECT pg_catalog.setval('public.migrations_id_seq', 67, true);
 
 
 --

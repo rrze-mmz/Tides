@@ -10,6 +10,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Filesystem\FileExistsException;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
@@ -30,7 +31,7 @@ class TransferAssetsJob implements ShouldQueue
      * Create a new job instance.
      */
     public function __construct(
-        protected Clip $clip,
+        protected Model $model,
         protected Collection $files,
         protected string $eventID = '',
         protected string $sourceDisk = ''
@@ -46,13 +47,18 @@ class TransferAssetsJob implements ShouldQueue
     {
         $settingData = Setting::opencast()->data;
 
-        $clipStoragePath = getClipStoragePath($this->clip);
+        $clipStoragePath = getClipStoragePath($this->model);
         $this->files->each(function ($file, $key) use ($clipStoragePath, $settingData) {
             $isVideo = (bool) $file['video'];
-            $storageDisk = ($this->eventID !== '')
-                ? Storage::disk($this->sourceDisk)->readStream('/'.$settingData['archive_path'].
-                    "/$this->eventID/{$file['version']}/{$file['name']}")
-                : Storage::disk($this->sourceDisk)->readStream($file['name']);
+            //if it is a filePond file read the file from local /tmp dir
+            if (isset($file['filePond'])) {
+                $storageDisk = Storage::readStream($file['path']);
+            } else {
+                $storageDisk = ($this->eventID !== '')
+                    ? Storage::disk($this->sourceDisk)->readStream('/'.$settingData['archive_path'].
+                        "/$this->eventID/{$file['version']}/{$file['name']}")
+                    : Storage::disk($this->sourceDisk)->readStream($file['name']);
+            }
             try {
                 Storage::disk('videos')->makeDirectory($clipStoragePath);
                 Storage::disk('videos')->writeStream("{$clipStoragePath}/{$file['name']}", $storageDisk);
@@ -78,17 +84,17 @@ class TransferAssetsJob implements ShouldQueue
                 'type' => ($isVideo) ? Content::PRESENTER() : Content::AUDIO(),
             ]);
 
-            $this->clip->addAsset($asset);
+            $this->model->addAsset($asset);
 
             if ($isVideo) {
                 //generate a poster image for the clip
                 $ffmpeg->getFrameFromSeconds(5)
                     ->export()
                     ->toDisk('thumbnails')
-                    ->save("{$this->clip->id}_poster.png");
-                $this->clip->updatePosterImage();
+                    ->save("{$this->model->id}_poster.png");
+                $this->model->updatePosterImage();
 
-                Storage::disk('thumbnails')->delete("{$this->clip->id}_poster.png");
+                Storage::disk('thumbnails')->delete("{$this->model->id}_poster.png");
             }
 
             //in case of local upload delete the tmp file

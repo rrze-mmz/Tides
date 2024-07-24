@@ -2,8 +2,8 @@
 
 namespace App\Mail;
 
-use App\Models\Clip;
 use Illuminate\Bus\Queueable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
@@ -15,9 +15,7 @@ class AssetsTransferred extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct(protected Clip $clip)
-    {
-    }
+    public function __construct(protected Model $model) {}
 
     /**
      * Sends an email message if a video is uploaded successfully.
@@ -28,7 +26,7 @@ class AssetsTransferred extends Mailable
     {
         return $this->subject('Cool your video is now online')
             ->markdown('email.clips.video_is_uploaded', [
-                'clip' => $this->clip,
+                'clip' => $this->model,
             ]);
     }
 }

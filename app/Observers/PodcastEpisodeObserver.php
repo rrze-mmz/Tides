@@ -5,6 +5,7 @@ namespace App\Observers;
 use App\Http\Resources\PodcastEpisodeResource;
 use App\Models\PodcastEpisode;
 use App\Services\OpenSearchService;
+use Illuminate\Support\Str;
 
 class PodcastEpisodeObserver
 {
@@ -13,7 +14,9 @@ class PodcastEpisodeObserver
     public function created(PodcastEpisode $podcastEpisode): void
     {
         session()->flash('flashMessage', "{$podcastEpisode->title} ".__FUNCTION__.' successfully');
-
+        $podcastEpisode->refresh();
+        $podcastEpisode->folder_id = Str::uuid()->toString();
+        $podcastEpisode->save();
         $this->openSearchService->createIndex(new PodcastEpisodeResource($podcastEpisode));
     }
 
@@ -26,7 +29,7 @@ class PodcastEpisodeObserver
 
     public function deleted(PodcastEpisode $podcastEpisode): void
     {
-        session()->flash('flashMessage', "{$podcastEpisode} ".__FUNCTION__.' successfully');
+        session()->flash('flashMessage', "{$podcastEpisode->title} ".__FUNCTION__.' successfully');
 
         $this->openSearchService->deleteIndex($podcastEpisode);
     }

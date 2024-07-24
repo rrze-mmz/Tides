@@ -101,7 +101,7 @@
                             alt="{{ $podcast->cover->description }}"
                             @endif
 
-                            class="w-full h-auto rounded-md">
+                            class="w-full h-auto rounded-md py-4">
                     </div>
                     @if(!is_null($podcast->cover))
                         <div class="text-lg dark:text-white italic">

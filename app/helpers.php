@@ -6,6 +6,7 @@ use App\Models\Clip;
 use App\Models\Livestream;
 use App\Models\Setting;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
@@ -33,12 +34,17 @@ function fetchClipPoster(?string $player_preview): string
 /**
  * Return file dir for a clip based on created date
  */
-function getClipStoragePath(Clip $clip): string
+function getClipStoragePath(Model $model): string
 {
-    return '/'.Carbon::createFromFormat('Y-m-d', $clip->created_at->format('Y-m-d'))->year.
-        '/'.str_pad(Carbon::createFromFormat('Y-m-d', $clip->created_at->format('Y-m-d'))->month, 2, '0', STR_PAD_LEFT).
-        '/'.str_pad(Carbon::createFromFormat('Y-m-d', $clip->created_at->format('Y-m-d'))->day, 2, '0', STR_PAD_LEFT).
-        "/{$clip->folder_id}/";
+    return '/'.Carbon::createFromFormat('Y-m-d', $model->created_at->format('Y-m-d'))->year.
+        '/'.str_pad(
+            Carbon::createFromFormat('Y-m-d', $model->created_at->format('Y-m-d'))->month,
+            2,
+            '0',
+            STR_PAD_LEFT
+        ).
+        '/'.str_pad(Carbon::createFromFormat('Y-m-d', $model->created_at->format('Y-m-d'))->day, 2, '0', STR_PAD_LEFT).
+        "/{$model->folder_id}/";
 }
 
 /*

@@ -7,7 +7,7 @@
     </x-button>
     <div x-show="open" @click.away="open = false" @keydown.escape.window="open = false"
          class="absolute inset-0 m-auto h-64 max-w-full sm:max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg
-        xl:max-w-2/3 2xl:max-w-screen-2/3 rounded-md bg-gray-200 dark:bg-slate-600">
+        xl:max-w-2/3 2xl:max-w-screen-2/3 rounded-md bg-gray-200 dark:bg-slate-600 z-10">
         <!-- Modal content -->
         <div class="rounded-lg">
             <!-- Modal header -->

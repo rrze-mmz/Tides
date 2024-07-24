@@ -4,21 +4,22 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Backend\Traits\Transferable;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UploadPodcastAudioFile;
 use App\Models\Clip;
+use App\Models\Podcast;
+use App\Models\PodcastEpisode;
 use App\Models\Traits\UploadAssetRequest;
 use App\Services\OpencastService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class AssetsTransferController extends Controller
 {
     use Transferable;
 
-    /**
-     * Upload a single transcoded file from clip edit page
-     */
     public function transferSingleAsset(Clip $clip, UploadAssetRequest $request): RedirectResponse
     {
         $sourceDisk = 'local';
@@ -53,7 +54,7 @@ class AssetsTransferController extends Controller
             'files.*' => 'alpha_num',
         ]);
 
-        $this->checkDropzoneFilesForClipUpload($clip, $validated);
+        $this->checkDropzoneFilesForUpload($clip, $validated);
 
         return to_route('clips.edit', $clip);
     }
@@ -84,8 +85,27 @@ class AssetsTransferController extends Controller
             'eventID' => 'required|uuid',
         ]);
 
-        $this->checkOpencastAssetsForClipUpload($clip, $validated['eventID'], $opencastService);
+        $this->checkOpencastAssetsForUpload($clip, $validated['eventID'], $opencastService);
 
         return to_route('clips.edit', $clip);
+    }
+
+    public function transferPodcastAudioFile(
+        Podcast $podcast,
+        PodcastEpisode $episode,
+        UploadPodcastAudioFile $request
+    ) {
+        $validated = $request->validated();
+        $validatedFiles = [
+            0 => [
+                'video' => false,
+                'name' => Str::afterLast($validated['asset'], '/'),
+                'filePond' => true,
+                'path' => $validated['asset'],
+            ],
+        ];
+        $this->checkFilePondFilesForUpload(model: $episode, validatedFiles: $validatedFiles);
+
+        return to_route('podcasts.episodes.edit', compact('podcast', 'episode'));
     }
 }

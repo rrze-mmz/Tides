@@ -25,7 +25,7 @@ return [
         'delete' => [
             'modal title' => 'Are you certain you wish to delete the clip titled ":clip_title"?',
             'modal body' => 'Please proceed with caution. Deleting this clip will permanently remove all associated '.
-                            'resources, including video files and transcriptions. Once deleted, the clip will no '.
+                            'assets, including video files and transcriptions. Once deleted, the clip will no '.
                             'longer be accessible to users.',
         ],
         'delete series connection' => [

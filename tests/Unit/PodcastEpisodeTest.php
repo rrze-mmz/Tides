@@ -13,6 +13,10 @@ beforeEach(function () {
     $this->podcastEpisode = PodcastEpisode::factory()->create();
 });
 
+it('belongs to an owner', function () {
+    expect($this->podcastEpisode->owner())->toBeInstanceOf(BelongsTo::class);
+});
+
 it('belongs to a podcasts', function () {
     expect($this->podcastEpisode->podcast())->toBeInstanceOf(BelongsTo::class);
 });

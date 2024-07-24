@@ -14,7 +14,7 @@
     </div>
 
     <div class="col-span-2 w-full pt-4 pl-4 items-start">
-        <h3 class="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+        <h3 class="text-xl font-bold tracking-tight text-gray-900 dark:text-white px-1">
             <a
                 @if(str_contains(url()->current(), 'admin'))
                     href="{{ route('podcasts.edit', $podcast) }}">{{ $podcast->title }}
@@ -36,8 +36,7 @@
             </p>
         </div>
 
-        <div class="flex w-full justify-between p-4
-        ">
+        <div class="flex w-full justify-between p-2 items-center">
             <div>
                 <ul class="flex space-x-4 sm:mt-0">
                     <li>
@@ -70,17 +69,17 @@
                         </a>
                     </div>
                     <div>
-                        <form action="{{ route('podcasts.destroy',$podcast) }}"
-                              method="POST"
+                        <x-modals.delete
+                            :route="route('podcasts.destroy',$podcast) "
+                            class="w-full justify-center"
                         >
-                            @method('DELETE')
-                            @csrf
-                            <x-button type="submit" class="bg-red-500 hover:bg-red-700"
-                            >
-                                delete podcast
-                            </x-button>
-                        </form>
-
+                            <x-slot:title>
+                                {{ __('podcast.backend.delete.modal title',['podcast_title'=>$podcast->title]) }}
+                            </x-slot:title>
+                            <x-slot:body>
+                                {{ __('podcast.backend.delete.modal body') }}
+                            </x-slot:body>
+                        </x-modals.delete>
                     </div>
                 @endcan
             </div>

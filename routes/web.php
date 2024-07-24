@@ -289,17 +289,15 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
             Route::put('/{podcast}/episodes/{episode:slug}', 'update')->name('podcasts.episodes.update');
             Route::delete('/{podcast}/episodes/{episode:slug}', 'destroy')->name('podcasts.episodes.destroy');
         });
+    Route::post(
+        '/podcasts/{podcast}/episodes/{episode:slug}/transferPodcastFile',
+        [AssetsTransferController::class, 'transferPodcastAudioFile']
+    )->name('admin.podcasts.episode.transferPodcastAudioFile');
 
     /*
      * A group of clip assets functions
      */
     Route::middleware('can:edit,clip')->group(function () {
-        /*
-         * Transfer assets from a certain path in the server
-         * called "dropzone". This path is usually the export path
-         * for an extern service ffmpeg video transcoding. In FAU case
-         * the encoding is performed by the HPC cluster
-         */
         Route::controller(AssetsTransferController::class)->prefix('/clips')->group(function () {
             Route::post('/{clip}/generatePreviewImageFromFrame', [
                 ClipsPlayerActionsController::class, 'generatePreviewImageFromFrame',
@@ -343,6 +341,7 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
     Route::resource('devices', DevicesController::class)->except(['show']);
     Route::post('images/import/', UploadImageController::class)->name('images.import');
     Route::post('/uploads/process', [FileUploadController::class, 'process'])->name('uploads.process');
+    Route::delete('/uploads/revert', [FileUploadController::class, 'revert'])->name('uploads.revert');
 
     // Portal admin resources (portal assistants are not included)
     Route::middleware(['user.admin'])->group(function () {

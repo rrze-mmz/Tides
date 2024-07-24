@@ -6,12 +6,11 @@ use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Support\Facades\Storage;
 
-class ValidImageFile implements ValidationRule
+class ValidFile implements ValidationRule
 {
     public function __construct(
         private readonly array $validMimeTypes
-    ) {
-    }
+    ) {}
 
     /**
      * Run the validation rule.

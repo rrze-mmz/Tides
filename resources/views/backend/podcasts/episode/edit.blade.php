@@ -180,7 +180,7 @@
                 <div class="row-span-4">
                     @if($episode->getAssetsByType(Content::AUDIO)->first())
                         <div>
-                            <div class="dark:bg-gray-400 ">
+                            <div>
                                 <div class="mt-4 dark:text-white ">
                                     <audio id="player" class="w-full" controls>
                                         <source
@@ -382,19 +382,21 @@
 
             <div class="mt-6">
                 <div x-show="activeTab === 1" id="clips" class="w-full ">
-                    {{--                    @include('backend.series.buttons.actions')--}}
                     @include('backend.assets.list', [
                     'obj' => $episode,
                     'assets'=> $episode->assets
                     ])
-                    <form action="#"
+                    <form action="{{ route(
+                                            'admin.podcasts.episode.transferPodcastAudioFile',
+                                            compact('podcast', 'episode')
+                                            ) }}"
                           method="POST"
                           class="w-full"
                     >
                         @csrf
 
                         <input type="file"
-                               name="image"
+                               name="asset"
                                class="filepond-input2"
                                data-max-file-size=" 100MB"
                         />
@@ -423,15 +425,15 @@
                         </a>
                         <a href="#">
                             <x-button class="bg-blue-600 hover:bg-blue-700">
-                                Generate transcript (take some time)
+                                Generate transcript
                             </x-button>
                         </a>
-                        <x-modals.delete :route="'#'">
+                        <x-modals.delete :route="route('podcasts.episodes.destroy', compact('podcast','episode'))">
                             <x-slot:title>
-                                {{__('clip.backend.delete.modal title',['clip_title'=>$episode->title])}}
+                                {{__('podcastEpisode.backend.delete.modal title',['episode_title'=>$episode->title])}}
                             </x-slot:title>
                             <x-slot:body>
-                                {{__('clip.backend.delete.modal body')}}
+                                {{__('podcastEpisode.backend.delete.modal body')}}
                             </x-slot:body>
                         </x-modals.delete>
                     </div>

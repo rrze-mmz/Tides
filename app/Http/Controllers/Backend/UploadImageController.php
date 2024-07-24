@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Image;
-use App\Rules\ValidImageFile;
+use App\Rules\ValidFile;
 use Illuminate\Http\File;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -23,7 +23,7 @@ class UploadImageController extends Controller
         $image = Image::findOrFail($imageID);
 
         $validated = $request->validate([
-            'image' => ['required', 'string', new ValidImageFile(['image/png', 'image/jpeg'])],
+            'image' => ['required', 'string', new ValidFile(['image/png', 'image/jpeg'])],
         ]);
 
         Storage::disk('images')->delete($image->file_name);

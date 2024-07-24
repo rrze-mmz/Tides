@@ -17,7 +17,7 @@ return new class extends Migration
             $table->date('recording_date')->nullable()->default('now');
             $table->string('title');
             $table->string('slug')->unique();
-            $table->unsignedBigInteger('podcast_id');
+            $table->unsignedBigInteger('podcast_id')->references('id')->on('podcasts')->onDelete('cascade')->index();
             $table->text('description')->nullable();
             $table->text('notes')->nullable();
             $table->longText('transcription')->nullable();
@@ -28,10 +28,10 @@ return new class extends Migration
             $table->string('apple_podcasts_url')->nullable();
             $table->bigInteger('old_episode_id')->nullable();
             $table->timestamp('published_at')->nullable();
+            $table->string('folder_id', 128)->nullable();
             $table->foreignId('owner_id')->nullable()->references('id')->on('users')->nullOnDelete()->index();
             $table->timestamps();
 
-            $table->foreign('podcast_id')->references('id')->on('podcasts')->onDelete('cascade')->index();
         });
     }
 
