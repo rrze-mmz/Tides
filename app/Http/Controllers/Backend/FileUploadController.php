@@ -45,8 +45,26 @@ final class FileUploadController extends Controller
 
         // Store the file in a temporary location and return the location
         // for FilePond to use.
-        return $file->store(
-            path: 'tmp/'.now()->timestamp.'-'.Str::random(20)
+        $originalName = $file->getClientOriginalName();
+
+        return $file->storeAs(
+            path: 'tmp/'.now()->timestamp.'-'.Str::random(20),
+            name: $originalName,
         );
+    }
+
+    public function revert(Request $request)
+    {
+        // Retrieve the file path from the request
+        $filePath = $request->input('filePath');
+
+        // Delete the file from storage
+        if (Storage::exists($filePath)) {
+            Storage::delete($filePath);
+
+            return response()->json(['status' => 'success']);
+        }
+
+        return response()->json(['status' => 'file not found'], 404);
     }
 }

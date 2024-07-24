@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\ValidImageFile;
+use App\Rules\ValidFile;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
@@ -33,7 +33,7 @@ class StorePodcastEpisodeRequest extends FormRequest
             'description' => ['nullable', 'string', 'max:40000'],
             'notes' => ['nullable', 'string', 'max:40000'],
             'transcription' => ['nullable', 'string', 'max:40000'],
-            'image' => ['string', 'nullable', new ValidImageFile(['image/png', 'image/jpeg'])],
+            'image' => ['string', 'nullable', new ValidFile(['image/png', 'image/jpeg'])],
             'website_url' => ['nullable', 'url'],
             'spotify_url' => ['nullable', 'url'],
             'apple_podcasts_url' => ['nullable', 'url'],

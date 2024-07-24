@@ -327,6 +327,7 @@ const csrfToken = document
 FilePond.create(inputElement).setOptions({
   server: {
     process: '/admin/uploads/process',
+    revert: '/admin/uploads/revert',
     headers: {
       'X-CSRF-TOKEN': csrfToken,
     },
@@ -342,6 +343,7 @@ const csrfToken1 = document
 FilePond.create(inputElement1).setOptions({
   server: {
     process: '/admin/uploads/process',
+    revert: '/admin/uploads/revert',
     headers: {
       'X-CSRF-TOKEN': csrfToken1,
     },
@@ -357,6 +359,7 @@ const csrfToken2 = document
 FilePond.create(inputElement2).setOptions({
   server: {
     process: '/admin/uploads/process',
+    revert: '/admin/uploads/revert',
     headers: {
       'X-CSRF-TOKEN': csrfToken2,
     },

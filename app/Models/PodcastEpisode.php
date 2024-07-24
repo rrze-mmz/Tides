@@ -43,6 +43,11 @@ class PodcastEpisode extends BaseModel
         return 'slug';
     }
 
+    public function owner(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function podcast(): BelongsTo
     {
         return $this->belongsTo(Podcast::class);

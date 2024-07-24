@@ -68,7 +68,9 @@
                 <td class="px-6 py-4  text-gray-900  dark:text-white">
                     <p class=" mb-2 text-black dark:text-white">
                         @if($episode->description==='')
-                            {!!  Str::limit(' Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab, assumenda atque beatae deserunt dolorem ducimus enim error illo incidunt odio pariatur, possimus quaerat quasi quidem quos temporibus unde vero. Quo?', 120, ' (...)') !!}
+                            <span class="italic">
+                            No description available
+                            </span>
                         @else
                             {{ Str::limit(removeHtmlElements($episode->description), 250, ' (...)') }}
                         @endif

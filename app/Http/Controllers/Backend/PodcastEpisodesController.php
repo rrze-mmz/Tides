@@ -28,7 +28,7 @@ class PodcastEpisodesController extends Controller
 
         $validated['owner_id'] = auth()->id();
         $validated['image_id'] =
-            $this->updateEpisodesImage(image: $validated['image'], imageTitle: $validated['title']);
+            $this->updateEpisodesImage(image: $validated['image'], imageTitle: $validated['title'], podcast: $podcast);
         $episode = $podcast->episodes()->create(Arr::except($validated, ['hosts', 'guests', 'image']));
         $episode->prepareAndSyncPodcastPresenters($validated['hosts'], $validated['guests']);
 
@@ -45,8 +45,15 @@ class PodcastEpisodesController extends Controller
     public function update(Podcast $podcast, PodcastEpisode $episode, StorePodcastEpisodeRequest $request)
     {
         $validated = $request->validated();
-        $validated['image_id'] =
-            $this->updateEpisodesImage(image: $validated['image'], imageTitle: $validated['title']);
+        if (! is_null($validated['image'])) {
+            $validated['image_id'] =
+                $this->updateEpisodesImage(
+                    image: $validated['image'],
+                    imageTitle: $validated['title'],
+                    podcast: $podcast
+                );
+        }
+
         $episode->update(Arr::except($validated, ['hosts', 'guests', 'image']));
 
         return to_route('podcasts.episodes.edit', compact('podcast', 'episode'));
@@ -61,10 +68,12 @@ class PodcastEpisodesController extends Controller
         return to_route('podcasts.edit', $podcast);
     }
 
-    private function updateEpisodesImage(?string $image, string $imageTitle)
+    private function updateEpisodesImage(?string $image, string $imageTitle, Podcast $podcast)
     {
         if (is_null($image)) {
-            $imageID = Image::find(config('settings.portal.default_image_id'))->id;
+            $imageID = ($podcast->cover)
+                ? $podcast->image_id
+                : Image::find(config('settings.portal.default_image_id'))->id;
         } else {
             $imageDescription = 'Podcast Episode'.$imageTitle.' cover image';
             $image = $this->uploadAndCreateImage(filePath: $image, description: $imageDescription);

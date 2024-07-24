@@ -19,6 +19,7 @@ class CreatePresentablesTable extends Migration
             $table->foreignId('presenter_id')->references('id')->on('presenters')->onDelete('cascade');
             $table->foreignId('presentable_id');
             $table->string('presentable_type');
+            $table->boolean('primary')->default('true');
 
             $table->timestamps();
         });

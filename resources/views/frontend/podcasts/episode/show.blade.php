@@ -24,8 +24,8 @@
                         class="w-full h-auto rounded-md">
                 </div>
                 @if($episode->getAssetsByType(Content::AUDIO)->first())
-                    <div class=" space-y-4  dark:bg-gray-400 ext ">
-                        <div class="mt-4 dark:text-white ">
+                    <div class=" space-y-4 ">
+                        <div class="mt-4 ">
                             <audio id="player" class="w-full" controls>
                                 <source
                                     src="{{ getProtectedUrl($episode->getAssetsByType(Content::AUDIO)->first()->path) }}"

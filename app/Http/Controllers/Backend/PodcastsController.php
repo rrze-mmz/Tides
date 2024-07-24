@@ -19,7 +19,7 @@ class PodcastsController extends BaseController
 
     public function index(): View
     {
-        $podcasts = Podcast::all();
+        $podcasts = Podcast::all()->sortByDesc('updated_at');
 
         return view('backend.podcasts.index', compact('podcasts'));
     }

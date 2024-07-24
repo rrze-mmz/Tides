@@ -63,7 +63,7 @@ class FetchOpencastAssets extends Command
 
                 $events->each(function ($event) use ($clip, $opencastService) {
                     if ($clip->opencast_event_id === $event['identifier']) {
-                        $this->checkOpencastAssetsForClipUpload($clip, $event['identifier'], $opencastService);
+                        $this->checkOpencastAssetsForUpload($clip, $event['identifier'], $opencastService);
                         $this->info("Videos from Clip {$clip->title} is online");
                     } else {
                         $this->info("No Opencast Event found for Clip {$clip->title} | [ID]:{$clip->id}");

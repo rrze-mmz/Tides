@@ -1,9 +1,11 @@
 @php use App\Enums\Content; @endphp
-<div
-    class="flex border-b border-black py-4 text-lg font-semibold dark:text-white dark:border-white"
->
-    Assets / FolderID: {{ $obj->folder_id }}
-</div>
+@can('administrate-superadmin-portal-pages')
+    <div
+        class="flex border-b border-black py-4 text-lg font-semibold dark:text-white dark:border-white"
+    >
+        Assets / FolderID: {{ $obj->folder_id }}
+    </div>
+@endcan
 <div class="flex">
     <ul class="w-full pt-3">
         @php
@@ -20,7 +22,7 @@
         @forelse($assetsList as $asset)
             <li class="mb-4 flex rounded bg-gray-200 p-2 text-sm  align-middle  content-center items-center
                        font-normal dark:bg-gray-800 dark:text-white">
-                <div class="w-4/12"> {{ $asset->original_file_name }}</div>
+                <div class="w-4/12"> {{ $asset->original_file_name }} | ID [{{ $asset->id }}]</div>
                 <div class="w-2/12">
                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full font-medium
                     bg-green-500">
@@ -51,8 +53,8 @@
                 </div>
             </li>
         @empty
-            <div class="flex text-center items-center">
-                <div class="text-lg dark:text-white">
+            <div class="flex mx-auto place-content-center">
+                <div class="text-2xl dark:text-white italic py-8">
                     No assets
                 </div>
             </div>

@@ -29,5 +29,9 @@ class PodcastsObserver
         session()->flash('flashMessage', "{$podcast->title} ".__FUNCTION__.' successfully');
 
         $this->openSearchService->deleteIndex($podcast);
+
+        $podcast->episodes->each(function ($episode) {
+            $episode->delete();
+        });
     }
 }

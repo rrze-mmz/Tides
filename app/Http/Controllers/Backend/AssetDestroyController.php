@@ -19,12 +19,29 @@ class AssetDestroyController extends Controller
     public function __invoke(Asset $asset): RedirectResponse
     {
         $this->authorize('edit', $asset);
+        if ($asset->clips()->exists()) {
+            $clip = $asset->clips->first();
+            $asset->delete();
+            $clip->updatePosterImage();
 
-        $clip = $asset->clips->first();
-        $asset->delete();
+            session()->flash('flashMessage', "{$asset->original_file_name} deleted successfully");
 
-        $clip->updatePosterImage();
+            return to_route('clips.edit', $clip);
+        } elseif ($asset->podcastEpisodes()->exists()) {
+            $episode = $asset->podcastEpisodes()->first();
+            $podcast = $episode->podcast;
 
-        return to_route('clips.edit', $clip);
+            $asset->delete();
+
+            session()->flash('flashMessage', "{$asset->original_file_name} deleted successfully");
+
+            return to_route('podcasts.episodes.edit', compact('podcast', 'episode'));
+        } else {
+            $asset->delete();
+
+            session()->flash('flashMessage', "{$asset->original_file_name} deleted successfully");
+
+            return to_route('dashboard');
+        }
     }
 }

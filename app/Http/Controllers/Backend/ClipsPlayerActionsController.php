@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Enums\Content;
 use App\Http\Controllers\Controller;
 use App\Models\Clip;
-use App\Rules\ValidImageFile;
+use App\Rules\ValidFile;
 use Illuminate\Http\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -31,6 +31,19 @@ class ClipsPlayerActionsController extends Controller
         return to_route('clips.edit', $clip);
     }
 
+    public function generatePreviewImageFromUser(Clip $clip, Request $request)
+    {
+        $validated = $request->validate([
+            'image' => ['required', 'string', new ValidFile(['image/png', 'image/jpeg'])],
+        ]);
+        $uploadedImage = new File(Storage::path($validated['image']));
+        $this->updateAssetPreviewFromUploadFile(clip: $clip, image: $uploadedImage);
+        //update the search index?
+        $clip->recordActivity(description: 'Create player preview from user uploaded file');
+
+        return to_route('clips.edit', $clip);
+    }
+
     private function updateAssetPreviewFromFrame(Clip $clip, $framePosition): void
     {
         $clip->assets->filter(function ($asset) {
@@ -50,19 +63,6 @@ class ClipsPlayerActionsController extends Controller
             $asset->save();
             Storage::disk('thumbnails')->delete('previews-ng/'.$oldPreview);
         });
-    }
-
-    public function generatePreviewImageFromUser(Clip $clip, Request $request)
-    {
-        $validated = $request->validate([
-            'image' => ['required', 'string', new ValidImageFile(['image/png', 'image/jpeg'])],
-        ]);
-        $uploadedImage = new File(Storage::path($validated['image']));
-        $this->updateAssetPreviewFromUploadFile(clip: $clip, image: $uploadedImage);
-        //update the search index?
-        $clip->recordActivity(description: 'Create player preview from user uploaded file');
-
-        return to_route('clips.edit', $clip);
     }
 
     private function updateAssetPreviewFromUploadFile(Clip $clip, $image): void

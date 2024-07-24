@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Backend\Traits\HandlesFilePondFiles;
 use App\Http\Controllers\Controller;
 use App\Models\Image;
-use App\Rules\ValidImageFile;
+use App\Rules\ValidFile;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -34,7 +34,7 @@ class ImagesController extends Controller
         $this->authorize('administrate-admin-portal-pages');
         $validated = $request->validate([
             'description' => ['required', 'string'],
-            'image' => ['required', 'string', new ValidImageFile(['image/png', 'image/jpeg'])],
+            'image' => ['required', 'string', new ValidFile(['image/png', 'image/jpeg'])],
         ]);
 
         $image = $this->uploadAndCreateImage(filePath: $validated['image'], description: $validated['description']);
