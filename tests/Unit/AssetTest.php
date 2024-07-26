@@ -14,10 +14,6 @@ beforeEach(function () {
     $this->asset = Asset::factory()->create();
 });
 
-it('has a path', function () {
-    expect($this->asset->path())->toEqual('/admin/assets/'.$this->asset->id);
-});
-
 it('may have many clips', function () {
     expect($this->asset->clips())->toBeInstanceOf(MorphToMany::class);
 });

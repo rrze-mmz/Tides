@@ -177,7 +177,7 @@ it('clip public page should display a series title and link if clip belongs to a
     $this->clip->save();
     get(route('frontend.clips.show', $this->clip))->assertSee($series->title);
 
-    $this->mockHandler->append(new Response(), new Response());
+    $this->mockHandler->append(new Response, new Response);
     get(route('frontend.clips.show', $this->clip))->assertSee(route('frontend.series.show', $series));
 });
 

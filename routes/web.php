@@ -192,7 +192,7 @@ Route::get('/set_lang/{locale}', function ($locale) {
     return back();
 });
 
-Route::get('/assetDownload/{asset}', AssetsDownloadController::class)->name('assets.download');
+Route::get('/assetDownload/{asset:guid}', AssetsDownloadController::class)->name('assets.download');
 
 //Backend routes
 Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->group(function () {

@@ -60,3 +60,8 @@ function acceptAdminPortalUseTerms(): void
 {
     put(route('frontend.admin.portal.accept.use.terms'), ['accept_use_terms' => 'on']);
 }
+
+function logoutAllUsers(): void
+{
+    auth()->logout();
+}

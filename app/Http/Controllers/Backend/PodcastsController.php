@@ -3,18 +3,16 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Backend\Traits\HandlesFilePondFiles;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePodcastRequest;
 use App\Models\Image;
 use App\Models\Podcast;
-use Barryvdh\Debugbar\Controllers\BaseController;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Arr;
 use Illuminate\View\View;
 
-class PodcastsController extends BaseController
+class PodcastsController extends Controller
 {
-    use AuthorizesRequests;
     use HandlesFilePondFiles;
 
     public function index(): View
