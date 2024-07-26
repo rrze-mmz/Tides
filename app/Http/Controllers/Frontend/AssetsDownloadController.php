@@ -13,6 +13,8 @@ class AssetsDownloadController extends Controller
      */
     public function __invoke(Asset $asset): BinaryFileResponse
     {
+        $this->authorize('download-asset', $asset);
+
         return response()->download($asset->downloadPath(), $asset->name, ['Content-Type' => $asset->type]);
     }
 }

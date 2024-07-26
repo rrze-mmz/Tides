@@ -10,19 +10,8 @@ use Slides\Saml2\Events\SignedIn;
 
 class Saml2UserSignedIn
 {
-    /**
-     * Create the event listener.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
+    public function __construct() {}
 
-    /**
-     * Handle the event.
-     */
     public function handle(SignedIn $event): void
     {
         // your own code preventing reuse of a $messageId to stop replay attacks

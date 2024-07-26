@@ -4,7 +4,7 @@
 <div class="flex flex-col">
 
     <div class="flex flex-col content-center justify-center pt-6">
-        @if($clip->checkAcls())
+        @can('watch-video', $clip)
             <div class="">
                 <x-player :clip="$clip" :wowzaStatus="$wowzaStatus" :default-video-url="$defaultVideoUrl" />
             </div>
@@ -88,7 +88,7 @@
                 @endforeach
             </div>
 
-        @endif
+        @endcan
     </div>
 
 

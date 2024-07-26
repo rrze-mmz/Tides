@@ -39,7 +39,6 @@ class ClipPolicy
 
     public function view(?User $user, Clip $clip): bool
     {
-
         if (optional($user)->is($clip->owner) || optional($user)->isAdmin() || optional($user)->isAssistant()) {
             return true;
         } elseif ($clip->is_public &&

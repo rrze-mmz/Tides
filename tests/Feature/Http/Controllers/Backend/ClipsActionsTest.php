@@ -97,7 +97,7 @@ it('has opencast action buttons if opencast server exists', function () {
 it('hides opencast action buttons if opencast server does not exists', function () {
     $mockHandler = $this->swapOpencastClient();
     app(OpencastService::class);
-    $mockHandler->append(new Response());
+    $mockHandler->append(new Response);
 
     get(route('clips.edit', ClipFactory::ownedBy(signInRole(Role::MODERATOR))->create()))
         ->assertDontSee('Ingest to Opencast')

@@ -78,14 +78,6 @@ class Asset extends BaseModel
     }
 
     /**
-     * Asset backend link
-     */
-    public function path(): string
-    {
-        return "/admin/assets/{$this->id}";
-    }
-
-    /**
      * Scope a query to only include video assets
      */
     public function scopeFormatVideo($query): mixed
