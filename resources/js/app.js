@@ -5,15 +5,14 @@ import {
   Alpine,
 } from '../../vendor/livewire/livewire/dist/livewire.esm';
 import jQuery from 'jquery';
-import Hls from 'hls.js';
 import Pikaday from 'pikaday';
 import * as FilePond from 'filepond';
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import FilePondPluginMediaPreview from 'filepond-plugin-media-preview';
 import 'filepond/dist/filepond.min.css';
 import select2 from 'select2';
-import Plyr from 'plyr';
-import 'plyr/dist/plyr.css';
+import { VidstackPlayer } from 'vidstack/global/player';
+import 'vidstack/player/styles/base.css';
 import {
   generateGeolocationLineChart,
   generatePieChart,
@@ -256,63 +255,6 @@ document.addEventListener(
       if (!state.id) return state.text;
       return state.text;
     }
-
-    const video = document.querySelector('video');
-
-    if (video !== null) {
-      const source = video.getElementsByTagName('source')[0].src;
-
-      // For more options see: https://github.com/sampotts/plyr/#options
-      // captions.update is required for captions to work with hls.js
-      const defaultOptions = {};
-
-      if (Hls.isSupported()) {
-        // For more Hls.js options, see https://github.com/dailymotion/hls.js
-        const hls = new Hls();
-        hls.loadSource(source);
-
-        // From the m3u8 playlist, hls parses the manifest and returns
-        // all available video qualities. This is important, in this approach,
-        // we will have one source on the Plyr player.
-        hls.on(Hls.Events.MANIFEST_PARSED, function (event, data) {
-          // Transform available levels into an array of integers (height values).
-          const availableQualities = hls.levels.map((l) => l.height);
-          defaultOptions.language = 'de';
-          defaultOptions.iconUrl = '/css/plyr.svg';
-          defaultOptions.loadSripte = false;
-
-          // Add new qualities to option
-          defaultOptions.quality = {
-            default: availableQualities[0],
-            options: availableQualities,
-            // this ensures Plyr to use Hls to update quality level
-            forced: true,
-            onChange: (e) => updateQuality(e),
-          };
-
-          // Initialize here
-          const player = new Plyr(video, defaultOptions);
-        });
-        hls.attachMedia(video);
-        window.hls = hls;
-      } else {
-        // default options with no quality update in case Hls is not supported
-        const player = new Plyr(video, {
-          language: 'de',
-          iconUrl: '/css/plyr.svg',
-          loadSprite: false,
-        });
-      }
-
-      function updateQuality(newQuality) {
-        window.hls.levels.forEach((level, levelIndex) => {
-          if (level.height === newQuality) {
-            console.log('Found quality match with ' + newQuality);
-            window.hls.currentLevel = levelIndex;
-          }
-        });
-      }
-    }
   },
   false
 );
@@ -366,24 +308,17 @@ FilePond.create(inputElement2).setOptions({
   },
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-  const video = document.querySelector('video');
-  const player = new Plyr('#video');
-  if (video) {
-    console.log(player);
-    const currentTimeInput = document.getElementById('currentTime');
-    currentTimeInput.value = 0;
-    player.on('timeupdate', () => {
-      currentTimeInput.value = Math.floor(player.currentTime);
-    });
-  }
+async function initializePlayer() {
+  const player = await VidstackPlayer.create({
+    target: document.querySelector('#target'),
+  });
 
-  // Function to change video source
   function changeVideoSource(newSource) {
     const currentTime = player.currentTime; // Get the current time of the video
+    console.log('currentTime:', currentTime);
 
     function setNewVideoTime() {
-      if (player.media.readyState >= 2) {
+      if (player.readyState >= 2) {
         // Ensure media is ready
         player.currentTime = currentTime; // Set the current time for the new video
         player.play();
@@ -392,36 +327,24 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    if (Hls.isSupported()) {
-      var hls = new Hls();
-      hls.loadSource(newSource);
-      hls.attachMedia(player.media);
-      hls.on(Hls.Events.MANIFEST_PARSED, function () {
-        setNewVideoTime(); // Set the time after the manifest is parsed
-      });
-    } else if (player.media.canPlayType('application/vnd.apple.mpegurl')) {
-      player.media.src = newSource;
-      player.media.addEventListener('loadedmetadata', setNewVideoTime);
-    } else {
-      player.source = {
-        type: 'video',
-        sources: [{ src: newSource, type: 'video/mp4' }],
-      };
-      player.on('loadeddata', setNewVideoTime); // Set the time for standard video formats
-    }
+    player.addEventListener('loadedmetadata', setNewVideoTime, { once: true }); // Set the time for standard video formats
+    player.src = newSource;
   }
 
   // Attach event listeners to links
-  const videoLinks = document.querySelectorAll('.video-link');
-  videoLinks.forEach((link) => {
-    link.addEventListener('click', function (event) {
-      event.preventDefault();
-      const videoUrl = this.getAttribute('href');
-      changeVideoSource(videoUrl);
+  document.addEventListener('DOMContentLoaded', () => {
+    const videoLinks = document.querySelectorAll('.video-link');
+    videoLinks.forEach((link) => {
+      link.addEventListener('click', function (event) {
+        event.preventDefault();
+        const videoUrl = this.getAttribute('href');
+        changeVideoSource(videoUrl);
+      });
     });
   });
-});
+}
 
+initializePlayer();
 // Assuming the data passed from the Blade template
 window.generatePieChart = generatePieChart;
 window.generateBarChart = generateBarChart;
