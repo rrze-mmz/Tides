@@ -24,35 +24,14 @@ beforeEach(function () {
     $this->asset = $this->clip->assets()->first();
 });
 
-it('downloads an asset', function () {
+it('allows to a non-authorize user to download an asset from a public clip', function () {
     $this->clip->addAcls(collect([Acl::PUBLIC()]));
     get(route('assets.download', $this->asset))->assertDownload($this->asset->original_name);
     expect(response()->download(Storage::disk('videos')->path($this->asset->path)))
         ->toBeInstanceOf(BinaryFileResponse::class);
 });
 
-it('denies downloading assets for a clip with portal ACL to unauthorized users', function () {
-    logoutAllUsers();
-    $this->clip->addAcls(collect([Acl::PORTAL()]));
-
-    get(route('assets.download', $this->asset))->assertForbidden();
-});
-
-it('denies downloading assets for a clip with lms ACL to unauthorized users', function () {
-    logoutAllUsers();
-    $this->clip->addAcls(collect([Acl::LMS()]));
-
-    get(route('assets.download', $this->asset))->assertForbidden();
-});
-
-it('denies downloading assets for a clip with password ACL to unauthorized users', function () {
-    logoutAllUsers();
-    $this->clip->addAcls(collect([Acl::PASSWORD()]));
-
-    get(route('assets.download', $this->asset))->assertForbidden();
-});
-
-it('allows download podcast audio files to visitors', function () {
+it('allows to a non-authorize user to download an asset from podcast episode', function () {
     $podcast = PodcastFactory::ownedBy(signInRole(Role::MODERATOR))->withEpisodes(1)->create();
     $episode = $podcast->episodes()->first();
 
@@ -68,4 +47,32 @@ it('allows download podcast audio files to visitors', function () {
 
     logoutAllUsers();
     get(route('assets.download', $episode->assets()->first()))->assertForbidden();
+});
+
+it('allows to an authorized user to download an asset from protected clip', function () {
+    $this->clip->addAcls(collect([Acl::PORTAL()]));
+    get(route('assets.download', $this->asset))->assertDownload($this->asset->original_name);
+    expect(response()->download(Storage::disk('videos')->path($this->asset->path)))
+        ->toBeInstanceOf(BinaryFileResponse::class);
+});
+
+it('denies to a non-authorize user to download an asset from a clip with portal acl', function () {
+    logoutAllUsers();
+    $this->clip->addAcls(collect([Acl::PORTAL()]));
+
+    get(route('assets.download', $this->asset))->assertForbidden();
+});
+
+it('denies to a non-authorize user to download an asset from a clip with lms acl', function () {
+    logoutAllUsers();
+    $this->clip->addAcls(collect([Acl::LMS()]));
+
+    get(route('assets.download', $this->asset))->assertForbidden();
+});
+
+it('denies to a non-authorize user to download an asset from a clip with password acl', function () {
+    logoutAllUsers();
+    $this->clip->addAcls(collect([Acl::PASSWORD()]));
+
+    get(route('assets.download', $this->asset))->assertForbidden();
 });
