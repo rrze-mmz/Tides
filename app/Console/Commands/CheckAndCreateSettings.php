@@ -4,6 +4,9 @@ namespace App\Console\Commands;
 
 use App\Models\Setting;
 use Illuminate\Console\Command;
+use Illuminate\Support\Arr;
+
+use function Laravel\Prompts\select;
 
 class CheckAndCreateSettings extends Command
 {
@@ -26,16 +29,28 @@ class CheckAndCreateSettings extends Command
      */
     public function handle(): int
     {
-        // Array of setting types to process
-        $settingsTypes = ['portal', 'opencast', 'streaming', 'openSearch'];
+        $settingsTypes = ['all', 'portal', 'opencast', 'streaming', 'openSearch'];
+        $settingToBeChecked = select(
+            label: 'First select the setting you want to update:',
+            options: $settingsTypes,
+            default: 'portal',
+            hint: 'Series/Clips/Assets/Users may take longer as expected'
+        );
 
-        foreach ($settingsTypes as $settingsType) {
-            $this->info("Starting with {$settingsType} settings");
-            $this->processSettings($settingsType);
-            $this->info("Finished with {$settingsType} settings");
+        if ($settingToBeChecked === 'all') {
+            $this->info('Start migrating all settings');
+            foreach (Arr::except($settingsTypes, [0]) as $settingType) {
+                $this->info("Starting with {$settingType} settings");
+                $this->processSettings($settingType);
+                $this->info("Finished with {$settingType} settings");
+            }
+        } else {
+            $this->info("Starting with {$settingToBeChecked} settings");
+            $this->processSettings($settingToBeChecked);
+            $this->info("Finished with {$settingToBeChecked} settings");
         }
 
-        $this->info('All settings have been checked and created');
+        $this->info($settingToBeChecked.'settings have been checked and created');
 
         return Command::SUCCESS;
     }

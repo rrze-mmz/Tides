@@ -9,6 +9,7 @@ use App\Http\Requests\SeriesOpencastActionsRequest;
 use App\Models\Clip;
 use App\Models\Semester;
 use App\Models\Series;
+use App\Models\Setting;
 use App\Services\OpencastService;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
@@ -103,6 +104,8 @@ class SeriesOpencastController extends Controller
         $events->each(function (array $event, int $key) use ($series, $clipIdentifiers) {
             //search if a clip exists for an event. If so then don't insert to avoid duplicates
             if ($clipIdentifiers->doesntContain($event['identifier'])) {
+                $setting = Setting::portal();
+                $settingData = $setting->data;
                 $attributes = [
                     'owner_id' => $series->owner_id,
                     'semester_id' => Semester::current(zuluToCEST($event['start']))->first()->id,
@@ -116,7 +119,7 @@ class SeriesOpencastController extends Controller
                     'title' => $event['title'],
                     'password' => $series->password,
                     'episode' => $key + 1,
-                    'image_id' => config('settings.portal.default_image_id'),
+                    'image_id' => $settingData['default_image_id'],
                     'is_public' => true,
                     'recording_date' => zuluToCEST($event['start']),
                     'opencast_event_id' => $event['identifier'],

@@ -2,22 +2,13 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Setting;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
 
 class StoreSeriesRequest extends FormRequest
 {
-    protected function prepareForValidation(): void
-    {
-        $this->merge([
-            'slug' => Str::slug($this->title),
-            'is_public' => $this->is_public === 'on',
-            'presenters' => $this->presenters = $this->presenters ?? [], //set empty array if presenters array is empty
-            'image_id' => (isset($this->image_id)) ? $this->image_id : config('settings.portal.default_image_id'),
-        ]);
-    }
-
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -44,5 +35,17 @@ class StoreSeriesRequest extends FormRequest
             'is_public' => ['boolean'],
             'image_id' => ['required', 'exists:App\Models\Image,id'],
         ];
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $setting = Setting::portal();
+        $settingData = $setting->data;
+        $this->merge([
+            'slug' => Str::slug($this->title),
+            'is_public' => $this->is_public === 'on',
+            'presenters' => $this->presenters = $this->presenters ?? [], //set empty array if presenters array is empty
+            'image_id' => (isset($this->image_id)) ? $this->image_id : $settingData['default_image_id'],
+        ]);
     }
 }

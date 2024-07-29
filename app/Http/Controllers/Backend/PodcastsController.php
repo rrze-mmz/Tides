@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePodcastRequest;
 use App\Models\Image;
 use App\Models\Podcast;
+use App\Models\Setting;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Arr;
 use Illuminate\View\View;
@@ -29,10 +30,13 @@ class PodcastsController extends Controller
 
     public function store(StorePodcastRequest $request): RedirectResponse
     {
+        $settings = Setting::portal();
+        $settingsData = $settings->data;
+
         $validated = $request->validated();
 
         if (is_null($validated['image'])) {
-            $validated['image_id'] = Image::find(config('settings.portal.default_image_id'))->id;
+            $validated['image_id'] = Image::find($settingsData['default_image_id'])->id;
         } else {
             $imageDescription = 'Podcast '.$validated['title'].' cover image';
             $image = $this->uploadAndCreateImage(filePath: $validated['image'], description: $imageDescription);
