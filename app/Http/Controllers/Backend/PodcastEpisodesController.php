@@ -8,6 +8,7 @@ use App\Http\Requests\StorePodcastEpisodeRequest;
 use App\Models\Image;
 use App\Models\Podcast;
 use App\Models\PodcastEpisode;
+use App\Models\Setting;
 use App\Models\Traits\RecordsActivity;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Arr;
@@ -70,10 +71,12 @@ class PodcastEpisodesController extends Controller
 
     private function updateEpisodesImage(?string $image, string $imageTitle, Podcast $podcast)
     {
+        $setting = Setting::portal();
+        $settingData = $setting->data;
         if (is_null($image)) {
             $imageID = ($podcast->cover)
                 ? $podcast->image_id
-                : Image::find(config('settings.portal.default_image_id'))->id;
+                : Image::find($settingData['default_image_id'])->id;
         } else {
             $imageDescription = 'Podcast Episode'.$imageTitle.' cover image';
             $image = $this->uploadAndCreateImage(filePath: $image, description: $imageDescription);

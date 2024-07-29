@@ -12,7 +12,7 @@
             @method('PUT')
             <div class="bg-gray-200 border-2 rounded-2xl p-4 my-4 dark:bg-slate-800 dark:border-indigo-950">
                 <div
-                    class="flex border-b border-black pb-1 text-xl font-semibold text-indigo-800
+                        class="flex border-b border-black pb-1 text-xl font-semibold text-indigo-800
                     dark:text-indigo-400 dark:border-white mb-4 pb-2">
                     General settings
                 </div>
@@ -47,8 +47,14 @@
                                   label="Default feeds email"
                                   :fullCol="true"
                                   :required="true" />
+                    <x-form.input field-name="default_image_id"
+                                  input-type="int"
+                                  :value="$setting['default_image_id']"
+                                  label="Default image ID"
+                                  :fullCol="true"
+                                  :required="true" />
                     <div
-                        class="mb-5 border-b border-black py-4 pb-2 text-base  dark:text-white  font-medium dark:border-white">
+                            class="mb-5 border-b border-black py-4 pb-2 text-base  dark:text-white  font-medium dark:border-white">
                         Contact
                     </div>
                     <x-form.input field-name="support_email_address"
@@ -68,7 +74,7 @@
 
             <div class="bg-gray-200 border-2 rounded-2xl p-4 my-4 dark:bg-slate-800 dark:border-indigo-950 space-y-2">
                 <div
-                    class="flex border-b border-black pb-1 text-xl font-semibold text-indigo-800
+                        class="flex border-b border-black pb-1 text-xl font-semibold text-indigo-800
                     dark:text-indigo-400 dark:border-white mb-4 pb-2">
                     Player settings
                 </div>
@@ -100,7 +106,7 @@
 
             <div class="bg-gray-200 border-2 rounded-2xl p-4 my-4 dark:bg-slate-800 dark:border-indigo-950">
                 <div
-                    class="flex border-b border-black pb-1 text-xl font-semibold text-indigo-800
+                        class="flex border-b border-black pb-1 text-xl font-semibold text-indigo-800
                     dark:text-indigo-400 dark:border-white mb-4 pb-2">
                     Clip settings
                 </div>

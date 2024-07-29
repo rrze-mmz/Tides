@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Setting;
 use App\Rules\ValidFile;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
@@ -44,8 +45,10 @@ class StorePodcastEpisodeRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
+        $setting = Setting::portal();
+        $settingData = $setting->data;
         $this->merge([
-            'image_id' => (isset($this->image_id)) ? $this->image_id : config('settings.portal.default_image_id'),
+            'image_id' => (isset($this->image_id)) ? $this->image_id : $settingData['default_image_id'],
             'hosts' => $this->hosts = $this->hosts ?? [],
             'guests' => $this->guests = $this->guests ?? [],
             'is_published' => $this->is_public === 'on',

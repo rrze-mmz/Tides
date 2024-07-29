@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Setting;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
@@ -56,6 +57,9 @@ class StoreClipRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
+        $setting = Setting::portal();
+        $settingData = $setting->data;
+
         $this->merge([
             'slug' => Str::slug($this->title),
             'tags' => $this->tags = $this->tags ?? [], //set empty array if select2 tags is empty
@@ -63,7 +67,7 @@ class StoreClipRequest extends FormRequest
             'presenters' => $this->presenters = $this->presenters ?? [], //set empty array if presenters array is empty
             'allow_comments' => $this->allow_comments === 'on',
             'is_public' => $this->is_public === 'on',
-            'image_id' => (isset($this->image_id)) ? $this->image_id : config('settings.portal.default_image_id'),
+            'image_id' => (isset($this->image_id)) ? $this->image_id : $settingData['default_image_id'],
             'has_time_availability' => $this->has_time_availability === 'on',
         ]);
     }

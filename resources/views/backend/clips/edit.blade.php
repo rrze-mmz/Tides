@@ -15,9 +15,9 @@
                     @endphp
                     <a href="{{ route('clips.edit', $previousClip) }}">
                         <x-button
-                            :tooltip="true"
-                            :tooltip-text="$previousClip->episode.' - '. $previousClip->title"
-                            class="flex items-center bg-blue-600 hover:bg-blue-700 space-x-2  text-sm"
+                                :tooltip="true"
+                                :tooltip-text="$previousClip->episode.' - '. $previousClip->title"
+                                class="flex items-center bg-blue-600 hover:bg-blue-700 space-x-2  text-sm"
                         >
                             <div>
                                 <x-heroicon-c-arrow-left class="w-4" />
@@ -32,9 +32,9 @@
                     @endphp
                     <a href="{{ route('clips.edit',$nextClip) }}">
                         <x-button
-                            :tooltip="true"
-                            :tooltip-text="$nextClip->episode.' - '. $nextClip->title"
-                            class="flex items-center bg-blue-600 hover:bg-blue-700 space-x-2  text-sm"
+                                :tooltip="true"
+                                :tooltip-text="$nextClip->episode.' - '. $nextClip->title"
+                                class="flex items-center bg-blue-600 hover:bg-blue-700 space-x-2  text-sm"
                         >
                             <div>
                                 <x-heroicon-c-arrow-right class="w-4" />
@@ -46,7 +46,7 @@
         </div>
         <div class="flex pt-2 text-sm italic pb-2">
             <span
-                class="pl-2"> created
+                    class="pl-2"> created
                 @if(!is_null($clip->owner_id))
                     by {{ $clip->owner->getFullNameAttribute() }} ({{ $clip->owner->username }})
                 @endif
@@ -159,13 +159,13 @@
                                              :model="$clip"
                                              label="Accessible via"
                                              select-class="select2-tides" />
-
-                    <x-form.password field-name="password"
-                                     :value="old('password', $clip->password)"
-                                     label="Password"
-                                     :full-col="true"
-                    />
-
+                    @can('administrate-admin-portal-pages')
+                        <x-form.password field-name="password"
+                                         :value="old('password', $clip->password)"
+                                         label="Password"
+                                         :full-col="true"
+                        />
+                    @endcan
                     <x-form.toggle-button :value="old('allow_comments', $clip->allow_comments)"
                                           label="Allow comments"
                                           field-name="allow_comments"
@@ -182,11 +182,11 @@
                     />
 
                     <x-date-time-picker
-                        :has-time-availability="old('has_time_availability', $clip->has_time_availability)"
-                        :time-availability-start="old('time_availability_start', $clip->time_availability_start)"
-                        :time-availability-end="old('time_availability_end', $clip->time_availability_end)"
-                        name="time_availability"
-                        label="Time availability">
+                            :has-time-availability="old('has_time_availability', $clip->has_time_availability)"
+                            :time-availability-start="old('time_availability_start', $clip->time_availability_start)"
+                            :time-availability-end="old('time_availability_end', $clip->time_availability_end)"
+                            name="time_availability"
+                            label="Time availability">
                     </x-date-time-picker>
 
                 </div>
@@ -226,7 +226,7 @@
 
 
     <div
-        class="pt-10">
+            class="pt-10">
         <div x-data="{
             activeTab:1,
             activeClass: 'inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500',
@@ -299,7 +299,7 @@
                                 </div>
                                 @if($count  = $clip->comments()->backend()->count() > 0)
                                     <span
-                                        class="inline-flex items-center justify-center w-4 h-4 ms-2 text-xs
+                                            class="inline-flex items-center justify-center w-4 h-4 ms-2 text-xs
                                     font-semibold text-white bg-blue-500 rounded-full">
                                         {{ $count }}
                                     </span>

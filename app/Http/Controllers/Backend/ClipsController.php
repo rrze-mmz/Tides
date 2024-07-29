@@ -63,7 +63,6 @@ class ClipsController extends Controller
         OpencastService $opencastService,
         WowzaService $wowzaService
     ): Application|Factory|View {
-
         $this->authorize('edit', $clip);
         $assetsResolutions = $clip->assets->map(function ($asset) {
             return match (true) {

@@ -7,6 +7,7 @@ use App\Models\Image;
 use App\Models\Podcast;
 use App\Models\Presenter;
 use App\Models\Series;
+use App\Models\Setting;
 use Illuminate\Support\Facades\Storage;
 
 class ImagesObserver
@@ -32,28 +33,30 @@ class ImagesObserver
      */
     public function deleting(Image $image)
     {
+        $setting = Setting::portal();
+        $settingData = $setting->data;
         //TODO this needs to be tested!
         if ($image->series()->exists()) {
-            $image->series()->each(function (Series $series) {
-                $series->image_id = config('settings.portal.default_image_id');
+            $image->series()->each(function (Series $series) use ($settingData) {
+                $series->image_id = $settingData['default_image_id'];
                 $series->save();
             });
         }
         if ($image->clips()->exists()) {
-            $image->clips()->each(function (Clip $clip) {
-                $clip->image_id = config('settings.portal.default_image_id');
+            $image->clips()->each(function (Clip $clip) use ($settingData) {
+                $clip->image_id = $settingData['default_image_id'];
                 $clip->save();
             });
         }
         if ($image->presenters()->exists()) {
-            $image->presenters()->each(function (Presenter $presenter) {
-                $presenter->image_id = config('settings.portal.default_image_id');
+            $image->presenters()->each(function (Presenter $presenter) use ($settingData) {
+                $presenter->image_id = $settingData['default_image_id'];
                 $presenter->save();
             });
         }
         if ($image->podcasts()->exists()) {
-            $image->podcasts()->each(function (Podcast $podcast) {
-                $podcast->image_id = config('settings.portal.default_image_id');
+            $image->podcasts()->each(function (Podcast $podcast) use ($settingData) {
+                $podcast->image_id = $settingData['default_image_id'];
                 $podcast->save();
             });
         }
