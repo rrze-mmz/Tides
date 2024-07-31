@@ -99,6 +99,7 @@ it('copies the metadata from the last series clip if any', function () {
     $series = SeriesFactory::ownedBy(signInRole(Role::MODERATOR))->create();
 
     $clip = Clip::factory()->create(['series_id' => $series->id]);
+    expect($clip->id)->toBe($series->latestClip->id);
     $formatIDItem = '<option value="'.$clip->format_id.'" selected>';
     $typeIDItem = '<option value="'.$clip->type_id.'" selected>';
     $contextIDItem = '<option value="'.$clip->context_id.'" selected>';

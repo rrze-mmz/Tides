@@ -47,7 +47,7 @@ class Select2Single extends Component
                 'semester' => Semester::where('id', '>', 1)
                     ->orderBy('id', 'desc')
                     ->get(),
-                'language' => Language::select(['id', 'code as name'])->get(),
+                'language' => Language::select(['id', 'code as name'])->where('id', '>', 0)->get(),
                 'livestream' => Livestream::select(['id', 'name'])->where('active', false)->get(),
                 'location' => DeviceLocation::select(['id', 'name'])->get(),
                 'context' => Context::select(['id', 'de_name as name'])->get(),

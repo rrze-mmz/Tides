@@ -697,3 +697,22 @@ test('a moderator can delete owned clips', function () {
     delete(route('clips.destroy', $clip))->assertRedirect(route('clips.index'));
     assertDatabaseMissing('clips', $clip->only('id'));
 });
+
+test('clip format, type and context can have null values', function () {
+    $clip = ClipFactory::ownedBy(signInRole(Role::MODERATOR))->create();
+
+    patch(route('clips.update', $clip), [
+        'episode' => '1',
+        'title' => 'changed',
+        'recording_date' => Carbon::now(),
+        'description' => 'changed',
+        'semester_id' => 1,
+        'language_id' => 1,
+        'organization_id' => '1',
+        'context_id' => null,
+        'context_id' => null,
+        'format_id' => null,
+        'type_id' => '1',
+        'image_id' => Image::factory()->create()->id,
+    ])->assertSessionDoesntHaveErrors()->assertRedirect();
+});

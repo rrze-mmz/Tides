@@ -108,7 +108,7 @@
                                            label="Language"
                                            select-class="select2-tides"
                                            model="language"
-                                           :selectedItem="old('language_id', $clip->lanugage_id)"
+                                           :selectedItem="old('language_id', $clip->language_id)"
                     />
 
                     <div class="mb-2 border-b border-solid border-b-black pb-2 text-left text-xl font-bold

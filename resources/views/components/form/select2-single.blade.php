@@ -12,7 +12,9 @@
                 name="{{ $fieldName }}"
                 style="width: 100%"
         >
-            <option value="0" selected> Select a {{ $fieldName }} if there is one</option>
+            @if($selectedItem == 0 )
+                <option value="0" selected> Select a {{ $label }} if there is one</option>
+            @endif
             @forelse($items as $item)
                 <option value="{{$item->id }}" {{ $isSelected($item->id) ? 'selected' : '' }}>
                     {{$item->name }}

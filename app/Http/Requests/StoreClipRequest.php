@@ -31,9 +31,9 @@ class StoreClipRequest extends FormRequest
             'slug' => ['required'],
             'semester_id' => ['required', 'integer'],
             'language_id' => ['required', 'integer'],
-            'context_id' => ['required', 'integer'],
-            'format_id' => ['required', 'integer'],
-            'type_id' => ['required', 'integer'],
+            'context_id' => ['nullable', 'integer'],
+            'format_id' => ['nullable', 'integer'],
+            'type_id' => ['nullable',  'integer'],
             'presenters' => ['array'],
             'presenters.*' => ['integer', 'nullable'],
             'tags' => ['array'],
@@ -69,6 +69,9 @@ class StoreClipRequest extends FormRequest
             'is_public' => $this->is_public === 'on',
             'image_id' => (isset($this->image_id)) ? $this->image_id : $settingData['default_image_id'],
             'has_time_availability' => $this->has_time_availability === 'on',
+            'context_id' => ($this->context_id > 0) ? $this->context_id : null,
+            'format_id' => ($this->format_id > 0) ? $this->format_id : null,
+            'type_id' => ($this->type_id > 0) ? $this->type_id : null,
         ]);
     }
 }
