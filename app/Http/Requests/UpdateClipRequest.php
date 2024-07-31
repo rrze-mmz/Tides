@@ -32,9 +32,9 @@ class UpdateClipRequest extends FormRequest
             'slug' => ['required'],
             'semester_id' => ['required', 'integer'],
             'language_id' => ['required', 'integer'],
-            'context_id' => ['required', 'integer'],
-            'format_id' => ['required', 'integer'],
-            'type_id' => ['required', 'integer'],
+            'context_id' => ['nullable', 'integer'],
+            'format_id' => ['nullable', 'integer'],
+            'type_id' => ['nullable', 'integer'],
             'chapter_id' => ['integer', 'nullable', function (string $attribute, mixed $value, Closure $fail) {
                 if ($this->route('clip')->series->chapters->pluck('id')->doesntContain($value)) {
                     $fail("The {$attribute} id doesn't belong to the series.");

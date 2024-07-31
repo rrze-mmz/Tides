@@ -1,3 +1,4 @@
+@use('App\Models\Semester')
 @extends('layouts.backend')
 
 @section('content')
@@ -47,7 +48,7 @@
                                        label="Language"
                                        select-class="select2-tides"
                                        model="language"
-                                       :selectedItem="old('language_id')"
+                                       :selectedItem="old('language_id', 4)"
                 />
 
                 <div class="mb-2 border-b border-solid border-b-black pb-2 text-left text-xl font-bold">
@@ -58,21 +59,21 @@
                                        label="Context"
                                        select-class="select2-tides"
                                        model="context"
-                                       :selectedItem="old('context_id')"
+                                       :selectedItem="old('context_id',0)"
                 />
 
                 <x-form.select2-single field-name="format_id"
                                        label="Format"
                                        select-class="select2-tides"
                                        model="format"
-                                       :selectedItem="old('format_id')"
+                                       :selectedItem="old('format_id', 11)"
                 />
 
                 <x-form.select2-single field-name="type_id"
                                        label="Type"
                                        select-class="select2-tides"
                                        model="type"
-                                       :selectedItem="old('type_id')"
+                                       :selectedItem="old('type_id',11)"
                 />
 
                 <x-form.select2-multiple field-name="presenters"
@@ -86,7 +87,7 @@
                                        label="Semester"
                                        select-class="select2-tides"
                                        model="semester"
-                                       :selectedItem="old('semester_id')"
+                                       :selectedItem="old('semester_id',Semester::current()->first()->id)"
                 />
 
                 <x-form.select2-multiple field-name="tags"
@@ -128,11 +129,11 @@
                 />
 
                 <x-date-time-picker
-                    :has-time-availability="old('has_time_availability', false)"
-                    :time-availability-start="old('time_availability_start',now()->format('Y-m-d H:i'))"
-                    :time-availability-end="old('time_availability_end',now()->format('Y-m-d H:i'))"
-                    name="time_availability"
-                    label="Time availability">
+                        :has-time-availability="old('has_time_availability', false)"
+                        :time-availability-start="old('time_availability_start',now()->format('Y-m-d H:i'))"
+                        :time-availability-end="old('time_availability_end',now()->format('Y-m-d H:i'))"
+                        name="time_availability"
+                        label="Time availability">
                 </x-date-time-picker>
 
                 <div class="col-span-7 w-4/5 pt-8">
@@ -154,105 +155,105 @@
 
     </div>
     <script>
-        const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-        const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
-
-        function app() {
-
-            return {
-
-                showDatepicker: false,
-
-                datepickerValue: '',
+      const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 
-                month: '',
+      function app() {
 
-                year: '',
+        return {
 
-                no_of_days: [],
+          showDatepicker: false,
 
-                blankdays: [],
-
-                days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+          datepickerValue: '',
 
 
-                initDate() {
+          month: '',
 
-                    let today = new Date();
+          year: '',
 
-                    this.month = today.getMonth();
+          no_of_days: [],
 
-                    this.year = today.getFullYear();
+          blankdays: [],
 
-                    this.datepickerValue = new Date(this.year, this.month, today.getDate()).toDateString();
-
-                },
-
-                isToday(date) {
-
-                    const today = new Date();
-
-                    const d = new Date(this.year, this.month, date);
+          days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
 
 
-                    return today.toDateString() === d.toDateString() ? true : false;
+          initDate() {
 
-                },
+            let today = new Date();
 
-                getDateValue(date) {
+            this.month = today.getMonth();
 
-                    let selectedDate = new Date(this.year, this.month, date);
+            this.year = today.getFullYear();
 
-                    this.datepickerValue = selectedDate.toDateString();
+            this.datepickerValue = new Date(this.year, this.month, today.getDate()).toDateString();
 
-                    this.$refs.date.value = selectedDate.getFullYear() + '-' + ('0' + selectedDate.getMonth()).slice(-2) + '-' + ('0' + selectedDate.getDate()).slice(-2);
+          },
 
-                    console.log(this.$refs.date.value);
+          isToday(date) {
 
+            const today = new Date();
 
-                    this.showDatepicker = false;
-
-                },
-
-
-                getNoOfDays() {
-
-                    let daysInMonth = new Date(this.year, this.month + 1, 0).getDate();
+            const d = new Date(this.year, this.month, date);
 
 
-                    // find where to start calendar day of week
+            return today.toDateString() === d.toDateString() ? true : false;
 
-                    let dayOfWeek = new Date(this.year, this.month).getDay();
+          },
 
-                    let blankdaysArray = [];
+          getDateValue(date) {
 
-                    for (var i = 1; i <= dayOfWeek; i++) {
+            let selectedDate = new Date(this.year, this.month, date);
 
-                        blankdaysArray.push(i);
+            this.datepickerValue = selectedDate.toDateString();
 
-                    }
+            this.$refs.date.value = selectedDate.getFullYear() + '-' + ('0' + selectedDate.getMonth()).slice(-2) + '-' + ('0' + selectedDate.getDate()).slice(-2);
 
-
-                    let daysArray = [];
-
-                    for (var i = 1; i <= daysInMonth; i++) {
-
-                        daysArray.push(i);
-
-                    }
+            console.log(this.$refs.date.value);
 
 
-                    this.blankdays = blankdaysArray;
+            this.showDatepicker = false;
 
-                    this.no_of_days = daysArray;
+          },
 
-                }
 
-            };
+          getNoOfDays() {
 
-        }
+            let daysInMonth = new Date(this.year, this.month + 1, 0).getDate();
+
+
+            // find where to start calendar day of week
+
+            let dayOfWeek = new Date(this.year, this.month).getDay();
+
+            let blankdaysArray = [];
+
+            for (var i = 1; i <= dayOfWeek; i++) {
+
+              blankdaysArray.push(i);
+
+            }
+
+
+            let daysArray = [];
+
+            for (var i = 1; i <= daysInMonth; i++) {
+
+              daysArray.push(i);
+
+            }
+
+
+            this.blankdays = blankdaysArray;
+
+            this.no_of_days = daysArray;
+
+          }
+
+        };
+
+      }
     </script>
 @endsection
