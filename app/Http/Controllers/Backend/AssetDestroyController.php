@@ -22,6 +22,8 @@ class AssetDestroyController extends Controller
         if ($asset->clips()->exists()) {
             $clip = $asset->clips->first();
             $asset->delete();
+            $clip->has_video_assets = $clip->refresh()->hasVideoAsset();
+            $clip->save();
             $clip->updatePosterImage();
 
             session()->flash('flashMessage', "{$asset->original_file_name} deleted successfully");

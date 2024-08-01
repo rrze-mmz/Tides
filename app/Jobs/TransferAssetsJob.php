@@ -87,6 +87,7 @@ class TransferAssetsJob implements ShouldQueue
             $this->model->addAsset($asset);
 
             if ($isVideo) {
+
                 //generate a poster image for the clip
                 $ffmpeg->getFrameFromSeconds(5)
                     ->export()

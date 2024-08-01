@@ -74,16 +74,17 @@ class SeriesDataTable extends Component
     {
         if (auth()->user()->can('administrate-portal-pages')) {
             $query = Series::query()->withLastPublicClip();
-            $query->where(function ($q) use ($search) {
-                $q->Where('id', (int) $search)
-                    ->orWhereRaw('lower(title) like ?', ["%{$search}%"])
-                    ->orWhere(function ($query) use ($search) {
-                        $query->WhereHas('presenters', function ($q) use ($search) {
-                            // Concatenate first_name and last_name and then apply the LIKE condition
-                            $q->whereRaw('lower(first_name || last_name) like ?', ["%{$search}%"]);
+            $query->with(['presenters'])
+                ->where(function ($q) use ($search) {
+                    $q->Where('id', (int) $search)
+                        ->orWhereRaw('lower(title) like ?', ["%{$search}%"])
+                        ->orWhere(function ($query) use ($search) {
+                            $query->WhereHas('presenters', function ($q) use ($search) {
+                                // Concatenate first_name and last_name and then apply the LIKE condition
+                                $q->whereRaw('lower(first_name || last_name) like ?', ["%{$search}%"]);
+                            });
                         });
-                    });
-            });
+                });
         } else {
             $query = Series::query();
             $query->with(['presenters'])

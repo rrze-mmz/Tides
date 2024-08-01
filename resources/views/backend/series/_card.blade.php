@@ -7,20 +7,23 @@
         $url = route('frontend.series.show', $series)
     @endphp
 @endif
+@php
+    $latestAsset = $series->lastPublicClip?->latestAsset();
+@endphp
 <div class="relative my-2 bg-gray-50 dark:bg-slate-800 rounded-md dark:border-white font-normal">
     <div class="relative h-15 overflow-hidden">
         <a href="{{ $url }}">
             <img
-                src="{{ ($series->lastPublicClip)
-                    ? fetchClipPoster($series->lastPublicClip?->latestAsset()?->player_preview)
+                    src="{{ ($series->lastPublicClip)
+                    ? fetchClipPoster($latestAsset?->player_preview)
                     : "/images/generic_clip_poster_image.png" }}"
-                alt="preview image"
-                class="object-cover w-full h-full" />
+                    alt="preview image"
+                    class="object-cover w-full h-full" />
         </a>
         <div
-            class="absolute w-full py-2.5 bottom-0 inset-x-0 bg-blue-600  text-white
+                class="absolute w-full py-2.5 bottom-0 inset-x-0 bg-blue-600  text-white
                     text-xs text-right pr-2 pb-2 leading-4 ">
-            {{ $series->latestClip?->latestAsset()?->durationToHours() }}
+            {{ $latestAsset?->durationToHours() }}
         </div>
     </div>
 
@@ -28,8 +31,8 @@
         <div class="mb-1">
             <div class="text-md font-bold text-gray-900 dark:text-white">
                 <a
-                    href="{{ $url }}"
-                    class="text-lg"
+                        href="{{ $url }}"
+                        class="text-lg"
                 >
                     {{ $series->title }}
                 </a>
@@ -37,7 +40,7 @@
             <div>
                 @if ($series->owner)
                     <span
-                        class="text-sm italic dark:text-white">von {{$series->owner->getFullNameAttribute()}}</span>
+                            class="text-sm italic dark:text-white">von {{$series->owner->getFullNameAttribute()}}</span>
                 @endif
             </div>
             <p class="text-base text-gray-700 dark:text-white">
@@ -69,10 +72,10 @@
             </div>
             <div class="text-sm">
                 <p class="italic text-gray-900 dark:text-white">
-                    @if(is_null($series->latestClip))
-                        {{ $series->updated_at->diffForHumans() }}
+                    @if($series->has('lastPublicClip'))
+                        {{ $series->lastPublicClip?->recording_date->diffForHumans()  }}
                     @else
-                        {{ $series->latestClip->recording_date->diffForHumans()  }}
+                        {{ $series->updated_at->diffForHumans() }}
                     @endif
 
                 </p>
@@ -83,17 +86,28 @@
             @if($seriesAcls!== 'public')
                 <div class="flex items-center justify-content-between">
                     <div class="pr-2">
-                        @if($series->checkClipAcls($series->clips))
-                            <x-heroicon-o-lock-open class="w-4 h-4 text-green-500 dark:text-white" />
-                            <span class="sr-only">Unlock clip</span>
+                        @if($series->has('lastPublicClip'))
+                            @if($series->lastPublicClip->checkAcls())
+                                <x-heroicon-o-lock-open class="w-4 h-4 text-green-500 dark:text-white" />
+                                <span class="sr-only">Unlock clip</span>
+                            @else
+                                <x-heroicon-o-lock-closed class="w-4 h-4 text-red-700 dark:text-white" />
+                                <span class="sr-only">Lock clip</span>
+                            @endif
                         @else
-                            <x-heroicon-o-lock-closed class="w-4 h-4 text-red-700 dark:text-white" />
-                            <span class="sr-only">Lock clip</span>
+                            @if($series->checkClipAcls(collect($series->lastPublicClip)))
+                                <x-heroicon-o-lock-open class="w-4 h-4 text-green-500 dark:text-white" />
+                                <span class="sr-only">Unlock clip</span>
+                            @else
+                                <x-heroicon-o-lock-closed class="w-4 h-4 text-red-700 dark:text-white" />
+                                <span class="sr-only">Lock clip</span>
+                            @endif
                         @endif
+
                     </div>
                     <div class="text-sm">
                         <p class="italic text-gray-900 dark:text-white">
-                            {{ $seriesAcls}}
+                            {{ $seriesAcls }}
                         </p>
                     </div>
                 </div>

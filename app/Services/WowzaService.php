@@ -142,6 +142,7 @@ class WowzaService
                 'width' => '0',
                 'height' => '0',
             ]));
+            $model->has_video_assets = true;
         }
     }
 

@@ -330,11 +330,11 @@ class Series extends BaseModel
     {
         return $query->addSelect(['last_public_clip_id' => Clip::select('id')
             ->public()
-            ->whereHas('assets')
+//            ->withVideoAssets()
             ->whereColumn('series_id', 'series.id')
-            ->orderByDesc('recording_date')
+            ->orderByDesc('episode')
             ->take(1),
-        ])->with('lastPublicClip');
+        ]);
     }
 
     /**
@@ -348,7 +348,7 @@ class Series extends BaseModel
     public function scopeHasClipsWithAssets($query): mixed
     {
         return $query->whereHas('clips', function ($q) {
-            $q->public()->whereHas('assets');
+            $q->public()->withVideoAssets()->limit(1);
         });
     }
 
@@ -380,7 +380,10 @@ class Series extends BaseModel
 
     public function getSeriesACLSUpdated()
     {
-        return $this->clips
+        return $this->clips()->select('id', 'is_public', 'has_video_assets')->get()
+            ->filter(function ($clip) {
+                return $clip->is_public && $clip->has_video_assets;
+            })
             ->map(fn ($clip) => $clip->acls->pluck('name'))->flatten()->unique()->values()
             ->implode(', ');
     }

@@ -231,9 +231,10 @@ class User extends Authenticatable
 
     public function getAllSeries(): Builder|Series
     {
-        return Series::whereHas('clips', function ($q) {
-            $q->where('supervisor_id', $this->id);
-        })
+        return Series::select('id', 'slug', 'title', 'updated_at', 'owner_id', 'organization_id')
+            ->whereHas('clips', function ($q) {
+                $q->where('supervisor_id', $this->id);
+            })
             ->orWhere('owner_id', $this->id)
             ->orWhereHas('members', function ($query) {
                 $query->where('user_id', $this->id);

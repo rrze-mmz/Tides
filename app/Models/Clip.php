@@ -375,6 +375,11 @@ class Clip extends BaseModel
         return $query->where('is_public', 1);
     }
 
+    public function scopeWithVideoAssets($query): mixed
+    {
+        return $query->where('has_video_assets', 1);
+    }
+
     /**
      *  Scope a query to only include clips without series
      */

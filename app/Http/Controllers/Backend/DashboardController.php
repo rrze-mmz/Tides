@@ -86,11 +86,13 @@ class DashboardController
         $livestreams = Livestream::active()->orderBy('clip_id');
 
         return view('backend.dashboard.index', [
-            'userSeries' => auth()->user()->getAllSeries()
+            'userSeries' => auth()->user()
+                ->getAllSeries()
+                ->with('owner')
                 ->withLastPublicClip()
                 ->CurrentSemester()
                 ->orderBy('title')
-                ->simplePaginate(100),
+                ->paginate(12),
             'userClips' => auth()->user()->clips()
                 ->whereNull('series_id')
                 ->orderByDesc('updated_at')

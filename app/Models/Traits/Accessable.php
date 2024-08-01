@@ -62,6 +62,7 @@ trait Accessable
         if (auth()->user()?->isAdmin()) {
             return true;
         }
+
         if ($acls->pluck('id')->contains(AclEnum::PORTAL()) && auth()->check()) {
             return ($this->assets()->count() > 0 && $this->is_public)
                 || auth()->user()->can('view-video', $this);
