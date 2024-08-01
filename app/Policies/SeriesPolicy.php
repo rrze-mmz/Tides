@@ -53,9 +53,10 @@ class SeriesPolicy
     public function edit(User $user, Series $series): Response
     {
         return (
-            $user->is($series->owner) ||
-            $user->isMemberOf($series) ||
-            ($user->isAdmin() || $user->isAssistant())
+            ($user->isAdmin() || $user->isAssistant()) ||
+            ($user->is($series->owner) ||
+                $user->isMemberOf($series))
+
         )
             ? Response::allow()
             : Response::deny('You do not own this series');

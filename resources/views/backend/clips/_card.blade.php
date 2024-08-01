@@ -1,19 +1,22 @@
 @use(App\Enums\Acl)
+@php
+    $latestAsset = $clip->latestAsset();
+@endphp
 <div class="relative my-2 bg-gray-50 dark:bg-slate-800 rounded-md dark:border-white font-normal">
     <div class="relative h-15 overflow-hidden">
         <a href="@if (str_contains(url()->current(), 'admin')) {{route('clips.edit', $clip)}}
                 @else {{route('frontend.clips.show', $clip) }} @endif">
             <img
-                src="{{ ($clip->latestAsset())
-                    ? fetchClipPoster($clip->latestAsset()?->player_preview)
+                    src="{{ ($latestAsset)
+                    ? fetchClipPoster($latestAsset?->player_preview)
                     : "/images/generic_clip_poster_image.png" }}"
-                alt="preview image"
-                class="object-cover w-full h-full" />
+                    alt="preview image"
+                    class="object-cover w-full h-full" />
         </a>
         <div
-            class="absolute w-full py-2.5 bottom-0 inset-x-0 bg-blue-600  text-white
+                class="absolute w-full py-2.5 bottom-0 inset-x-0 bg-blue-600  text-white
                     text-xs text-right pr-2 pb-2 leading-4 ">
-            {{ $clip->latestAsset()?->durationToHours() }}
+            {{ $latestAsset?->durationToHours() }}
         </div>
     </div>
 
@@ -21,9 +24,9 @@
         <div class="mb-1">
             <div class="text-md font-bold text-gray-900 dark:text-white">
                 <a
-                    href="@if (str_contains(url()->current(), 'admin')) {{route('clips.edit', $clip)}}
+                        href="@if (str_contains(url()->current(), 'admin')) {{route('clips.edit', $clip)}}
                 @else {{route('frontend.clips.show', $clip) }} @endif"
-                    class="text-md"
+                        class="text-md"
                 >
                     {{ (request()->routeIs('clips.index') ||
                       request()->routeIs('frontend.clips.index') ||

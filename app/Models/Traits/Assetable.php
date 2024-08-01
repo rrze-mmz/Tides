@@ -13,6 +13,11 @@ trait Assetable
     {
         $this->assets()->attach($asset);
 
+        if ($this->getTable() === 'clips') {
+            $this->has_video_assets = true;
+            $this->save();
+        }
+
         return $asset;
     }
 

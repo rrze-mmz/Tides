@@ -48,7 +48,7 @@
                     <thead>
                     <tr>
                         <th
-                            class="px-6 py-3 text-left">
+                                class="px-6 py-3 text-left">
                             <div class="flex items-center">
                                 <button wire:click="sortBy('name')"
                                         class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white leading-4
@@ -57,13 +57,13 @@
                                     Title
                                 </button>
                                 <x-sort-icon
-                                    field="title"
-                                    :sortField="$sortField"
-                                    :sortAsc="$sortAsc" />
+                                        field="title"
+                                        :sortField="$sortField"
+                                        :sortAsc="$sortAsc" />
                             </div>
                         </th>
                         <th
-                            class="px-6 py-3 text-left">
+                                class="px-6 py-3 text-left">
                             <div class="flex items-center">
                                 <button wire:click="sortBy('semester_id')"
                                         class="bg-gray-50 text-xs leading-4  text-gray-500  dark:bg-gray-800
@@ -72,13 +72,13 @@
                                     Semester
                                 </button>
                                 <x-sort-icon
-                                    field="location"
-                                    :sortField="$sortField"
-                                    :sortAsc="$sortAsc" />
+                                        field="location"
+                                        :sortField="$sortField"
+                                        :sortAsc="$sortAsc" />
                             </div>
                         </th>
                         <th
-                            class="px-6 py-3 text-left">
+                                class="px-6 py-3 text-left">
                             <div class="flex items-center">
                                 <button wire:click="sortBy('faculty')"
                                         class="bg-gray-50 text-xs leading-4   dark:bg-gray-800
@@ -87,13 +87,13 @@
                                     Acl
                                 </button>
                                 <x-sort-icon
-                                    field="faculty"
-                                    :sortField="$sortField"
-                                    :sortAsc="$sortAsc" />
+                                        field="faculty"
+                                        :sortField="$sortField"
+                                        :sortAsc="$sortAsc" />
                             </div>
                         </th>
                         <th
-                            class="px-6 py-3 text-left">
+                                class="px-6 py-3 text-left">
                             <div class="flex items-center">
                                 <button wire:click="sortBy('faculty')"
                                         class="bg-gray-50 text-xs leading-4   dark:bg-gray-800
@@ -102,13 +102,13 @@
                                     Organization
                                 </button>
                                 <x-sort-icon
-                                    field="faculty"
-                                    :sortField="$sortField"
-                                    :sortAsc="$sortAsc" />
+                                        field="faculty"
+                                        :sortField="$sortField"
+                                        :sortAsc="$sortAsc" />
                             </div>
                         </th>
                         <th
-                            class="px-6 py-3 text-left">
+                                class="px-6 py-3 text-left">
                             <div class="flex items-center">
                                 <button wire:click="sortBy('faculty')"
                                         class="bg-gray-50 text-xs leading-4  dark:bg-gray-800
@@ -117,16 +117,16 @@
                                     Presenters
                                 </button>
                                 <x-sort-icon
-                                    field="faculty"
-                                    :sortField="$sortField"
-                                    :sortAsc="$sortAsc" />
+                                        field="faculty"
+                                        :sortField="$sortField"
+                                        :sortAsc="$sortAsc" />
                             </div>
                         </th>
                         <th
-                            class="px-6 py-3 text-left">
+                                class="px-6 py-3 text-left">
                             <div class="flex items-center">
                                 <div
-                                    class="bg-gray-50 text-xs leading-4  dark:bg-gray-800 dark:text-white
+                                        class="bg-gray-50 text-xs leading-4  dark:bg-gray-800 dark:text-white
                                             text-gray-500 uppercase tracking-wider"
                                 >
                                     Actions
@@ -176,11 +176,11 @@
                                                             <div class="pr-2">
                                                                 @if($singleSeries->checkClipAcls($singleSeries->clips))
                                                                     <x-heroicon-o-lock-open
-                                                                        class="w-4 h-4 text-green-500" />
+                                                                            class="w-4 h-4 text-green-500" />
                                                                     <span class="sr-only">Unlock clip</span>
                                                                 @else
                                                                     <x-heroicon-o-lock-closed
-                                                                        class="w-4 h-4 text-red-700" />
+                                                                            class="w-4 h-4 text-red-700" />
                                                                     <span class="sr-only">Lock clip</span>
                                                                 @endif
                                                             </div>
@@ -201,7 +201,7 @@
                                 <div class="flex items-center">
                                     <div class="ml-4">
                                         <div class="">
-                                            {{  $singleSeries->organization->name }}
+                                            {{  $singleSeries->organization?->name }}
                                         </div>
                                     </div>
                                 </div>

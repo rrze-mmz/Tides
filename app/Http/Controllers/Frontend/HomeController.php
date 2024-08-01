@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Clip;
 use App\Models\Series;
-use Illuminate\Contracts\Database\Eloquent\Builder as ContractsBuilder;
 use Illuminate\View\View;
 
 class HomeController extends Controller
@@ -15,14 +14,15 @@ class HomeController extends Controller
      */
     public function __invoke(): View
     {
-        $series = Series::whereHas('clips.assets')->isPublic()
-            ->with(['owner', 'presenters', 'clips' => function (ContractsBuilder $query) {
-                $query->whereHas('assets');
-            }, 'clips.assets'])
+        $series = Series::select('id', 'slug', 'title', 'owner_id')
+            ->isPublic()
+            ->hasClipsWithAssets()
+            ->with(['owner', 'presenters:id'])
             ->withLastPublicClip()
             ->orderByDesc(Clip::select('recording_date')
+                ->where('has_video_assets', 1)
+                ->where('is_public', 1)
                 ->whereColumn('series_id', 'series.id')
-                ->has('assets')
                 ->limit(1)
                 ->orderByDesc('recording_date'))
             ->limit(16)
@@ -30,9 +30,10 @@ class HomeController extends Controller
 
         return view('frontend.homepage.index', [
             'series' => $series,
-            'clips' => Clip::with(['assets', 'presenters'])
+            'clips' => Clip::select('id', 'slug', 'title', 'recording_date', 'owner_id')
+                ->with(['presenters:id'])
                 ->public()
-                ->whereHas('assets')
+                ->withVideoAssets()
                 ->single()
                 ->orderByDesc('recording_date')
                 ->limit(12)
