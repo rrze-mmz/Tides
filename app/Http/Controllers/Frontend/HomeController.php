@@ -17,7 +17,7 @@ class HomeController extends Controller
         $series = Series::select('id', 'slug', 'title', 'owner_id')
             ->isPublic()
             ->hasClipsWithAssets()
-            ->with(['owner', 'presenters:id'])
+            ->with(['owner', 'presenters'])
             ->withLastPublicClip()
             ->orderByDesc(Clip::select('recording_date')
                 ->where('has_video_assets', 1)
@@ -31,7 +31,7 @@ class HomeController extends Controller
         return view('frontend.homepage.index', [
             'series' => $series,
             'clips' => Clip::select('id', 'slug', 'title', 'recording_date', 'owner_id')
-                ->with(['presenters:id'])
+                ->with(['presenters'])
                 ->public()
                 ->withVideoAssets()
                 ->single()

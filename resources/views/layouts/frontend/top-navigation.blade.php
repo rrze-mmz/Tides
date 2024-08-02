@@ -1,15 +1,20 @@
 <nav class="container mx-auto flex items-center justify-between px-2 w-full">
-    <div class="text-2xl">
+    <div class="flex">
         <a href="{{ url('/') }}"
            class="font-bold  no-underline text-ur "
         >
-            {{ config('app.name', 'Laravel') }}
-            @auth()
-                @if(auth()->user()->email === config('settings.portal.admin_main_address')
-                    && app()->env !== 'local')
-                    [{{ config('settings.portal.deploy_branch') }}]
-                @endif
-            @endauth
+            <div class="flex flex-col">
+                <div>
+                    <span class="text-2xl">
+                            {{ config('app.name', 'Laravel') }}
+                    </span>
+                </div>
+                <div>
+            <span class="text-sm">
+                [develop/unstable]
+            </span>
+                </div>
+            </div>
         </a>
     </div>
     <nav class="font-semibold space-x-4  text-lg">
