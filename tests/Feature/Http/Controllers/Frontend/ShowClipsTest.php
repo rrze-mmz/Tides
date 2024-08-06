@@ -252,7 +252,7 @@ it('a signed in user can access frontend clip page if clip has a portal access',
     $this->mockHandler->append($this->mockCheckApiConnection(), $this->mockVodSecureUrls());
     signInRole(Role::STUDENT);
 
-    get(route('frontend.clips.show', $this->clip))->assertSee('video id="target"', false);
+    get(route('frontend.clips.show', $this->clip))->assertSee('mediaPlayer id="target"', false);
 });
 
 it('shows a login url and acl info if a clip has portal, password, or lms acl ', function () {

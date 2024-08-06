@@ -6,6 +6,8 @@ use App\Models\Presenter;
 use App\Models\Tag;
 
 use function Pest\Laravel\get;
+use function Pest\Laravel\post;
+use function Pest\Laravel\postJson;
 
 uses()->group('frontend');
 
@@ -64,3 +66,27 @@ it('can search organizations', function (Organization $organization) {
         'updated_at' => null,
     ]),
 ]);
+
+it('has a method for logging player play events to database', function () {
+    $_SERVER['REMOTE_ADDR'] = '10.24.2.22';
+    $_SERVER['REQUEST_METHOD'] = 'POST';
+    postJson(route('api.logPlayEvent', ['mediaID' => 42, 'serviceIDs' => [1]]))->assertOk()->assertJson([]);
+});
+
+it('expects a json request before validating the request data', function () {
+    $_SERVER['REMOTE_ADDR'] = '10.24.2.22';
+    $_SERVER['REQUEST_METHOD'] = 'POST';
+    post(route('api.logPlayEvent', ['mediaID' => 42, 'serviceIDs' => [1]]))->assertNotFound();
+});
+
+it('checks for a valid IP', function () {
+    $_SERVER['REMOTE_ADDR'] = '';
+    postJson(route('api.logPlayEvent', ['mediaID' => 42, 'serviceIDs' => [1]]))->assertNotFound();
+});
+
+it('validates requests for player events', function () {
+    $_SERVER['REMOTE_ADDR'] = '10.24.2.22';
+    $_SERVER['REQUEST_METHOD'] = 'POST';
+    postJson(route('api.logPlayEvent', ['mediaID' => null, 'serviceIDs' => '1,2']))
+        ->assertJsonValidationErrors(['mediaID']);
+});

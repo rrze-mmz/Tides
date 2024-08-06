@@ -1,32 +1,44 @@
 @php use Barryvdh\Debugbar\Facades\Debugbar;use Barryvdh\Debugbar\Twig\Extension\Debug; @endphp
-<video id="target" class="w-full" playsinline controls
-       data-poster="{{ fetchClipPoster($clip->latestAsset()?->player_preview)  }}">
-    @if($clip->is_livestream)
+
+@if($clip->is_livestream)
+    <video id="target" class="w-full" playsinline controls
+           data-poster="{{ fetchClipPoster($clip->latestAsset()?->player_preview)  }}">
         <source
                 src="{{ $defaultVideoUrl }}"
                 type="video/mp4"
         />
-    @elseif(Illuminate\Support\Facades\Storage::disk('streamable_videos')
-                                                ->exists($clip->assets()->first()->id.'.m3u8'))
+    </video>
+@elseif(Illuminate\Support\Facades\Storage::disk('streamable_videos')
+                                            ->exists($clip->assets()->first()->id.'.m3u8'))
+    <video id="target" class="w-full" playsinline controls
+           data-poster="{{ fetchClipPoster($clip->latestAsset()?->player_preview)  }}">
         <source src="{{ '/streamable_videos/'.$clip->assets()->first()->id . '.m3u8'  }}"
-                type="application/x-mpegURL"
         />
-    @elseif($wowzaStatus->contains('pass') && !empty($defaultVideoUrl))
-        <source
-                src="{{ $defaultVideoUrl }}"
-                type="application/x-mpegURL"
-        />
+    </video>
+@elseif($wowzaStatus->contains('pass') && !empty($defaultVideoUrl))
+    <mediaPlayer id="target"
+                 src="{{ $defaultVideoUrl }}"
+                 title="{{ $clip->title }}"
+                 mediaID="{{ $clip->latestAsset()->id  }}"
+                 serviceIDs="{{ $clip->acls->pluck('id') }}"
+                 poster="{{ fetchClipPoster($clip->latestAsset()?->player_preview)  }}"
+    >
         @if($captionAsset = $clip->getCaptionAsset())
-            <track kind="captions"
-                   label="DE"
-                   src="{{getProtectedUrl($captionAsset->path)}}"
-                   srclang="de"
-                   default
+            <track
+                    id="de-track"
+                    kind="captions"
+                    label="DE"
+                    src="{{getProtectedUrl($captionAsset->path)}}"
+                    srclang="de"
+                    default
             />
         @endisset
-    @else
+    </mediaPlayer>
+@else
+    <video id="target" class="w-full" playsinline controls
+           data-poster="{{ fetchClipPoster($clip->latestAsset()?->player_preview)  }}">
         <source src="{{ '/videos/'.$clip->assets()->first()->path  }}"
                 type="video/mp4"
         />
-    @endif
-</video>
+    </video>
+@endif

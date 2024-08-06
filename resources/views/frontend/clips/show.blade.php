@@ -11,7 +11,8 @@
         @endif
         <div class="flex items-center border-b-2 border-black pb-2 dark:border-white">
             <div class="flex-grow">
-                <h2 class="text-2xl font-bold dark:text-white">{{ $clip->title }} [ID: {{ $clip->id }}]</h2>
+                <h2 id="clip-title" class="text-2xl font-bold dark:text-white">{{ $clip->title }} [ID: {{ $clip->id }}
+                    ]</h2>
             </div>
             @can('edit-clips', $clip)
                 <div class="flex-none">
@@ -81,7 +82,7 @@
                 <span class="pt-4">
                         @foreach($clip->tags as $tag)
                         <div
-                            class="text-sm mr-1 inline-flex items-center font-bold leading-sm px-3 py-1 bg-green-200
+                                class="text-sm mr-1 inline-flex items-center font-bold leading-sm px-3 py-1 bg-green-200
                                     text-green-700 rounded-full"
                         >
                             {{ $tag->name }}

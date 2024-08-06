@@ -63,6 +63,7 @@ use App\Models\Series;
 use App\Providers\RouteServiceProvider;
 use App\Services\OpenSearchService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
 Route::redirect('/home', '/');
@@ -95,6 +96,7 @@ Route::controller(ShowClipsController::class)->prefix('/clips')->group(function 
     Route::get('/{clip}', 'show')->name('frontend.clips.show');
 });
 
+//Route::get('/webplayer', TestApiController::class)->name('frontend.webplayer');C
 Route::get('/clips/{clip}/feed/{assetsResolution}', [FeedsController::class, 'clips'])
     ->name('frontend.clips.feed');
 
@@ -180,6 +182,7 @@ Route::controller(ApiController::class)->prefix('/api')->group(function () {
     Route::get('/organizations', 'organizations')->name('api.organizations');
     Route::get('/images', 'images')->name('api.images');
     Route::get('/roles', 'roles')->name('api.roles');
+    Route::post('/logPlayEvent', [ApiController::class, 'logPlayEvent'])->name('api.logPlayEvent');
 });
 
 //change portal language
@@ -408,7 +411,7 @@ Route::prefix('admin')->middleware(['auth', 'saml', 'can:access-dashboard'])->gr
             ->name('channels.activate');
     });
 });
-
+//https://www.sso.uni-erlangen.de/simplesaml/saml2/idp/metadata.php
 //redirect the saml2 logged-in user to previous page e.g. a clip with portal acl
 Route::get('/saml2Login', function () {
     $redirectUrl = (session()->has('url.intended')) ? session('url.intended') : RouteServiceProvider::HOME;

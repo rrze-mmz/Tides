@@ -6,6 +6,9 @@
 @import '../../node_modules/pikaday/css/pikaday.css';
 @import 'filepond/dist/filepond.min.css';
 @import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css';
+@import 'vidstack/player/styles/default/theme.css';
+@import 'vidstack/player/styles/default/layouts/video.css';
+@import 'vidstack/player/styles/default/layouts/audio.css';
 
 /*Dark mode switcher smooth transition*/
 [x-cloak] {
