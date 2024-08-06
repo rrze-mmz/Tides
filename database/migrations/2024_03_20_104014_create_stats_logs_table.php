@@ -29,7 +29,7 @@ return new class extends Migration
                 $table->boolean('in_range');
                 $table->string('referer')->nullable();
                 $table->text('query')->nullable();
-                $table->boolean('is_akamai');
+                $table->boolean('is_akami');
                 $table->string('server')->default(env('APP_ENV', 'production'))->nullable();
                 $table->string('range')->nullable();
                 $table->string('response');

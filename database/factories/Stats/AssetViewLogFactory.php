@@ -34,7 +34,7 @@ class AssetViewLogFactory extends Factory
             'in_range' => false,
             'referer' => 'localhost/clip/testClip-1',
             'query' => '',
-            'is_akamai' => false,
+            'is_akami' => false,
             'server' => env('app_env'),
             'range' => '',
             'response' => '200 OK',

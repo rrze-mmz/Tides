@@ -68,13 +68,13 @@ it('can search organizations', function (Organization $organization) {
 ]);
 
 it('has a method for logging player play events to database', function () {
-    $_SERVER['REMOTE_ADDR'] = '10.24.2.22';
+    $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
     $_SERVER['REQUEST_METHOD'] = 'POST';
     postJson(route('api.logPlayEvent', ['mediaID' => 42, 'serviceIDs' => [1]]))->assertOk()->assertJson([]);
 });
 
 it('expects a json request before validating the request data', function () {
-    $_SERVER['REMOTE_ADDR'] = '10.24.2.22';
+    $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
     $_SERVER['REQUEST_METHOD'] = 'POST';
     post(route('api.logPlayEvent', ['mediaID' => 42, 'serviceIDs' => [1]]))->assertNotFound();
 });
@@ -85,8 +85,13 @@ it('checks for a valid IP', function () {
 });
 
 it('validates requests for player events', function () {
-    $_SERVER['REMOTE_ADDR'] = '10.24.2.22';
+    $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
     $_SERVER['REQUEST_METHOD'] = 'POST';
     postJson(route('api.logPlayEvent', ['mediaID' => null, 'serviceIDs' => '1,2']))
         ->assertJsonValidationErrors(['mediaID']);
+});
+
+afterAll(function () {
+    unset($_SERVER['REMOTE_ADDR']);
+    unset($_SERVER['REQUEST_METHOD']);
 });

@@ -175,7 +175,7 @@ class ApiController extends Controller
                 'is_valid' => '1',
                 'referer' => array_key_exists('HTTP_REFERER', $_SERVER) ? $_SERVER['HTTP_REFERER'] : '',
                 'query' => array_key_exists('QUERY_STRING', $_SERVER) ? $_SERVER['QUERY_STRING'] : '',
-                'is_akamai' => '0',
+                'is_akami' => '0',
                 'in_range' => '0',
                 'server' => env('APP_ENV'),
                 'range' => $_SERVER['HTTP_RANGE'] ?? '',
