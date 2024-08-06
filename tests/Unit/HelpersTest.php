@@ -199,3 +199,14 @@ it('has a check opencast livestream room function', function () {
 
     expect(checkOpencastLivestreamRoom($location))->toBeInstanceOf(Livestream::class);
 });
+
+it('has a check for a valid insert for statistics', function () {
+    //null values
+    expect(check_valid_statistic_insert(null, 'POST', 'Firefox'))->toBeFalse();
+    //method is not POST
+    expect(check_valid_statistic_insert(23311872, 'GET', 'Firefox'))->toBeFalse();
+    //user agent contains the string 'bot'
+    expect(check_valid_statistic_insert(23311872, 'POST', 'bot'))->toBeFalse();
+
+    expect(check_valid_statistic_insert(23311872, 'POST', 'Firefox'))->toBeTrue();
+});

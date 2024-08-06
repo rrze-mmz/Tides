@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\Carbon;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,7 +19,7 @@ return new class extends Migration
                 $table->unsignedInteger('service_id');
                 $table->date('access_date');
                 $table->dateTime('access_time');
-                $table->ipAddress('remove_addr');
+                $table->ipAddress('remote_addr');
                 $table->string('remote_host');
                 $table->string('remote_user');
                 $table->string('script_name');
@@ -28,21 +29,22 @@ return new class extends Migration
                 $table->boolean('in_range');
                 $table->string('referer')->nullable();
                 $table->text('query')->nullable();
-                $table->boolean('is_akami');
+                $table->boolean('is_akamai');
                 $table->string('server')->default(env('APP_ENV', 'production'))->nullable();
                 $table->string('range')->nullable();
                 $table->string('response');
                 $table->ipAddress('real_ip');
                 $table->string('num_ip');
-                $table->dateTime('last_modified_at');
+                $table->dateTime('last_modified_at')->default(Carbon::now());
                 $table->string('last_modified_from')->nullable();
                 $table->string('bot_name')->nullable();
                 $table->string('city')->nullable();
                 $table->char('country', 2)->nullable();
                 $table->string('counter3')->nullable();
                 $table->boolean('is_bot');
-                $table->string('region');
-                $table->string('region_name');
+                $table->boolean('is_get');
+                $table->string('region')->nullable();
+                $table->string('region_name')->nullable();
             });
         }
     }

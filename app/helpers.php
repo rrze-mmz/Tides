@@ -294,3 +294,16 @@ function removeHtmlElements(?string $text): string
 
     return html_entity_decode($plainText, ENT_QUOTES, 'UTF-8');
 }
+
+function check_valid_statistic_insert($numIP, $requestMethod, $userAgent): bool
+{
+    if (is_null($numIP) || is_null($requestMethod) || is_null($userAgent)) {
+        return false;
+    }
+
+    return match (true) {
+        $requestMethod !== 'POST' => false,
+        str_contains(strtolower($userAgent), 'bot') => false,
+        default => true,
+    };
+}

@@ -11,7 +11,7 @@ import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import FilePondPluginMediaPreview from 'filepond-plugin-media-preview';
 import 'filepond/dist/filepond.min.css';
 import select2 from 'select2';
-import { VidstackPlayer } from 'vidstack/global/player';
+import { VidstackPlayer, VidstackPlayerLayout } from 'vidstack/global/player';
 import 'vidstack/player/styles/base.css';
 import {
   generateGeolocationLineChart,
@@ -32,9 +32,7 @@ $('.solution-trix-field-wrapper')
   .css('min-height', '100px');
 
 document.addEventListener('alpine:init', () => {
-  Alpine.store('darkMode', {
-    on: Alpine.$persist(false),
-  });
+  Alpine.store('darkMode', {});
 });
 
 document.addEventListener(
@@ -309,13 +307,61 @@ FilePond.create(inputElement2).setOptions({
 });
 
 async function initializePlayer() {
+  const layout = new VidstackPlayerLayout({});
   const player = await VidstackPlayer.create({
     target: document.querySelector('#target'),
+    crossOrigin: true,
+    playsInline: true,
+    viewType: 'video',
+    streamType: 'on-demand',
+    layout,
+  });
+
+  player.addEventListener('play', async () => {
+    const player = document.getElementById('target');
+    const mediaID = player.getAttribute('mediaID');
+    const serviceIDsString = player.getAttribute('serviceIDs');
+    const serviceIDsArray = JSON.parse(serviceIDsString);
+    try {
+      const response = await fetch('/api/logPlayEvent', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
+            .content,
+        },
+        body: JSON.stringify({
+          mediaID: mediaID,
+          serviceIDs: serviceIDsArray,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const result = await response.json();
+      console.log(result.message);
+    } catch (error) {
+      console.error('Error logging play event:', error);
+    }
+  });
+
+  // Select and add tracks
+  const trackElements = document.querySelectorAll('#target track');
+  trackElements.forEach((trackElement) => {
+    player.textTracks.add({
+      src: trackElement.src,
+      kind: trackElement.kind,
+      label: trackElement.label,
+      srclang: trackElement.srclang,
+      default: trackElement.default,
+    });
   });
 
   function changeVideoSource(newSource) {
     const currentTime = player.currentTime; // Get the current time of the video
-    console.log('currentTime:', currentTime);
 
     function setNewVideoTime() {
       if (player.readyState >= 2) {
@@ -341,6 +387,39 @@ async function initializePlayer() {
         changeVideoSource(videoUrl);
       });
     });
+  });
+
+  // Add event listener for play event
+  player.on('play', async () => {
+    const videoId = player.config.mediaId; // Ensure mediaId is set in player config
+    const userId = document.querySelector('meta[name="user-id"]').content; // Assuming you have user ID in a meta tag
+    const playedAt = new Date().toISOString();
+
+    console.log('videoID', videoId);
+    try {
+      const csrfToken = document
+        .querySelector('meta[name="csrf-token"]')
+        .getAttribute('content');
+      console.log(csrfToken);
+      const response = await fetch('/api/log-play-event', {
+        method: 'POST',
+        headers: {
+          'X-CSRF-TOKEN': csrfToken,
+        },
+        body: JSON.stringify({
+          video_id: videoId,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const result = await response.json();
+      console.log(result.message);
+    } catch (error) {
+      console.error('Error logging play event:', error);
+    }
   });
 }
 
