@@ -337,6 +337,15 @@ class Series extends BaseModel
         ]);
     }
 
+    public function scopeHasClipsWithAcl($query, \App\Enums\Acl $acl): mixed
+    {
+        return $query->whereHas('clips', function ($q) use ($acl) {
+            $q->public()->whereHas('acls', function ($aclQuery) use ($acl) {
+                $aclQuery->where('acl_id', $acl());
+            });
+        });
+    }
+
     /**
      *  Scope a query to only include public series
      */

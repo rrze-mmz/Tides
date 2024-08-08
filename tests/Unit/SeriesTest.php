@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\Acl;
 use App\Models\Clip;
 use App\Models\Semester;
 use App\Models\Series;
@@ -128,6 +129,10 @@ it('has a current semester scope', function () {
 
 it('has a scope to fetch clips with assets', function () {
     expect(Series::hasClipsWithAssets())->toBeInstanceOf(Builder::class);
+});
+
+it('has a scope to fetch clips with certain acl', function () {
+    expect(Series::hasClipsWithAssets(Acl::PUBLIC))->toBeInstanceOf(Builder::class);
 });
 
 test('series owner can be null', function () {

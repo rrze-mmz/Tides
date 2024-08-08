@@ -32,7 +32,7 @@
                       request()->routeIs('frontend.clips.index') ||
                       request()->routeIs('search'))
                      ?$clip->title
-                     :Str::limit($clip->title, 20, '...')}}
+                     :Str::limit($clip->title, 100, preserveWords:true)}}
                 </a>
             </div>
             <div>

@@ -36,10 +36,10 @@
                     </a>
                 </div>
             </div>
+        </div>
     </section>
     <main class="sm:container sm:mx-auto sm:mt-16">
         @include('frontend.search._searchbar')
-
         @auth()
             @if(auth()->user()->settings->data['show_subscriptions_to_home_page'])
                 <div class="flex w-full items-end border-b-2 border-black dark:border-white justify-content-between">
@@ -58,6 +58,35 @@
                     @empty
                         <div class="dark:text-white text-2xl">
                             {{ __('homepage.series.You are not subscribed to any series') }}
+                        </div>
+                    @endforelse
+                </div>
+            @endif
+            @if($portalSeries->isNotEmpty())
+                <div class="flex w-full items-end border-b justify-content-between pb-4
+            border-b-2 border-black dark:border-white"
+                >
+                    <div class="flex w-full items-end justify-between pb-2">
+                        <div class="text-2xl dark:text-white font-bold">
+                            {{  __('homepage.series.Recently added!') }} Portal
+                        </div>
+                        <a href="{{ route('frontend.series.index') }}"
+                           class="text-sm underline dark:text-white "
+                        >
+                            {{__('homepage.series.more series') }}
+                        </a>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-4 gap-4 pt-8">
+                    @forelse($portalSeries as $single)
+                        @include('backend.series._card',[
+                                'series'=> $single,
+                                'route' => 'admin'
+                                ])
+                    @empty
+                        <div class="dark:text-white text-2xl pt-10">
+                            {{ __('homepage.series.no series found' )}}
                         </div>
                     @endforelse
                 </div>

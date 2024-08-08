@@ -96,31 +96,45 @@ it('does not display series with clips without assets', function () {
     get(route('home'))->assertDontSee($series->title);
 });
 
-it('displays latest series with clips that have assets', function () {
+it('displays latest series with clips that are open and have assets to visitors', function () {
     $series = SeriesFactory::create();
     $clip = ClipFactory::withAssets(1)->create();
+    $clip->addAcls(collect(Acl::PUBLIC()));
     $series->clips()->save($clip);
 
-    get(route('home'))->assertSee(Str::limit($series->title, 20, ''));
+    get(route('home'))->assertSee(Str::limit($series->title, 100, preserveWords: true));
+});
+
+it('displays latest series with clips that are portal protected to logged in users', function () {
+    $series = SeriesFactory::create();
+    $clip = ClipFactory::withAssets(1)->create();
+    $clip->addAcls(collect(Acl::PORTAL()));
+    $series->clips()->save($clip);
+
+    get(route('home'))->assertDontSee(Str::limit($series->title, 100, preserveWords: true));
+
+    signInRole(Role::STUDENT);
+    get(route('home'))->assertSee(Str::limit($series->title, 100, preserveWords: true));
 });
 
 it('should not display series that is not public', function () {
     $series = SeriesFactory::create();
     $clip = ClipFactory::withAssets(1)->create();
+    $clip->addAcls(collect(Acl::PUBLIC()));
     $series->clips()->save($clip);
 
-    get(route('home'))->assertSee(Str::limit($series->title, 20, ''));
+    get(route('home'))->assertSee(Str::limit($series->title, 100, preserveWords: true));
 
     $series->is_public = false;
     $series->save();
 
-    get(route('home'))->assertDontSee(Str::limit($series->title, 20, ''));
+    get(route('home'))->assertDontSee(Str::limit($series->title, 100, preserveWords: true));
 });
 
 it('does not display clips without assets', function () {
     $clip = ClipFactory::create();
 
-    get(route('home'))->assertDontSee(Str::limit($clip->title, 20, '...'));
+    get(route('home'))->assertDontSee(Str::limit($clip->title, 100, preserveWords: true));
 });
 
 it('does not display clips that belong to a series', function () {
@@ -132,18 +146,18 @@ it('does not display clips that belong to a series', function () {
 it('displays clips with video assets', function () {
     $clip = ClipFactory::withAssets(1)->create();
 
-    get(route('home'))->assertSee(Str::limit($clip->title, 20, '...'));
+    get(route('home'))->assertSee(Str::limit($clip->title, 100, preserveWords: true));
 });
 
 it('should not display clips that are not public', function () {
     $clip = ClipFactory::withAssets(1)->create();
 
-    get(route('home'))->assertSee(Str::limit($clip->title, 20, '...'));
+    get(route('home'))->assertSee(Str::limit($clip->title, 100, preserveWords: true));
 
     $clip->is_public = false;
     $clip->save();
 
-    get(route('home'))->assertDontSee(Str::limit($clip->title, 20, '...'));
+    get(route('home'))->assertDontSee(Str::limit($clip->title, 100, preserveWords: true));
 });
 
 it('shows dashboard menu item for admins', function () {
@@ -210,16 +224,17 @@ it('hide non visible clip acls in series description', function () {
     $secondClip = Clip::find(2);
 
     $firstClip->addAcls(collect([Acl::PORTAL()]));
-    $secondClip->addAcls(collect([Acl::PASSWORD()]));
+    $secondClip->addAcls(collect([Acl::PORTAL()]));
 
-    get(route('home'))->assertSee('portal, password');
+    signInRole(Role::STUDENT);
+    get(route('home'))->assertSee('portal');
 
     //clip has no assets thus should not be displayed to visitors
     $thirdClip = Clip::factory()->create(['series_id' => $series]);
 
     $thirdClip->addAcls(collect([Acl::LMS()]));
 
-    get(route('home'))->assertDontSee('portal, password, lms');
+    get(route('home'))->assertDontSee('portal, lms');
 });
 
 it('has an faq static page,', function () {
