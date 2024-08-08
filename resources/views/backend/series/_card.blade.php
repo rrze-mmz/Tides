@@ -46,7 +46,7 @@
             <p class="text-base text-gray-700 dark:text-white">
                 {{ strip_tags((str_contains(url()->current(),'search'))
                     ?$series->description
-                    : Str::limit($series->description, 30))  }}
+                    : Str::limit($series->description, 100 ,preserveWords: true))  }}
             </p>
         </div>
 

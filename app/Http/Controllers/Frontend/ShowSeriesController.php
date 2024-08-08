@@ -67,7 +67,7 @@ class ShowSeriesController extends Controller
                 });
         } else {
             $chapters = $series->chapters()->get();
-            $clips = (auth()->user()?->id === $series->owner_id || auth()->user()?->isAdmin())
+            $clips = (($series->owner_id && auth()->user()?->id === $series->owner_id) || auth()->user()?->isAdmin())
                 ?
                 Clip::select(['id', 'title', 'slug', 'episode', 'is_public'])
                     ->where('series_id', $series->id)
@@ -83,7 +83,8 @@ class ShowSeriesController extends Controller
                     ->where('is_public', true)
                     ->WithSemester()
                     ->with('assets:id,width,height,type')
-                    ->orderBy('episode')->get();
+                    ->orderBy('episode')
+                    ->get();
             $assetsResolutions = $clips
                 ->map(function ($clip) {
                     return $clip->assets->map(function ($asset) {
