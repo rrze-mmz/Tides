@@ -664,7 +664,7 @@ it('loads the video player if clip is a livestream', function () {
     $clip->is_livestream = true;
     $clip->save();
 
-    get(route('clips.edit', $clip))->assertSee('video id="target"', false);
+    get(route('clips.edit', $clip))->assertSee('streamType="live"', false);
 });
 
 it('hides livestream reservation dialog from moderators', function () {
@@ -680,7 +680,7 @@ it('loads the video player if clip is a livestream for portal admins', function 
 
     signInRole(Role::ADMIN);
 
-    get(route('clips.edit', $clip))->assertSee('video id="target"', false);
+    get(route('clips.edit', $clip))->assertSee('streamType="live"', false);
 });
 
 test('an admin user can delete a not owned clip', function () {
