@@ -5,7 +5,9 @@ return [
 
     ],
     'frontend' => [
-
+        'hosted by' => 'Moderiert von: ',
+        'show notes' => 'Sendungsnotizen',
+        'show transcript' => 'Sendungstranskript',
     ],
     'backend' => [
         'delete' => [

@@ -89,7 +89,8 @@
             <div>
                 <div class="pt-8 flex w-48 h-auto place-items-center justify-center justify-items-center">
                     <img src="{{ $series['poster']}}"
-                         alt="preview image">
+                         alt="series preview image"
+                    >
                 </div>
             </div>
         </div>

@@ -5,7 +5,11 @@ return [
 
     ],
     'frontend' => [
-
+        'public livestreams available' => 'Öffentlicher Livestream verfügbar',
+        'hidden livestreams' => 'Versteckte Livestreams',
+        'hidden livestream for room' => 'Versteckte Livestream für Raum :roomName',
+        'visit livestream page' => 'Zur Livestream-Seite gehen',
+        'no active livestream found' => 'Keine aktiven Livestreams gefunden.',
     ],
     'backend' => [
         'delete' => [

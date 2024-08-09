@@ -6,6 +6,8 @@ return [
     'Dashboard greeting' => 'Good day :fullName',
     'description' => 'Description',
     'password' => 'Password',
+    'guest' => 'Guest|Guests',
+    'categories' => 'Category|Categories',
     'actions' => [
         'save' => 'save',
         'edit' => 'edit',
@@ -33,6 +35,10 @@ return [
         'image' => 'Image|Images',
         'article' => 'Article|Articles',
         'channel' => 'Channel|Channels',
+        'organization' => 'Organization|Organizations',
+        'live now' => 'Live now!',
+        'faq' => 'FAQ|FAQs',
+        'myPortal' => 'my:appName',
     ],
     'heading' => [
         'create new series' => 'Create new series',

@@ -72,7 +72,7 @@ it('returns only clips with assets', function () {
     $this->mockHandler->append($this->mockClusterNotAvailable());
     Clip::factory()->create(['title' => 'without assets', 'description' => 'clip without assets']);
 
-    searchFor('assets')->assertSee(__('search.no results found'));
+    searchFor('assets')->assertSee(__('search.frontend.no results found'));
 });
 
 it('searches for clip title', function () {

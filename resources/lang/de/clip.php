@@ -11,6 +11,11 @@ return [
         ],
         'show' => [
             'Back to clip edit page' => 'Zurück zur Clip-Bearbeitungsseite',
+            'presenter video stream' => 'Präsentator-Videostream',
+            'presentation video stream' => 'Präsentations-Videostream',
+            'composite video stream' => 'Komposit-Videostream',
+            'to LMS course' => 'Zum LMS-Kurs',
+            'views' => ':numViews Videoaufrufe',
         ],
 
         'not authorized to view video' => 'Sie sind nicht berechtigt, dieses Video anzusehen!',

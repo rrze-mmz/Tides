@@ -19,7 +19,7 @@
                     font-semibold text-xs text-white uppercase tracking-widest
                     hover:bg-blue-700 active:bg-blue-900 focus:outline-none focus:border-blue-900
                     focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150"
-                                       title="presenter video stream">
+                                       title="{{__('clip.frontend.show.presenter video stream')}}">
                                         <x-iconoir-video-camera class="w-6 h-6 " />
                                     </a>
                                 @endif
@@ -29,7 +29,7 @@
                     font-semibold text-xs text-white uppercase tracking-widest
                     hover:bg-blue-700 active:bg-blue-900 focus:outline-none focus:border-blue-900
                     focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150"
-                                       title="presentation video stream">
+                                       title=" {{__('clip.frontend.show.presentation video stream')}}">
                                         <x-iconoir-video-projector class="w-6 h-6 " />
                                     </a>
                                 @endif
@@ -39,7 +39,7 @@
                     font-semibold text-xs text-white uppercase tracking-widest
                     hover:bg-blue-700 active:bg-blue-900 focus:outline-none focus:border-blue-900
                     focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150"
-                                       title="composite video stream">
+                                       title="{{ __('clip.frontend.show.composite video stream') }}">
                                         <x-iconoir-view-columns-2 class="w-6 h-6 " />
                                     </a>
                                 @endif
@@ -72,7 +72,7 @@
                     @if($acl == Acl::PORTAL())
                         <a href="{{route('login')}}">
                             <x-button class='flex items-center bg-blue-600 hover:bg-blue-700'>
-                                Login
+                                {{ __('auth.Login') }}
                                 <x-heroicon-o-arrow-right class="w-6 ml-4" />
                             </x-button>
                         </a>
@@ -80,7 +80,7 @@
                     @if($acl == Acl::LMS())
                         <a href="{{$clip->series->lms_link}}">
                             <x-button class='flex items-center bg-blue-600 hover:bg-blue-700'>
-                                Go to LMS Course
+                                {{ __('clip.frontend.show.to LMS course') }}
                                 <x-heroicon-o-arrow-right class="w-6 ml-4" />
                             </x-button>
                         </a>
@@ -166,7 +166,7 @@
 
         <div class="flex items-center dark:text-white">
             <x-heroicon-o-eye class="h-6 w-6" />
-            <span class="pl-3"> {{$clip->views()}} Views </span>
+            <span class="pl-3">{{__('clip.frontend.show.views', ['numViews' =>  $clip->views() ])}} </span>
         </div>
 
     </div>

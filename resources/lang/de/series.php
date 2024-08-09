@@ -10,10 +10,11 @@ return [
         'semester' => 'Semester',
         'duration' => 'Dauer',
         'actions' => 'Aktionen',
+        'edit series' => 'Series bearbeiten',
     ],
     'frontend' => [
         'show' => [
-            'views' => ':counter views',
+            'views' => ':counter Videoaufrufe',
         ],
         'index' => [
             'Series index' => 'Serienindex',

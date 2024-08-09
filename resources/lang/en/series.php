@@ -10,6 +10,7 @@ return [
         'semester' => 'Semester',
         'duration' => 'Duration',
         'actions' => 'Actions',
+        'edit series' => 'Edit series',
     ],
     'frontend' => [
         'show' => [

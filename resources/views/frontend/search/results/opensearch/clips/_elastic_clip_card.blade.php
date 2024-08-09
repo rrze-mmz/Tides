@@ -4,7 +4,6 @@
         <div class="mb-1">
             <div class="text-lg font-bold text-gray-900 dark:text-white">
                 <a href="{{ route('frontend.clips.show', $clip['slug']) }}"
-                   class=""
                 >
                     {{ $clip['title'].' |'.$clip['semester'].' |  ClipID:'.$clip['id'] }}
                 </a>
@@ -64,11 +63,11 @@
                             </div>
                             <div class="flex items-center align-middle">
                                 @foreach ($clip['presenters'] as $presenter)
-
                                     <div class="pr-2 dark:text-white">
                                         {{ $presenter['presenter_fullName'] }}
                                     </div>
-                                    <img src="{{ env('app_url').$presenter['presenter_image_url'] }}" alt=""
+                                    <img src="{{ env('app_url').$presenter['presenter_image_url'] }}"
+                                         alt="clip poster image"
                                          class="h-8 rounded-full">
                                 @endforeach
                             </div>
@@ -90,7 +89,7 @@
                     <div class="flex flex-row items-center">
                         <div class="flex pr-2 items-center">
                             <div class="pr-2 font-bold dark:text-white">
-                                Part of Videoseries :
+                                {{__('search.frontend.part of video series')}}
                             </div>
                             <div class="flex items-center align-middle italic dark:text-white">
                                 <a href="{{ route('frontend.series.show', $clip['series']['series_slug']) }}">

@@ -193,9 +193,9 @@ it('clip public page should display all alternative videos if a video has assets
         'type' => Content::SMIL,
     ]));
     get(route('frontend.clips.show', $this->clip))
-        ->assertSee('presenter video stream')
-        ->assertSee('presentation video stream')
-        ->assertSee('composite video stream');
+        ->assertSee(__('clip.frontend.show.presenter video stream'))
+        ->assertSee(__('clip.frontend.show.presentation video stream'))
+        ->assertSee(__('clip.frontend.show.composite video stream'));
 });
 
 it('clip public page should not display alternative videos if user is not allowed to view the video', function () {

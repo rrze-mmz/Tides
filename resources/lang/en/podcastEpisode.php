@@ -5,7 +5,9 @@ return [
 
     ],
     'frontend' => [
-
+        'hosted by' => 'Hosted by: ',
+        'show notes' => 'Show notes',
+        'show transcript' => 'Show transcript',
     ],
     'backend' => [
         'delete' => [

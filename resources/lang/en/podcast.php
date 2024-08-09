@@ -2,10 +2,15 @@
 
 return [
     'common' => [
-
+        'edit podcast' => 'Edit podcast',
     ],
     'frontend' => [
-
+        'jumbotron heading' => 'Podcasts by Students, Departments, and University Leadership',
+        'jumbotron body' => 'At FAU, there are a wide variety of podcasts: Students introduce scientists, Chancellor 
+        Christian Zens talks about developments at the university, and individual departments present their research. 
+        You can find an overview of FAU\'s podcast offerings on this page.',
+        'no podcasts available or published' => 'No podcasts available or published',
+        'episode details' => 'Episode details',
     ],
     'backend' => [
         'delete' => [
