@@ -41,7 +41,7 @@ class AddDemoUser extends Command
             'password' => Str::password(16, true, true, false, false),
             'email' => 'john.dolittle@tides.edu',
         ]);
-        $user->assignRoles(Role::MODERATOR);
+        $user->assignRole(Role::MODERATOR);
         $this->info('Adding Dr. Dolittle presenter');
         $user->presenter()->create([
             'academic_degree_id' => '1',
