@@ -308,12 +308,13 @@ FilePond.create(inputElement2).setOptions({
 
 async function initializePlayer() {
   const layout = new VidstackPlayerLayout({});
+  const playerDIV = document.getElementById('target');
   const player = await VidstackPlayer.create({
     target: document.querySelector('#target'),
     crossOrigin: true,
     playsInline: true,
     viewType: 'video',
-    streamType: 'on-demand',
+    streamType: playerDIV.getAttribute('streamType'),
     layout,
   });
 
