@@ -330,7 +330,7 @@ class Series extends BaseModel
     {
         return $query->addSelect(['last_public_clip_id' => Clip::select('id')
             ->public()
-//            ->withVideoAssets()
+            ->withVideoAssets()
             ->whereColumn('series_id', 'series.id')
             ->orderByDesc('episode')
             ->take(1),
