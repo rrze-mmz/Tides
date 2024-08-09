@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Enums\Content;
+use App\Enums\Role;
 use App\Models\Asset;
 use App\Models\Semester;
 use App\Models\User;
@@ -40,6 +41,7 @@ class AddDemoUser extends Command
             'password' => Str::password(16, true, true, false, false),
             'email' => 'john.dolittle@tides.edu',
         ]);
+        $user->assignRoles(Role::MODERATOR);
         $this->info('Adding Dr. Dolittle presenter');
         $user->presenter()->create([
             'academic_degree_id' => '1',
