@@ -20,7 +20,7 @@
     <nav class="font-semibold space-x-4  text-lg">
         <span class="pl-10 no-underline ">
             <a href="{{ route('frontend.channels.index') }}">
-                Channels
+                {{ trans_choice('common.menu.channel',2)}}
             </a>
         </span>
         <span class="no-underline ">
@@ -30,27 +30,27 @@
         </span>
         <span class="no-underline ">
             <a href="{{ route('frontend.clips.index') }}">
-                Clips
+                {{ trans_choice('common.menu.clip', 2)}}
             </a>
         </span>
         <span class="no-underline ">
             <a href="{{ route('frontend.podcasts.index') }}">
-                Podcasts
+                 {{ trans_choice('common.menu.podcast', 2)}}
             </a>
         </span>
         <span class="no-underline ">
             <a href="{{ route('frontend.organizations.index') }}">
-                Organizations
+                {{ trans_choice('common.menu.organization', 2) }}
             </a>
         </span>
         <span class="no-underline ">
             <a href="{{ route('frontend.livestreams.index') }}">
-                Live now!
+                {{ __('common.menu.live now') }}
             </a>
         </span>
         <span class="pr-10 no-underline ">
             <a href="{{ route('frontend.faq') }}">
-                FAQs
+                {{ trans_choice('common.menu.faq', 2) }}
             </a>
         </span>
     </nav>
@@ -63,7 +63,7 @@
         @else
             <span>Hi, {{ Auth::user()->getFullNameAttribute() }}</span>
             <a href="{{route('frontend.userSettings.edit')}}">
-                my{{ str(config('app.name'))->ucfirst() }}
+                {{ __('common.menu.myPortal', ['appName' => str(config('app.name'))->ucfirst() ]) }}
             </a>
             @if(!str_contains(url()->current(), 'admin') && auth()->user()->can('access-dashboard'))
                 <a href="/admin/dashboard"

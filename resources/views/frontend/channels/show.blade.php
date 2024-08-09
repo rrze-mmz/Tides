@@ -8,7 +8,8 @@
                 {{ $channel->name }}
             </h2>
             @can('edit-channel', $channel)
-                <x-form.button :link="route('channels.edit',$channel)" type="submit" text="Edit channel" />
+                <x-form.button :link="route('channels.edit',$channel)" type="submit"
+                               text="{{ __('channel.backend.edit channel')  }}" />
             @endcan
         </div>
         <div class="flex flex-col px-2 py-2 pt-10">
@@ -17,11 +18,11 @@
                     <div class="w-120 h-72 rounded-full mx-auto
                 ">
                         <img
-                            src="{{ (is_null($channel->banner_url))
+                                src="{{ (is_null($channel->banner_url))
                     ? "/images/channels_banners/generic_channel_banner.png"
                     : '/'.$channel->banner_url }}"
-                            alt="channel banner"
-                            class="object-cover w-full h-full" />
+                                alt="channel banner"
+                                class="object-cover w-full h-full" />
                     </div>
                 </div>
             </div>

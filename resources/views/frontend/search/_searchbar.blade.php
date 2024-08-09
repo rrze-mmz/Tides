@@ -5,7 +5,7 @@
 
         <div class="p-2">
             <div
-                class="flex flex-col items-center rounded-full bg-gray-50 dark:bg-slate-800 dark:border-white shadow-xl">
+                    class="flex flex-col items-center rounded-full bg-gray-50 dark:bg-slate-800 dark:border-white shadow-xl">
                 <div class="flex w-full items-center rounded-full">
                     <input class="ml-2 py-2 px-4 w-full leading-tight text-gray-700 dark:text-white
                                         rounded-l-full dark:placeholder-white  dark:focus:border-white
@@ -52,12 +52,12 @@
                                        id="search-clips-checkbox"
                                        class="form-checkbox h-5 w-5 text-blue-600"
                                        name="clips"
-                                    @checked(old('channels', ))
+                                        @checked(old('channels', ))
                                 />
                                 <label for="search-clips-checkbox"
                                        class="ml-2 text-black dark:text-white"
                                 >
-                                    Channels
+                                    {{ trans_choice('common.menu.channel',2) }}
                                 </label>
                             </div>
                         </div>
@@ -67,7 +67,7 @@
                                        id="search-clips-checkbox"
                                        class="form-checkbox h-5 w-5 text-blue-600"
                                        name="podcasts"
-                                    @checked(old('podcasts', ))
+                                        @checked(old('podcasts', ))
                                 />
                                 <label for="search-clips-checkbox"
                                        class="ml-2 text-black dark:text-white"

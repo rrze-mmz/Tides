@@ -1,6 +1,12 @@
 <?php
 
 return [
+    'jumbotron heading' => 'Willkommen im Tides Videoportal',
+    'jumbotron subheading' => 'Tides ist eine Open-Source-Videoplattform, die auf dem Laravel-Framework basiert.
+                            Sie bietet eine flexible und anpassbare Lösung für die Verwaltung und das Streaming
+                             von Videos.',
+    'jumbotron link 1' => 'Aktuelle Videos aus der Wissenschaft erkunden',
+    'jumbotron link 2' => 'GitHub-Repository anzeigen',
     'Start by creating something new' => 'Videoportal Startseite!',
     'Search form placeholder' => 'Suche',
     'series' => [

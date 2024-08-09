@@ -33,7 +33,7 @@
 
     <footer class="bg-gray-100 dark:bg-sky-950">
         <div
-            class="flex w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between text-dark
+                class="flex w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between text-dark
                 dark:text-white">
             <div class="text-sm sm:text-center grow">
                 Copyright @ {{ Illuminate\Support\Carbon::now()->year }} MIT Licence [ v. {{ getCurrentGitBranch() }}]
@@ -47,6 +47,5 @@
     </footer>
 </div>
 @vite('resources/js/app.js')
-{{--@livewireScriptConfig--}}
 </body>
 </html>

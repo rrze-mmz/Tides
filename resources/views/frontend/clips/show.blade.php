@@ -11,8 +11,11 @@
         @endif
         <div class="flex items-center border-b-2 border-black pb-2 dark:border-white">
             <div class="flex-grow">
-                <h2 id="clip-title" class="text-2xl font-bold dark:text-white">{{ $clip->title }} [ID: {{ $clip->id }}
-                    ]</h2>
+                <h2 id="clip-title"
+                    class="text-2xl font-bold dark:text-white"
+                >
+                    {{ $clip->title }} [ID: {{ $clip->id }}]
+                </h2>
             </div>
             @can('edit-clips', $clip)
                 <div class="flex-none">

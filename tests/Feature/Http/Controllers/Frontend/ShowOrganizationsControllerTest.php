@@ -10,7 +10,7 @@ uses()->group('frontend');
 it('has a faculties index page', function () {
     get(route('frontend.organizations.index'))->assertOk();
 
-    get(route('frontend.organizations.index'))->assertSee('Organizations index');
+    get(route('frontend.organizations.index'))->assertSee(__('organization.index.Organization index'));
 });
 
 it('shows all public series for a organization', function () {

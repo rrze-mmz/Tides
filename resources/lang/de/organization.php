@@ -9,5 +9,4 @@ return [
         'Organization index' => 'Organisationsindex',
         'No organizations found' => 'Das Portal hat noch keine Fakultäten oder Organisationen!',
     ],
-
 ];

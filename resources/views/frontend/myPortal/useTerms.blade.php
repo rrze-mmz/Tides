@@ -3,7 +3,9 @@
 @section('content')
     <main class="container mx-auto mt-6 md:mt-12">
         <div class="flex flex-col place-content-center content-center items-center justify-center">
-            <h2 class="text-2xl font-bold dark:text-white">MyPortal</h2>
+            <h2 class="text-2xl font-bold dark:text-white">
+                {{ __('common.menu.myPortal', ['appName' => str(config('app.name'))->ucfirst() ]) }}
+            </h2>
         </div>
 
         <form action="{{ route('frontend.acceptUseTerms') }}" method="POST">

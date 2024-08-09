@@ -16,7 +16,7 @@
                     >
                         <x-button class="bg-green-500 hover:bg-green-700"
                         >
-                            Edit podcast
+                            {{__('podcast.common.edit podcast')}}
                         </x-button>
                     </a>
                 </div>
@@ -28,13 +28,13 @@
             <div class="p-6 rounded-lg  h-200 dark:text-white">
                 <div class="mb-4">
                     <img
-                        @if(!is_null($podcast->image_id))
-                            src="{{ asset('images/'.$podcast->cover->file_name) }}"
-                        @else
-                            src="/podcast-files/covers/PodcastDefaultFAU.png"
-                        @endif
-                        alt="{{ $podcast->title }} cover image"
-                        class="w-full h-auto rounded-md">
+                            @if(!is_null($podcast->image_id))
+                                src="{{ asset('images/'.$podcast->cover->file_name) }}"
+                            @else
+                                src="/podcast-files/covers/PodcastDefaultFAU.png"
+                            @endif
+                            alt="{{ $podcast->title }} cover image"
+                            class="w-full h-auto rounded-md">
                 </div>
                 <h1 class="text-2xl font-bold mb-2">
                     {{$podcast->title}} @can('administrate-superadmin-portal-pages')
@@ -50,7 +50,7 @@
                 <div class="dark:text-white">
                     @if($podcast->getPrimaryPresenters()->count() > 0 )
                         <span class="text-gray-600 dark:text-white">
-                        Hosted by:
+                        {{ __('podcastEpisode.frontend.hosted by') }}
                     </span>
                         <span class="text-gray-800 font-semibold dark:text-white">
                      {{ $podcast->getPrimaryPresenters()->map(fn($presenter) => $presenter->full_name)->join(', ') }}
@@ -60,7 +60,7 @@
                 <div class="dark:text-white">
                     @if($podcast->getPrimaryPresenters(primary: false)->count() > 0 )
                         <span class="text-gray-600 dark:text-white">
-                        Guests:
+                            {{ trans_choice('common.guest', 2) }}:
                     </span>
                         <span class="text-gray-800 font-semibold dark:text-white">
                     {{
@@ -72,11 +72,10 @@
                     @endif
                 </div>
                 <div class="mt-4">
-                    <span class="text-gray-600 dark:text-white">Categories:</span>
-                    <span
-                        class="inline-block bg-blue-200 text-blue-800 text-sm px-2 py-1 rounded-full">Podcast</span>
-                    <span
-                        class="inline-block bg-green-200 text-green-800 text-sm px-2 py-1 rounded-full">Test</span>
+                    <span class="text-gray-600 dark:text-white">{{ trans_choice('common.categories',2) }}:</span>
+                    <span class="inline-block bg-blue-200 text-blue-800 text-sm px-2 py-1 rounded-full">
+                        Podcast
+                    </span>
                 </div>
             </div>
 
@@ -86,7 +85,7 @@
                     <!-- Episode 1 -->
                     @foreach($podcast->episodes()->orderBy('episode_number')->get() as $episode)
                         <div
-                            class="p-4 border rounded-lg bg-white shadow-md
+                                class="p-4 border rounded-lg bg-white shadow-md
                                     dark:bg-slate-900"
                         >
                             <h3 class="text-lg font-semibold mb-2 dark:text-white">
@@ -103,7 +102,10 @@
                             </div>
                             <div class="pt-10">
                                 <a href="{{ route('frontend.podcasts.episode.show', [$podcast, $episode]) }}"
-                                   class="text-blue-500 hover:underline pt-8">Episode details</a>
+                                   class="text-blue-500 hover:underline pt-8"
+                                >
+                                    {{ __('podcast.frontend.episode details') }}
+                                </a>
                             </div>
 
                         </div>

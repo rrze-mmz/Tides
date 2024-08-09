@@ -7,7 +7,7 @@
         </div>
 
         <div class="flex flex-col place-content-center content-center items-center justify-center">
-            <h2 class="text-2xl font-bold dark:text-white">Organizations index</h2>
+            <h2 class="text-2xl font-bold dark:text-white">{{__('organization.index.Organization index')}}</h2>
         </div>
         <ul class="flex-row">
             <div class="grid grid-cols-3 items-stretch gap-4 pt-4">

@@ -19,7 +19,7 @@ it('shows all public podcasts to visitors', function () {
 });
 
 it('shows no podcasts found if podcasts list is empty', function () {
-    get(route('frontend.podcasts.index'))->assertSee('No podcasts found or published');
+    get(route('frontend.podcasts.index'))->assertSee(__('podcast.frontend.no podcasts available or published'));
 });
 
 it('lists all published podcasts with episodes to visitors', function () {

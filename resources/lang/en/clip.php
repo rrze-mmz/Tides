@@ -11,6 +11,11 @@ return [
         ],
         'show' => [
             'Back to clip edit page' => 'Back to clip edit page',
+            'presenter video stream' => 'presenter video stream',
+            'presentation video stream' => 'presentation video stream',
+            'composite video stream' => 'composite video stream',
+            'to LMS course' => 'LMS-Course Page',
+            'views' => ':numVideo views',
         ],
         'not authorized to view video' => 'You are not authorized to view this video!',
         'this clip is exclusively accessible to logged-in users' => 'This clip is exclusively accessible to logged-in'.

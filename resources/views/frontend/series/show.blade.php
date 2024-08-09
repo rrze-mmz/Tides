@@ -16,7 +16,10 @@
                 @endif
             @endcannot
             @can('edit-series', $series)
-                <x-form.button :link="route('series.edit', $series)" type="submit" text="Edit series" />
+                <x-form.button :link="route('series.edit', $series)"
+                               type="submit"
+                               text="{{__('series.common.edit series')}}"
+                />
             @endcan
 
         </div>
@@ -79,10 +82,9 @@
             <div class="flex w-1/4 items-center">
                 <x-heroicon-o-user class="h-6 w-6" />
                 <span class="pl-3">
-                    {{
-                    $series->presenters->map(function ($presenter) {
-                        return $presenter->getFullNameAttribute();
-                        })->implode(', ')
+                    {{  $series->presenters->map(function ($presenter) {
+                                            return $presenter->getFullNameAttribute();
+                                            })->implode(', ')
                         }}
                 </span>
             </div>
