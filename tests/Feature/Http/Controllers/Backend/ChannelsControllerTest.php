@@ -53,6 +53,7 @@ it('validates the input to activate a channel', function () {
         'description' => fake()->sentence(1001),
     ]))->assertSessionHasErrors(['url_handle', 'name', 'description']);
 });
+
 it('allows access to moderators to create a channel', function () {
     signInRole(Role::MODERATOR);
 
