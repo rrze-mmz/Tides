@@ -15,7 +15,7 @@
                 @include('partials.channels._card')
             @empty
                 <div class="flex justify-center">
-                    <div class="dark:text-white pt-10 text-2xl">{{ __('channel.frontend.no active channels found') }}</div>
+                    <div class="dark:text-white pt-20 text-2xl">{{ __('channel.frontend.no active channels found') }}</div>
                 </div>
             @endforelse
         </div>

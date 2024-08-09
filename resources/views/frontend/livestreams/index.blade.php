@@ -3,7 +3,7 @@
 @section('content')
     <main class="container mx-auto mt-6 md:mt-12">
         @if($livestreams->count() == 0)
-            <div class="dark:text-white text-2xl">
+            <div class="dark:text-white text-2xl pt-10">
                 {{ __('livestream.frontend.no active livestream found') }}
             </div>
         @else
@@ -19,7 +19,7 @@
                 <div class="flex items-center border-b-2 border-black dark:border-white pb-2">
                     <div class="flex-grow">
                         <h2 class="text-2xl font-bold dark:text-white">
-                            {{__(' livestream.frontend.public livestreams available')}}
+                            {{__('livestream.frontend.public livestreams available')}}
                         </h2>
                     </div>
                 </div>
