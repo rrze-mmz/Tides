@@ -100,8 +100,6 @@
                     {{ __('clip.frontend.comments') }}
                 </h2>
                 <livewire:comments-section :model="$clip" :type="'frontend'" />
-                @livewireScripts
-
             </div>
         @endauth
 
