@@ -318,7 +318,7 @@ async function initializePlayer() {
     layout,
   });
 
-  player.addEventListener('play', async () => {
+  playerDIV.addEventListener('play', async () => {
     const player = document.getElementById('target');
     const mediaID = player.getAttribute('mediaID');
     const serviceIDsString = player.getAttribute('serviceIDs');
@@ -361,8 +361,18 @@ async function initializePlayer() {
     });
   });
 
-  function changeVideoSource(newSource) {
-    const currentTime = player.currentTime; // Get the current time of the video
+  // Attach event listeners to links
+  document.querySelectorAll('.video-link').forEach((link) => {
+    link.addEventListener('click', function (event) {
+      event.preventDefault();
+      const videoUrl = this.getAttribute('href');
+      const currentTime = player.currentTime;
+      changeVideoSource(videoUrl, currentTime);
+    });
+  });
+
+  function changeVideoSource(newSource, currentTime) {
+    // Get the current time of the video
 
     function setNewVideoTime() {
       if (player.readyState >= 2) {
@@ -378,20 +388,8 @@ async function initializePlayer() {
     player.src = newSource;
   }
 
-  // Attach event listeners to links
-  document.addEventListener('DOMContentLoaded', () => {
-    const videoLinks = document.querySelectorAll('.video-link');
-    videoLinks.forEach((link) => {
-      link.addEventListener('click', function (event) {
-        event.preventDefault();
-        const videoUrl = this.getAttribute('href');
-        changeVideoSource(videoUrl);
-      });
-    });
-  });
-
   // Add event listener for play event
-  player.on('play', async () => {
+  playerDIV.addEventListener('play', async () => {
     const videoId = player.config.mediaId; // Ensure mediaId is set in player config
     const userId = document.querySelector('meta[name="user-id"]').content; // Assuming you have user ID in a meta tag
     const playedAt = new Date().toISOString();
