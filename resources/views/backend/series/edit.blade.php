@@ -7,7 +7,7 @@
         </div>
         <div>
      <span
-         class="text-sm font-normal italic"> created at {{$series->created_at }} </span>
+             class="text-sm font-normal italic"> created at {{$series->created_at }} </span>
         </div>
     </div>
 
@@ -63,7 +63,7 @@
                 />
 
                 <x-form.toggle-button :value="$series->is_public"
-                                      label="{{__('common.forms.public')}}"
+                                      label="{{__('common.forms.public available')}}"
                                       field-name="is_public"
                 />
             </div>
@@ -88,7 +88,7 @@
 
 
     <div
-        class="">
+            class="">
         <div x-data="{
             activeTab:1,
             activeClass: 'inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500',

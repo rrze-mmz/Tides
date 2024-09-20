@@ -190,7 +190,7 @@ it('should display Opencast running events if any', function () {
     );
     signInRole(Role::ADMIN);
 
-    get(route('dashboard'))->assertSee('1 Opencast running workflows');
+    get(route('dashboard'))->assertSee(__('opencast.backend.running events', ['counter' => 1]));
 });
 
 it('should display Opencast recording events if any', function () {
@@ -208,7 +208,7 @@ it('should display Opencast recording events if any', function () {
     );
     signInRole(Role::ADMIN);
 
-    get(route('dashboard'))->assertSee('1 Recording events');
+    get(route('dashboard'))->assertSee(__('opencast.backend.recording events', ['counter' => 1]));
 });
 
 it('hides Opencast running events for moderators', function () {
@@ -217,7 +217,7 @@ it('hides Opencast running events for moderators', function () {
     $mockHandler = $this->swapOpencastClient();
     $mockHandler->append($this->mockEventResponse($series, OpencastWorkflowState::RUNNING, 2));
 
-    get(route('dashboard'))->assertDontSee('Opencast running workflows')->assertOk();
+    get(route('dashboard'))->assertDontSee(__('opencast.backend.running events', ['counter' => 1]))->assertOk();
 });
 
 it('should not display any Opencast information if opencast server is not available', function () {
@@ -245,7 +245,7 @@ it('should display scheduled events for a moderators series', function () {
         $this->mockNoResultsResponse(),
     );
 
-    get(route('dashboard'))->assertSee('Opencast running workflows')->assertOk();
+    get(route('dashboard'))->assertSee(__('opencast.backend.running events', ['counter' => 1]))->assertOk();
 });
 
 it('hides opencast events for unauthorized moderators', function () {
@@ -266,7 +266,7 @@ it('hides opencast events for unauthorized moderators', function () {
         $this->mockNoTrimmingResultsResponse(),
     );
 
-    get(route('dashboard'))->assertDontSee('Opencast running workflows')->assertOk();
+    get(route('dashboard'))->assertDontSee(__('opencast.backend.running events', ['counter' => 1]))->assertOk();
 });
 
 it('should display all active livestreams for portal admins', function () {

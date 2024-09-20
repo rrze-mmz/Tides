@@ -11,6 +11,7 @@ return [
         'duration' => 'Duration',
         'actions' => 'Actions',
         'edit series' => 'Edit series',
+        'my series' => 'My series',
     ],
     'frontend' => [
         'show' => [
@@ -22,6 +23,10 @@ return [
         ],
     ],
     'backend' => [
+        'actions' => [
+            'create series' => 'Create new series',
+            'select semester' => 'Please select semester',
+        ],
         'Series administrator' => 'Series administrator',
         'Set a series owner' => 'Set a series owner',
         'Update Series' => 'Update series',

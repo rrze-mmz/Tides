@@ -4,7 +4,7 @@
         <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
             <div class="flex items-center justify-between">
                 <div class="w-full max-w-lg lg:max-w-xs">
-                    <label for="search" class="sr-only">Search</label>
+                    <label for="search" class="sr-only">{{ __('common.actions.search') }}</label>
                     <div class="relative">
                         <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                             <x-heroicon-o-magnifying-glass class="h-5 w-5 text-gray-400" />
@@ -16,7 +16,7 @@
                                             dark:placeholder-gray-800 dark:bg-white dark:text-gray-900
                                             focus:border-blue-300 focus:shadow-outline-blue sm:text-sm transition
                                             duration-150 ease-in-out"
-                               placeholder="Search" type="search">
+                               placeholder="{{ __('common.actions.search') }}" type="search">
                     </div>
                 </div>
                 <div class="flex justify-between items-center">
@@ -25,13 +25,19 @@
                             <input wire:model.live="userSeries" id="user-series" type="checkbox"
                                    class="h-4 w-4 text-indigo-600 transition duration-150 ease-in-out form-checkbox">
                             <div class="ml-3 text-sm leading-5">
-                                <label for="admin" class=" text-gray-700 dark:text-white">My series</label>
+                                <label for="admin"
+                                       class=" text-gray-700 dark:text-white"
+                                >
+                                    {{ __('series.common.my series') }}
+                                </label>
                             </div>
                         </div>
                     </div>
                     <div class="relative flex items-start">
                         <select wire:model.live="selectedSemesterID" class="dark:bg-gray-800 dark:text-white">
-                            <option value="">Select a semester</option>
+                            <option value="">
+                                {{ __('series.backend.actions.select semester') }}
+                            </option>
                             @foreach ($semestersList as $semester)
                                 <option value="{{ $semester->id }}">
                                     {{ $semester->name }}
@@ -259,10 +265,17 @@
                     </tbody>
                 </table>
             </div>
-            <div class="flex pt-4">
-                <x-form.button :link="route('series.create')"
-                               type="submit"
-                               text="Create new series" />
+            <div class="flex mt-4">
+                <a href="{{route('series.create')}}">
+                    <x-button class="flex items-center bg-blue-600 hover:bg-blue-700">
+                        <div class="pr-2">
+                            {{ __('series.backend.actions.create series') }}
+                        </div>
+                        <div>
+                            <x-heroicon-o-plus-circle class="h-6 w-6" />
+                        </div>
+                    </x-button>
+                </a>
             </div>
             <div class="mt-8">
                 {{ $series->links() }}

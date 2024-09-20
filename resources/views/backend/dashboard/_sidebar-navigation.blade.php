@@ -1,6 +1,6 @@
 <a
-    href="{{route('dashboard')}}"
-    class="flex items-left items-center text-white {{ setActiveLink(route('dashboard')) }}   hover:opacity-100 hover:mx-2
+        href="{{route('dashboard')}}"
+        class="flex items-left items-center text-white {{ setActiveLink(route('dashboard')) }}   hover:opacity-100 hover:mx-2
     hover:rounded py-4 pl-6 my-4 nav-item space-x-2 "
 >
     <div>
@@ -11,11 +11,11 @@
     </div>
 </a>
 <div class="flex items-left py-4 pl-4 italic font-extrabold text-lg">
-    Main Objects
+    {{ __('common.menu.main objects') }}
 </div>
 <a
-    href="{{route('series.index')}}"
-    class="flex items-left items-center text-white hover:opacity-100 hover:mx-2 hover:rounded py-4
+        href="{{route('series.index')}}"
+        class="flex items-left items-center text-white hover:opacity-100 hover:mx-2 hover:rounded py-4
         pl-6 nav-item {{ setActiveLink(route('series.index')) }} space-x-2"
 >
     <div>
@@ -26,8 +26,8 @@
     </div>
 </a>
 <a
-    href="{{route('clips.index')}}"
-    class="flex items-left items-center text-white hover:opacity-100 hover:mx-2 hover:rounded py-4
+        href="{{route('clips.index')}}"
+        class="flex items-left items-center text-white hover:opacity-100 hover:mx-2 hover:rounded py-4
         pl-6 nav-item {{ setActiveLink(route('clips.index')) }} space-x-2"
 >
     <div>
@@ -38,8 +38,8 @@
     </div>
 </a>
 <a
-    href="{{route('podcasts.index')}}"
-    class="flex items-left items-center text-white hover:opacity-100 hover:mx-2 hover:rounded py-4
+        href="{{route('podcasts.index')}}"
+        class="flex items-left items-center text-white hover:opacity-100 hover:mx-2 hover:rounded py-4
         pl-6 nav-item {{ setActiveLink(route('podcasts.index')) }} space-x-2"
 >
     <div>
@@ -50,8 +50,8 @@
     </div>
 </a>
 <a
-    href="{{route('channels.index')}}"
-    class="flex items-left items-center text-white hover:opacity-100 hover:mx-2 hover:rounded py-4
+        href="{{route('channels.index')}}"
+        class="flex items-left items-center text-white hover:opacity-100 hover:mx-2 hover:rounded py-4
         pl-6 nav-item {{ setActiveLink(route('channels.index')) }} space-x-2"
 >
     <div>
@@ -62,11 +62,11 @@
     </div>
 </a>
 <div class="flex items-left py-4 pl-4 italic font-extrabold text-lg">
-    Portal resources
+    {{ __('common.menu.portal resources') }}
 </div>
 <a
-    href="{{route('images.index')}}"
-    class="flex items-left items-center text-white hover:opacity-100 hover:mx-2 hover:rounded py-4
+        href="{{route('images.index')}}"
+        class="flex items-left items-center text-white hover:opacity-100 hover:mx-2 hover:rounded py-4
         pl-6 nav-item {{ setActiveLink(route('images.index')) }} space-x-2"
 >
     <div>
@@ -79,8 +79,8 @@
 
 @can('administrate-portal-pages')
     <a
-        href="{{ route('presenters.index') }}"
-        class="flex items-left items-center text-white hover:opacity-100 hover:mx-2 hover:rounded py-4
+            href="{{ route('presenters.index') }}"
+            class="flex items-left items-center text-white hover:opacity-100 hover:mx-2 hover:rounded py-4
         pl-6 nav-item  {{ setActiveLink(route('presenters.index')) }} space-x-2"
     >
         <div>
@@ -90,8 +90,8 @@
 
     </a>
     <a
-        href="{{ route('activities.index') }}"
-        class="flex items-left items-center text-white hover:opacity-100 hover:mx-2 hover:rounded py-4
+            href="{{ route('activities.index') }}"
+            class="flex items-left items-center text-white hover:opacity-100 hover:mx-2 hover:rounded py-4
         pl-6 nav-item {{ setActiveLink(route('activities.index')) }} space-x-2"
     >
         <div>
@@ -102,8 +102,8 @@
         </div>
     </a>
     <a
-        href="{{ route('livestreams.index') }}"
-        class="flex items-left items-center text-white hover:opacity-100 hover:mx-2 hover:rounded py-4
+            href="{{ route('livestreams.index') }}"
+            class="flex items-left items-center text-white hover:opacity-100 hover:mx-2 hover:rounded py-4
         pl-6 nav-item {{ setActiveLink(route('livestreams.index')) }} space-x-2"
     >
         <div>
@@ -114,8 +114,8 @@
         </div>
     </a>
     <a
-        href="{{ route('devices.index') }}"
-        class="flex items-left items-center text-white hover:opacity-100 hover:mx-2 hover:rounded py-4
+            href="{{ route('devices.index') }}"
+            class="flex items-left items-center text-white hover:opacity-100 hover:mx-2 hover:rounded py-4
         pl-6 nav-item  {{ setActiveLink(route('devices.index')) }} space-x-2"
     >
         <div>
@@ -130,8 +130,8 @@
 
 @can('administrate-admin-portal-pages')
     <a
-        href="{{ route('articles.index') }}"
-        class="flex items-left items-center text-white hover:opacity-100 hover:mx-2 hover:rounded py-4
+            href="{{ route('articles.index') }}"
+            class="flex items-left items-center text-white hover:opacity-100 hover:mx-2 hover:rounded py-4
         pl-6 nav-item  {{ setActiveLink(route('articles.index')) }} space-x-2"
     >
         <div>
@@ -144,8 +144,8 @@
     </a>
 
     <a
-        href="{{ route('collections.index') }}"
-        class="flex items-left items-center text-white hover:opacity-100 hover:mx-2 hover:rounded py-4
+            href="{{ route('collections.index') }}"
+            class="flex items-left items-center text-white hover:opacity-100 hover:mx-2 hover:rounded py-4
         pl-6 nav-item {{ setActiveLink(route('collections.index')) }} space-x-2"
     >
         <div>
@@ -156,11 +156,11 @@
         </div>
     </a>
     <div class="flex items-left py-4 pl-4 italic font-extrabold text-lg w-full pr-2">
-        Portal Administration
+        {{ __('common.menu.portal administration') }}
     </div>
     <a
-        href="{{ route('users.index') }}"
-        class="flex items-left items-center text-white hover:opacity-100 hover:mx-2 hover:rounded py-4
+            href="{{ route('users.index') }}"
+            class="flex items-left items-center text-white hover:opacity-100 hover:mx-2 hover:rounded py-4
         pl-6 nav-item {{ setActiveLink(route('users.index')) }} space-x-2"
     >
         <div>
@@ -174,8 +174,8 @@
 @can('administrate-superadmin-portal-pages')
 
     <a
-        href="{{route('systems.status')}}"
-        class="flex items-left items-center text-white hover:opacity-100 hover:mx-2 hover:rounded py-4
+            href="{{route('systems.status')}}"
+            class="flex items-left items-center text-white hover:opacity-100 hover:mx-2 hover:rounded py-4
         pl-6 nav-item  {{ setActiveLink(route('systems.status')) }} space-x-2"
     >
         <div>

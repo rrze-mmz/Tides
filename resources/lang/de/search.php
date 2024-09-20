@@ -13,6 +13,6 @@ return [
         'no clips results found' => 'Keine Clips Ergebnisse gefunden',
     ],
     'backend' => [
-
+        'form placeholder' => 'Begriff oder Suchmuster wie s:, c:, pd:, i:',
     ],
 ];

@@ -15,5 +15,8 @@ return [
 
     'previous' => '&laquo; Previous',
     'next' => 'Next &raquo;',
+    'Showing x to y of xy results' => 'Showing <span class="font-medium"> :firstItem </span> 
+                                          to <span class="font-medium"> :lastItem </span> 
+                                          of <span class="font-medium"> :total </span> results ',
 
 ];
