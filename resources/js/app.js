@@ -32,7 +32,13 @@ $('.solution-trix-field-wrapper')
   .css('min-height', '100px');
 
 document.addEventListener('alpine:init', () => {
-  Alpine.store('darkMode', {});
+  Alpine.store('darkMode', {
+    on: Alpine.$persist(true).as('darkMode_on'),
+
+    toggle() {
+      this.on = !this.on;
+    },
+  });
 });
 
 document.addEventListener(
@@ -306,9 +312,29 @@ FilePond.create(inputElement2).setOptions({
   },
 });
 
+function updateCurrentTimeDisplay(player) {
+  const currentTimeInput = document.getElementById('currentTime');
+
+  if (!currentTimeInput) {
+    return;
+  }
+
+  const currentTime = player.currentTime;
+  // Set the initial value of the current time
+
+  // Use addEventListener for the timeupdate event to track time updates
+  player.addEventListener('time-update', () => {
+    const currentTime = Math.floor(player.currentTime);
+    currentTimeInput.value = currentTime; // Update the input value with the current time
+  });
+}
+
 async function initializePlayer() {
   const layout = new VidstackPlayerLayout({});
   const playerDIV = document.getElementById('target');
+  if (!playerDIV) {
+    return;
+  }
   const player = await VidstackPlayer.create({
     target: document.querySelector('#target'),
     crossOrigin: true,
@@ -318,11 +344,15 @@ async function initializePlayer() {
     layout,
   });
 
+  // Call the function to update the current time display
+  updateCurrentTimeDisplay(player);
+
   playerDIV.addEventListener('play', async () => {
     const player = document.getElementById('target');
     const mediaID = player.getAttribute('mediaID');
     const serviceIDsString = player.getAttribute('serviceIDs');
     const serviceIDsArray = JSON.parse(serviceIDsString);
+
     try {
       const response = await fetch('/api/logPlayEvent', {
         method: 'POST',
@@ -372,20 +402,31 @@ async function initializePlayer() {
   });
 
   function changeVideoSource(newSource, currentTime) {
-    // Get the current time of the video
+    // Pause the player while switching video
+    player.pause();
 
-    function setNewVideoTime() {
-      if (player.readyState >= 2) {
-        // Ensure media is ready
-        player.currentTime = currentTime; // Set the current time for the new video
-        player.play();
-      } else {
-        setTimeout(setNewVideoTime, 100); // Check again after a short delay
-      }
-    }
-
-    player.addEventListener('loadedmetadata', setNewVideoTime, { once: true }); // Set the time for standard video formats
+    // Set the new video source via the fallback method
     player.src = newSource;
+    console.log('Fallback to setting src directly:', newSource);
+
+    // Listen for the 'loadedmetadata' event, which ensures the video duration is available
+    player.addEventListener(
+      'loaded-metadata',
+      () => {
+        console.log('inside loadedmetadata');
+
+        // Check if the current time is valid and set it
+        if (currentTime && currentTime < player.duration) {
+          player.currentTime = currentTime;
+        } else {
+          player.currentTime = 0; // Start from the beginning if currentTime is invalid
+        }
+
+        // Play the video after setting the time
+        player.play();
+      },
+      { once: true } // Ensure the event listener is only triggered once
+    );
   }
 
   // Add event listener for play event
