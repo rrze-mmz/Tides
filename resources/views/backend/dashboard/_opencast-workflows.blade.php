@@ -6,32 +6,32 @@
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <caption
-                    class="p-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-gray-200 dark:text-white
+                        class="p-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-gray-200 dark:text-white
                     dark:bg-gray-800">
-                    {{ $opencastEvents['recording']->count() }} Recording events
+                    {{ __('opencast.backend.recording events',['counter' => $opencastEvents['recording']->count()]) }}
                 </caption>
                 <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-white">
                 <tr>
                     <th scope="col"
                         class="px-6 py-3 ">
-                        Title
+                        {{ __('opencast.common.title') }}
                     </th>
                     <th scope="col"
                         class="px-6 py-3">
-                        Series
+                        {{ __('opencast.common.series') }}
                     </th>
                     <th scope="col"
                         class="px-6 py-3">
-                        Presenter
+                        {{ __('opencast.common.presenter') }}
                     </th>
 
                     <th scope="col"
                         class="px-6 py-3">
-                        Start time
+                        {{ __('opencast.common.start time') }}
                     </th>
                     <th scope="col"
                         class="px-6 py-3">
-                        Location
+                        {{ __('opencast.common.location') }}
                     </th>
                     <th scope="col"
                         class="px-6 py-3">
@@ -92,7 +92,7 @@
                                         active:bg-white-900 focus:outline-none focus:border-white-900 focus:ring
                                         ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150"
                                         >
-                                                    Livestream existiert
+                                                    {{ __('livestream.common.livestream exists') }}
                                                 </span>
                                     @else
                                         <a href="">
@@ -107,7 +107,7 @@
                                                 <div class="alert alert-danger">{{ $message }}</div>
                                                 @enderror
                                                 <x-button type="submit" class="bg-blue-600 hover:bg-blue-700">
-                                                    Livestream reservieren
+                                                    {{ __('livestream.common.reserve livestream') }}
                                                 </x-button>
                                             </form>
                                         </a>
@@ -127,30 +127,35 @@
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <caption
-                    class="p-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-gray-200 dark:text-white
+                        class="p-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-gray-200 dark:text-white
                     dark:bg-gray-800">
-                    {{ $opencastEvents['scheduled']->count() }} Scheduled events
+                    {{ __('opencast.backend.scheduled events', ['counter' => $opencastEvents['scheduled']->count() ]) }}
                 </caption>
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
-                    <th scope="col" class="px-6 py-3">
-                        Title
+                    <th scope="col"
+                        class="px-6 py-3 ">
+                        {{ __('opencast.common.title') }}
                     </th>
-                    <th scope="col" class="px-6 py-3">
-                        Series
+                    <th scope="col"
+                        class="px-6 py-3">
+                        {{ __('opencast.common.series') }}
                     </th>
-                    <th scope="col" class="px-6 py-3">
-                        Presenter
+                    <th scope="col"
+                        class="px-6 py-3">
+                        {{ __('opencast.common.presenter') }}
                     </th>
 
-                    <th scope="col" class="px-6 py-3">
-                        Start time
+                    <th scope="col"
+                        class="px-6 py-3">
+                        {{ __('opencast.common.start time') }}
+                    </th>
+                    <th scope="col"
+                        class="px-6 py-3">
+                        {{ __('opencast.common.location') }}
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Location
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Status
+                        {{__('common.status')}}
                     </th>
                 </tr>
                 </thead>
@@ -202,27 +207,32 @@
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <caption
-                    class="p-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-gray-200 dark:text-white
+                        class="p-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-gray-200 dark:text-white
                     dark:bg-gray-800">
-                    {{ $opencastEvents['trimming']->count() }} Opencast events waiting for trim
+                    {{__('opencast.backend.todo events', ['counter' => $opencastEvents['trimming']->count()])}}
                 </caption>
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
-                    <th scope="col" class="px-6 py-3">
-                        Title
+                    <th scope="col"
+                        class="px-6 py-3 ">
+                        {{ __('opencast.common.title') }}
                     </th>
-                    <th scope="col" class="px-6 py-3">
-                        Series
+                    <th scope="col"
+                        class="px-6 py-3">
+                        {{ __('opencast.common.series') }}
                     </th>
-                    <th scope="col" class="px-6 py-3">
-                        Presenter
+                    <th scope="col"
+                        class="px-6 py-3">
+                        {{ __('opencast.common.presenter') }}
                     </th>
 
-                    <th scope="col" class="px-6 py-3">
-                        Start time
+                    <th scope="col"
+                        class="px-6 py-3">
+                        {{ __('opencast.common.start time') }}
                     </th>
-                    <th scope="col" class="px-6 py-3">
-                        Location
+                    <th scope="col"
+                        class="px-6 py-3">
+                        {{ __('opencast.common.location') }}
                     </th>
                     <th scope="col" class="px-6 py-3">
                     </th>
@@ -273,26 +283,26 @@
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <caption
-                    class="p-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-gray-200 dark:text-white
+                        class="p-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-gray-200 dark:text-white
                     dark:bg-gray-800">
-                    {{ $opencastEvents['running']->count() }} Opencast running workflows
+                    {{ __('opencast.backend.running events', ['counter' => $opencastEvents['running']->count()]) }}
                 </caption>
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
                     <th scope="col" class="px-6 py-3">
-                        Title
+                        {{__('opencast.common.title')}}
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Series
+                        {{__('opencast.common.series')}}
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Recording date
+                        {{__('opencast.common.recording date')}}
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Presenter
+                        {{__('opencast.common.presenter')}}
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Status
+                        {{__('common.status')}}
                     </th>
                 </tr>
                 </thead>
@@ -335,20 +345,20 @@
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <caption
-                    class="p-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-gray-200 dark:text-white
+                        class="p-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-gray-200 dark:text-white
                     dark:bg-gray-800">
-                    Opencast failed events
+                    {{ __('opencast.backend.failed events', ['counter' => $opencastEvents['failed']->count()]) }}
                 </caption>
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
                     <th scope="col" class="px-6 py-3">
-                        Title
+                        {{ __('opencast.common.title') }}
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Series
+                        {{  __('opencast.common.series') }}
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Date
+                        {{ __('opencast.common.recording date') }}
                     </th>
                 </tr>
                 </thead>
@@ -379,31 +389,31 @@
             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <caption
-                    class="p-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-gray-200 dark:text-white
+                        class="p-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-gray-200 dark:text-white
                     dark:bg-gray-800">
-                    {{ $opencastEvents['upcoming']->count() }} upcoming Opencast events
+                    {{ __('opencast.backend.upcoming events', ['counter' => $opencastEvents['upcoming']->count() ]) }}
                 </caption>
                 <tr>
                     <th scope="col" class="px-6 py-3">
-                        Title
+                        {{__('opencast.common.title')}}
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Series
+                        {{ __('opencast.common.series') }}
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Presenter
+                        {{  __('opencast.common.presenter') }}
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Start time
+                        {{ __('opencast.common.start time') }}
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        End time
+                        {{ __('opencast.common.end time') }}
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Location
+                        {{ __('opencast.common.location') }}
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Status
+                        {{ __('common.status') }}
                     </th>
                 </tr>
                 </thead>

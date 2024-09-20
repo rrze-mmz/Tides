@@ -3,6 +3,7 @@
 return [
     'common' => [
         'no clips' => 'Keine Clips gefunden',
+        'trending clips' => 'Trendende Clips',
     ],
     'frontend' => [
         'index' => [

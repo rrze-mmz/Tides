@@ -1,6 +1,6 @@
 @php use App\Models\Stats\AssetViewCount;use Illuminate\Support\Carbon; @endphp
 <div class="border-b border-black pt-10 pb-2 font-semibold font-2xl dark:text-white dark:border-white">
-    Trending Clips
+    {{ __('clip.common.trending clips') }}
 </div>
 <div class="mt-3 w-full rounded-md bg-white py-3 dark:bg-slate-800 dark:text-white">
     <ul>
@@ -22,7 +22,6 @@
                         <div class="font-bold italic ">
                             {{ $clip['counter'] }}
                         </div>
-
                     </span>
                 </div>
             </li>

@@ -12,6 +12,6 @@ return [
         'no clips results found' => 'No clips results found',
     ],
     'backend' => [
-
+        'form placeholder' => 'term or search patterns like s:, c:, pd:, i:',
     ],
 ];

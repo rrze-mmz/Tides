@@ -8,6 +8,7 @@ return [
     'password' => 'Password',
     'guest' => 'Guest|Guests',
     'categories' => 'Category|Categories',
+    'status' => 'Status',
     'actions' => [
         'save' => 'save',
         'edit' => 'edit',
@@ -17,6 +18,7 @@ return [
         'show' => 'show',
         'upload' => 'upload',
         'download' => 'download',
+        'search' => 'search',
     ],
     'menu' => [
         'dashboard' => 'Dashboard',
@@ -32,6 +34,7 @@ return [
         'system' => 'System|Systems',
         'document' => 'Document|Documents',
         'portal settings' => 'Portal settings',
+        'user settings' => 'User settings',
         'image' => 'Image|Images',
         'article' => 'Article|Articles',
         'channel' => 'Channel|Channels',
@@ -39,6 +42,10 @@ return [
         'live now' => 'Live now!',
         'faq' => 'FAQ|FAQs',
         'myPortal' => 'my:appName',
+        'notifications' => 'Notifications',
+        'main objects' => 'Main objects',
+        'portal resources' => 'Portal resources',
+        'portal administration' => 'Portal administration',
     ],
     'heading' => [
         'create new series' => 'Create new series',
@@ -62,6 +69,7 @@ return [
         'height' => 'height',
         'mime type' => 'Mime Type',
         'decline' => 'Decline',
+        'public available' => 'Public available',
     ],
     'language' => [
         'English' => 'English',

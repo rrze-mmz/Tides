@@ -1,8 +1,11 @@
 @extends('layouts.backend')
 
 @section('content')
-    <div class="flex pb-2 font-semibold border-b border-black font-2xl  dark:text-white dark:border-white">
-        {{ __('common.heading.create new series') }}
+    <div class="mb-5 flex items-center justify-between border-b border-black pb-2 font-semibold font-2xl
+    dark:text-white dark:border-white">
+        <div class="flex text-2xl">
+            {{ __('common.heading.create new series') }}
+        </div>
     </div>
     <div class="flex py-2 px-2">
         <form action="{{ route('series.store') }}"
@@ -51,7 +54,7 @@
                 />
 
                 <x-form.toggle-button :value="true"
-                                      label="Public available"
+                                      label="{{ __('common.forms.public available') }}"
                                       field-name="is_public"
                 />
 
@@ -63,7 +66,7 @@
                     </x-button>
                     <a href="{{route('dashboard')}}">
                         <x-button type="button" class="ml-3 bg-green-600 hover:bg-green-700">
-                            Cancel
+                            {{ __('common.actions.cancel') }}
                         </x-button>
                     </a>
                 </div>

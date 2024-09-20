@@ -2,36 +2,36 @@
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <caption
-                class="p-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-gray-200 dark:text-white
+                    class="p-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-gray-200 dark:text-white
                     dark:bg-gray-800">
-                {{ $activeLivestreams->count() }} Livestream rooms
+                {{ __('livestream.backend.livestream rooms', ['counter' => $activeLivestreams->count() ]) }}
             </caption>
             <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-white">
             <tr>
                 <th scope="col"
                     class="px-6 py-3 ">
-                    Title
+                    {{ __('livestream.common.room') }}
                 </th>
                 <th scope="col"
                     class="px-6 py-3">
-                    Room
+                    {{ __('livestream.common.room') }}
                 </th>
                 <th scope="col"
                     class="px-6 py-3">
-                    Stream Type
+                    {{ __('livestream.common.stream type') }}
                 </th>
 
                 <th scope="col"
                     class="px-6 py-3">
-                    Stream start
+                    {{ __('livestream.common.Stream start') }}
                 </th>
                 <th scope="col"
                     class="px-6 py-3">
-                    Stream end
+                    {{ __('livestream.common.Stream end') }}
                 </th>
                 <th scope="col"
                     class="px-6 py-3">
-                    Online viewers
+                    {{ __('livestream.common.online viewers') }}
                 </th>
                 <th scope="col"
                     class="px-6 py-3">
@@ -45,7 +45,7 @@
                         @if($activeLivestream->clip_id)
                             {{ $activeLivestream->clip->title }}
                         @else
-                            Hidden Livestream
+                            {{ __('livestream.common.hidden stream') }}
                         @endif
 
                     </td>

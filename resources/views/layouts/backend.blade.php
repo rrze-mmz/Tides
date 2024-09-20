@@ -100,12 +100,14 @@
                 <div x-show="isOpen"
                      class="absolute mt-12 w-48 items-center rounded-lg bg-white
                      dark:bg-sky-950 py-2 align-middle shadow-lg dark:text-white font-normal">
-                    <a href="#" class="block px-4 py-2 hover:text-gray-400">Settings</a>
+                    <a href="#" class="block px-4 py-2 hover:text-gray-400">
+                        {{ __('common.menu.user settings') }}
+                    </a>
                     <a href="{{ route('user.notifications') }}" class="block px-4 py-2 hover:text-gray-400">
-                        Notifications
+                        {{ __('common.menu.notifications') }}
                         @if (($counter = auth()->user()->unreadNotifications->count()) > 0)
                             <span
-                                class="ml-1 rounded-full bg-white text-sm text-green-700 p-1.5"> {{ $counter }}</span>
+                                    class="ml-1 rounded-full bg-white text-sm text-green-700 p-1.5"> {{ $counter }}</span>
                         @endif
                     </a>
                     <a href="{{ route('logout') }}"

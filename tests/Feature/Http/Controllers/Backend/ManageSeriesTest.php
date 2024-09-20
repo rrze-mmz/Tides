@@ -42,7 +42,7 @@ function a_visitor_cannot_manage_series(): void
 it('shows a create series button if moderator has no series', function () {
     signInRole(Role::MODERATOR);
 
-    get(route('series.index'))->assertSee('Create new series');
+    get(route('series.index'))->assertSee(__('series.backend.actions.create series'));
 });
 
 it('shows series information in index page', function () {
@@ -490,18 +490,18 @@ test('edit series should display opencast failed events if any', function () {
 
     get(route('series.edit', $series))
         ->assertViewHas(['opencastSeriesInfo'])
-        ->assertSee('Opencast failed events');
+        ->assertSee(__('opencast.backend.failed events', ['counter' => 1]));
 });
 
 it('loads comments component at edit page', function () {
-    $this->mockHandler->append(new Response());
+    $this->mockHandler->append(new Response);
     $series = SeriesFactory::ownedBy(signInRole(Role::MODERATOR))->create();
 
     get(route('series.edit', $series))->assertSeeLivewire('comments-section');
 });
 
 test('edit series should display admin comments', function () {
-    $this->mockHandler->append(new Response());
+    $this->mockHandler->append(new Response);
     $series = SeriesFactory::ownedBy(signInRole(Role::MODERATOR))->create();
 
     get(route('series.edit', $series))->assertSee(__('clip.frontend.comments'));
@@ -517,7 +517,7 @@ test('edit series should display admin comments', function () {
 });
 
 test('edit series should display series activities', function () {
-    $this->mockHandler->append(new Response());
+    $this->mockHandler->append(new Response);
     $series = SeriesFactory::ownedBy(signInRole(Role::MODERATOR))->create();
 
     get(route('series.edit', $series))->assertSee('Activities');
@@ -527,7 +527,7 @@ test('edit series should display series activities', function () {
 });
 
 test('a series owner can update series', function () {
-    $this->mockHandler->append(new Response());
+    $this->mockHandler->append(new Response);
     $series = SeriesFactory::ownedBy(signInRole(Role::MODERATOR))->create();
     $this->patch(route('series.edit', $series), [
         'title' => 'changed',
