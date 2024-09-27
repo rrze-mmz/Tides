@@ -10,6 +10,22 @@ module.exports = {
     './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
   ],
   theme: {
+    container: {
+      // you can configure the container to be centered
+      center: true,
+
+      // or have default horizontal padding
+      padding: '4rem',
+
+      // default breakpoints but with 40px removed
+      screens: {
+        sm: '600px',
+        md: '728px',
+        lg: '984px',
+        xl: '1440px',
+        '2xl': '1900px',
+      },
+    },
     extend: {
       fontFamily: {
         sans: ['Nunito', ...defaultTheme.fontFamily.sans],

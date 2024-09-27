@@ -2,7 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -22,14 +22,14 @@
 <div class="flex bg-gray-100">
     <aside class="relative hidden  w-[20rem] shadow-xl bg-sidebar dark:bg-sky-950 sm:block items-center">
         <div class="flex flex-col p-6 text-center align-center">
-            <div>
+            <div class="pb-2">
                 <a href="{{route('home')}}"
-                   class="text-3xl font-semibold text-white hover:text-gray-300">
+                   class="text-2xl font-semibold text-white hover:text-gray-300">
                     {{ config('app.name', 'Laravel') }}
                 </a>
             </div>
             @env('local')
-                <div class="flex text-fuchsia-900 dark:text-white italic items-center">
+                <div class="flex text-white dark:text-white italic items-center place-content-center">
                     <div>
                         <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
                              xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
@@ -52,7 +52,7 @@
                                   clip-rule="evenodd" />
                         </svg>
                     </div>
-                    <div>
+                    <div class="pl-2">
                         {{getCurrentGitBranch()}}
                     </div>
                 </div>

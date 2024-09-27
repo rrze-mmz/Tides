@@ -54,7 +54,7 @@
             </a>
         </span>
     </nav>
-    <nav class=" flex font-semibold text-md space-x-4 ">
+    <nav class=" flex font-semibold text-lg space-x-4 ">
         @guest
             <a href="{{ route('login') }}"
             >
