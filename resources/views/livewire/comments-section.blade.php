@@ -1,7 +1,7 @@
 <div class="mb-2 space-y-5 font-normal" id="comments-section">
     <x-message
-        :messageText="$messageText"
-        :messageType="$messageType" />
+            :messageText="$messageText"
+            :messageType="$messageType" />
 
     <form wire:submit="postComment" action="#" method="PATCH" class="my-12 w-full">
         @csrf
@@ -19,8 +19,8 @@
                           name="content"
                           id="content"
                           rows="4"
-                          placeholder="Type your comment here..."
-                          class="w-full rounded-md border px-4 py-2 shadow dark:text-black text-sm"
+                          placeholder="{{ __('comment.common.type your comment here') }}"
+                          class=" w-full rounded-md border px-4 py-2 shadow dark:text-black text-sm"
                 ></textarea>
 
                 @error('content')
@@ -51,7 +51,9 @@
                                     7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
                         </path>
                     </svg>
-                    <span>Post Comment</span>
+                    <span>
+                        {{ __('comment.common.actions.Post comment') }}
+                    </span>
                 </button>
 
             </div>
@@ -71,13 +73,17 @@
                          alt="avatar">
                     <div class="ml-4 flex-grow">
                         <div class="flex items-center dark:text-white">
-                            <div class="font-semibold">{{ $comment->owner->getFullNameAttribute() }}</div>
+                            <div class="font-semibold">
+                                {{ $comment->owner->getFullNameAttribute() }}
+                            </div>
                             <div
-                                class="ml-2 text-gray-500 dark:text-gray-50">{{ $comment->created_at->diffForHumans() }}</div>
+                                    class="ml-2 text-gray-500 dark:text-gray-50">
+                                {{ $comment->created_at->diffForHumans() }}
+                            </div>
                         </div>
                         <div class="flex flex-col">
                             <div
-                                class="mt-2 w-full text-gray-700 dark:text-gray-50 text-sm">
+                                    class="mt-2 w-full text-gray-700 dark:text-gray-50 text-sm">
                                 {{ $comment->content }}
                             </div>
                             @can('delete-comment', $comment)
@@ -85,7 +91,9 @@
                                     <a href="#comments-section"
                                        class="pt-2 text-sm text-red-800 dark:text-red-500 underline hover:text-red-700"
                                        wire:click="deleteComment({{ $comment }})">
-                                        <span>Delete</span>
+                                        <span>
+                                            {{ __('common.actions.delete') }}
+                                        </span>
                                     </a>
                                 </div>
                             @endcan

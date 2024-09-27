@@ -1,23 +1,23 @@
 @can('administrate-admin-portal-pages')
     <div class="flex flex-col font-normal py-4">
         <h4 class="mt-4 mb-4 text-green-700  dark:text-green-400">
-            <span class="text-xl font-bold">Opencast access policy</span>
+            <span class="text-xl font-bold">{{ __('opencast.backend.Opencast access policy') }}</span>
         </h4>
         <div class="flex w-1/2">
             <table class="table-auto border-b border-gray-200 dark:border-white">
                 <thead class="text-left">
                 <tr class="uppercase dark:text-white">
                     <th class="px-4">
-                        Name
+                        {{ __('common.name') }}
                     </th>
                     <th class="pr-4">
-                        Read
+                        {{ __('common.read') }}
                     </th>
                     <th class="pr-4">
-                        Write
+                        {{ __('common.write') }}
                     </th>
                     <th class="pr-4">
-                        Actions
+                        {{ trans_choice('common.actions.action', 2) }}
                     </th>
                 </tr>
                 </thead>
@@ -77,7 +77,7 @@
                 @empty
                     <tr>
                         <td class="font-bold italic dark:bg-slate-800 dark:text-white py-4" colspan="4">
-                            Series in Opencast has no Tides editors
+                            {{ __('opencast.backend.series in opencast has no video portal editors') }}
                         </td>
                     </tr>
                 @endforelse
@@ -87,7 +87,9 @@
 
 
         <h4 class="mt-4 mb-4 text-green-700">
-            <span class="text-xl font-bold">Available assistants</span>
+            <span class="text-xl font-bold">
+                {{ __('opencast.backend.available assistants') }}
+            </span>
         </h4>
         <form action="{{route('series.opencast.updateSeriesAcl', $series)}}"
               method="POST"
@@ -95,7 +97,11 @@
         >
             @csrf
             <input hidden readonly type="text" name="opencastSeriesID" value="{{$series->opencast_series_id}}">
-            <label class="font-normal mr-4 dark:text-white" for="username">Add assistant to opencast series:</label>
+            <label class="font-normal mr-4 dark:text-white"
+                   for="username"
+            >
+                {{ __('opencast.backend.Add assistant to opencast series') }}:
+            </label>
             <select name="username"
                     id="username"
                     class="mr-4 rounded-md text-md focus:border-blue-500 focus:bg-white focus:outline-none">

@@ -1,5 +1,5 @@
 <div class="flex mt-6  pb-1  mb-5 font-medium border-b border-black font-3xl">
-    Add clips to chapter: {{$chapter->title}}
+    {{ __('chapter.backend.add clips to chapter') }}
 </div>
 <form action="{{ route('series.chapters.addClips',[$series,$chapter]) }}"
       method="POST"
@@ -31,7 +31,7 @@
             <x-button class="bg-blue-600 hover:bg-blue-700"
                       type="submit"
             >
-                Add selected clips to chapter
+                {{ __('chapter.backend.actions.add selected clips to chapter') }}
             </x-button>
         </div>
     </div>

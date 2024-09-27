@@ -34,10 +34,9 @@ beforeEach(function () {
     $this->flashMessageName = 'flashMessage';
 });
 
-function a_visitor_cannot_manage_series(): void
-{
+it('denies series management to visitors', function () {
     post(route('series.store'), [])->assertRedirect('login');
-}
+});
 
 it('shows a create series button if moderator has no series', function () {
     signInRole(Role::MODERATOR);
@@ -308,20 +307,20 @@ test('a superadmin can edit a not owned series', function () {
 it('has an add clips button', function () {
     $this->mockHandler->append($this->mockServerNotAvailable());
     get(route('series.edit', SeriesFactory::ownedBy(signInRole(Role::MODERATOR))->create()))
-        ->assertSee('Add new clip');
+        ->assertSee(__('series.backend.actions.add new clip'));
 });
 
 it('has go to public page button', function () {
     $this->mockHandler->append($this->mockServerNotAvailable());
     get(route('series.edit', SeriesFactory::ownedBy(signInRole(Role::MODERATOR))->create()))
-        ->assertSee('Go to public page');
+        ->assertSee(__('series.backend.actions.go to public page'));
 });
 
 it('has a series statistics button', function () {
     $this->mockHandler->append($this->mockServerNotAvailable());
     $series = SeriesFactory::ownedBy(signInRole(Role::MODERATOR))->create();
     get(route('series.edit', $series))
-        ->assertSee('Statistics')->assertSee(route('statistics.series', $series));
+        ->assertSee(trans_choice('common.forms.statistic', 2))->assertSee(route('statistics.series', $series));
 });
 
 test('edit series page should display belonging clips', function () {
@@ -398,7 +397,7 @@ test('edit series should allow user to switch to default image if one is set', f
     );
 
     get(route('series.edit', $series))
-        ->assertSee('Set Default image');
+        ->assertSee(__('image.backend.Set default image'));
 
     $series->image_id = 1;
     $series->save();
@@ -433,7 +432,7 @@ test('series admin can select another image', function () {
     );
 
     get(route('series.edit', $series))
-        ->assertSee('Assign selected image');
+        ->assertSee(__('image.backend.Assign selected image'));
 });
 
 test('edit series page should display opencast users rights', function () {
@@ -520,7 +519,7 @@ test('edit series should display series activities', function () {
     $this->mockHandler->append(new Response);
     $series = SeriesFactory::ownedBy(signInRole(Role::MODERATOR))->create();
 
-    get(route('series.edit', $series))->assertSee('Activities');
+    get(route('series.edit', $series))->assertSee(trans_choice('common.menu.activity', 2));
 
     Livewire::test(ActivitiesDataTable::class)
         ->assertSee('created series');

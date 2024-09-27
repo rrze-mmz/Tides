@@ -168,7 +168,7 @@ it('removes a clip from series', function () {
 
 it('shows a reorder clips button in series page', function () {
     get(route('series.edit', SeriesFactory::withClips(3)->ownedBy(signInRole(Role::MODERATOR))->create()))
-        ->assertSee('Reorder clips');
+        ->assertSee(__('series.backend.actions.reorder series clips'));
 });
 
 it('has a view for reordering series clips based on clip episode', function () {

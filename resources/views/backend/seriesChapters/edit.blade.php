@@ -15,30 +15,30 @@
                     <x-form.input field-name="position"
                                   input-type="number"
                                   :value="$chapter->position"
-                                  label="Episode"
+                                  label="{{ __('series.common.episode') }}"
                                   :full-col="false"
-                                  :required="true"/>
+                                  :required="true" />
                     <x-form.input field-name="title"
                                   input-type="text"
                                   :value="$chapter->title"
-                                  label="Title"
+                                  label="{{ __('common.metadata.title') }}"
                                   :full-col="true"
-                                  :required="true"/>
+                                  :required="true" />
                     <x-form.toggle-button :value="$chapter->default"
-                                          label="Default chapter"
+                                          label="{{ __('chapter.backend.default chapter') }}"
                                           field-name="default"
                     />
                     <div class="pt-6">
                         <x-button class="bg-blue-600 hover:bg-blue-700"
                                   type="submit"
                         >
-                            Update chapter
+                            {{ __('chapter.backend.actions.delete chapter') }}
                         </x-button>
                         <a href="{{route('series.chapters.index',$series)}}">
                             <x-button class="bg-green-600 hover:bg-green-700"
                                       type="button"
                             >
-                                Back to series chapters
+                                {{ __('chapter.backend.actions.back to series chapters') }}
                             </x-button>
                         </a>
                     </div>
@@ -47,7 +47,7 @@
             </form>
         </div>
         <div class="flex pt-8 pb-2 font-semibold border-b border-black font-2xl">
-            More actions
+            {{ __('series.common.actions') }}
         </div>
         <div class="flex items-center pt-3 space-x-6">
             <form action="{{route('series.chapters.delete',[$series, $chapter])}}"
@@ -57,7 +57,7 @@
                 <x-button class="bg-red-600 hover:bg-red-700"
                           type="submit"
                 >
-                    Delete chapter
+                    {{ __('chapter.backend.actions.delete chapter') }}
                 </x-button>
             </form>
         </div>

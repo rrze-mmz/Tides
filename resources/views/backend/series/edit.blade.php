@@ -7,7 +7,7 @@
         </div>
         <div>
      <span
-             class="text-sm font-normal italic"> created at {{$series->created_at }} </span>
+             class="text-sm font-normal italic"> {{ __('series.common.created at') }} {{$series->created_at }} </span>
         </div>
     </div>
 
@@ -163,7 +163,7 @@
                            x-on:click="activeTab = 5"
                            :class="activeTab === 5 ? activeClass : inactiveClass"
                         >
-                            Activities
+                            {{ trans_choice('common.menu.activity',2) }}
                         </a>
                     </li>
                 </ul>

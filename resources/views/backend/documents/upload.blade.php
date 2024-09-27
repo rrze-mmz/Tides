@@ -9,10 +9,10 @@
         </h2>
 
         <form
-            method="POST"
-            class="px-2"
-            enctype="multipart/form-data"
-            action="{{ route('documents.upload') }}"
+                method="POST"
+                class="px-2"
+                enctype="multipart/form-data"
+                action="{{ route('documents.upload') }}"
         >
             @csrf
 
@@ -28,7 +28,7 @@
             @enderror
 
             <x-button class="bg-green-600 hover:bg-green-700">
-                Upload file
+                {{ __('common.actions.upload') }}
             </x-button>
         </form>
 
@@ -51,8 +51,8 @@
                                 </a>
                                 <div>
                                     <x-modals.delete
-                                        :route="route('documents.destroy', $document)"
-                                        class="w-full justify-center"
+                                            :route="route('documents.destroy', $document)"
+                                            class="w-full justify-center"
                                     >
                                         <x-slot:title>
                                             {{ __('article.backend.delete.modal title',[

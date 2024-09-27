@@ -1,6 +1,6 @@
 <div class="flex-row my-10 px-3 py-2 bg-white mt-10 text-lg dark:text-white dark:border-white dark:bg-gray-900">
     <div class="font-normal w-full">
-        New chapter
+        {{ __('chapter.backend.new chapter') }}
     </div>
 
     <form action="{{route('series.chapters.create', $series)}}"
@@ -18,12 +18,12 @@
             >
             <input type="text"
                    name="title"
-                   placeholder="Chapter title"
+                   placeholder="{{ __('chapter.backend.chapter title') }}"
                    class="grow w-1/2"
             >
             <div class="mt-1">
                 <x-button type="submit" class="bg-blue-600 hover:bg-blue-700">
-                    Create chapter
+                    {{ __('chapter.backend.actions.create chapter') }}
                 </x-button>
             </div>
         </div>

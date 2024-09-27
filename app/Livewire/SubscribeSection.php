@@ -27,9 +27,10 @@ class SubscribeSection extends Component
         if (session()->has('redirect_back_to_subscribe')) {
             $this->subscribe();
         }
+
         $this->isUserSubscribed = $this->user->subscriptions()->where('series_id', $this->series->id)->exists();
         $this->formAction = ($this->isUserSubscribed) ? 'unsubscribe' : 'subscribe';
-        $this->btnText = ($this->isUserSubscribed) ? 'Unsubscribe' : 'Subscribe';
+        $this->btnText = ($this->isUserSubscribed) ? __('common.unsubscribe') : __('common.subscribe');
     }
 
     /**
@@ -46,7 +47,7 @@ class SubscribeSection extends Component
         $this->user->subscriptions()->attach($this->series);
         $this->isUserSubscribed = true;
         $this->formAction = 'unsubscribe';
-        $this->btnText = 'unsubscribe';
+        $this->btnText = __('common.unsubscribe');
         session()->remove('redirect_back_to_subscribe');
         $this->user->notify((new UserSubscribed($this->series))->delay($delay));
     }
@@ -59,7 +60,7 @@ class SubscribeSection extends Component
         $this->user->subscriptions()->detach($this->series);
         $this->isUserSubscribed = false;
         $this->formAction = 'subscribe';
-        $this->btnText = 'Subscribe';
+        $this->btnText = __('common.subscribe');
     }
 
     public function render(): Factory|View|Application

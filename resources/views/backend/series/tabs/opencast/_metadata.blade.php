@@ -1,20 +1,24 @@
 @php use App\Models\Semester; @endphp
 <div class="flex flex-col font-normal">
     <h4 class="mb-4 text-green-700 dark:text-green-400">
-        <span class="text-xl font-bold">Opencast Metadata</span> <span
-            class="text-sm italic">created at {{ zuluToCEST($opencastSeriesInfo['metadata']['created']) }}</span>
+        <span class="text-xl font-bold">
+            {{ __('opencast.backend.Opencast metadata') }}
+        </span>
+        <span class="text-sm italic">
+            {{ __('series.common.created at') }} {{ zuluToCEST($opencastSeriesInfo['metadata']['created']) }}
+        </span>
     </h4>
     <div class="dark:text-white">
-        <span class="font-bold">
-            Title:
+        <span class="font-bold pr-4">
+          {{ __('opencast.common.title') }} :
         </span>
         <span class="italic">
             {{ $series->title }}
         </span>
     </div>
     <div class="dark:text-white">
-            <span class="font-bold">
-                Subject
+    <span class="font-bold pr-4">
+                {{ __('opencast.common.subject') }} :
             </span>
         <span class="italic">
             @if($series->clips()->count() > 0)
@@ -25,16 +29,16 @@
         </span>
     </div>
     <div class="dark:text-white">
-        <span class="font-bold">
-            Presenter:
+          <span class="font-bold pr-4">
+            {{ __('opencast.common.presenter') }} :
         </span>
         <span class="italic">
             {{ $series->presenters->first()?->getFullNameAttribute() }}
         </span>
     </div>
     <div class="dark:text-white">
-        <span class="font-bold">
-            Contributor:
+        <span class="font-bold pr-4">
+            {{ __('opencast.common.contributor') }} :
         </span>
         <span class="italic">
             {{ $series->organization->name }}

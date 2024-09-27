@@ -4,13 +4,13 @@
 @section('content')
     <div class="flex border-b border-black text-2xl flex-col dark:text-white dark:border-white font-normal">
         <div class="font-semibold ">
-            Statistics for Series: {{ $obj['info']->title }} / ID: {{ $obj['info']->id }}
+            {{ __('statistic.backend.statistic for series:') }} {{ $obj['info']->title }} / ID: {{ $obj['info']->id }}
         </div>
     </div>
     @if($obj['type'] === 'series')
         <div class="flex flex-col py-4 px-2 ">
             <div class=" text-xl font-bold text-left rtl:text-right text-gray-500 dark:text-gray-400 pb-10">
-                Views pro Clip
+                {{ __('statistic.backend.views pro clip') }}
             </div>
             @if(!empty($obj['clipsViews']))
                 <div class="flex w-full ">
@@ -18,14 +18,14 @@
                 </div>
             @else
                 <div class="h4 dark:text-white">
-                    Statistic data are empty.
+                    {{ __('statistic.common.no statistic data available') }}
                 </div>
             @endif
         </div>
     @else
         <div class="flex flex-col py-4 px-2 ">
             <div class=" text-xl font-bold text-left rtl:text-right text-gray-500 dark:text-gray-400 pb-10">
-                Clip Stats
+                {{ __('statistic.backend.clips statistics') }}
             </div>
             @if(!empty($obj['clipsViews']))
                 <div class="flex w-full ">
@@ -33,14 +33,14 @@
                 </div>
             @else
                 <div class="h4 dark:text-white">
-                    Statistic data are empty.
+                    {{ __('statistic.common.no statistic data available') }}
                 </div>
             @endif
         </div>
     @endif
     <div class="flex flex-col py-2 px-2  justify-stretch">
         <div class=" text-xl font-bold text-left rtl:text-right text-gray-500 dark:text-gray-400 pb-10">
-            Geolocation Stats
+            {{ __('statistic.backend.geolocation statistics') }}
         </div>
         <div class="flex w-full pr-10">
             @if(!empty($obj['clipsViews']))
@@ -53,7 +53,7 @@
             @else
                 <div class="flex w-full ">
                     <div class="h4 dark:text-white">
-                        Statistic data are empty.
+                        {{ __('statistic.common.no statistic data available') }}
                     </div>
                 </div>
             @endif
