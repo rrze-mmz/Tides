@@ -210,6 +210,7 @@ document.addEventListener(
 
     $('.select2-tides-images').select2({
       placeholder: 'Select an image',
+      language: 'de',
       minimumInputLength: 2,
       ajax: {
         url: '/api/images/',

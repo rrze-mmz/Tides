@@ -109,7 +109,7 @@ it('displays a delete button for comment owner', function () {
         'model' => $this->clip,
         'type' => 'frontend',
     ])
-        ->assertSee('Delete');
+        ->assertSee(__('common.actions.delete'));
 });
 
 it('displays a delete button for admin users', function () {
@@ -120,7 +120,7 @@ it('displays a delete button for admin users', function () {
         'model' => $this->clip,
         'type' => 'frontend',
     ])
-        ->assertSee('Delete');
+        ->assertSee(__('common.actions.delete'));
 });
 
 test('a comment owner can delete his comment', function () {

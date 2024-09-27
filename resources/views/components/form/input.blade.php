@@ -9,8 +9,8 @@
             </span>
             </label>
             @if ($disabled)
-                <div class="flex text-sm text-green-500">
-                    (You cannot change this field)
+                <div class="flex text-xs text-green-500 italic">
+                    {{ __('common.forms.you cannot change this field') }}
                 </div>
             @endif
         </div>
@@ -26,9 +26,9 @@
                name="{{ $fieldName }}"
                id="{{ $fieldName }}"
                value="{{ $value }}"
-            {{($required)?'required':''}}
-            {{($readOnly)?'readonly':''}}
-            {{($disabled)?'disabled':''}}
+                {{($required)?'required':''}}
+                {{($readOnly)?'readonly':''}}
+                {{($disabled)?'disabled':''}}
         >
     </div>
     @error($fieldName)

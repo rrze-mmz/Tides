@@ -1,5 +1,5 @@
 <div class="flex mt-6  pb-1 font-medium border-b border-black font-3xl">
-    Clips for this chapter
+    {{ __('chapter.backend.clips for this chapter') }}
 </div>
 <form action="{{ route('series.chapters.removeClips',[$series, $chapter]) }}"
       method="POST"
@@ -30,7 +30,7 @@
                 <x-button class="bg-blue-600 hover:bg-blue-700"
                           type="submit"
                 >
-                    Remove selected clips from chapter
+                    {{ __('chapter.backend.actions.remove selected clips from chapter') }}
                 </x-button>
             </div>
         </div>

@@ -33,16 +33,16 @@ it('displays a forbidden page for unauthorized moderators', function () {
 });
 
 it('displays a create chapter button in chapters index page', function () {
-    get(route('series.chapters.index', $this->series))->assertSee('Create chapter');
+    get(route('series.chapters.index', $this->series))->assertSee(__('chapter.backend.actions.create chapter'));
 });
 
 it('lists series chapters on the index page if there are any', function () {
-    get(route('series.chapters.index', $this->series))->assertSee('Series chapters');
+    get(route('series.chapters.index', $this->series))->assertSee(__('chapter.backend.series chapters'));
     get(route('series.chapters.index', $this->series))->assertSee($this->series->chapters()->first()->title);
 });
 
 it('displays a manage series button on the series edit page', function () {
-    get(route('series.edit', $this->series))->assertSee('Manage chapters');
+    get(route('series.edit', $this->series))->assertSee(__('series.backend.actions.manage chapters'));
 });
 
 it('has an index page for series chapters', function () {

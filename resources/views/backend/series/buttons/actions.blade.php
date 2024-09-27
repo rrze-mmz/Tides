@@ -1,34 +1,34 @@
 <div class="flex items-center py-4 space-x-4 ">
     <a href="{{ route('series.clips.create', $series) }}">
         <x-button class="bg-blue-600 hover:bg-blue-700">
-            Add new clip
+            {{ __('series.backend.actions.add new clip') }}
         </x-button>
     </a>
     <a href="{{ route('frontend.series.show', $series) }}">
         <x-button class="bg-blue-600 hover:bg-blue-700">
-            Go to public page
+            {{ __('series.backend.actions.go to public page') }}
         </x-button>
     </a>
     <a href="{{ route('statistics.series', $series) }}">
         <x-button class="bg-blue-600 hover:bg-blue-700">
-            Statistics
+            {{ trans_choice('common.menu.statistic',2) }}
         </x-button>
     </a>
     @if($series->clips->count()> 0 )
         <a href="{{ route('series.clips.batch.show.clips.metadata', $series) }}">
             <x-button class="bg-green-600 hover:bg-green-700">
-                Edit metadata of multiple clips
+                {{ __('series.backend.actions.edit metadata of multiple clips') }}
             </x-button>
         </a>
         <a href="{{ route('series.clips.changeEpisode', $series) }}">
             <x-button class="bg-green-600 hover:bg-green-700">
-                Reorder clips
+                {{ __('series.backend.actions.reorder series clips') }}
             </x-button>
         </a>
     @endif
     <a href="{{ route('series.chapters.index', $series) }}">
         <x-button class="bg-green-600 hover:bg-green-700">
-            Manage chapters
+            {{ __('series.backend.actions.manage chapters') }}
         </x-button>
     </a>
     @can('update-series', $series)

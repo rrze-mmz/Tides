@@ -87,7 +87,7 @@ test('an admin can see change series ownership button', function () {
     $series = Series::factory()->create(['owner_id' => null]);
     signInRole(Role::ADMIN);
 
-    get(route('series.edit', $series))->assertSee('Set series owner');
+    get(route('series.edit', $series))->assertSee(__('series.backend.update series owner'));
 });
 
 test('an assistant is not allowed to change series ownership', function () {

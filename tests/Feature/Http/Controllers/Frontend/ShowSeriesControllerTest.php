@@ -100,11 +100,11 @@ it('shows for each clip if it is locked or not', function () {
         $clip->addAcls(collect([Acl::PORTAL()]));
     });
 
-    get(route('frontend.series.show', $series))->assertSee('Lock clip');
+    get(route('frontend.series.show', $series))->assertSee(__('common.locked').' clip');
 
     signIn();
 
-    get(route('frontend.series.show', $series))->assertSee('Unlock clip');
+    get(route('frontend.series.show', $series))->assertSee(__('common.unlocked').' clip');
 });
 
 it('list all clips with semester info', function () {

@@ -7,11 +7,13 @@ return [
         'title' => 'Titel',
         'access via' => 'Zugang via',
         'no clips' => 'Series hat keine Clips',
+        'clips without chapter(s)' => 'clips ohne Kapitel',
         'semester' => 'Semester',
         'duration' => 'Dauer',
         'actions' => 'Aktionen',
         'edit series' => 'Series bearbeiten',
         'my series' => 'Meine Serien',
+        'created at' => 'erstellt am',
     ],
     'frontend' => [
         'show' => [
@@ -26,11 +28,22 @@ return [
         'actions' => [
             'create series' => 'Neue Serie erstellen',
             'select semester' => 'Bitte wählen Sie das Semester aus',
+            'reorder series clips' => 'Serienclips neu anordnen',
+            'add new clip' => 'Neuen Clip hinzufügen',
+            'go to public page' => 'Zur öffentlichen Seite gehen',
+            'edit metadata of multiple clips' => 'Metadaten mehrerer Clips bearbeiten',
+            'manage chapters' => 'Kapitel verwalten',
+            'mass update all clips' => 'Alle Clips massenweise aktualisieren',
+            'back to edit series' => 'Zurück zur Bearbeitung der Serie',
         ],
         'Series administrator' => 'Serien Administrator',
         'Set a series owner' => 'Serien-Besitzer einsetzen',
+        'Series has no owner yet' => 'Die Serie hat noch keinen Besitzer',
         'Update Series' => 'Serien aktualisieren',
+        'update series owner' => 'Serienbesitzer aktualisieren',
         'Add a series member' => 'Neue Serien-Teilnehmer hinzufügen',
+        'actual episode' => 'Aktuelle Episode:',
+        'mass update clip metadata for series' => 'Massenaktualisierung der Clip-Metadaten für die Serie: :seriesTitle',
         'delete' => [
             'modal title' => 'Sind Sie sicher, dass Sie den Serien „:series_title“ löschen möchten?',
             'modal body' => 'Bitte vorsichtig vorgehen. Das Löschen dieses Serien wird alle zugehörigen Clips sowie '.

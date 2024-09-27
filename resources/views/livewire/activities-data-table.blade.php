@@ -4,7 +4,9 @@
         <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
             <div class="flex items-center justify-between">
                 <div class="w-full max-w-lg lg:max-w-xs">
-                    <label for="search" class="sr-only">Search</label>
+                    <label for="search" class="sr-only">
+                        {{ __('common.actions.search') }}
+                    </label>
                     <div class="relative">
                         <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                             <x-heroicon-o-magnifying-glass class="h-5 w-5 text-gray-400" />
@@ -16,7 +18,7 @@
                                             dark:placeholder-gray-800 dark:bg-gray-300 dark:text-gray-900
                                             focus:border-blue-300 focus:shadow-outline-blue sm:text-sm transition
                                             duration-150 ease-in-out"
-                               placeholder="Search" type="search">
+                               placeholder="{{ __('common.actions.search') }}" type="search">
                     </div>
                 </div>
                 @if ($model === '')
@@ -26,7 +28,7 @@
                                    class="h-4 w-4 text-indigo-600 transition duration-150 ease-in-out form-checkbox">
                         </div>
                         <div class="ml-3 text-sm leading-5">
-                            <label for="series" class="font-medium text-gray-700">Series</label>
+                            <label for="series" class="font-medium text-gray-700">{{ __('common.menu.series') }}</label>
                         </div>
                     </div>
                 @endif
@@ -38,7 +40,7 @@
                     <thead>
                     <tr>
                         <th
-                            class="px-2 py-3 text-left">
+                                class="px-2 py-3 text-left">
                             <div class="flex items-center">
                                 <button wire:click="sortBy('id')"
                                         class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white leading-4
@@ -47,84 +49,84 @@
                                     ID
                                 </button>
                                 <x-sort-icon
-                                    field="id"
-                                    :sortField="$sortField"
-                                    :sortAsc="$sortAsc" />
+                                        field="id"
+                                        :sortField="$sortField"
+                                        :sortAsc="$sortAsc" />
                             </div>
                         </th>
                         <th
-                            class="px-6 py-3 text-left">
+                                class="px-6 py-3 text-left">
                             <div class="flex items-center">
                                 <button wire:click="sortBy('created_at')"
                                         class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white  leading-4
                                         font-medium text-gray-500 uppercase tracking-wider"
                                 >
-                                    Updated
+                                    {{ __('common.updated') }}
                                 </button>
                                 <x-sort-icon
-                                    field="created_at"
-                                    :sortField="$sortField"
-                                    :sortAsc="$sortAsc" />
+                                        field="created_at"
+                                        :sortField="$sortField"
+                                        :sortAsc="$sortAsc" />
                             </div>
                         </th>
                         <th
-                            class="px-6 py-3 text-left">
+                                class="px-6 py-3 text-left">
                             <div class="flex items-center">
                                 <button wire:click="sortBy('user_id')"
                                         class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white leading-4
                                         font-medium text-gray-500 uppercase tracking-wider"
                                 >
-                                    Full Name
+                                    {{ __('common.full name') }}
                                 </button>
                                 <x-sort-icon
-                                    field="user_id"
-                                    :sortField="$sortField"
-                                    :sortAsc="$sortAsc" />
+                                        field="user_id"
+                                        :sortField="$sortField"
+                                        :sortAsc="$sortAsc" />
                             </div>
                         </th>
                         <th
-                            class="px-6 py-3 text-left">
+                                class="px-6 py-3 text-left">
                             <div class="flex items-center">
                                 <button wire:click="sortBy('content_type')"
                                         class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white leading-4
                                         font-medium text-gray-500 uppercase tracking-wider"
                                 >
-                                    Type
+                                    {{ __('common.type') }}
                                 </button>
                                 <x-sort-icon
-                                    field="content_type"
-                                    :sortField="$sortField"
-                                    :sortAsc="$sortAsc" />
+                                        field="content_type"
+                                        :sortField="$sortField"
+                                        :sortAsc="$sortAsc" />
                             </div>
                         </th>
                         <th
-                            class="px-6 py-3 text-left">
+                                class="px-6 py-3 text-left">
                             <div class="flex items-center">
                                 <button wire:click="sortBy('change_message')"
                                         class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white  leading-4
                                         font-medium text-gray-500 uppercase tracking-wider"
                                 >
-                                    Message
+                                    {{ __('common.message') }}
                                 </button>
                                 <x-sort-icon
-                                    field="change_message"
-                                    :sortField="$sortField"
-                                    :sortAsc="$sortAsc" />
+                                        field="change_message"
+                                        :sortField="$sortField"
+                                        :sortAsc="$sortAsc" />
                             </div>
                         </th>
                         <th
-                            class="px-6 py-3 text-left">
+                                class="px-6 py-3 text-left">
                             <div class="flex items-center">
                                 <button wire:click="sortBy('changes')"
                                         class="bg-gray-50 dark:bg-gray-900 text-xs dark:text-white  leading-4
                                         font-medium text-gray-500 uppercase tracking-wider"
                                 >
-                                    Changed
+                                    {{ __('common.changes') }}
                                 </button>
                                 <x-sort-icon
-                                    field="changes"
-                                    :sortField="$sortField"
-                                    :sortAsc="$sortAsc" />
+                                        field="changes"
+                                        :sortField="$sortField"
+                                        :sortAsc="$sortAsc" />
                             </div>
                         </th>
                     </tr>
@@ -207,7 +209,7 @@
                         <tr class="dark:bg-gray-800 dark:text-white">
                             <td colspan="7" class="items-center w-full text-center">
                                 <div class="text-2xl m-4 p-4 ">
-                                    No activities found
+                                    {{ __('common.no activities found') }}
                                 </div>
                             </td>
                         </tr>
