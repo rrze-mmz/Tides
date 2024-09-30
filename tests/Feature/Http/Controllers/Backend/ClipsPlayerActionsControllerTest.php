@@ -26,7 +26,7 @@ it('hides preview image actions for a clip without assets', function () {
 });
 
 it('displays preview image actions for a clip with assets', function () {
-    get(route('clips.edit', $this->clip))->assertSee('Preview image')
+    get(route('clips.edit', $this->clip))->assertSee(__('player.backend.preview image'))
         ->assertSee(route('clips.generatePreviewImageFromFrame', $this->clip));
 });
 

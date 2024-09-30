@@ -28,6 +28,12 @@ return [
         'comments' => 'Kommentare',
     ],
     'backend' => [
+        'actions' => [
+            'go to clip public page' => 'Go to clip public page',
+            'got to clip statistics page' => 'Got clip statistics page',
+            'generate preview from frame' => 'Generate preview from frame',
+            'upload an image' => 'Upload an image',
+        ],
         'delete' => [
             'modal title' => 'Are you certain you wish to delete the clip titled ":clip_title"?',
             'modal body' => 'Please proceed with caution. Deleting this clip will permanently remove all associated '.

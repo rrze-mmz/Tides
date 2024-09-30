@@ -8,7 +8,7 @@
             <div class="col-span-2">
                 <label for="has_time_availability" class="mr-6 block py-2 font-bold text-gray-700 text-md
                 dark:text-white dark:border-white ">
-                    Time Availability
+                    {{ __('common.metadata.time availability') }}
                 </label>
             </div>
             <div>
@@ -38,7 +38,7 @@
                         <div class="flex flex-col">
                             <label class="ml-4 mr-2 block flex py-2 font-bold text-gray-700 text-md dark:text-white
                             dark:border-white "
-                                   for="{{ $name }}_start">Start time</label>
+                                   for="{{ $name }}_start">{{ __('common.metadata.start time') }}</label>
                         </div>
                     </div>
                     <div class="col-start-2 col-end-8">
@@ -58,7 +58,7 @@
                         <div class="flex flex-col">
                             <label class="ml-4 mr-6 block py-2 font-bold text-gray-700 text-md dark:text-white
                             dark:border-white "
-                                   for="{{ $name }}_end">End time</label>
+                                   for="{{ $name }}_end">{{ __('common.metadata.end time') }}</label>
                         </div>
                     </div>
                     <div class="col-start-2 col-end-8">

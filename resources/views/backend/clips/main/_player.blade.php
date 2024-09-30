@@ -16,7 +16,7 @@
                                 @click="selected !==  0  ? selected = 0 : selected = null">
                             <div class="flex items-center justify-between">
                                 <span>
-                                  Quick Links
+                                  {{ __('player.backend.quick links') }}
                                 </span>
                                 <x-heroicon-o-plus-circle class="h-6 w-6" />
                             </div>
@@ -32,7 +32,7 @@
                                         >
                                             <x-heroicon-o-arrow-right-circle class="w-6 h-6" />
                                             <div class="pl-2">
-                                                Go to public page
+                                                {{ __('clip.backend.actions.go to clip public page') }}
                                             </div>
                                         </x-button>
                                     </a>
@@ -42,7 +42,7 @@
                                         >
                                             <x-heroicon-o-arrow-right-circle class="w-6 h-6" />
                                             <div class="pl-2">
-                                                Go to statistics page
+                                                {{ __('clip.backend.actions.got to clip statistics page') }}
                                             </div>
                                         </x-button>
                                     </a>
@@ -70,8 +70,8 @@
                                     @if($clip->livestream)
                                         <div class="flex flex-col space-y-4 dark:text-white w-full ">
                                             <form
-                                                action="{{route('livestreams.cancelReservation', $clip->livestream->id)}}"
-                                                method="POST">
+                                                    action="{{route('livestreams.cancelReservation', $clip->livestream->id)}}"
+                                                    method="POST">
                                                 @csrf
                                                 <div class="mx-4 ">
                                                     <div class="border-b mb-4">Active livestream room
@@ -157,7 +157,7 @@
                                     @click="selected !==  1  ? selected = 1 : selected = null">
                                 <div class="flex items-center justify-between">
                                 <span>
-                                    Preview image
+                                    {{ __('player.backend.preview image') }}
                                 </span>
                                     <x-heroicon-o-plus-circle class="h-6 w-6" />
                                 </div>
@@ -182,13 +182,15 @@
                                                     <input id="currentTime" type="text" name="recentFrame"
                                                            class="dark:text-black h-200">
                                                     <x-button type="submit" class="py-2 bg-blue-600 hover:bg-blue-700">
-                                                        Generate Preview from Frame
+                                                        {{ __('clip.backend.actions.generate preview from frame') }}
                                                     </x-button>
                                                 </form>
                                             </div>
                                             <div class="flex flex-nowrap items-center justify-center space-x-2">
                                                 <span class="h-px w-20 bg-gray-300"></span>
-                                                <span class="dark:text-white">OR</span>
+                                                <span class="dark:text-white uppercase">
+                                                    {{ __('common.or') }}
+                                                </span>
                                                 <span class="h-px w-20 bg-gray-300"></span>
                                             </div>
                                             <div>
@@ -206,8 +208,10 @@
                                                     <x-button class="bg-blue-600 hover:bg-blue-700 ">
                                                         <div class="flex">
                                                             <x-heroicon-o-arrow-up-circle
-                                                                class="h-6 w-6"></x-heroicon-o-arrow-up-circle>
-                                                            <span class="pl-4">Set uploaded image</span>
+                                                                    class="h-6 w-6"></x-heroicon-o-arrow-up-circle>
+                                                            <span class="pl-4">
+                                                                {{ __('clip.backend.actions.upload an image') }}
+                                                            </span>
                                                         </div>
                                                     </x-button>
                                                 </form>
@@ -224,7 +228,7 @@
                                     @click="selected !==  2  ? selected = 2 : selected = null">
                                 <div class="flex items-center justify-between">
                                 <span>
-                                    Load different video assets
+                                    {{ __('player.backend.load different video assets') }}
                                 </span>
                                     <x-heroicon-o-plus-circle class="h-6 w-6" />
                                 </div>
@@ -244,7 +248,7 @@
                                                    title="composite video stream">
                                                     <x-heroicon-o-view-columns class="w-6 h-6 fill-white" />
                                                     <div class="pl-2">
-                                                        Side by Side
+                                                        {{ __('player.common.sbs') }}
                                                     </div>
                                                 </a>
                                             @endif
@@ -257,7 +261,7 @@
                                                    title="presenter video stream place-items-center">
                                                     <x-heroicon-o-user class="w-6 h-6 fill-white" />
                                                     <div class="pl-2">
-                                                        Camera
+                                                        {{ __('player.common.camera') }}
                                                     </div>
                                                 </a>
                                             @endif
@@ -271,7 +275,7 @@
                                                    title="presentation video stream">
                                                     <x-heroicon-o-computer-desktop class="w-6 h-6 fill-white" />
                                                     <div class="pl-2">
-                                                        Slides
+                                                        {{ __('player.common.slides') }}
                                                     </div>
                                                 </a>
                                             @endif
