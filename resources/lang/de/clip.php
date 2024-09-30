@@ -29,6 +29,12 @@ return [
         'comments' => 'Kommentare',
     ],
     'backend' => [
+        'actions' => [
+            'go to clip public page' => 'Zur öffentlichen Clip-Seite gehen',
+            'got to clip statistics page' => 'Zur Clip-Statistikseite gehen',
+            'generate preview from frame' => 'Vorschau aus Frame erstellen',
+            'upload an image' => 'Ein Bild hochladen',
+        ],
         'delete' => [
             'modal title' => 'Sind Sie sicher, dass Sie den Clip „:clip_title“ löschen möchten?',
             'modal body' => 'Bitte vorsichtig vorgehen. Das Löschen dieses Clips wird alle zugehörigen Ressourcen,'.
