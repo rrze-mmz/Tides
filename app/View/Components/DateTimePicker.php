@@ -13,8 +13,7 @@ class DateTimePicker extends Component
         public $hasTimeAvailability,
         public $timeAvailabilityStart,
         public $timeAvailabilityEnd
-    ) {
-    }
+    ) {}
 
     /**
      * Get the view / contents that represent the component.

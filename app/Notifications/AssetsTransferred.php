@@ -34,7 +34,7 @@ class AssetsTransferred extends Notification
      */
     public function toMail(mixed $notifiable): MailMessage
     {
-        return (new MailMessage())
+        return (new MailMessage)
             ->line("Your video files for \"$this->clip->title\" are transferred.")
             ->action('Check your clip', route('clips.edit', $this->clip))
             ->line('Thanks!');

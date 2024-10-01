@@ -34,7 +34,7 @@ class MailResetPasswordToken extends Notification
      */
     public function toMail(mixed $notifiable): MailMessage
     {
-        return (new MailMessage())
+        return (new MailMessage)
             ->subject('Welcome to Tides Portal')
             ->line('Please to log in first reset your password')
             ->action('Reset Password', url(route('password.reset', [

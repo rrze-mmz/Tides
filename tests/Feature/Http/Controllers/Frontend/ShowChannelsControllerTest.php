@@ -11,6 +11,4 @@ it('allows channels index page to viewed by everyone', function () {
         ->assertViewHas('channels');
 });
 
-it('has show channels page for each channel', function () {
-
-})->todo();
+it('has show channels page for each channel', function () {})->todo();

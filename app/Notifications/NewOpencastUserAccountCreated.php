@@ -16,9 +16,7 @@ class NewOpencastUserAccountCreated extends Notification
      *
      * @return void
      */
-    public function __construct(private Collection $userData, private string $url)
-    {
-    }
+    public function __construct(private Collection $userData, private string $url) {}
 
     /**
      * Get the notification's delivery channels.

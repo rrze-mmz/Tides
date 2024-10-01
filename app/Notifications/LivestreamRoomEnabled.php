@@ -42,7 +42,7 @@ class LivestreamRoomEnabled extends Notification
             $livestreamName = 'Hidden livestream';
         }
 
-        return (new MailMessage())
+        return (new MailMessage)
             ->subject("[VideoBot] - A livestream room : $livestreamName  reserved")
             ->greeting('Hello '.$notifiable->getFullNameAttribute())
             ->line("The livestream for the series : $seriesTitle")

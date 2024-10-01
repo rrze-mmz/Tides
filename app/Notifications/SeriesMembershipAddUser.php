@@ -34,7 +34,7 @@ class SeriesMembershipAddUser extends Notification
      */
     public function toMail(mixed $notifiable): MailMessage
     {
-        return (new MailMessage())
+        return (new MailMessage)
             ->subject("You have been added to {$this->series->title} Series as moderator!")
             ->line("Hi {$notifiable->getFullNameAttribute()}")
             ->line('you have been added by '.auth()->user()->getFullNameAttribute().' as Series moderator')

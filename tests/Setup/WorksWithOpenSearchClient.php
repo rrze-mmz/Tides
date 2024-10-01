@@ -21,7 +21,7 @@ trait WorksWithOpenSearchClient
 
     public function swapOpenSearchGuzzleClient(): MockHandler
     {
-        $mockHandler = new MockHandler();
+        $mockHandler = new MockHandler;
 
         $client = new OpenSearchClient([
             'handler' => HandlerStack::create($mockHandler),
