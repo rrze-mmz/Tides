@@ -62,7 +62,7 @@ class IndexPagesDatatable extends Component
                     $q->where('id', (int) $search)
                         ->orWhereRaw('lower(title) like ?', ["%{$search}%"])
                         ->orWhereHas('presenters', function ($q) use ($search) {
-                            if (DB::getDriverName() === 'pgsql') {
+                            if (DB::getDriverName() === 'pgsql' || DB::getDriverName() === 'sqlite') {
                                 // PostgresSQL concatenation using "||"
                                 $q->whereRaw('lower(first_name) like ?', ["%{$search}%"])
                                     ->orWhereRaw('lower(last_name) like ?', ["%{$search}%"])
@@ -91,7 +91,7 @@ class IndexPagesDatatable extends Component
                     $q->where('id', (int) $search)
                         ->orWhereRaw('lower(title) like ?', ["%{$search}%"])
                         ->orWhereHas('presenters', function ($q) use ($search) {
-                            if (DB::getDriverName() === 'pgsql') {
+                            if (DB::getDriverName() === 'pgsql' || DB::getDriverName() === 'sqlite') {
                                 // PostgresSQL concatenation using "||"
                                 $q->whereRaw('lower(first_name) like ?', ["%{$search}%"])
                                     ->orWhereRaw('lower(last_name) like ?', ["%{$search}%"])
@@ -120,7 +120,7 @@ class IndexPagesDatatable extends Component
                     $q->where('id', (int) $search)
                         ->orWhereRaw('lower(title) like ?', ["%{$search}%"])
                         ->orWhereHas('presenters', function ($q) use ($search) {
-                            if (DB::getDriverName() === 'pgsql') {
+                            if (DB::getDriverName() === 'pgsql' || DB::getDriverName() === 'sqlite') {
                                 // PostgresSQL concatenation using "||"
                                 $q->whereRaw('lower(first_name) like ?', ["%{$search}%"])
                                     ->orWhereRaw('lower(last_name) like ?', ["%{$search}%"])
