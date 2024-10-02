@@ -9,6 +9,6 @@
                                         ]) }}
         </div>
     </div>
-    @include('backend.seriesChapters.index._new-chapter')
     @include('backend.seriesChapters.index._list-chapters')
+    @include('backend.seriesChapters.index._new-chapter')
 @endsection

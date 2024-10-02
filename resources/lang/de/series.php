@@ -7,7 +7,7 @@ return [
         'title' => 'Titel',
         'access via' => 'Zugang via',
         'no clips' => 'Series hat keine Clips',
-        'clips without chapter(s)' => 'clips ohne Kapitel',
+        'clips without chapter(s)' => 'Clips ohne Kapitel',
         'semester' => 'Semester',
         'duration' => 'Dauer',
         'actions' => 'Aktionen',
@@ -44,6 +44,7 @@ return [
         'Add a series member' => 'Neue Serien-Teilnehmer hinzufügen',
         'actual episode' => 'Aktuelle Episode:',
         'mass update clip metadata for series' => 'Massenaktualisierung der Clip-Metadaten für die Serie: :seriesTitle',
+        'Series chapter has no clips' => 'Die Serien-Kapitel <span class="italic">:chapterTitle</span> hat keine Clips.',
         'delete' => [
             'modal title' => 'Sind Sie sicher, dass Sie den Serien „:series_title“ löschen möchten?',
             'modal body' => 'Bitte vorsichtig vorgehen. Das Löschen dieses Serien wird alle zugehörigen Clips sowie '.

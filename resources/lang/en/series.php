@@ -45,6 +45,7 @@ return [
         'actual episode' => 'Actual episode:',
         'mass update clip metadata for series' => 'Mass update clip metadata for series: 
             <span class="pl-2 font-semibold"> :seriesTitle </span>',
+        'Series chapter has no clips' => 'Series chapter <span class="italic"> :chapterTitle </span> has no clips',
         'delete' => [
             'modal title' => 'Are you certain you wish to delete the series titled ":series_title"?',
             'modal body' => 'Please proceed with caution. Deleting this series will permanently remove all associated '.

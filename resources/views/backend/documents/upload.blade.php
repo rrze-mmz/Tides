@@ -27,7 +27,7 @@
             </div>
             @enderror
 
-            <x-button class="bg-green-600 hover:bg-green-700">
+            <x-button class="bg-blue-600 hover:bg-blue-700">
                 {{ __('common.actions.upload') }}
             </x-button>
         </form>

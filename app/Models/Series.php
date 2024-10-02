@@ -306,10 +306,10 @@ class Series extends BaseModel
         return $query->Where('opencast_series_id', '<>', '');
     }
 
-    public function clipsWithoutChapter(?Chapter $chapter = null): mixed
+    public function clipsWithoutChapter(): mixed
     {
-        return $this->clips->filter(function ($clip) use ($chapter) {
-            return ($chapter) ? $clip->chapter_id !== $chapter->id : $clip->chapter_id === null;
+        return $this->clips->filter(function ($clip) {
+            return $clip->chapter_id === null || $clip->chapter_id == 0;
         });
     }
 

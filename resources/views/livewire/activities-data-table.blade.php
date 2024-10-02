@@ -187,16 +187,20 @@
                                     <div class="ml-2">
                                         <div class="text-sm font-normal leading-5 text-gray-900 dark:text-white">
                                             @if (!empty($activity->changes) )
-                                                @foreach($activity->changes['before'] as $key=>$value)
-                                                    <div class="w-full text-red-600">
-                                                        {{ '--'. $key. '=>'.$value}}
-                                                    </div>
-                                                @endforeach
-                                                @foreach($activity->changes['after'] as $key=>$value)
-                                                    <div class="w-full text-green-600">
-                                                        {{ '++'. $key. '=>'.$value}}
-                                                    </div>
-                                                @endforeach
+                                                @if(isset($activity->changes['before']))
+                                                    @foreach($activity->changes['before'] as $key=>$value)
+                                                        <div class="w-full text-red-600">
+                                                            {{ '--'. $key. '=>'.$value}}
+                                                        </div>
+                                                    @endforeach
+                                                @endif
+                                                @if(isset($activity->changes['after']))
+                                                    @foreach($activity->changes['after'] as $key=>$value)
+                                                        <div class="w-full text-green-600">
+                                                            {{ '++'. $key. '=>'.$value}}
+                                                        </div>
+                                                    @endforeach
+                                                @endif
                                             @else
                                                 {{ '-' }}
                                             @endif

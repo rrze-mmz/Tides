@@ -10,6 +10,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class ChaptersController extends Controller
 {
@@ -45,18 +46,30 @@ class ChaptersController extends Controller
             'chapters' => ['required', 'array'],
             'chapters.*.position' => ['integer', 'required', 'min:0'],
             'chapters.*.title' => ['string', 'required'],
+            'chapters.*.default' => ['in:on', 'nullable'],
         ]);
+        // Custom validation to ensure only one chapter is marked as default
+        $defaultCount = collect($validated['chapters'])
+            ->filter(fn ($chapter) => isset($chapter['default']) && $chapter['default'] === 'on')
+            ->count();
 
+        if ($defaultCount > 1) {
+            throw ValidationException::withMessages([
+                'chapters' => 'Exactly one chapter must be set as default.',
+            ]);
+        }
         $chapters = collect($validated['chapters']);
 
         $chapters->each(function ($ch, $id) {
             $chapter = Chapter::find($id);
-
+            $chapter->default = (isset($ch['default']));
             $chapter->position = $ch['position'];
             $chapter->title = $ch['title'];
 
             $chapter->save();
         });
+
+        session()->flash('flashMessage', 'Series chapters updated successfully!');
 
         return to_route('series.chapters.index', $series);
     }
