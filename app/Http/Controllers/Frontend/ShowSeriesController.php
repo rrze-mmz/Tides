@@ -14,15 +14,7 @@ class ShowSeriesController extends Controller
 {
     public function index(): View
     {
-        $series = Series::whereHas('clips', function (Builder $query) {
-            $query->has('assets');
-        })->isPublic()
-            ->with('presenters')
-            ->withLastPublicClip()
-            ->orderByDesc('updated_at')
-            ->paginate(12);
-
-        return view('frontend.series.index', compact('series'));
+        return view('frontend.series.index');
     }
 
     /**
@@ -48,19 +40,17 @@ class ShowSeriesController extends Controller
                         $query->has('assets')->orWhere('is_livestream', true);
                     })->orderBy('position')->get();
 
-            $assetsResolutions = $chapters->flatMap(function ($chapter) {
-                return $chapter->clips->flatMap(function ($clip) {
-                    return $clip->assets->map(function ($asset) {
-                        return match (true) {
-                            $asset->width >= 1920 => 'QHD',
-                            $asset->width >= 720 && $asset->width < 1920 => 'HD',
-                            $asset->width >= 10 && $asset->width < 720 => 'SD',
-                            $asset->type == Content::AUDIO() => 'Audio',
-                            default => 'PDF/CC'
-                        };
-                    })->unique();
-                });
-            })->flatten()
+            $assetsResolutions = $chapters->flatMap(fn ($chapter) => $chapter->clips->flatMap(function ($clip) {
+                return $clip->assets->map(function ($asset) {
+                    return match (true) {
+                        $asset->width >= 1920 => 'QHD',
+                        $asset->width >= 720 && $asset->width < 1920 => 'HD',
+                        $asset->width >= 10 && $asset->width < 720 => 'SD',
+                        $asset->type == Content::AUDIO() => 'Audio',
+                        default => 'PDF/CC'
+                    };
+                })->unique();
+            }))->flatten()
                 ->unique()
                 ->filter(function ($value, $key) {
                     return $value !== 'PDF/CC';
