@@ -21,15 +21,15 @@ class ShowOrganizationsController extends Controller
 
     public function show(Organization $organization)
     {
-        $orgSeries = Series::whereHas('organization', function ($q) use ($organization) {
-            $string = Str::substr($organization->orgno, 0, 2);
-            $q->whereRaw('orgno  like (?)', ["{$string}%"]);
-        })->isPublic()
-            ->withLastPublicClip()
-            ->hasClipsWithAssets()
-            ->orderByDesc('updated_at')
-            ->paginate(12);
+        //        $orgSeries = Series::whereHas('organization', function ($q) use ($organization) {
+        //            $string = Str::substr($organization->orgno, 0, 2);
+        //            $q->whereRaw('orgno  like (?)', ["{$string}%"]);
+        //        })->isPublic()
+        //            ->withLastPublicClip()
+        //            ->hasClipsWithAssets()
+        //            ->orderByDesc('updated_at')
+        //            ->paginate(12);
 
-        return view('frontend.organizations.show', compact(['organization', 'orgSeries']));
+        return view('frontend.organizations.show', compact(['organization']));
     }
 }
