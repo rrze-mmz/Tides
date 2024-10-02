@@ -187,3 +187,22 @@ it('sets a clip chapter id to null if chapter is deleted', function () {
     expect($this->series->clips()->first()->chapter_id)->toBeNull();
 
 });
+
+it('records an activity on the series when a chapter is updated', function () {
+    $attributes = [
+        'chapters' => [
+            $this->chapter->id => [
+                'position' => '3',
+                'title' => 'changed',
+            ],
+        ],
+    ];
+
+    put(route('series.chapters.update', $this->series), $attributes);
+    $this->chapter->refresh();
+
+    assertDatabaseHas('activities', [
+        'content_type' => 'series',
+        'change_message' => 'Updated chapter:'.$this->chapter->title,
+    ]);
+});

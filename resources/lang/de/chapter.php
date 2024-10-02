@@ -19,6 +19,10 @@ return [
             'remove selected clips from chapter' => 'Ausgewählte Clips aus dem Kapitel entfernen',
         ],
         'chapters for series' => 'Kapitel für Serie: :seriesTitle / SerienID: :seriesID',
+        'edit chapter for series' => 'Kapitel bearbeiten: :chapterPosition - :chapterTitle 
+                                    für Serie: <span class="italic">:seriesTitle </span>',
+        'series chapters info text' => 'Markieren Sie, ob ein Kapitel das Standardkapitel sein soll oder nicht. '.
+                                        'Es kann nur ein Kapitel als Standard festgelegt werden.',
         'new chapter' => 'Neues Kapitel',
         'chapter title' => 'Kapitel Titel',
         'series chapters' => 'Serienkapitel',

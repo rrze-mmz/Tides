@@ -1,4 +1,4 @@
-<div class="flex items-center py-4 space-x-4 ">
+<div class="flex items-center py-4 space-x-4 mb-16  ">
     <a href="{{ route('series.clips.create', $series) }}">
         <x-button class="bg-blue-600 hover:bg-blue-700">
             {{ __('series.backend.actions.add new clip') }}

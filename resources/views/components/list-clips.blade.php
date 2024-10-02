@@ -1,6 +1,11 @@
 @use(App\Enums\Acl)
 @if(method_exists($series, 'chapters') && $series->chapters()->count() > 0)
-    <div class="mt-5 flex" x-data="{selected: 0 }">
+    @php
+        $defaultChapter = ($series->chapters->filter(function($chapter){ return $chapter->default;})->first()?->id)??'0';
+    @endphp
+    <div class="mt-5 flex" x-data="{ selected: {{$defaultChapter}} }"
+         x-init="$nextTick(() => { if (selected) { $refs['container' + selected].style.maxHeight = $refs['container' + selected].scrollHeight + 'px'; } })">
+
         <ul class="shadow-box mb-4 flex flex-col w-full text-center text-lg dark:bg-gray-900 dark:text-white">
             @foreach($chapters as $chapter)
                 <li class="relative flex w-full rounded-lg pb-5">
@@ -16,7 +21,8 @@
                         </button>
                         <div class="relative max-h-0 overflow-hidden transition-all duration-700"
                              x-ref="container{{$chapter->id}}"
-                             x-bind:style="selected == {{ $chapter->id }}? 'max-height: ' + $refs.container{{$chapter->id}}.scrollHeight + 'px' : ''">
+                             x-bind:style="selected == {{ $chapter->id }} ? 'max-height: ' + $refs['container' + {{ $chapter->id }}].scrollHeight + 'px' : ''"
+                        >
                             <div class="p-6">
                                 <ul class="w-full pt-3">
                                     @forelse($chapter->clips->sortBy('episode') as $clip)
@@ -29,13 +35,7 @@
                                                         class="mx-2 flex h-full w-48 place-items-center justify-center
                                                     justify-items-center"
                                                 >
-                                                    <a href="
-                                                        @if(str_contains(url()->current(), 'admin'))
-                                                            {{ route('clips.edit', $clip) }}
-                                                        @else
-                                                            {{  route('frontend.clips.show', $clip)}}
-                                                        @endif
-                                                       ">
+                                                    <a href="@if(str_contains(url()->current(), 'admin')){{ route('clips.edit', $clip) }}@else{{  route('frontend.clips.show', $clip)}}@endif">
                                                         <img
                                                                 src="{{ fetchClipPoster($clip->latestAsset()?->player_preview) }}"
                                                                 alt="preview image"
@@ -102,7 +102,9 @@
                                     @empty
                                         <div class="grid place-items-center">
                                             <div class="mb-4 w-full rounded bg-gray-200 p-5 text-center text-2xl">
-                                                {{ __('series.common.no clips') }}
+                                                {!!  __('series.backend.Series chapter has no clips', [
+                                                'chapterTitle' =>  $chapter->title
+                                                ])  !!}
                                             </div>
                                         </div>
                                     @endforelse
@@ -236,7 +238,7 @@
                     @forelse($clips as $clip)
                         <li class="mb-4 flex content-center items-center rounded
                         @if($clip->is_public) bg-gray-300 dark:bg-gray-700  @else bg-gray-500 dark:bg-blue-700  @endif
-                         p-2 text-center text-lg font-normal dark:text-white">
+                         p-2 text-center text-lg  dark:text-white">
                             <div class="w-1/12">
                                 @if ($reorder)
                                     <label>
@@ -261,14 +263,9 @@
                                 <div class="mx-2 flex h-full w-48 place-items-center justify-center
                                 justify-items-center"
                                 >
-                                    <a href
-                                       ="
-                                    @if(str_contains(url()->current(), 'admin'))
-                                        {{ route('clips.edit', $clip) }}
-                                    @else
-                                        {{ route('frontend.clips.show', $clip) }}
-                                    @endif
-                                    ">
+                                    <a href="@if(str_contains(url()->current(), 'admin')){{ route('clips.edit', $clip) }}
+                                    @else{{ route('frontend.clips.show', $clip) }}@endif"
+                                    >
                                         <img src="{{ fetchClipPoster($clip->latestAsset()?->player_preview) }}"
                                              alt="preview image"
                                         >
@@ -345,7 +342,8 @@
                             <x-button class="bg-blue-600 hover:bg-blue-700">
                                 {{ __('series.backend.actions.reorder series clips') }}
                             </x-button>
-                            <x-back-button :url="route('series.edit',$series)" class="bg-green-600 hover:bg-green-700">
+                            <x-back-button :url="route('series.edit',$series)"
+                                           class="bg-green-600 hover:bg-green-700">
                                 {{ __('common.forms.go back') }}
                             </x-back-button>
                         </div>

@@ -1,4 +1,4 @@
-<div class="flex mt-6  pb-1  mb-5 font-medium border-b border-black font-3xl">
+<div class="flex mt-6  pb-1  mb-5 font-medium border-b border-black font-3xl dark:text-white dark:border-white">
     {{ __('chapter.backend.add clips to chapter') }}
 </div>
 <form action="{{ route('series.chapters.addClips',[$series,$chapter]) }}"
@@ -14,7 +14,9 @@
                     multiple
                     style="width:100%">
                 @foreach ($series->clipsWithoutChapter($chapter) as $clip)
-                    <option value="{{$clip->id}}"> {{$clip->title}}</option>
+                    <option value="{{$clip->id}}"> {{$clip->episode}} - {{$clip->title}} / <span
+                                class="text-sm">{{ $clip->recording_date }}</span>
+                    </option>
                 @endforeach
 
             </select>
