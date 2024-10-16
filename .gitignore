@@ -6,6 +6,7 @@
 /public/videos
 /public/streamable_videos
 /public/thumbnails
+/public/podcast-files
 /storage/*.key
 /vendor
 .idea
