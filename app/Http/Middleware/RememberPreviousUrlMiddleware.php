@@ -16,7 +16,8 @@ class RememberPreviousUrlMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         if (! $request->is(
-            'login', 'logout', 'register', 'password/*', 'verify-email/*', 'verified/*', 'saml2Login', 'api/*'
+            'login', 'logout', 'register', 'password/*', 'verify-email/*', 'verified/*', 'saml2Login', 'api/*',
+            'livewire'
         )) {
             session(['url.intended' => url()->current()]);
         }
