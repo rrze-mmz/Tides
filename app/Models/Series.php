@@ -266,7 +266,7 @@ class Series extends BaseModel
             ->public()
             ->withVideoAssets()
             ->whereColumn('series_id', 'series.id')
-            ->orderByDesc('episode')
+            ->orderByDesc('recording_date')
             ->take(1),
         ]);
     }

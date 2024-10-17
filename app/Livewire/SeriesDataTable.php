@@ -54,7 +54,10 @@ class SeriesDataTable extends Component
 
         // Apply semester filter if a semester is selected
         if ($this->selectedSemesterID) {
-            $query->where('semester_id', $this->selectedSemesterID);
+            // Filter series where at least one clip has the selected semester_id
+            $query->whereHas('clips', function ($q) {
+                $q->where('semester_id', $this->selectedSemesterID);
+            });
         }
 
         return $query;
