@@ -8,8 +8,9 @@ return [
 
     ],
     'backend' => [
-        'statistic for series:' => 'Statistik für die Serie:',
-        'views pro clip' => 'Aufrufe pro Clip:',
+        'statistic for series:' => 'Statistik für die Serie: :series_title / SerienID: :series_id',
+        'statistic for clip:' => 'Statistik für den Clip: :clip_title / ClipID: :clip_id',
+        'views pro clip' => 'Aufrufe pro Clip: :clip_title',
         'clips statistics' => 'Clip-Statistiken',
         'geolocation statistics' => 'Geolokalisierungsstatistiken',
 

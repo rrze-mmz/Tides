@@ -1,25 +1,21 @@
 @extends('layouts.backend')
 
 @section('content')
-    <div class="flex border-b border-black pb-2 font-semibold font-2xl dark:text-white dark:border-white">
-        Video file in drop zone
+    <div class="flex justify-between border-b border-black text-2xl dark:text-white dark:border-white
+                font-normal pb-2">
+        <div class="font-semibold">
+            {{ __('clip.backend.video files in dropzone') }}
+        </div>
     </div>
-
-    <div class="flex py-2">
-        <x-form.button :link="route('clips.edit', $clip)"
-                       type="submit"
-                       text="Go back to clip"
-        />
-    </div>
-    <form action="{{ route('admin.clips.dropzone.transfer', $clip) }}"
-          method="POST"
-          class="w-3/5">
-        @csrf
-        <div class="mb-6">
-            <label class="mb-2 block text-xs font-bold uppercase text-gray-700 dark:text-white"
+    <div class="px-2">
+        <form action="{{ route('admin.clips.dropzone.transfer', $clip) }}"
+              method="POST"
+              class="w-3/5 pt-10">
+            @csrf
+            <label class="mb-2 block text-md font-bold text-gray-700 dark:text-white"
                    for="files[]"
             >
-                Please select video files
+                {{ __('clip.backend.please select one or more audio/video files') }}
             </label>
 
             <select class="w-full border border-gray-400 p-2"
@@ -36,13 +32,18 @@
                 @endforelse
                 @error('files')
                 <p class="mt-2 text-xs text-red-500">{{ $message }}</p>
-            @enderror
-        </div>
+                @enderror
+            </select>
+            <div class="pt-20 space-x-4">
+                <x-button type="submit" class="bg-blue-600 hover:bg-blue-700">
+                    {{ __('clip.backend.actions.add selected audio/video files to clip') }}
+                </x-button>
+                <x-back-button :url="route('clips.edit',$clip)"
+                               class="bg-green-600 hover:bg-green-700">
+                    {{ __('common.forms.go back') }}
+                </x-back-button>
+            </div>
+        </form>
+    </div>
 
-        <input type="submit"
-               value="submit"
-               class="mt-3 py-2 px-8 font-normal focus:outline-none text-white rounded-md bg-blue-700 hover:bg-blue-600
-                            hover:shadow-lg"
-        />
-    </form>
 @endsection

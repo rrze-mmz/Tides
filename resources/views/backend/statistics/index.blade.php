@@ -1,10 +1,20 @@
 @php use Illuminate\Support\Carbon; @endphp
 @extends('layouts.backend')
-
 @section('content')
     <div class="flex border-b border-black text-2xl flex-col dark:text-white dark:border-white font-normal">
         <div class="font-semibold ">
-            {{ __('statistic.backend.statistic for series:') }} {{ $obj['info']->title }} / ID: {{ $obj['info']->id }}
+            @if($obj['type']==='clip')
+                {{ __('statistic.backend.statistic for clip:', [
+                                                                'clip_title' => $obj['info']->title,
+                                                                'clip_id' => $obj['info']->id
+                                                                ]) }}
+            @else
+                {{ __('statistic.backend.statistic for series:', [
+                                                                'clip_title' => $obj['info']->title,
+                                                                'clip_id' => $obj['info']->id
+                                                                ]) }}
+            @endif
+
         </div>
     </div>
     @if($obj['type'] === 'series')

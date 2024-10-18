@@ -1,9 +1,9 @@
 @php use App\Enums\Content; @endphp
 @can('administrate-superadmin-portal-pages')
     <div
-        class="flex border-b border-black py-4 text-lg font-semibold dark:text-white dark:border-white"
+            class="flex border-b border-black py-4 text-lg font-semibold dark:text-white dark:border-white"
     >
-        Assets / FolderID: {{ $obj->folder_id }}
+        {{ __('asset.backend.Assets / FolderID', ['folder_id' => $obj->folder_id]) }}
     </div>
 @endcan
 <div class="flex">
@@ -38,8 +38,8 @@
                         </x-button>
                     </a>
                     <x-modals.delete
-                        :route="route('assets.destroy', $asset)"
-                        class="w-full justify-center"
+                            :route="route('assets.destroy', $asset)"
+                            class="w-full justify-center"
                     >
                         <x-slot:title>
                             {{ __('asset.backend.delete.modal title',[
@@ -55,7 +55,7 @@
         @empty
             <div class="flex mx-auto place-content-center">
                 <div class="text-2xl dark:text-white italic py-8">
-                    No assets
+                    {{ __('asset.common.no assets found') }}
                 </div>
             </div>
         @endforelse
