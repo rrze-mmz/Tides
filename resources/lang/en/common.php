@@ -65,6 +65,7 @@ return [
         'dashboard' => 'Dashboard',
         'series' => 'Series',
         'clip' => 'Clip|Clips',
+        'asset' => 'Asset|Assets',
         'podcast' => 'Podcast|Podcasts',
         'presenter' => 'Presenter|Presenters',
         'member' => 'Member|Members',

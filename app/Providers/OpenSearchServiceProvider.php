@@ -19,7 +19,7 @@ class OpenSearchServiceProvider extends ServiceProvider
         $this->app->singleton(ClientBuilder::class, function () {
             $this->settingsData = $this->getConfig();
 
-            $builder = new ClientBuilder();
+            $builder = new ClientBuilder;
 
             $builder->setHosts([$this->settingsData['url'].':'.$this->settingsData['port']])
                 ->setBasicAuthentication($this->settingsData['username'], $this->settingsData['password'])

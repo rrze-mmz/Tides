@@ -24,7 +24,7 @@ trait WorksWithOpencastClient
 
     public function swapOpencastClient(): MockHandler
     {
-        $mockHandler = new MockHandler();
+        $mockHandler = new MockHandler;
 
         $client = new OpencastClient([
             'handler' => HandlerStack::create($mockHandler),
@@ -87,7 +87,7 @@ trait WorksWithOpencastClient
     public function mockIngestMediaPackageResponse(): Response
     {
         return new Response(200, [], json_encode([
-            new Xml(),
+            new Xml,
         ]));
     }
 

@@ -3,8 +3,7 @@
     font-normal"
 >
     <h2 class="mb-3 -ml-5 border-l-4 border-blue-600 py-4 pl-4 text-xl dark:border-blue-800">
-
-        Belongs to: {{ $clip->series->title  }}
+        {{ __('clip.backend.belongs to', ['series_title' => $clip->series->title]) }}
     </h2>
     <div class="flex flex-col space-y-4">
         <div>
@@ -19,7 +18,7 @@
 
         <div>
             <x-modals.delete
-                    :btn_text="'Remove Series'"
+                    :btn_text="__('clip.backend.actions.remove series')"
                     :route="route('series.clips.remove', $clip)"
                     class="w-full justify-center mt-2"
             >

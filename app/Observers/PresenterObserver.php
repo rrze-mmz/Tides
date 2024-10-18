@@ -7,9 +7,7 @@ use App\Services\OpenSearchService;
 
 class PresenterObserver
 {
-    public function __construct(private OpenSearchService $openSearchService)
-    {
-    }
+    public function __construct(private OpenSearchService $openSearchService) {}
 
     /**
      * Handle the Presenter "created" event.

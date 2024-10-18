@@ -9,9 +9,7 @@ use App\Services\OpenSearchService;
 
 class UserObserver
 {
-    public function __construct(private OpenSearchService $openSearchService)
-    {
-    }
+    public function __construct(private OpenSearchService $openSearchService) {}
 
     /**
      * Handle the User "created" event.

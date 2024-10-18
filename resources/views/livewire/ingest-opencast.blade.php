@@ -1,8 +1,8 @@
 <div>
     @if ($messageText)
         <x-message
-            :messageText="$messageText"
-            :messageType="$messageType" />
+                :messageText="$messageText"
+                :messageType="$messageType" />
     @endif
 
     <form wire:submit="submitForm" action="#"
@@ -25,7 +25,7 @@
                    class="dark:text-white"
             >
             <p class="pt-2 text-sm italic dark:text-white">
-                * will start an Opencast workflow and your video will be transcoded directly to Opencast server
+                * {{ __('clip.backend.opencast video upload description') }}
             </p>
 
             <!-- Progress Bar -->
@@ -37,7 +37,7 @@
         </div>
 
         <x-button class="bg-green-600 hover:bg-green-700 w-full my-2 justify-center">
-            Video {{__('common.actions.upload')}}
+            {{ __('clip.backend.actions.upload video') }}
         </x-button>
 
         @error('videoFile')

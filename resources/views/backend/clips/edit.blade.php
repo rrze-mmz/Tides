@@ -193,7 +193,7 @@
 
                 <div class="pt-10">
                     <x-button type="submit" class="bg-blue-600 hover:bg-blue-700">
-                        Update
+                        {{ __('common.actions.update') }}
                     </x-button>
                 </div>
             </form>
@@ -207,12 +207,12 @@
                 @include('backend.clips.sidebar._assign-series')
             @endif
 
-            @if(!$clip->is_livestream)
-                @include('backend.clips.sidebar._upload-video')
-            @endif
-
             @if ($opencastConnectionCollection['status']==='pass' && !$clip->is_livestream)
                 @include('backend.clips.sidebar._ingest-video')
+            @else
+                @if(!$clip->is_livestream)
+                    @include('backend.clips.sidebar._upload-video')
+                @endif
             @endif
 
             @if(auth()->user()->isAdmin() && $clip->acls->pluck('id')->contains(Acl::LMS()))
@@ -267,7 +267,7 @@
                            :class="activeTab === 1 ? activeClass : inactiveClass"
                            aria-current="page"
                         >
-                            Assets
+                            {{trans_choice('common.menu.asset',2)}}
                         </a>
                     </li>
                     @if(isset($opencastSeriesInfo['health']) && $opencastSeriesInfo['health'])
@@ -276,7 +276,7 @@
                                x-on:click="activeTab = 2"
                                :class="activeTab === 2 ? activeClass : inactiveClass"
                             >
-                                Opencast
+                                Video Workflow
                             </a>
                         </li>
                     @endif
@@ -313,7 +313,7 @@
                            x-on:click="activeTab = 5"
                            :class="activeTab === 5 ? activeClass : inactiveClass"
                         >
-                            Activities
+                            {{trans_choice('common.menu.activity', 2)}}
                         </a>
                     </li>
                 </ul>
@@ -321,45 +321,45 @@
 
             <div class="mt-6">
                 <div x-show="activeTab === 1" id="clips" class="w-full ">
-                    {{--                    @include('backend.series.buttons.actions')--}}
                     @include('backend.assets.list', ['assets'=>$clip->assets,'obj'=> $clip])
                 </div>
                 <div x-show="activeTab === 2" id="opencast">
-                    {{--                    @include('backend.series.tabs.opencast.index')--}}
-
                 </div>
                 <div x-show="activeTab === 3" id="actions">
                     <div class="flex items-center pt-3 space-x-6 pb-10">
                         <a href="{{route('frontend.clips.show', $clip)}}">
                             <x-button type='button' class="bg-blue-600 hover:bg-blue-700">
-                                Go to public page
+                                {{ __('clip.backend.actions.go to clip public page') }}
                             </x-button>
                         </a>
                         <a href="{{ route('statistics.clip', $clip) }}">
                             <x-button class="bg-blue-600 hover:bg-blue-700">
-                                Statistics
+                                {{ trans_choice('common.menu.statistic', 2) }}
                             </x-button>
                         </a>
-                        @if ($clip->assets()->count())
-                            <a href="{{route('admin.clips.triggerSmilFiles', $clip)}}">
-                                <x-button type='button' class="bg-blue-600 hover:bg-blue-700">
-                                    Trigger smil files
-                                </x-button>
-                            </a>
-                        @endif
+                        @can('administrate-superadmin-portal-pages')
+                            @if ($clip->assets()->count())
+                                <a href="{{route('admin.clips.triggerSmilFiles', $clip)}}">
+                                    <x-button type='button' class="bg-blue-600 hover:bg-blue-700">
+                                        {{ __('clip.backend.actions.re-trigger streaming smil files') }}
+                                    </x-button>
+                                </a>
+                            @endif
+                        @endcan
 
-                        @if(!$clip->is_livestream)
-                            <a href="{{route('admin.clips.dropzone.listFiles', $clip)}}">
-                                <x-button type='button' class="bg-blue-600 hover:bg-blue-700">
-                                    Transfer files from drop zone
-                                </x-button>
-                            </a>
-                        @endif
-
+                        @can('administrate-admin-portal-pages')
+                            @if(!$clip->is_livestream )
+                                <a href="{{route('admin.clips.dropzone.listFiles', $clip)}}">
+                                    <x-button type='button' class="bg-blue-600 hover:bg-blue-700">
+                                        {{ __('clip.backend.actions.transfer files from drop zone') }}
+                                    </x-button>
+                                </a>
+                            @endif
+                        @endcan
                         @if($opencastConnectionCollection['status']==='pass' && !$clip->is_livestream)
                             <a href="{{route('admin.clips.opencast.listEvents', $clip)}}">
                                 <x-button type='button' class="bg-blue-600 hover:bg-blue-700">
-                                    Transfer files from Opencast
+                                    {{ __('clip.backend.actions.upload already transcoded recording') }}
                                 </x-button>
                             </a>
                         @endif

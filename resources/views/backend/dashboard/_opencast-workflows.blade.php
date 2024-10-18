@@ -125,13 +125,13 @@
 @if(isset($opencastEvents['scheduled']) && $opencastEvents['scheduled']->isNotEmpty())
     <div class="flex flex-col py-2">
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <table class="w-full  text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <caption
                         class="p-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-gray-200 dark:text-white
                     dark:bg-gray-800">
                     {{ __('opencast.backend.scheduled events', ['counter' => $opencastEvents['scheduled']->count() ]) }}
                 </caption>
-                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <thead class="text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
                     <th scope="col"
                         class="px-6 py-3 ">
@@ -162,7 +162,7 @@
                 <tbody>
                 @foreach($opencastEvents['scheduled'] as $event)
                     <tr class="border-b bg-white font-normal text-gray-900 dark:bg-gray-800 dark:text-white">
-                        <td class="px-6 py-3 text-sm font-light">
+                        <td class="px-6 py-3 text-sm">
                             {{ $event['title'] }}
                         </td>
                         <td class="px-6 py-3">
@@ -264,11 +264,13 @@
                         <td class="px-6 py-3">
                             {{ $event['location'] }}
                         </td>
-                        <td class="px-6 py-3 text-sm font-light text-green-700">
-                            <a href="{{ $opencastSettings['url'].'/editor-ui/index.html?id='.$event['id'] }}">
-                                <x-heroicon-c-scissors class="h-6" />
-                            </a>
-                        </td>
+                        @can('administrate-admin-portal-pages')
+                            <td class="px-6 py-3 text-sm font-light text-green-700">
+                                <a href="{{ $opencastSettings['url'].'/editor-ui/index.html?id='.$event['id'] }}">
+                                    <x-heroicon-c-scissors class="h-6" />
+                                </a>
+                            </td>
+                        @endcan
                     </tr>
                 @endforeach
                 </tbody>

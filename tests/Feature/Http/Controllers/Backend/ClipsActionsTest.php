@@ -90,8 +90,8 @@ it('has opencast action buttons if opencast server exists', function () {
     $mockHandler->append($this->mockHealthResponse());
 
     get(route('clips.edit', ClipFactory::ownedBy(signInRole(Role::MODERATOR))->create()))
-        ->assertSee('Ingest to Opencast')
-        ->assertSee('Transfer files from Opencast');
+        ->assertSee(__('clip.backend.upload a video'))
+        ->assertSee(__('clip.backend.actions.upload already transcoded recording'));
 });
 
 it('hides opencast action buttons if opencast server does not exists', function () {
@@ -159,10 +159,12 @@ it('hides next clip id if clip is the last on a series', function () {
         ->assertSee(route('clips.edit', $previousClip));
 });
 
-it('has a trigger smil file button if clip has assets', function () {
+it('has a re-trigger smil file button for superadmins if clip has assets', function () {
     $clip = ClipFactory::withAssets(2)->ownedBy(signInRole(Role::MODERATOR))->create();
 
-    get(route('clips.edit', $clip))->assertSee('Trigger smil files');
+    auth()->logout();
+    signInRole(Role::SUPERADMIN);
+    get(route('clips.edit', $clip))->assertSee(__('clip.backend.actions.re-trigger streaming smil files'));
 });
 
 it('list smil files for admins if any', function () {
@@ -199,10 +201,10 @@ it('list audio files if any', function () {
 
 it('has an assign series option in clip edit if clip has no series', function () {
     $clip = ClipFactory::ownedBy(signInRole(Role::MODERATOR))->create(['series_id' => 1]);
-    get(route('clips.edit', $clip))->assertDontSee('Assign series');
+    get(route('clips.edit', $clip))->assertDontSee(__('clip.backend.assign a series to this clip'));
 
     $clip = ClipFactory::create();
-    get(route('clips.edit', $clip))->assertSee('Assign series');
+    get(route('clips.edit', $clip))->assertSee(__('clip.backend.assign a series to this clip'));
 });
 
 it('shows clip image information', function () {

@@ -11,8 +11,7 @@ class SeriesObserver
 {
     public function __construct(
         readonly private OpenSearchService $openSearchService,
-    ) {
-    }
+    ) {}
 
     /**
      * Handle the Series "created" event.

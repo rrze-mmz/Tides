@@ -14,7 +14,7 @@ trait WorksWithWowzaClient
 
     public function swapWowzaClient(): MockHandler
     {
-        $mockHandler = new MockHandler();
+        $mockHandler = new MockHandler;
 
         $client = new StreamingClient([
             'handler' => HandlerStack::create($mockHandler),

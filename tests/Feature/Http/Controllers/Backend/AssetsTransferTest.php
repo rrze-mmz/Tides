@@ -85,9 +85,9 @@ test('uploading an asset should create a clip poster', function () {
     Storage::disk('thumbnails')->assertExists($clip->posterImage);
 });
 
-test('a moderator can see copy assets from dropzone button', function () {
+test('a moderator cannot see copy assets from dropzone button', function () {
     $clip = ClipFactory::ownedBy(signInRole(Role::MODERATOR))->create();
-    get(route('clips.edit', $clip))->assertSee('Transfer files from drop zone');
+    get(route('clips.edit', $clip))->assertDontSee(__('clip.backend.actions.transfer files from drop zone'));
 });
 
 it('has a transfer view for dropzone files', function () {

@@ -17,9 +17,7 @@ use Illuminate\Support\Facades\Password;
 
 class UsersController extends Controller
 {
-    public function __construct(private OpencastService $opencastService)
-    {
-    }
+    public function __construct(private OpencastService $opencastService) {}
 
     /**
      * Render datatables Livewire component

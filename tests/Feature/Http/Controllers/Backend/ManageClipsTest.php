@@ -527,13 +527,14 @@ it('has a go to public page button', function () {
 
     get(route('clips.edit', $clip))
         ->assertSee(route('frontend.clips.show', $clip))
-        ->assertSee('Go to public page');
+        ->assertSee(__('clip.backend.actions.go to clip public page'));
 });
 
 it('has a clip statistics button', function () {
     $clip = ClipFactory::ownedBy($this->signInRole(Role::MODERATOR))->create();
 
-    get(route('clips.edit', $clip))->assertSee('Statistics')->assertSee(route('statistics.clip', $clip));
+    get(route('clips.edit', $clip))->assertSee(trans_choice('common.menu.statistic', 2))
+        ->assertSee(route('statistics.clip', $clip));
 });
 
 it('denies access to a moderator when updating a not owned clip', function () {
@@ -646,7 +647,7 @@ it('shows clip activities in clip edit page', function () {
     $clip = ClipFactory::create();
     signInRole(Role::ADMIN);
 
-    get(route('clips.edit', $clip))->assertSee('Activities');
+    get(route('clips.edit', $clip))->assertSee(trans_choice('common.menu.activity', 2));
 
     Livewire::test(ActivitiesDataTable::class)
         ->assertSee('created clip');

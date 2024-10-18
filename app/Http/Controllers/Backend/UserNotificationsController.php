@@ -21,7 +21,7 @@ class UserNotificationsController extends Controller
     {
         $validated = $request->validate([
             'selected_notifications' => ['required', 'array', 'min:1'],
-            'selected_notifications.*' => ['required', new NotificationBelongsToUser()],
+            'selected_notifications.*' => ['required', new NotificationBelongsToUser],
         ]);
 
         Notification::whereIn('id', $validated['selected_notifications'])->delete();

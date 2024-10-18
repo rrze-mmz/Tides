@@ -46,7 +46,7 @@
                                 <a data-message="view-document"
                                    href="{{ route('document.'.str(class_basename($resource))->lower().'.view',[$resource, $document]) }}">
                                     <x-button class="bg-green-600 hover:bg-green-700">
-                                        Anschauen
+                                        {{ __('common.actions.show') }}
                                     </x-button>
                                 </a>
                                 <div>

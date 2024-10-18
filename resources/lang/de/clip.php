@@ -29,11 +29,25 @@ return [
         'comments' => 'Kommentare',
     ],
     'backend' => [
+        'belongs to' => 'Teil von Serien: :series_title',
+        'assign a series to this clip' => 'Eine Serie diesem Clip zuweisen',
+        'upload a video' => 'Ein Video hochladen',
+        'opencast video upload description' => 'Es wird ein neuer Video-Workflow gestartet.
+         Vielen Dank für Ihre Geduld.',
+        'video files in dropzone' => 'Videodateien in der Dropzone',
+        'please select one or more audio/video files' => 'Bitte wählen Sie eine oder mehrere Audio-/Videodateien aus',
         'actions' => [
             'go to clip public page' => 'Zur öffentlichen Clip-Seite gehen',
             'got to clip statistics page' => 'Zur Clip-Statistikseite gehen',
             'generate preview from frame' => 'Vorschau aus Frame erstellen',
             'upload an image' => 'Ein Bild hochladen',
+            're-trigger streaming smil files' => 'Streaming SMIL-Dateien erneut auslösen',
+            'transfer files from drop zone' => 'Dateien aus der Dropzone übertragen',
+            'upload already transcoded recording' => 'Eine bereits transkodierte Aufnahme hochladen',
+            'remove series' => 'Serie entfernen',
+            'view available series' => 'Verfügbare Serien anzeigen',
+            'upload video' => 'Video hochladen',
+            'add selected audio/video files to clip' => 'Ausgewählte Audio-/Videodateien zum Clip hinzufügen',
         ],
         'delete' => [
             'modal title' => 'Sind Sie sicher, dass Sie den Clip „:clip_title“ löschen möchten?',
