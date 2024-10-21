@@ -64,7 +64,11 @@ class AssetsTransferController extends Controller
      */
     public function listOpencastEvents(OpencastService $opencastService, Clip $clip): View
     {
-        $events = $opencastService->getProcessedEventsBySeriesID($clip->series->opencast_series_id);
+        if (is_null($clip->series->opencast_series_id)) {
+            $events = collect();
+        } else {
+            $events = $opencastService->getProcessedEventsBySeriesID($clip->series->opencast_series_id);
+        }
 
         return view('backend.clips.opencast.listEvents', [
             'clip' => $clip,
