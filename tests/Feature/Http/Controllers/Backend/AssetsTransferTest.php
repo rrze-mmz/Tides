@@ -192,7 +192,7 @@ test('opencast transfer view should list all events with event uid', function ()
         ->withOpencastID()
         ->create();
     $mockHandler = $this->swapOpencastClient();
-    $opencastService = app(OpencastService::class);
+    app(OpencastService::class);
     $mockHandler->append(
         $this->mockEventResponse($series, OpencastWorkflowState::SUCCEEDED),
         $this->mockEventResponse($series, OpencastWorkflowState::PAUSED)

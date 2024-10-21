@@ -1,18 +1,21 @@
 @extends('layouts.backend')
 
 @section('content')
-    <div class="flex border-b border-black pb-2 font-semibold font-2xl dark:text-white dark:border-white">
-        Opencast processed events
+    <div class="flex justify-between border-b border-black text-2xl dark:text-white dark:border-white
+                font-normal pb-2">
+        <div class="font-semibold">
+            Opencast processed events
+        </div>
     </div>
 
     <div class="flex py-2">
     </div>
     <form action="{{ route('admin.clips.opencast.transfer', $clip) }}"
           method="POST"
-          class="w-3/5">
+          class="w-3/5 pt-10">
         @csrf
         <div class="mb-6">
-            <label class="mb-2 block pt-4 text-xs font-normal text-gray-700 dark:text-white"
+            <label class="mb-2 block text-md font-bold text-gray-700 dark:text-white"
                    for="eventID"
             >
                 Please select video files
@@ -36,15 +39,14 @@
             @enderror
         </div>
 
-        <x-form.button :link="$link=false"
-                       type="submit"
-                       text="Transfer the selected Event assets"
-        />
-        <a href="{{ route('clips.edit', $clip) }}">
-            <span class="rounded-md font-normal bg-green-700 px-8 py-2 text-white hover:shadow-lg focus:outline-noe">
-                Back to clip
-            </span>
-        </a>
+        <x-button type="submit" class="bg-blue-600 hover:bg-blue-700">
+            {{ __('clip.backend.actions.add selected audio/video files to clip') }}
+        </x-button>
+        <x-back-button :url="route('clips.edit',$clip)"
+                       class="bg-green-600 hover:bg-green-700">
+            {{ __('common.forms.go back') }}
+        </x-back-button>
+        </div>
 
     </form>
 @endsection
