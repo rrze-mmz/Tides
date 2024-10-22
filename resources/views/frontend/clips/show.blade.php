@@ -3,9 +3,6 @@
 
 @section('content')
     <main class="container mx-auto mt-6 md:mt-12">
-        <div class="pb-10">
-            @include('frontend.search._searchbar')
-        </div>
         @if($playerSetting->data['player_show_article_link_in_player'])
             @include('frontend.clips._article_section')
         @endif

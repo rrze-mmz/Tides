@@ -52,7 +52,7 @@
                            class="text-sm underline">{{__('homepage.series.more series') }}</a>
                     </div>
                 </div>
-                <div class="grid grid-cols-4 gap-4">
+                <div class="grid grid-cols-4 gap-4 sm:grid-cols-1">
                     @forelse(auth()->user()->subscriptions as $single)
                         @include('backend.series._card',[
                                 'series'=> $single,
@@ -81,7 +81,7 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-4 gap-4 pt-8">
+                <div class="grid xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-4 pt-8">
                     @forelse($portalSeries as $single)
                         @include('backend.series._card',[
                                 'series'=> $single,
@@ -106,7 +106,7 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-4 gap-4 pt-8">
+        <div class="grid xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-4 pt-8">
             @forelse($series as $single)
 
                 @include('backend.series._card',[
@@ -132,7 +132,7 @@
 
         </div>
         <ul class="flex-row">
-            <div class="grid grid-cols-4 gap-6 pt-8">
+            <div class="grid xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-4 pt-8">
                 @forelse($clips as $clip)
                     <li class="my-2 w-full rounded bg-white dark:bg-gray-900 p-4">
                         @include('backend.clips._card',[

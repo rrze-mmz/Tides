@@ -10,4 +10,9 @@ export default defineConfig({
       boot: './bootstrap',
     },
   },
+  server: {
+    watch: {
+      ignored: ['**/storage/app/videos/**'],
+    },
+  },
 });

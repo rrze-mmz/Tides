@@ -2,12 +2,10 @@
 @extends('layouts.frontend')
 
 @section('content')
-    <div class="container mx-auto mt-16 md:mt-16 dark:text-white">
-        <div class="pb-10">
-            @include('frontend.search._searchbar')
-        </div>
-
-
+    <div class="md:container py-10 mx-auto">
+        @include('frontend.search._searchbar')
+    </div>
+    <div class="container md:mx-auto mt-4 md:mt-4 dark:text-white">
         <div class="flex justify-between border-b-2 border-black pb-2 dark:border-white">
             <h2 class="text-2xl font-bold ">{{ $series->title }} [ID: {{ $series->id }}]</h2>
             @cannot('administrate-admin-portal-pages')

@@ -89,6 +89,11 @@ return [
         'portal resources' => 'Portalressourcen',
         'portal administration' => 'Portalverwaltung',
         'statistic' => 'Statistik|Statistiken',
+        'contact' => 'Kontakt',
+        'error report' => 'Fehler melden',
+        'imprint' => 'Impressum',
+        'privacy' => 'Datenschutz',
+        'accessibility' => 'Barrierefreiheit',
     ],
 
     'heading' => [
