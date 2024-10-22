@@ -52,7 +52,7 @@
                            class="text-sm underline">{{__('homepage.series.more series') }}</a>
                     </div>
                 </div>
-                <div class="grid grid-cols-4 gap-4 sm:grid-cols-1">
+                <div class="grid xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-4 pt-8">
                     @forelse(auth()->user()->subscriptions as $single)
                         @include('backend.series._card',[
                                 'series'=> $single,
