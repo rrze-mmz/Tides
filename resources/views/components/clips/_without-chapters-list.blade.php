@@ -9,7 +9,7 @@
                     <li class="flex flex-col lg:flex-row content-center items-center rounded mb-4
                         @if($clip->is_public) bg-gray-300 dark:bg-gray-700  @else bg-gray-500 dark:bg-blue-700  @endif
                          p-2 text-center text-lg dark:text-white">
-                        <div class="w-1/12 md:w-full mb-2 md:mb-0">
+                        <div class="w-4 md:w-full mb-2 md:mb-0">
                             @if ($reorder)
                                 <label class="flex flex-col sm:flex-row items-center">
                                     <input class="w-full sm:w-1/2 dark:text-black" type="number"
@@ -30,16 +30,25 @@
                             @endif
                         </div>
                         <div class="w-2/12 md:w-full mb-2 md:mb-0">
-                            <div class="mx-auto flex h-full w-full sm:w-48 justify-center items-center">
+                            <div class="relative h-full w-48 ">
                                 <a href="@if(str_contains(url()->current(), 'admin')){{ route('clips.edit', $clip) }}@else{{ route('frontend.clips.show', $clip) }}@endif">
                                     <img src="{{ fetchClipPoster($clip->latestAsset()?->player_preview) }}"
                                          alt="preview image"
                                          class="w-full"
                                     >
                                 </a>
+                                <div
+                                        class="absolute w-full py-2.5 bottom-0 inset-x-0 bg-blue-600  text-white
+                                            text-md text-right pr-2 pb-2 leading-4 ">
+                                    {{ is_null($clip->latestAsset()) ? '00:00:00' : gmdate('H:i:s', $clip->latestAsset()->duration) }}
+                                </div>
                             </div>
                         </div>
-                        <div class="w-3/12 md:w-full mb-2 sm:mb-0"> {{ $clip->title }}</div>
+                        <div class="w-3/12 md:w-full mb-2 sm:mb-0 mx-2"> {{ $clip->title }}</div>
+                        <div class="w-1/12 sm:w-full mb-2 sm:mb-0">
+                            {{ $clip->recording_date->format('Y-m-d') }}
+                        </div>
+                        <div class="w-2/12 sm:w-full mb-2 sm:mb-0">{{ $clip->semester }}</div>
                         <div class="w-2/12 md:w-full flex justify-center items-center mb-2 sm:mb-0">
                             <div class="pr-2">
                                 {{ ($clip->acls->isEmpty()) ? Acl::PUBLIC->lower() : $clip->acls->pluck('name')->implode(',') }}
@@ -59,10 +68,6 @@
                                     @endcan
                                 </div>
                             @endif
-                        </div>
-                        <div class="w-2/12 sm:w-full mb-2 sm:mb-0">{{ $clip->semester }}</div>
-                        <div class="w-1/12 sm:w-full mb-2 sm:mb-0">
-                            {{ is_null($clip->latestAsset()) ? '00:00:00' : gmdate('H:i:s', $clip->latestAsset()->duration) }}
                         </div>
                         <div class="w-1/12 sm:w-full">
                             @if($dashboardAction && Request::segment(1) === 'admin')

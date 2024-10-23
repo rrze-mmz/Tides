@@ -154,13 +154,19 @@ class Series extends BaseModel
 
     public function views(): int
     {
-        return $this->clips->load('assets.viewCount')->sum(function ($clip) {
-            // For each clip, sum the views of all its assets
-            return $clip->assets->sum(function ($asset) {
-                // Sum the views for each asset from its statsCounter entries
-                return $asset->viewCount->sum('counter'); // 'counter' is the column for the views
+        return $this->clips()
+            ->with(['assets.viewCount' => function ($query) {
+                $query->select('resourceid', DB::raw('SUM(counter) as total_views'))
+                    ->groupBy('resourceid');
+            }])
+            ->get()
+            ->sum(function ($clip) {
+                // Calculate the total views for each clip's assets
+                return $clip->assets->sum(function ($asset) {
+                    // Access the aggregated 'total_views' value directly
+                    return $asset->viewCount->first()->total_views ?? 0;
+                });
             });
-        });
     }
 
     public function sumGeoLocationDataGroupedByMonth(): array
@@ -231,12 +237,10 @@ class Series extends BaseModel
 
     public function fetchClipsSemester(): string
     {
-        return $this->clips
-            ->sortBy('semester_id')
-            ->map(function ($clip) {
-                return $clip->semester;
-            })
-            ->pluck('name')
+        return $this->clips()
+            ->with('semester')
+            ->get()
+            ->pluck('semester.name')
             ->unique()
             ->implode(', ');
     }

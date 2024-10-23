@@ -20,7 +20,10 @@
                          x-bind:style="selected == {{ $chapter->id }} ? 'max-height: ' + $refs['container' + {{ $chapter->id }}].scrollHeight + 'px' : ''">
                         <div class="p-4 sm:p-6">
                             <ul class="w-full pt-3">
-                                @forelse($chapter->clips->sortBy('episode') as $clip)
+                                @forelse($chapter->clips()->with('semester')->orderBy('episode')->get() as $clip)
+                                    @php
+                                        $latestAsset = $clip->latestAsset();
+                                    @endphp
                                     <li class="flex flex-col lg:flex-row  lg:space-y-3 content-center
                                     items-center rounded text-center text-sm lg:text-lg sm:text-lg py-4 border-b
                                     border-gray-300 dark:border-gray-700">
@@ -31,19 +34,28 @@
 
                                         <!-- Clip Image -->
                                         <div class="w-2/12 sm:w-full mb-2 sm:mb-0">
-                                            <div class="mx-auto sm:mx-0 flex h-24 sm:h-auto w-full sm:w-auto place-items-center justify-center">
+                                            <div class="relative h-15 overflow-hidden">
                                                 <a href="@if(str_contains(url()->current(), 'admin')){{ route('clips.edit', $clip) }}@else{{ route('frontend.clips.show', $clip) }}@endif">
-                                                    <img src="{{ fetchClipPoster($clip->latestAsset()?->player_preview) }}"
+                                                    <img src="{{ fetchClipPoster($latestAsset?->player_preview) }}"
                                                          alt="preview image"
                                                          class="w-full h-auto max-w-xs sm:max-w-full">
                                                 </a>
+                                                <div
+                                                        class="absolute w-full py-2.5 bottom-0 inset-x-0 bg-blue-600  text-white
+                                            text-md text-right pr-2 pb-2 leading-4 ">
+                                                    {{ is_null($latestAsset) ? '00:00:00' : gmdate('H:i:s', $latestAsset->duration) }}
+                                                </div>
                                             </div>
                                         </div>
 
                                         <!-- Clip Title -->
-                                        <div class="w-3/12 sm:w-full mb-2 sm:mb-0 text-center">
+                                        <div class="w-3/12 sm:w-full mb-2 sm:mb-0 text-center  mx-2">
                                             {{ $clip->title }}
                                         </div>
+                                        <div class="w-1/12 sm:w-full mb-2 sm:mb-0">
+                                            {{ $clip->recording_date->format('Y-m-d') }}
+                                        </div>
+                                        <div class="w-2/12 sm:w-full mb-2 sm:mb-0">{{ $clip->semester->name }}</div>
 
                                         <!-- ACL Status and Icons -->
                                         <div class="w-2/12 sm:w-full mb-2 sm:mb-0 flex flex-col sm:flex-row justify-center items-center">
@@ -62,17 +74,7 @@
                                                 </div>
                                             @endif
                                         </div>
-
-                                        <!-- Semester Acronym -->
-                                        <div class="w-2/12 sm:w-full mb-2 sm:mb-0 text-center">
-                                            {{ $clip->semester->acronym }}
-                                        </div>
-
-                                        <!-- Clip Duration -->
-                                        <div class="w-1/12 sm:w-full mb-2 sm:mb-0 text-center">
-                                            {{ is_null($clip->latestAsset()) ? '00:00:00' : gmdate('H:i:s', $clip->latestAsset()->duration) }}
-                                        </div>
-
+                                        
                                         <!-- Play/Edit Button -->
                                         <div class="w-1/12 sm:w-full flex justify-center mb-2 sm:mb-0">
                                             @if($dashboardAction && Request::segment(1) === 'admin')

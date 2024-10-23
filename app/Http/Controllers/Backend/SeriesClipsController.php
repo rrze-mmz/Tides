@@ -96,7 +96,7 @@ class SeriesClipsController extends Controller
 
     public function listClips(Series $series): Factory|View|Application
     {
-        $clips = Clip::select('id', 'title', 'slug', 'episode', 'is_public')
+        $clips = Clip::select('id', 'title', 'slug', 'episode', 'is_public', 'recording_date')
             ->where('series_id', $series->id)
             ->addSelect(
                 [
@@ -130,7 +130,7 @@ class SeriesClipsController extends Controller
     {
         $this->authorize('edit-series', $series);
 
-        $clips = Clip::select('id', 'title', 'slug', 'episode', 'is_public')
+        $clips = Clip::select('id', 'title', 'slug', 'episode', 'is_public', 'recording_date')
             ->where('series_id', $series->id)
             ->addSelect(
                 [
@@ -160,7 +160,7 @@ class SeriesClipsController extends Controller
         });
 
         session()->flash('flashMessage', "{$series->clips->count()} Clips updated successfully");
-        $clips = Clip::select('id', 'title', 'slug', 'episode', 'is_public')
+        $clips = Clip::select('id', 'title', 'slug', 'episode', 'is_public', 'recording_date')
             ->where('series_id', $series->id)
             ->addSelect(
                 [
