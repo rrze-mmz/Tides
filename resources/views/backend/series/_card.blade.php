@@ -87,7 +87,7 @@
                 <div class="flex items-center justify-content-between">
                     <div class="pr-2">
                         @if($series->has('lastPublicClip'))
-                            @if($series->lastPublicClip->checkAcls())
+                            @if($series->lastPublicClip?->checkAcls())
                                 <x-heroicon-o-lock-open class="w-4 h-4 text-green-500 dark:text-white" />
                                 <span class="sr-only">Unlock clip</span>
                             @else
@@ -113,35 +113,51 @@
                 </div>
             @endif
         @endif
-
-        @if(isset($action) && $action == 'assignClip')
-            <form action="{{route('series.clips.assign',['series'=>$series,'clip'=>$clip])}}"
-                  method="POST"
-                  class="flex flex-col py-2"
-            >
-                @csrf
-                <x-form.button :link="$link=false"
-                               type="submit"
-                               text="Select this series" />
-            </form>
-        @endif
     </div>
     @can('edit-series',$series)
         <div class="absolute w-full py-1.5 bottom-0 inset-x-0 text-white dark:text-white
                     text-xs text-right pr-2 pb-2 leading-2 min-pt-5">
-            <a href="{{route('series.edit', $series)}}">
-                <x-button class="bg-blue-500 hover:bg-blue-700">
-                    <div class="flex items-center">
-                        <div class="pr-5">
-                            {{ __('common.actions.edit') }}
+            @if(isset($actionButton))
+                @if($actionButton === 'edit')
+                    <a href="{{route('series.edit', $series)}}">
+                        <x-button class="bg-blue-500 hover:bg-blue-700">
+                            <div class="flex items-center">
+                                <div class="pr-5">
+                                    {{ __('common.actions.edit') }}
+                                </div>
+                                <div>
+                                    <x-heroicon-o-pencil class="w-4 h-4" />
+                                </div>
+                            </div>
+                        </x-button>
+                    </a>
+                @elseif($actionButton === 'assignClip')
+                    <form action="{{route('series.clips.assign',['series'=>$series,'clip'=> $actionObj])}}"
+                          method="POST"
+                          class="flex flex-col py-2"
+                    >
+                        @csrf
+                        <div class="pt-10">
+                            <x-button class="bg-blue-600 hover:bg-blue-700">
+                                {{ __('series.backend.actions.select series') }}
+                            </x-button>
                         </div>
-                        <div>
-                            <x-heroicon-o-pencil class="w-4 h-4" />
+                    </form>
+                @endif
+            @else
+                <a href="{{route('series.edit', $series)}}">
+                    <x-button class="bg-blue-500 hover:bg-blue-700">
+                        <div class="flex items-center">
+                            <div class="pr-5">
+                                {{ __('common.actions.edit') }}
+                            </div>
+                            <div>
+                                <x-heroicon-o-pencil class="w-4 h-4" />
+                            </div>
                         </div>
-                    </div>
-
-                </x-button>
-            </a>
+                    </x-button>
+                </a>
+            @endif
         </div>
     @endcan
 </div>

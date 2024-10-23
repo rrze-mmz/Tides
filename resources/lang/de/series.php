@@ -28,6 +28,7 @@ return [
         'actions' => [
             'create series' => 'Neue Serie erstellen',
             'select semester' => 'Bitte wählen Sie das Semester aus',
+            'select series' => 'Serie auswählen',
             'reorder series clips' => 'Serienclips neu anordnen',
             'add new clip' => 'Neuen Clip hinzufügen',
             'go to public page' => 'Zur öffentlichen Seite gehen',
@@ -45,6 +46,8 @@ return [
         'actual episode' => 'Aktuelle Episode:',
         'mass update clip metadata for series' => 'Massenaktualisierung der Clip-Metadaten für die Serie: :seriesTitle',
         'Series chapter has no clips' => 'Die Serien-Kapitel <span class="italic">:chapterTitle</span> hat keine Clips.',
+        'no user series found' => 'Du hast noch keine Serie. Bitte erstelle eine!',
+        'Select a series for clip' => 'Wähle eine Serie für den Clip: :clip_title',
         'delete' => [
             'modal title' => 'Sind Sie sicher, dass Sie den Serien „:series_title“ löschen möchten?',
             'modal body' => 'Bitte vorsichtig vorgehen. Das Löschen dieses Serien wird alle zugehörigen Clips sowie '.

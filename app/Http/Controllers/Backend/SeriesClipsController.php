@@ -57,9 +57,6 @@ class SeriesClipsController extends Controller
 
         return view('backend.seriesClips.listSeries', [
             'clip' => $clip,
-            'series' => (auth()->user()->isAdmin())
-                    ? Series::orderByDesc('updated_at')->paginate(12)
-                    : auth()->user()->accessableSeries()->paginate(12),
         ]);
     }
 
