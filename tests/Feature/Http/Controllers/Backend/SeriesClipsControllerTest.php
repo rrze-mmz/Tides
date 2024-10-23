@@ -134,7 +134,8 @@ it('lists series that user has access to for assigning a single clip to a series
     $user = signInRole(Role::MODERATOR);
     $singleClip = ClipFactory::ownedBy($user)->create();
 
-    get(route('series.clips.listSeries', $singleClip))->assertSee('You have no series yet');
+    get(route('series.clips.listSeries', $singleClip))
+        ->assertSee(__('series.backend.no user series found'));
 
     $series->addMember($user);
 

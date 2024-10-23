@@ -37,11 +37,11 @@
                                          class="w-full"
                                     >
                                 </a>
-                                <div
+                                <divc
                                         class="absolute w-full py-2.5 bottom-0 inset-x-0 bg-blue-600  text-white
                                             text-md text-right pr-2 pb-2 leading-4 ">
                                     {{ is_null($clip->latestAsset()) ? '00:00:00' : gmdate('H:i:s', $clip->latestAsset()->duration) }}
-                                </div>
+                                </divc>
                             </div>
                         </div>
                         <div class="w-3/12 md:w-full mb-2 sm:mb-0 mx-2"> {{ $clip->title }}</div>

@@ -39,12 +39,30 @@
             @forelse ($objs as $obj)
                 @include('backend.series._card',[
                         'series'=> $obj,
-                        'route' => 'admin'
+                        'route' => 'admin',
+                        'actionButton'=> $actionButton,
                         ])
             @empty
-                <p class="col-span-4 text-3xl dark:text-white">
-                    {!!  __('search.frontend.no series results found for search term', ['searchTerm' => $search])  !!}
-                </p>
+                @if($actionButton === 'assignClip')
+                    <div class="flex col-span-12 items-center justify-center text-3xl dark:text-white">
+                        <div class="w-full">
+                            {{ __('series.backend.no user series found') }}
+                        </div>
+                    </div>
+                    <div class="pt-10">
+                        <a href="{{ route('series.create') }}">
+                            <x-button class="bg-green-500 hover:bg-green-700">
+                                {{ __('common.forms.create series') }}
+                            </x-button>
+                        </a>
+                    </div>
+
+                @else
+                    <p class="col-span-4 text-3xl dark:text-white italic items-center">
+                        {!!  __('search.frontend.no clips results found for search term', ['searchTerm' => $search])  !!}
+                    </p>
+
+                @endif
             @endforelse
         @else
             @forelse ($objs as $obj)
@@ -53,7 +71,7 @@
                         'route' => 'admin'
                         ])
             @empty
-                <p class="col-span-4 text-3xl dark:text-white">
+                <p class="col-span-4 text-3xl dark:text-white italic items-center">
                     {!!  __('search.frontend.no clips results found for search term', ['searchTerm' => $search])  !!}
                 </p>
             @endforelse

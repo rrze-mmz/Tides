@@ -25,6 +25,10 @@ class IndexPagesDatatable extends Component
 
     public $organization;
 
+    public $actionButton = 'edit';
+
+    public $actionObj;
+
     public function sortBy($field): void
     {
         $this->sortAsc = ! ($this->sortField === $field) || ! $this->sortAsc;
@@ -46,38 +50,94 @@ class IndexPagesDatatable extends Component
             'type' => $this->type,
             'objs' => $objects,
             'search' => $search,
+            'actionButton' => $this->actionButton,
         ]);
     }
 
     protected function determineClipQuery($search)
     {
         if ($this->type === 'series') {
-            return Series::query()
-                ->with(['presenters'])
-                ->withLastPublicClip()
-                ->isPublic()
-                ->whereHas('clips.assets')
-                ->where(function ($q) use ($search) {
-                    $search = strtolower($search);
-                    $q->where('id', (int) $search)
-                        ->orWhereRaw('lower(title) like ?', ["%{$search}%"])
-                        ->orWhereHas('presenters', function ($q) use ($search) {
-                            if (DB::getDriverName() === 'pgsql' || DB::getDriverName() === 'sqlite') {
-                                // PostgresSQL concatenation using "||"
-                                $q->whereRaw('lower(first_name) like ?', ["%{$search}%"])
-                                    ->orWhereRaw('lower(last_name) like ?', ["%{$search}%"])
-                                    ->orWhereRaw('lower(first_name || \' \' || last_name) like ?', ["%{$search}%"])
-                                    ->orWhereRaw('lower(last_name || \' \' || first_name) like ?', ["%{$search}%"]);
-                            } else {
-                                // MySQL or others using CONCAT()
-                                $q->whereRaw('lower(first_name) like ?', ["%{$search}%"])
-                                    ->orWhereRaw('lower(last_name) like ?', ["%{$search}%"])
-                                    ->orWhereRaw('lower(CONCAT(first_name, " ", last_name)) like ?', ["%{$search}%"])
-                                    ->orWhereRaw('lower(CONCAT(last_name, " ", first_name)) like ?', ["%{$search}%"]);
-                            }
-                        });
-                })
-                ->orderBy('id', 'desc');
+            //if it is a lecturer fetch all user series to assign them to a clip
+            if ($this->actionButton === 'assignClip' && ! auth()->user()->isAdmin()) {
+                if (auth()->user()->isAdmin()) {
+                    return Series::query()
+                        ->with(['presenters'])
+                        ->withLastPublicClip()
+                        ->where(function ($q) use ($search) {
+                            $search = strtolower($search);
+                            $q->where('id', (int) $search)
+                                ->orWhereRaw('lower(title) like ?', ["%{$search}%"])
+                                ->orWhereHas('presenters', function ($q) use ($search) {
+                                    if (DB::getDriverName() === 'pgsql' || DB::getDriverName() === 'sqlite') {
+                                        // PostgresSQL concatenation using "||"
+                                        $q->whereRaw('lower(first_name) like ?', ["%{$search}%"])
+                                            ->orWhereRaw('lower(last_name) like ?', ["%{$search}%"])
+                                            ->orWhereRaw('lower(first_name || \' \' || last_name) like ?', ["%{$search}%"])
+                                            ->orWhereRaw('lower(last_name || \' \' || first_name) like ?', ["%{$search}%"]);
+                                    } else {
+                                        // MySQL or others using CONCAT()
+                                        $q->whereRaw('lower(first_name) like ?', ["%{$search}%"])
+                                            ->orWhereRaw('lower(last_name) like ?', ["%{$search}%"])
+                                            ->orWhereRaw('lower(CONCAT(first_name, " ", last_name)) like ?', ["%{$search}%"])
+                                            ->orWhereRaw('lower(CONCAT(last_name, " ", first_name)) like ?', ["%{$search}%"]);
+                                    }
+                                });
+                        })
+                        ->orderBy('id', 'desc');
+                } else {
+                    return auth()->user()->accessableSeries()->with(['presenters'])
+                        ->withLastPublicClip()
+                        ->where(function ($q) use ($search) {
+                            $search = strtolower($search);
+                            $q->where('id', (int) $search)
+                                ->orWhereRaw('lower(title) like ?', ["%{$search}%"])
+                                ->orWhereHas('presenters', function ($q) use ($search) {
+                                    if (DB::getDriverName() === 'pgsql' || DB::getDriverName() === 'sqlite') {
+                                        // PostgresSQL concatenation using "||"
+                                        $q->whereRaw('lower(first_name) like ?', ["%{$search}%"])
+                                            ->orWhereRaw('lower(last_name) like ?', ["%{$search}%"])
+                                            ->orWhereRaw('lower(first_name || \' \' || last_name) like ?', ["%{$search}%"])
+                                            ->orWhereRaw('lower(last_name || \' \' || first_name) like ?', ["%{$search}%"]);
+                                    } else {
+                                        // MySQL or others using CONCAT()
+                                        $q->whereRaw('lower(first_name) like ?', ["%{$search}%"])
+                                            ->orWhereRaw('lower(last_name) like ?', ["%{$search}%"])
+                                            ->orWhereRaw('lower(CONCAT(first_name, " ", last_name)) like ?', ["%{$search}%"])
+                                            ->orWhereRaw('lower(CONCAT(last_name, " ", first_name)) like ?', ["%{$search}%"]);
+                                    }
+                                });
+                        })
+                        ->orderBy('id', 'desc');
+                }
+            } else {
+                return Series::query()
+                    ->with(['presenters'])
+                    ->withLastPublicClip()
+                    ->isPublic()
+                    ->whereHas('clips.assets')
+                    ->where(function ($q) use ($search) {
+                        $search = strtolower($search);
+                        $q->where('id', (int) $search)
+                            ->orWhereRaw('lower(title) like ?', ["%{$search}%"])
+                            ->orWhereHas('presenters', function ($q) use ($search) {
+                                if (DB::getDriverName() === 'pgsql' || DB::getDriverName() === 'sqlite') {
+                                    // PostgresSQL concatenation using "||"
+                                    $q->whereRaw('lower(first_name) like ?', ["%{$search}%"])
+                                        ->orWhereRaw('lower(last_name) like ?', ["%{$search}%"])
+                                        ->orWhereRaw('lower(first_name || \' \' || last_name) like ?', ["%{$search}%"])
+                                        ->orWhereRaw('lower(last_name || \' \' || first_name) like ?', ["%{$search}%"]);
+                                } else {
+                                    // MySQL or others using CONCAT()
+                                    $q->whereRaw('lower(first_name) like ?', ["%{$search}%"])
+                                        ->orWhereRaw('lower(last_name) like ?', ["%{$search}%"])
+                                        ->orWhereRaw('lower(CONCAT(first_name, " ", last_name)) like ?', ["%{$search}%"])
+                                        ->orWhereRaw('lower(CONCAT(last_name, " ", first_name)) like ?', ["%{$search}%"]);
+                                }
+                            });
+                    })
+                    ->orderBy('id', 'desc');
+            }
+
         } elseif ($this->type === 'clips') {
             $query = Clip::query();
             if ($this->singleClips) {

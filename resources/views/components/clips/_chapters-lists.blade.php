@@ -74,7 +74,7 @@
                                                 </div>
                                             @endif
                                         </div>
-                                        
+
                                         <!-- Play/Edit Button -->
                                         <div class="w-1/12 sm:w-full flex justify-center mb-2 sm:mb-0">
                                             @if($dashboardAction && Request::segment(1) === 'admin')
@@ -84,12 +84,12 @@
                                                     </x-button>
                                                 </a>
                                             @else
-                                                <form method="GET" action="{{ route('clips.edit', $clip) }}">
+                                                <a href="{{ route('frontend.clips.show', $clip) }}">
                                                     <button type="submit"
                                                             class="focus:outline-none text-white text-sm py-1.5 px-5 rounded-md bg-blue-700 hover:bg-blue-500 hover:shadow-lg">
                                                         <x-heroicon-o-play class="h-6 w-6" />
                                                     </button>
-                                                </form>
+                                                </a>
                                             @endif
                                         </div>
                                     </li>

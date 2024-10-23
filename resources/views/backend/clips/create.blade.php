@@ -51,7 +51,9 @@
                                        :selectedItem="old('language_id', 4)"
                 />
 
-                <div class="mb-2 border-b border-solid border-b-black pb-2 text-left text-xl font-bold">
+                <div class="mb-2 border-b border-solid border-b-black pb-2 text-left text-xl font-bold
+                            dark:text-white dark:border-white"
+                >
                     Metadata
                 </div>
 
@@ -97,7 +99,9 @@
                                          :items="[]"
                 />
 
-                <div class="mb-2 border-b border-solid border-b-black pb-2 text-left text-xl font-bold">
+                <div class="mb-2 border-b border-solid border-b-black pb-2 text-left text-xl font-bold
+                            dark:text-white dark:border-white"
+                >
                     Access
                 </div>
 
