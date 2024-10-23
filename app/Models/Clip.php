@@ -248,10 +248,16 @@ class Clip extends BaseModel
 
     public function views(): int
     {
-        return $this->assets->load('viewCount')->sum(function ($asset) {
-            // Sum the views for each asset from its multiple statsCounter entries
-            return $asset->viewCount->sum('counter'); // Assuming 'views' is the column where views are stored
-        });
+        return $this->assets()
+            ->with(['viewCount' => function ($query) {
+                $query->select('resourceid', DB::raw('SUM(counter) as total_views'))
+                    ->groupBy('resourceid');
+            }])
+            ->get()
+            ->sum(function ($asset) {
+                // Access the aggregated 'total_views' value directly
+                return $asset->viewCount->first()->total_views ?? 0;
+            });
     }
 
     // Function to calculate total views for all assets' stats

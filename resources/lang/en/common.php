@@ -88,6 +88,11 @@ return [
         'main objects' => 'Main objects',
         'portal resources' => 'Portal resources',
         'portal administration' => 'Portal administration',
+        'contact' => 'Contact',
+        'error report' => 'Reporting errors',
+        'imprint' => 'Imprint',
+        'privacy' => 'Privacy',
+        'accessibility' => 'Accessibility',
     ],
     'heading' => [
         'create new series' => 'Create new series',

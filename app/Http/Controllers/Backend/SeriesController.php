@@ -83,7 +83,7 @@ class SeriesController extends Controller
             });
         }
 
-        $clips = Clip::select(['id', 'title', 'slug', 'episode', 'is_public'])
+        $clips = Clip::select(['id', 'title', 'slug', 'episode', 'is_public', 'recording_date'])
             ->where('series_id', $series->id)
             ->addSelect(
                 [

@@ -59,13 +59,13 @@ class ShowSeriesController extends Controller
             $chapters = $series->chapters()->get();
             $clips = (($series->owner_id && auth()->user()?->id === $series->owner_id) || auth()->user()?->isAdmin())
                 ?
-                Clip::select(['id', 'title', 'slug', 'episode', 'is_public'])
+                Clip::select(['id', 'title', 'slug', 'episode', 'is_public', 'recording_date'])
                     ->where('series_id', $series->id)
                     ->WithSemester()
                     ->with('assets:id,width,height,type')
                     ->orderBy('episode')->get()
                 :
-                Clip::select(['id', 'title', 'slug', 'episode', 'is_public'])
+                Clip::select(['id', 'title', 'slug', 'episode', 'is_public', 'recording_date'])
                     ->where(function (Builder $query) {
                         $query->has('assets')->orWhere('is_livestream', true);
                     })

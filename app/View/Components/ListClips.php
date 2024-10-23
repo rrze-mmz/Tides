@@ -29,6 +29,6 @@ class ListClips extends Component
      */
     public function render(): View
     {
-        return view('components.list-clips');
+        return view('components.clips.list');
     }
 }

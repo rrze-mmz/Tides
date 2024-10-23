@@ -1,96 +1,92 @@
-<nav class="container mx-auto flex items-center justify-between px-2 w-full">
-    <div class="flex">
-        <a href="{{ url('/') }}"
-           class="font-bold  no-underline text-ur "
-        >
+<nav class="container mx-auto px-4 py-2 flex flex-col lg:flex-row lg:justify-between lg:items-center">
+    <!-- Branding / Logo -->
+    <div class="flex justify-between items-center w-full lg:w-auto mb-2 lg:mb-0">
+        <a href="{{ url('/') }}" class="font-bold no-underline">
             <div class="flex flex-col">
-                <div>
-                    <span class="text-2xl">
-                            {{ config('app.name', 'Laravel') }}
-                    </span>
-                </div>
-                <div>
-            <span class="text-sm">
-                [develop/unstable]
-            </span>
-                </div>
+                <span class="text-2xl">
+                    {{ config('app.name', 'Laravel') }}
+                </span>
+                <span class="text-sm">
+                    [develop/unstable]
+                </span>
             </div>
         </a>
+
+        <!-- Hamburger Button (for mobile) -->
+        <button @click="menuOpen = !menuOpen" class="block lg:hidden text-gray-700 dark:text-white">
+            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                 stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+            </svg>
+        </button>
     </div>
-    <nav class="font-semibold space-x-4  text-lg">
-        <span class="pl-10 no-underline ">
-            <a href="{{ route('frontend.channels.index') }}">
-                {{ trans_choice('common.menu.channel',2)}}
+
+    <!-- Navigation Links and Options -->
+    <div :class="{'block': menuOpen, 'hidden': !menuOpen}"
+         class="w-full lg:flex lg:justify-center lg:space-x-8 lg:items-center hidden mt-4 lg:mt-0">
+        <!-- Navigation Links -->
+        <div class="flex flex-col space-y-4 lg:flex-row lg:space-y-0 lg:space-x-8 font-semibold text-lg">
+            <a href="{{ route('frontend.channels.index') }}" class="block py-2 lg:py-0">
+                {{ trans_choice('common.menu.channel', 2) }}
             </a>
-        </span>
-        <span class="no-underline ">
-            <a href="{{ route('frontend.series.index') }}">
+            <a href="{{ route('frontend.series.index') }}" class="block py-2 lg:py-0">
                 Series
             </a>
-        </span>
-        <span class="no-underline ">
-            <a href="{{ route('frontend.clips.index') }}">
-                {{ trans_choice('common.menu.clip', 2)}}
+            <a href="{{ route('frontend.clips.index') }}" class="block py-2 lg:py-0">
+                {{ trans_choice('common.menu.clip', 2) }}
             </a>
-        </span>
-        <span class="no-underline ">
-            <a href="{{ route('frontend.podcasts.index') }}">
-                 {{ trans_choice('common.menu.podcast', 2)}}
+            <a href="{{ route('frontend.podcasts.index') }}" class="block py-2 lg:py-0">
+                {{ trans_choice('common.menu.podcast', 2) }}
             </a>
-        </span>
-        <span class="no-underline ">
-            <a href="{{ route('frontend.organizations.index') }}">
+            <a href="{{ route('frontend.organizations.index') }}" class="block py-2 lg:py-0">
                 {{ trans_choice('common.menu.organization', 2) }}
             </a>
-        </span>
-        <span class="no-underline ">
-            <a href="{{ route('frontend.livestreams.index') }}">
+            <a href="{{ route('frontend.livestreams.index') }}" class="block py-2 lg:py-0">
                 {{ __('common.menu.live now') }}
             </a>
-        </span>
-        <span class="pr-10 no-underline ">
-            <a href="{{ route('frontend.faq') }}">
+            <a href="{{ route('frontend.faq') }}" class="block py-2 lg:py-0">
                 {{ trans_choice('common.menu.faq', 2) }}
             </a>
-        </span>
-    </nav>
-    <nav class=" flex font-semibold text-lg space-x-4 ">
-        @guest
-            <a href="{{ route('login') }}"
-            >
-                {{ __('auth.Login') }}
-            </a>
-        @else
-            <span>Hi, {{ Auth::user()->getFullNameAttribute() }}</span>
-            <a href="{{route('frontend.userSettings.edit')}}">
-                {{ __('common.menu.myPortal', ['appName' => str(config('app.name'))->ucfirst() ]) }}
-            </a>
-            @if(!str_contains(url()->current(), 'admin') && auth()->user()->can('access-dashboard'))
-                <a href="/admin/dashboard"
-                >
-                    Dashboard
-                </a>
-            @endif
-
-            <a href="{{ route('logout') }}"
-               onclick="event.preventDefault();
-                                document.getElementById('logout-form').submit();"
-            >{{ __('auth.Logout') }}</a>
-            <form id="logout-form"
-                  action="{{ route('logout') }}"
-                  method="POST"
-                  class="hidden">
-                {{ csrf_field() }}
-            </form>
-        @endguest
-        <div class="flex px-2">
-            <x-theme-toogle />
         </div>
-        <!-- Dark Mode Toggle Component -->
-        <span class="mr-10 no-underline">
-            <a href="/set_lang/en" class="{{ (session('locale') === 'en')?'underline':'' }}">EN</a> |
-            <a href="/set_lang/de" class="{{ (session('locale') === 'de')?'underline':'' }}">DE</a>
-        </span>
 
-    </nav>
+        <!-- Auth Links & Additional Options -->
+        <div class="flex flex-col space-y-4 mt-4 lg:mt-0 lg:flex-row lg:space-y-0 lg:space-x-8 items-start lg:items-center">
+            @guest
+                <a href="{{ route('login') }}" class="block py-2 lg:py-0">
+                    {{ __('auth.Login') }}
+                </a>
+            @else
+                <span class="block py-2 lg:py-0">Hi, {{ Auth::user()->getFullNameAttribute() }}</span>
+                <a href="{{ route('frontend.userSettings.edit') }}" class="block py-2 lg:py-0">
+                    {{ __('common.menu.myPortal', ['appName' => str(config('app.name'))->ucfirst() ]) }}
+                </a>
+                @if(!str_contains(url()->current(), 'admin') && auth()->user()->can('access-dashboard'))
+                    <a href="/admin/dashboard" class="block py-2 lg:py-0">Dashboard</a>
+                @endif
+                <a href="{{ route('logout') }}"
+                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                   class="block py-2 lg:py-0">
+                    {{ __('auth.Logout') }}
+                </a>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                    {{ csrf_field() }}
+                </form>
+            @endguest
+
+            <!-- Dark Mode Toggle -->
+            <div class="flex px-2">
+                <button @click="darkMode = !darkMode" :class="{'bg-gray-800': darkMode, 'bg-gray-300': !darkMode}"
+                        class="w-10 h-5 rounded-full flex items-center justify-between p-1 transition-colors duration-300">
+                    <div :class="{'translate-x-5': darkMode, 'translate-x-0': !darkMode}"
+                         class="w-4 h-4 bg-white rounded-full transform transition-transform duration-300"></div>
+                </button>
+            </div>
+
+            <!-- Language Toggle -->
+            <span class="block py-2 lg:py-0">
+                <a href="/set_lang/en" class="{{ (session('locale') === 'en') ? 'underline' : '' }}">EN</a> |
+                <a href="/set_lang/de" class="{{ (session('locale') === 'de') ? 'underline' : '' }}">DE</a>
+            </span>
+        </div>
+    </div>
 </nav>
